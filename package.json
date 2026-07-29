@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "electron electron/main.js",
-    "dev": "concurrently \"npm start\" \"npm run electron\""
+    "dev": "concurrently \"npm start\" \"wait-on http://localhost:4200 && npm run electron\""
   },
   "private": true,
   "dependencies": {
@@ -26,6 +26,7 @@
     "@primeng/themes": "^21.0.2",
     "ag-grid-angular": "^36.0.2",
     "ag-grid-community": "^36.0.2",
+    "chart.js": "^4.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -43,6 +44,7 @@
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^4.0.2",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "wait-on": "^9.1.0"
   }
 }
