@@ -1,0 +1,136 @@
+/* ==========================================================
+   Colors
+   ========================================================== */
+$background: #2563eb;
+
+$primary: #2563eb;
+$primary-light: #3b82f6;
+$primary-dark: #1d4ed8;
+
+$secondary: #64748b;
+
+$success: #16a34a;
+$warning: #f59e0b;
+$error: #dc2626;
+$info: #0284c7;
+
+/* ==========================================================
+   Backgrounds
+   ========================================================== */
+
+$background: #f8fafc;
+$surface: #ffffff;
+$surface-alt: #f1f5f9;
+
+$card-bg: #ffffff;
+$dialog-bg: #ffffff;
+
+/* ==========================================================
+   Text
+   ========================================================== */
+
+$text-primary: #0f172a;
+$text-secondary: #475569;
+$text-muted: #94a3b8;
+$text-white: #ffffff;
+
+/* ==========================================================
+   Borders
+   ========================================================== */
+
+$border-color: #e2e8f0;
+$border-light: #f1f5f9;
+
+/* ==========================================================
+   Shadows
+   ========================================================== */
+
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.12);
+
+/* ==========================================================
+   Border Radius
+   ========================================================== */
+
+$radius-xs: 2px;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-round: 9999px;
+
+/* ==========================================================
+   Spacing
+   ========================================================== */
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+$spacing-2xl: 32px;
+$spacing-3xl: 48px;
+
+/* ==========================================================
+   Typography
+   ========================================================== */
+
+$font-family:
+  "Inter",
+  "Segoe UI",
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
+
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-md: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-2xl: 20px;
+$font-size-3xl: 24px;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+/* ==========================================================
+   Layout
+   ========================================================== */
+
+$header-height: 64px;
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 72px;
+$footer-height: 48px;
+
+/* ==========================================================
+   Z-Index
+   ========================================================== */
+
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-tooltip: 1060;
+
+/* ==========================================================
+   Animation
+   ========================================================== */
+
+$transition-fast: 0.15s ease;
+$transition-normal: 0.25s ease;
+$transition-slow: 0.4s ease;
+
+/* ==========================================================
+   Breakpoints
+   ========================================================== */
+
+$mobile: 576px;
+$tablet: 768px;
+$laptop: 992px;
+$desktop: 1200px;
+$wide: 1400px;

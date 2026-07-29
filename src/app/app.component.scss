@@ -1,0 +1,64 @@
+.layout {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  height: 100vh;
+  box-sizing: border-box;
+  background: #f5f7fa;
+}
+
+.navigation-pane {
+  width: 20%;
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: width .25s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &.collapsed {
+    width: 2%;
+  }
+}
+
+.content-pane {
+  flex: 1;
+  overflow: auto;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 100%;
+  border-radius: .75rem;
+  text-decoration: none;
+}
+
+.navigation-pane.collapsed nav a {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.navigation-pane.collapsed mat-icon {
+  margin: 0;
+}
+
+.active {
+  background: #e3f2fd;
+}

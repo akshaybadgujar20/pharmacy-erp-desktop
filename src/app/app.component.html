@@ -1,52 +1,61 @@
-<p-sidebar-layout>
-  <!-- Sidebar Navigation Container -->
-  <p-sidebar>
-    <p-sidebar-spacer />
+<div class="layout">
+  <aside class="navigation-pane" [class.collapsed]="isCollapsed">
+    <div class="nav-header">
+      @if (!isCollapsed) {
+        <h2>ERP</h2>
+      }
 
-    <p-sidebar-aside>
-      <p-sidebar-panel>
-        <!-- Header Section -->
-        <p-sidebar-header>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <i class="pi pi-prime" style="font-size: 1.5rem;"></i>
-            <span style="font-weight: bold; font-size: 1.2rem;">My App</span>
-          </div>
-        </p-sidebar-header>
-
-        <!-- Main Navigation Links -->
-        <p-sidebar-content>
-          <ul style="list-style: none; padding: 0; margin: 0;">
-            @for (item of navItems; track item.label) {
-              <li style="padding: 0.75rem 0.5rem; cursor: pointer;">
-                <i [class]="item.icon" style="margin-right: 0.5rem;"></i>
-                <span>{{ item.label }}</span>
-              </li>
-            }
-          </ul>
-        </p-sidebar-content>
-
-        <!-- Footer / User Profile Section -->
-        <p-sidebar-footer>
-          <div style="display: flex; align-items: center; gap: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #e5e7eb;">
-            <i class="pi pi-user" style="font-size: 1.2rem;"></i>
-            <span>John Doe</span>
-          </div>
-        </p-sidebar-footer>
-      </p-sidebar-panel>
-    </p-sidebar-aside>
-  </p-sidebar>
-
-  <!-- Main Viewport Content -->
-  <p-sidebar-main>
-    <!-- Toggle Button to collapse/expand the sidebar -->
-    <header style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-      <button pButton pSidebarTrigger icon="pi pi-bars" class="p-button-text"></button>
-      <h2>Dashboard Overview</h2>
-    </header>
-
-    <!-- Page Body Content -->
-    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
-      <p>Welcome to your application shell! The main content area adjusts automatically when you trigger the sidebar.</p>
+      <button mat-icon-button type="button" (click)="toggleSidebar()">
+        <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
     </div>
-  </p-sidebar-main>
-</p-sidebar-layout>
+
+    <nav class="nav-menu">
+      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>dashboard</mat-icon>
+        @if (!isCollapsed) {
+          <span>Dashboard</span>
+        }
+      </a>
+
+      <a class="nav-item" routerLink="/patients" routerLinkActive="active">
+        <mat-icon>groups</mat-icon>
+        @if (!isCollapsed) {
+          <span>Patients</span>
+        }
+      </a>
+
+      <a class="nav-item" routerLink="/inventory" routerLinkActive="active">
+        <mat-icon>inventory_2</mat-icon>
+        @if (!isCollapsed) {
+          <span>Inventory</span>
+        }
+      </a>
+
+      <a class="nav-item" routerLink="/billing" routerLinkActive="active">
+        <mat-icon>receipt_long</mat-icon>
+        @if (!isCollapsed) {
+          <span>Billing</span>
+        }
+      </a>
+
+      <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+        <mat-icon>analytics</mat-icon>
+        @if (!isCollapsed) {
+          <span>Reports</span>
+        }
+      </a>
+
+      <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+        <mat-icon>settings</mat-icon>
+        @if (!isCollapsed) {
+          <span>Settings</span>
+        }
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content-pane">
+    <router-outlet></router-outlet>
+  </main>
+</div>

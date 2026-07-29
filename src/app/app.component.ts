@@ -1,22 +1,22 @@
-import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { SidebarModule } from 'primeng/sidebar';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {RouterLinkActive, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    ButtonModule,
-    SidebarModule
-  ],
   templateUrl: './app.component.html',
+  imports: [
+    MatIcon,
+    RouterOutlet,
+    RouterLinkActive
+  ],
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'pharmacy-erp';
-  navItems = [
-    { label: 'Dashboard', icon: 'pi pi-home' },
-    { label: 'Analytics', icon: 'pi pi-chart-bar' },
-    { label: 'Users', icon: 'pi pi-users' },
-    { label: 'Settings', icon: 'pi pi-cog' }
-  ];
+  isCollapsed = false;
+
+  toggleSidebar(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

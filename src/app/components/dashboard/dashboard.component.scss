@@ -1,0 +1,33 @@
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  flex: 1;
+}
+
+.middle-row {
+  display: flex;
+  flex: 2;
+  gap: 1rem;
+
+  > .panel {
+    flex: 1;
+  }
+}
+
+.bottom {
+  flex: 5;
+}
+
+.panel {
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: auto;
+}
