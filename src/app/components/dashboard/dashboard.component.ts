@@ -1,24 +1,34 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, ViewChild} from '@angular/core';
 import {ColDef} from 'ag-grid-community';
 import {AgGridAngular} from 'ag-grid-angular';
+import { ToastrService } from 'ngx-toastr';
 
 import {
   Chart,
   ChartConfiguration,
   registerables
 } from 'chart.js';
+import {MatButtonToggle} from '@angular/material/button-toggle';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    AgGridAngular
+    AgGridAngular,
+    MatButtonToggle,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements AfterViewInit {
+
+  toastr = inject(ToastrService);
+
+  showSuccess() {
+    this.toastr.success('Hello world!', 'Toastr fun!');
+  }
+
   columnDefs: ColDef[] = [
     { field: 'id' },
     { field: 'name' },

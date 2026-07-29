@@ -3,6 +3,8 @@
 @use '@angular/material' as mat;
 @use "ag-grid-community/styles" as ag;
 
+@use 'ngx-toastr/toastr';
+
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-quartz.css";
 
