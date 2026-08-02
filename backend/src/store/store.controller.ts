@@ -7,11 +7,11 @@ export class StoreController {
 
   @Post()
   create(@Body('name') name: string) {
-    return this.storeService.create(name)
+    return this.storeService.create(name);
   }
 
   @Get()
   findAll() {
-    return this.storeService.findAll()
+    return this.storeService.findAll();
   }
 }

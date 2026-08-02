@@ -1,3 +1,4 @@
+<a id="pharmacy-erp-system-design-document"></a>
 # Pharmacy ERP System Design Document
 **Version:** 1.0  
 **Status:** Living Architecture Document  
@@ -13,58 +14,58 @@
 
 ---
 
+<a id="table-of-contents"></a>
 # Table of Contents
-
-1. Vision & Product Philosophy
-2. Design Principles
-3. Overall System Architecture
-4. Technology Stack
-5. High Level Architecture
-6. Module Architecture
-7. Folder Structure
-8. Electron Architecture
-9. Angular Architecture
-10. NestJS Architecture
-11. Database Design
-12. Prisma ORM
-13. Authentication & Authorization
-14. Offline First Architecture
-15. Synchronization Strategy
-16. Conflict Resolution
-17. Event Driven Architecture
-18. Service Layer Design
-19. API Design Standards
-20. Domain Driven Design
-21. UX & Product Guidelines
-22. Keyboard First Philosophy
-23. Workflow Driven UI
-24. Configuration Driven Development
-25. Performance Guidelines
-26. Hardware Integration
-27. Printing Architecture
-28. Barcode Integration
-29. Reporting Engine
-30. Audit Logging
-31. Error Handling
-32. Backup & Recovery
-33. Security Guidelines
-34. Coding Standards
-35. Testing Strategy
-36. CI/CD Strategy
-37. Observability
-38. Telemetry & Analytics
-39. Feature Flags
-40. Multi Store Architecture
-41. Migration Strategy
-42. Localization
-43. Disaster Recovery
-44. Future Roadmap
-45. Engineering Checklist
+- [Pharmacy ERP System Design Document](#pharmacy-erp-system-design-document)
+- [1. Vision & Product Philosophy](#vision-and-product-philosophy)
+- [2. Design Principles](#design-principles)
+- [3. Overall Architecture](#overall-architecture)
+- [4. Technology Stack](#technology-stack)
+- [5. Module Architecture](#module-architecture)
+- [6. Electron Architecture](#electron-architecture)
+- [7. Angular Architecture](#angular-architecture)
+- [8. NestJS Architecture](#nestjs-architecture)
+- [9. Database Design](#database-design)
+- [10. Prisma ORM](#prisma-orm)
+- [11. Authentication](#authentication)
+- [12. Offline First](#offline-first)
+- [13. Synchronization Strategy](#synchronization-strategy)
+- [14. Event Driven Architecture](#event-driven-architecture)
+- [15. API Design](#api-design)
+- [16. Domain Driven Design](#domain-driven-design)
+- [17. UX Guidelines](#ux-guidelines)
+- [18. Keyboard First Philosophy](#keyboard-first-philosophy)
+- [19. Workflow Driven UI](#workflow-driven-ui)
+- [20. Configuration Driven Development](#configuration-driven-development)
+- [21. Performance Guidelines](#performance-guidelines)
+- [22. Hardware Integration](#hardware-integration)
+- [23. Printing](#printing)
+- [24. Barcode](#barcode)
+- [25. Reporting](#reporting)
+- [26. Audit Logging](#audit-logging)
+- [27. Error Handling](#error-handling)
+- [28. Backup & Recovery](#backup-and-recovery)
+- [29. Security](#security)
+- [30. Coding Standards](#coding-standards)
+- [31. Testing](#testing)
+- [32. CI/CD](#cicd)
+- [33. Observability](#observability)
+- [34. Telemetry & Analytics](#telemetry-and-analytics)
+- [35. Feature Flags](#feature-flags)
+- [36. Multi Store Architecture](#multi-store-architecture)
+- [37. Migration Strategy](#migration-strategy)
+- [38. Localization](#localization)
+- [39. Disaster Recovery](#disaster-recovery)
+- [40. Future Roadmap](#future-roadmap)
+- [41. Engineering Checklist](#engineering-checklist)
+- [Guiding Principle](#guiding-principle)
 
 ---
 
+<a id="vision-and-product-philosophy"></a>
 # 1. Vision & Product Philosophy
 
+<a id="goal"></a>
 ## Goal
 
 Build a **fast, reliable, offline-first Pharmacy ERP** that pharmacists enjoy using.
@@ -73,6 +74,7 @@ The software should disappear into the workflow.
 
 Users should think about medicines—not software.
 
+<a id="product-goals"></a>
 ### Product Goals
 
 - Fast
@@ -86,9 +88,12 @@ Users should think about medicines—not software.
 
 ---
 
+<a id="design-principles"></a>
 # 2. Design Principles
 
+<a id="principle-1"></a>
 ## Principle 1
+<a id="simplicity"></a>
 ### Simplicity
 
 Simple code lasts longer.
@@ -97,7 +102,9 @@ Avoid unnecessary abstraction.
 
 ---
 
+<a id="principle-2"></a>
 ## Principle 2
+<a id="modularity"></a>
 ### Modularity
 
 Every business domain lives independently.
@@ -116,7 +123,9 @@ Never mix business logic.
 
 ---
 
+<a id="principle-3"></a>
 ## Principle 3
+<a id="single-responsibility"></a>
 ### Single Responsibility
 
 Each class should have only one responsibility.
@@ -143,7 +152,9 @@ SyncService
 
 ---
 
+<a id="principle-4"></a>
 ## Principle 4
+<a id="offline-first"></a>
 ### Offline First
 
 The application should never depend on internet availability.
@@ -152,7 +163,9 @@ Internet is an enhancement—not a requirement.
 
 ---
 
+<a id="principle-5"></a>
 ## Principle 5
+<a id="performance-first"></a>
 ### Performance First
 
 Every screen should feel instant.
@@ -165,6 +178,7 @@ Targets
 
 ---
 
+<a id="overall-architecture"></a>
 # 3. Overall Architecture
 
 ```
@@ -198,8 +212,10 @@ Targets
 
 ---
 
+<a id="technology-stack"></a>
 # 4. Technology Stack
 
+<a id="desktop"></a>
 ## Desktop
 
 Electron
@@ -215,6 +231,7 @@ Reason
 
 ---
 
+<a id="frontend"></a>
 ## Frontend
 
 Angular
@@ -229,6 +246,7 @@ Reason
 
 ---
 
+<a id="backend"></a>
 ## Backend
 
 NestJS
@@ -248,6 +266,7 @@ Provides
 
 ---
 
+<a id="orm"></a>
 ## ORM
 
 Prisma
@@ -262,6 +281,7 @@ Advantages
 
 ---
 
+<a id="local-database"></a>
 ## Local Database
 
 SQLite
@@ -276,6 +296,7 @@ Advantages
 
 ---
 
+<a id="cloud"></a>
 ## Cloud
 
 Spring Boot
@@ -289,6 +310,7 @@ Reasons
 
 ---
 
+<a id="module-architecture"></a>
 # 5. Module Architecture
 
 Each module owns its business.
@@ -330,6 +352,7 @@ Modules
 
 ---
 
+<a id="electron-architecture"></a>
 # 6. Electron Architecture
 
 Renderer
@@ -351,6 +374,7 @@ Use **Context Isolation** and a **Preload Script** with `contextBridge` to expos
 
 ---
 
+<a id="angular-architecture"></a>
 # 7. Angular Architecture
 
 Use feature modules.
@@ -382,6 +406,7 @@ Components → Services → Backend
 
 ---
 
+<a id="nestjs-architecture"></a>
 # 8. NestJS Architecture
 
 Structure
@@ -420,6 +445,7 @@ Keep:
 
 ---
 
+<a id="database-design"></a>
 # 9. Database Design
 
 Use normalized tables.
@@ -443,6 +469,7 @@ Core Tables
 
 ---
 
+<a id="prisma-orm"></a>
 # 10. Prisma ORM
 
 Benefits
@@ -457,6 +484,7 @@ Use migrations for all schema changes.
 
 ---
 
+<a id="authentication"></a>
 # 11. Authentication
 
 Use JWT between Angular and NestJS.
@@ -472,6 +500,7 @@ Permissions should always be checked in the backend, never only in the UI.
 
 ---
 
+<a id="offline-first"></a>
 # 12. Offline First
 
 The local database is the **source of truth** during daily operation.
@@ -480,8 +509,10 @@ Users should never know whether the internet is available.
 
 ---
 
+<a id="synchronization-strategy"></a>
 # 13. Synchronization Strategy
 
+<a id="delta-sync"></a>
 ## Delta Sync
 
 Send only changed records.
@@ -490,18 +521,21 @@ Never upload the whole database.
 
 ---
 
+<a id="push"></a>
 ## Push
 
 Local → Cloud
 
 ---
 
+<a id="pull"></a>
 ## Pull
 
 Cloud → Local
 
 ---
 
+<a id="background-sync"></a>
 ## Background Sync
 
 Runs
@@ -513,6 +547,7 @@ Runs
 
 ---
 
+<a id="outbox-pattern"></a>
 ## Outbox Pattern
 
 Every change is recorded in an Outbox table.
@@ -528,6 +563,7 @@ This guarantees reliable delivery even after crashes.
 
 ---
 
+<a id="idempotency"></a>
 ## Idempotency
 
 Every transaction gets a unique UUID.
@@ -536,6 +572,7 @@ If the same request is received twice, the server safely ignores duplicates.
 
 ---
 
+<a id="conflict-resolution"></a>
 ## Conflict Resolution
 
 Different entities require different rules.
@@ -550,6 +587,7 @@ Keep version numbers or timestamps for conflict detection.
 
 ---
 
+<a id="event-driven-architecture"></a>
 # 14. Event Driven Architecture
 
 Example events
@@ -570,6 +608,7 @@ Benefits
 
 ---
 
+<a id="api-design"></a>
 # 15. API Design
 
 Use REST consistently.
@@ -589,6 +628,7 @@ Version APIs when needed.
 
 ---
 
+<a id="domain-driven-design"></a>
 # 16. Domain Driven Design
 
 Bounded contexts
@@ -605,10 +645,12 @@ Communicate through services or events.
 
 ---
 
+<a id="ux-guidelines"></a>
 # 17. UX Guidelines
 
 The ERP should optimize the pharmacist's workflow, not showcase technology.
 
+<a id="goals"></a>
 ### Goals
 
 - Minimum clicks
@@ -621,6 +663,7 @@ The ERP should optimize the pharmacist's workflow, not showcase technology.
 
 ---
 
+<a id="keyboard-first-philosophy"></a>
 # 18. Keyboard First Philosophy
 
 Everything should work without a mouse.
@@ -641,6 +684,7 @@ Benefits
 
 ---
 
+<a id="workflow-driven-ui"></a>
 # 19. Workflow Driven UI
 
 Design screens around real work.
@@ -675,6 +719,7 @@ Avoid making users jump across unrelated menus.
 
 ---
 
+<a id="configuration-driven-development"></a>
 # 20. Configuration Driven Development
 
 Do not hardcode:
@@ -690,6 +735,7 @@ Store these in configuration tables.
 
 ---
 
+<a id="performance-guidelines"></a>
 # 21. Performance Guidelines
 
 Targets
@@ -703,6 +749,7 @@ Use background workers for long-running tasks.
 
 ---
 
+<a id="hardware-integration"></a>
 # 22. Hardware Integration
 
 Abstract hardware behind interfaces.
@@ -717,6 +764,7 @@ This allows easy replacement of vendors without changing business logic.
 
 ---
 
+<a id="printing"></a>
 # 23. Printing
 
 Support
@@ -730,6 +778,7 @@ Keep templates configurable.
 
 ---
 
+<a id="barcode"></a>
 # 24. Barcode
 
 Support
@@ -741,6 +790,7 @@ Support
 
 ---
 
+<a id="reporting"></a>
 # 25. Reporting
 
 Provide
@@ -758,6 +808,7 @@ Reports should be exportable to PDF and Excel.
 
 ---
 
+<a id="audit-logging"></a>
 # 26. Audit Logging
 
 Maintain separate logs for:
@@ -780,6 +831,7 @@ Details
 
 ---
 
+<a id="error-handling"></a>
 # 27. Error Handling
 
 Show user-friendly messages.
@@ -790,6 +842,7 @@ Allow safe retries where possible.
 
 ---
 
+<a id="backup-and-recovery"></a>
 # 28. Backup & Recovery
 
 Automatic scheduled backups.
@@ -804,6 +857,7 @@ Test restore procedures regularly.
 
 ---
 
+<a id="security"></a>
 # 29. Security
 
 - Context Isolation enabled
@@ -817,6 +871,7 @@ Test restore procedures regularly.
 
 ---
 
+<a id="coding-standards"></a>
 # 30. Coding Standards
 
 - Strict TypeScript
@@ -831,6 +886,7 @@ Test restore procedures regularly.
 
 ---
 
+<a id="testing"></a>
 # 31. Testing
 
 - Unit Tests
@@ -844,6 +900,7 @@ Automate critical business flows.
 
 ---
 
+<a id="cicd"></a>
 # 32. CI/CD
 
 Automate:
@@ -857,6 +914,7 @@ Automate:
 
 ---
 
+<a id="observability"></a>
 # 33. Observability
 
 Track
@@ -871,6 +929,7 @@ Logs should help diagnose problems quickly.
 
 ---
 
+<a id="telemetry-and-analytics"></a>
 # 34. Telemetry & Analytics
 
 Collect anonymous usage metrics (with customer consent).
@@ -886,6 +945,7 @@ Use data to guide product improvements.
 
 ---
 
+<a id="feature-flags"></a>
 # 35. Feature Flags
 
 Enable gradual rollout of new features.
@@ -898,6 +958,7 @@ Benefits
 
 ---
 
+<a id="multi-store-architecture"></a>
 # 36. Multi Store Architecture
 
 Future support for:
@@ -911,6 +972,7 @@ Keep branch identifiers in core data models from the beginning.
 
 ---
 
+<a id="migration-strategy"></a>
 # 37. Migration Strategy
 
 Help customers migrate from:
@@ -929,6 +991,7 @@ Provide:
 
 ---
 
+<a id="localization"></a>
 # 38. Localization
 
 Prepare for:
@@ -942,6 +1005,7 @@ Never hardcode display text.
 
 ---
 
+<a id="disaster-recovery"></a>
 # 39. Disaster Recovery
 
 Plan for:
@@ -956,6 +1020,7 @@ Document recovery procedures and test them periodically.
 
 ---
 
+<a id="future-roadmap"></a>
 # 40. Future Roadmap
 
 - Multi-branch support
@@ -971,6 +1036,7 @@ Document recovery procedures and test them periodically.
 
 ---
 
+<a id="engineering-checklist"></a>
 # 41. Engineering Checklist
 
 Before every release, verify:
@@ -989,6 +1055,7 @@ Before every release, verify:
 
 ---
 
+<a id="guiding-principle"></a>
 # Guiding Principle
 
 > **"Design around the pharmacist's workflow, not the database schema."**
