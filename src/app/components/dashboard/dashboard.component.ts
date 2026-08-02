@@ -20,6 +20,7 @@ Chart.register(...registerables);
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  standalone: true
 })
 export class DashboardComponent implements AfterViewInit {
 
