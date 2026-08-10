@@ -1,0 +1,41 @@
+model PartyAddress {
+  id            BigInt   @id @default(autoincrement())
+  partyId       BigInt
+
+  uuid          String   @unique
+
+  addressType   String
+
+  addressLine1  String
+  addressLine2  String?
+
+  landmark      String?
+  area          String?
+
+  cityId        BigInt?
+  stateId       BigInt?
+  countryId     BigInt?
+
+  postalCode    String?
+
+  latitude      Float?
+  longitude     Float?
+
+  isDefault     Boolean  @default(false)
+  isActive      Boolean  @default(true)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
+
+  version       Int      @default(1)
+
+  party         Party    @relation(fields: [partyId], references: [id])
+
+  @@index([partyId])
+  @@index([addressType])
+  @@index([cityId])
+  @@index([stateId])
+  @@index([isDefault])
+  @@index([isActive])
+}

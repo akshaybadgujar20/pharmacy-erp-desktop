@@ -1,0 +1,38 @@
+enum PartyType {
+  PERSON
+  ORGANIZATION
+}
+
+model Party {
+  id          BigInt    @id @default(autoincrement())
+  uuid        String    @unique
+  partyType   PartyType
+  displayName String
+
+  firstName  String?
+  middleName String?
+  lastName   String?
+
+  organizationName String?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  version Int @default(1)
+
+  partyRoles PartyRole[]
+  addresses  PartyAddress[]
+  contacts   PartyContact[]
+
+  customer Customer?
+  supplier Supplier?
+  doctor   Doctor?
+  employee Employee?
+
+  @@index([displayName])
+  @@index([partyType])
+  @@index([isActive])
+}

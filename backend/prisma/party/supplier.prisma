@@ -1,0 +1,33 @@
+model Supplier {
+  id      BigInt @id @default(autoincrement())
+  partyId BigInt @unique
+
+  uuid String @unique
+
+  supplierCode String @unique
+  supplierType String
+
+  gstin             String? @unique
+  drugLicenseNumber String?
+  panNumber         String?
+
+  creditLimit       Decimal @default(0)
+  outstandingAmount Decimal @default(0)
+
+  paymentTermsDays Int @default(0)
+
+  preferredSupplier Boolean @default(false)
+  isActive          Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  version Int @default(1)
+
+  party Party @relation(fields: [partyId], references: [id])
+
+  @@index([supplierType])
+  @@index([preferredSupplier])
+  @@index([isActive])
+}

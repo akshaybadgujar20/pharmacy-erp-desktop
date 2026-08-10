@@ -1,0 +1,34 @@
+model Employee {
+  id      BigInt @id @default(autoincrement())
+  partyId BigInt @unique
+
+  uuid String @unique
+
+  employeeCode String @unique
+
+  designation String?
+  department  String?
+
+  joiningDate DateTime?
+  leavingDate DateTime?
+
+  salary Decimal?
+
+  licenseNumber String?
+
+  isPharmacist Boolean @default(false)
+  isActive     Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  version Int @default(1)
+
+  party Party @relation(fields: [partyId], references: [id])
+
+  @@index([department])
+  @@index([designation])
+  @@index([isPharmacist])
+  @@index([isActive])
+}

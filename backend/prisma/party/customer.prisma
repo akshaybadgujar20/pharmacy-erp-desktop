@@ -1,0 +1,31 @@
+model Customer {
+  id      BigInt @id @default(autoincrement())
+  partyId BigInt @unique
+
+  uuid String @unique
+
+  customerCode String @unique
+  customerType String
+
+  creditLimit       Decimal @default(0)
+  outstandingAmount Decimal @default(0)
+
+  paymentTermsDays Int @default(0)
+
+  loyaltyPoints Int @default(0)
+
+  isTaxExempt Boolean @default(false)
+  isActive    Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  version Int @default(1)
+
+  party Party @relation(fields: [partyId], references: [id])
+
+  @@index([customerType])
+  @@index([isActive])
+  @@index([outstandingAmount])
+}

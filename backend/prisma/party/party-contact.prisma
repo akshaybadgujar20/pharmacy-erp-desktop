@@ -1,0 +1,28 @@
+model PartyContact {
+  id      BigInt @id @default(autoincrement())
+  partyId BigInt
+
+  uuid String @unique
+
+  contactType  String
+  contactValue String
+  countryCode  String?
+
+  isPrimary  Boolean @default(false)
+  isVerified Boolean @default(false)
+  isActive   Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  version Int @default(1)
+
+  party Party @relation(fields: [partyId], references: [id])
+
+  @@unique([partyId, contactType, contactValue])
+  @@index([partyId])
+  @@index([contactType])
+  @@index([isPrimary])
+  @@index([isActive])
+}

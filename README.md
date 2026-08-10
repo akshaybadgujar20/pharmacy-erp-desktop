@@ -79,3 +79,12 @@ nest g module <module_name>
 nest g service <service_name>
 nest g controller <controller_name>
 ```
+
+
+This mirrors real-world pharmacy operations:
+
+Purchase Order – "I want to buy."
+Goods Receipt – "I physically received the medicines."
+Purchase Invoice – "Supplier billed me."
+Inventory Update – "Stock is available for sale."
+Payment – "I paid the supplier."
