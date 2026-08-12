@@ -44,23 +44,23 @@ Party (1)
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
-| Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Foreign Key | partyId | INTEGER | BIGINT | No | References Party.id |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier |
-| Business | customerCode | TEXT | VARCHAR(30) | No | Unique customer code |
-| Business | customerType | TEXT | VARCHAR(30) | No | WALK_IN, REGULAR, WHOLESALE, CORPORATE |
-| Financial | creditLimit | REAL | NUMERIC(12,2) | No | Maximum credit allowed |
-| Financial | outstandingAmount | REAL | NUMERIC(12,2) | No | Current outstanding balance |
-| Financial | paymentTermsDays | INTEGER | INTEGER | No | Credit period in days |
-| Loyalty | loyaltyPoints | INTEGER | INTEGER | No | Available loyalty points |
-| Status | isTaxExempt | INTEGER | BOOLEAN | No | Tax exemption flag |
-| Status | isActive | INTEGER | BOOLEAN | No | Active status |
-| Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
-| Audit | updatedAt | DATETIME | TIMESTAMP | No | Last update timestamp |
-| Audit | deletedAt | DATETIME | TIMESTAMP | Yes | Soft delete timestamp |
-| Audit | version | INTEGER | INTEGER | No | Optimistic locking version |
+| Category    | Column            | SQLite   | PostgreSQL    | Nullable | Description                            |
+|-------------|-------------------|----------|---------------|----------|----------------------------------------|
+| Primary Key | id                | INTEGER  | BIGINT        | No       | Auto increment primary key             |
+| Foreign Key | partyId           | INTEGER  | BIGINT        | No       | References Party.id                    |
+| Identifier  | uuid              | TEXT     | UUID          | No       | Global unique identifier               |
+| Business    | customerCode      | TEXT     | VARCHAR(30)   | No       | Unique customer code                   |
+| Business    | customerType      | TEXT     | VARCHAR(30)   | No       | WALK_IN, REGULAR, WHOLESALE, CORPORATE |
+| Financial   | creditLimit       | REAL     | NUMERIC(12,2) | No       | Maximum credit allowed                 |
+| Financial   | outstandingAmount | REAL     | NUMERIC(12,2) | No       | Current outstanding balance            |
+| Financial   | paymentTermsDays  | INTEGER  | INTEGER       | No       | Credit period in days                  |
+| Loyalty     | loyaltyPoints     | INTEGER  | INTEGER       | No       | Available loyalty points               |
+| Status      | isTaxExempt       | INTEGER  | BOOLEAN       | No       | Tax exemption flag                     |
+| Status      | isActive          | INTEGER  | BOOLEAN       | No       | Active status                          |
+| Audit       | createdAt         | DATETIME | TIMESTAMP     | No       | Record creation timestamp              |
+| Audit       | updatedAt         | DATETIME | TIMESTAMP     | No       | Last update timestamp                  |
+| Audit       | deletedAt         | DATETIME | TIMESTAMP     | Yes      | Soft delete timestamp                  |
+| Audit       | version           | INTEGER  | INTEGER       | No       | Optimistic locking version             |
 
 ---
 
@@ -93,10 +93,10 @@ Party (1)
 ## Sample Records
 
 | id | partyId | customerCode | customerType | creditLimit | outstandingAmount | loyaltyPoints |
-|----|---------|--------------|--------------|------------:|------------------:|---------------:|
-| 1 | 1 | CUST00001 | WALK_IN | 0.00 | 0.00 | 0 |
-| 2 | 5 | CUST00002 | REGULAR | 10000.00 | 2500.00 | 150 |
-| 3 | 8 | CUST00003 | CORPORATE | 50000.00 | 12000.00 | 0 |
+|----|---------|--------------|--------------|------------:|------------------:|--------------:|
+| 1  | 1       | CUST00001    | WALK_IN      |        0.00 |              0.00 |             0 |
+| 2  | 5       | CUST00002    | REGULAR      |    10000.00 |           2500.00 |           150 |
+| 3  | 8       | CUST00003    | CORPORATE    |    50000.00 |          12000.00 |             0 |
 
 ---
 
@@ -107,7 +107,7 @@ model Customer {
   id                 BigInt    @id @default(autoincrement())
   partyId            BigInt     @unique
 
-  uuid               String     @unique @db.Uuid
+  uuid               String     @unique
 
   customerCode       String     @unique
   customerType       String

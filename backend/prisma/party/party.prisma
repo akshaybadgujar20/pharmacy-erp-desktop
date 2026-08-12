@@ -6,20 +6,20 @@ enum PartyType {
 model Party {
   id          BigInt    @id @default(autoincrement())
   uuid        String    @unique
-  partyType   PartyType
-  displayName String
+  partyType   PartyType @map("party_type")
+  displayName String    @map("display_name")
 
-  firstName  String?
-  middleName String?
-  lastName   String?
+  firstName  String? @map("first_name")
+  middleName String? @map("middle_name")
+  lastName   String? @map("last_name")
 
-  organizationName String?
+  organizationName String? @map("organization_name")
 
-  isActive Boolean @default(true)
+  isActive Boolean @default(true) @map("is_active")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   version Int @default(1)
 

@@ -99,11 +99,16 @@ Party (1)
 ## Prisma Model
 
 ```prisma
+enum PartyType {
+  PERSON
+  ORGANIZATION
+}
+
 model Party {
   id               BigInt    @id @default(autoincrement())
-  uuid             String    @unique @db.Uuid
-  partyType        String
-  displayName      String
+  uuid             String    @unique
+  partyType        PartyType @map("party_type")   
+  displayName      String    @map("display_name")
 
   firstName        String?
   middleName       String?
@@ -122,6 +127,11 @@ model Party {
   partyRoles       PartyRole[]
   addresses        PartyAddress[]
   contacts         PartyContact[]
+
+  customer         Customer?
+  supplier         Supplier?
+  doctor           Doctor?
+  employee         Employee?
 
   @@index([displayName])
   @@index([partyType])

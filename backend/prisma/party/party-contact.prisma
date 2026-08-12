@@ -1,20 +1,29 @@
+enum ContactType {
+  PHONE
+  MOBILE
+  EMAIL
+  FAX
+  WHATSAPP
+  OTHER
+}
+
 model PartyContact {
   id      BigInt @id @default(autoincrement())
-  partyId BigInt
+  partyId BigInt @map("party_id")
 
   uuid String @unique
 
-  contactType  String
-  contactValue String
-  countryCode  String?
+  contactType  ContactType @map("contact_type")
+  contactValue String      @map("contact_value")
+  countryCode  String?     @map("country_code")
 
-  isPrimary  Boolean @default(false)
-  isVerified Boolean @default(false)
-  isActive   Boolean @default(true)
+  isPrimary  Boolean @default(false) @map("is_primary")
+  isVerified Boolean @default(false) @map("is_verified")
+  isActive   Boolean @default(true) @map("is_active")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   version Int @default(1)
 

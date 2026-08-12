@@ -44,21 +44,21 @@ Party (1)
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
-| Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Foreign Key | partyId | INTEGER | BIGINT | No | References Party.id |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier |
-| Basic | contactType | TEXT | VARCHAR(30) | No | MOBILE, PHONE, EMAIL, WHATSAPP, FAX, WEBSITE |
-| Contact | contactValue | TEXT | VARCHAR(250) | No | Contact value |
-| Contact | countryCode | TEXT | VARCHAR(10) | Yes | Country dialing code |
-| Status | isPrimary | INTEGER | BOOLEAN | No | Primary contact of this type |
-| Status | isVerified | INTEGER | BOOLEAN | No | Indicates whether the contact has been verified |
-| Status | isActive | INTEGER | BOOLEAN | No | Active status |
-| Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
-| Audit | updatedAt | DATETIME | TIMESTAMP | No | Last update timestamp |
-| Audit | deletedAt | DATETIME | TIMESTAMP | Yes | Soft delete timestamp |
-| Audit | version | INTEGER | INTEGER | No | Optimistic locking version |
+| Category    | Column       | SQLite   | PostgreSQL   | Nullable | Description                                     |
+|-------------|--------------|----------|--------------|----------|-------------------------------------------------|
+| Primary Key | id           | INTEGER  | BIGINT       | No       | Auto increment primary key                      |
+| Foreign Key | partyId      | INTEGER  | BIGINT       | No       | References Party.id                             |
+| Identifier  | uuid         | TEXT     | UUID         | No       | Global unique identifier                        |
+| Basic       | contactType  | TEXT     | VARCHAR(30)  | No       | MOBILE, PHONE, EMAIL, WHATSAPP, FAX, WEBSITE    |
+| Contact     | contactValue | TEXT     | VARCHAR(250) | No       | Contact value                                   |
+| Contact     | countryCode  | TEXT     | VARCHAR(10)  | Yes      | Country dialing code                            |
+| Status      | isPrimary    | INTEGER  | BOOLEAN      | No       | Primary contact of this type                    |
+| Status      | isVerified   | INTEGER  | BOOLEAN      | No       | Indicates whether the contact has been verified |
+| Status      | isActive     | INTEGER  | BOOLEAN      | No       | Active status                                   |
+| Audit       | createdAt    | DATETIME | TIMESTAMP    | No       | Record creation timestamp                       |
+| Audit       | updatedAt    | DATETIME | TIMESTAMP    | No       | Last update timestamp                           |
+| Audit       | deletedAt    | DATETIME | TIMESTAMP    | Yes      | Soft delete timestamp                           |
+| Audit       | version      | INTEGER  | INTEGER      | No       | Optimistic locking version                      |
 
 ---
 
@@ -103,7 +103,7 @@ model PartyContact {
   id            BigInt   @id @default(autoincrement())
   partyId       BigInt
 
-  uuid          String   @unique @db.Uuid
+  uuid          String   @unique
 
   contactType   String
   contactValue  String

@@ -105,7 +105,7 @@ model Doctor {
   id                  BigInt   @id @default(autoincrement())
   partyId             BigInt   @unique
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique
 
   doctorCode          String   @unique
   registrationNumber  String   @unique
@@ -114,7 +114,7 @@ model Doctor {
   specialization      String?
   hospitalName        String?
 
-  consultationFee     Decimal? @db.Decimal(10,2)
+  consultationFee     Decimal?
 
   isVisitingDoctor    Boolean  @default(false)
   isActive            Boolean  @default(true)

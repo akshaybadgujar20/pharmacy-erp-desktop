@@ -109,7 +109,7 @@ model PartyAddress {
   id            BigInt   @id @default(autoincrement())
   partyId       BigInt
 
-  uuid          String   @unique @db.Uuid
+  uuid          String   @unique
 
   addressType   String
 

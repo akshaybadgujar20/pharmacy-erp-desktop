@@ -1,36 +1,45 @@
+enum AddressType {
+  HOME
+  WORK
+  BILLING
+  SHIPPING
+  REGISTERED
+  OTHER
+}
+
 model PartyAddress {
-  id            BigInt   @id @default(autoincrement())
-  partyId       BigInt
+  id      BigInt @id @default(autoincrement())
+  partyId BigInt @map("party_id")
 
-  uuid          String   @unique
+  uuid String @unique
 
-  addressType   String
+  addressType AddressType @map("address_type")
 
-  addressLine1  String
-  addressLine2  String?
+  addressLine1 String  @map("address_line1")
+  addressLine2 String? @map("address_line2")
 
-  landmark      String?
-  area          String?
+  landmark String?
+  area     String?
 
-  cityId        BigInt?
-  stateId       BigInt?
-  countryId     BigInt?
+  cityId    BigInt? @map("city_id")
+  stateId   BigInt? @map("state_id")
+  countryId BigInt? @map("country_id")
 
-  postalCode    String?
+  postalCode String? @map("postal_code")
 
-  latitude      Float?
-  longitude     Float?
+  latitude  Float?
+  longitude Float?
 
-  isDefault     Boolean  @default(false)
-  isActive      Boolean  @default(true)
+  isDefault Boolean @default(false) @map("is_default")
+  isActive  Boolean @default(true) @map("is_active")
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  version       Int      @default(1)
+  version Int @default(1)
 
-  party         Party    @relation(fields: [partyId], references: [id])
+  party Party @relation(fields: [partyId], references: [id])
 
   @@index([partyId])
   @@index([addressType])

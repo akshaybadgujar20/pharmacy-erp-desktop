@@ -109,7 +109,7 @@ model Employee {
   id               BigInt   @id @default(autoincrement())
   partyId          BigInt   @unique
 
-  uuid             String   @unique @db.Uuid
+  uuid             String   @unique
 
   employeeCode     String   @unique
 
@@ -119,7 +119,7 @@ model Employee {
   joiningDate      DateTime?
   leavingDate      DateTime?
 
-  salary           Decimal? @db.Decimal(12,2)
+  salary           Decimal?
 
   licenseNumber    String?
 

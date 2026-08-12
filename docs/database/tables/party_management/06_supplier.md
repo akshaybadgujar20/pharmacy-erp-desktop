@@ -114,7 +114,7 @@ model Supplier {
   id                  BigInt   @id @default(autoincrement())
   partyId             BigInt   @unique
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique
 
   supplierCode        String   @unique
   supplierType        String

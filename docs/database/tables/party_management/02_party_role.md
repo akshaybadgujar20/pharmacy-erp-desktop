@@ -101,7 +101,7 @@ model PartyRole {
   id         BigInt   @id @default(autoincrement())
   partyId    BigInt
 
-  uuid       String   @unique @db.Uuid
+  uuid       String   @unique
 
   roleType   String
 
