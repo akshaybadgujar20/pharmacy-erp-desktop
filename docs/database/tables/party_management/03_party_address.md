@@ -9,7 +9,7 @@ A Party may have multiple addresses such as:
 - Billing Address
 - Shipping Address
 - Residential Address
-- Office Address
+- Work Address
 - Warehouse Address
 
 Separating addresses from the Party table keeps the database normalized and allows future expansion without modifying the Party entity.
@@ -20,8 +20,8 @@ Separating addresses from the Party table keeps the database normalized and allo
 
 - Every address must belong to exactly one Party.
 - A Party can have multiple addresses.
-- Only one address of a particular type can be marked as the default.
-- Address types should be configurable.
+- Only one address of a particular type should be marked as the default; this is an application-level rule.
+- Address type is restricted to the `AddressType` enum: HOME, WORK, BILLING, SHIPPING, REGISTERED, or OTHER.
 - Soft delete should be used.
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
@@ -46,7 +46,7 @@ Party (1)
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
 | Foreign Key | partyId | INTEGER | BIGINT | No | References Party.id |
 | Identifier | uuid | TEXT | UUID | No | Global unique identifier |
-| Basic | addressType | TEXT | VARCHAR(30) | No | BILLING, SHIPPING, HOME, OFFICE, WAREHOUSE |
+| Basic | addressType | TEXT | VARCHAR(30) | No | HOME, WORK, BILLING, SHIPPING, REGISTERED, OTHER |
 | Address | addressLine1 | TEXT | VARCHAR(200) | No | Primary address line |
 | Address | addressLine2 | TEXT | VARCHAR(200) | Yes | Secondary address line |
 | Address | landmark | TEXT | VARCHAR(150) | Yes | Nearby landmark |
@@ -74,7 +74,7 @@ Party (1)
 - Foreign Key (stateId → State.id)
 - Foreign Key (countryId → Country.id)
 - Unique (uuid)
-- CHECK addressType IN ('BILLING','SHIPPING','HOME','OFFICE','WAREHOUSE')
+- CHECK addressType IN ('HOME','WORK','BILLING','SHIPPING','REGISTERED','OTHER')
 - version >= 1
 
 ---
@@ -98,42 +98,54 @@ Party (1)
 |----|---------|-------------|--------------|--------|---------|------------|-----------|
 | 1 | 1 | HOME | 12 MG Road | 101 | 21 | 411001 | Yes |
 | 2 | 1 | BILLING | ABC Plaza, FC Road | 101 | 21 | 411004 | No |
-| 3 | 2 | OFFICE | Pharma Industrial Estate | 101 | 21 | 411038 | Yes |
+| 3 | 2 | WORK | Pharma Industrial Estate | 101 | 21 | 411038 | Yes |
 
 ---
 
 ## Prisma Model
 
 ```prisma
+enum AddressType {
+  HOME
+  WORK
+  BILLING
+  SHIPPING
+  REGISTERED
+  OTHER
+}
+```
+
+
+```prisma
 model PartyAddress {
   id            BigInt   @id @default(autoincrement())
-  partyId       BigInt
+  partyId       BigInt   @map("party_id")
 
   uuid          String   @unique
 
-  addressType   String
+  addressType   AddressType @map("address_type")
 
-  addressLine1  String
-  addressLine2  String?
+  addressLine1  String   @map("address_line1")
+  addressLine2  String?  @map("address_line2")
 
   landmark      String?
   area          String?
 
-  cityId        BigInt?
-  stateId       BigInt?
-  countryId     BigInt?
+  cityId        BigInt? @map("city_id")
+  stateId       BigInt? @map("state_id")
+  countryId     BigInt? @map("country_id")
 
-  postalCode    String?
+  postalCode    String? @map("postal_code")
 
   latitude      Float?
   longitude     Float?
 
-  isDefault     Boolean  @default(false)
-  isActive      Boolean  @default(true)
+  isDefault     Boolean  @default(false) @map("is_default")
+  isActive      Boolean  @default(true) @map("is_active")
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
 
   version       Int      @default(1)
 
@@ -158,3 +170,4 @@ model PartyAddress {
 - GPS coordinates enable delivery routing and map integration.
 - Supports offline-first synchronization using UUID.
 - Designed to remain compatible with both SQLite and PostgreSQL.
+

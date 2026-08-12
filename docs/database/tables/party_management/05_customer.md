@@ -50,7 +50,7 @@ Party (1)
 | Foreign Key | partyId           | INTEGER  | BIGINT        | No       | References Party.id                    |
 | Identifier  | uuid              | TEXT     | UUID          | No       | Global unique identifier               |
 | Business    | customerCode      | TEXT     | VARCHAR(30)   | No       | Unique customer code                   |
-| Business    | customerType      | TEXT     | VARCHAR(30)   | No       | WALK_IN, REGULAR, WHOLESALE, CORPORATE |
+| Business    | customerType      | TEXT     | VARCHAR(30)   | No       | RETAIL, WHOLESALE, CORPORATE |
 | Financial   | creditLimit       | REAL     | NUMERIC(12,2) | No       | Maximum credit allowed                 |
 | Financial   | outstandingAmount | REAL     | NUMERIC(12,2) | No       | Current outstanding balance            |
 | Financial   | paymentTermsDays  | INTEGER  | INTEGER       | No       | Credit period in days                  |
@@ -71,10 +71,10 @@ Party (1)
 - Unique (uuid)
 - Unique (partyId)
 - Unique (customerCode)
-- CHECK customerType IN ('WALK_IN','REGULAR','WHOLESALE','CORPORATE')
-- CHECK creditLimit >= 0
-- CHECK outstandingAmount >= 0
-- CHECK loyaltyPoints >= 0
+- `customerType` uses the `CustomerType` enum: RETAIL, WHOLESALE, CORPORATE.
+- `creditLimit` should not be negative; enforce this in the application layer.
+- `outstandingAmount` should not be negative; enforce this in the application layer.
+- `loyaltyPoints` should not be negative; enforce this in the application layer.
 
 ---
 
@@ -94,8 +94,8 @@ Party (1)
 
 | id | partyId | customerCode | customerType | creditLimit | outstandingAmount | loyaltyPoints |
 |----|---------|--------------|--------------|------------:|------------------:|--------------:|
-| 1  | 1       | CUST00001    | WALK_IN      |        0.00 |              0.00 |             0 |
-| 2  | 5       | CUST00002    | REGULAR      |    10000.00 |           2500.00 |           150 |
+| 1  | 1       | CUST00001    | RETAIL      |        0.00 |              0.00 |             0 |
+| 2  | 5       | CUST00002    | RETAIL      |    10000.00 |           2500.00 |           150 |
 | 3  | 8       | CUST00003    | CORPORATE    |    50000.00 |          12000.00 |             0 |
 
 ---
@@ -103,28 +103,37 @@ Party (1)
 ## Prisma Model
 
 ```prisma
+enum CustomerType {
+  RETAIL
+  WHOLESALE
+  CORPORATE
+}
+```
+
+
+```prisma
 model Customer {
   id                 BigInt    @id @default(autoincrement())
-  partyId            BigInt     @unique
+  partyId            BigInt     @unique @map("party_id")
 
   uuid               String     @unique
 
-  customerCode       String     @unique
-  customerType       String
+  customerCode       String     @unique @map("customer_code")
+  customerType       CustomerType @map("customer_type")
 
-  creditLimit        Decimal    @default(0)
-  outstandingAmount  Decimal    @default(0)
+  creditLimit        Decimal    @default(0) @map("credit_limit")
+  outstandingAmount  Decimal    @default(0) @map("outstanding_amount")
 
-  paymentTermsDays   Int        @default(0)
+  paymentTermsDays   Int        @default(0) @map("payment_terms_days")
 
-  loyaltyPoints      Int        @default(0)
+  loyaltyPoints      Int        @default(0) @map("loyalty_points")
 
-  isTaxExempt        Boolean    @default(false)
-  isActive           Boolean    @default(true)
+  isTaxExempt        Boolean    @default(false) @map("is_tax_exempt")
+  isActive           Boolean    @default(true) @map("is_active")
 
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-  deletedAt          DateTime?
+  createdAt          DateTime   @default(now()) @map("created_at")
+  updatedAt          DateTime   @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
 
   version            Int        @default(1)
 
@@ -148,3 +157,4 @@ model Customer {
 - Outstanding amount should preferably be calculated from LedgerEntry rather than manually updated.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+

@@ -71,7 +71,7 @@ Party (1)
 - Unique (partyId)
 - Unique (doctorCode)
 - Unique (registrationNumber)
-- CHECK consultationFee >= 0
+- `consultationFee` should not be negative; enforce this in the application layer.
 
 ---
 
@@ -103,25 +103,25 @@ Party (1)
 ```prisma
 model Doctor {
   id                  BigInt   @id @default(autoincrement())
-  partyId             BigInt   @unique
+  partyId             BigInt   @unique @map("party_id")
 
   uuid                String   @unique
 
-  doctorCode          String   @unique
-  registrationNumber  String   @unique
+  doctorCode          String   @unique @map("doctor_code")
+  registrationNumber  String   @unique @map("registration_number")
 
   qualification       String?
   specialization      String?
-  hospitalName        String?
+  hospitalName        String? @map("hospital_name")
 
-  consultationFee     Decimal?
+  consultationFee     Decimal? @map("consultation_fee")
 
-  isVisitingDoctor    Boolean  @default(false)
-  isActive            Boolean  @default(true)
+  isVisitingDoctor    Boolean  @default(false) @map("is_visiting_doctor")
+  isActive            Boolean  @default(true) @map("is_active")
 
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  deletedAt           DateTime?
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
 
   version             Int      @default(1)
 
@@ -146,3 +146,4 @@ model Doctor {
 - Registration Number should comply with the applicable medical council requirements.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+

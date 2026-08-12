@@ -75,7 +75,7 @@ Party (1)
 - Unique (uuid)
 - Unique (partyId)
 - Unique (employeeCode)
-- CHECK salary >= 0
+- `salary` should not be negative; enforce this in the application layer.
 
 ---
 
@@ -107,28 +107,28 @@ Party (1)
 ```prisma
 model Employee {
   id               BigInt   @id @default(autoincrement())
-  partyId          BigInt   @unique
+  partyId          BigInt   @unique @map("party_id")
 
   uuid             String   @unique
 
-  employeeCode     String   @unique
+  employeeCode     String   @unique @map("employee_code")
 
   designation      String?
   department       String?
 
-  joiningDate      DateTime?
-  leavingDate      DateTime?
+  joiningDate      DateTime? @map("joining_date")
+  leavingDate      DateTime? @map("leaving_date")
 
   salary           Decimal?
 
-  licenseNumber    String?
+  licenseNumber    String? @map("license_number")
 
-  isPharmacist     Boolean  @default(false)
-  isActive         Boolean  @default(true)
+  isPharmacist     Boolean  @default(false) @map("is_pharmacist")
+  isActive         Boolean  @default(true) @map("is_active")
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  deletedAt        DateTime?
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
 
   version          Int      @default(1)
 
@@ -154,3 +154,4 @@ model Employee {
 - Employees are referenced throughout the ERP for auditing, inventory transactions, purchases, sales, and approvals.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+

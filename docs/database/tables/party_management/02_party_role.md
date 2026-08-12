@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The PartyRole table defines the business roles assigned to a Party.
+The PartyRole table defines the business roles assigned to a Party. The parent Party model declares the inverse relation as `partyRoles PartyRole[]`.
 
 A single Party can have one or more roles, allowing the same person or organization to participate in multiple business processes without duplicating master data.
 
@@ -52,7 +52,7 @@ Party (1)
 | Primary Key | id        | INTEGER  | BIGINT      | No       | Auto increment primary key           |
 | Foreign Key | partyId   | INTEGER  | BIGINT      | No       | References Party.id                  |
 | Identifier  | uuid      | TEXT     | UUID        | No       | Global unique identifier             |
-| Basic       | roleType  | TEXT     | VARCHAR(30) | No       | CUSTOMER, SUPPLIER, DOCTOR, EMPLOYEE |
+| Basic       | roleType  | TEXT     | VARCHAR(30) | No       | CUSTOMER, SUPPLIER, DOCTOR, EMPLOYEE, ADMIN, OTHER |
 | Status      | isPrimary | INTEGER  | BOOLEAN     | No       | Indicates the primary/default role   |
 | Status      | isActive  | INTEGER  | BOOLEAN     | No       | Whether the role is active           |
 | Audit       | createdAt | DATETIME | TIMESTAMP   | No       | Record creation timestamp            |
@@ -68,7 +68,7 @@ Party (1)
 - Foreign Key (partyId → Party.id)
 - Unique (uuid)
 - Unique (partyId, roleType)
-- CHECK roleType IN ('CUSTOMER','SUPPLIER','DOCTOR','EMPLOYEE')
+- CHECK roleType IN ('CUSTOMER','SUPPLIER','DOCTOR','EMPLOYEE','ADMIN','OTHER')
 - version >= 1
 
 ---
@@ -94,7 +94,23 @@ Party (1)
 
 ---
 
-## Prisma Model
+## Prisma Models
+
+The inverse relation is declared in `party.prisma`:
+
+```prisma
+model Party {
+  id         BigInt      @id @default(autoincrement())
+  partyRoles PartyRole[]
+
+  customer Customer?
+  supplier Supplier?
+  doctor   Doctor?
+  employee Employee?
+}
+```
+
+The PartyRole model is defined in `party-role.prisma`:
 
 ```prisma
 model PartyRole {
@@ -103,10 +119,10 @@ model PartyRole {
 
   uuid       String   @unique
 
-  roleType   String
+  roleType   RoleType
 
   isPrimary  Boolean  @default(false)
-  isActive   Boolean  @default(true)
+  isActive   Boolean  @default(true) @map("is_active")
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -131,3 +147,4 @@ model PartyRole {
 - Role-specific attributes should **not** be stored here; they belong in their respective tables (Customer, Supplier, Doctor, Employee).
 - This table serves as the bridge between the generic Party master and specialized business entities.
 - Designed for offline-first synchronization using UUID and soft-delete support.
+

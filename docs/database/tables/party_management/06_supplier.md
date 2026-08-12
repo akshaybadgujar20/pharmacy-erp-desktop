@@ -54,7 +54,7 @@ Party (1)
 | Foreign Key | partyId | INTEGER | BIGINT | No | References Party.id |
 | Identifier | uuid | TEXT | UUID | No | Global unique identifier |
 | Business | supplierCode | TEXT | VARCHAR(30) | No | Unique supplier code |
-| Business | supplierType | TEXT | VARCHAR(30) | No | MANUFACTURER, DISTRIBUTOR, WHOLESALER, LOCAL |
+| Business | supplierType | TEXT | VARCHAR(30) | No | MANUFACTURER, DISTRIBUTOR, WHOLESALER, OTHER |
 | Business | gstin | TEXT | VARCHAR(20) | Yes | GST Identification Number |
 | Business | drugLicenseNumber | TEXT | VARCHAR(50) | Yes | Drug License Number |
 | Business | panNumber | TEXT | VARCHAR(20) | Yes | PAN Number |
@@ -78,9 +78,9 @@ Party (1)
 - Unique (partyId)
 - Unique (supplierCode)
 - Unique (gstin)
-- CHECK supplierType IN ('MANUFACTURER','DISTRIBUTOR','WHOLESALER','LOCAL')
-- CHECK creditLimit >= 0
-- CHECK outstandingAmount >= 0
+- `supplierType` uses the `SupplierType` enum: MANUFACTURER, DISTRIBUTOR, WHOLESALER, OTHER.
+- `creditLimit` should not be negative; enforce this in the application layer.
+- `outstandingAmount` should not be negative; enforce this in the application layer.
 
 ---
 
@@ -110,30 +110,40 @@ Party (1)
 ## Prisma Model
 
 ```prisma
+enum SupplierType {
+  MANUFACTURER
+  DISTRIBUTOR
+  WHOLESALER
+  OTHER
+}
+```
+
+
+```prisma
 model Supplier {
   id                  BigInt   @id @default(autoincrement())
-  partyId             BigInt   @unique
+  partyId             BigInt   @unique @map("party_id")
 
   uuid                String   @unique
 
-  supplierCode        String   @unique
-  supplierType        String
+  supplierCode        String   @unique @map("supplier_code")
+  supplierType        SupplierType @map("supplier_type")
 
   gstin               String?  @unique
-  drugLicenseNumber   String?
-  panNumber           String?
+  drugLicenseNumber   String? @map("drug_license_number")
+  panNumber           String? @map("pan_number")
 
-  creditLimit         Decimal  @default(0)
-  outstandingAmount   Decimal  @default(0)
+  creditLimit         Decimal  @default(0) @map("credit_limit")
+  outstandingAmount   Decimal  @default(0) @map("outstanding_amount")
 
-  paymentTermsDays    Int      @default(0)
+  paymentTermsDays    Int      @default(0) @map("payment_terms_days")
 
-  preferredSupplier   Boolean  @default(false)
-  isActive            Boolean  @default(true)
+  preferredSupplier   Boolean  @default(false) @map("preferred_supplier")
+  isActive            Boolean  @default(true) @map("is_active")
 
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  deletedAt           DateTime?
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
 
   version             Int      @default(1)
 
@@ -157,3 +167,4 @@ model Supplier {
 - Drug License Number and GSTIN are important for statutory compliance in pharmacy operations.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+

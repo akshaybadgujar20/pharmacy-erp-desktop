@@ -110,13 +110,13 @@ model Party {
   partyType        PartyType @map("party_type")   
   displayName      String    @map("display_name")
 
-  firstName        String?
-  middleName       String?
-  lastName         String?
+  firstName        String? @map("first_name")
+  middleName       String? @map("middle_name")
+  lastName         String? @map("last_name")
 
-  organizationName String?
+  organizationName String? @map("organization_name")
 
-  isActive         Boolean   @default(true)
+  isActive         Boolean   @default(true) @map("is_active")
 
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -149,3 +149,6 @@ model Party {
 - Contact details should be stored in PartyContact.
 - Address information should be stored in PartyAddress.
 - Designed for offline-first synchronization using UUID.
+
+
+

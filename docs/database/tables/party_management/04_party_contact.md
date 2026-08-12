@@ -11,7 +11,7 @@ A Party can have multiple contact methods such as:
 - Email Address
 - WhatsApp Number
 - Fax Number
-- Website
+- Other contact details
 
 Separating contact information from the Party table keeps the database normalized and allows unlimited contact methods for each Party.
 
@@ -21,8 +21,8 @@ Separating contact information from the Party table keeps the database normalize
 
 - Every contact must belong to exactly one Party.
 - A Party can have multiple contact records.
-- Only one contact of a specific type can be marked as the default.
-- Contact types should be configurable.
+- Only one contact of a specific type should be marked as primary; this is an application-level rule.
+- Contact type is restricted to the `ContactType` enum: PHONE, MOBILE, EMAIL, FAX, WHATSAPP, or OTHER.
 - Email addresses should be stored in lowercase.
 - Mobile numbers should include the country code where applicable.
 - Soft delete should be used.
@@ -49,7 +49,7 @@ Party (1)
 | Primary Key | id           | INTEGER  | BIGINT       | No       | Auto increment primary key                      |
 | Foreign Key | partyId      | INTEGER  | BIGINT       | No       | References Party.id                             |
 | Identifier  | uuid         | TEXT     | UUID         | No       | Global unique identifier                        |
-| Basic       | contactType  | TEXT     | VARCHAR(30)  | No       | MOBILE, PHONE, EMAIL, WHATSAPP, FAX, WEBSITE    |
+| Basic       | contactType  | TEXT     | VARCHAR(30)  | No       | PHONE, MOBILE, EMAIL, FAX, WHATSAPP, OTHER    |
 | Contact     | contactValue | TEXT     | VARCHAR(250) | No       | Contact value                                   |
 | Contact     | countryCode  | TEXT     | VARCHAR(10)  | Yes      | Country dialing code                            |
 | Status      | isPrimary    | INTEGER  | BOOLEAN      | No       | Primary contact of this type                    |
@@ -68,7 +68,7 @@ Party (1)
 - Foreign Key (partyId → Party.id)
 - Unique (uuid)
 - Unique (partyId, contactType, contactValue)
-- CHECK contactType IN ('MOBILE','PHONE','EMAIL','WHATSAPP','FAX','WEBSITE')
+- `contactType` uses the `ContactType` enum: PHONE, MOBILE, EMAIL, FAX, WHATSAPP, OTHER.
 - version >= 1
 
 ---
@@ -92,30 +92,42 @@ Party (1)
 | 1 | 1 | MOBILE | 9876543210 | +91 | Yes | Yes |
 | 2 | 1 | EMAIL | john.doe@email.com | NULL | Yes | Yes |
 | 3 | 2 | PHONE | 02012345678 | +91 | Yes | No |
-| 4 | 2 | WEBSITE | https://abcpharma.com | NULL | Yes | No |
+| 4 | 2 | OTHER | https://abcpharma.com | NULL | Yes | No |
 
 ---
 
 ## Prisma Model
 
 ```prisma
+enum ContactType {
+  PHONE
+  MOBILE
+  EMAIL
+  FAX
+  WHATSAPP
+  OTHER
+}
+```
+
+
+```prisma
 model PartyContact {
   id            BigInt   @id @default(autoincrement())
-  partyId       BigInt
+  partyId       BigInt   @map("party_id")
 
   uuid          String   @unique
 
-  contactType   String
-  contactValue  String
-  countryCode   String?
+  contactType   ContactType @map("contact_type")
+  contactValue  String   @map("contact_value")
+  countryCode   String?  @map("country_code")
 
-  isPrimary     Boolean  @default(false)
-  isVerified    Boolean  @default(false)
-  isActive      Boolean  @default(true)
+  isPrimary     Boolean  @default(false) @map("is_primary")
+  isVerified    Boolean  @default(false) @map("is_verified")
+  isActive      Boolean  @default(true) @map("is_active")
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
 
   version       Int      @default(1)
 
@@ -135,8 +147,9 @@ model PartyContact {
 ## Notes
 
 - Stores all contact methods for every Party in the ERP.
-- Supports multiple phone numbers, email addresses, and websites for a single Party.
+- Supports multiple phone numbers, email addresses, and other contact details for a single Party.
 - Business modules should retrieve the primary contact where available.
 - Verification status can be used for OTP/email verification workflows.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+
