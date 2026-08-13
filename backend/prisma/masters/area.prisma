@@ -1,0 +1,36 @@
+model Area {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  cityId BigInt @map("city_id")
+
+  areaCode String @map("area_code")
+  areaName String @map("area_name")
+
+  postalCode String? @map("postal_code")
+
+  deliveryZone String? @map("delivery_zone")
+  routeCode    String? @map("route_code")
+
+  latitude  Float?
+  longitude Float?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  city City @relation(fields: [cityId], references: [id])
+
+  @@unique([cityId, areaCode])
+  @@unique([cityId, areaName])
+
+  @@index([cityId])
+  @@index([postalCode])
+  @@index([deliveryZone])
+  @@index([isActive])
+}
