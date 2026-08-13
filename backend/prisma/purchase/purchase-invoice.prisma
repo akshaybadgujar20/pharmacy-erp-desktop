@@ -1,0 +1,48 @@
+model PurchaseInvoice {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  purchaseInvoiceNumber String @unique @map("purchase_invoice_number")
+  supplierInvoiceNumber String @map("supplier_invoice_number")
+
+  supplierId     BigInt  @map("supplier_id")
+  goodsReceiptId BigInt? @map("goods_receipt_id")
+  branchId       BigInt  @map("branch_id")
+
+  invoiceDate DateTime  @map("invoice_date")
+  dueDate     DateTime? @map("due_date")
+
+  grossAmount    Decimal @map("gross_amount")
+  discountAmount Decimal @default(0) @map("discount_amount")
+  taxAmount      Decimal @default(0) @map("tax_amount")
+
+  netAmount     Decimal @map("net_amount")
+  paidAmount    Decimal @default(0) @map("paid_amount")
+  balanceAmount Decimal @map("balance_amount")
+
+  status String
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  supplier     Supplier      @relation(fields: [supplierId], references: [id])
+  goodsReceipt GoodsReceipt? @relation(fields: [goodsReceiptId], references: [id])
+  branch       Branch        @relation(fields: [branchId], references: [id])
+
+  items    PurchaseInvoiceItem[]
+  payments Payment[]
+
+  @@unique([supplierId, supplierInvoiceNumber])
+  @@index([supplierId])
+  @@index([goodsReceiptId])
+  @@index([branchId])
+  @@index([invoiceDate])
+  @@index([status])
+  @@index([dueDate])
+}

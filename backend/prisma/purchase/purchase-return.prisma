@@ -1,0 +1,43 @@
+model PurchaseReturn {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  purchaseReturnNumber String @unique @map("purchase_return_number")
+
+  supplierId        BigInt  @map("supplier_id")
+  purchaseInvoiceId BigInt? @map("purchase_invoice_id")
+  branchId          BigInt  @map("branch_id")
+
+  returnDate   DateTime @map("return_date")
+  returnReason String   @map("return_reason")
+
+  totalAmount Decimal @map("total_amount")
+
+  status String
+
+  supplierCreditNoteNo String? @map("supplier_credit_note_no")
+  remarks              String?
+
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  supplier        Supplier         @relation(fields: [supplierId], references: [id])
+  purchaseInvoice PurchaseInvoice? @relation(fields: [purchaseInvoiceId], references: [id])
+  branch          Branch           @relation(fields: [branchId], references: [id])
+  approvedBy      Employee?        @relation(fields: [approvedByEmployeeId], references: [id])
+
+  items PurchaseReturnItem[]
+
+  @@index([supplierId])
+  @@index([purchaseInvoiceId])
+  @@index([branchId])
+  @@index([returnDate])
+  @@index([status])
+}

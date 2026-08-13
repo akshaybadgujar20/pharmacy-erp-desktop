@@ -1,0 +1,37 @@
+model FinancialYear {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  companyId BigInt  @map("company_id")
+  branchId  BigInt? @map("branch_id")
+
+  financialYearCode String @map("financial_year_code")
+  financialYearName String @map("financial_year_name")
+
+  startDate DateTime @map("start_date")
+  endDate   DateTime @map("end_date")
+
+  status String
+
+  isCurrent Boolean @default(false) @map("is_current")
+
+  closingDate DateTime? @map("closing_date")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  company Company @relation(fields: [companyId], references: [id])
+  branch  Branch? @relation(fields: [branchId], references: [id])
+
+  @@unique([companyId, financialYearCode])
+  @@index([companyId])
+  @@index([branchId])
+  @@index([status])
+  @@index([isCurrent])
+}

@@ -1,0 +1,38 @@
+model PurchaseOrderItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  purchaseOrderId BigInt @map("purchase_order_id")
+  medicineId      BigInt @map("medicine_id")
+  unitId          BigInt @map("unit_id")
+
+  lineNumber Int @map("line_number")
+
+  orderedQuantity  Decimal @map("ordered_quantity")
+  receivedQuantity Decimal @default(0) @map("received_quantity")
+
+  unitPrice       Decimal  @map("unit_price")
+  discountPercent Decimal? @map("discount_percent")
+  taxPercent      Decimal? @map("tax_percent")
+
+  lineAmount Decimal @map("line_amount")
+
+  isClosed Boolean @default(false) @map("is_closed")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  medicine     Medicine      @relation(fields: [medicineId], references: [id])
+  unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
+
+  @@unique([purchaseOrderId, medicineId])
+  @@index([purchaseOrderId])
+  @@index([medicineId])
+  @@index([lineNumber])
+  @@index([isClosed])
+}

@@ -1,0 +1,38 @@
+model UserSession {
+  id BigInt @id @default(autoincrement())
+
+  userId BigInt @map("user_id")
+
+  uuid String @unique
+
+  sessionToken String  @unique @map("session_token")
+  refreshToken String? @map("refresh_token")
+
+  deviceName         String? @map("device_name")
+  deviceType         String? @map("device_type")
+  operatingSystem    String? @map("operating_system")
+  applicationVersion String? @map("application_version")
+
+  ipAddress String? @map("ip_address")
+
+  loginTime       DateTime  @map("login_time")
+  lastActivityAt  DateTime  @map("last_activity_at")
+  logoutTime      DateTime? @map("logout_time")
+  expiresAt       DateTime  @map("expires_at")
+
+  isActive     Boolean @default(true) @map("is_active")
+  logoutReason String?  @map("logout_reason")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([loginTime])
+  @@index([expiresAt])
+}

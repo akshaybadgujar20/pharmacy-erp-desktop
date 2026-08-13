@@ -1,0 +1,16 @@
+model MedicineSalt {
+  id BigInt @id @default(autoincrement())
+
+  medicineId        BigInt @map("medicine_id")
+  saltCompositionId BigInt @map("salt_composition_id")
+
+  sequenceNo Int      @map("sequence_no")
+  percentage Decimal?
+
+  medicine        Medicine        @relation(fields: [medicineId], references: [id])
+  saltComposition SaltComposition @relation(fields: [saltCompositionId], references: [id])
+
+  @@unique([medicineId, saltCompositionId])
+  @@index([medicineId])
+  @@index([saltCompositionId])
+}

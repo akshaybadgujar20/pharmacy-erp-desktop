@@ -1,0 +1,47 @@
+model SalesInvoice {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  invoiceNumber String @unique @map("invoice_number")
+
+  customerId     BigInt? @map("customer_id")
+  prescriptionId BigInt? @map("prescription_id")
+  branchId       BigInt  @map("branch_id")
+
+  invoiceDate DateTime @map("invoice_date")
+
+  grossAmount    Decimal @map("gross_amount")
+  discountAmount Decimal @default(0) @map("discount_amount")
+  taxAmount      Decimal @default(0) @map("tax_amount")
+  netAmount      Decimal @map("net_amount")
+
+  paidAmount    Decimal @default(0) @map("paid_amount")
+  balanceAmount Decimal @default(0) @map("balance_amount")
+
+  paymentMode String? @map("payment_mode")
+  status      String
+
+  remarks String?
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  customer     Customer?     @relation(fields: [customerId], references: [id])
+  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
+  branch       Branch        @relation(fields: [branchId], references: [id])
+
+  items    SalesInvoiceItem[]
+  payments SalesPayment[]
+
+  @@index([customerId])
+  @@index([prescriptionId])
+  @@index([branchId])
+  @@index([invoiceDate])
+  @@index([status])
+}

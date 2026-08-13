@@ -1,0 +1,29 @@
+model MedicineSchedule {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  scheduleCode String @unique @map("schedule_code")
+  scheduleName String @unique @map("schedule_name")
+
+  description String?
+
+  requiresPrescription  Boolean @default(false) @map("requires_prescription")
+  requiresDoctorDetails Boolean @default(false) @map("requires_doctor_details")
+  maintainSalesRegister Boolean @default(false) @map("maintain_sales_register")
+  controlledSubstance   Boolean @default(false) @map("controlled_substance")
+
+  isSystemSchedule Boolean @default(false) @map("is_system_schedule")
+  isActive         Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  medicines Medicine[]
+
+  @@index([requiresPrescription])
+  @@index([isActive])
+}

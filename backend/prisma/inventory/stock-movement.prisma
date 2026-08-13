@@ -1,0 +1,37 @@
+model StockMovement {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  batchId BigInt @map("batch_id")
+
+  movementNumber String @unique @map("movement_number")
+
+  movementType      String @map("movement_type")
+  movementDirection String @map("movement_direction")
+
+  quantity     Decimal @map("quantity")
+  balanceAfter Decimal @map("balance_after")
+
+  referenceTable String @map("reference_table")
+  referenceId    BigInt @map("reference_id")
+
+  movementDate DateTime @map("movement_date")
+
+  remarks String?
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  batch Batch @relation(fields: [batchId], references: [id])
+
+  @@index([batchId])
+  @@index([movementType])
+  @@index([movementDate])
+  @@index([referenceTable, referenceId])
+}

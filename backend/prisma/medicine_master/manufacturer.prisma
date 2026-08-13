@@ -1,0 +1,30 @@
+model Manufacturer {
+  id BigInt @id @default(autoincrement())
+
+  partyId BigInt @unique @map("party_id")
+
+  uuid String @unique
+
+  manufacturerCode       String  @unique @map("manufacturer_code")
+  manufacturingLicenseNo String? @unique @map("manufacturing_license_no")
+  gstin                  String? @unique
+
+  website      String?
+  email        String?
+  supportPhone String? @map("support_phone")
+
+  isPreferred Boolean @default(false) @map("is_preferred")
+  isActive    Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  party     Party     @relation(fields: [partyId], references: [id])
+  medicines Medicine[]
+
+  @@index([isPreferred])
+  @@index([isActive])
+}

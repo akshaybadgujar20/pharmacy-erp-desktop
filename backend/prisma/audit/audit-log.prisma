@@ -1,0 +1,36 @@
+model AuditLog {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  userId BigInt? @map("user_id")
+
+  entityType String  @map("entity_type")
+  entityId   BigInt? @map("entity_id")
+
+  action String
+  module String
+
+  description String?
+
+  ipAddress String? @map("ip_address")
+  deviceId  String? @map("device_id")
+  sessionId String? @map("session_id")
+
+  actionTimestamp DateTime @map("action_timestamp")
+
+  correlationId String? @map("correlation_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  version Int @default(1)
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([module])
+  @@index([actionTimestamp])
+  @@index([correlationId])
+}

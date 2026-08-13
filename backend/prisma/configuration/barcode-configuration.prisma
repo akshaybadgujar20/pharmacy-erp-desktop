@@ -1,0 +1,42 @@
+model BarcodeConfiguration {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  companyId BigInt  @map("company_id")
+  branchId  BigInt? @map("branch_id")
+
+  configurationName String @map("configuration_name")
+
+  barcodeType String @map("barcode_type")
+  appliesTo   String @map("applies_to")
+
+  labelWidth  Decimal @map("label_width")
+  labelHeight Decimal @map("label_height")
+
+  dpi                   Int     @default(203)
+  showHumanReadableText Boolean @default(true) @map("show_human_readable_text")
+
+  template String?
+
+  isDefault Boolean @default(false) @map("is_default")
+  isActive  Boolean @default(true) @map("is_active")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  company Company @relation(fields: [companyId], references: [id])
+  branch  Branch? @relation(fields: [branchId], references: [id])
+
+  @@unique([companyId, branchId, configurationName])
+  @@index([companyId])
+  @@index([branchId])
+  @@index([barcodeType])
+  @@index([isDefault])
+  @@index([isActive])
+}

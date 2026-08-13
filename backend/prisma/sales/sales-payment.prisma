@@ -1,0 +1,39 @@
+model SalesPayment {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  salesInvoiceId BigInt @map("sales_invoice_id")
+
+  paymentNumber String @unique @map("payment_number")
+
+  paymentDate   DateTime @map("payment_date")
+  paymentAmount Decimal  @map("payment_amount")
+
+  paymentMethod String @map("payment_method")
+
+  transactionReference String? @map("transaction_reference")
+
+  bankName     String?
+  chequeNumber String?   @map("cheque_number")
+  chequeDate   DateTime? @map("cheque_date")
+
+  status String
+
+  remarks String?
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
+
+  @@index([salesInvoiceId])
+  @@index([paymentDate])
+  @@index([paymentMethod])
+  @@index([status])
+}

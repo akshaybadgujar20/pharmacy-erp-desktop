@@ -1,0 +1,33 @@
+model SaltComposition {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  genericId BigInt @map("generic_id")
+  unitId    BigInt @map("unit_id")
+
+  compositionCode String @unique @map("composition_code")
+
+  strength     Decimal @map("strength")
+  strengthUnit String  @map("strength_unit")
+
+  description String?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  generic MedicineGeneric @relation(fields: [genericId], references: [id])
+  unit    UnitOfMeasure   @relation(fields: [unitId], references: [id])
+
+  medicineSalts MedicineSalt[]
+
+  @@unique([genericId, strength, strengthUnit])
+  @@index([genericId])
+  @@index([unitId])
+  @@index([isActive])
+}

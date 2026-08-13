@@ -1,0 +1,34 @@
+model Ledger {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  ledgerCode String @unique @map("ledger_code")
+  ledgerName String @map("ledger_name")
+
+  ledgerType String @map("ledger_type")
+
+  parentLedgerId BigInt? @map("parent_ledger_id")
+
+  normalBalance String @map("normal_balance")
+
+  isSystem Boolean @default(false) @map("is_system")
+  isActive Boolean @default(true) @map("is_active")
+
+  description String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  parentLedger Ledger?  @relation("LedgerHierarchy", fields: [parentLedgerId], references: [id])
+  childLedgers Ledger[] @relation("LedgerHierarchy")
+
+  entries LedgerEntry[]
+
+  @@index([parentLedgerId])
+  @@index([ledgerType])
+  @@index([isActive])
+}

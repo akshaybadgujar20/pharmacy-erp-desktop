@@ -1,0 +1,49 @@
+model DiscountRule {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  ruleCode String @unique @map("rule_code")
+  ruleName String @map("rule_name")
+
+  discountType  String  @map("discount_type")
+  discountValue Decimal @map("discount_value")
+
+  appliesTo String @map("applies_to")
+
+  medicineId  BigInt? @map("medicine_id")
+  categoryId  BigInt? @map("category_id")
+  customerId  BigInt? @map("customer_id")
+  priceListId BigInt? @map("price_list_id")
+
+  minimumQuantity Decimal? @map("minimum_quantity")
+  minimumAmount   Decimal? @map("minimum_amount")
+
+  priority Int
+
+  effectiveFrom DateTime  @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  medicine  Medicine?         @relation(fields: [medicineId], references: [id])
+  category  MedicineCategory? @relation(fields: [categoryId], references: [id])
+  customer  Customer?         @relation(fields: [customerId], references: [id])
+  priceList PriceList?        @relation(fields: [priceListId], references: [id])
+
+  @@index([priority])
+  @@index([isActive])
+  @@index([effectiveFrom, effectiveTo])
+  @@index([medicineId])
+  @@index([categoryId])
+  @@index([customerId])
+  @@index([priceListId])
+}

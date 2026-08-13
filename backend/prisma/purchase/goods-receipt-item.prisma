@@ -1,0 +1,44 @@
+model GoodsReceiptItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  goodsReceiptId      BigInt  @map("goods_receipt_id")
+  purchaseOrderItemId BigInt? @map("purchase_order_item_id")
+
+  medicineId BigInt @map("medicine_id")
+  unitId     BigInt @map("unit_id")
+
+  lineNumber Int @map("line_number")
+
+  batchNumber       String    @map("batch_number")
+  manufacturingDate DateTime? @map("manufacturing_date")
+  expiryDate        DateTime  @map("expiry_date")
+
+  receivedQuantity Decimal @map("received_quantity")
+
+  purchaseRate Decimal @map("purchase_rate")
+  mrp          Decimal
+  saleRate     Decimal @map("sale_rate")
+
+  lineAmount Decimal @map("line_amount")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  goodsReceipt      GoodsReceipt       @relation(fields: [goodsReceiptId], references: [id])
+  purchaseOrderItem PurchaseOrderItem? @relation(fields: [purchaseOrderItemId], references: [id])
+  medicine          Medicine            @relation(fields: [medicineId], references: [id])
+  unit              UnitOfMeasure       @relation(fields: [unitId], references: [id])
+
+  @@index([goodsReceiptId])
+  @@index([purchaseOrderItemId])
+  @@index([medicineId])
+  @@index([batchNumber])
+  @@index([expiryDate])
+}

@@ -1,0 +1,29 @@
+model ChangeHistory {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  auditLogId BigInt @map("audit_log_id")
+
+  entityType String @map("entity_type")
+  entityId   BigInt @map("entity_id")
+
+  fieldName String @map("field_name")
+
+  oldValue String? @map("old_value")
+  newValue String? @map("new_value")
+
+  dataType   String? @map("data_type")
+  changeType String  @map("change_type")
+
+  changedAt DateTime @default(now()) @map("changed_at")
+
+  version Int @default(1)
+
+  auditLog AuditLog @relation(fields: [auditLogId], references: [id])
+
+  @@index([auditLogId])
+  @@index([entityType, entityId])
+  @@index([fieldName])
+  @@index([changedAt])
+}

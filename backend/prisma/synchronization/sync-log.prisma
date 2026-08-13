@@ -1,0 +1,34 @@
+model SyncLog {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  syncType      String @map("sync_type")
+  syncDirection String @map("sync_direction")
+
+  startedAt   DateTime  @map("started_at")
+  completedAt DateTime? @map("completed_at")
+
+  recordsUploaded   Int @default(0) @map("records_uploaded")
+  recordsDownloaded Int @default(0) @map("records_downloaded")
+
+  conflictsDetected Int @default(0) @map("conflicts_detected")
+  failedRecords     Int @default(0) @map("failed_records")
+
+  status String
+
+  errorMessage String? @map("error_message")
+
+  deviceId   String? @map("device_id")
+  appVersion String? @map("app_version")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  version Int @default(1)
+
+  @@index([status])
+  @@index([startedAt])
+  @@index([syncType])
+  @@index([syncDirection])
+  @@index([deviceId])
+}

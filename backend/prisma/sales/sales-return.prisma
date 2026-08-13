@@ -1,0 +1,43 @@
+model SalesReturn {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  salesReturnNumber String @unique @map("sales_return_number")
+
+  salesInvoiceId BigInt  @map("sales_invoice_id")
+  customerId     BigInt? @map("customer_id")
+  branchId       BigInt  @map("branch_id")
+
+  returnDate   DateTime @map("return_date")
+  returnReason String   @map("return_reason")
+
+  totalAmount  Decimal @map("total_amount")
+  refundAmount Decimal @default(0) @map("refund_amount")
+
+  status String
+
+  remarks String?
+
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
+  customer     Customer?    @relation(fields: [customerId], references: [id])
+  branch       Branch       @relation(fields: [branchId], references: [id])
+  approvedBy   Employee?    @relation(fields: [approvedByEmployeeId], references: [id])
+
+  items SalesReturnItem[]
+
+  @@index([salesInvoiceId])
+  @@index([customerId])
+  @@index([branchId])
+  @@index([returnDate])
+  @@index([status])
+}

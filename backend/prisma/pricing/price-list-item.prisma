@@ -1,0 +1,39 @@
+model PriceListItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  priceListId BigInt @map("price_list_id")
+  medicineId  BigInt @map("medicine_id")
+
+  sellingPrice        Decimal  @map("selling_price")
+  mrp                 Decimal
+  minimumSellingPrice Decimal? @map("minimum_selling_price")
+
+  discountPercent Decimal? @map("discount_percent")
+
+  taxId BigInt? @map("tax_id")
+
+  effectiveFrom DateTime  @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  priceList PriceList @relation(fields: [priceListId], references: [id])
+  medicine  Medicine  @relation(fields: [medicineId], references: [id])
+  tax       Tax?      @relation(fields: [taxId], references: [id])
+
+  @@unique([priceListId, medicineId])
+  @@index([priceListId])
+  @@index([medicineId])
+  @@index([taxId])
+  @@index([isActive])
+}

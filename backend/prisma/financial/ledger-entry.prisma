@@ -1,0 +1,37 @@
+model LedgerEntry {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  ledgerId BigInt @map("ledger_id")
+
+  voucherType   String @map("voucher_type")
+  voucherId     BigInt @map("voucher_id")
+  voucherNumber String @map("voucher_number")
+
+  transactionDate DateTime @map("transaction_date")
+
+  debitAmount  Decimal @default(0) @map("debit_amount")
+  creditAmount Decimal @default(0) @map("credit_amount")
+
+  runningBalance Decimal? @map("running_balance")
+
+  narration String?
+
+  isPosted Boolean @default(true) @map("is_posted")
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  ledger Ledger @relation(fields: [ledgerId], references: [id])
+
+  @@index([ledgerId])
+  @@index([transactionDate])
+  @@index([voucherType, voucherId])
+  @@index([isPosted])
+}

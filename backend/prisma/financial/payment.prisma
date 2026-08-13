@@ -1,0 +1,37 @@
+model Payment {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  paymentNumber String @unique @map("payment_number")
+
+  paymentType String   @map("payment_type")
+  paymentDate DateTime @map("payment_date")
+
+  amount Decimal @map("amount")
+
+  paymentMethod String @map("payment_method")
+
+  transactionReference String? @map("transaction_reference")
+
+  referenceType String? @map("reference_type")
+  referenceId   BigInt? @map("reference_id")
+
+  status String
+
+  remarks String?
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  @@index([paymentDate])
+  @@index([paymentType])
+  @@index([paymentMethod])
+  @@index([status])
+  @@index([referenceType, referenceId])
+}

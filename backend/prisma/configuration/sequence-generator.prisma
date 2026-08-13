@@ -1,0 +1,35 @@
+model SequenceGenerator {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  companyId BigInt  @map("company_id")
+  branchId  BigInt? @map("branch_id")
+
+  documentType String @map("document_type")
+
+  prefix String?
+  suffix String?
+
+  currentNumber BigInt @map("current_number")
+  incrementBy   Int    @default(1) @map("increment_by")
+  paddingLength Int    @default(6) @map("padding_length")
+
+  resetPolicy String  @map("reset_policy")
+  format     String?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  version Int @default(1)
+
+  company Company @relation(fields: [companyId], references: [id])
+  branch  Branch? @relation(fields: [branchId], references: [id])
+
+  @@unique([companyId, branchId, documentType])
+  @@index([companyId])
+  @@index([branchId])
+  @@index([isActive])
+}

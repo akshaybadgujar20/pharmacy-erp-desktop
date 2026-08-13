@@ -1,0 +1,37 @@
+model LoyaltyTransaction {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  loyaltyProgramId BigInt  @map("loyalty_program_id")
+  customerId       BigInt  @map("customer_id")
+  salesInvoiceId   BigInt? @map("sales_invoice_id")
+
+  transactionNumber String @unique @map("transaction_number")
+  transactionType   String @map("transaction_type")
+  transactionDate   DateTime @map("transaction_date")
+
+  points                  Int      @map("points")
+  monetaryValue           Decimal? @map("monetary_value")
+  balanceAfterTransaction Int?     @map("balance_after_transaction")
+
+  remarks String?
+
+  isPosted Boolean @default(true) @map("is_posted")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  loyaltyProgram LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
+  customer       Customer       @relation(fields: [customerId], references: [id])
+  salesInvoice   SalesInvoice?  @relation(fields: [salesInvoiceId], references: [id])
+
+  @@index([customerId])
+  @@index([loyaltyProgramId])
+  @@index([salesInvoiceId])
+  @@index([transactionDate])
+  @@index([transactionType])
+}

@@ -1,0 +1,46 @@
+model PurchaseInvoiceItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  purchaseInvoiceId  BigInt  @map("purchase_invoice_id")
+  goodsReceiptItemId BigInt? @map("goods_receipt_item_id")
+
+  medicineId BigInt @map("medicine_id")
+  batchId    BigInt @map("batch_id")
+  unitId     BigInt @map("unit_id")
+
+  lineNumber Int @map("line_number")
+
+  invoiceQuantity Decimal @map("invoice_quantity")
+
+  unitPrice Decimal @map("unit_price")
+
+  discountPercent Decimal? @map("discount_percent")
+  discountAmount  Decimal  @default(0) @map("discount_amount")
+
+  taxPercent Decimal? @map("tax_percent")
+  taxAmount  Decimal  @default(0) @map("tax_amount")
+
+  lineAmount Decimal @map("line_amount")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  purchaseInvoice  PurchaseInvoice    @relation(fields: [purchaseInvoiceId], references: [id])
+  goodsReceiptItem GoodsReceiptItem?  @relation(fields: [goodsReceiptItemId], references: [id])
+  medicine         Medicine            @relation(fields: [medicineId], references: [id])
+  batch            Batch               @relation(fields: [batchId], references: [id])
+  unit             UnitOfMeasure       @relation(fields: [unitId], references: [id])
+
+  @@index([purchaseInvoiceId])
+  @@index([goodsReceiptItemId])
+  @@index([medicineId])
+  @@index([batchId])
+  @@index([lineNumber])
+}

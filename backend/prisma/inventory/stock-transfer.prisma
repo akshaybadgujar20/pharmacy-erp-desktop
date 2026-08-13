@@ -1,0 +1,37 @@
+model StockTransfer {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  transferNumber String @unique @map("transfer_number")
+
+  sourceBranchId      BigInt @map("source_branch_id")
+  destinationBranchId BigInt @map("destination_branch_id")
+
+  transferDate        DateTime  @map("transfer_date")
+  expectedArrivalDate DateTime? @map("expected_arrival_date")
+  receivedDate        DateTime? @map("received_date")
+
+  status String
+
+  approvedByEmployeeId BigInt? @map("approved_by_employee_id")
+
+  remarks String?
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+
+  items StockTransferItem[]
+
+  @@index([sourceBranchId])
+  @@index([destinationBranchId])
+  @@index([transferDate])
+  @@index([status])
+}

@@ -1,0 +1,42 @@
+model PurchaseOrder {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  purchaseOrderNumber String @unique @map("purchase_order_number")
+
+  supplierId BigInt @map("supplier_id")
+  branchId   BigInt @map("branch_id")
+
+  orderDate            DateTime  @map("order_date")
+  expectedDeliveryDate DateTime? @map("expected_delivery_date")
+
+  totalAmount    Decimal @map("total_amount")
+  taxAmount      Decimal @default(0) @map("tax_amount")
+  discountAmount Decimal @default(0) @map("discount_amount")
+
+  status String
+
+  remarks String?
+
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  supplier   Supplier  @relation(fields: [supplierId], references: [id])
+  branch     Branch    @relation(fields: [branchId], references: [id])
+  approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+
+  items         PurchaseOrderItem[]
+  goodsReceipts GoodsReceipt[]
+
+  @@index([supplierId])
+  @@index([branchId])
+  @@index([orderDate])
+  @@index([status])
+}

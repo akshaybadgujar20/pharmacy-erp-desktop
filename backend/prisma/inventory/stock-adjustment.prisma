@@ -1,0 +1,36 @@
+model StockAdjustment {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  adjustmentNumber String @unique @map("adjustment_number")
+
+  adjustmentType String   @map("adjustment_type")
+  adjustmentDate DateTime @map("adjustment_date")
+
+  reason String
+
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
+
+  status String
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+
+  items StockAdjustmentItem[]
+
+  @@index([adjustmentDate])
+  @@index([status])
+  @@index([adjustmentType])
+  @@index([approvedByEmployeeId])
+}

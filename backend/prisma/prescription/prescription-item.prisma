@@ -1,0 +1,40 @@
+model PrescriptionItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  prescriptionId BigInt @map("prescription_id")
+  medicineId     BigInt @map("medicine_id")
+  unitId         BigInt @map("unit_id")
+
+  lineNumber Int @map("line_number")
+
+  prescribedQuantity Decimal @map("prescribed_quantity")
+  dispensedQuantity  Decimal @default(0) @map("dispensed_quantity")
+  remainingQuantity  Decimal @map("remaining_quantity")
+
+  dosage       String?
+  frequency    String?
+  duration     String?
+  route        String?
+  instructions String?
+
+  status String
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+  medicine     Medicine     @relation(fields: [medicineId], references: [id])
+  unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
+
+  @@index([prescriptionId])
+  @@index([medicineId])
+  @@index([status])
+  @@index([lineNumber])
+}

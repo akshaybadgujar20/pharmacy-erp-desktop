@@ -1,0 +1,43 @@
+model SalesInvoiceItem {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique
+
+  salesInvoiceId BigInt @map("sales_invoice_id")
+
+  medicineId BigInt @map("medicine_id")
+  batchId    BigInt @map("batch_id")
+  unitId     BigInt @map("unit_id")
+
+  lineNumber Int @map("line_number")
+
+  soldQuantity Decimal @map("sold_quantity")
+
+  unitPrice Decimal @map("unit_price")
+
+  discountPercent Decimal? @map("discount_percent")
+  discountAmount  Decimal  @default(0) @map("discount_amount")
+
+  taxPercent Decimal? @map("tax_percent")
+  taxAmount  Decimal  @default(0) @map("tax_amount")
+
+  lineAmount Decimal @map("line_amount")
+
+  remarks String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
+  medicine     Medicine     @relation(fields: [medicineId], references: [id])
+  batch        Batch        @relation(fields: [batchId], references: [id])
+  unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
+
+  @@index([salesInvoiceId])
+  @@index([medicineId])
+  @@index([batchId])
+  @@index([lineNumber])
+}
