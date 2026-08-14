@@ -1,0 +1,341 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000e44c8208a30cd06a2124ac8f",
+    "source_of_truth": true,
+    "note": "Structured ADO import manifest derived from the supplied Phase 10 Markdown. The Markdown remains the detailed source for individual user stories, acceptance criteria and tasks."
+  },
+  "phase": {
+    "number": 10,
+    "key": "PHASE-010",
+    "name": "Pricing & Taxation Management",
+    "objective": "Establish one authoritative pricing, tax and discount engine that Sales and Purchase consume rather than duplicating commercial calculation rules inside their own domains."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-010",
+      "title": "Pricing & Taxation Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-141",
+        "title": "Pricing Domain & Data Model"
+      },
+      {
+        "id": "FEAT-142",
+        "title": "Price List Management"
+      },
+      {
+        "id": "FEAT-143",
+        "title": "Price List Item Management"
+      },
+      {
+        "id": "FEAT-144",
+        "title": "Medicine Price Resolution"
+      },
+      {
+        "id": "FEAT-145",
+        "title": "Batch-Level Pricing"
+      },
+      {
+        "id": "FEAT-146",
+        "title": "Purchase Cost & Margin Handling"
+      },
+      {
+        "id": "FEAT-147",
+        "title": "Tax Master Management"
+      },
+      {
+        "id": "FEAT-148",
+        "title": "Tax Calculation Engine"
+      },
+      {
+        "id": "FEAT-149",
+        "title": "Discount Rule Management"
+      },
+      {
+        "id": "FEAT-150",
+        "title": "Discount Evaluation Engine"
+      },
+      {
+        "id": "FEAT-151",
+        "title": "Pricing Priority & Rule Resolution"
+      },
+      {
+        "id": "FEAT-152",
+        "title": "Sales Integration"
+      },
+      {
+        "id": "FEAT-153",
+        "title": "Purchase Integration"
+      },
+      {
+        "id": "FEAT-154",
+        "title": "Pricing UI & Workflow"
+      },
+      {
+        "id": "FEAT-155",
+        "title": "Offline Pricing & Synchronization"
+      },
+      {
+        "id": "FEAT-156",
+        "title": "Pricing Security, Audit & Testing"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 16,
+    "user_stories": 48,
+    "tasks": 1173,
+    "total_work_items": 1238
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-010",
+    "features": "FEAT-141 through FEAT-156",
+    "user_stories": "US-385 through US-432",
+    "tasks": "TASK-001 through TASK-1173"
+  },
+  "approved_database_tables": [
+    "PriceList",
+    "PriceListItem",
+    "Tax",
+    "DiscountRule"
+  ],
+  "domain_boundary": {
+    "pricing_owns": [
+      "PriceList",
+      "PriceListItem",
+      "Tax",
+      "DiscountRule",
+      "Price resolution",
+      "Tax applicability and calculation",
+      "Discount eligibility and calculation",
+      "Pricing rule priority",
+      "Commercial calculation rules",
+      "Transaction-time pricing snapshots"
+    ],
+    "medicine_owns": [
+      "Medicine identity/master data"
+    ],
+    "inventory_owns": [
+      "Batch",
+      "Stock",
+      "Stock transactions"
+    ],
+    "sales_owns": [
+      "Sales invoice",
+      "Sales return",
+      "Sales transaction lifecycle"
+    ],
+    "purchase_owns": [
+      "Purchase transaction lifecycle",
+      "Purchase invoice"
+    ],
+    "financial_owns": [
+      "Accounting entries",
+      "Monetary posting"
+    ],
+    "party_owns": [
+      "Customer/supplier identity and roles"
+    ]
+  },
+  "pricing_calculation_pipeline": [
+    "Transaction Context",
+    "Medicine / Batch",
+    "Applicable Price List",
+    "Base Price / MRP",
+    "Discount Rule Evaluation",
+    "Tax Rule Evaluation",
+    "Rounding",
+    "Final Commercial Amount",
+    "Sales / Purchase"
+  ],
+  "critical_business_rules": [
+    "Pricing is the authoritative owner of price, tax and discount rules.",
+    "Sales and Purchase must consume Pricing instead of duplicating pricing logic.",
+    "Pricing must not own Sales Invoice, Purchase Invoice, Stock or Ledger transactions.",
+    "Price resolution must be deterministic.",
+    "Tax calculation must be authoritative and deterministic.",
+    "Discount evaluation must be authoritative and deterministic.",
+    "Rule priority and conflicts must be explicitly defined.",
+    "Tax-inclusive versus tax-exclusive semantics must be finalized explicitly.",
+    "Transaction-time commercial values must be persisted/snapshotted correctly.",
+    "Manual discount overrides require explicit authorization.",
+    "Backend calculation is authoritative; UI calculations are for user experience.",
+    "Offline pricing mutations must use Outbox and idempotent synchronization."
+  ],
+  "security": {
+    "principles": [
+      "Backend authorization is authoritative.",
+      "UI permission checks are only an additional UX layer.",
+      "Pricing master mutations must be auditable.",
+      "Manual price/discount overrides must be permission controlled."
+    ]
+  },
+  "ui_standards": [
+    "Pricing screens should minimize clicks.",
+    "Pricing workflows should support keyboard-first navigation.",
+    "Price-list grids should support search, filtering, sorting and efficient entry.",
+    "Tax and discount forms should provide immediate validation feedback.",
+    "Calculation preview should clearly separate base price, discount, taxable amount, tax and final amount.",
+    "Manual discount overrides should clearly show permission requirements.",
+    "UI must not expose actions the current user cannot perform."
+  ],
+  "integration": {
+    "sales": [
+      "Resolve applicable price",
+      "Evaluate discount",
+      "Calculate tax",
+      "Return authoritative commercial values",
+      "Persist transaction-time snapshot"
+    ],
+    "purchase": [
+      "Resolve purchase cost/pricing context where applicable",
+      "Apply tax and discount rules where applicable",
+      "Support cost/margin calculations",
+      "Persist transaction-time commercial values"
+    ],
+    "inventory": [
+      "Pricing can consume Batch context where required.",
+      "Pricing does not own Batch or Stock."
+    ],
+    "financial": [
+      "Pricing provides commercial/tax values.",
+      "Financial remains responsible for accounting entries and monetary posting."
+    ]
+  },
+  "offline_sync": {
+    "capabilities": [
+      "Local pricing operation",
+      "SQLite persistence",
+      "Outbox creation",
+      "Background synchronization",
+      "Retry",
+      "Idempotency",
+      "Conflict detection",
+      "Conflict-safe resolution"
+    ],
+    "rule": "Pricing changes must not be silently overwritten during synchronization."
+  },
+  "testing_matrix": {
+    "PriceList": [
+      "CRUD",
+      "activation",
+      "effective dates",
+      "uniqueness"
+    ],
+    "PriceListItem": [
+      "CRUD",
+      "medicine assignment",
+      "validation"
+    ],
+    "price_resolution": [
+      "priority",
+      "effective date",
+      "missing price",
+      "transaction context"
+    ],
+    "batch_pricing": [
+      "override behavior",
+      "fallback behavior"
+    ],
+    "tax": [
+      "applicability",
+      "rate",
+      "effective dates",
+      "rounding"
+    ],
+    "discount": [
+      "eligibility",
+      "priority",
+      "limits",
+      "manual override"
+    ],
+    "sales": [
+      "final price snapshot",
+      "tax snapshot",
+      "discount snapshot"
+    ],
+    "purchase": [
+      "cost integration",
+      "tax integration",
+      "discount integration"
+    ],
+    "offline": [
+      "local mutation",
+      "Outbox",
+      "retry"
+    ],
+    "sync": [
+      "duplicate request",
+      "conflict",
+      "replay"
+    ],
+    "security": [
+      "allowed changes",
+      "denied changes"
+    ],
+    "audit": [
+      "pricing master mutations",
+      "manual overrides"
+    ],
+    "database": [
+      "SQLite",
+      "PostgreSQL"
+    ],
+    "performance": [
+      "price lookup latency",
+      "calculation latency"
+    ]
+  },
+  "source_boundary": {
+    "schema_finalization_required": true,
+    "reason": "The supplied database overview explicitly identifies the four Pricing tables but does not provide complete field-level definitions in the retrieved source. The backlog therefore intentionally includes schema/business-rule finalization work rather than inventing unsupported columns or relationships."
+  },
+  "definition_of_done": [
+    "All four approved Pricing tables are implemented according to finalized schema decisions.",
+    "Price resolution has one authoritative implementation.",
+    "Tax calculation has one authoritative implementation.",
+    "Discount evaluation has one authoritative implementation.",
+    "Sales and Purchase do not duplicate pricing rules.",
+    "Transaction-time commercial values are persisted correctly.",
+    "Pricing changes work offline.",
+    "Outbox synchronization is reliable and idempotent.",
+    "Conflict behavior is documented and tested.",
+    "Permissions are enforced in backend services.",
+    "Audit history is complete for pricing mutations and overrides.",
+    "Angular workflows are keyboard-first.",
+    "Unit tests pass.",
+    "API tests pass.",
+    "E2E tests pass.",
+    "Synchronization tests pass.",
+    "SQLite compatibility is verified.",
+    "PostgreSQL compatibility is verified.",
+    "Performance targets are measured and documented.",
+    "Phase documentation is complete."
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management",
+      "Phase 7 — Purchase Management",
+      "Phase 8 — Sales & Billing Management",
+      "Phase 9 — Financial Management"
+    ],
+    "downstream_consumers": [
+      "Sales",
+      "Purchase",
+      "Prescription",
+      "Reporting",
+      "Loyalty"
+    ]
+  },
+  "ado_import_note": "The source explicitly states 1 Epic, 16 Features, 48 User Stories, 1173 Tasks and 1238 total work items. This manifest preserves the approved Phase 10 hierarchy and boundaries without inventing schema fields. Use the Markdown source alongside this JSON when importing the complete individual user stories and tasks."
+}

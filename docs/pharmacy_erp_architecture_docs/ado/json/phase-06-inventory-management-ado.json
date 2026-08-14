@@ -1,0 +1,337 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_0000000074a88211a1c1fb61a2765366",
+    "source_of_truth": true,
+    "note": "Structured representation of the supplied Phase 6 Markdown. The Markdown remains the detailed source of truth; no new backlog items were intentionally added."
+  },
+  "phase": {
+    "number": 6,
+    "key": "PHASE-006",
+    "name": "Inventory Management",
+    "objective": "Implement the Pharmacy ERP inventory domain for batch, stock, stock movements, adjustments, transfers, stock takes, availability, expiry, controls, offline synchronization, testing and readiness."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-006",
+      "title": "Inventory Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-066",
+        "title": "Batch Master & Batch Lifecycle"
+      },
+      {
+        "id": "FEAT-067",
+        "title": "Stock Ledger & Stock Balance"
+      },
+      {
+        "id": "FEAT-068",
+        "title": "Stock Movement Engine"
+      },
+      {
+        "id": "FEAT-069",
+        "title": "Stock Adjustment"
+      },
+      {
+        "id": "FEAT-070",
+        "title": "Stock Transfer"
+      },
+      {
+        "id": "FEAT-071",
+        "title": "Physical Stock Take"
+      },
+      {
+        "id": "FEAT-072",
+        "title": "Inventory Search & Availability"
+      },
+      {
+        "id": "FEAT-073",
+        "title": "Expiry & Near-Expiry Management"
+      },
+      {
+        "id": "FEAT-074",
+        "title": "Inventory Valuation & Quantity Controls"
+      },
+      {
+        "id": "FEAT-075",
+        "title": "Inventory Authorization & Audit"
+      },
+      {
+        "id": "FEAT-076",
+        "title": "Inventory API & Domain Services"
+      },
+      {
+        "id": "FEAT-077",
+        "title": "Inventory UI/UX & Keyboard Workflow"
+      },
+      {
+        "id": "FEAT-078",
+        "title": "Offline-First Inventory & Synchronization"
+      },
+      {
+        "id": "FEAT-079",
+        "title": "Inventory Testing, Performance & Readiness"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 14,
+    "user_stories": 48,
+    "tasks": 537,
+    "total_work_items": 600
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-006",
+    "features": "FEAT-066 through FEAT-079",
+    "user_stories": "US-158 through US-205",
+    "tasks": "TASK-001 through TASK-537"
+  },
+  "ownership": {
+    "inventory_owns": [
+      "Batch identity",
+      "Batch lifecycle",
+      "Expiry tracking",
+      "Stock quantity/state",
+      "Stock movements",
+      "Stock adjustments",
+      "Stock transfers",
+      "Physical stock taking",
+      "Stock reconciliation",
+      "Inventory availability",
+      "Inventory ledger/history",
+      "Inventory search",
+      "Inventory controls"
+    ],
+    "purchase_owns_later": [
+      "Purchase Order",
+      "Goods Receipt",
+      "Purchase Invoice",
+      "Purchase Return",
+      "Supplier procurement workflow"
+    ],
+    "sales_owns_later": [
+      "Sales Invoice",
+      "Sales Return",
+      "Sales Payment",
+      "Customer billing"
+    ]
+  },
+  "database_model": {
+    "inventory_tables": [
+      "Batch",
+      "Stock",
+      "StockMovement",
+      "StockAdjustment",
+      "StockTransfer",
+      "StockTake",
+      "StockTakeItem"
+    ],
+    "relationship": "Invoice → Batch → Stock → Stock Movement",
+    "core_principle": "Stock is current state; StockMovement is the history of how that state changed."
+  },
+  "architecture": {
+    "stack": [
+      "Angular",
+      "NestJS",
+      "Prisma",
+      "SQLite"
+    ],
+    "offline_flow": [
+      "Local SQLite",
+      "Inventory operation",
+      "Stock transaction",
+      "Stock Movement",
+      "Outbox",
+      "Background Sync",
+      "Cloud"
+    ],
+    "inventory_conflict_rule": "Inventory conflicts are transaction-based; stock must never be overwritten during conflict resolution."
+  },
+  "business_rules": [
+    "Stock must not be directly edited.",
+    "Every stock-changing operation must be traceable.",
+    "Historical movements should not be casually deleted; corrections should use controlled reversal/correction movements.",
+    "Negative stock behavior must be explicitly controlled.",
+    "Expired stock must be distinguishable and not silently treated as sellable.",
+    "Locked batches must be protected by backend validation.",
+    "Stock synchronization must be transaction based rather than last-write-wins stock replacement."
+  ],
+  "legacy_informed_operations": [
+    "Opening Stock",
+    "Batch MRP & Expiry Date Changes",
+    "Batch Bifurcation",
+    "Batch Lock / Unlock",
+    "Batch Serial Changes",
+    "Batch Barcode Label Print",
+    "Expiry / Breakage / Return / Shortage",
+    "Stock Issue",
+    "Productwise Balance",
+    "Stock Reports"
+  ],
+  "reporting_queries_to_prepare": [
+    "Companywise Batchwise Stock",
+    "Locationwise Batchwise Stock",
+    "Product Typewise Batchwise Stock",
+    "Contentwise Batchwise Stock",
+    "Schedulewise Batchwise Stock",
+    "Expiry Stock",
+    "Expiry Stock Date-wise",
+    "Product Ledger",
+    "Non-Moving Product List",
+    "Total Stock Value",
+    "Supplierwise Closing Stock",
+    "Itemwise Closing Stock As On Date",
+    "Product Short List",
+    "Below Stock Level"
+  ],
+  "downstream_integration": [
+    "Medicine Master → Inventory",
+    "Inventory → Purchase",
+    "Inventory → Sales",
+    "Inventory → Reporting"
+  ],
+  "security": {
+    "permission_catalog": [
+      "Inventory.View",
+      "Inventory.Batch.View",
+      "Inventory.Batch.Create",
+      "Inventory.Batch.Update",
+      "Inventory.Batch.Lock",
+      "Inventory.Batch.Unlock",
+      "Inventory.Stock.View",
+      "Inventory.StockMovement.View",
+      "Inventory.Adjustment.View",
+      "Inventory.Adjustment.Create",
+      "Inventory.Adjustment.Approve",
+      "Inventory.Adjustment.Post",
+      "Inventory.Transfer.View",
+      "Inventory.Transfer.Create",
+      "Inventory.Transfer.Approve",
+      "Inventory.Transfer.Dispatch",
+      "Inventory.Transfer.Receive",
+      "Inventory.Transfer.Cancel",
+      "Inventory.StockTake.View",
+      "Inventory.StockTake.Create",
+      "Inventory.StockTake.Count",
+      "Inventory.StockTake.Approve",
+      "Inventory.StockTake.Post"
+    ],
+    "principle": "Backend authorization is authoritative; UI authorization is an additional UX layer."
+  },
+  "audit_events": [
+    "BatchCreated",
+    "BatchUpdated",
+    "BatchLocked",
+    "BatchUnlocked",
+    "StockAdjusted",
+    "StockTransferred",
+    "StockTransferReceived",
+    "StockTakeCreated",
+    "StockTakeCounted",
+    "StockTakeApproved",
+    "StockTakePosted",
+    "StockMovementCreated"
+  ],
+  "testing_matrix": [
+    "Batch create/update/lock/unlock",
+    "Stock increase/decrease/query",
+    "Movement inbound/outbound/history",
+    "Adjustment create/validate/post",
+    "Transfer create/dispatch/receive",
+    "Stock take count/variance/approve/post",
+    "Expiry and near-expiry",
+    "Medicine/batch/stock search",
+    "Authorization allowed/denied",
+    "Concurrency",
+    "Idempotency",
+    "Offline operations",
+    "Synchronization retry/replay",
+    "Conflict handling",
+    "Audit",
+    "UI workflows",
+    "Keyboard workflows",
+    "Performance",
+    "SQLite compatibility",
+    "PostgreSQL compatibility"
+  ],
+  "dependencies": {
+    "depends_on": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master"
+    ],
+    "downstream": [
+      "Phase 7 — Purchase",
+      "Phase 8 — Sales",
+      "Reporting"
+    ]
+  },
+  "definition_of_done": [
+    "Batch schema finalized",
+    "Batch CRUD implemented",
+    "Batch lifecycle implemented",
+    "Batch locking implemented where required",
+    "Stock schema finalized",
+    "Stock balance engine implemented",
+    "Stock movement engine implemented",
+    "Stock cannot be directly overwritten through normal workflows",
+    "Stock adjustments implemented",
+    "Stock transfers implemented",
+    "Physical stock take implemented",
+    "Variance calculation implemented",
+    "Expired stock identifiable",
+    "Near-expiry stock identifiable",
+    "Inventory search implemented",
+    "Batch availability lookup implemented",
+    "Inventory permissions implemented",
+    "Backend authorization enforced",
+    "Audit events implemented",
+    "Outbox integration implemented",
+    "Inventory idempotency implemented",
+    "Transaction-based conflict handling implemented",
+    "Unit tests pass",
+    "API integration tests pass",
+    "E2E inventory workflows pass",
+    "Performance tests pass",
+    "SQLite compatibility verified",
+    "PostgreSQL compatibility verified",
+    "Documentation complete",
+    "Purchase integration contracts ready",
+    "Sales integration contracts ready",
+    "QA sign-off complete"
+  ],
+  "phase_boundary": {
+    "implements": [
+      "Batch",
+      "Stock",
+      "StockMovement",
+      "StockAdjustment",
+      "StockTransfer",
+      "StockTake",
+      "Inventory search",
+      "Availability",
+      "Expiry/near-expiry",
+      "Inventory valuation/quantity controls",
+      "Authorization/audit",
+      "REST/domain services",
+      "Inventory UI/UX and keyboard workflow",
+      "Offline-first synchronization",
+      "Idempotency and conflict handling",
+      "Testing/performance/readiness"
+    ],
+    "does_not_implement": [
+      "Complete Purchase workflow",
+      "Complete Sales workflow",
+      "Pricing/tax workflow",
+      "Accounting workflow",
+      "Complete Reporting module"
+    ]
+  },
+  "ado_import_note": "The Phase 6 Markdown explicitly states 1 Epic, 14 Features, 48 User Stories, 537 Tasks and 600 total work items. Some tasks are schema-finalization tasks because the database overview confirms the Inventory table names but not every column-level definition."
+}

@@ -1,0 +1,304 @@
+{
+  "schema_version": "1.1",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000f1e48208acc02e19a9259639",
+    "source_of_truth": true,
+    "note": "Corrected Phase 12 manifest. The supplied source identifies Phase 12 as Prescription Management and explicitly states 1 Epic, 11 Features, 32 User Stories, 603 Tasks, and 647 Total Work Items."
+  },
+  "phase": {
+    "number": 12,
+    "key": "PHASE-012",
+    "name": "Prescription Management",
+    "objective": "Provide a controlled prescription workflow from creation through finalization and dispensing while preserving prescription history and preventing invalid dispensing."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-012",
+      "title": "Prescription Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-167",
+        "title": "Prescription Domain & Data Model"
+      },
+      {
+        "id": "FEAT-168",
+        "title": "Prescription Creation & Registration"
+      },
+      {
+        "id": "FEAT-169",
+        "title": "Patient & Prescriber Association"
+      },
+      {
+        "id": "FEAT-170",
+        "title": "Prescription Item Management"
+      },
+      {
+        "id": "FEAT-171",
+        "title": "Medicine & Dosage Validation"
+      },
+      {
+        "id": "FEAT-172",
+        "title": "Prescription Status & Lifecycle"
+      },
+      {
+        "id": "FEAT-173",
+        "title": "Dispensing Workflow Integration"
+      },
+      {
+        "id": "FEAT-174",
+        "title": "Prescription History & Search"
+      },
+      {
+        "id": "FEAT-175",
+        "title": "Prescription Security, Audit & Compliance"
+      },
+      {
+        "id": "FEAT-176",
+        "title": "Offline Synchronization & Conflict Handling"
+      },
+      {
+        "id": "FEAT-177",
+        "title": "Prescription UI, Testing & Performance"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 11,
+    "user_stories": 32,
+    "tasks": 603,
+    "total_work_items": 647,
+    "formula": "1 + 11 + 32 + 603 = 647"
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-012",
+    "features": "FEAT-167 through FEAT-177",
+    "user_stories": "US-463 through US-494",
+    "tasks": "603 tasks as explicitly specified by the source"
+  },
+  "approved_database_tables": [
+    "Prescription",
+    "PrescriptionItem"
+  ],
+  "domain_boundary": {
+    "prescription_owns": [
+      "Prescription header",
+      "Prescription items",
+      "Prescribing instructions",
+      "Prescription reference",
+      "Prescription lifecycle",
+      "Prescription history",
+      "Prescription validation",
+      "Prescribed quantity tracking",
+      "Prescription-to-dispensing validation"
+    ],
+    "party_customer_owns": [
+      "Patient/customer identity",
+      "Party information"
+    ],
+    "medicine_owns": [
+      "Medicine identity",
+      "Medicine master attributes"
+    ],
+    "sales_owns": [
+      "Sales invoice",
+      "Dispensing transaction",
+      "Sales payment",
+      "Stock deduction through Inventory"
+    ],
+    "inventory_owns": [
+      "Batch",
+      "Stock",
+      "Stock movement"
+    ],
+    "pricing_owns": [
+      "Price",
+      "Tax",
+      "Discount calculation"
+    ],
+    "financial_owns": [
+      "Accounting",
+      "Ledger posting"
+    ],
+    "synchronization_owns": [
+      "Outbox",
+      "SyncLog",
+      "SyncConflict"
+    ],
+    "audit_owns": [
+      "AuditLog",
+      "ChangeHistory"
+    ]
+  },
+  "core_workflow": [
+    "Patient / Customer",
+    "Prescription",
+    "PrescriptionItem(s)",
+    "Medicine Validation",
+    "Prescription Finalization",
+    "Sales / Dispensing",
+    "Prescribed Quantity vs Dispensed Quantity",
+    "Prescription History"
+  ],
+  "critical_business_rules": [
+    "Prescription owns prescription data but not patient/customer identity.",
+    "Prescription references approved Party/Customer records.",
+    "Prescription references approved Medicine master records.",
+    "Sales owns the sale and dispensing transaction.",
+    "Finalized prescription history must not be destructively overwritten.",
+    "Medicine selection must be validated against Medicine master.",
+    "Dispensing must not exceed permitted prescription quantity where quantity limits apply.",
+    "Partial dispensing must be supported where the business workflow permits it.",
+    "Remaining quantity must be calculated consistently.",
+    "Prescription status must control downstream dispensing eligibility.",
+    "Cancelled, expired or otherwise ineligible prescriptions must not be accepted where prohibited.",
+    "Invalid patient/prescriber relationships must be rejected before finalization.",
+    "Sensitive prescription information must be permission protected.",
+    "Prescription mutations must be auditable where required.",
+    "Offline mutations must be persisted locally before synchronization.",
+    "Synchronization must be idempotent and conflict-safe."
+  ],
+  "integration_boundaries": {
+    "patient": [
+      "Search/select patient from approved Party/Customer model",
+      "Store only required patient reference",
+      "Validate patient existence/status"
+    ],
+    "prescriber": [
+      "Search/select approved prescriber/provider model",
+      "Validate prescriber existence/status",
+      "Prevent ambiguous prescriber selection"
+    ],
+    "medicine": [
+      "Search Medicine master",
+      "Prevent uncontrolled free-text medicine identity",
+      "Validate medicine reference",
+      "Support dosage/frequency/duration/quantity validation"
+    ],
+    "sales_dispensing": [
+      "Allow Sales to identify applicable prescription",
+      "Validate prescription status before dispensing",
+      "Link prescription to dispensing transaction where supported",
+      "Track prescribed versus dispensed quantities",
+      "Support partial dispensing",
+      "Prevent over-dispensing"
+    ]
+  },
+  "offline_sync": {
+    "flow": [
+      "Angular",
+      "NestJS Prescription Service",
+      "SQLite",
+      "Outbox",
+      "Cloud Synchronization",
+      "PostgreSQL"
+    ],
+    "rules": [
+      "Prescription mutations must be persisted locally before synchronization.",
+      "Prescription and PrescriptionItem changes must synchronize consistently.",
+      "UUID/idempotency mechanisms must prevent duplicate records during retries.",
+      "Finalized prescription history must not be overwritten by stale synchronization data.",
+      "Synchronization conflicts must be explicit and resolvable."
+    ]
+  },
+  "security_and_compliance": [
+    "Backend/domain service is authoritative for business rules.",
+    "Server-side permissions are mandatory.",
+    "Sensitive prescription information must not be unnecessarily exposed in list screens.",
+    "Direct record access must validate authorization.",
+    "Historical records must be protected from unsafe destructive changes.",
+    "Important prescription operations must be audited.",
+    "Duplicate/retry behavior must be deterministic where synchronization is involved."
+  ],
+  "ui_standards": [
+    "Prescription entry optimized for fast pharmacy workflow.",
+    "Searchable patient and prescriber master-data lookup.",
+    "Medicine selection through Medicine master search.",
+    "Efficient keyboard navigation.",
+    "Validation errors close to the relevant field/item.",
+    "Status actions shown only when permitted.",
+    "Prescription history filtered by patient, prescriber, date and status.",
+    "Dispensing UI clearly shows prescribed, dispensed and remaining quantities.",
+    "Sensitive information minimized in list screens."
+  ],
+  "testing_matrix": [
+    "Prescription create/edit/reference/lifecycle",
+    "Patient association and invalid patient scenarios",
+    "Prescriber association and invalid prescriber scenarios",
+    "PrescriptionItem medicine lookup/dosage/quantity/completeness",
+    "Lifecycle valid/invalid transitions, cancellation and archive",
+    "Full/partial/over-dispensing validation",
+    "Prescription history/search/filter/detail/pagination",
+    "Security and sensitive-data boundaries",
+    "Audit creation/updates/lifecycle/dispensing linkage",
+    "Offline local creation/update",
+    "Outbox/retry",
+    "Synchronization idempotency/replay/conflict/stale update",
+    "SQLite/PostgreSQL compatibility",
+    "Search/detail/dispensing validation performance"
+  ],
+  "definition_of_done": [
+    "Prescription and PrescriptionItem are implemented according to finalized schema decisions.",
+    "Prescription references valid patient/customer and prescriber records.",
+    "Prescription items reference valid Medicine records.",
+    "Dosage, frequency, duration and quantity rules are enforced.",
+    "Prescription lifecycle transitions are explicitly validated.",
+    "Sales can identify and validate applicable prescriptions.",
+    "Partial dispensing is correctly supported where required.",
+    "Over-dispensing is prevented.",
+    "Prescription history remains traceable.",
+    "Sensitive prescription information is permission protected.",
+    "Important prescription operations are audited.",
+    "Offline operation works correctly.",
+    "Outbox synchronization is retry-safe and idempotent.",
+    "Conflict handling is documented and tested.",
+    "Angular workflows are keyboard-first and efficient.",
+    "Unit/API/E2E/synchronization tests pass.",
+    "SQLite and PostgreSQL compatibility is verified.",
+    "Performance is measured for common search and validation paths.",
+    "Documentation is complete."
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management",
+      "Phase 7 — Purchase Management",
+      "Phase 8 — Sales & Billing Management",
+      "Phase 9 — Financial Management",
+      "Phase 10 — Pricing & Taxation Management",
+      "Phase 11 — Loyalty & Customer Rewards"
+    ],
+    "key_consumers": [
+      "Sales / Dispensing",
+      "Inventory",
+      "Reporting"
+    ]
+  },
+  "source_alignment": {
+    "database_overview": {
+      "module": "Prescription",
+      "tables": [
+        "Prescription",
+        "PrescriptionItem"
+      ],
+      "note": "The approved database overview identifies Prescription management and these two core tables. No unsupported prescription tables are introduced as approved schema."
+    },
+    "schema_policy": "Where field-level definitions are not approved, the backlog uses schema-finalization work rather than inventing database columns."
+  },
+  "validation": {
+    "expected_epics": 1,
+    "expected_features": 11,
+    "expected_user_stories": 32,
+    "expected_tasks": 603,
+    "expected_total": 647,
+    "validated_formula": "1 + 11 + 32 + 603 = 647",
+    "correction": "This replaces the earlier incorrect Phase 12 Reporting & Analytics interpretation. The uploaded Phase 12 source is Prescription Management."
+  }
+}

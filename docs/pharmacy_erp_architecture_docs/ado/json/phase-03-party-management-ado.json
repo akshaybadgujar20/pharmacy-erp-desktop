@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000e1988208a3085dbba0eadff0",
+    "source_of_truth": true,
+    "note": "This JSON is generated from the Phase 3 Party Management Markdown source. The uploaded Markdown remains the authoritative detailed text."
+  },
+  "phase": {
+    "number": 3,
+    "key": "PHASE-003",
+    "name": "Party Management",
+    "epic": {
+      "id": "EPIC-003",
+      "title": "Party Management"
+    },
+    "objective": "Establish the central Party Management capability for the Pharmacy ERP.",
+    "in_scope": [
+      "Party master",
+      "Party identity information",
+      "Party lifecycle",
+      "Party search and retrieval",
+      "Party duplicate prevention",
+      "Party roles",
+      "Customer role",
+      "Supplier role",
+      "Doctor role",
+      "Employee role",
+      "Party addresses",
+      "Party contacts",
+      "Primary address/contact rules",
+      "Address/contact lifecycle",
+      "Party status",
+      "Party role validation",
+      "Party relationship APIs",
+      "Party management UI",
+      "Role-specific UI",
+      "Authorization integration",
+      "Audit integration",
+      "Testing",
+      "SQLite/PostgreSQL compatibility",
+      "Reusable Party services for later modules"
+    ],
+    "out_of_scope": [
+      "User authentication and login",
+      "User/Role/Permission administration",
+      "Medicine",
+      "Inventory",
+      "Purchase",
+      "Sales",
+      "Prescription",
+      "Financial transactions",
+      "Loyalty",
+      "Full synchronization implementation",
+      "Advanced reporting"
+    ]
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-003",
+      "title": "Party Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-025",
+        "title": "Party Master Foundation"
+      },
+      {
+        "id": "FEAT-026",
+        "title": "Party Registration"
+      },
+      {
+        "id": "FEAT-027",
+        "title": "Party Search & Retrieval"
+      },
+      {
+        "id": "FEAT-028",
+        "title": "Party Update & Lifecycle"
+      },
+      {
+        "id": "FEAT-029",
+        "title": "Party Role Management"
+      },
+      {
+        "id": "FEAT-030",
+        "title": "Customer Management"
+      },
+      {
+        "id": "FEAT-031",
+        "title": "Supplier Management"
+      },
+      {
+        "id": "FEAT-032",
+        "title": "Doctor Management"
+      },
+      {
+        "id": "FEAT-033",
+        "title": "Employee Management"
+      },
+      {
+        "id": "FEAT-034",
+        "title": "Party Address Management"
+      },
+      {
+        "id": "FEAT-035",
+        "title": "Party Contact Management"
+      },
+      {
+        "id": "FEAT-036",
+        "title": "Party Duplicate & Data Quality"
+      },
+      {
+        "id": "FEAT-037",
+        "title": "Party Integration Foundation"
+      }
+    ],
+    "user_story_range": "US-049 through US-084",
+    "task_range": "TASK-281 through TASK-553"
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 13,
+    "user_stories": 36,
+    "tasks": 273,
+    "total_work_items": 323
+  },
+  "cross_cutting_areas": [
+    "Authorization",
+    "Audit integration",
+    "Data privacy and sensitive information",
+    "Database standards",
+    "UI standards",
+    "Testing strategy"
+  ],
+  "dependencies": {
+    "depends_on": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration"
+    ],
+    "phase_2_capabilities_consumed": [
+      "Country",
+      "State",
+      "City",
+      "Area",
+      "Company",
+      "Branch",
+      "Configuration conventions"
+    ],
+    "later_consumers": [
+      "Purchase",
+      "Sales",
+      "Prescription",
+      "User/Security",
+      "Medicine",
+      "Inventory",
+      "Financial",
+      "Loyalty"
+    ]
+  },
+  "design_principles": [
+    "Party is the common identity.",
+    "Multiple business roles must be supported.",
+    "PartyRole is distinct from system authorization.",
+    "Historical references must survive lifecycle changes.",
+    "Common identity information must not be duplicated across role tables.",
+    "PartyAddress and PartyContact are reusable party-level structures."
+  ],
+  "party_relationships": {
+    "master": "Party",
+    "supporting": [
+      "PartyRole",
+      "PartyAddress",
+      "PartyContact"
+    ],
+    "business_roles": [
+      "Customer",
+      "Supplier",
+      "Doctor",
+      "Employee"
+    ]
+  },
+  "phase_boundary": {
+    "implements": [
+      "Party master",
+      "Party registration",
+      "Party search/retrieval",
+      "Party lifecycle",
+      "Business role management",
+      "Customer/Supplier/Doctor/Employee role masters",
+      "Address/contact management",
+      "Duplicate/data-quality controls",
+      "Reusable lookup services"
+    ],
+    "does_not_implement": [
+      "Sales transactions",
+      "Purchase transactions",
+      "Prescription workflows",
+      "Employee authentication/user-account management",
+      "Medicine workflows",
+      "Inventory workflows",
+      "Financial transactions"
+    ]
+  },
+  "ado_import_note": "Use the uploaded Phase 3 Markdown as the detailed source when generating the final ADO payload. This manifest preserves the exact Phase 3 hierarchy and source identity so that no new backlog items are invented."
+}

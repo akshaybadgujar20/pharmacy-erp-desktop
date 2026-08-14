@@ -1,0 +1,1254 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "markdown",
+    "title": "Phase 1 — Foundation & Architecture",
+    "source_file": "Pasted markdown.md",
+    "source_reference": "turn9file10"
+  },
+  "phase": {
+    "number": 1,
+    "key": "PHASE-001",
+    "name": "Foundation & Architecture",
+    "objective": "Establish the technical foundation required to build the Pharmacy ERP consistently across the Angular/Electron UI, NestJS local backend, Prisma ORM, SQLite development database, and PostgreSQL production database.",
+    "scope_statement": "This phase is about platform capabilities and engineering standards, not business-domain CRUD functionality.",
+    "in_scope": [
+      "Repository and application foundation",
+      "NestJS foundation",
+      "Angular/Electron foundation",
+      "Prisma foundation",
+      "SQLite configuration",
+      "PostgreSQL compatibility foundation",
+      "Environment/configuration management",
+      "Database migration strategy",
+      "Common API conventions",
+      "Error handling",
+      "Validation",
+      "Exception handling",
+      "Logging",
+      "UUID and BIGINT handling",
+      "Soft-delete framework",
+      "Optimistic locking framework",
+      "Transaction handling",
+      "Common UI foundation",
+      "API client foundation",
+      "Global loading/error handling",
+      "Development tooling",
+      "Code quality",
+      "CI/CD foundation"
+    ],
+    "out_of_scope": [
+      "Party business functionality",
+      "Medicine business functionality",
+      "Inventory business functionality",
+      "Purchase/sales workflows",
+      "Financial workflows",
+      "Loyalty",
+      "Business reporting",
+      "Detailed offline synchronization workflows",
+      "Domain-specific audit functionality"
+    ],
+    "out_of_scope_note": "Those are covered in later phases."
+  },
+  "ado_hierarchy": {
+    "epic_id": "EPIC-001",
+    "feature_ids": [
+      "FEAT-001",
+      "FEAT-002",
+      "FEAT-003",
+      "FEAT-004",
+      "FEAT-005",
+      "FEAT-006",
+      "FEAT-007",
+      "FEAT-008",
+      "FEAT-009",
+      "FEAT-010",
+      "FEAT-011",
+      "FEAT-012"
+    ]
+  },
+  "epic": {
+    "id": "EPIC-001",
+    "work_item_type": "Epic",
+    "title": "Foundation & Architecture",
+    "description": "Establish the shared technical foundation required for all Pharmacy ERP modules.",
+    "business_technical_value": "The Pharmacy ERP contains multiple business domains and must operate with SQLite during local development and PostgreSQL in production. A standardized foundation prevents each module from implementing its own persistence, validation, error handling, configuration, UI, logging, and deployment patterns.",
+    "completion_criteria": [
+      "Application starts successfully in the supported development environment.",
+      "Angular/Electron and NestJS foundations are operational.",
+      "Prisma is configured.",
+      "SQLite development database is operational.",
+      "PostgreSQL compatibility approach is established.",
+      "Database migrations are operational.",
+      "Common API/error/validation conventions are established.",
+      "Common persistence conventions are established.",
+      "Common UI infrastructure is available.",
+      "Logging and diagnostics are available.",
+      "Code-quality checks are established.",
+      "CI/CD foundation is operational."
+    ]
+  },
+  "features": [
+    {
+      "id": "FEAT-001",
+      "work_item_type": "Feature",
+      "title": "Repository & Application Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-001",
+          "work_item_type": "User Story",
+          "title": "Establish Pharmacy ERP project structure",
+          "parent_id": "FEAT-001",
+          "user_story": "As a development team, we want a standardized project structure so that all ERP components follow a consistent organization.",
+          "scope": [
+            "Repository structure",
+            "Application boundaries",
+            "Documentation location",
+            "Source code conventions",
+            "Configuration locations",
+            "Database/schema locations",
+            "Test locations"
+          ],
+          "acceptance_criteria": [
+            "Project structure is documented.",
+            "Application responsibilities are clearly separated.",
+            "Source, test, configuration, database, and documentation locations are defined.",
+            "New developers can understand where each type of artifact belongs."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-001",
+              "work_item_type": "Task",
+              "title": "Define repository structure",
+              "parent_id": "US-001",
+              "details": [
+                "Document application and module boundaries.",
+                "Define locations for frontend, backend, database, tests, scripts, and documentation."
+              ]
+            },
+            {
+              "id": "TASK-002",
+              "work_item_type": "Task",
+              "title": "Establish source-code organization standards",
+              "parent_id": "US-001",
+              "details": [
+                "Define module/folder conventions.",
+                "Define naming conventions.",
+                "Document expected structure for new modules."
+              ]
+            },
+            {
+              "id": "TASK-003",
+              "work_item_type": "Task",
+              "title": "Establish documentation structure",
+              "parent_id": "US-001",
+              "details": [
+                "Create documentation structure.",
+                "Define database documentation location.",
+                "Define ADO planning/backlog documentation location."
+              ]
+            },
+            {
+              "id": "TASK-004",
+              "work_item_type": "Task",
+              "title": "Establish development setup documentation",
+              "parent_id": "US-001",
+              "details": [
+                "Document prerequisites.",
+                "Document installation.",
+                "Document startup commands.",
+                "Document local development workflow."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-002",
+      "work_item_type": "Feature",
+      "title": "NestJS Backend Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-002",
+          "work_item_type": "User Story",
+          "title": "Establish NestJS backend application foundation",
+          "parent_id": "FEAT-002",
+          "user_story": "As a development team, we want a standardized NestJS backend foundation so that all ERP backend modules follow consistent implementation patterns.",
+          "acceptance_criteria": [
+            "NestJS application starts successfully.",
+            "Module organization standard is established.",
+            "Dependency injection conventions are established.",
+            "Controller/service/module patterns are documented.",
+            "Backend configuration can be loaded consistently."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-005",
+              "work_item_type": "Task",
+              "title": "Configure NestJS application",
+              "parent_id": "US-002",
+              "details": [
+                "Configure application bootstrap.",
+                "Configure global application behavior.",
+                "Establish module loading conventions."
+              ]
+            },
+            {
+              "id": "TASK-006",
+              "work_item_type": "Task",
+              "title": "Define NestJS module structure",
+              "parent_id": "US-002",
+              "details": [
+                "Establish feature-module conventions.",
+                "Define controller/service/data-access responsibilities."
+              ]
+            },
+            {
+              "id": "TASK-007",
+              "work_item_type": "Task",
+              "title": "Establish backend coding conventions",
+              "parent_id": "US-002",
+              "details": [
+                "Define naming conventions.",
+                "Define DTO conventions.",
+                "Define service conventions.",
+                "Define exception conventions."
+              ]
+            },
+            {
+              "id": "TASK-008",
+              "work_item_type": "Task",
+              "title": "Create backend health endpoint",
+              "parent_id": "US-002",
+              "details": [
+                "Implement application health/basic availability endpoint.",
+                "Verify successful startup and response."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-003",
+      "work_item_type": "Feature",
+      "title": "Angular/Electron Frontend Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-003",
+          "work_item_type": "User Story",
+          "title": "Establish frontend application foundation",
+          "parent_id": "FEAT-003",
+          "user_story": "As a development team, we want a standardized Angular/Electron foundation so that ERP screens have a consistent structure and behavior.",
+          "acceptance_criteria": [
+            "Angular application starts successfully.",
+            "Electron integration foundation is operational where applicable.",
+            "Routing foundation is established.",
+            "Shared UI infrastructure can be consumed by feature modules.",
+            "Frontend configuration is environment-aware."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-009",
+              "work_item_type": "Task",
+              "title": "Configure Angular application foundation",
+              "parent_id": "US-003",
+              "details": [
+                "Establish application bootstrap.",
+                "Establish routing.",
+                "Establish shared/core application structure."
+              ]
+            },
+            {
+              "id": "TASK-010",
+              "work_item_type": "Task",
+              "title": "Establish Electron integration foundation",
+              "parent_id": "US-003",
+              "details": [
+                "Define communication boundary between Angular UI and local backend.",
+                "Establish required Electron configuration."
+              ]
+            },
+            {
+              "id": "TASK-011",
+              "work_item_type": "Task",
+              "title": "Establish shared UI structure",
+              "parent_id": "US-003",
+              "details": [
+                "Define common components/services location.",
+                "Define reusable UI conventions."
+              ]
+            },
+            {
+              "id": "TASK-012",
+              "work_item_type": "Task",
+              "title": "Establish frontend coding conventions",
+              "parent_id": "US-003",
+              "details": [
+                "Define component/service naming.",
+                "Define state and observable/signal conventions.",
+                "Define error/loading handling conventions."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-004",
+      "work_item_type": "Feature",
+      "title": "Prisma & Database Foundation",
+      "parent_id": "EPIC-001",
+      "description_note": "The database architecture explicitly uses Prisma ORM, SQLite for development, and PostgreSQL for production. The database overview also specifies BIGINT primary keys, UUID external references, `createdAt`/`updatedAt`, soft delete using `deletedAt`, and a `version` column for optimistic locking.",
+      "user_stories": [
+        {
+          "id": "US-004",
+          "work_item_type": "User Story",
+          "title": "Establish Prisma database foundation",
+          "parent_id": "FEAT-004",
+          "user_story": "As a development team, we want Prisma configured consistently so that the ERP database schema can evolve through controlled migrations.",
+          "acceptance_criteria": [
+            "Prisma is configured.",
+            "Schema location is standardized.",
+            "Migration workflow is documented.",
+            "Development database can be initialized.",
+            "Prisma client can be generated successfully."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-013",
+              "work_item_type": "Task",
+              "title": "Configure Prisma",
+              "parent_id": "US-004",
+              "details": [
+                "Configure Prisma schema.",
+                "Configure Prisma client generation.",
+                "Establish database access conventions."
+              ]
+            },
+            {
+              "id": "TASK-014",
+              "work_item_type": "Task",
+              "title": "Establish Prisma schema organization",
+              "parent_id": "US-004",
+              "details": [
+                "Define model naming conventions.",
+                "Define relation conventions.",
+                "Define index/constraint conventions."
+              ]
+            },
+            {
+              "id": "TASK-015",
+              "work_item_type": "Task",
+              "title": "Establish Prisma migration workflow",
+              "parent_id": "US-004",
+              "details": [
+                "Define migration creation process.",
+                "Define migration application process.",
+                "Define local reset/development workflow."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "US-005",
+          "work_item_type": "User Story",
+          "title": "Establish SQLite development database",
+          "parent_id": "FEAT-004",
+          "acceptance_criteria": [
+            "SQLite database can be created locally.",
+            "Prisma can connect successfully.",
+            "Migrations can be applied.",
+            "Application can execute basic database operations."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-016",
+              "work_item_type": "Task",
+              "title": "Configure SQLite development database",
+              "parent_id": "US-005"
+            },
+            {
+              "id": "TASK-017",
+              "work_item_type": "Task",
+              "title": "Validate Prisma-to-SQLite connectivity",
+              "parent_id": "US-005"
+            },
+            {
+              "id": "TASK-018",
+              "work_item_type": "Task",
+              "title": "Document SQLite database lifecycle",
+              "parent_id": "US-005"
+            }
+          ]
+        },
+        {
+          "id": "US-006",
+          "work_item_type": "User Story",
+          "title": "Establish PostgreSQL production compatibility",
+          "parent_id": "FEAT-004",
+          "acceptance_criteria": [
+            "PostgreSQL is identified as the production database.",
+            "Schema decisions are reviewed for SQLite/PostgreSQL compatibility.",
+            "Migration strategy is documented.",
+            "Database-specific features are explicitly identified before use."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-019",
+              "work_item_type": "Task",
+              "title": "Define SQLite/PostgreSQL compatibility guidelines",
+              "parent_id": "US-006"
+            },
+            {
+              "id": "TASK-020",
+              "work_item_type": "Task",
+              "title": "Review Prisma data types for cross-database compatibility",
+              "parent_id": "US-006"
+            },
+            {
+              "id": "TASK-021",
+              "work_item_type": "Task",
+              "title": "Define PostgreSQL production configuration",
+              "parent_id": "US-006"
+            },
+            {
+              "id": "TASK-022",
+              "work_item_type": "Task",
+              "title": "Establish database compatibility verification process",
+              "parent_id": "US-006"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-005",
+      "work_item_type": "Feature",
+      "title": "Configuration & Environment Management",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-007",
+          "work_item_type": "User Story",
+          "title": "Establish environment configuration",
+          "parent_id": "FEAT-005",
+          "user_story": "As a development team, we want centralized configuration so that environment-specific values are not hardcoded.",
+          "acceptance_criteria": [
+            "Development and production configuration can be separated.",
+            "Secrets are not stored in source code.",
+            "Configuration values can be validated at startup.",
+            "Backend and frontend configuration conventions are documented."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-023",
+              "work_item_type": "Task",
+              "title": "Establish backend environment configuration",
+              "parent_id": "US-007"
+            },
+            {
+              "id": "TASK-024",
+              "work_item_type": "Task",
+              "title": "Establish frontend environment configuration",
+              "parent_id": "US-007"
+            },
+            {
+              "id": "TASK-025",
+              "work_item_type": "Task",
+              "title": "Define configuration validation",
+              "parent_id": "US-007"
+            },
+            {
+              "id": "TASK-026",
+              "work_item_type": "Task",
+              "title": "Define secret-management standards",
+              "parent_id": "US-007"
+            },
+            {
+              "id": "TASK-027",
+              "work_item_type": "Task",
+              "title": "Document environment configuration",
+              "parent_id": "US-007"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-006",
+      "work_item_type": "Feature",
+      "title": "API Standards & Error Handling",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-008",
+          "work_item_type": "User Story",
+          "title": "Establish common API standards",
+          "parent_id": "FEAT-006",
+          "acceptance_criteria": [
+            "API naming conventions are documented.",
+            "HTTP method conventions are documented.",
+            "Request/response conventions are documented.",
+            "Pagination conventions are documented.",
+            "Error response structure is standardized."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-028",
+              "work_item_type": "Task",
+              "title": "Define REST API conventions",
+              "parent_id": "US-008"
+            },
+            {
+              "id": "TASK-029",
+              "work_item_type": "Task",
+              "title": "Define request/response DTO conventions",
+              "parent_id": "US-008"
+            },
+            {
+              "id": "TASK-030",
+              "work_item_type": "Task",
+              "title": "Define pagination and filtering conventions",
+              "parent_id": "US-008"
+            },
+            {
+              "id": "TASK-031",
+              "work_item_type": "Task",
+              "title": "Define API error response structure",
+              "parent_id": "US-008"
+            }
+          ]
+        },
+        {
+          "id": "US-009",
+          "work_item_type": "User Story",
+          "title": "Establish centralized backend error handling",
+          "parent_id": "FEAT-006",
+          "acceptance_criteria": [
+            "Unexpected exceptions are handled consistently.",
+            "Validation errors use the common format.",
+            "Business errors can be represented consistently.",
+            "Internal implementation details are not unnecessarily exposed to clients."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-032",
+              "work_item_type": "Task",
+              "title": "Implement global exception handling",
+              "parent_id": "US-009"
+            },
+            {
+              "id": "TASK-033",
+              "work_item_type": "Task",
+              "title": "Implement standardized error responses",
+              "parent_id": "US-009"
+            },
+            {
+              "id": "TASK-034",
+              "work_item_type": "Task",
+              "title": "Define business exception conventions",
+              "parent_id": "US-009"
+            },
+            {
+              "id": "TASK-035",
+              "work_item_type": "Task",
+              "title": "Add error logging integration",
+              "parent_id": "US-009"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-007",
+      "work_item_type": "Feature",
+      "title": "Validation & Data Integrity Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-010",
+          "work_item_type": "User Story",
+          "title": "Establish backend request validation",
+          "parent_id": "FEAT-007",
+          "acceptance_criteria": [
+            "DTO validation is standardized.",
+            "Required fields can be enforced.",
+            "Invalid data is rejected before business processing.",
+            "Validation errors are returned using the standard API format."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-036",
+              "work_item_type": "Task",
+              "title": "Configure global validation pipeline",
+              "parent_id": "US-010"
+            },
+            {
+              "id": "TASK-037",
+              "work_item_type": "Task",
+              "title": "Establish DTO validation conventions",
+              "parent_id": "US-010"
+            },
+            {
+              "id": "TASK-038",
+              "work_item_type": "Task",
+              "title": "Establish validation error response conventions",
+              "parent_id": "US-010"
+            }
+          ]
+        },
+        {
+          "id": "US-011",
+          "work_item_type": "User Story",
+          "title": "Establish database integrity conventions",
+          "parent_id": "FEAT-007",
+          "tasks": [
+            {
+              "id": "TASK-039",
+              "work_item_type": "Task",
+              "title": "Define primary-key conventions",
+              "parent_id": "US-011"
+            },
+            {
+              "id": "TASK-040",
+              "work_item_type": "Task",
+              "title": "Define UUID external-reference conventions",
+              "parent_id": "US-011"
+            },
+            {
+              "id": "TASK-041",
+              "work_item_type": "Task",
+              "title": "Define unique-constraint conventions",
+              "parent_id": "US-011"
+            },
+            {
+              "id": "TASK-042",
+              "work_item_type": "Task",
+              "title": "Define foreign-key and relationship conventions",
+              "parent_id": "US-011"
+            },
+            {
+              "id": "TASK-043",
+              "work_item_type": "Task",
+              "title": "Define index conventions",
+              "parent_id": "US-011"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-008",
+      "work_item_type": "Feature",
+      "title": "Common Persistence Capabilities",
+      "parent_id": "EPIC-001",
+      "description_note": "The database overview defines soft delete using `deletedAt`, standard timestamps, and a `version` column for optimistic locking. These should be implemented as reusable persistence patterns rather than recreated independently for every module.",
+      "user_stories": [
+        {
+          "id": "US-012",
+          "work_item_type": "User Story",
+          "title": "Establish soft-delete framework",
+          "parent_id": "FEAT-008",
+          "acceptance_criteria": [
+            "Soft-deletable records can be marked deleted.",
+            "Normal queries can exclude deleted records.",
+            "Explicit administrative/history queries can access deleted records where required.",
+            "Hard deletion is restricted to explicitly approved cases."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-044",
+              "work_item_type": "Task",
+              "title": "Define soft-delete persistence convention",
+              "parent_id": "US-012"
+            },
+            {
+              "id": "TASK-045",
+              "work_item_type": "Task",
+              "title": "Define default filtering behavior",
+              "parent_id": "US-012"
+            },
+            {
+              "id": "TASK-046",
+              "work_item_type": "Task",
+              "title": "Define restore behavior",
+              "parent_id": "US-012"
+            },
+            {
+              "id": "TASK-047",
+              "work_item_type": "Task",
+              "title": "Document hard-delete restrictions",
+              "parent_id": "US-012"
+            }
+          ]
+        },
+        {
+          "id": "US-013",
+          "work_item_type": "User Story",
+          "title": "Establish optimistic locking",
+          "parent_id": "FEAT-008",
+          "acceptance_criteria": [
+            "Concurrent updates can be detected.",
+            "Version information is maintained.",
+            "Stale updates are rejected safely.",
+            "A standard concurrency error is returned."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-048",
+              "work_item_type": "Task",
+              "title": "Define version-column convention",
+              "parent_id": "US-013"
+            },
+            {
+              "id": "TASK-049",
+              "work_item_type": "Task",
+              "title": "Implement optimistic-locking pattern",
+              "parent_id": "US-013"
+            },
+            {
+              "id": "TASK-050",
+              "work_item_type": "Task",
+              "title": "Define stale-update error handling",
+              "parent_id": "US-013"
+            },
+            {
+              "id": "TASK-051",
+              "work_item_type": "Task",
+              "title": "Document optimistic-locking usage",
+              "parent_id": "US-013"
+            }
+          ]
+        },
+        {
+          "id": "US-014",
+          "work_item_type": "User Story",
+          "title": "Establish transaction handling standards",
+          "parent_id": "FEAT-008",
+          "acceptance_criteria": [
+            "Multi-step business operations can execute transactionally.",
+            "Failure causes appropriate rollback.",
+            "Transaction boundaries are documented.",
+            "Developers have a standard transaction pattern."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-052",
+              "work_item_type": "Task",
+              "title": "Define transaction boundary guidelines",
+              "parent_id": "US-014"
+            },
+            {
+              "id": "TASK-053",
+              "work_item_type": "Task",
+              "title": "Establish Prisma transaction pattern",
+              "parent_id": "US-014"
+            },
+            {
+              "id": "TASK-054",
+              "work_item_type": "Task",
+              "title": "Document transaction usage",
+              "parent_id": "US-014"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-009",
+      "work_item_type": "Feature",
+      "title": "Common UI Infrastructure",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-015",
+          "work_item_type": "User Story",
+          "title": "Establish common application layout",
+          "parent_id": "FEAT-009",
+          "acceptance_criteria": [
+            "Application shell is available.",
+            "Navigation structure is established.",
+            "Feature modules can register navigation.",
+            "Layout is reusable."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-055",
+              "work_item_type": "Task",
+              "title": "Implement application shell",
+              "parent_id": "US-015"
+            },
+            {
+              "id": "TASK-056",
+              "work_item_type": "Task",
+              "title": "Implement navigation foundation",
+              "parent_id": "US-015"
+            },
+            {
+              "id": "TASK-057",
+              "work_item_type": "Task",
+              "title": "Define reusable layout components",
+              "parent_id": "US-015"
+            }
+          ]
+        },
+        {
+          "id": "US-016",
+          "work_item_type": "User Story",
+          "title": "Establish common UI states",
+          "parent_id": "FEAT-009",
+          "acceptance_criteria": [
+            "Loading state is standardized.",
+            "Error state is standardized.",
+            "Empty state is standardized.",
+            "Confirmation behavior is standardized."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-058",
+              "work_item_type": "Task",
+              "title": "Implement global loading handling",
+              "parent_id": "US-016"
+            },
+            {
+              "id": "TASK-059",
+              "work_item_type": "Task",
+              "title": "Implement common error display",
+              "parent_id": "US-016"
+            },
+            {
+              "id": "TASK-060",
+              "work_item_type": "Task",
+              "title": "Implement common empty-state component",
+              "parent_id": "US-016"
+            },
+            {
+              "id": "TASK-061",
+              "work_item_type": "Task",
+              "title": "Implement confirmation dialog convention",
+              "parent_id": "US-016"
+            }
+          ]
+        },
+        {
+          "id": "US-017",
+          "work_item_type": "User Story",
+          "title": "Establish common API client",
+          "parent_id": "FEAT-009",
+          "tasks": [
+            {
+              "id": "TASK-062",
+              "work_item_type": "Task",
+              "title": "Implement HTTP/API client foundation",
+              "parent_id": "US-017"
+            },
+            {
+              "id": "TASK-063",
+              "work_item_type": "Task",
+              "title": "Establish request error handling",
+              "parent_id": "US-017"
+            },
+            {
+              "id": "TASK-064",
+              "work_item_type": "Task",
+              "title": "Establish API request loading handling",
+              "parent_id": "US-017"
+            },
+            {
+              "id": "TASK-065",
+              "work_item_type": "Task",
+              "title": "Establish API response conventions",
+              "parent_id": "US-017"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-010",
+      "work_item_type": "Feature",
+      "title": "Logging & Diagnostics Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-018",
+          "work_item_type": "User Story",
+          "title": "Establish application logging",
+          "parent_id": "FEAT-010",
+          "acceptance_criteria": [
+            "Backend application events can be logged.",
+            "Log levels are standardized.",
+            "Errors include useful diagnostic context.",
+            "Sensitive information is not unnecessarily logged."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-066",
+              "work_item_type": "Task",
+              "title": "Establish backend logging framework",
+              "parent_id": "US-018"
+            },
+            {
+              "id": "TASK-067",
+              "work_item_type": "Task",
+              "title": "Define log levels and conventions",
+              "parent_id": "US-018"
+            },
+            {
+              "id": "TASK-068",
+              "work_item_type": "Task",
+              "title": "Define structured logging format",
+              "parent_id": "US-018"
+            },
+            {
+              "id": "TASK-069",
+              "work_item_type": "Task",
+              "title": "Define sensitive-data logging restrictions",
+              "parent_id": "US-018"
+            }
+          ]
+        },
+        {
+          "id": "US-019",
+          "work_item_type": "User Story",
+          "title": "Establish diagnostic support",
+          "parent_id": "FEAT-010",
+          "tasks": [
+            {
+              "id": "TASK-070",
+              "work_item_type": "Task",
+              "title": "Define application diagnostic information",
+              "parent_id": "US-019"
+            },
+            {
+              "id": "TASK-071",
+              "work_item_type": "Task",
+              "title": "Establish development troubleshooting guidelines",
+              "parent_id": "US-019"
+            },
+            {
+              "id": "TASK-072",
+              "work_item_type": "Task",
+              "title": "Document common startup/database troubleshooting",
+              "parent_id": "US-019"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-011",
+      "work_item_type": "Feature",
+      "title": "Development Standards & Code Quality",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-020",
+          "work_item_type": "User Story",
+          "title": "Establish code-quality standards",
+          "parent_id": "FEAT-011",
+          "acceptance_criteria": [
+            "Formatting standards are automated.",
+            "Linting is automated.",
+            "Static analysis can run locally.",
+            "Team coding conventions are documented."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-073",
+              "work_item_type": "Task",
+              "title": "Configure frontend linting/formatting",
+              "parent_id": "US-020"
+            },
+            {
+              "id": "TASK-074",
+              "work_item_type": "Task",
+              "title": "Configure backend linting/formatting",
+              "parent_id": "US-020"
+            },
+            {
+              "id": "TASK-075",
+              "work_item_type": "Task",
+              "title": "Establish shared coding standards",
+              "parent_id": "US-020"
+            },
+            {
+              "id": "TASK-076",
+              "work_item_type": "Task",
+              "title": "Document code-quality standards",
+              "parent_id": "US-020"
+            }
+          ]
+        },
+        {
+          "id": "US-021",
+          "work_item_type": "User Story",
+          "title": "Establish automated testing foundation",
+          "parent_id": "FEAT-011",
+          "acceptance_criteria": [
+            "Backend tests can execute.",
+            "Frontend tests can execute.",
+            "Test organization is standardized.",
+            "Test execution can be integrated into CI."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-077",
+              "work_item_type": "Task",
+              "title": "Configure backend unit-test foundation",
+              "parent_id": "US-021"
+            },
+            {
+              "id": "TASK-078",
+              "work_item_type": "Task",
+              "title": "Configure frontend unit-test foundation",
+              "parent_id": "US-021"
+            },
+            {
+              "id": "TASK-079",
+              "work_item_type": "Task",
+              "title": "Establish test naming and organization conventions",
+              "parent_id": "US-021"
+            },
+            {
+              "id": "TASK-080",
+              "work_item_type": "Task",
+              "title": "Establish test execution commands",
+              "parent_id": "US-021"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-012",
+      "work_item_type": "Feature",
+      "title": "CI/CD Foundation",
+      "parent_id": "EPIC-001",
+      "user_stories": [
+        {
+          "id": "US-022",
+          "work_item_type": "User Story",
+          "title": "Establish CI pipeline",
+          "parent_id": "FEAT-012",
+          "acceptance_criteria": [
+            "Source changes trigger CI.",
+            "Dependencies can be installed.",
+            "Application can be built.",
+            "Tests can execute.",
+            "Code-quality checks can execute.",
+            "Pipeline failures prevent successful validation."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-081",
+              "work_item_type": "Task",
+              "title": "Create CI pipeline",
+              "parent_id": "US-022"
+            },
+            {
+              "id": "TASK-082",
+              "work_item_type": "Task",
+              "title": "Configure dependency installation",
+              "parent_id": "US-022"
+            },
+            {
+              "id": "TASK-083",
+              "work_item_type": "Task",
+              "title": "Configure backend build",
+              "parent_id": "US-022"
+            },
+            {
+              "id": "TASK-084",
+              "work_item_type": "Task",
+              "title": "Configure frontend build",
+              "parent_id": "US-022"
+            },
+            {
+              "id": "TASK-085",
+              "work_item_type": "Task",
+              "title": "Configure automated tests",
+              "parent_id": "US-022"
+            },
+            {
+              "id": "TASK-086",
+              "work_item_type": "Task",
+              "title": "Configure lint/static analysis",
+              "parent_id": "US-022"
+            }
+          ]
+        },
+        {
+          "id": "US-023",
+          "work_item_type": "User Story",
+          "title": "Establish database migration validation in CI",
+          "parent_id": "FEAT-012",
+          "tasks": [
+            {
+              "id": "TASK-087",
+              "work_item_type": "Task",
+              "title": "Validate Prisma schema in CI",
+              "parent_id": "US-023"
+            },
+            {
+              "id": "TASK-088",
+              "work_item_type": "Task",
+              "title": "Validate migration workflow in CI",
+              "parent_id": "US-023"
+            },
+            {
+              "id": "TASK-089",
+              "work_item_type": "Task",
+              "title": "Add database compatibility validation where practical",
+              "parent_id": "US-023"
+            }
+          ]
+        },
+        {
+          "id": "US-024",
+          "work_item_type": "User Story",
+          "title": "Establish build/release foundation",
+          "parent_id": "FEAT-012",
+          "tasks": [
+            {
+              "id": "TASK-090",
+              "work_item_type": "Task",
+              "title": "Define application build artifacts",
+              "parent_id": "US-024"
+            },
+            {
+              "id": "TASK-091",
+              "work_item_type": "Task",
+              "title": "Define versioning strategy",
+              "parent_id": "US-024"
+            },
+            {
+              "id": "TASK-092",
+              "work_item_type": "Task",
+              "title": "Define release configuration strategy",
+              "parent_id": "US-024"
+            },
+            {
+              "id": "TASK-093",
+              "work_item_type": "Task",
+              "title": "Document deployment prerequisites",
+              "parent_id": "US-024"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cross_cutting_requirements": {
+    "database": [
+      "Prisma remains the ORM.",
+      "SQLite remains the development target.",
+      "PostgreSQL remains the production target.",
+      "BIGINT primary-key strategy is retained.",
+      "UUID external-reference strategy is retained.",
+      "`createdAt` / `updatedAt` conventions are retained.",
+      "`deletedAt` is used for soft delete where applicable.",
+      "`version` is used for optimistic locking where applicable."
+    ],
+    "backend": [
+      "NestJS module boundaries must remain clear.",
+      "Controllers should remain thin.",
+      "Business logic should be contained in services/domain logic.",
+      "DTO validation should happen at the API boundary.",
+      "Errors should use standardized responses.",
+      "Transactions should be explicit around multi-step operations."
+    ],
+    "ui": [
+      "Angular feature structure should be reusable.",
+      "Common UI states should not be implemented independently by every feature.",
+      "API communication should use the common API client.",
+      "Loading/error handling should follow shared conventions."
+    ],
+    "testing": [
+      "Foundation capabilities should have tests before being used heavily by later modules."
+    ],
+    "documentation": [
+      "Every architectural convention introduced in this phase should be documented so later ADO phases can reference it instead of redefining it."
+    ]
+  },
+  "dependencies": {
+    "later_phases": [
+      "Phase 2 — Organization & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User & Security",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory",
+      "Phase 7 — Procurement",
+      "Phase 8 — Sales & Prescription",
+      "Phase 9 — Financial",
+      "Phase 10 — Loyalty/Audit/Reporting",
+      "Phase 11 — Synchronization"
+    ],
+    "guidance": "Phase 1 should be completed before substantial implementation of the listed later phases. Some Phase 1 items can be developed in parallel, but the core database, backend, frontend, API, configuration, validation, and testing foundations should exist before domain development begins."
+  },
+  "suggested_ado_priority": {
+    "Repository/application foundation": "P0",
+    "NestJS foundation": "P0",
+    "Angular/Electron foundation": "P0",
+    "Prisma foundation": "P0",
+    "SQLite foundation": "P0",
+    "PostgreSQL compatibility": "P0",
+    "Configuration": "P0",
+    "API standards": "P0",
+    "Validation": "P0",
+    "Persistence conventions": "P0",
+    "UI infrastructure": "P0",
+    "Logging": "P0",
+    "Code quality": "P0",
+    "Testing foundation": "P0",
+    "CI/CD foundation": "P0"
+  },
+  "definition_of_done": [
+    "Repository structure is established.",
+    "NestJS backend foundation is operational.",
+    "Angular/Electron foundation is operational.",
+    "Prisma is operational.",
+    "SQLite development database is operational.",
+    "PostgreSQL production compatibility approach is documented.",
+    "Migration workflow is established.",
+    "Environment configuration is established.",
+    "API conventions are documented.",
+    "Global validation is established.",
+    "Global error handling is established.",
+    "Soft-delete convention is established.",
+    "Optimistic-locking convention is established.",
+    "Transaction convention is established.",
+    "Common UI infrastructure is established.",
+    "Common API client is established.",
+    "Logging foundation is established.",
+    "Testing foundation is established.",
+    "Code-quality checks are established.",
+    "CI pipeline is operational.",
+    "Phase 1 documentation is committed to the repository."
+  ],
+  "important_boundary": {
+    "statement": "Phase 1 establishes reusable technical mechanisms.",
+    "should_not_create": [
+      "Customer CRUD",
+      "Supplier CRUD",
+      "Medicine CRUD",
+      "Inventory CRUD",
+      "Purchase Order CRUD",
+      "Sales Invoice CRUD",
+      "Prescription CRUD",
+      "Financial transactions"
+    ],
+    "note": "Those belong to their respective later phases. This prevents the foundation phase from becoming an unmanageable mixture of platform and business functionality."
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 12,
+    "user_stories": 24,
+    "tasks": 93
+  }
+}

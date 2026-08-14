@@ -1,0 +1,282 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_000000000e3c8207d90caefbce2b9c1c",
+    "source_of_truth": true,
+    "note": "Structured representation of the supplied Phase 5 Markdown. No new backlog items intentionally added."
+  },
+  "phase": {
+    "number": 5,
+    "key": "PHASE-005",
+    "name": "Medicine Master",
+    "objective": "Establish the complete medicine and pharmaceutical product master required by all downstream Pharmacy ERP workflows.",
+    "scope": {
+      "in_scope": [
+        "Medicine master",
+        "Medicine identity",
+        "Medicine code / SKU",
+        "Medicine generic / composition",
+        "Brand",
+        "Manufacturer",
+        "Category",
+        "Dosage form",
+        "Strength",
+        "Pack configuration",
+        "Unit of Measure",
+        "Prescription classification",
+        "Schedule classification",
+        "Tax classification",
+        "Medicine status",
+        "Medicine lifecycle",
+        "Medicine search",
+        "Medicine filtering",
+        "Medicine duplicate prevention",
+        "Medicine validation",
+        "Medicine metadata",
+        "Medicine aliases / alternate names",
+        "Medicine barcode/GTIN foundation",
+        "Medicine master APIs",
+        "Medicine master UI",
+        "Medicine lookup services",
+        "Medicine authorization",
+        "Medicine audit integration",
+        "Medicine testing",
+        "SQLite/PostgreSQL compatibility"
+      ],
+      "out_of_scope": [
+        "Inventory stock",
+        "Batch stock",
+        "Purchase transactions",
+        "Sales transactions",
+        "Prescription transactions",
+        "Financial transactions",
+        "Customer management",
+        "Supplier transactions",
+        "Doctor workflows",
+        "Loyalty",
+        "Full barcode scanning workflow",
+        "Advanced medicine analytics",
+        "Full drug interaction engine",
+        "Full prescription validation engine"
+      ]
+    }
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-005",
+      "title": "Medicine Master"
+    },
+    "features": [
+      {
+        "id": "FEAT-052",
+        "title": "Medicine Master Foundation"
+      },
+      {
+        "id": "FEAT-053",
+        "title": "Medicine Registration"
+      },
+      {
+        "id": "FEAT-054",
+        "title": "Medicine Search & Retrieval"
+      },
+      {
+        "id": "FEAT-055",
+        "title": "Medicine Update & Lifecycle"
+      },
+      {
+        "id": "FEAT-056",
+        "title": "Brand Management"
+      },
+      {
+        "id": "FEAT-057",
+        "title": "Manufacturer Management"
+      },
+      {
+        "id": "FEAT-058",
+        "title": "Medicine Category Management"
+      },
+      {
+        "id": "FEAT-059",
+        "title": "Dosage Form Management"
+      },
+      {
+        "id": "FEAT-060",
+        "title": "Unit of Measure Management"
+      },
+      {
+        "id": "FEAT-061",
+        "title": "Medicine Composition Management"
+      },
+      {
+        "id": "FEAT-062",
+        "title": "Medicine Packaging & Strength"
+      },
+      {
+        "id": "FEAT-063",
+        "title": "Medicine Classification"
+      },
+      {
+        "id": "FEAT-064",
+        "title": "Medicine Barcode & Alternate Identifiers"
+      },
+      {
+        "id": "FEAT-065",
+        "title": "Medicine Duplicate & Data Quality"
+      },
+      {
+        "id": "FEAT-066",
+        "title": "Medicine Integration Foundation"
+      }
+    ]
+  },
+  "work_item_ranges": {
+    "epic": {
+      "count": 1,
+      "id": "EPIC-005"
+    },
+    "features": {
+      "count": 15,
+      "first_id": "FEAT-052",
+      "last_id": "FEAT-066"
+    },
+    "user_stories": {
+      "count": 38,
+      "first_id": "US-120",
+      "last_id": "US-157"
+    },
+    "tasks": {
+      "count": 292,
+      "first_id": "TASK-831",
+      "last_id": "TASK-1122"
+    },
+    "total": 346
+  },
+  "medicine_model": {
+    "core_entity": "Medicine",
+    "supporting_entities": [
+      "Brand",
+      "Manufacturer",
+      "MedicineCategory",
+      "DosageForm",
+      "UnitOfMeasure",
+      "MedicineComposition",
+      "MedicinePackaging",
+      "MedicineIdentifier"
+    ],
+    "conceptual_relationships": [
+      "Medicine → Brand",
+      "Medicine → Manufacturer",
+      "Medicine → MedicineCategory",
+      "Medicine → DosageForm",
+      "Medicine → UnitOfMeasure",
+      "Medicine → MedicineComposition",
+      "Medicine → MedicinePackaging",
+      "Medicine → MedicineIdentifier"
+    ]
+  },
+  "design_principles": [
+    "Medicine is the central pharmaceutical product identity.",
+    "Medicine master must be reusable by Inventory, Purchase, Sales, Prescription and reporting.",
+    "Generic/composition information must be separated from brand/manufacturer identity where appropriate.",
+    "Packaging and strength must be modeled explicitly rather than embedded in free text.",
+    "Medicine classification must support future prescription and compliance rules.",
+    "Historical transactional references must remain valid when medicine master data changes.",
+    "Medicine master should support future barcode/GTIN integration.",
+    "Lookup/reference masters should be reusable rather than duplicated across modules."
+  ],
+  "downstream_consumers": [
+    "Inventory",
+    "Purchase",
+    "Sales",
+    "Prescription",
+    "Reporting",
+    "Financial"
+  ],
+  "dependencies": {
+    "depends_on": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management"
+    ],
+    "phase_5_provides": [
+      "Medicine identity",
+      "Medicine lookup APIs",
+      "Medicine classification",
+      "Medicine packaging/strength model",
+      "Medicine composition",
+      "Brand/manufacturer references",
+      "Medicine identifiers",
+      "Medicine lifecycle/status",
+      "Medicine authorization integration"
+    ]
+  },
+  "phase_boundary": {
+    "implements": [
+      "Medicine master",
+      "Brand master",
+      "Manufacturer master",
+      "Medicine category master",
+      "Dosage form master",
+      "Unit of measure master",
+      "Medicine composition",
+      "Packaging and strength",
+      "Medicine classification",
+      "Medicine barcode/alternate identifiers",
+      "Medicine search/retrieval",
+      "Medicine lifecycle",
+      "Duplicate/data-quality controls",
+      "Reusable medicine lookup services"
+    ],
+    "does_not_implement": [
+      "Stock quantities",
+      "Batch stock",
+      "Purchase orders",
+      "Goods receipts",
+      "Sales invoices",
+      "Prescription transactions",
+      "Financial transactions",
+      "Advanced drug interaction engine"
+    ]
+  },
+  "database_standards": [
+    "BIGINT primary keys",
+    "UUID external references where applicable",
+    "Singular table names",
+    "createdAt",
+    "updatedAt",
+    "deletedAt where appropriate",
+    "version where optimistic locking is applicable",
+    "Explicit foreign keys",
+    "Unique constraints",
+    "Appropriate indexes",
+    "SQLite compatibility",
+    "PostgreSQL compatibility"
+  ],
+  "validation_principles": [
+    "Medicine code must be unique.",
+    "Medicine name must be meaningful.",
+    "Brand/manufacturer/category references must be valid.",
+    "Dosage form must be valid.",
+    "Strength must follow a controlled representation.",
+    "Pack configuration must be valid.",
+    "Unit of measure must be valid.",
+    "Duplicate medicine detection must be supported.",
+    "Inactive medicines should not be selectable for new transactions.",
+    "Historical references must remain valid."
+  ],
+  "security_and_audit": {
+    "authorization": "Use Phase 4 centralized authorization and permission checks.",
+    "audit": [
+      "Medicine created",
+      "Medicine updated",
+      "Medicine deactivated",
+      "Medicine reactivated",
+      "Reference master changes",
+      "Identifier changes"
+    ]
+  },
+  "ado_import_note": "Use the uploaded Phase 5 Markdown as the detailed source when generating the final ADO import payload. This JSON preserves the explicit Phase 5 hierarchy, ranges, counts, dependencies, scope, and domain design principles."
+}

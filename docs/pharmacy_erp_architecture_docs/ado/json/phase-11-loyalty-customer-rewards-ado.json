@@ -1,0 +1,379 @@
+{
+  "schema_version": "1.1",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_000000001504820880179f066d2c2f2f",
+    "source_of_truth": true
+  },
+  "phase": {
+    "number": 11,
+    "key": "PHASE-011",
+    "name": "Loyalty & Customer Rewards",
+    "objective": "Provide a reliable customer reward system where points are earned, redeemed, reversed and audited without corrupting Sales transactions or customer balances."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-011",
+      "title": "Loyalty & Customer Rewards"
+    },
+    "features": [
+      {
+        "id": "FEAT-157",
+        "title": "Loyalty Domain & Data Model"
+      },
+      {
+        "id": "FEAT-158",
+        "title": "Loyalty Program Management"
+      },
+      {
+        "id": "FEAT-159",
+        "title": "Customer Enrollment & Membership"
+      },
+      {
+        "id": "FEAT-160",
+        "title": "Loyalty Earning Rules"
+      },
+      {
+        "id": "FEAT-161",
+        "title": "Loyalty Point Transactions"
+      },
+      {
+        "id": "FEAT-162",
+        "title": "Loyalty Redemption"
+      },
+      {
+        "id": "FEAT-163",
+        "title": "Sales Integration"
+      },
+      {
+        "id": "FEAT-164",
+        "title": "Returns, Reversals & Corrections"
+      },
+      {
+        "id": "FEAT-165",
+        "title": "Offline Synchronization & Conflict Handling"
+      },
+      {
+        "id": "FEAT-166",
+        "title": "Security, Audit, Reporting & Testing"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 10,
+    "user_stories": 30,
+    "tasks": 570,
+    "total_work_items": 611,
+    "formula": "1 + 10 + 30 + 570 = 611"
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-011",
+    "features": "FEAT-157 through FEAT-166",
+    "user_stories": "US-433 through US-462",
+    "tasks": "570 tasks as specified by the Phase 11 source document"
+  },
+  "approved_database_tables": [
+    "LoyaltyProgram",
+    "LoyaltyTransaction"
+  ],
+  "domain_boundary": {
+    "loyalty_owns": [
+      "Loyalty programs",
+      "Program eligibility",
+      "Customer enrollment/membership behavior",
+      "Earning rules",
+      "Point calculation",
+      "Point transactions",
+      "Point balance/history",
+      "Redemption rules",
+      "Reversals",
+      "Authorized adjustments"
+    ],
+    "party_customer_owns": [
+      "Customer identity",
+      "Customer master data"
+    ],
+    "sales_owns": [
+      "Sales Invoice",
+      "Sales Return",
+      "Sales transaction lifecycle"
+    ],
+    "pricing_owns": [
+      "Price",
+      "Tax",
+      "Discount calculation"
+    ],
+    "financial_owns": [
+      "Accounting",
+      "Monetary ledger posting"
+    ],
+    "synchronization_owns": [
+      "Outbox",
+      "SyncLog",
+      "SyncConflict"
+    ],
+    "audit_owns": [
+      "AuditLog",
+      "ChangeHistory"
+    ]
+  },
+  "core_flow": [
+    "Customer",
+    "Loyalty Program Enrollment",
+    "Sales Invoice",
+    "Eligibility Evaluation",
+    "Points Earned / Points Redeemed",
+    "LoyaltyTransaction",
+    "Customer Loyalty Balance"
+  ],
+  "critical_business_rules": [
+    "Loyalty must not own Customer identity.",
+    "Loyalty must not own Sales Invoice or Sales Return.",
+    "LoyaltyTransaction is the historical source of truth.",
+    "Completed loyalty transactions must not be edited or deleted to rewrite history.",
+    "Corrections must use compensating/reversal transactions.",
+    "Point balance must be deterministic.",
+    "Sales must not award points for failed transactions.",
+    "Redemption must be atomic.",
+    "Sales Returns must reverse loyalty effects correctly.",
+    "Manual point changes require authorization.",
+    "Operators must not directly edit a customer's point balance.",
+    "Manual adjustments require a reason/reference and audit trail.",
+    "Duplicate/retry behavior must be deterministic.",
+    "Offline mutations must be persisted locally and synchronized safely."
+  ],
+  "feature_focus": {
+    "FEAT-157": [
+      "Finalize loyalty domain boundaries",
+      "Finalize schema",
+      "Define Customer-to-program membership relationship",
+      "Define UUID/primary-key strategy",
+      "Define soft delete/versioning",
+      "Define balance derivation/caching strategy"
+    ],
+    "FEAT-158": [
+      "Loyalty program lifecycle",
+      "Program activation/deactivation/expiration",
+      "Earning and redemption parameters"
+    ],
+    "FEAT-159": [
+      "Customer enrollment",
+      "Membership state",
+      "Membership lifecycle"
+    ],
+    "FEAT-160": [
+      "Earning rules",
+      "Eligible/excluded transactions",
+      "Point calculation",
+      "Rounding and limits"
+    ],
+    "FEAT-161": [
+      "Immutable loyalty transactions",
+      "Balance",
+      "History",
+      "Source references"
+    ],
+    "FEAT-162": [
+      "Redemption during Sales",
+      "Minimum/maximum redemption rules",
+      "Insufficient balance protection",
+      "Concurrent redemption protection",
+      "Idempotency"
+    ],
+    "FEAT-163": [
+      "Sales invoice earning",
+      "Sales invoice redemption",
+      "Sales cancellation behavior"
+    ],
+    "FEAT-164": [
+      "Sales Return earning reversal",
+      "Sales Return redemption reversal",
+      "Manual authorized corrections"
+    ],
+    "FEAT-165": [
+      "Offline earning/redemption",
+      "Outbox synchronization",
+      "Retry",
+      "Idempotency",
+      "Conflict handling"
+    ],
+    "FEAT-166": [
+      "Permissions",
+      "Audit",
+      "Loyalty UI",
+      "Balance/history views",
+      "Sales redemption workflow",
+      "Testing",
+      "Performance",
+      "Documentation"
+    ]
+  },
+  "sales_integration": {
+    "earning": [
+      "Define exact Sales lifecycle point where points are earned",
+      "Do not award points for draft/failed invoices",
+      "Persist source Sales Invoice reference",
+      "Ensure retries cannot award points twice"
+    ],
+    "redemption": [
+      "Pass redemption context from Sales to Loyalty",
+      "Validate redemption before final invoice completion",
+      "Persist redemption reference",
+      "Ensure invoice retry is idempotent"
+    ],
+    "cancellation": [
+      "Define cancellation behavior before completion",
+      "Define cancellation behavior after points were awarded",
+      "Prevent orphan loyalty transactions",
+      "Test cancellation/retry scenarios"
+    ]
+  },
+  "returns_and_reversals": {
+    "earned_points": [
+      "Identify original earning transaction",
+      "Calculate reversal amount",
+      "Create reversal instead of editing history",
+      "Prevent duplicate reversal",
+      "Support full and partial Sales Return"
+    ],
+    "redeemed_points": [
+      "Identify original redemption",
+      "Define whether returned goods restore redeemed points",
+      "Create controlled reversal transaction",
+      "Prevent duplicate reversal",
+      "Support full and partial Sales Return"
+    ],
+    "manual_adjustment": [
+      "Restrict to authorized roles",
+      "Require reason/reference",
+      "Create explicit ADJUSTMENT transaction",
+      "Audit before/after balance",
+      "Prevent arbitrary balance edits"
+    ]
+  },
+  "offline_sync": {
+    "flow": [
+      "Local SQLite",
+      "Loyalty operation",
+      "Transactional local mutation + Outbox",
+      "Background synchronization",
+      "Cloud service"
+    ],
+    "rules": [
+      "Use authoritative transaction identity",
+      "Use idempotency keys",
+      "Prevent duplicate cloud transactions",
+      "Retry safely",
+      "Record unresolved conflicts",
+      "Do not blindly overwrite loyalty master changes",
+      "Test replay and concurrent synchronization"
+    ]
+  },
+  "security": {
+    "principles": [
+      "Backend authorization is authoritative.",
+      "UI permission checks are not the security boundary.",
+      "Program administration must be permission-controlled.",
+      "Enrollment/status changes must be protected.",
+      "Redemption must be protected.",
+      "Manual adjustments must be restricted.",
+      "Privileged operations must be audited."
+    ],
+    "permission_areas": [
+      "Loyalty program administration",
+      "Customer enrollment",
+      "Membership status",
+      "Redemption",
+      "Manual adjustment",
+      "Loyalty history/balance viewing"
+    ]
+  },
+  "ui": {
+    "workflows": [
+      "Loyalty program management",
+      "Customer enrollment",
+      "Customer points balance",
+      "Loyalty transaction history",
+      "Sales redemption",
+      "Insufficient-balance validation"
+    ],
+    "standards": [
+      "Keyboard-first",
+      "Pharmacist-oriented",
+      "Clear balance and transaction history",
+      "Explicit validation/error feedback",
+      "Permission-aware actions"
+    ]
+  },
+  "testing_matrix": [
+    "Program lifecycle",
+    "Earning calculation",
+    "Redemption calculation",
+    "Sales integration",
+    "Sales Return reversal",
+    "Concurrent redemption",
+    "Manual adjustment authorization",
+    "Offline operation",
+    "Outbox synchronization",
+    "Sync retry",
+    "Duplicate request",
+    "Conflict handling",
+    "SQLite compatibility",
+    "PostgreSQL compatibility",
+    "Balance lookup performance",
+    "Transaction insertion performance",
+    "API tests",
+    "E2E tests",
+    "Security/authorization tests",
+    "Audit coverage"
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management",
+      "Phase 7 — Purchase Management",
+      "Phase 8 — Sales & Billing Management",
+      "Phase 9 — Financial Management",
+      "Phase 10 — Pricing & Taxation Management"
+    ],
+    "downstream_or_consumers": [
+      "Sales",
+      "Customer-facing workflows",
+      "Reporting"
+    ]
+  },
+  "definition_of_done": [
+    "Both approved Loyalty tables are finalized and implemented.",
+    "Loyalty programs can be configured and managed.",
+    "Customers can be enrolled and membership status controlled.",
+    "Points are calculated using centralized business rules.",
+    "LoyaltyTransaction provides authoritative transaction history.",
+    "Point balance cannot become negative through normal workflows.",
+    "Sales earning and redemption are atomic and idempotent.",
+    "Sales Returns and cancellations reverse loyalty effects correctly.",
+    "Manual adjustments require authorization and audit trail.",
+    "Offline operations work using the local database.",
+    "Outbox synchronization is retry-safe and idempotent.",
+    "Angular workflows are keyboard-first and pharmacist-oriented.",
+    "Permissions and audit controls are enforced server-side.",
+    "Unit/API/E2E/sync tests pass.",
+    "SQLite and PostgreSQL behavior is validated.",
+    "Performance is measured.",
+    "Documentation is complete."
+  ],
+  "validation": {
+    "expected_epics": 1,
+    "expected_features": 10,
+    "expected_user_stories": 30,
+    "expected_tasks": 570,
+    "expected_total": 611,
+    "validated_formula": "1 + 10 + 30 + 570 = 611",
+    "correction_from_previous_version": "The previous Phase 11 JSON incorrectly omitted the 570-task source count. This version restores the source-of-truth count and total."
+  }
+}

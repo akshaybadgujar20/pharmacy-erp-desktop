@@ -1,0 +1,444 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000aef3820a87efc50e37c9dd41",
+    "source_of_truth": true,
+    "note": "Structured representation of the supplied Phase 9 Markdown. The Markdown remains the detailed source of truth; no new ADO work items intentionally added."
+  },
+  "phase": {
+    "number": 9,
+    "key": "PHASE-009",
+    "name": "Financial Management",
+    "objective": "Establish the financial/accounting domain of the Pharmacy ERP covering accounts, journals, ledgers, receivables, payables, payments, receipts, settlements, financial posting and reporting integration."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-009",
+      "title": "Financial Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-117",
+        "title": "Financial Domain & Accounting Foundation"
+      },
+      {
+        "id": "FEAT-118",
+        "title": "Chart of Accounts"
+      },
+      {
+        "id": "FEAT-119",
+        "title": "Account Groups & Classification"
+      },
+      {
+        "id": "FEAT-120",
+        "title": "Journal Entry Management"
+      },
+      {
+        "id": "FEAT-121",
+        "title": "Journal Entry Lines & Double-Entry Validation"
+      },
+      {
+        "id": "FEAT-122",
+        "title": "General Ledger"
+      },
+      {
+        "id": "FEAT-123",
+        "title": "Accounts Receivable"
+      },
+      {
+        "id": "FEAT-124",
+        "title": "Accounts Payable"
+      },
+      {
+        "id": "FEAT-125",
+        "title": "Payment Management"
+      },
+      {
+        "id": "FEAT-126",
+        "title": "Receipt Management"
+      },
+      {
+        "id": "FEAT-127",
+        "title": "Settlement & Allocation"
+      },
+      {
+        "id": "FEAT-128",
+        "title": "Credit/Debit Notes & Adjustments"
+      },
+      {
+        "id": "FEAT-129",
+        "title": "Financial Posting Engine"
+      },
+      {
+        "id": "FEAT-130",
+        "title": "Sales Financial Integration"
+      },
+      {
+        "id": "FEAT-131",
+        "title": "Purchase Financial Integration"
+      },
+      {
+        "id": "FEAT-132",
+        "title": "Inventory Financial Integration"
+      },
+      {
+        "id": "FEAT-133",
+        "title": "Financial Period & Closing"
+      },
+      {
+        "id": "FEAT-134",
+        "title": "Financial Search & Reporting Readiness"
+      },
+      {
+        "id": "FEAT-135",
+        "title": "Financial Authorization & Audit"
+      },
+      {
+        "id": "FEAT-136",
+        "title": "Financial REST API & NestJS Services"
+      },
+      {
+        "id": "FEAT-137",
+        "title": "Angular Financial UI"
+      },
+      {
+        "id": "FEAT-138",
+        "title": "Offline-First Financial & Synchronization"
+      },
+      {
+        "id": "FEAT-139",
+        "title": "Financial Testing, Performance & Readiness"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 23,
+    "user_stories": 61,
+    "tasks": 600,
+    "total_work_items": 685
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-009",
+    "features": "FEAT-117 through FEAT-139",
+    "user_stories": "US-314 through US-374",
+    "tasks": "TASK-001 through TASK-600"
+  },
+  "financial_tables": [
+    "Account",
+    "AccountGroup",
+    "JournalEntry",
+    "JournalEntryLine",
+    "Ledger",
+    "LedgerEntry",
+    "Payment",
+    "Receipt",
+    "Settlement",
+    "FinancialPeriod",
+    "CreditNote",
+    "DebitNote"
+  ],
+  "accounting_principles": [
+    "Every financial transaction must balance.",
+    "Total debits must equal total credits.",
+    "Journal entries are immutable after posting except through controlled reversal/correction.",
+    "Ledger balances are derived from posted ledger entries.",
+    "Financial documents must be traceable to their source business transaction.",
+    "Posted transactions must not be silently deleted.",
+    "Financial periods must control posting dates and closing.",
+    "Financial calculations must be backend authoritative.",
+    "Financial posting must be transactional and idempotent."
+  ],
+  "ownership": {
+    "financial_owns": [
+      "Chart of Accounts",
+      "Account Groups",
+      "Journal Entries",
+      "Journal Entry Lines",
+      "General Ledger",
+      "Accounts Receivable",
+      "Accounts Payable",
+      "Payments",
+      "Receipts",
+      "Settlements",
+      "Credit Notes",
+      "Debit Notes",
+      "Financial Periods",
+      "Financial Posting",
+      "Financial audit"
+    ],
+    "sales_owns": [
+      "SalesInvoice",
+      "SalesInvoiceItem",
+      "SalesReturn",
+      "SalesReturnItem",
+      "SalesPayment"
+    ],
+    "purchase_owns": [
+      "PurchaseOrder",
+      "GoodsReceipt",
+      "PurchaseInvoice",
+      "PurchaseReturn"
+    ],
+    "inventory_owns": [
+      "Stock",
+      "StockMovement",
+      "Batch",
+      "StockAdjustment",
+      "StockTake",
+      "StockTransfer"
+    ],
+    "party_owns": [
+      "Customer",
+      "Supplier",
+      "Party",
+      "PartyContact",
+      "PartyAddress"
+    ]
+  },
+  "financial_posting_flow": [
+    "Business transaction occurs",
+    "Financial posting service receives event/request",
+    "Validate source transaction",
+    "Resolve account mappings",
+    "Build balanced journal entry",
+    "Validate debit = credit",
+    "Post journal entry transactionally",
+    "Create ledger entries",
+    "Create audit event",
+    "Create outbox event"
+  ],
+  "integration_flows": {
+    "sales": [
+      "Sales Invoice",
+      "Financial Posting",
+      "Customer Receivable / Cash",
+      "Revenue",
+      "Tax",
+      "Inventory/COGS integration where configured"
+    ],
+    "purchase": [
+      "Purchase Invoice",
+      "Financial Posting",
+      "Supplier Payable",
+      "Purchase/Expense/Inventory account",
+      "Tax"
+    ],
+    "inventory": [
+      "Stock valuation events",
+      "Inventory adjustment",
+      "Inventory write-off",
+      "Financial Posting",
+      "Inventory/expense account"
+    ]
+  },
+  "security": {
+    "permission_catalog": [
+      "Financial.View",
+      "Financial.Account.View",
+      "Financial.Account.Create",
+      "Financial.Account.Update",
+      "Financial.Account.Deactivate",
+      "Financial.Journal.View",
+      "Financial.Journal.Create",
+      "Financial.Journal.Post",
+      "Financial.Journal.Reverse",
+      "Financial.Ledger.View",
+      "Financial.Receivable.View",
+      "Financial.Payable.View",
+      "Financial.Payment.View",
+      "Financial.Payment.Create",
+      "Financial.Payment.Post",
+      "Financial.Payment.Cancel",
+      "Financial.Receipt.View",
+      "Financial.Receipt.Create",
+      "Financial.Receipt.Post",
+      "Financial.Receipt.Cancel",
+      "Financial.Settlement.View",
+      "Financial.Settlement.Create",
+      "Financial.Settlement.Post",
+      "Financial.CreditNote.View",
+      "Financial.CreditNote.Create",
+      "Financial.CreditNote.Post",
+      "Financial.DebitNote.View",
+      "Financial.DebitNote.Create",
+      "Financial.DebitNote.Post",
+      "Financial.Period.View",
+      "Financial.Period.Open",
+      "Financial.Period.Close",
+      "Financial.Reports.View"
+    ],
+    "principle": "Backend authorization is authoritative; UI permission checks are an additional UX layer."
+  },
+  "legacy_mapping": {
+    "sales_posting_in_accounts": "Sales financial integration",
+    "sales_return_posting_in_accounts": "Sales return financial integration",
+    "purchase_posting_in_accounts": "Purchase financial integration",
+    "purchase_return_posting_in_accounts": "Purchase return financial integration",
+    "pending_cash": "Receivable/payment integration",
+    "supplier_credit": "Accounts payable/settlement",
+    "debit_note": "DebitNote",
+    "credit_note": "CreditNote",
+    "ledger": "General Ledger",
+    "account_statement": "Account/ledger statement",
+    "trial_balance": "Financial reporting",
+    "profit_loss": "Financial reporting",
+    "balance_sheet": "Financial reporting",
+    "cash_book": "Cash/bank ledger reporting"
+  },
+  "reporting_readiness": [
+    "Trial Balance",
+    "General Ledger",
+    "Account Ledger",
+    "Customer Outstanding",
+    "Supplier Outstanding",
+    "Receivable Aging",
+    "Payable Aging",
+    "Cash Book",
+    "Bank Book",
+    "Day Book",
+    "Profit & Loss",
+    "Balance Sheet",
+    "Account Statement",
+    "Payment Register",
+    "Receipt Register",
+    "Credit Note Register",
+    "Debit Note Register",
+    "Financial Period Summary"
+  ],
+  "offline_architecture": {
+    "flow": [
+      "Local SQLite",
+      "Financial operation",
+      "Local transaction",
+      "Outbox",
+      "Background synchronization",
+      "Cloud financial service"
+    ],
+    "rules": [
+      "Financial transactions must use UUID idempotency keys.",
+      "Duplicate posting must not create duplicate ledger impact.",
+      "Financial conflicts must never be resolved by blindly overwriting posted financial data.",
+      "Posted financial records should be immutable.",
+      "Synchronization must preserve journal and ledger consistency."
+    ]
+  },
+  "testing_matrix": [
+    "Chart of Accounts CRUD",
+    "Account group validation",
+    "Journal entry create/validate/post",
+    "Debit-credit balancing",
+    "Ledger generation",
+    "AR transaction",
+    "AP transaction",
+    "Payment",
+    "Receipt",
+    "Settlement allocation",
+    "Credit note",
+    "Debit note",
+    "Financial period open/close",
+    "Sales posting",
+    "Purchase posting",
+    "Inventory financial posting",
+    "Reversal/correction",
+    "Authorization allowed/denied",
+    "Audit coverage",
+    "Idempotency",
+    "Optimistic locking",
+    "Offline operation",
+    "Synchronization retry/replay",
+    "Financial reporting queries",
+    "SQLite/PostgreSQL compatibility",
+    "Large-ledger performance"
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management",
+      "Phase 7 — Purchase Management",
+      "Phase 8 — Sales & Billing Management"
+    ],
+    "downstream": [
+      "Reporting",
+      "Analytics",
+      "Business intelligence"
+    ]
+  },
+  "phase_boundary": {
+    "implements": [
+      "Financial schema",
+      "Chart of Accounts",
+      "Account groups",
+      "Journal entries",
+      "Double-entry validation",
+      "General Ledger",
+      "Accounts Receivable",
+      "Accounts Payable",
+      "Payments",
+      "Receipts",
+      "Settlement/allocation",
+      "Credit/Debit Notes",
+      "Financial posting engine",
+      "Sales integration",
+      "Purchase integration",
+      "Inventory financial integration",
+      "Financial periods and closing",
+      "Financial search/reporting readiness",
+      "Authorization and audit",
+      "Financial REST APIs",
+      "Angular financial UI",
+      "Offline-first financial synchronization",
+      "Testing/performance/readiness"
+    ],
+    "does_not_implement": [
+      "Complete Reporting module",
+      "Business intelligence dashboards",
+      "Advanced analytics",
+      "Sales domain ownership",
+      "Purchase domain ownership",
+      "Inventory domain ownership",
+      "Party identity ownership"
+    ]
+  },
+  "definition_of_done": [
+    "Financial schema finalized.",
+    "Chart of Accounts implemented.",
+    "Account Groups implemented.",
+    "Journal Entry implemented.",
+    "Double-entry validation enforced.",
+    "General Ledger implemented.",
+    "Accounts Receivable implemented.",
+    "Accounts Payable implemented.",
+    "Payment implemented.",
+    "Receipt implemented.",
+    "Settlement/allocation implemented.",
+    "Credit Note implemented.",
+    "Debit Note implemented.",
+    "Financial Posting Engine implemented.",
+    "Sales financial integration implemented.",
+    "Purchase financial integration implemented.",
+    "Inventory financial integration implemented.",
+    "Financial periods and closing implemented.",
+    "Financial search/reporting readiness implemented.",
+    "Permissions implemented.",
+    "Audit implemented.",
+    "Outbox implemented.",
+    "Idempotency implemented.",
+    "Conflict handling implemented.",
+    "Angular UI implemented.",
+    "Unit/API/E2E tests pass.",
+    "Performance tests pass.",
+    "SQLite compatibility verified.",
+    "PostgreSQL compatibility verified.",
+    "Documentation complete.",
+    "Reporting integration contract ready.",
+    "QA sign-off complete."
+  ],
+  "ado_import_note": "The source explicitly states 1 Epic, 23 Features, 61 User Stories, 600 Tasks and 685 total work items. This JSON preserves the planning hierarchy and financial domain boundaries; the uploaded Markdown remains the detailed source for individual acceptance criteria and tasks."
+}

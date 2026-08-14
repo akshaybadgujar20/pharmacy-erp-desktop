@@ -1,0 +1,320 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_0000000003c882088aa6909a632adfd2",
+    "source_of_truth": true,
+    "note": "Structured JSON representation of the supplied Phase 4 Markdown. No new ADO work items have been intentionally added."
+  },
+  "phase": {
+    "number": 4,
+    "key": "PHASE-004",
+    "name": "User, Role, Permission & Security Management",
+    "objective": "Establish the complete application security and authorization foundation for the Pharmacy ERP.",
+    "scope": {
+      "in_scope": [
+        "User master",
+        "User account lifecycle",
+        "Employee-to-user association",
+        "Username/login identifier",
+        "Password credential management",
+        "User status",
+        "Role master",
+        "Permission master",
+        "Role-permission mapping",
+        "User-role mapping",
+        "Permission checks",
+        "Authentication foundation",
+        "Authorization foundation",
+        "Session/token handling contract",
+        "Login/logout",
+        "Password change",
+        "Password reset workflow foundation",
+        "Account lock/disable rules",
+        "Branch/company access scope",
+        "Permission-aware API guards",
+        "Permission-aware UI",
+        "Security audit events",
+        "Security error handling",
+        "Security testing",
+        "Brute-force/rate-limit protection foundation",
+        "Secure secret/configuration handling"
+      ],
+      "out_of_scope": [
+        "Party master creation",
+        "Customer/Supplier/Doctor/Employee master creation",
+        "Purchase authorization business rules",
+        "Sales authorization business rules",
+        "Inventory-specific permissions",
+        "Financial transaction authorization rules",
+        "Full audit-reporting UI",
+        "External identity providers unless explicitly added later",
+        "Advanced SSO/OIDC integration unless separately approved"
+      ]
+    }
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-004",
+      "title": "User, Role, Permission & Security Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-038",
+        "title": "User Account Management",
+        "user_story_range": "US-085–US-088",
+        "task_range": "TASK-554–TASK-589"
+      },
+      {
+        "id": "FEAT-039",
+        "title": "Employee/User Association",
+        "user_story_range": "US-089–US-090",
+        "task_range": "TASK-590–TASK-601"
+      },
+      {
+        "id": "FEAT-040",
+        "title": "Authentication",
+        "user_story_range": "US-091–US-093",
+        "task_range": "TASK-602–TASK-622"
+      },
+      {
+        "id": "FEAT-041",
+        "title": "Password & Credential Management",
+        "user_story_range": "US-094–US-096",
+        "task_range": "TASK-623–TASK-644"
+      },
+      {
+        "id": "FEAT-042",
+        "title": "Role Management",
+        "user_story_range": "US-097–US-098",
+        "task_range": "TASK-645–TASK-658"
+      },
+      {
+        "id": "FEAT-043",
+        "title": "Permission Management",
+        "user_story_range": "US-099",
+        "task_range": "TASK-659–TASK-668"
+      },
+      {
+        "id": "FEAT-044",
+        "title": "Role-Permission Management",
+        "user_story_range": "US-100–US-101",
+        "task_range": "TASK-669–TASK-680"
+      },
+      {
+        "id": "FEAT-045",
+        "title": "User-Role Management",
+        "user_story_range": "US-102–US-103",
+        "task_range": "TASK-681–TASK-694"
+      },
+      {
+        "id": "FEAT-046",
+        "title": "Authorization & Access Control",
+        "user_story_range": "US-104–US-106",
+        "task_range": "TASK-695–TASK-710"
+      },
+      {
+        "id": "FEAT-047",
+        "title": "Company & Branch Access Scope",
+        "user_story_range": "US-107–US-108",
+        "task_range": "TASK-711–TASK-726"
+      },
+      {
+        "id": "FEAT-048",
+        "title": "Session & Token Management",
+        "user_story_range": "US-109–US-110",
+        "task_range": "TASK-727–TASK-737"
+      },
+      {
+        "id": "FEAT-049",
+        "title": "Security Monitoring & Audit",
+        "user_story_range": "US-111–US-112",
+        "task_range": "TASK-738–TASK-749"
+      },
+      {
+        "id": "FEAT-050",
+        "title": "Security Hardening",
+        "user_story_range": "US-113–US-115",
+        "task_range": "TASK-750–TASK-764"
+      },
+      {
+        "id": "FEAT-051",
+        "title": "Security Integration Foundation",
+        "user_story_range": "US-116–US-119",
+        "task_range": "TASK-765–TASK-794"
+      }
+    ]
+  },
+  "work_item_ranges": {
+    "epic": {
+      "count": 1,
+      "ids": [
+        "EPIC-004"
+      ]
+    },
+    "features": {
+      "count": 14,
+      "first_id": "FEAT-038",
+      "last_id": "FEAT-051"
+    },
+    "user_stories": {
+      "count": 35,
+      "first_id": "US-085",
+      "last_id": "US-119"
+    },
+    "tasks": {
+      "count": 277,
+      "first_id": "TASK-554",
+      "last_id": "TASK-830"
+    },
+    "total": 327
+  },
+  "security_model": {
+    "business_roles": [
+      "Customer",
+      "Supplier",
+      "Doctor",
+      "Employee"
+    ],
+    "security_roles": [
+      "Administrator",
+      "Pharmacist",
+      "Cashier",
+      "Manager",
+      "Inventory Manager"
+    ],
+    "relationship": [
+      "User",
+      "UserRole",
+      "Role",
+      "RolePermission",
+      "Permission",
+      "Employee/Party"
+    ],
+    "authorization_flow": [
+      "HTTP Request",
+      "Authentication",
+      "User Resolution",
+      "Permission Check",
+      "Company/Branch Scope Check",
+      "DTO Validation",
+      "Business Logic",
+      "Database"
+    ],
+    "core_rule": "Backend authorization is the actual security boundary; UI authorization is an additional UX layer."
+  },
+  "security_principles": [
+    "Backend is authoritative.",
+    "Business roles and security roles are different.",
+    "Do not hardcode user-specific permissions.",
+    "Permission names must be stable.",
+    "Authorization must support future ERP modules."
+  ],
+  "initial_security_roles": [
+    "System Administrator",
+    "Pharmacy Administrator",
+    "Pharmacist",
+    "Inventory Manager",
+    "Purchase Manager",
+    "Sales Manager",
+    "Cashier",
+    "Accountant",
+    "Doctor/Prescription Operator",
+    "Read Only"
+  ],
+  "database_scope": {
+    "expected_security_related_tables": [
+      "User",
+      "Role",
+      "Permission",
+      "UserRole",
+      "RolePermission",
+      "UserCompany",
+      "UserBranch",
+      "PasswordResetToken / equivalent",
+      "Session / RefreshToken / equivalent"
+    ],
+    "standards": [
+      "BIGINT primary keys",
+      "UUID external references where applicable",
+      "Singular table names",
+      "createdAt",
+      "updatedAt",
+      "deletedAt where appropriate",
+      "version where optimistic locking is applicable",
+      "Explicit foreign keys",
+      "Unique constraints for login identifiers and security mappings",
+      "Appropriate indexes",
+      "SQLite compatibility",
+      "PostgreSQL compatibility"
+    ]
+  },
+  "dependencies": {
+    "depends_on": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management"
+    ],
+    "critical_dependency": "Phase 3 Employee → Phase 4 User",
+    "used_by": [
+      "Phase 5 — Medicine",
+      "Phase 6 — Inventory",
+      "Phase 7 — Purchase",
+      "Phase 8 — Sales",
+      "Phase 9 — Financial",
+      "Phase 10 — Prescription/Loyalty/etc."
+    ]
+  },
+  "phase_boundary": {
+    "provides": [
+      "Centralized user/account management",
+      "Authentication",
+      "Password security",
+      "Role and permission management",
+      "Permission-based API authorization",
+      "Permission-aware UI infrastructure",
+      "Company/branch access scope",
+      "Session/token handling",
+      "Security audit events",
+      "Security hardening",
+      "Reusable authentication context",
+      "Reusable authorization service",
+      "Frontend security context",
+      "Initial role/permission seed",
+      "Initial administrator bootstrap"
+    ],
+    "does_not_define": [
+      "Purchase-specific authorization rules",
+      "Sales-specific authorization rules",
+      "Inventory-specific permissions",
+      "Financial transaction authorization rules"
+    ]
+  },
+  "security_review_checklist": [
+    "Passwords are never stored in plaintext.",
+    "Passwords never appear in logs.",
+    "Access tokens never appear in logs.",
+    "Reset tokens are short-lived and single-use.",
+    "Authentication is required for protected APIs.",
+    "Authorization is enforced server-side.",
+    "UI authorization is only an additional UX layer.",
+    "User roles are not confused with Party business roles.",
+    "Permission names are stable.",
+    "Permissions are centrally managed.",
+    "Role mappings are centrally managed.",
+    "Company/branch scope is enforced server-side.",
+    "Disabled users cannot authenticate.",
+    "Locked users cannot authenticate.",
+    "Logout invalidates access appropriately.",
+    "Session/token expiry works.",
+    "Brute-force protection exists.",
+    "Administrative APIs are protected.",
+    "Security events are auditable.",
+    "Sensitive audit payloads are minimized.",
+    "SQLite compatibility is verified.",
+    "PostgreSQL compatibility is verified.",
+    "Security test suite passes."
+  ],
+  "ado_import_note": "This JSON preserves the exact Phase 4 ADO hierarchy and documented work-item ranges/counts from the Markdown source. Use the Markdown source as the detailed narrative source when producing the final ADO import payload."
+}

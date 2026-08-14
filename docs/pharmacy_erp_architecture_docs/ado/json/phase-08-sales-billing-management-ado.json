@@ -1,0 +1,468 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000413082118ea215d8898f9035",
+    "source_of_truth": true,
+    "note": "Structured representation of the supplied Phase 8 Markdown. No new ADO work items intentionally added."
+  },
+  "phase": {
+    "number": 8,
+    "key": "PHASE-008",
+    "name": "Sales & Billing Management",
+    "objective": "Build a fast, reliable, pharmacist-friendly Sales and Billing workflow from customer and medicine selection through batch validation, pricing, invoice posting, stock deduction, payment, printing, audit and synchronization.",
+    "scope": [
+      "Customer selection",
+      "Medicine search",
+      "Batch selection",
+      "Sales invoice",
+      "Sales invoice items",
+      "Quantity",
+      "Pricing integration",
+      "Discount integration",
+      "Tax integration",
+      "Prescription linkage",
+      "Stock deduction",
+      "Stock movement",
+      "Sales payment",
+      "Sales return",
+      "Stock return",
+      "Invoice printing",
+      "Barcode billing",
+      "Cashier workflow",
+      "Credit sales",
+      "Sales history",
+      "Invoice verification",
+      "Invoice cancellation/reversal",
+      "Permissions",
+      "Audit",
+      "Offline operation",
+      "Outbox",
+      "Idempotency",
+      "Synchronization",
+      "Testing",
+      "Performance"
+    ]
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-008",
+      "title": "Sales & Billing Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-096",
+        "title": "Sales Domain & Data Model"
+      },
+      {
+        "id": "FEAT-097",
+        "title": "Sales Invoice Creation"
+      },
+      {
+        "id": "FEAT-098",
+        "title": "Sales Invoice Items & Medicine Selection"
+      },
+      {
+        "id": "FEAT-099",
+        "title": "Batch Selection & Stock Availability"
+      },
+      {
+        "id": "FEAT-100",
+        "title": "Pricing, Discount & Tax Integration"
+      },
+      {
+        "id": "FEAT-101",
+        "title": "Sales Invoice Validation & Calculation"
+      },
+      {
+        "id": "FEAT-102",
+        "title": "Sales Invoice Lifecycle"
+      },
+      {
+        "id": "FEAT-103",
+        "title": "Sales Payment"
+      },
+      {
+        "id": "FEAT-104",
+        "title": "Sales Return"
+      },
+      {
+        "id": "FEAT-105",
+        "title": "Sales-to-Inventory Integration"
+      },
+      {
+        "id": "FEAT-106",
+        "title": "Prescription Integration"
+      },
+      {
+        "id": "FEAT-107",
+        "title": "Barcode & Fast Billing"
+      },
+      {
+        "id": "FEAT-108",
+        "title": "Cashier Workflow"
+      },
+      {
+        "id": "FEAT-109",
+        "title": "Invoice Printing & Reprinting"
+      },
+      {
+        "id": "FEAT-110",
+        "title": "Sales Search & History"
+      },
+      {
+        "id": "FEAT-111",
+        "title": "Delivery Challan / Temporary Sales Boundary"
+      },
+      {
+        "id": "FEAT-112",
+        "title": "Sales Authorization & Audit"
+      },
+      {
+        "id": "FEAT-113",
+        "title": "Sales REST API & NestJS Services"
+      },
+      {
+        "id": "FEAT-114",
+        "title": "Angular Sales UI"
+      },
+      {
+        "id": "FEAT-115",
+        "title": "Offline-First Sales & Synchronization"
+      },
+      {
+        "id": "FEAT-116",
+        "title": "Sales Testing, Performance & Readiness"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 21,
+    "user_stories": 56,
+    "tasks": 601,
+    "total_work_items": 679
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-008",
+    "features": "FEAT-096 through FEAT-116",
+    "user_stories": "US-258 through US-313",
+    "tasks": "TASK-001 through TASK-601"
+  },
+  "sales_tables": [
+    "SalesInvoice",
+    "SalesInvoiceItem",
+    "SalesReturn",
+    "SalesReturnItem",
+    "SalesPayment"
+  ],
+  "ownership": {
+    "sales_owns": [
+      "SalesInvoice",
+      "SalesInvoiceItem",
+      "SalesReturn",
+      "SalesReturnItem",
+      "SalesPayment",
+      "Sales document lifecycle",
+      "Sales validation",
+      "Sales workflow",
+      "Sales-specific queries",
+      "Sales audit events",
+      "Sales-to-Inventory orchestration"
+    ],
+    "inventory_owns": [
+      "Batch",
+      "Stock",
+      "StockMovement",
+      "StockAdjustment",
+      "StockTransfer",
+      "StockTake"
+    ],
+    "pricing_owns": [
+      "PriceList",
+      "PriceListItem",
+      "Tax",
+      "DiscountRule"
+    ],
+    "party_owns": [
+      "Party",
+      "Customer",
+      "PartyAddress",
+      "PartyContact"
+    ],
+    "prescription_owns": [
+      "Prescription",
+      "PrescriptionItem"
+    ],
+    "financial_owns_later": [
+      "Payment",
+      "Receipt",
+      "Ledger",
+      "LedgerEntry"
+    ]
+  },
+  "core_architecture": {
+    "primary_flow": [
+      "Customer",
+      "Medicine Search",
+      "Batch Selection",
+      "Pricing / Discount / Tax",
+      "Sales Invoice",
+      "Stock Deduction",
+      "Stock Movement",
+      "Payment",
+      "Print"
+    ],
+    "optional_prescription_flow": [
+      "Prescription",
+      "Sales Invoice",
+      "Sales Invoice Items",
+      "Stock Deduction",
+      "Payment"
+    ],
+    "integration_flow": [
+      "Customer",
+      "Sales Invoice",
+      "Prescription",
+      "Pricing",
+      "Tax",
+      "Payment",
+      "Stock Deduction",
+      "Stock Movement",
+      "Audit",
+      "Outbox",
+      "Sync"
+    ],
+    "return_flow": [
+      "Sales Return",
+      "Original Invoice",
+      "Batch / Quantity Validation",
+      "Inventory StockService",
+      "Stock Increase",
+      "StockMovement",
+      "Audit",
+      "Outbox"
+    ]
+  },
+  "performance_targets": {
+    "medicine_search": "< 200ms",
+    "invoice_save": "< 500ms",
+    "barcode_scan": "< 100ms"
+  },
+  "critical_business_rules": [
+    "Sales does not own stock.",
+    "Sales must request stock changes through Inventory services.",
+    "Stock must be revalidated at invoice posting inside the transaction.",
+    "Invoice calculations are server authoritative.",
+    "Posted invoices are not casually edited; corrections use controlled reversal/correction workflows.",
+    "Sales Return restores stock through Inventory services.",
+    "Payment is separate from the invoice.",
+    "Duplicate posting must be harmless and idempotent."
+  ],
+  "security": {
+    "permission_catalog": [
+      "Sales.View",
+      "Sales.Invoice.View",
+      "Sales.Invoice.Create",
+      "Sales.Invoice.Update",
+      "Sales.Invoice.Post",
+      "Sales.Invoice.Cancel",
+      "Sales.Invoice.Reverse",
+      "Sales.Invoice.Reprint",
+      "Sales.Payment.View",
+      "Sales.Payment.Create",
+      "Sales.Payment.Update",
+      "Sales.Payment.Cancel",
+      "Sales.Return.View",
+      "Sales.Return.Create",
+      "Sales.Return.Post",
+      "Sales.Return.Cancel",
+      "Sales.Cashier.Access",
+      "Sales.BarcodeBilling",
+      "Sales.CreditSale",
+      "Sales.Prescription.View",
+      "Sales.Prescription.Override"
+    ],
+    "principle": "Backend authorization is enforced in NestJS; UI permission checks are for usability and are not the security boundary."
+  },
+  "idempotency_and_concurrency": {
+    "duplicate_protection": [
+      "Duplicate invoice",
+      "Duplicate payment",
+      "Duplicate return",
+      "Duplicate stock deduction",
+      "Duplicate stock restoration"
+    ],
+    "conflict_areas": [
+      "Invoice edit conflict",
+      "Payment conflict",
+      "Return conflict",
+      "Stock concurrency conflict"
+    ],
+    "events": [
+      "SaleCompleted",
+      "StockUpdated",
+      "InvoicePrinted"
+    ]
+  },
+  "legacy_workflow_mapping": {
+    "invoicing": "SalesInvoice",
+    "invoicing_change": "Controlled invoice editing",
+    "delete": "Controlled cancellation/reversal",
+    "reprint_view": "Invoice viewing/reprinting",
+    "print_non_printed": "Print-status workflow",
+    "print_in_range": "Printing/query feature",
+    "invoice_verification": "Invoice validation/verification",
+    "sale_updation": "Controlled correction workflow",
+    "cashier_window": "Fast cashier UI",
+    "sales_delivery_challan": "Boundary analysis + optional implementation",
+    "customer_return_goods": "SalesReturn",
+    "pending_cash": "SalesPayment / Financial boundary",
+    "stock_issue": "Boundary with Inventory",
+    "issue_transfer_to_invoice": "Boundary analysis",
+    "quotation_entry": "Future/controlled scope unless explicitly required",
+    "sales_posting_in_accounts": "Financial integration",
+    "sales_return_posting_in_accounts": "Financial integration"
+  },
+  "reporting_readiness": [
+    "Sales Register",
+    "Billwise Sale Register",
+    "User Wise Sale Register",
+    "Companywise Sales Register",
+    "Gross Profit Productwise",
+    "Gross Profit Billwise",
+    "Gross Profit Doctor-Wise",
+    "Gross Profit Date-Wise",
+    "Customer Return Goods Register",
+    "Customer Return Goods Summary"
+  ],
+  "testing_matrix": [
+    "Invoice create/update/post/cancel/reverse",
+    "Item add/edit/remove",
+    "Medicine search/selection",
+    "Barcode lookup/scan",
+    "Batch selection/availability",
+    "Pricing resolution",
+    "Discount rule application",
+    "Tax calculation",
+    "Payment",
+    "Credit eligibility/limit",
+    "Return create/post/cancel",
+    "Stock deduction/restoration",
+    "StockMovement sale/return",
+    "Prescription linkage/validation",
+    "Printing/reprinting",
+    "Authorization allowed/denied",
+    "Audit mutation coverage",
+    "Idempotency duplicate requests",
+    "Offline local sale",
+    "Sync retry/replay",
+    "Concurrency",
+    "Performance search/barcode/posting",
+    "SQLite/PostgreSQL compatibility"
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management",
+      "Phase 7 — Purchase Management"
+    ],
+    "integration_dependencies": [
+      "Pricing",
+      "Prescription",
+      "Financial"
+    ],
+    "downstream": [
+      "Financial",
+      "Reporting"
+    ]
+  },
+  "phase_boundary": {
+    "implements": [
+      "Sales schema",
+      "Sales invoice",
+      "Sales invoice items",
+      "Customer selection",
+      "Medicine search",
+      "Batch selection",
+      "Stock availability validation",
+      "Pricing/discount/tax integration",
+      "Server-side calculations",
+      "Invoice lifecycle",
+      "Sales payment",
+      "Sales return",
+      "Inventory stock deduction/restoration through Inventory",
+      "Prescription linkage",
+      "Barcode billing",
+      "Cashier workflow",
+      "Keyboard-first workflow",
+      "Invoice printing/reprinting",
+      "Sales history",
+      "Authorization",
+      "Audit",
+      "Offline-first operation",
+      "Outbox",
+      "Idempotency",
+      "Conflict handling",
+      "Testing/performance/readiness"
+    ],
+    "does_not_implement": [
+      "Complete Financial Accounting",
+      "Broader payment/ledger accounting",
+      "Complete Pricing Master",
+      "Complete Prescription domain",
+      "Complete Reporting module",
+      "Quotation unless explicitly approved",
+      "Complete Sales Delivery Challan domain beyond defined boundary"
+    ]
+  },
+  "definition_of_done": [
+    "Sales schema finalized.",
+    "SalesInvoice implemented.",
+    "SalesInvoiceItem implemented.",
+    "SalesReturn implemented.",
+    "SalesReturnItem implemented.",
+    "SalesPayment implemented.",
+    "Customer selection implemented.",
+    "Medicine search implemented.",
+    "Batch selection implemented.",
+    "Stock availability validation implemented.",
+    "Pricing integration implemented.",
+    "Discount integration implemented.",
+    "Tax integration implemented.",
+    "Server-side calculations implemented.",
+    "Sales Invoice lifecycle implemented.",
+    "Stock deduction implemented through Inventory.",
+    "StockMovement generated for sales.",
+    "Sales Return implemented.",
+    "Stock restored through Inventory.",
+    "Prescription linkage implemented where required.",
+    "Barcode billing implemented.",
+    "Cashier workflow implemented.",
+    "Keyboard-first workflow implemented.",
+    "Invoice printing implemented.",
+    "Invoice reprinting implemented.",
+    "Sales history implemented.",
+    "Permissions implemented.",
+    "Audit implemented.",
+    "Outbox implemented.",
+    "Idempotency implemented.",
+    "Conflict handling implemented.",
+    "Unit tests pass.",
+    "API tests pass.",
+    "E2E tests pass.",
+    "Performance targets verified.",
+    "SQLite verified.",
+    "PostgreSQL verified.",
+    "Documentation complete.",
+    "Financial integration contract ready.",
+    "Reporting query contract ready.",
+    "QA sign-off complete."
+  ],
+  "ado_import_note": "The source explicitly states 1 Epic, 21 Features, 56 User Stories, 601 Tasks and 679 total work items. This JSON preserves the planning hierarchy and domain boundaries; the uploaded Markdown remains the detailed source for individual story acceptance criteria and task descriptions."
+}

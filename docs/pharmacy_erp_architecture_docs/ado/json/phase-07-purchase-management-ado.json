@@ -1,0 +1,378 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "uploaded_markdown",
+    "file_name": "Pasted markdown.md",
+    "file_reference": "file_00000000dd2c8208943c8fc538879691",
+    "source_of_truth": true,
+    "note": "Structured representation of the supplied Phase 7 Markdown. The Markdown remains the detailed source of truth; no new backlog items intentionally added."
+  },
+  "phase": {
+    "number": 7,
+    "key": "PHASE-007",
+    "name": "Purchase Management",
+    "objective": "Implement the Pharmacy ERP Purchase domain covering supplier ordering, goods receipt, purchase invoicing and purchase returns while integrating safely with Inventory."
+  },
+  "ado_hierarchy": {
+    "epic": {
+      "id": "EPIC-007",
+      "title": "Purchase Management"
+    },
+    "features": [
+      {
+        "id": "FEAT-080",
+        "title": "Purchase Domain & Data Model"
+      },
+      {
+        "id": "FEAT-081",
+        "title": "Purchase Order Management"
+      },
+      {
+        "id": "FEAT-082",
+        "title": "Purchase Order Item & Supplier Ordering"
+      },
+      {
+        "id": "FEAT-083",
+        "title": "Goods Receipt Management"
+      },
+      {
+        "id": "FEAT-084",
+        "title": "Goods Receipt Item & Batch Capture"
+      },
+      {
+        "id": "FEAT-085",
+        "title": "Purchase Invoice Management"
+      },
+      {
+        "id": "FEAT-086",
+        "title": "Purchase Invoice Calculation & Validation"
+      },
+      {
+        "id": "FEAT-087",
+        "title": "Purchase Return Management"
+      },
+      {
+        "id": "FEAT-088",
+        "title": "Purchase Document Lifecycle"
+      },
+      {
+        "id": "FEAT-089",
+        "title": "Purchase Search, History & Supplier Analysis"
+      },
+      {
+        "id": "FEAT-090",
+        "title": "Purchase-to-Inventory Integration"
+      },
+      {
+        "id": "FEAT-091",
+        "title": "Purchase Authorization, Audit & Controls"
+      },
+      {
+        "id": "FEAT-092",
+        "title": "Purchase API & NestJS Services"
+      },
+      {
+        "id": "FEAT-093",
+        "title": "Purchase Angular UI & Keyboard Workflow"
+      },
+      {
+        "id": "FEAT-094",
+        "title": "Offline-First Purchase & Synchronization"
+      },
+      {
+        "id": "FEAT-095",
+        "title": "Purchase Testing, Performance & Readiness"
+      }
+    ]
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 16,
+    "user_stories": 51,
+    "tasks": 601,
+    "total_work_items": 669
+  },
+  "work_item_ranges": {
+    "epic": "EPIC-007",
+    "features": "FEAT-080 through FEAT-095",
+    "user_stories": "US-207 through US-257",
+    "tasks": "TASK-001 through TASK-601"
+  },
+  "purchase_tables": [
+    "PurchaseOrder",
+    "PurchaseOrderItem",
+    "GoodsReceipt",
+    "GoodsReceiptItem",
+    "PurchaseInvoice",
+    "PurchaseInvoiceItem",
+    "PurchaseReturn",
+    "PurchaseReturnItem"
+  ],
+  "business_flow": [
+    "Supplier",
+    "Purchase Order",
+    "Goods Receipt",
+    "Batch",
+    "Stock",
+    "Stock Movement"
+  ],
+  "ownership": {
+    "purchase_owns": [
+      "Supplier procurement",
+      "Purchase orders",
+      "Purchase order items",
+      "Goods receipts",
+      "Received quantities",
+      "Purchase invoices",
+      "Purchase invoice items",
+      "Purchase returns",
+      "Purchase return items",
+      "Purchase document lifecycle",
+      "Purchase document search",
+      "Purchase-specific validation",
+      "Purchase-to-inventory integration",
+      "Purchase audit",
+      "Purchase synchronization"
+    ],
+    "inventory_owns": [
+      "Batch",
+      "Stock",
+      "StockMovement",
+      "StockAdjustment",
+      "StockTransfer",
+      "StockTake"
+    ],
+    "pricing_owns_later": [
+      "PriceList",
+      "PriceListItem",
+      "Tax",
+      "DiscountRule"
+    ],
+    "financial_owns_later": [
+      "Payment",
+      "Receipt",
+      "Ledger",
+      "LedgerEntry"
+    ]
+  },
+  "architecture": {
+    "application_flow": [
+      "Angular",
+      "NestJS",
+      "DTO",
+      "Validation",
+      "Service",
+      "Prisma",
+      "SQLite"
+    ],
+    "offline_flow": [
+      "Local SQLite",
+      "Purchase operation",
+      "Transaction",
+      "Outbox",
+      "Cloud Sync"
+    ],
+    "capabilities": [
+      "delta synchronization",
+      "push/pull synchronization",
+      "background sync",
+      "Outbox",
+      "idempotency using UUID",
+      "conflict detection using version/timestamps",
+      "event-driven communication"
+    ]
+  },
+  "critical_business_rules": [
+    "Purchase does not own stock.",
+    "Purchase must not directly execute arbitrary Stock updates.",
+    "Goods Receipt is the primary Purchase operation that drives physical inventory receipt.",
+    "Goods Receipt must use Inventory services for Batch/Stock/StockMovement changes.",
+    "Purchase Invoice must not blindly increase stock again.",
+    "Purchase Return reverses inventory through Inventory services.",
+    "Partial receipts are first-class.",
+    "Supplier invoice duplication must be controlled.",
+    "Purchase calculations must be server authoritative.",
+    "Posted purchase documents should use controlled cancellation/reversal rather than silent deletion."
+  ],
+  "integration_architecture": {
+    "goods_receipt": [
+      "Goods Receipt",
+      "Validate receipt",
+      "Create/find Batch",
+      "Increase Stock",
+      "Create StockMovement",
+      "Audit",
+      "Outbox"
+    ],
+    "purchase_return": [
+      "Purchase Return",
+      "Validate stock",
+      "Decrease stock",
+      "Stock Movement"
+    ],
+    "invoice_rule": "Physical inventory impact belongs to Goods Receipt; financial impact belongs to the later Financial phase."
+  },
+  "security": {
+    "permission_catalog": [
+      "Purchase.View",
+      "Purchase.Order.View",
+      "Purchase.Order.Create",
+      "Purchase.Order.Update",
+      "Purchase.Order.Submit",
+      "Purchase.Order.Cancel",
+      "Purchase.Order.Print",
+      "Purchase.GoodsReceipt.View",
+      "Purchase.GoodsReceipt.Create",
+      "Purchase.GoodsReceipt.Update",
+      "Purchase.GoodsReceipt.Post",
+      "Purchase.GoodsReceipt.Cancel",
+      "Purchase.Invoice.View",
+      "Purchase.Invoice.Create",
+      "Purchase.Invoice.Update",
+      "Purchase.Invoice.Post",
+      "Purchase.Invoice.Cancel",
+      "Purchase.Return.View",
+      "Purchase.Return.Create",
+      "Purchase.Return.Post",
+      "Purchase.Return.Cancel",
+      "Purchase.Import",
+      "Purchase.History.View"
+    ],
+    "principle": "Backend authorization is authoritative; UI authorization is an additional UX layer."
+  },
+  "legacy_mapping": {
+    "Order Placement": "PurchaseOrder",
+    "Order Reprinting": "PurchaseOrder UI/service",
+    "Order Short List": "Purchase replenishment workflow",
+    "Pending/Short Receipt": "PurchaseOrder + GoodsReceipt",
+    "Goods Receipt Purchase Bill": "GoodsReceipt",
+    "Goods Receipt Purchase DM": "GoodsReceipt variant if required",
+    "Goods Receipt Replacement": "GoodsReceipt variant if required",
+    "Purchase Update": "Controlled Purchase lifecycle",
+    "Purchase Import": "Purchase import feature",
+    "Opening Stock": "Inventory/Purchase boundary",
+    "Supplier Direct Credit Note": "Purchase Return / later Financial boundary",
+    "Expiry/Breakage/Return/Shortage": "Purchase Return + Inventory",
+    "Batch MRP/Expiry changes": "Inventory Batch",
+    "Batch Lock/Unlock": "Inventory Batch",
+    "Purchase Register": "Reporting",
+    "Purchase Analysis": "Reporting",
+    "Supplier-wise Purchase": "Reporting",
+    "GST Purchase Reports": "Reporting/Pricing/Financial",
+    "Debit Note / Claim": "Purchase + later Financial integration"
+  },
+  "data_ownership": {
+    "Supplier identity": "Party/Supplier",
+    "Medicine identity": "Medicine Master",
+    "Purchase Order": "Purchase",
+    "Purchase Order Item": "Purchase",
+    "Goods Receipt": "Purchase",
+    "Goods Receipt Item": "Purchase",
+    "Batch identity": "Inventory",
+    "Stock balance": "Inventory",
+    "Stock movement": "Inventory",
+    "Purchase Invoice": "Purchase",
+    "Purchase Invoice Item": "Purchase",
+    "Purchase Return": "Purchase",
+    "Purchase Return Item": "Purchase",
+    "Tax definition": "Pricing",
+    "Discount rules": "Pricing",
+    "Financial posting": "Financial",
+    "Payment": "Financial",
+    "Audit": "Audit",
+    "Synchronization": "Sync"
+  },
+  "testing_coverage": [
+    "Purchase Order create/update/submit/cancel",
+    "Order item add/edit/delete",
+    "Partial receipt",
+    "Goods Receipt create/update/post",
+    "Batch create/find during receipt",
+    "Stock increase through Inventory",
+    "Stock movement for receipt",
+    "Purchase Invoice create/match/post",
+    "Purchase Return create/post",
+    "Stock return through Inventory",
+    "Discount/tax/rounding calculations",
+    "Supplier/date/medicine/batch search",
+    "Authorization allowed/denied",
+    "Audit mutation coverage",
+    "Idempotency duplicate processing",
+    "Offline local operation",
+    "Synchronization retry/replay",
+    "Optimistic locking",
+    "SQLite/PostgreSQL",
+    "UI forms/grids/workflows",
+    "Keyboard navigation/save/search",
+    "Large purchase dataset performance"
+  ],
+  "definition_of_done": [
+    "Purchase schema is finalized.",
+    "All eight Purchase tables are implemented.",
+    "Supplier integration is complete.",
+    "Purchase Order lifecycle is implemented.",
+    "Partial receipt and short receipt tracking are implemented.",
+    "Goods Receipt creates/uses Batch through Inventory.",
+    "Goods Receipt increases stock through Inventory.",
+    "StockMovement is generated.",
+    "Purchase Invoice does not duplicate stock.",
+    "Purchase Return decreases stock through Inventory.",
+    "Purchase calculations are backend-authoritative.",
+    "Purchase permissions are enforced.",
+    "Audit is implemented.",
+    "Outbox integration is implemented.",
+    "Idempotency is implemented.",
+    "Optimistic locking is implemented.",
+    "Angular Purchase UI is complete.",
+    "Keyboard workflow is complete.",
+    "Unit/API/E2E/performance tests pass.",
+    "SQLite compatibility is verified.",
+    "PostgreSQL compatibility is verified.",
+    "Documentation is complete.",
+    "Financial integration contracts are ready.",
+    "Pricing integration contracts are ready.",
+    "Reporting query contracts are ready.",
+    "QA sign-off is complete."
+  ],
+  "dependencies": {
+    "upstream": [
+      "Phase 1 — Foundation & Architecture",
+      "Phase 2 — Organization, Geography & Configuration",
+      "Phase 3 — Party Management",
+      "Phase 4 — User, Role, Permission & Security Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory Management"
+    ],
+    "downstream": [
+      "Financial",
+      "Pricing",
+      "Reporting"
+    ]
+  },
+  "phase_boundary": {
+    "supports": [
+      "Supplier procurement",
+      "Purchase Order",
+      "Goods Receipt",
+      "Purchase Invoice",
+      "Purchase Return",
+      "Purchase history/search",
+      "Purchase-to-Inventory integration",
+      "Purchase authorization/audit",
+      "Offline-first Purchase",
+      "Synchronization",
+      "Purchase testing/performance/readiness"
+    ],
+    "does_not_implement": [
+      "Complete Sales",
+      "Financial Accounting",
+      "Payment",
+      "Pricing Master",
+      "Tax Master",
+      "Loyalty",
+      "Prescription",
+      "Complete Reporting"
+    ]
+  },
+  "ado_import_note": "The source explicitly states 1 Epic, 16 Features, 51 User Stories, 601 Tasks and 669 total work items. This JSON preserves that planning structure and the important domain boundaries; the Markdown remains the detailed source for each individual story/task."
+}

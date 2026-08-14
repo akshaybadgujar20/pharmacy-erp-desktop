@@ -1,0 +1,1971 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "type": "markdown",
+    "uploaded_file": "Pasted markdown(3).md",
+    "sandbox_path": "/mnt/data/Pasted markdown(3).md"
+  },
+  "phase": {
+    "number": 2,
+    "key": "PHASE-002",
+    "name": "Organization, Geography & Configuration",
+    "objective": "Establish the organization, branch, geographic, financial-year, numbering, application-setting, printer, and barcode configuration capabilities required by the Pharmacy ERP.",
+    "objective_context": "This phase builds the configuration and reference foundation that later business modules depend on.",
+    "database_tables": [
+      "Company",
+      "Branch",
+      "FinancialYear",
+      "SequenceGenerator",
+      "AppSetting",
+      "PrinterConfiguration",
+      "BarcodeConfiguration",
+      "Country",
+      "State",
+      "City",
+      "Area"
+    ],
+    "geographic_hierarchy": [
+      "Country",
+      "State",
+      "City",
+      "Area"
+    ],
+    "architecture_conventions": [
+      "Soft delete",
+      "Timestamps",
+      "BIGINT primary keys",
+      "UUID external references",
+      "Optimistic locking"
+    ],
+    "scope": {
+      "in_scope": [
+        "Company management",
+        "Branch management",
+        "Company-branch relationship",
+        "Geographic master hierarchy",
+        "Country management",
+        "State management",
+        "City management",
+        "Area management",
+        "Financial year management",
+        "Financial year lifecycle",
+        "Sequence generation",
+        "Business document numbering",
+        "Application settings",
+        "Printer configuration",
+        "Barcode configuration",
+        "Configuration validation",
+        "Configuration APIs",
+        "Configuration UI",
+        "Authorization integration",
+        "Audit integration points",
+        "Testing"
+      ],
+      "out_of_scope": [
+        "Party management",
+        "Customer management",
+        "Supplier management",
+        "Employee management",
+        "Medicine master",
+        "Inventory",
+        "Purchase",
+        "Sales",
+        "Financial transactions",
+        "Loyalty",
+        "Full synchronization workflows",
+        "Reporting"
+      ],
+      "out_of_scope_note": "Those capabilities are covered in later phases."
+    }
+  },
+  "ado_hierarchy": {
+    "epic_id": "EPIC-002",
+    "features": [
+      {
+        "id": "FEAT-013",
+        "title": "Company Management"
+      },
+      {
+        "id": "FEAT-014",
+        "title": "Branch Management"
+      },
+      {
+        "id": "FEAT-015",
+        "title": "Geographic Master — Country"
+      },
+      {
+        "id": "FEAT-016",
+        "title": "Geographic Master — State"
+      },
+      {
+        "id": "FEAT-017",
+        "title": "Geographic Master — City"
+      },
+      {
+        "id": "FEAT-018",
+        "title": "Geographic Master — Area"
+      },
+      {
+        "id": "FEAT-019",
+        "title": "Geographic Hierarchy & Address Reference"
+      },
+      {
+        "id": "FEAT-020",
+        "title": "Financial Year Management"
+      },
+      {
+        "id": "FEAT-021",
+        "title": "Sequence Generator"
+      },
+      {
+        "id": "FEAT-022",
+        "title": "Application Settings"
+      },
+      {
+        "id": "FEAT-023",
+        "title": "Printer Configuration"
+      },
+      {
+        "id": "FEAT-024",
+        "title": "Barcode Configuration"
+      }
+    ]
+  },
+  "epic": {
+    "id": "EPIC-002",
+    "work_item_type": "Epic",
+    "title": "Organization, Geography & Configuration",
+    "description": "Provide the core organization and configuration capabilities required for the Pharmacy ERP to operate consistently across companies, branches, financial years, geographic locations, document sequences, application settings, printers, and barcode functionality.",
+    "technical_context": "The database overview identifies Company, Branch, FinancialYear, SequenceGenerator, AppSetting, PrinterConfiguration, and BarcodeConfiguration as configuration tables, while Country, State, City, and Area form the geographic master hierarchy.",
+    "business_value": "These capabilities provide the reference context required by later ERP transactions. Purchase, sales, inventory, party addresses, financial processing, printing, and document numbering should depend on standardized configuration rather than hardcoded values.",
+    "completion_criteria": [
+      "Company configuration is operational.",
+      "Branch configuration is operational.",
+      "Geographic hierarchy is operational.",
+      "Financial year configuration is operational.",
+      "Sequence generation foundation is operational.",
+      "Application settings are manageable.",
+      "Printer configuration is manageable.",
+      "Barcode configuration is manageable.",
+      "APIs and UI are implemented.",
+      "Validation and authorization are implemented.",
+      "Appropriate audit behavior is integrated.",
+      "Tests cover core and negative scenarios."
+    ]
+  },
+  "features": [
+    {
+      "id": "FEAT-013",
+      "work_item_type": "Feature",
+      "title": "Company Management",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-025",
+          "work_item_type": "User Story",
+          "title": "Create company",
+          "parent_id": "FEAT-013",
+          "user_story": "As an authorized administrator, I want to create a company so that the ERP has a defined organization context.",
+          "acceptance_criteria": [
+            "An authorized user can create a company.",
+            "Mandatory company information is validated.",
+            "Duplicate company information is rejected according to defined uniqueness rules.",
+            "A new company receives the standard system identifiers and audit fields.",
+            "The company can subsequently be associated with branches.",
+            "Invalid requests return standardized validation errors."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-094",
+              "work_item_type": "Task",
+              "title": "Define Company database model requirements",
+              "parent_id": "US-025",
+              "details": [
+                "Review required attributes.",
+                "Define relationships.",
+                "Define constraints and indexes.",
+                "Confirm soft-delete and optimistic-locking requirements."
+              ]
+            },
+            {
+              "id": "TASK-095",
+              "work_item_type": "Task",
+              "title": "Implement Company Prisma model",
+              "parent_id": "US-025",
+              "details": [
+                "Add model to Prisma schema.",
+                "Add relationships and indexes.",
+                "Verify SQLite compatibility."
+              ]
+            },
+            {
+              "id": "TASK-096",
+              "work_item_type": "Task",
+              "title": "Create Company migration",
+              "parent_id": "US-025",
+              "details": [
+                "Generate migration.",
+                "Apply migration locally.",
+                "Verify migration behavior."
+              ]
+            },
+            {
+              "id": "TASK-097",
+              "work_item_type": "Task",
+              "title": "Implement Company DTOs",
+              "parent_id": "US-025",
+              "details": [
+                "Create create/update DTOs.",
+                "Add validation rules."
+              ]
+            },
+            {
+              "id": "TASK-098",
+              "work_item_type": "Task",
+              "title": "Implement Company service",
+              "parent_id": "US-025",
+              "details": [
+                "Implement creation logic.",
+                "Implement uniqueness validation.",
+                "Implement lifecycle rules."
+              ]
+            },
+            {
+              "id": "TASK-099",
+              "work_item_type": "Task",
+              "title": "Implement Company controller/API",
+              "parent_id": "US-025",
+              "details": [
+                "Add create endpoint.",
+                "Add appropriate error handling."
+              ]
+            },
+            {
+              "id": "TASK-100",
+              "work_item_type": "Task",
+              "title": "Implement Company create UI",
+              "parent_id": "US-025",
+              "details": [
+                "Create company form.",
+                "Add field validation.",
+                "Add submission/error/loading states."
+              ]
+            },
+            {
+              "id": "TASK-101",
+              "work_item_type": "Task",
+              "title": "Add Company authorization",
+              "parent_id": "US-025",
+              "details": [
+                "Restrict company configuration to appropriate administrative permissions."
+              ]
+            },
+            {
+              "id": "TASK-102",
+              "work_item_type": "Task",
+              "title": "Add Company tests",
+              "parent_id": "US-025",
+              "details": [
+                "Backend unit tests.",
+                "API tests.",
+                "UI tests.",
+                "Negative validation tests."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "US-026",
+          "work_item_type": "User Story",
+          "title": "View and search companies",
+          "parent_id": "FEAT-013",
+          "acceptance_criteria": [
+            "Authorized users can view companies.",
+            "Search/filter behavior is available where required.",
+            "Deleted companies are excluded from normal views.",
+            "Pagination is applied where the dataset requires it."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-103",
+              "work_item_type": "Task",
+              "title": "Implement Company list API",
+              "parent_id": "US-026"
+            },
+            {
+              "id": "TASK-104",
+              "work_item_type": "Task",
+              "title": "Implement Company search/filter support",
+              "parent_id": "US-026"
+            },
+            {
+              "id": "TASK-105",
+              "work_item_type": "Task",
+              "title": "Implement Company list UI",
+              "parent_id": "US-026"
+            },
+            {
+              "id": "TASK-106",
+              "work_item_type": "Task",
+              "title": "Implement Company pagination/sorting",
+              "parent_id": "US-026"
+            },
+            {
+              "id": "TASK-107",
+              "work_item_type": "Task",
+              "title": "Add Company list tests",
+              "parent_id": "US-026"
+            }
+          ]
+        },
+        {
+          "id": "US-027",
+          "work_item_type": "User Story",
+          "title": "Update and deactivate company",
+          "parent_id": "FEAT-013",
+          "acceptance_criteria": [
+            "Authorized users can update permitted company information.",
+            "Invalid changes are rejected.",
+            "A company can be deactivated according to business rules.",
+            "Deactivated companies are not selectable for new transactions where applicable.",
+            "Existing historical records remain intact."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-108",
+              "work_item_type": "Task",
+              "title": "Implement Company update API",
+              "parent_id": "US-027"
+            },
+            {
+              "id": "TASK-109",
+              "work_item_type": "Task",
+              "title": "Implement Company lifecycle/deactivation logic",
+              "parent_id": "US-027"
+            },
+            {
+              "id": "TASK-110",
+              "work_item_type": "Task",
+              "title": "Implement Company edit UI",
+              "parent_id": "US-027"
+            },
+            {
+              "id": "TASK-111",
+              "work_item_type": "Task",
+              "title": "Implement Company status display",
+              "parent_id": "US-027"
+            },
+            {
+              "id": "TASK-112",
+              "work_item_type": "Task",
+              "title": "Add Company lifecycle tests",
+              "parent_id": "US-027"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-014",
+      "work_item_type": "Feature",
+      "title": "Branch Management",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-028",
+          "work_item_type": "User Story",
+          "title": "Create branch",
+          "parent_id": "FEAT-014",
+          "user_story": "As an authorized administrator, I want to create a branch under a company so that the ERP can manage multiple operational locations.",
+          "acceptance_criteria": [
+            "A branch belongs to a valid company.",
+            "Mandatory branch information is validated.",
+            "Branch uniqueness rules are enforced within the applicable organization scope.",
+            "A branch can reference geographic master data.",
+            "An inactive company cannot receive new operational branches unless explicitly allowed.",
+            "Branch identifiers and audit fields are generated consistently."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-113",
+              "work_item_type": "Task",
+              "title": "Define Branch database model requirements",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-114",
+              "work_item_type": "Task",
+              "title": "Implement Branch Prisma model",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-115",
+              "work_item_type": "Task",
+              "title": "Create Branch migration",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-116",
+              "work_item_type": "Task",
+              "title": "Implement Branch DTOs and validation",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-117",
+              "work_item_type": "Task",
+              "title": "Implement Branch service",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-118",
+              "work_item_type": "Task",
+              "title": "Implement Branch API",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-119",
+              "work_item_type": "Task",
+              "title": "Implement Branch create UI",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-120",
+              "work_item_type": "Task",
+              "title": "Add company selection/association UI",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-121",
+              "work_item_type": "Task",
+              "title": "Add Branch authorization",
+              "parent_id": "US-028"
+            },
+            {
+              "id": "TASK-122",
+              "work_item_type": "Task",
+              "title": "Add Branch tests",
+              "parent_id": "US-028"
+            }
+          ]
+        },
+        {
+          "id": "US-029",
+          "work_item_type": "User Story",
+          "title": "View and search branches",
+          "parent_id": "FEAT-014",
+          "acceptance_criteria": [
+            "Authorized users can list branches.",
+            "Branches can be filtered by company.",
+            "Branch status is visible.",
+            "Deleted branches are excluded from normal results."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-123",
+              "work_item_type": "Task",
+              "title": "Implement Branch list API",
+              "parent_id": "US-029"
+            },
+            {
+              "id": "TASK-124",
+              "work_item_type": "Task",
+              "title": "Implement company-based filtering",
+              "parent_id": "US-029"
+            },
+            {
+              "id": "TASK-125",
+              "work_item_type": "Task",
+              "title": "Implement Branch list UI",
+              "parent_id": "US-029"
+            },
+            {
+              "id": "TASK-126",
+              "work_item_type": "Task",
+              "title": "Add pagination/sorting",
+              "parent_id": "US-029"
+            },
+            {
+              "id": "TASK-127",
+              "work_item_type": "Task",
+              "title": "Add Branch list tests",
+              "parent_id": "US-029"
+            }
+          ]
+        },
+        {
+          "id": "US-030",
+          "work_item_type": "User Story",
+          "title": "Update and deactivate branch",
+          "parent_id": "FEAT-014",
+          "acceptance_criteria": [
+            "Authorized users can update branch information.",
+            "Branch deactivation is supported.",
+            "Deactivated branches cannot be selected for new operational transactions where applicable.",
+            "Historical references remain valid."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-128",
+              "work_item_type": "Task",
+              "title": "Implement Branch update API",
+              "parent_id": "US-030"
+            },
+            {
+              "id": "TASK-129",
+              "work_item_type": "Task",
+              "title": "Implement Branch status/lifecycle logic",
+              "parent_id": "US-030"
+            },
+            {
+              "id": "TASK-130",
+              "work_item_type": "Task",
+              "title": "Implement Branch edit UI",
+              "parent_id": "US-030"
+            },
+            {
+              "id": "TASK-131",
+              "work_item_type": "Task",
+              "title": "Add Branch lifecycle tests",
+              "parent_id": "US-030"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-015",
+      "work_item_type": "Feature",
+      "title": "Geographic Master — Country",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-031",
+          "work_item_type": "User Story",
+          "title": "Manage countries",
+          "parent_id": "FEAT-015",
+          "user_story": "As an administrator, I want to maintain country master data so that addresses can use standardized geographic references.",
+          "acceptance_criteria": [
+            "Authorized users can create countries.",
+            "Country name/code validation is applied.",
+            "Duplicate country records are prevented according to the defined uniqueness rules.",
+            "Countries can be viewed and searched.",
+            "Countries can be deactivated/soft-deleted according to dependency rules.",
+            "Countries referenced by existing records cannot be physically removed."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-132",
+              "work_item_type": "Task",
+              "title": "Define Country model constraints and indexes",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-133",
+              "work_item_type": "Task",
+              "title": "Implement Country Prisma model",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-134",
+              "work_item_type": "Task",
+              "title": "Create Country migration",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-135",
+              "work_item_type": "Task",
+              "title": "Implement Country CRUD APIs",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-136",
+              "work_item_type": "Task",
+              "title": "Implement Country validation",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-137",
+              "work_item_type": "Task",
+              "title": "Implement Country management UI",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-138",
+              "work_item_type": "Task",
+              "title": "Implement Country search/filter",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-139",
+              "work_item_type": "Task",
+              "title": "Add Country authorization",
+              "parent_id": "US-031"
+            },
+            {
+              "id": "TASK-140",
+              "work_item_type": "Task",
+              "title": "Add Country tests",
+              "parent_id": "US-031"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-016",
+      "work_item_type": "Feature",
+      "title": "Geographic Master — State",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-032",
+          "work_item_type": "User Story",
+          "title": "Manage states within countries",
+          "parent_id": "FEAT-016",
+          "user_story": "As an administrator, I want to maintain states under countries so that the geographic hierarchy remains consistent.",
+          "acceptance_criteria": [
+            "Every state belongs to one valid country.",
+            "A state cannot be created without a valid parent country.",
+            "State uniqueness is enforced within the applicable country.",
+            "Country filtering is supported.",
+            "Invalid parent references are rejected.",
+            "Existing referenced states are protected from unsafe deletion."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-141",
+              "work_item_type": "Task",
+              "title": "Define State relationship and constraints",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-142",
+              "work_item_type": "Task",
+              "title": "Implement State Prisma model",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-143",
+              "work_item_type": "Task",
+              "title": "Create State migration",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-144",
+              "work_item_type": "Task",
+              "title": "Implement State CRUD APIs",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-145",
+              "work_item_type": "Task",
+              "title": "Implement State validation",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-146",
+              "work_item_type": "Task",
+              "title": "Implement dependent-country filtering",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-147",
+              "work_item_type": "Task",
+              "title": "Implement State management UI",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-148",
+              "work_item_type": "Task",
+              "title": "Add State authorization",
+              "parent_id": "US-032"
+            },
+            {
+              "id": "TASK-149",
+              "work_item_type": "Task",
+              "title": "Add State tests",
+              "parent_id": "US-032"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-017",
+      "work_item_type": "Feature",
+      "title": "Geographic Master — City",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-033",
+          "work_item_type": "User Story",
+          "title": "Manage cities within states",
+          "parent_id": "FEAT-017",
+          "user_story": "As an administrator, I want to maintain cities under states so that the geographic hierarchy can be used consistently by addresses and operational processes.",
+          "acceptance_criteria": [
+            "Every city belongs to one valid state.",
+            "A city cannot be created without a valid parent state.",
+            "City uniqueness is enforced within the applicable state.",
+            "State selection filters available cities appropriately.",
+            "Invalid parent relationships are rejected.",
+            "Referenced cities cannot be physically removed unsafely."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-150",
+              "work_item_type": "Task",
+              "title": "Define City relationship and constraints",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-151",
+              "work_item_type": "Task",
+              "title": "Implement City Prisma model",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-152",
+              "work_item_type": "Task",
+              "title": "Create City migration",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-153",
+              "work_item_type": "Task",
+              "title": "Implement City CRUD APIs",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-154",
+              "work_item_type": "Task",
+              "title": "Implement City validation",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-155",
+              "work_item_type": "Task",
+              "title": "Implement dependent-state filtering",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-156",
+              "work_item_type": "Task",
+              "title": "Implement City management UI",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-157",
+              "work_item_type": "Task",
+              "title": "Add City authorization",
+              "parent_id": "US-033"
+            },
+            {
+              "id": "TASK-158",
+              "work_item_type": "Task",
+              "title": "Add City tests",
+              "parent_id": "US-033"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-018",
+      "work_item_type": "Feature",
+      "title": "Geographic Master — Area",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-034",
+          "work_item_type": "User Story",
+          "title": "Manage areas within cities",
+          "parent_id": "FEAT-018",
+          "user_story": "As an administrator, I want to maintain areas under cities so that the ERP can use the lowest-level geographic reference for addresses and operational processes.",
+          "acceptance_criteria": [
+            "Every area belongs to one valid city.",
+            "An area cannot be created without a valid parent city.",
+            "Area code/name uniqueness follows the defined business scope.",
+            "City selection is supported.",
+            "Invalid parent relationships are rejected.",
+            "Referenced areas cannot be physically removed unsafely."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-159",
+              "work_item_type": "Task",
+              "title": "Define Area relationship and constraints",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-160",
+              "work_item_type": "Task",
+              "title": "Implement Area Prisma model",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-161",
+              "work_item_type": "Task",
+              "title": "Create Area migration",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-162",
+              "work_item_type": "Task",
+              "title": "Implement Area CRUD APIs",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-163",
+              "work_item_type": "Task",
+              "title": "Implement Area validation",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-164",
+              "work_item_type": "Task",
+              "title": "Implement dependent-city filtering",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-165",
+              "work_item_type": "Task",
+              "title": "Implement Area management UI",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-166",
+              "work_item_type": "Task",
+              "title": "Add Area authorization",
+              "parent_id": "US-034"
+            },
+            {
+              "id": "TASK-167",
+              "work_item_type": "Task",
+              "title": "Add Area tests",
+              "parent_id": "US-034"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-019",
+      "work_item_type": "Feature",
+      "title": "Geographic Hierarchy & Address Reference",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-035",
+          "work_item_type": "User Story",
+          "title": "Provide cascading geographic selection",
+          "parent_id": "FEAT-019",
+          "user_story": "As a user entering an address, I want geographic selections to follow the Country → State → City → Area hierarchy so that invalid combinations cannot be selected.",
+          "acceptance_criteria": [
+            "Selecting a country limits available states.",
+            "Selecting a state limits available cities.",
+            "Selecting a city limits available areas.",
+            "Clearing a parent selection clears or invalidates dependent selections.",
+            "The backend validates the complete hierarchy rather than trusting UI selections.",
+            "Invalid geographic combinations are rejected."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-168",
+              "work_item_type": "Task",
+              "title": "Implement hierarchical geographic lookup API",
+              "parent_id": "US-035"
+            },
+            {
+              "id": "TASK-169",
+              "work_item_type": "Task",
+              "title": "Implement backend hierarchy validation",
+              "parent_id": "US-035"
+            },
+            {
+              "id": "TASK-170",
+              "work_item_type": "Task",
+              "title": "Implement cascading geographic UI controls",
+              "parent_id": "US-035"
+            },
+            {
+              "id": "TASK-171",
+              "work_item_type": "Task",
+              "title": "Add geographic lookup caching where appropriate",
+              "parent_id": "US-035"
+            },
+            {
+              "id": "TASK-172",
+              "work_item_type": "Task",
+              "title": "Add hierarchy validation tests",
+              "parent_id": "US-035"
+            }
+          ]
+        },
+        {
+          "id": "US-036",
+          "work_item_type": "User Story",
+          "title": "Provide reusable geographic lookup services",
+          "parent_id": "FEAT-019",
+          "tasks": [
+            {
+              "id": "TASK-173",
+              "work_item_type": "Task",
+              "title": "Create shared backend geographic lookup service",
+              "parent_id": "US-036"
+            },
+            {
+              "id": "TASK-174",
+              "work_item_type": "Task",
+              "title": "Create shared frontend geographic lookup service",
+              "parent_id": "US-036"
+            },
+            {
+              "id": "TASK-175",
+              "work_item_type": "Task",
+              "title": "Define lookup response conventions",
+              "parent_id": "US-036"
+            },
+            {
+              "id": "TASK-176",
+              "work_item_type": "Task",
+              "title": "Add lookup service tests",
+              "parent_id": "US-036"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-020",
+      "work_item_type": "Feature",
+      "title": "Financial Year Management",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-037",
+          "work_item_type": "User Story",
+          "title": "Create financial year",
+          "parent_id": "FEAT-020",
+          "user_story": "As an authorized administrator, I want to define a financial year so that financial and operational transactions can be associated with the correct period.",
+          "acceptance_criteria": [
+            "A financial year has a defined start and end.",
+            "Start date must precede end date.",
+            "Overlapping financial years are prevented according to business rules.",
+            "Financial year status is maintained.",
+            "Financial year information is auditable."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-177",
+              "work_item_type": "Task",
+              "title": "Define FinancialYear model rules",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-178",
+              "work_item_type": "Task",
+              "title": "Implement FinancialYear Prisma model",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-179",
+              "work_item_type": "Task",
+              "title": "Create FinancialYear migration",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-180",
+              "work_item_type": "Task",
+              "title": "Implement FinancialYear DTOs and validation",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-181",
+              "work_item_type": "Task",
+              "title": "Implement FinancialYear service",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-182",
+              "work_item_type": "Task",
+              "title": "Implement FinancialYear API",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-183",
+              "work_item_type": "Task",
+              "title": "Implement FinancialYear UI",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-184",
+              "work_item_type": "Task",
+              "title": "Add overlap validation",
+              "parent_id": "US-037"
+            },
+            {
+              "id": "TASK-185",
+              "work_item_type": "Task",
+              "title": "Add FinancialYear tests",
+              "parent_id": "US-037"
+            }
+          ]
+        },
+        {
+          "id": "US-038",
+          "work_item_type": "User Story",
+          "title": "Activate and close financial year",
+          "parent_id": "FEAT-020",
+          "acceptance_criteria": [
+            "An authorized administrator can activate a financial year.",
+            "Business rules prevent multiple invalid active periods.",
+            "Closing a financial year prevents prohibited transactions.",
+            "Historical records remain accessible.",
+            "Financial year state transitions are auditable."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-186",
+              "work_item_type": "Task",
+              "title": "Define FinancialYear state transitions",
+              "parent_id": "US-038"
+            },
+            {
+              "id": "TASK-187",
+              "work_item_type": "Task",
+              "title": "Implement activation logic",
+              "parent_id": "US-038"
+            },
+            {
+              "id": "TASK-188",
+              "work_item_type": "Task",
+              "title": "Implement closing logic",
+              "parent_id": "US-038"
+            },
+            {
+              "id": "TASK-189",
+              "work_item_type": "Task",
+              "title": "Implement state transition UI",
+              "parent_id": "US-038"
+            },
+            {
+              "id": "TASK-190",
+              "work_item_type": "Task",
+              "title": "Add financial-period validation service",
+              "parent_id": "US-038"
+            },
+            {
+              "id": "TASK-191",
+              "work_item_type": "Task",
+              "title": "Add state-transition tests",
+              "parent_id": "US-038"
+            }
+          ]
+        },
+        {
+          "id": "US-039",
+          "work_item_type": "User Story",
+          "title": "Resolve current financial year",
+          "parent_id": "FEAT-020",
+          "acceptance_criteria": [
+            "The system can determine the applicable financial year for a date.",
+            "The result is consistent across backend services.",
+            "Invalid or ambiguous periods are rejected.",
+            "Later transaction modules can consume the service."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-192",
+              "work_item_type": "Task",
+              "title": "Implement current financial-year resolution service",
+              "parent_id": "US-039"
+            },
+            {
+              "id": "TASK-193",
+              "work_item_type": "Task",
+              "title": "Implement date-to-financial-year lookup",
+              "parent_id": "US-039"
+            },
+            {
+              "id": "TASK-194",
+              "work_item_type": "Task",
+              "title": "Expose reusable financial-year service",
+              "parent_id": "US-039"
+            },
+            {
+              "id": "TASK-195",
+              "work_item_type": "Task",
+              "title": "Add resolution tests",
+              "parent_id": "US-039"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-021",
+      "work_item_type": "Feature",
+      "title": "Sequence Generator",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-040",
+          "work_item_type": "User Story",
+          "title": "Define document numbering sequence",
+          "parent_id": "FEAT-021",
+          "user_story": "As an administrator, I want to configure document sequences so that ERP transactions receive controlled business document numbers.",
+          "acceptance_criteria": [
+            "A sequence can be defined for a supported document type.",
+            "Sequence configuration can include the required numbering parameters.",
+            "Duplicate sequence definitions are prevented.",
+            "Sequence status can be managed.",
+            "Sequence configuration can be associated with the appropriate organization/branch scope where applicable."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-196",
+              "work_item_type": "Task",
+              "title": "Define SequenceGenerator model requirements",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-197",
+              "work_item_type": "Task",
+              "title": "Implement SequenceGenerator Prisma model",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-198",
+              "work_item_type": "Task",
+              "title": "Create SequenceGenerator migration",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-199",
+              "work_item_type": "Task",
+              "title": "Implement sequence configuration DTOs",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-200",
+              "work_item_type": "Task",
+              "title": "Implement sequence configuration service",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-201",
+              "work_item_type": "Task",
+              "title": "Implement sequence configuration API",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-202",
+              "work_item_type": "Task",
+              "title": "Implement sequence configuration UI",
+              "parent_id": "US-040"
+            },
+            {
+              "id": "TASK-203",
+              "work_item_type": "Task",
+              "title": "Add sequence configuration tests",
+              "parent_id": "US-040"
+            }
+          ]
+        },
+        {
+          "id": "US-041",
+          "work_item_type": "User Story",
+          "title": "Generate the next document number safely",
+          "parent_id": "FEAT-021",
+          "acceptance_criteria": [
+            "The system can request the next number for a configured sequence.",
+            "Numbers are generated without unintended duplication.",
+            "Concurrent requests are handled safely.",
+            "Failed transactions do not create unacceptable numbering corruption.",
+            "The sequence behavior is documented for later transaction modules."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-204",
+              "work_item_type": "Task",
+              "title": "Implement sequence allocation service",
+              "parent_id": "US-041"
+            },
+            {
+              "id": "TASK-205",
+              "work_item_type": "Task",
+              "title": "Define transaction/concurrency strategy for sequence allocation",
+              "parent_id": "US-041"
+            },
+            {
+              "id": "TASK-206",
+              "work_item_type": "Task",
+              "title": "Implement atomic sequence update",
+              "parent_id": "US-041"
+            },
+            {
+              "id": "TASK-207",
+              "work_item_type": "Task",
+              "title": "Add duplicate/concurrency tests",
+              "parent_id": "US-041"
+            },
+            {
+              "id": "TASK-208",
+              "work_item_type": "Task",
+              "title": "Document sequence consumption rules",
+              "parent_id": "US-041"
+            }
+          ]
+        },
+        {
+          "id": "US-042",
+          "work_item_type": "User Story",
+          "title": "Integrate sequence generation with transaction modules",
+          "parent_id": "FEAT-021",
+          "notes": "This story establishes the integration contract; actual Purchase/Sales document integrations belong to their respective phases.",
+          "tasks": [
+            {
+              "id": "TASK-209",
+              "work_item_type": "Task",
+              "title": "Define sequence-generation API contract",
+              "parent_id": "US-042"
+            },
+            {
+              "id": "TASK-210",
+              "work_item_type": "Task",
+              "title": "Define document-type registration convention",
+              "parent_id": "US-042"
+            },
+            {
+              "id": "TASK-211",
+              "work_item_type": "Task",
+              "title": "Document integration pattern for later modules",
+              "parent_id": "US-042"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-022",
+      "work_item_type": "Feature",
+      "title": "Application Settings",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-043",
+          "work_item_type": "User Story",
+          "title": "Manage application settings",
+          "parent_id": "FEAT-022",
+          "user_story": "As an authorized administrator, I want to manage application settings so that configurable system behavior can be changed without modifying source code.",
+          "acceptance_criteria": [
+            "Authorized users can view supported settings.",
+            "Authorized users can modify permitted settings.",
+            "Setting values are validated according to their type.",
+            "Unsupported setting keys cannot be created through unrestricted input.",
+            "Sensitive values are protected.",
+            "Setting changes are auditable where appropriate."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-212",
+              "work_item_type": "Task",
+              "title": "Define AppSetting model and configuration rules",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-213",
+              "work_item_type": "Task",
+              "title": "Implement AppSetting Prisma model",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-214",
+              "work_item_type": "Task",
+              "title": "Create AppSetting migration",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-215",
+              "work_item_type": "Task",
+              "title": "Define supported setting catalog",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-216",
+              "work_item_type": "Task",
+              "title": "Implement setting validation",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-217",
+              "work_item_type": "Task",
+              "title": "Implement settings service",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-218",
+              "work_item_type": "Task",
+              "title": "Implement settings API",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-219",
+              "work_item_type": "Task",
+              "title": "Implement settings UI",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-220",
+              "work_item_type": "Task",
+              "title": "Add settings authorization",
+              "parent_id": "US-043"
+            },
+            {
+              "id": "TASK-221",
+              "work_item_type": "Task",
+              "title": "Add settings tests",
+              "parent_id": "US-043"
+            }
+          ]
+        },
+        {
+          "id": "US-044",
+          "work_item_type": "User Story",
+          "title": "Provide application settings to runtime components",
+          "parent_id": "FEAT-022",
+          "tasks": [
+            {
+              "id": "TASK-222",
+              "work_item_type": "Task",
+              "title": "Implement backend configuration lookup",
+              "parent_id": "US-044"
+            },
+            {
+              "id": "TASK-223",
+              "work_item_type": "Task",
+              "title": "Implement frontend configuration lookup where required",
+              "parent_id": "US-044"
+            },
+            {
+              "id": "TASK-224",
+              "work_item_type": "Task",
+              "title": "Define configuration caching/refresh behavior",
+              "parent_id": "US-044"
+            },
+            {
+              "id": "TASK-225",
+              "work_item_type": "Task",
+              "title": "Add runtime configuration tests",
+              "parent_id": "US-044"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-023",
+      "work_item_type": "Feature",
+      "title": "Printer Configuration",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-045",
+          "work_item_type": "User Story",
+          "title": "Configure printers",
+          "parent_id": "FEAT-023",
+          "user_story": "As an authorized administrator, I want to configure printers so that the ERP can use the correct printer for supported output operations.",
+          "acceptance_criteria": [
+            "Printer configuration can be created.",
+            "Printer details are validated.",
+            "Printer configuration can be associated with the applicable company/branch/context where required.",
+            "A default printer can be identified according to business rules.",
+            "Inactive printers cannot be selected for new print operations.",
+            "Configuration changes are auditable where appropriate."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-226",
+              "work_item_type": "Task",
+              "title": "Define PrinterConfiguration model requirements",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-227",
+              "work_item_type": "Task",
+              "title": "Implement PrinterConfiguration Prisma model",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-228",
+              "work_item_type": "Task",
+              "title": "Create PrinterConfiguration migration",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-229",
+              "work_item_type": "Task",
+              "title": "Implement printer configuration DTOs",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-230",
+              "work_item_type": "Task",
+              "title": "Implement printer configuration service",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-231",
+              "work_item_type": "Task",
+              "title": "Implement printer configuration API",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-232",
+              "work_item_type": "Task",
+              "title": "Implement printer configuration UI",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-233",
+              "work_item_type": "Task",
+              "title": "Implement default-printer rules",
+              "parent_id": "US-045"
+            },
+            {
+              "id": "TASK-234",
+              "work_item_type": "Task",
+              "title": "Add printer configuration tests",
+              "parent_id": "US-045"
+            }
+          ]
+        },
+        {
+          "id": "US-046",
+          "work_item_type": "User Story",
+          "title": "Validate printer availability/configuration",
+          "parent_id": "FEAT-023",
+          "tasks": [
+            {
+              "id": "TASK-235",
+              "work_item_type": "Task",
+              "title": "Define printer validation contract",
+              "parent_id": "US-046"
+            },
+            {
+              "id": "TASK-236",
+              "work_item_type": "Task",
+              "title": "Implement printer availability/configuration check where supported",
+              "parent_id": "US-046"
+            },
+            {
+              "id": "TASK-237",
+              "work_item_type": "Task",
+              "title": "Implement printer test/diagnostic action",
+              "parent_id": "US-046"
+            },
+            {
+              "id": "TASK-238",
+              "work_item_type": "Task",
+              "title": "Add printer diagnostic tests",
+              "parent_id": "US-046"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FEAT-024",
+      "work_item_type": "Feature",
+      "title": "Barcode Configuration",
+      "parent_id": "EPIC-002",
+      "user_stories": [
+        {
+          "id": "US-047",
+          "work_item_type": "User Story",
+          "title": "Configure barcode behavior",
+          "parent_id": "FEAT-024",
+          "user_story": "As an authorized administrator, I want to configure barcode behavior so that barcode-based workflows can use consistent system settings.",
+          "acceptance_criteria": [
+            "Barcode configuration can be created and updated.",
+            "Supported configuration values are validated.",
+            "Configuration can be scoped appropriately.",
+            "Invalid barcode configuration is rejected.",
+            "Barcode configuration can be consumed by later inventory/sales functionality."
+          ],
+          "tasks": [
+            {
+              "id": "TASK-239",
+              "work_item_type": "Task",
+              "title": "Define BarcodeConfiguration model requirements",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-240",
+              "work_item_type": "Task",
+              "title": "Implement BarcodeConfiguration Prisma model",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-241",
+              "work_item_type": "Task",
+              "title": "Create BarcodeConfiguration migration",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-242",
+              "work_item_type": "Task",
+              "title": "Define supported barcode configuration options",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-243",
+              "work_item_type": "Task",
+              "title": "Implement barcode configuration validation",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-244",
+              "work_item_type": "Task",
+              "title": "Implement barcode configuration service",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-245",
+              "work_item_type": "Task",
+              "title": "Implement barcode configuration API",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-246",
+              "work_item_type": "Task",
+              "title": "Implement barcode configuration UI",
+              "parent_id": "US-047"
+            },
+            {
+              "id": "TASK-247",
+              "work_item_type": "Task",
+              "title": "Add barcode configuration tests",
+              "parent_id": "US-047"
+            }
+          ]
+        },
+        {
+          "id": "US-048",
+          "work_item_type": "User Story",
+          "title": "Provide reusable barcode configuration to transaction modules",
+          "parent_id": "FEAT-024",
+          "tasks": [
+            {
+              "id": "TASK-248",
+              "work_item_type": "Task",
+              "title": "Define barcode configuration lookup contract",
+              "parent_id": "US-048"
+            },
+            {
+              "id": "TASK-249",
+              "work_item_type": "Task",
+              "title": "Implement reusable barcode configuration service",
+              "parent_id": "US-048"
+            },
+            {
+              "id": "TASK-250",
+              "work_item_type": "Task",
+              "title": "Document integration with later inventory/sales modules",
+              "parent_id": "US-048"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cross_cutting": [
+    {
+      "key": "authorization",
+      "title": "Cross-Cutting Authorization",
+      "description": "Every administrative configuration capability introduced in this phase must use the security framework from Phase 1 and later be connected to the full User/Role/Permission implementation in Phase 4.",
+      "tasks": [
+        {
+          "id": "TASK-251",
+          "work_item_type": "Task",
+          "title": "Define configuration permission categories",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-252",
+          "work_item_type": "Task",
+          "title": "Define company/branch administration permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-253",
+          "work_item_type": "Task",
+          "title": "Define geographic-master administration permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-254",
+          "work_item_type": "Task",
+          "title": "Define financial-year administration permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-255",
+          "work_item_type": "Task",
+          "title": "Define sequence administration permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-256",
+          "work_item_type": "Task",
+          "title": "Define application-settings permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-257",
+          "work_item_type": "Task",
+          "title": "Define printer/barcode configuration permissions",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        },
+        {
+          "id": "TASK-258",
+          "work_item_type": "Task",
+          "title": "Verify UI/API permission boundaries",
+          "parent_id": "CROSS-CUTTING-AUTHORIZATION"
+        }
+      ]
+    },
+    {
+      "key": "audit",
+      "title": "Cross-Cutting Audit Integration",
+      "description": "The complete AuditLog/ChangeHistory implementation is covered later. This phase should nevertheless identify auditable configuration changes.",
+      "tasks": [
+        {
+          "id": "TASK-259",
+          "work_item_type": "Task",
+          "title": "Define configuration audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-260",
+          "work_item_type": "Task",
+          "title": "Define company/branch audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-261",
+          "work_item_type": "Task",
+          "title": "Define geographic-master audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-262",
+          "work_item_type": "Task",
+          "title": "Define financial-year state-change audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-263",
+          "work_item_type": "Task",
+          "title": "Define sequence configuration audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-264",
+          "work_item_type": "Task",
+          "title": "Define application-settings audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        },
+        {
+          "id": "TASK-265",
+          "work_item_type": "Task",
+          "title": "Define printer/barcode configuration audit events",
+          "parent_id": "CROSS-CUTTING-AUDIT"
+        }
+      ]
+    },
+    {
+      "key": "database_standards",
+      "title": "Database Standards",
+      "requirements": [
+        "Singular table names.",
+        "BIGINT primary keys.",
+        "UUID external references where applicable.",
+        "`createdAt` and `updatedAt`.",
+        "`deletedAt` for applicable soft-deletable records.",
+        "`version` for optimistic locking where applicable.",
+        "Explicit foreign-key relationships.",
+        "Appropriate unique constraints.",
+        "Appropriate indexes.",
+        "SQLite compatibility.",
+        "PostgreSQL compatibility.",
+        "Prisma migration support."
+      ],
+      "tasks": [
+        {
+          "id": "TASK-266",
+          "work_item_type": "Task",
+          "title": "Review Phase 2 schema for naming consistency",
+          "parent_id": "CROSS-CUTTING-DATABASE"
+        },
+        {
+          "id": "TASK-267",
+          "work_item_type": "Task",
+          "title": "Review Phase 2 indexes and unique constraints",
+          "parent_id": "CROSS-CUTTING-DATABASE"
+        },
+        {
+          "id": "TASK-268",
+          "work_item_type": "Task",
+          "title": "Review Phase 2 foreign-key relationships",
+          "parent_id": "CROSS-CUTTING-DATABASE"
+        },
+        {
+          "id": "TASK-269",
+          "work_item_type": "Task",
+          "title": "Validate SQLite compatibility",
+          "parent_id": "CROSS-CUTTING-DATABASE"
+        },
+        {
+          "id": "TASK-270",
+          "work_item_type": "Task",
+          "title": "Validate PostgreSQL compatibility",
+          "parent_id": "CROSS-CUTTING-DATABASE"
+        }
+      ]
+    },
+    {
+      "key": "ui_standards",
+      "title": "UI Standards",
+      "standard_screen_capabilities": [
+        "List",
+        "Search",
+        "Filter",
+        "Sort",
+        "Pagination",
+        "Create",
+        "Edit",
+        "View",
+        "Activate/deactivate",
+        "Validation",
+        "Loading state",
+        "Empty state",
+        "Error state",
+        "Confirmation",
+        "Permission-based visibility"
+      ],
+      "tasks": [
+        {
+          "id": "TASK-271",
+          "work_item_type": "Task",
+          "title": "Define common configuration list-page pattern",
+          "parent_id": "CROSS-CUTTING-UI"
+        },
+        {
+          "id": "TASK-272",
+          "work_item_type": "Task",
+          "title": "Define common configuration form pattern",
+          "parent_id": "CROSS-CUTTING-UI"
+        },
+        {
+          "id": "TASK-273",
+          "work_item_type": "Task",
+          "title": "Define hierarchical geographic selection component",
+          "parent_id": "CROSS-CUTTING-UI"
+        },
+        {
+          "id": "TASK-274",
+          "work_item_type": "Task",
+          "title": "Define configuration status display pattern",
+          "parent_id": "CROSS-CUTTING-UI"
+        }
+      ]
+    },
+    {
+      "key": "testing",
+      "title": "Testing Strategy",
+      "backend": [
+        "Service unit tests",
+        "Controller/API tests",
+        "Validation tests",
+        "Relationship tests",
+        "Authorization tests",
+        "Concurrency tests for sequence generation",
+        "Financial-year overlap/state tests"
+      ],
+      "ui": [
+        "Form validation tests",
+        "List/search tests",
+        "Cascading geographic selection tests",
+        "Permission visibility tests",
+        "Loading/error state tests"
+      ],
+      "integration": [
+        "Database migration tests",
+        "SQLite integration tests",
+        "PostgreSQL compatibility validation",
+        "API-to-database integration"
+      ],
+      "negative_scenarios": [
+        "Duplicate company",
+        "Duplicate branch",
+        "Invalid company/branch relationship",
+        "Invalid geographic hierarchy",
+        "Invalid financial-year range",
+        "Overlapping financial year",
+        "Invalid sequence configuration",
+        "Concurrent sequence requests",
+        "Invalid application setting",
+        "Unauthorized configuration change",
+        "Invalid printer configuration",
+        "Invalid barcode configuration"
+      ],
+      "tasks": [
+        {
+          "id": "TASK-275",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 backend unit-test suite",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        },
+        {
+          "id": "TASK-276",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 API integration-test suite",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        },
+        {
+          "id": "TASK-277",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 frontend test suite",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        },
+        {
+          "id": "TASK-278",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 authorization tests",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        },
+        {
+          "id": "TASK-279",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 negative test suite",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        },
+        {
+          "id": "TASK-280",
+          "work_item_type": "Task",
+          "title": "Implement Phase 2 database compatibility tests",
+          "parent_id": "CROSS-CUTTING-TESTING"
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "phase_1": "Phase 1 — Foundation & Architecture",
+    "phase_1_dependencies": [
+      "Prisma foundation",
+      "Database migration framework",
+      "NestJS foundation",
+      "Angular/Electron foundation",
+      "Validation",
+      "API standards",
+      "Error handling",
+      "Common UI infrastructure",
+      "Logging",
+      "Testing foundation",
+      "CI/CD foundation"
+    ],
+    "later_dependencies": [
+      "Phase 3 — Party Management",
+      "Phase 5 — Medicine Master",
+      "Phase 6 — Inventory",
+      "Phase 7 — Procurement",
+      "Phase 8 — Sales",
+      "Phase 9 — Financial"
+    ],
+    "flow_note": "Phase 2 depends on Phase 1. Later business modules consume Phase 2 organization, geographic, financial-year, numbering, and configuration capabilities."
+  },
+  "business_dependency_flow": {
+    "geographic": [
+      "Country",
+      "State",
+      "City",
+      "Area"
+    ],
+    "organization": [
+      "Company",
+      "Branch"
+    ],
+    "financial_context": [
+      "Company / Branch",
+      "Financial Year",
+      "Transaction Processing"
+    ],
+    "numbering": [
+      "Sequence Generator",
+      "Business Document",
+      "Purchase / Sales / Other Transaction"
+    ],
+    "configuration": [
+      "AppSetting",
+      "PrinterConfiguration",
+      "BarcodeConfiguration",
+      "Application / Transaction Modules"
+    ]
+  },
+  "completion_checklist": [
+    "Company master implemented.",
+    "Company create/view/edit/lifecycle flows implemented.",
+    "Branch master implemented.",
+    "Branch create/view/edit/lifecycle flows implemented.",
+    "Country master implemented.",
+    "State master implemented.",
+    "City master implemented.",
+    "Area master implemented.",
+    "Country → State → City → Area hierarchy validated.",
+    "Reusable geographic lookup capability implemented.",
+    "Financial year master implemented.",
+    "Financial-year activation/closure implemented.",
+    "Current financial-year resolution implemented.",
+    "Sequence configuration implemented.",
+    "Safe sequence allocation implemented.",
+    "Application settings implemented.",
+    "Runtime settings lookup implemented.",
+    "Printer configuration implemented.",
+    "Printer validation/diagnostics implemented where supported.",
+    "Barcode configuration implemented.",
+    "Reusable barcode configuration lookup implemented.",
+    "Configuration authorization defined.",
+    "Configuration audit events defined.",
+    "Database constraints/indexes reviewed.",
+    "SQLite compatibility verified.",
+    "PostgreSQL compatibility verified.",
+    "Backend tests completed.",
+    "Frontend tests completed.",
+    "Integration tests completed.",
+    "Negative scenarios tested.",
+    "CI pipeline passes.",
+    "Documentation updated."
+  ],
+  "phase_boundary": {
+    "statement": "Phase 2 establishes the organizational and configuration context.",
+    "does_not_implement": "It does not implement downstream business transactions.",
+    "examples": [
+      "Phase 2: Branch → configured",
+      "Phase 3: Party → uses Branch/Geography",
+      "Phase 5: Medicine → uses configuration/master data",
+      "Phase 6: Inventory → uses Branch, Medicine, UOM, configuration",
+      "Phase 7: Purchase → uses Supplier, Medicine, Branch, FinancialYear, Sequence",
+      "Phase 8: Sales → uses Customer, Medicine, Branch, FinancialYear, Sequence",
+      "Phase 9: Financial → uses FinancialYear and transaction context"
+    ],
+    "boundary_note": "This boundary keeps the ADO backlog dependency-driven rather than mixing unrelated business functionality into the configuration phase."
+  },
+  "work_item_summary": {
+    "epics": 1,
+    "features": 12,
+    "user_stories": 24,
+    "tasks": 187,
+    "total_work_items": 224
+  }
+}
