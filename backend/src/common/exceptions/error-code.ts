@@ -30,6 +30,13 @@ export const ErrorCode = {
 
   // Inventory
   STOCK_NOT_FOUND: 'STOCK_NOT_FOUND',
+  STOCK_INSUFFICIENT: 'STOCK_INSUFFICIENT',
+
+  // Persistence
+  SEQUENCE_NOT_FOUND: 'SEQUENCE_NOT_FOUND',
+  SEQUENCE_CONFLICT: 'SEQUENCE_CONFLICT',
+  OUTBOX_DUPLICATE_OPERATION: 'OUTBOX_DUPLICATE_OPERATION',
+  TRANSACTION_FAILED: 'TRANSACTION_FAILED',
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];

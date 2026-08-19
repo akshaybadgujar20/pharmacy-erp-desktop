@@ -113,9 +113,8 @@ See [seed/README.md](seed/README.md) for folder layout and row-count targets.
 
 ### Troubleshooting
 
-- **FK errors** — run `npx prisma db push` or `migrate dev` before seeding.
-- **Unique constraint** — re-run with `npm run db:seed:fresh` or `db:reset`.
-- **`npm run build` fails on Store module** — legacy `src/store/` references a removed model; unrelated to seed (remove that module separately).
+- **FK errors** - run `npx prisma db push` or `migrate dev` before seeding.
+- **Unique constraint** - re-run with `npm run db:seed:fresh` or `db:reset.
 
 ### Format and validate the Prisma schema
 
@@ -233,6 +232,18 @@ npm run start:dev
 npm run start:prod
 ```
 
+
+## Persistence layer
+
+Business modules should use `PersistenceModule` (unit of work, request context, sequences, outbox, inventory ledger) instead of ad-hoc Prisma transactions.
+
+Design and usage: [persistence-patterns.md](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md)
+
+Integration tests against seeded SQLite:
+
+``` bash
+npm run test:persistence
+```
 ## Run tests
 
 ``` bash
@@ -265,3 +276,4 @@ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing
 you to focus on building features rather than managing infrastructure.
+

@@ -1,0 +1,144 @@
+---
+description: Testing standards for the Pharmacy ERP backend (Jest unit + persistence integration)
+globs: backend/**/*.spec.ts,backend/test/**/*.ts
+alwaysApply: false
+---
+
+## Test layout
+
+| Location | Type | Command |
+|----------|------|---------|
+| `src/**/*.spec.ts` | Unit tests (co-located) | `npm run test` |
+| `test/persistence/**/*.spec.ts` | Persistence integration | `npm run test:persistence` |
+| `test/app.e2e-spec.ts` | End-to-end | `npm run test:e2e` |
+
+- Unit tests: Jest `rootDir: src`, pattern `*.spec.ts`
+- Persistence tests: separate config at [jest-persistence.json](backend/test/persistence/jest-persistence.json), run with `--runInBand` (shared SQLite file)
+
+---
+
+## Unit tests
+
+- Co-locate specs next to source: `feature.service.spec.ts` beside `feature.service.ts`
+- Use `@nestjs/testing` `Test.createTestingModule()` for service tests
+- Mock dependencies with `jest.fn()` or `{ provide: Token, useValue: mock }`
+- One `describe` per class/function; nested `describe` for method groups
+- Test names describe behavior: `'throws SEQUENCE_NOT_FOUND when no active row exists'`
+
+```typescript
+describe('SequenceGeneratorService', () => {
+  describe('next', () => {
+    it('throws SEQUENCE_NOT_FOUND when no active row exists', async () => {
+      // …
+    });
+  });
+});
+```
+
+---
+
+## Persistence integration tests
+
+Use helpers from [persistence-test.helpers.ts](backend/test/persistence/persistence-test.helpers.ts):
+
+```typescript
+const { moduleRef, services } = await createPersistenceTestContext();
+const { company, branch } = await loadSeededBranch(services.prisma);
+
+await runWithTestContext(services, { company, branch }, async (tx) => {
+  // test logic inside UnitOfWork + RequestContext
+});
+```
+
+- `TEST_DEVICE_ID = 'test-device-001'` for outbox tests
+- Tests run against the seeded `pharmacy.sqlite` — do not assume empty DB
+- Import `PersistenceTestModule` for wiring
+
+---
+
+## Coverage expectations
+
+When changing production code, add or extend tests for:
+
+- Every new branch, guard, and error path
+- Both positive paths (success) and negative paths (not found, conflict, validation failure)
+- Optimistic concurrency conflict and retry behavior where applicable
+
+### Branch coverage checklist
+
+For branching logic, cover **every boolean outcome**:
+
+- **Short-circuit expressions** (`a && b`, `a || b`): test each operand true/false
+- **Ternaries** (`cond ? x : y`): test both branches
+- **`instanceof` checks**: test match and non-match (e.g. wrong type, null)
+- **Null/empty guards**: test early return and continue paths
+- **Exception paths**: use `expect(…).rejects.toThrow(ApplicationException)` with code assertion
+
+```typescript
+await expect(service.next(tx, input)).rejects.toMatchObject({
+  code: ErrorCode.SEQUENCE_NOT_FOUND,
+});
+```
+
+Assert **behavior** (return values, side effects, thrown codes) — not implementation details.
+
+---
+
+## Test data lifecycle
+
+### Persistence integration tests
+
+- Tests run against **seeded** data — use `loadSeededBranch()` and similar helpers to find existing records
+- **Mutating tests** must create their own records and clean up afterward
+- Never delete or modify seed fixture data that other tests depend on
+
+| Test type | Creates own data? | Cleans up? |
+|-----------|:-:|:-:|
+| read / query | — | — |
+| insert | yes | yes |
+| update | yes (insert first) | yes |
+| delete | yes (insert first) | yes |
+
+- Use unique marker prefixes + random suffix for test-created records
+- Use `try/finally` so cleanup runs even when assertions fail
+
+### Unit tests
+
+- Fully isolated — mock all external dependencies
+- No database access in unit tests
+
+---
+
+## Assertions
+
+- Prefer `toEqual` / `toMatchObject` for structured results
+- Use `rejects.toThrow` / `rejects.toMatchObject` for async error assertions
+- Do not assert on log output unless testing logging behavior
+- For `ApplicationException`, assert `code`, `statusCode`, and relevant `details`
+
+---
+
+## Forbidden
+
+- Skipping tests to meet coverage thresholds
+- Tests that depend on execution order (unless using `--runInBand` with documented reason)
+- Hardcoded IDs from seed data in mutating tests — look up or create records dynamically
+- Leaving test-created rows in the database after mutating tests
+
+---
+
+## Running tests
+
+```bash
+# Unit tests
+npm run test
+
+# Single file
+npx jest src/persistence/sequence/sequence-generator.service.spec.ts
+
+# Persistence integration (serial)
+npm run test:persistence
+
+# With coverage
+npm run test:cov
+```

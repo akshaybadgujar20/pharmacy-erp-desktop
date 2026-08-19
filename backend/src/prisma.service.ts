@@ -1,20 +1,29 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-import path from 'path';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { createPrismaClient } from './persistence/prisma/prisma-client.factory';
+import { syncPrismaIdSequenceFromDatabase } from './persistence/prisma/sync-prisma-id-sequence';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService implements OnModuleInit, OnModuleDestroy {
+  readonly client: PrismaClient;
 
   constructor() {
-    super({
-      adapter: new PrismaBetterSqlite3({
-        url: `file:${path.join(process.cwd(), '..', 'db', 'pharmacy.sqlite')}`,
-      }),
-    });
+    this.client = createPrismaClient();
   }
 
-  async onModuleInit() {
-    await this.$connect();
+  async onModuleInit(): Promise<void> {
+    await this.client.$connect();
+    await syncPrismaIdSequenceFromDatabase(this.client);
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    await this.client.$disconnect();
+  }
+
+  $transaction<R>(
+    fn: (tx: Prisma.TransactionClient) => Promise<R>,
+    options?: Parameters<PrismaClient['$transaction']>[1],
+  ): Promise<R> {
+    return this.client.$transaction(fn, options);
   }
 }

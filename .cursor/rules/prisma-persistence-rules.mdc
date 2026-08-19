@@ -1,0 +1,173 @@
+---
+description: Prisma and persistence-layer conventions for the Pharmacy ERP backend
+globs: backend/src/persistence/**/*.ts,backend/seed/**/*.ts
+alwaysApply: false
+---
+
+## Architecture overview
+
+Persistence infrastructure lives in `src/persistence/`. Feature services must use these abstractions — not raw Prisma calls scattered across modules.
+
+| Service | Role |
+|---------|------|
+| `UnitOfWorkService` | Transaction boundary + retry + error mapping |
+| `RequestContextService` | AsyncLocalStorage for tenant/device context |
+| `SequenceGeneratorService` | Branch-scoped document numbers |
+| `OutboxService` | Transactional outbox enqueue |
+| `InventoryLedgerService` | Stock movements + balance tracking |
+
+Full reference: [persistence-patterns.md](docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md)
+
+---
+
+## Transactions — UnitOfWorkService
+
+**Always** use `UnitOfWorkService.run()` for multi-write flows. Do **not** call `prisma.$transaction()` directly in feature services.
+
+```typescript
+return this.unitOfWork.run(async (tx) => {
+  const { documentNumber } = await this.sequenceGenerator.next(tx, { … });
+  await this.outboxService.enqueue(tx, { … });
+  return createdEntity;
+});
+```
+
+[UnitOfWorkService](backend/src/persistence/unit-of-work/unit-of-work.service.ts):
+
+- Wraps `prisma.$transaction(fn)`
+- Maps Prisma errors via `rethrowAsApplicationException()`
+- Retries once on optimistic conflicts (`P2034`, `SEQUENCE_CONFLICT`)
+
+Pass `TxClient` (not `PrismaClient`) to all persistence helpers inside the transaction.
+
+---
+
+## Request context
+
+Business transactions must run inside `RequestContextService.run()` so downstream services read tenant and device context:
+
+```typescript
+await this.requestContext.run(
+  { companyId, branchId, userId, deviceId },
+  () => this.unitOfWork.run(async (tx) => { … }),
+);
+```
+
+Required context fields:
+
+- `companyId`, `branchId` — tenant scoping
+- `deviceId` — required for outbox ordering (`OutboxService.enqueue`)
+
+---
+
+## Optimistic concurrency
+
+Use `version` column + `updateMany` with expected version, then check `count === 1`:
+
+```typescript
+const updated = await tx.sequenceGenerator.updateMany({
+  where: { id: row.id, version: row.version },
+  data: { currentNumber: nextValue, version: { increment: 1 }, updatedAt: now },
+});
+
+if (updated.count !== 1) {
+  throw new ApplicationException(
+    ErrorCode.SEQUENCE_CONFLICT,
+    'Sequence row was modified concurrently',
+    HttpStatus.CONFLICT,
+    { sequenceId: row.id },
+  );
+}
+```
+
+On conflict, `UnitOfWorkService` retries once automatically for known retryable errors.
+
+---
+
+## Document sequences
+
+Use `SequenceGeneratorService.next(tx, input)` — never manually increment sequence rows in feature code.
+
+```typescript
+const { sequenceValue, documentNumber } = await this.sequenceGenerator.next(tx, {
+  companyId,
+  branchId,
+  documentType: DocumentType.STOCK_MOVEMENT,
+  branchCode,
+});
+```
+
+- Document types: `DocumentType` constants in [document-type.constants.ts](backend/src/persistence/sequence/document-type.constants.ts)
+- Reset policies: `NEVER`, `YEARLY`, `MONTHLY`
+- Formatting: `formatDocumentNumber()` handles prefix/suffix/padding
+
+---
+
+## Outbox pattern
+
+Enqueue sync events in the **same transaction** as the business mutation:
+
+```typescript
+await this.outboxService.enqueue(tx, {
+  entityType: 'SalesInvoice',
+  entityUuid: invoice.uuid,
+  operation: OutboxOperation.CREATE,
+  payload: { … },
+  branchId,
+});
+```
+
+- Operations: `OutboxOperation` constants in [outbox-operation.constants.ts](backend/src/persistence/outbox/outbox-operation.constants.ts)
+- `deviceId` comes from `RequestContextService` — must be set before calling
+- `operationId` is auto-generated for idempotency
+
+---
+
+## Inventory ledger
+
+Stock changes go through `InventoryLedgerService.applyMovement(tx, …)`:
+
+- Allocates `STOCK_MOVEMENT` document number via sequence service
+- Upserts `Stock` for `(branchId, batchId)`
+- Guards negative stock on `OUT` → throws `STOCK_INSUFFICIENT`
+- Inserts immutable `StockMovement` with `balanceAfter`
+
+Never update `Stock.quantity` directly in feature services.
+
+---
+
+## Prisma error mapping
+
+Use `rethrowAsApplicationException(error)` from [prisma-error.mapper.ts](backend/src/persistence/prisma/prisma-error.mapper.ts) — do not catch Prisma errors and return defaults.
+
+Known mappings:
+
+- Unique constraint → `CONFLICT`
+- Record not found → `NOT_FOUND`
+- Other → `TRANSACTION_FAILED` or re-throw
+
+---
+
+## BIGINT primary keys
+
+Some tables omit SQLite autoincrement. `createPrismaClient()` assigns BIGINT ids via `nextBigIntId()` when `id` is omitted on `create`. Do not manually assign ids unless required by the specific table's pattern.
+
+---
+
+## Seed scripts
+
+Seed code under `backend/seed/`:
+
+- Use deterministic JSON fixtures in `seed/data/`
+- Generators in `seed/lib/generators/` for derived data
+- Run via `npm run db:seed` or `npm run db:seed:fresh`
+- Seed scripts may use `PrismaService` directly (not `UnitOfWorkService`) but should respect the same schema contracts
+
+---
+
+## Do not
+
+- Call `prisma.$transaction()` directly in feature services
+- Update `Stock.quantity` or `SequenceGenerator.currentNumber` outside dedicated persistence services
+- Enqueue outbox rows outside an active transaction
+- Skip `RequestContextService.run()` for business writes that need tenant/device context

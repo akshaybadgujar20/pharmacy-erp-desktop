@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:seed": "tsx seed/seed.ts",
     "db:seed:fresh": "tsx seed/seed.ts --fresh",
-    "db:reset": "prisma db push --force-reset && npm run db:seed:fresh"
+    "db:reset": "prisma db push --force-reset && npm run db:seed:fresh",
+    "test:persistence": "jest --config ./test/persistence/jest-persistence.json --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

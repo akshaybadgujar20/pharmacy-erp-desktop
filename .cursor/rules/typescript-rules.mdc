@@ -1,0 +1,139 @@
+---
+description: TypeScript language standards for the Pharmacy ERP backend
+globs: backend/**/*.ts
+alwaysApply: false
+---
+
+## Formatting and lint
+
+Match existing project style enforced by [backend/.prettierrc](backend/.prettierrc) and [backend/eslint.config.mjs](backend/eslint.config.mjs):
+
+- **Prettier:** `singleQuote: true`, `trailingComma: 'all'`, `endOfLine: 'auto'`
+- **ESLint:** `@typescript-eslint/recommendedTypeChecked` — respect type-checked rules
+- Run `npm run lint` and `npm run format` on touched files before finishing
+- Do **not** drive-by reformat unrelated files or modules
+
+### Forbidden
+
+- Blank line after every line (imports, fields, statements)
+- Splitting short `throw`, `return`, or simple calls unnecessarily
+- One parameter per line **with** blank lines between parameters
+- "Format document" that doubles line count without functional need
+
+### Required
+
+- One blank line between methods, between import groups, and after top-level declarations where the file already uses that pattern
+- Keep readable lines on one line when they fit (~120 chars); wrap only when necessary
+- After edits, line count should stay in the same ballpark as before
+
+---
+
+## Imports
+
+Whenever you edit a `.ts` file, **remove unused imports** in the same change.
+
+- Use `import type { … }` for type-only imports (e.g. `TxClient`, DTO interfaces)
+- Add imports only for types/values actually used
+- Group: external packages → internal absolute/relative → type-only imports
+- Do not leave speculative or leftover imports
+
+```typescript
+// Prefer
+import type { TxClient } from '../prisma/prisma-tx.type';
+import { Injectable } from '@nestjs/common';
+```
+
+---
+
+## Naming
+
+- **Classes / enums / interfaces:** PascalCase (`SequenceGeneratorService`, `SequenceNextInput`)
+- **Methods / variables / parameters:** camelCase — no underscores
+- Prefer **context-specific** names over generic placeholders (`data`, `result`, `tmp`, `out`, `item`)
+
+```typescript
+// Avoid
+const result = await tx.sequenceGenerator.findFirst({ … });
+
+// Prefer
+const activeSequenceRow = await tx.sequenceGenerator.findFirst({ … });
+```
+
+- **Constants:** `UPPER_SNAKE_CASE` for true constants; group domain constants in `*.constants.ts` files
+- **Files:** kebab-case matching the primary export (`sequence-generator.service.ts`, `document-type.constants.ts`)
+- **Acronyms:** readable camelCase (`parseJsonPayload`, not `parseJSONPayload`)
+
+---
+
+## Types
+
+- Prefer `interface` for input/result shapes (`SequenceNextInput`, `OutboxEnqueueInput`)
+- Use `type` for unions, mapped types, and utility aliases (`TxClient`, `ErrorCode`)
+- Explicit return types on **exported** and **public** methods
+- Prefer `unknown` + narrowing over `any` (even though `no-explicit-any` is off in ESLint)
+- Use `as const` for string-literal registries (`ErrorCode`, `DocumentType`, `OutboxOperation`)
+
+```typescript
+export const ErrorCode = {
+  NOT_FOUND: 'NOT_FOUND',
+  SEQUENCE_CONFLICT: 'SEQUENCE_CONFLICT',
+} as const;
+
+export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
+```
+
+---
+
+## BIGINT / numeric IDs
+
+SQLite BIGINT columns map to JavaScript `bigint`. Follow existing patterns:
+
+- Use `bigint` literals: `0n`, `1n`, `row.currentNumber + increment`
+- Never coerce BIGINT ids or sequence values to `number` (precision loss)
+- Accept `bigint` in service inputs; serialize to string in JSON responses when needed
+
+---
+
+## Functions and control flow
+
+- Validate cheap preconditions at the **caller** before invoking helpers
+- Favor early returns over deep nesting
+- Extract pure helpers as module-level functions when they have no DI dependencies (see `shouldResetSequence`, `isRetryableTransactionError`)
+- Keep `@Injectable()` classes focused on orchestration and DI
+
+---
+
+## Comments and documentation
+
+- Comments explain **why** or non-obvious constraints — not what the code obviously does
+- JSDoc on exported helpers and public service methods when behavior, preconditions, or error cases are not obvious from the signature
+- Do not restate parameter types already visible in the signature
+
+---
+
+## String literals
+
+- Do not duplicate meaningful string literals; extract to named constants in `*.constants.ts`
+- Error codes belong in `ErrorCode` (`src/common/exceptions/error-code.ts`)
+- Document types, reset policies, outbox operations belong in their respective constant files
+
+---
+
+## Propagate errors — no silent handling
+
+When a dependency call fails (DB, external service), **do not** mask the failure with defaults or empty results unless explicitly documented.
+
+```typescript
+// BAD — failure treated as "no sequence"
+} catch (error) {
+  return { sequenceValue: 0n, documentNumber: '' };
+}
+
+// GOOD — domain exception with context
+throw new ApplicationException(
+  ErrorCode.SEQUENCE_NOT_FOUND,
+  `No active sequence for ${input.documentType}`,
+  HttpStatus.NOT_FOUND,
+  input,
+);
+```

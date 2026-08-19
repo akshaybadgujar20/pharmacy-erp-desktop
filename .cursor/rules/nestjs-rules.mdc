@@ -1,0 +1,143 @@
+---
+description: NestJS conventions for the Pharmacy ERP backend
+globs: backend/src/**/*.ts
+alwaysApply: false
+---
+
+## Module structure
+
+- One feature per module: `feature.module.ts`, `feature.controller.ts`, `feature.service.ts`
+- Register providers in `@Module({ providers, exports, imports })`; export services other modules need
+- Import `PersistenceModule` / `PrismaModule` when accessing DB or persistence services
+- Keep `AppModule` as wiring only — feature logic belongs in feature modules
+
+```
+src/
+  feature/
+    feature.module.ts
+    feature.controller.ts
+    feature.service.ts
+    dto/
+      create-feature.dto.ts
+```
+
+---
+
+## Dependency injection
+
+- Constructor injection only; use `private readonly` for injected dependencies
+- Do not instantiate services manually (`new FeatureService()`)
+- Inject interfaces/tokens only when the project already uses them; default to concrete `@Injectable()` classes
+
+```typescript
+@Injectable()
+export class FeatureService {
+  constructor(
+    private readonly unitOfWork: UnitOfWorkService,
+    private readonly requestContext: RequestContextService,
+  ) {}
+}
+```
+
+---
+
+## Controllers
+
+- Controllers are thin: validate input (DTO), delegate to service, return result
+- Use standard HTTP decorators (`@Get`, `@Post`, `@Param`, `@Body`, `@Query`)
+- Do **not** hand-build `{ success: true, data: … }` — the global `ResponseInterceptor` wraps responses
+- Return `PaginatedResult` from list endpoints so the interceptor adds pagination metadata
+
+---
+
+## DTOs and validation
+
+Global `ValidationPipe` is configured in [main.ts](backend/src/main.ts):
+
+```typescript
+new ValidationPipe({
+  whitelist: true,
+  transform: true,
+  forbidNonWhitelisted: true,
+})
+```
+
+- Every request body/query DTO uses class-validator decorators (`@IsString`, `@IsNotEmpty`, `@IsOptional`, `@Type`, etc.)
+- Use `@Transform` for type coercion (e.g. string → `bigint`) when needed
+- DTOs live in a `dto/` subfolder per feature
+- Validation messages should be clear and user-facing
+
+---
+
+## Error handling
+
+### ApplicationException
+
+Business and domain errors use `ApplicationException`:
+
+```typescript
+throw new ApplicationException(
+  ErrorCode.STOCK_INSUFFICIENT,
+  'Insufficient stock for batch',
+  HttpStatus.CONFLICT,
+  { batchId, requestedQty },
+);
+```
+
+- First arg: code from `ErrorCode` — add new codes to [error-code.ts](backend/src/common/exceptions/error-code.ts)
+- Second arg: human-readable message
+- Third arg: HTTP status (default `400`)
+- Fourth arg: optional `details` payload for clients
+
+### GlobalExceptionFilter
+
+[GlobalExceptionFilter](backend/src/common/exceptions/global-exception.filter.ts) maps exceptions to:
+
+```json
+{ "success": false, "error": { "code": "…", "message": "…", "details": … } }
+```
+
+- Do not catch-and-swallow in services; let exceptions propagate to the filter
+- Use Nest `HttpException` only for framework-level concerns; prefer `ApplicationException` for domain errors
+
+---
+
+## Response envelope
+
+[ResponseInterceptor](backend/src/common/interceptors/response.interceptor.ts) wraps successful responses:
+
+```json
+{ "success": true, "data": … }
+```
+
+- Return raw data from controllers/services — the interceptor adds the envelope
+- For paginated lists, return a `PaginatedResult` (detected by `isPaginatedResult()`)
+
+---
+
+## Logging
+
+- Use Nest `Logger` with the class name: `private readonly logger = new Logger(MyService.name)`
+- Log unexpected failures at `error` level with stack traces
+- Do not log sensitive data (passwords, tokens)
+
+---
+
+## Lifecycle hooks
+
+- `OnModuleInit` / `OnModuleDestroy` for connection setup/teardown (see [PrismaService](backend/src/prisma.service.ts))
+- Keep lifecycle logic in the service that owns the resource
+
+---
+
+## Guards, interceptors, filters
+
+- Register global filters/interceptors in `main.ts` or `AppModule` providers with `APP_FILTER` / `APP_INTERCEPTOR`
+- Feature-specific guards/interceptors stay in the feature module
+
+---
+
+## Environment and config
+
+- Use `@nestjs/config` for environment variables
+- Access via `ConfigService`; do not read `process.env` directly in services (except bootstrap in `main.ts`)

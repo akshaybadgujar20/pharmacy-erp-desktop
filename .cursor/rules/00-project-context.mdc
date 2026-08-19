@@ -1,0 +1,111 @@
+---
+description: Pharmacy ERP backend — project context, layout, commands, and change policy
+alwaysApply: true
+---
+
+## Scope
+
+This repo is **pharmacy-erp-desktop**. Backend rules apply to `backend/` (NestJS + Prisma + TypeScript). Architecture docs live under `docs/pharmacy_erp_architecture_docs/`.
+
+**Standard:** Follow the scoped `.mdc` rules in `.cursor/rules/` for all backend work unless the user overrides a specific rule in the task.
+
+---
+
+## Stack
+
+| Layer | Technology |
+|-------|------------|
+| Runtime | Node.js |
+| Framework | NestJS 11 |
+| Language | TypeScript 5.7 |
+| ORM | Prisma 7 (`@prisma/adapter-better-sqlite3`) |
+| Database | SQLite (`db/pharmacy.sqlite`) |
+| Validation | class-validator + class-transformer |
+| Testing | Jest 30 |
+| Lint / format | ESLint 9 (`typescript-eslint` type-checked) + Prettier |
+
+---
+
+## Repository layout
+
+```
+backend/
+  src/
+    common/          # exceptions, interceptors, response types
+    persistence/     # UnitOfWork, Outbox, Sequence, InventoryLedger, RequestContext
+    prisma.service.ts
+    prisma.module.ts
+    app.module.ts
+    main.ts
+  seed/              # deterministic seed data + generators
+  test/
+    persistence/     # integration tests against seeded SQLite
+docs/pharmacy_erp_architecture_docs/
+  database/          # schema docs, persistence-patterns.md
+db/
+  pharmacy.sqlite
+```
+
+---
+
+## Key commands
+
+Run from `backend/`:
+
+| Command | Purpose |
+|---------|---------|
+| `npm run start:dev` | Dev server with watch |
+| `npm run build` | Compile NestJS |
+| `npm run lint` | ESLint (auto-fix) |
+| `npm run format` | Prettier write |
+| `npm run test` | Unit tests (`src/**/*.spec.ts`) |
+| `npm run test:persistence` | Persistence integration tests (`--runInBand`) |
+| `npm run test:e2e` | End-to-end tests |
+| `npm run db:seed` | Seed database |
+| `npm run db:seed:fresh` | Wipe + seed |
+| `npm run db:reset` | Force-reset schema + fresh seed |
+
+Before finishing backend changes, run `npm run lint` and relevant tests.
+
+---
+
+## Change policy
+
+### Minimal diff
+
+- Change **only** files and regions required for the task.
+- Do not reformat or "clean up" unrelated modules.
+- If a file has **no logical edit** for the task, **leave it untouched**.
+
+### Line endings
+
+- **Preserve** the file's existing line-ending style (CRLF vs LF).
+- Do not rewrite whole files solely to normalize line endings.
+- Do not add or modify `.gitattributes` `eol` / `text` rules without explicit user approval.
+
+### Additive-only feature work
+
+When implementing a **new** feature, treat the task as **additive only** unless the user explicitly asks to fix or refactor existing behavior.
+
+**Allowed**
+
+- New constants, helpers, modules, and guarded logic at defined insertion points
+- New or extended unit/integration tests for the feature
+- Touching only files required for the feature and its tests
+
+**Not allowed** (without explicit user confirmation)
+
+- Fixing pre-existing bugs discovered while implementing
+- Drive-by edits to unrelated files (config, formatters, unrelated controllers/services)
+- Refactoring code outside the new feature's scope
+- Changing behavior for paths **outside** the new feature's scope
+
+If a pre-existing defect is found, **document it** and **do not fix** unless the user approves.
+
+---
+
+## Architecture references
+
+- Persistence patterns: `docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md`
+- Database overview: `docs/pharmacy_erp_architecture_docs/database/database_overview.md`
+- Agent onboarding: `backend/AGENTS.md`
