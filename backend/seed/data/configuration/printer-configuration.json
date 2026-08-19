@@ -1,0 +1,7 @@
+[
+  {"uuid": "15151515-1515-4515-8515-151515151501", "companyUuid": "55555555-5555-4555-8555-555555555501", "branchUuid": "66666666-6666-4666-8666-666666666601", "printerName": "Counter Thermal", "printerType": "THERMAL", "documentType": "SALES_INVOICE", "paperSize": "80mm", "isDefault": true, "isActive": true},
+  {"uuid": "15151515-1515-4515-8515-151515151502", "companyUuid": "55555555-5555-4555-8555-555555555501", "branchUuid": "66666666-6666-4666-8666-666666666602", "printerName": "Counter Thermal", "printerType": "THERMAL", "documentType": "SALES_INVOICE", "paperSize": "80mm", "isDefault": true, "isActive": true},
+  {"uuid": "15151515-1515-4515-8515-151515151503", "companyUuid": "55555555-5555-4555-8555-555555555501", "branchUuid": "66666666-6666-4666-8666-666666666601", "printerName": "Label Printer", "printerType": "LABEL", "documentType": "BARCODE_LABEL", "paperSize": "50x25mm", "isDefault": true, "isActive": true},
+  {"uuid": "15151515-1515-4515-8515-151515151504", "companyUuid": "55555555-5555-4555-8555-555555555501", "branchUuid": "66666666-6666-4666-8666-666666666603", "printerName": "A4 Laser", "printerType": "LASER", "documentType": "PURCHASE_ORDER", "paperSize": "A4", "isDefault": true, "isActive": true},
+  {"uuid": "15151515-1515-4515-8515-151515151505", "companyUuid": "55555555-5555-4555-8555-555555555501", "printerName": "Default A4", "printerType": "LASER", "documentType": "REPORT", "paperSize": "A4", "isDefault": true, "isActive": true}
+]

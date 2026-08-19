@@ -1,0 +1,7 @@
+[
+  {"uuid": "77777777-7777-4777-8777-777777777701", "unitCode": "TAB", "unitName": "Tablet", "shortName": "Tab", "unitType": "COUNT", "decimalAllowed": false, "isSystemUnit": true, "isActive": true},
+  {"uuid": "77777777-7777-4777-8777-777777777702", "unitCode": "STR", "unitName": "Strip", "shortName": "Strip", "unitType": "PACK", "decimalAllowed": false, "isSystemUnit": true, "isActive": true},
+  {"uuid": "77777777-7777-4777-8777-777777777703", "unitCode": "BOT", "unitName": "Bottle", "shortName": "Btl", "unitType": "PACK", "decimalAllowed": false, "isSystemUnit": true, "isActive": true},
+  {"uuid": "77777777-7777-4777-8777-777777777704", "unitCode": "ML", "unitName": "Millilitre", "shortName": "ml", "unitType": "VOLUME", "decimalAllowed": true, "isSystemUnit": true, "isActive": true},
+  {"uuid": "77777777-7777-4777-8777-777777777705", "unitCode": "GM", "unitName": "Gram", "shortName": "g", "unitType": "WEIGHT", "decimalAllowed": true, "isSystemUnit": true, "isActive": true}
+]

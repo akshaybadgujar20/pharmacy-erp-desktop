@@ -25,16 +25,21 @@ The main Prisma schema directory is:
 ``` text
 prisma/
 ├── migrations/
-├── party/
-│   ├── customer.prisma
-│   ├── doctor.prisma
-│   ├── employee.prisma
-│   ├── party.prisma
-│   ├── party-address.prisma
-│   ├── party-contact.prisma
-│   ├── party-role.prisma
-│   └── supplier.prisma
-└── schema.prisma
+├── schema.prisma
+├── configuration/
+├── masters/
+├── party_management/
+├── medicine_master/
+├── inventory/
+├── purchase/
+├── sales/
+├── pricing/
+├── prescription/
+├── financial/
+├── loyalty/
+├── user_and_security/
+├── synchronization/
+└── audit/
 ```
 
 The Prisma configuration is located at:
@@ -65,11 +70,52 @@ Individual `.prisma` files can be organized into logical folders such
 as:
 
 ``` text
-prisma/party/
+prisma/party_management/
 ```
 
 Do not import individual `.prisma` files into `schema.prisma`. Prisma
 discovers the schema files from the configured schema directory.
+
+## Seed data
+
+Sample data lives under `seed/`. Static **JSON masters** (geo, company, branches, medicine references, tax, security) use stable UUIDs; **generators** create parties, medicines, inventory, purchase/sales flows, sync outbox, and financial/audit samples.
+
+### Prerequisites
+
+1. Apply the schema to SQLite (`db push` or `migrate dev`).
+2. Run `npx prisma generate`.
+
+### Commands
+
+``` bash
+cd backend
+npm install
+npx prisma generate
+# prepare DB (choose one):
+npx prisma db push
+# or: npx prisma migrate dev --name init
+npm run db:seed:fresh
+npx prisma studio
+```
+
+Other scripts:
+
+``` bash
+npm run db:seed          # seed (default: wipe + reseed)
+npm run db:seed:fresh    # explicit fresh seed
+npm run db:reset         # force-reset DB + seed
+npx prisma db seed       # uses package.json prisma.seed hook
+```
+
+Use `--no-wipe` to append (may hit unique constraints). Use `--only sales` to re-run from a phase onward.
+
+See [seed/README.md](seed/README.md) for folder layout and row-count targets.
+
+### Troubleshooting
+
+- **FK errors** — run `npx prisma db push` or `migrate dev` before seeding.
+- **Unique constraint** — re-run with `npm run db:seed:fresh` or `db:reset`.
+- **`npm run build` fails on Store module** — legacy `src/store/` references a removed model; unrelated to seed (remove that module separately).
 
 ### Format and validate the Prisma schema
 

@@ -1,0 +1,4 @@
+[
+  {"uuid": "12121212-1212-4212-8212-121212121201", "companyUuid": "55555555-5555-4555-8555-555555555501", "financialYearCode": "FY2425", "financialYearName": "FY 2024-25", "startDate": "2024-04-01T00:00:00.000Z", "endDate": "2025-03-31T23:59:59.000Z", "status": "OPEN", "isCurrent": true},
+  {"uuid": "12121212-1212-4212-8212-121212121202", "companyUuid": "55555555-5555-4555-8555-555555555501", "financialYearCode": "FY2324", "financialYearName": "FY 2023-24", "startDate": "2023-04-01T00:00:00.000Z", "endDate": "2024-03-31T23:59:59.000Z", "status": "CLOSED", "isCurrent": false}
+]

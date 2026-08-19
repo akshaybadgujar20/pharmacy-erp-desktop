@@ -1,0 +1,12 @@
+[
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb01", "permissionCode": "SALES_CREATE", "permissionName": "Create Sales Invoice", "module": "SALES", "resource": "SALES_INVOICE", "action": "CREATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02", "permissionCode": "SALES_VIEW", "permissionName": "View Sales Invoice", "module": "SALES", "resource": "SALES_INVOICE", "action": "READ", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb03", "permissionCode": "PURCHASE_CREATE", "permissionName": "Create Purchase Order", "module": "PURCHASE", "resource": "PURCHASE_ORDER", "action": "CREATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb04", "permissionCode": "INVENTORY_VIEW", "permissionName": "View Inventory", "module": "INVENTORY", "resource": "STOCK", "action": "READ", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb05", "permissionCode": "INVENTORY_ADJUST", "permissionName": "Adjust Stock", "module": "INVENTORY", "resource": "STOCK_ADJUSTMENT", "action": "CREATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb06", "permissionCode": "MASTER_MEDICINE", "permissionName": "Manage Medicines", "module": "MASTER", "resource": "MEDICINE", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb07", "permissionCode": "PARTY_MANAGE", "permissionName": "Manage Parties", "module": "PARTY", "resource": "PARTY", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb08", "permissionCode": "REPORT_VIEW", "permissionName": "View Reports", "module": "REPORT", "resource": "REPORT", "action": "READ", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb09", "permissionCode": "USER_ADMIN", "permissionName": "User Administration", "module": "SECURITY", "resource": "USER", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb10", "permissionCode": "SYNC_RUN", "permissionName": "Run Sync", "module": "SYNC", "resource": "SYNC", "action": "EXECUTE", "isSystemPermission": true, "isActive": true}
+]

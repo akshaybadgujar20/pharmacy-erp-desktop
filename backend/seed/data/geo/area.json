@@ -1,0 +1,22 @@
+[
+  {"uuid": "44444444-4444-4444-8444-444444444401", "cityUuid": "33333333-3333-4333-8333-333333333301", "areaCode": "KOTHRUD", "areaName": "Kothrud", "pinCode": "411038", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444402", "cityUuid": "33333333-3333-4333-8333-333333333301", "areaCode": "HINJEWADI", "areaName": "Hinjewadi", "pinCode": "411057", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444403", "cityUuid": "33333333-3333-4333-8333-333333333301", "areaCode": "BANER", "areaName": "Baner", "pinCode": "411045", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444404", "cityUuid": "33333333-3333-4333-8333-333333333302", "areaCode": "ANDHERI", "areaName": "Andheri West", "pinCode": "400053", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444405", "cityUuid": "33333333-3333-4333-8333-333333333302", "areaCode": "BANDRA", "areaName": "Bandra", "pinCode": "400050", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444406", "cityUuid": "33333333-3333-4333-8333-333333333303", "areaCode": "SITABULDI", "areaName": "Sitabuldi", "pinCode": "440012", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444407", "cityUuid": "33333333-3333-4333-8333-333333333304", "areaCode": "INDIRANAGAR", "areaName": "Indiranagar", "pinCode": "560038", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444408", "cityUuid": "33333333-3333-4333-8333-333333333304", "areaCode": "WHITEFIELD", "areaName": "Whitefield", "pinCode": "560066", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444409", "cityUuid": "33333333-3333-4333-8333-333333333305", "areaCode": "SAYYAJIRAO", "areaName": "Sayyajirao Road", "pinCode": "570001", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444410", "cityUuid": "33333333-3333-4333-8333-333333333306", "areaCode": "NAVRANGPURA", "areaName": "Navrangpura", "pinCode": "380009", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444411", "cityUuid": "33333333-3333-4333-8333-333333333307", "areaCode": "ADAJAN", "areaName": "Adajan", "pinCode": "395009", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444412", "cityUuid": "33333333-3333-4333-8333-333333333308", "areaCode": "CP", "areaName": "Connaught Place", "pinCode": "110001", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444413", "cityUuid": "33333333-3333-4333-8333-333333333308", "areaCode": "SAKET", "areaName": "Saket", "pinCode": "110017", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444414", "cityUuid": "33333333-3333-4333-8333-333333333309", "areaCode": "T_NAGAR", "areaName": "T Nagar", "pinCode": "600017", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444415", "cityUuid": "33333333-3333-4333-8333-333333333309", "areaCode": "ADYAR", "areaName": "Adyar", "pinCode": "600020", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444416", "cityUuid": "33333333-3333-4333-8333-333333333310", "areaCode": "RS_PURAM", "areaName": "RS Puram", "pinCode": "641002", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444417", "cityUuid": "33333333-3333-4333-8333-333333333301", "areaCode": "WAKAD", "areaName": "Wakad", "pinCode": "411057", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444418", "cityUuid": "33333333-3333-4333-8333-333333333302", "areaCode": "GHATKOPAR", "areaName": "Ghatkopar", "pinCode": "400086", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444419", "cityUuid": "33333333-3333-4333-8333-333333333304", "areaCode": "KORAMANGALA", "areaName": "Koramangala", "pinCode": "560034", "isActive": true},
+  {"uuid": "44444444-4444-4444-8444-444444444420", "cityUuid": "33333333-3333-4333-8333-333333333306", "areaCode": "SATELLITE", "areaName": "Satellite", "pinCode": "380015", "isActive": true}
+]

@@ -1,0 +1,7 @@
+[
+  {"uuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "roleCode": "ADMIN", "roleName": "Administrator", "description": "Full system access", "isSystemRole": true, "isActive": true},
+  {"uuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc02", "roleCode": "PHARMACIST", "roleName": "Pharmacist", "description": "Dispensing and inventory", "isSystemRole": true, "isActive": true},
+  {"uuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc03", "roleCode": "CASHIER", "roleName": "Cashier", "description": "Sales and payments", "isSystemRole": true, "isActive": true},
+  {"uuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc04", "roleCode": "PROCUREMENT", "roleName": "Procurement", "description": "Purchase operations", "isSystemRole": true, "isActive": true},
+  {"uuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc05", "roleCode": "MANAGER", "roleName": "Branch Manager", "description": "Branch oversight", "isSystemRole": true, "isActive": true}
+]

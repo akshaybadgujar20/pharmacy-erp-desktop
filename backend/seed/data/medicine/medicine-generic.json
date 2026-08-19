@@ -1,0 +1,17 @@
+[
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee01", "genericCode": "GEN-PARACETAMOL", "genericName": "Paracetamol", "therapeuticClass": "Analgesic", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee02", "genericCode": "GEN-IBUPROFEN", "genericName": "Ibuprofen", "therapeuticClass": "NSAID", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee03", "genericCode": "GEN-AZITHROMYCIN", "genericName": "Azithromycin", "therapeuticClass": "Antibiotic", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee04", "genericCode": "GEN-AMOXICILLIN", "genericName": "Amoxicillin", "therapeuticClass": "Antibiotic", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee05", "genericCode": "GEN-METFORMIN", "genericName": "Metformin", "therapeuticClass": "Antidiabetic", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee06", "genericCode": "GEN-ATORVASTATIN", "genericName": "Atorvastatin", "therapeuticClass": "Statin", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee07", "genericCode": "GEN-PANTOPRAZOLE", "genericName": "Pantoprazole", "therapeuticClass": "PPI", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee08", "genericCode": "GEN-OMEPRAZOLE", "genericName": "Omeprazole", "therapeuticClass": "PPI", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee09", "genericCode": "GEN-CETIRIZINE", "genericName": "Cetirizine", "therapeuticClass": "Antihistamine", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee10", "genericCode": "GEN-DICLOFENAC", "genericName": "Diclofenac", "therapeuticClass": "NSAID", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee11", "genericCode": "GEN-TELMISARTAN", "genericName": "Telmisartan", "therapeuticClass": "Antihypertensive", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee12", "genericCode": "GEN-AMLODIPINE", "genericName": "Amlodipine", "therapeuticClass": "Calcium Channel Blocker", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee13", "genericCode": "GEN-SALBUTAMOL", "genericName": "Salbutamol", "therapeuticClass": "Bronchodilator", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee14", "genericCode": "GEN-MONTELUKAST", "genericName": "Montelukast", "therapeuticClass": "Leukotriene Inhibitor", "isActive": true},
+  {"uuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee15", "genericCode": "GEN-CLOPIDOGREL", "genericName": "Clopidogrel", "therapeuticClass": "Antiplatelet", "isActive": true}
+]

@@ -1,0 +1,7 @@
+[
+  {"uuid": "88888888-8888-4888-8888-888888888801", "categoryCode": "GEN", "categoryName": "General Medicines", "isActive": true},
+  {"uuid": "88888888-8888-4888-8888-888888888802", "categoryCode": "ANT", "categoryName": "Antibiotics", "isActive": true},
+  {"uuid": "88888888-8888-4888-8888-888888888803", "categoryCode": "CVS", "categoryName": "Cardiovascular", "isActive": true},
+  {"uuid": "88888888-8888-4888-8888-888888888804", "categoryCode": "DIA", "categoryName": "Diabetes Care", "isActive": true},
+  {"uuid": "88888888-8888-4888-8888-888888888805", "categoryCode": "OTC", "categoryName": "OTC / Wellness", "isActive": true}
+]

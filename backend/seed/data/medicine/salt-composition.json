@@ -1,0 +1,12 @@
+[
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff01", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee01", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "PARA-650MG", "strength": "650", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff02", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee02", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "IBU-400MG", "strength": "400", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff03", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee03", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "AZI-500MG", "strength": "500", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff04", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee04", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "AMOX-500MG", "strength": "500", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff05", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee05", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "MET-500MG", "strength": "500", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff06", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee06", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "ATR-10MG", "strength": "10", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff07", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee07", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "PAN-40MG", "strength": "40", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff08", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee08", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "OME-20MG", "strength": "20", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff09", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee09", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "CET-10MG", "strength": "10", "strengthUnit": "MG", "isActive": true},
+  {"uuid": "ffffffff-ffff-4fff-8fff-fffffffffff10", "genericUuid": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeee10", "unitUuid": "77777777-7777-4777-8777-777777777701", "compositionCode": "DIC-50MG", "strength": "50", "strengthUnit": "MG", "isActive": true}
+]

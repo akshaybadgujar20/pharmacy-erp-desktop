@@ -1,0 +1,6 @@
+[
+  {"uuid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa01", "taxCode": "GST12", "taxName": "GST 12%", "taxType": "GST", "taxRate": "12.00", "effectiveFrom": "2024-04-01T00:00:00.000Z", "isActive": true},
+  {"uuid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02", "taxCode": "GST5", "taxName": "GST 5%", "taxType": "GST", "taxRate": "5.00", "effectiveFrom": "2024-04-01T00:00:00.000Z", "isActive": true},
+  {"uuid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03", "taxCode": "GST18", "taxName": "GST 18%", "taxType": "GST", "taxRate": "18.00", "effectiveFrom": "2024-04-01T00:00:00.000Z", "isActive": true},
+  {"uuid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa04", "taxCode": "GST0", "taxName": "GST 0%", "taxType": "GST", "taxRate": "0.00", "effectiveFrom": "2024-04-01T00:00:00.000Z", "isActive": true}
+]

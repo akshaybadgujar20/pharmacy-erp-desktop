@@ -1,0 +1,21 @@
+[
+  {
+    "uuid": "55555555-5555-4555-8555-555555555501",
+    "companyCode": "APEXPHARMA",
+    "companyName": "Apex Pharmacy Pvt Ltd",
+    "displayName": "Apex Pharmacy",
+    "gstNumber": "27AABCA1234A1Z5",
+    "panNumber": "AABCA1234A",
+    "drugLicenseNumber": "MH/PH/2020/001",
+    "email": "info@apexpharmacy.in",
+    "phoneNumber": "+912020123456",
+    "website": "https://apexpharmacy.in",
+    "addressLine1": "Plot 12, Pharma Park",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "country": "India",
+    "pinCode": "411057",
+    "isDefault": true,
+    "isActive": true
+  }
+]

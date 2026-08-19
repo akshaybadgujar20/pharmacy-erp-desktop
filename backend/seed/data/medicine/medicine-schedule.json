@@ -1,0 +1,6 @@
+[
+  {"uuid": "99999999-9999-4999-8999-999999999901", "scheduleCode": "OTC", "scheduleName": "Over The Counter", "requiresPrescription": false, "isActive": true},
+  {"uuid": "99999999-9999-4999-8999-999999999902", "scheduleCode": "H", "scheduleName": "Schedule H", "requiresPrescription": true, "isActive": true},
+  {"uuid": "99999999-9999-4999-8999-999999999903", "scheduleCode": "H1", "scheduleName": "Schedule H1", "requiresPrescription": true, "isActive": true},
+  {"uuid": "99999999-9999-4999-8999-999999999904", "scheduleCode": "X", "scheduleName": "Schedule X (Narcotic)", "requiresPrescription": true, "isActive": true}
+]
