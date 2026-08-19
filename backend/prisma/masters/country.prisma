@@ -1,15 +1,15 @@
 model Country {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   countryCode String @unique @map("country_code")
   isoAlpha2   String @unique @map("iso_alpha2")
   isoAlpha3   String @unique @map("iso_alpha3")
 
-  countryName String @map("country_name")
-  nationality String?
-  phoneCode   String? @map("phone_code")
+  countryName  String  @map("country_name")
+  nationality  String?
+  phoneCode    String? @map("phone_code")
   currencyCode String? @map("currency_code")
   timezone     String?
 

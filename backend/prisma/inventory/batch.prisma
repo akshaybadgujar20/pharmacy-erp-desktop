@@ -1,7 +1,7 @@
 model Batch {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   medicineId BigInt @map("medicine_id")
 
@@ -10,11 +10,8 @@ model Batch {
   manufacturingDate DateTime? @map("manufacturing_date")
   expiryDate        DateTime  @map("expiry_date")
 
-  purchaseRate Decimal @map("purchase_rate")
-  mrp          Decimal
-  saleRate     Decimal @map("sale_rate")
-
-  discountPercent Decimal? @map("discount_percent")
+  purchaseRate Decimal @map("purchase_rate") // Lot cost snapshot at receipt
+  mrp          Decimal // Statutory MRP printed on pack/lot
 
   barcode String?
 
@@ -23,12 +20,16 @@ model Batch {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  updatedBy BigInt?   @map("updated_by")
+  deletedBy BigInt?   @map("deleted_by")
 
   version Int @default(1)
 
-  medicine Medicine @relation(fields: [medicineId], references: [id])
+  medicine      Medicine @relation(fields: [medicineId], references: [id])
+  updatedByUser User?    @relation("BatchUpdatedBy", fields: [updatedBy], references: [id])
+  deletedByUser User?    @relation("BatchDeletedBy", fields: [deletedBy], references: [id])
 
-  stock                Stock?
+  stocks               Stock[]
   stockMovements       StockMovement[]
   stockAdjustmentItems StockAdjustmentItem[]
   stockTransferItems   StockTransferItem[]
@@ -38,9 +39,11 @@ model Batch {
   purchaseReturnItems  PurchaseReturnItem[]
   salesInvoiceItems    SalesInvoiceItem[]
   salesReturnItems     SalesReturnItem[]
+  goodsReceiptItems    GoodsReceiptItem[]
 
   @@unique([medicineId, batchNumber])
   @@index([medicineId])
+  @@index([medicineId, expiryDate])
   @@index([expiryDate])
   @@index([barcode])
   @@index([isActive])

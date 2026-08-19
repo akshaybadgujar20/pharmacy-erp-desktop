@@ -1,13 +1,8 @@
-enum PartyType {
-  PERSON
-  ORGANIZATION
-}
-
 model Party {
-  id          BigInt    @id @default(autoincrement())
-  uuid        String    @unique
-  partyType   PartyType @map("party_type")
-  displayName String    @map("display_name")
+  id          BigInt @id @default(autoincrement())
+  uuid        String @unique @default(uuid())
+  partyType   String @map("party_type") // PERSON, ORGANIZATION
+  displayName String @map("display_name")
 
   firstName  String? @map("first_name")
   middleName String? @map("middle_name")
@@ -20,6 +15,8 @@ model Party {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  updatedBy BigInt?   @map("updated_by")
+  deletedBy BigInt?   @map("deleted_by")
 
   version Int @default(1)
 
@@ -27,10 +24,14 @@ model Party {
   addresses  PartyAddress[]
   contacts   PartyContact[]
 
-  customer Customer?
-  supplier Supplier?
-  doctor   Doctor?
-  employee Employee?
+  updatedByUser User? @relation("PartyUpdatedBy", fields: [updatedBy], references: [id])
+  deletedByUser User? @relation("PartyDeletedBy", fields: [deletedBy], references: [id])
+
+  customer     Customer?
+  supplier     Supplier?
+  doctor       Doctor?
+  employee     Employee?
+  manufacturer Manufacturer?
 
   @@index([displayName])
   @@index([partyType])

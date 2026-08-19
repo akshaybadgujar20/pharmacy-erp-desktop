@@ -4,7 +4,7 @@
 
 The StockTransferItem table stores the individual inventory items included in a StockTransfer.
 
-A single StockTransfer can contain multiple medicines/batches. Each item identifies the batch being transferred and the quantity being moved from the source branch to the destination branch.
+A single StockTransfer can contain multiple batches. Each item identifies the org-global batch being transferred and the quantities moved from the source branch to the destination branch.
 
 Every StockTransferItem belongs to exactly one StockTransfer.
 
@@ -14,16 +14,15 @@ Every StockTransferItem belongs to exactly one StockTransfer.
 
 - Every StockTransfer must contain at least one StockTransferItem.
 - Every StockTransferItem must belong to a valid StockTransfer.
-- Every StockTransferItem must reference a valid Batch.
-- Transfer quantity must be greater than zero.
-- Transfer quantity cannot exceed the available stock at the source location.
-- Only approved transfers can proceed to inventory movement.
-- A StockTransferItem must not be modified after the transfer has reached the final completed state.
-- The source inventory is reduced through a StockMovement of type OUT.
-- The destination inventory is increased through a StockMovement of type IN.
+- Every StockTransferItem must reference a valid Batch (org-global).
+- `sentQuantity` must be greater than zero and cannot exceed source branch Stock.
+- `receivedQuantity` and `damagedQuantity` are recorded at receipt (may differ from sent).
+- A batch can appear only once per transfer document.
+- Only approved/dispatched transfers can proceed to inventory movement.
+- Source inventory is reduced via StockMovement OUT at `sourceBranchId`.
+- Destination inventory is increased via StockMovement IN at `destinationBranchId`.
 - Stock must never be updated directly from StockTransferItem.
 - Cancelled transfers must not create inventory movements.
-- Historical transfer items should be preserved for audit purposes.
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
 - Optimistic locking is maintained using the version column.
@@ -33,7 +32,7 @@ Every StockTransferItem belongs to exactly one StockTransfer.
 ## Relationships
 
 ```text
-StockTransfer
+StockTransfer (sourceBranchId, destinationBranchId)
        │
        │ 1
        ▼
@@ -41,44 +40,30 @@ StockTransferItem
        │
        │ N
        ▼
-     Batch
+     Batch (org-global)
        │
-       ├────────► Source Stock
+       ├────────► Stock (sourceBranchId, batchId)
        │
-       └────────► Destination Stock
-```
-
-A single StockTransfer can contain multiple StockTransferItem records.
-
-```text
-StockTransfer ST000001
-    │
-    ├── StockTransferItem
-    │     Batch: 101
-    │     Quantity: 10
-    │
-    ├── StockTransferItem
-    │     Batch: 205
-    │     Quantity: 25
-    │
-    └── StockTransferItem
-          Batch: 301
-          Quantity: 5
+       └────────► Stock (destinationBranchId, batchId)
 ```
 
 ---
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
+| Category | Column | SQLite | PostgreSQL (JPA) | Nullable | Description |
+|----------|--------|---------|------------------|----------|-------------|
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier used for synchronization |
+| Identifier | uuid | TEXT | UUID/TEXT | No | Global unique identifier |
 | Foreign Key | stockTransferId | INTEGER | BIGINT | No | Parent StockTransfer |
 | Foreign Key | batchId | INTEGER | BIGINT | No | Batch being transferred |
-| Business | quantity | DECIMAL | NUMERIC | No | Quantity transferred from source to destination |
+| Business | sentQuantity | REAL | NUMERIC | No | Quantity dispatched from source |
+| Business | receivedQuantity | REAL | NUMERIC | Yes | Quantity received at destination |
+| Business | damagedQuantity | REAL | NUMERIC | No | Quantity damaged in transit |
+| Business | remarks | TEXT | TEXT | Yes | Line remarks |
 | Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
 | Audit | updatedAt | DATETIME | TIMESTAMP | No | Last update timestamp |
+| Audit | deletedAt | DATETIME | TIMESTAMP | Yes | Soft delete timestamp |
 | Audit | version | INTEGER | INTEGER | No | Optimistic locking version |
 
 ---
@@ -87,9 +72,10 @@ StockTransfer ST000001
 
 - Primary Key (id)
 - Unique (uuid)
+- Unique (stockTransferId, batchId)
 - Foreign Key (stockTransferId → StockTransfer.id)
 - Foreign Key (batchId → Batch.id)
-- CHECK (quantity > 0)
+- CHECK (sentQuantity > 0)
 - CHECK (version >= 1)
 
 ---
@@ -98,6 +84,7 @@ StockTransfer ST000001
 
 - PK_StockTransferItem (id)
 - UK_StockTransferItem_UUID
+- UK_StockTransferItem_Transfer_Batch
 - IDX_StockTransferItem_Transfer
 - IDX_StockTransferItem_Batch
 
@@ -105,106 +92,11 @@ StockTransfer ST000001
 
 ## Sample Records
 
-| id | stockTransferId | batchId | quantity |
-|----|-----------------|---------|----------|
-| 1 | 1 | 101 | 10 |
-| 2 | 1 | 205 | 25 |
-| 3 | 2 | 301 | 5 |
-
-Example:
-
-```text
-StockTransfer ST000001
-Source: Branch 1
-Destination: Branch 2
-
-    │
-    ├── Item 1
-    │     Batch: 101
-    │     Quantity: 10
-    │
-    ├── Item 2
-    │     Batch: 205
-    │     Quantity: 25
-    │
-    └── Item 3
-          Batch: 301
-          Quantity: 5
-```
-
----
-
-## Inventory Flow
-
-StockTransferItem does not directly update Stock.
-
-The inventory flow is:
-
-```text
-StockTransfer
-       │
-       ▼
-StockTransferItem
-       │
-       ▼
-Approval
-       │
-       ▼
-Dispatch
-       │
-       ├──────────────► StockMovement (OUT)
-       │
-       ▼
-    In Transit
-       │
-       ▼
-    Receipt
-       │
-       └──────────────► StockMovement (IN)
-```
-
-For example:
-
-```text
-Source Branch Stock:
-Batch 101 = 100
-
-Transfer Item:
-quantity = 10
-
-        │
-        ▼
-
-StockMovement OUT:
-quantity = -10
-
-        │
-        ▼
-
-Source Stock:
-100 → 90
-```
-
-When the destination receives the transfer:
-
-```text
-Destination Branch Stock:
-Batch 101 = 20
-
-        │
-        ▼
-
-StockMovement IN:
-quantity = +10
-
-        │
-        ▼
-
-Destination Stock:
-20 → 30
-```
-
-The StockMovement records provide the inventory transaction history.
+| id | stockTransferId | batchId | sentQuantity | receivedQuantity | damagedQuantity |
+|----|-----------------|---------|-------------:|-----------------:|----------------:|
+| 1 | 1 | 101 | 10 | 10 | 0 |
+| 2 | 1 | 205 | 25 | 24 | 1 |
+| 3 | 2 | 301 | 5 | NULL | 0 |
 
 ---
 
@@ -212,39 +104,55 @@ The StockMovement records provide the inventory transaction history.
 
 ```prisma
 model StockTransferItem {
-  id                BigInt   @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid              String   @unique @db.Uuid
+  stockTransferId BigInt @map("stock_transfer_id")
+  batchId         BigInt @map("batch_id")
 
-  stockTransferId   BigInt
-  batchId           BigInt
+  sentQuantity     Decimal  @map("sent_quantity")
+  receivedQuantity Decimal? @map("received_quantity")
+  damagedQuantity  Decimal  @default(0) @map("damaged_quantity")
 
-  quantity          Decimal
+  remarks String? @map("remarks")
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  version           Int      @default(1)
+  version Int @default(1)
 
-  stockTransfer     StockTransfer @relation(
-    fields: [stockTransferId],
-    references: [id]
-  )
+  stockTransfer StockTransfer @relation(fields: [stockTransferId], references: [id])
+  batch         Batch         @relation(fields: [batchId], references: [id])
 
-  batch             Batch @relation(
-    fields: [batchId],
-    references: [id]
-  )
-
+  @@unique([stockTransferId, batchId])
   @@index([stockTransferId])
   @@index([batchId])
+  @@map("stock_transfer_items")
 }
 ```
 
-The parent `StockTransfer` model contains:
+---
 
-```prisma
-items StockTransferItem[]
+## Inventory Flow
+
+```text
+StockTransfer
+       │
+       ▼
+StockTransferItem (batchId, sentQuantity)
+       │
+       ▼
+Dispatch → StockMovement OUT (sourceBranchId)
+       │
+       ▼
+Source Stock (sourceBranchId, batchId) decreases
+       │
+       ▼
+Receipt → StockMovement IN (destinationBranchId)
+       │
+       ▼
+Destination Stock (destinationBranchId, batchId) increases
 ```
 
 ---
@@ -252,13 +160,7 @@ items StockTransferItem[]
 ## Notes
 
 - This is the detail table for StockTransfer.
-- StockTransfer is the header and StockTransferItem contains the individual medicines/batches and quantities being transferred.
-- One transfer can contain multiple batches.
-- Quantity is always positive because it represents the amount being transferred.
-- The OUT and IN signs are determined when the corresponding StockMovement records are created.
-- StockTransferItem should not directly modify Stock.
-- StockMovement remains the inventory transaction ledger and source of truth for stock changes.
-- For transfers using a dispatch/receipt workflow, the OUT movement is created at dispatch and the IN movement is created at receipt.
-- Historical transfer items should never be deleted after the transfer has been completed.
+- Batch is org-global; Stock balances are per branch.
+- Quantity fields track dispatch vs receipt variance.
+- StockMovement remains the inventory transaction ledger.
 - Supports offline-first synchronization using UUID.
-- Compatible with both SQLite and PostgreSQL.

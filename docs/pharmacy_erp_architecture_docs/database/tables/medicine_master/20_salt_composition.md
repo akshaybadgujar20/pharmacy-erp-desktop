@@ -102,14 +102,14 @@ MedicineGeneric (1)
 model SaltComposition {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   genericId         BigInt
   unitId            BigInt
 
   compositionCode   String   @unique
 
-  strength          Decimal  @db.Decimal(10,3)
+  strength          Decimal  
   strengthUnit      String
 
   description       String?

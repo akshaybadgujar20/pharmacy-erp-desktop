@@ -1,16 +1,21 @@
 model Outbox {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   entityType String @map("entity_type")
-  entityId   BigInt @map("entity_id")
+  entityUuid String @map("entity_uuid")
 
   operation String
 
   payload Json
 
   payloadVersion Int @default(1) @map("payload_version")
+
+  deviceId    String  @map("device_id")
+  branchId    BigInt? @map("branch_id")
+  operationId String  @unique @map("operation_id")
+  sequenceNo  BigInt  @map("sequence_no")
 
   syncStatus String @default("PENDING") @map("sync_status")
 
@@ -23,9 +28,13 @@ model Outbox {
 
   version Int @default(1)
 
+  branch Branch? @relation(fields: [branchId], references: [id])
+
   @@index([syncStatus])
   @@index([createdAt])
-  @@index([entityType, entityId])
+  @@index([entityType, entityUuid])
   @@index([operation])
   @@index([retryCount])
+  @@index([sequenceNo])
+  @@index([deviceId])
 }

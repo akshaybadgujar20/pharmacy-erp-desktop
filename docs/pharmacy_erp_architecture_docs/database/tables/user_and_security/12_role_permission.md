@@ -91,7 +91,7 @@ model RolePermission {
   roleId         BigInt
   permissionId   BigInt
 
-  uuid           String   @unique @db.Uuid
+  uuid           String   @unique 
 
   isGranted      Boolean  @default(true)
 

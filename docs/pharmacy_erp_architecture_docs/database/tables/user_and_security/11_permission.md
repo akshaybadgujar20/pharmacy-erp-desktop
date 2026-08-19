@@ -104,7 +104,7 @@ Permission (1)
 model Permission {
   id                  BigInt   @id @default(autoincrement())
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique 
 
   permissionCode      String   @unique
   permissionName      String

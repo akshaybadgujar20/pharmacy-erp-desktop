@@ -1,19 +1,10 @@
-enum RoleType {
-  CUSTOMER
-  SUPPLIER
-  DOCTOR
-  EMPLOYEE
-  ADMIN
-  OTHER
-}
-
 model PartyRole {
   id      BigInt @id @default(autoincrement())
   partyId BigInt @map("party_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
-  roleType RoleType @map("role_type")
+  roleType String @map("role_type") // CUSTOMER, SUPPLIER, DOCTOR, EMPLOYEE, ADMIN, OTHER
 
   isPrimary Boolean @default(false) @map("is_primary")
   isActive  Boolean @default(true) @map("is_active")

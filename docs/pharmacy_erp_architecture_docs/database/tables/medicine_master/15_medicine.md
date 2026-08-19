@@ -122,7 +122,7 @@ Manufacturer (1)
 model Medicine {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   medicineCode           String   @unique
   medicineName           String

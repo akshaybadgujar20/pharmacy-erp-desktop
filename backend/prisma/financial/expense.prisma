@@ -1,0 +1,36 @@
+model Expense {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
+
+  expenseNumber String @map("expense_number")
+
+  branchId BigInt @map("branch_id")
+
+  category    String   @map("category")
+  description String?  @map("description")
+  amount      Decimal  @map("amount")
+  expenseDate DateTime @map("expense_date")
+
+  paymentMethod String? @map("payment_method")
+  reference     String? @map("reference")
+
+  status String @default("POSTED") @map("status")
+
+  createdBy BigInt? @map("created_by")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  branch        Branch @relation(fields: [branchId], references: [id])
+  createdByUser User?  @relation("ExpenseCreatedBy", fields: [createdBy], references: [id])
+
+  @@unique([branchId, expenseNumber])
+  @@index([branchId])
+  @@index([expenseDate])
+  @@index([category])
+  @@index([status])
+  @@map("expenses")
+}

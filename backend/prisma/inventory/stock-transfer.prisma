@@ -1,27 +1,8 @@
-// 1. Inter-Branch Stock Transfer Lifecycle Status
-enum StockTransferStatus {
-  DRAFT               // Transfer request created / items being picked
-  PENDING_APPROVAL    // Awaiting dispatch authorization
-  DISPATCHED          // Stock deducted from source branch and packed
-  IN_TRANSIT          // En route with courier / internal transport van
-  PARTIALLY_RECEIVED  // Destination received goods, but some items damaged/missing
-  COMPLETED           // Destination acknowledged and safely restocked all items
-  REJECTED            // Destination rejected transfer (e.g., cold-chain breach)
-  CANCELLED           // Cancelled before dispatch
-}
-
-// 2. Transfer Purpose / Priority (Optional)
-enum StockTransferType {
-  ROUTINE_REPLENISHMENT // Regular warehouse-to-store stock replenishment
-  EMERGENCY_TRANSFER    // Urgent patient prescription demand
-  EXCESS_REBALANCING    // Moving slow-moving inventory to high-demand branch
-}
-
 model StockTransfer {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  transferNumber String @unique @map("transfer_number")
+  transferNumber String @map("transfer_number")
 
   sourceBranchId      BigInt @map("source_branch_id")
   destinationBranchId BigInt @map("destination_branch_id")
@@ -30,9 +11,10 @@ model StockTransfer {
   expectedArrivalDate DateTime? @map("expected_arrival_date")
   receivedDate        DateTime? @map("received_date")
 
-  // ✅ Enums Applied Here
-  status       StockTransferStatus @default(DRAFT) @map("status")
-  transferType StockTransferType   @default(ROUTINE_REPLENISHMENT) @map("transfer_type")
+  // Status: DRAFT, PENDING_APPROVAL, DISPATCHED, IN_TRANSIT, PARTIALLY_RECEIVED, COMPLETED, REJECTED, CANCELLED
+  status       String @default("DRAFT") @map("status")
+  // Type: ROUTINE_REPLENISHMENT, EMERGENCY_TRANSFER, EXCESS_REBALANCING
+  transferType String @default("ROUTINE_REPLENISHMENT") @map("transfer_type")
 
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
   approvedAt           DateTime? @map("approved_at")
@@ -47,14 +29,15 @@ model StockTransfer {
 
   version Int @default(1)
 
-  // Named Branch Relations
   sourceBranch      Branch @relation("SourceStockTransfers", fields: [sourceBranchId], references: [id])
   destinationBranch Branch @relation("DestinationStockTransfers", fields: [destinationBranchId], references: [id])
 
-  approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+  approvedBy    Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+  createdByUser User?     @relation("StockTransferCreatedBy", fields: [createdBy], references: [id])
 
   items StockTransferItem[]
 
+  @@unique([sourceBranchId, transferNumber])
   @@index([sourceBranchId])
   @@index([destinationBranchId])
   @@index([transferDate])

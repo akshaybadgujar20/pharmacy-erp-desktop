@@ -4,7 +4,7 @@
 
 This document provides a high-level overview of the Pharmacy ERP database architecture.
 
-It explains h   
+It explains how the database is designed to:
 
 - Normalize common information.
 - Avoid duplicate data.
@@ -14,6 +14,26 @@ It explains h
 - Keep SQLite and PostgreSQL schemas compatible.
 - Maintain complete audit history.
 - Use soft delete wherever applicable.
+- Use **String** fields for status/type values (not Prisma enums) for SQLite compatibility.
+
+---
+
+# Local vs Cloud Persistence
+
+| Aspect | Local (Desktop) | Cloud (Server) |
+|--------|-----------------|----------------|
+| Database | **SQLite** | **PostgreSQL** |
+| ORM | **Prisma** | **Spring Boot + JPA/Hibernate** |
+| Runtime | Electron + NestJS | Spring Boot REST API |
+| Primary key | `BigInt` autoincrement (local FK efficiency) | `BIGINT` (mapped from cloud sequences) |
+| Sync identity | `uuid String @unique @default(uuid())` on all syncable entities | Same UUID as authoritative merge key |
+| JSON payloads | Prisma `Json` → TEXT in SQLite | JPA `@Column(columnDefinition = "jsonb")` on Outbox/SyncConflict |
+| Decimal | Prisma `Decimal` → REAL in SQLite | JPA `NUMERIC` in PostgreSQL |
+| Status fields | `String` validated in application code | `String` + optional PostgreSQL CHECK constraints |
+
+The Prisma schema in `backend/prisma/` is the **local source of truth**. Cloud JPA entities mirror the same logical model; PostgreSQL-specific types (JSONB, NUMERIC precision) are applied in JPA mappings only — not via `@db.*` in Prisma.
+
+See [[prisma_sqlite_jpa_postgres_alignment]] for the full alignment guide.
 
 ---
 
@@ -56,13 +76,14 @@ Goods Receipt
 Purchase Invoice
        │
        ▼
-      Batch
+      Batch (org-global lot)
+       │
+       ├── Stock @ Branch A
+       ├── Stock @ Branch B
+       └── ...
        │
        ▼
-      Stock
-       │
-       ▼
-Stock Movement
+Stock Movement (per branch)
 
 ────────────────────────────────────────────────────────────
 
@@ -266,7 +287,7 @@ Tables
 
 ---
 
-## 12. [[aduit|Audit]]
+## 12. [[audit|Audit]]
 
 Tracks all changes made in the ERP.
 
@@ -338,11 +359,17 @@ tables/
 
 # Target Databases
 
-Development
-- SQLite
+**Local development / desktop (offline-first)**
 
-Production
-- PostgreSQL
+- SQLite via Prisma + NestJS
 
-ORM
-- Prisma
+**Cloud production**
+
+- PostgreSQL via Spring Boot + JPA
+
+**Shared schema principles**
+
+- No `@db.Uuid`, `@db.Decimal`, or Prisma `enum` in the Prisma schema
+- `uuid String @unique @default(uuid())` for sync identity
+- `String` status/type fields with application-level validation
+- Batch 1:N Stock (per branch via `@@unique([branchId, batchId])`)

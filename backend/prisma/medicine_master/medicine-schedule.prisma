@@ -1,7 +1,7 @@
 model MedicineSchedule {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   scheduleCode String @unique @map("schedule_code")
   scheduleName String @unique @map("schedule_name")

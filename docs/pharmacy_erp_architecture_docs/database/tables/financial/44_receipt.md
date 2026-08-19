@@ -111,14 +111,14 @@ Receipt
 model Receipt {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   receiptNumber          String   @unique
 
   receiptType            String
   receiptDate            DateTime
 
-  amount                 Decimal  @db.Decimal(14,2)
+  amount                 Decimal  
 
   receiptMethod          String
 

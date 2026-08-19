@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The StockAdjustment table records manual corrections made to inventory when the physical stock differs from the system stock.
+The StockAdjustment table records manual corrections made to inventory when the physical stock differs from the system stock at a **specific branch**.
 
 Adjustments are required for situations such as:
 
@@ -15,18 +15,20 @@ Adjustments are required for situations such as:
 - Free samples
 - Internal consumption
 
-Every Stock Adjustment automatically generates one or more StockMovement records.
+Every Stock Adjustment automatically generates one or more StockMovement records at the branch level.
 
 ---
 
 ## Business Rules
 
+- Every adjustment belongs to exactly one Branch.
 - Every adjustment must contain at least one adjustment item.
 - Every adjustment requires a valid adjustment reason.
 - Adjustments should be approved according to company policy.
 - Approved adjustments cannot be modified.
 - Cancelling an adjustment should create a reversal StockMovement instead of deleting records.
-- Every adjustment updates the Stock table through StockMovement.
+- Every adjustment updates the branch Stock table through StockMovement.
+- `adjustmentNumber` is unique **per branch**, not globally.
 - Soft delete should not be used for approved adjustments.
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
@@ -37,31 +39,35 @@ Every Stock Adjustment automatically generates one or more StockMovement records
 ## Relationships
 
 ```
-Employee
+Branch
     │
     ▼
 StockAdjustment
     │
-    ├──────< StockAdjustmentItem
+    ├──────< StockAdjustmentItem ──► Batch
     │
-    └────────────► StockMovement
+    └────────────► StockMovement (branch-scoped)
+                         │
+                         ▼
+                      Stock (branchId + batchId)
 ```
 
 ---
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
+| Category | Column | SQLite | PostgreSQL (JPA) | Nullable | Description |
+|----------|--------|---------|------------------|----------|-------------|
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier |
-| Business | adjustmentNumber | TEXT | VARCHAR(30) | No | Unique adjustment document number |
-| Business | adjustmentType | TEXT | VARCHAR(30) | No | DAMAGE, EXPIRED, LOST, FOUND, OPENING, CORRECTION |
+| Identifier | uuid | TEXT | UUID/TEXT | No | Global unique identifier |
+| Foreign Key | branchId | INTEGER | BIGINT | No | Branch where adjustment applies |
+| Business | adjustmentNumber | TEXT | VARCHAR(30) | No | Branch-scoped adjustment document number |
+| Business | adjustmentType | TEXT | VARCHAR(30) | No | DAMAGE, EXPIRED, LOST, etc. (String) |
 | Business | adjustmentDate | DATETIME | TIMESTAMP | No | Adjustment date |
 | Business | reason | TEXT | TEXT | No | Reason for adjustment |
 | Foreign Key | approvedByEmployeeId | INTEGER | BIGINT | Yes | Approving employee |
 | Business | approvedAt | DATETIME | TIMESTAMP | Yes | Approval date |
-| Status | status | TEXT | VARCHAR(20) | No | DRAFT, APPROVED, CANCELLED |
+| Status | status | TEXT | VARCHAR(20) | No | DRAFT, APPROVED, CANCELLED (String) |
 | Status | isActive | INTEGER | BOOLEAN | No | Active record |
 | Audit | createdBy | INTEGER | BIGINT | Yes | Employee creating adjustment |
 | Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
@@ -75,10 +81,9 @@ StockAdjustment
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (adjustmentNumber)
+- Unique (branchId, adjustmentNumber)
+- Foreign Key (branchId → Branch.id)
 - Foreign Key (approvedByEmployeeId → Employee.id)
-- CHECK (status IN ('DRAFT','APPROVED','CANCELLED'))
-- CHECK (adjustmentType IN ('DAMAGE','EXPIRED','LOST','FOUND','OPENING','CORRECTION'))
 - CHECK (version >= 1)
 
 ---
@@ -87,7 +92,8 @@ StockAdjustment
 
 - PK_StockAdjustment (id)
 - UK_StockAdjustment_UUID
-- UK_StockAdjustment_Number
+- UK_StockAdjustment_Branch_Number
+- IDX_StockAdjustment_Branch
 - IDX_StockAdjustment_Date
 - IDX_StockAdjustment_Status
 - IDX_StockAdjustment_Type
@@ -97,11 +103,13 @@ StockAdjustment
 
 ## Sample Records
 
-| id | adjustmentNumber | adjustmentType | adjustmentDate | status |
-|----|------------------|----------------|----------------|---------|
-| 1 | ADJ000001 | DAMAGE | 2026-08-01 | APPROVED |
-| 2 | ADJ000002 | EXPIRED | 2026-08-02 | APPROVED |
-| 3 | ADJ000003 | STOCK_COUNT | 2026-08-03 | DRAFT |
+| id | branchId | adjustmentNumber | adjustmentType | adjustmentDate | status |
+|----|----------|------------------|----------------|----------------|---------|
+| 1 | 1 | ADJ000001 | DAMAGE | 2026-08-01 | APPROVED |
+| 2 | 1 | ADJ000002 | EXPIRED | 2026-08-02 | APPROVED |
+| 3 | 2 | ADJ000001 | OPENING | 2026-08-03 | DRAFT |
+
+Note: Branch 1 and Branch 2 can both use `ADJ000001` because adjustment numbers are branch-scoped.
 
 ---
 
@@ -109,39 +117,43 @@ StockAdjustment
 
 ```prisma
 model StockAdjustment {
-  id                     BigInt   @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid                   String   @unique @db.Uuid
+  adjustmentNumber String @map("adjustment_number")
 
-  adjustmentNumber       String   @unique
+  branchId BigInt @map("branch_id")
 
-  adjustmentType         String
-  adjustmentDate         DateTime
+  adjustmentType String   @map("adjustment_type")
+  adjustmentDate DateTime @map("adjustment_date")
 
-  reason                 String
+  reason String
 
-  approvedByEmployeeId   BigInt?
-  approvedAt             DateTime?
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
 
-  status                 String
+  status   String
+  isActive Boolean @default(true) @map("is_active")
 
-  isActive               Boolean  @default(true)
+  createdBy BigInt? @map("created_by")
 
-  createdBy              BigInt?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-  deletedAt              DateTime?
+  version Int @default(1)
 
-  version                Int      @default(1)
+  branch     Branch    @relation(fields: [branchId], references: [id])
+  approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
 
-  approvedBy             Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+  items StockAdjustmentItem[]
 
-  items                  StockAdjustmentItem[]
-
+  @@unique([branchId, adjustmentNumber])
+  @@index([branchId])
   @@index([adjustmentDate])
   @@index([status])
   @@index([adjustmentType])
+  @@map("stock_adjustments")
 }
 ```
 
@@ -149,11 +161,10 @@ model StockAdjustment {
 
 ## Notes
 
-- This is the **header table** for stock adjustments.
-- Individual medicine adjustments should be stored in a separate **StockAdjustmentItem** table.
+- This is the **header table** for branch-scoped stock adjustments.
+- Individual medicine adjustments should be stored in **StockAdjustmentItem** (references Batch; branch comes from header).
 - Approval workflow should be enforced before inventory is updated.
-- Every approved adjustment must automatically generate corresponding **StockMovement** records.
+- Every approved adjustment must automatically generate corresponding **StockMovement** records at `branchId`.
 - Stock should never be updated directly from this table.
 - Historical adjustments should be preserved for audit and compliance purposes.
 - Supports offline-first synchronization using UUID.
-- Compatible with both SQLite and PostgreSQL.

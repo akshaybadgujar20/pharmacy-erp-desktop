@@ -2,32 +2,32 @@
 
 ## Purpose
 
-The StockTransfer table records inventory transfers between branches, warehouses, or storage locations.
+The StockTransfer table records inventory transfers between branches.
 
-It provides complete traceability of inventory movement without affecting the overall company inventory.
+It provides complete traceability of inventory movement between branch-scoped Stock balances without affecting overall company inventory totals.
 
 Typical scenarios include:
 
 - Branch-to-Branch Transfer
 - Warehouse-to-Store Transfer
 - Store-to-Warehouse Return
-- Shelf Reorganization
 - Emergency Stock Transfer
 
-Every completed Stock Transfer generates corresponding **StockMovement** records for both the source and destination locations.
+Every completed Stock Transfer generates corresponding **StockMovement** records for both the source and destination branches.
 
 ---
 
 ## Business Rules
 
 - Every transfer must have at least one StockTransferItem.
-- Source and Destination locations must be different.
-- Transfer quantity cannot exceed available stock.
-- Only approved transfers update inventory.
+- Source and Destination branches must be different.
+- Transfer quantity cannot exceed available stock at the source branch.
+- Only approved/dispatched transfers update inventory.
 - Cancelled transfers do not affect stock.
 - Every completed transfer creates two StockMovement records:
-  - OUT from source location
-  - IN to destination location
+  - OUT from source branch (reduces source Stock)
+  - IN to destination branch (increases destination Stock — same Batch, new branch Stock row if needed)
+- `transferNumber` is unique **per source branch**, not globally.
 - Soft delete should not be used for completed transfers.
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
@@ -38,36 +38,37 @@ Every completed Stock Transfer generates corresponding **StockMovement** records
 ## Relationships
 
 ```
-Branch/Warehouse
-        │
-        ▼
- StockTransfer
-        │
-        ├──────< StockTransferItem
-        │
-        ├────────► StockMovement (OUT)
-        │
-        └────────► StockMovement (IN)
+Branch (source)                    Branch (destination)
+        │                                    │
+        └──────────► StockTransfer ◄─────────┘
+                           │
+                    ├──────< StockTransferItem ──► Batch (org-global)
+                    │
+                    ├────────► StockMovement (OUT, source branch)
+                    │
+                    └────────► StockMovement (IN, destination branch)
 ```
 
 ---
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
+| Category | Column | SQLite | PostgreSQL (JPA) | Nullable | Description |
+|----------|--------|---------|------------------|----------|-------------|
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier |
-| Business | transferNumber | TEXT | VARCHAR(30) | No | Unique transfer document number |
-| Foreign Key | sourceBranchId | INTEGER | BIGINT | No | Source branch/warehouse |
-| Foreign Key | destinationBranchId | INTEGER | BIGINT | No | Destination branch/warehouse |
+| Identifier | uuid | TEXT | UUID/TEXT | No | Global unique identifier |
+| Business | transferNumber | TEXT | VARCHAR(30) | No | Unique per source branch |
+| Foreign Key | sourceBranchId | INTEGER | BIGINT | No | Source branch |
+| Foreign Key | destinationBranchId | INTEGER | BIGINT | No | Destination branch |
 | Business | transferDate | DATETIME | TIMESTAMP | No | Transfer date |
 | Business | expectedArrivalDate | DATETIME | TIMESTAMP | Yes | Expected arrival |
 | Business | receivedDate | DATETIME | TIMESTAMP | Yes | Goods received date |
-| Status | status | TEXT | VARCHAR(20) | No | DRAFT, APPROVED, IN_TRANSIT, RECEIVED, CANCELLED |
+| Status | status | TEXT | VARCHAR(20) | No | DRAFT, DISPATCHED, COMPLETED, etc. (String) |
+| Business | transferType | TEXT | VARCHAR(30) | No | ROUTINE_REPLENISHMENT, EMERGENCY_TRANSFER, etc. |
 | Foreign Key | approvedByEmployeeId | INTEGER | BIGINT | Yes | Approving employee |
+| Business | approvedAt | DATETIME | TIMESTAMP | Yes | Approval timestamp |
 | Business | remarks | TEXT | TEXT | Yes | Transfer remarks |
-| Audit | createdBy | INTEGER | BIGINT | Yes | Created by employee |
+| Audit | createdBy | INTEGER | BIGINT | Yes | Created by user |
 | Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
 | Audit | updatedAt | DATETIME | TIMESTAMP | No | Last update timestamp |
 | Audit | deletedAt | DATETIME | TIMESTAMP | Yes | Normally unused |
@@ -79,12 +80,11 @@ Branch/Warehouse
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (transferNumber)
+- Unique (sourceBranchId, transferNumber)
 - Foreign Key (sourceBranchId → Branch.id)
 - Foreign Key (destinationBranchId → Branch.id)
 - Foreign Key (approvedByEmployeeId → Employee.id)
 - CHECK (sourceBranchId <> destinationBranchId)
-- CHECK (status IN ('DRAFT','APPROVED','IN_TRANSIT','RECEIVED','CANCELLED'))
 - CHECK (version >= 1)
 
 ---
@@ -93,11 +93,12 @@ Branch/Warehouse
 
 - PK_StockTransfer (id)
 - UK_StockTransfer_UUID
-- UK_StockTransfer_Number
+- UK_StockTransfer_Source_Number
 - IDX_StockTransfer_Source
 - IDX_StockTransfer_Destination
 - IDX_StockTransfer_Date
 - IDX_StockTransfer_Status
+- IDX_StockTransfer_Type
 
 ---
 
@@ -105,9 +106,11 @@ Branch/Warehouse
 
 | id | transferNumber | sourceBranchId | destinationBranchId | transferDate | status |
 |----|----------------|----------------|---------------------|--------------|--------|
-| 1 | ST000001 | 1 | 2 | 2026-08-04 | RECEIVED |
+| 1 | ST000001 | 1 | 2 | 2026-08-04 | COMPLETED |
 | 2 | ST000002 | 2 | 3 | 2026-08-05 | IN_TRANSIT |
-| 3 | ST000003 | 1 | 4 | 2026-08-06 | DRAFT |
+| 3 | ST000001 | 3 | 4 | 2026-08-06 | DRAFT |
+
+Note: Branch 1 and Branch 3 can both issue `ST000001` because transfer numbers are scoped to source branch.
 
 ---
 
@@ -115,41 +118,47 @@ Branch/Warehouse
 
 ```prisma
 model StockTransfer {
-  id                     BigInt   @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid                   String   @unique @db.Uuid
+  transferNumber String @map("transfer_number")
 
-  transferNumber         String   @unique
+  sourceBranchId      BigInt @map("source_branch_id")
+  destinationBranchId BigInt @map("destination_branch_id")
 
-  sourceBranchId         BigInt
-  destinationBranchId    BigInt
+  transferDate        DateTime  @map("transfer_date")
+  expectedArrivalDate DateTime? @map("expected_arrival_date")
+  receivedDate        DateTime? @map("received_date")
 
-  transferDate           DateTime
-  expectedArrivalDate    DateTime?
-  receivedDate           DateTime?
+  status       String @default("DRAFT") @map("status")
+  transferType String @default("ROUTINE_REPLENISHMENT") @map("transfer_type")
 
-  status                 String
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
 
-  approvedByEmployeeId   BigInt?
+  remarks String? @map("remarks")
 
-  remarks                String?
+  createdBy BigInt? @map("created_by")
 
-  createdBy              BigInt?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-  deletedAt              DateTime?
+  version Int @default(1)
 
-  version                Int      @default(1)
+  sourceBranch      Branch @relation("SourceStockTransfers", fields: [sourceBranchId], references: [id])
+  destinationBranch Branch @relation("DestinationStockTransfers", fields: [destinationBranchId], references: [id])
+  approvedBy        Employee? @relation(fields: [approvedByEmployeeId], references: [id])
 
-  approvedBy             Employee? @relation(fields: [approvedByEmployeeId], references: [id])
+  items StockTransferItem[]
 
-  items                  StockTransferItem[]
-
+  @@unique([sourceBranchId, transferNumber])
   @@index([sourceBranchId])
   @@index([destinationBranchId])
   @@index([transferDate])
   @@index([status])
+  @@index([transferType])
+  @@map("stock_transfers")
 }
 ```
 
@@ -157,12 +166,12 @@ model StockTransfer {
 
 ## Notes
 
-- This is the **header table** for stock transfers.
-- Individual medicines and quantities should be stored in a separate **StockTransferItem** table.
-- Inventory should only be updated after approval and according to the configured workflow (dispatch, receipt, or both).
+- This is the **header table** for inter-branch stock transfers.
+- Batch is org-global; source and destination each maintain their own **Stock** row for `(branchId, batchId)`.
+- Individual medicines and quantities are stored in **StockTransferItem**.
+- Inventory should only be updated after approval/dispatch according to the configured workflow.
 - Each completed transfer generates:
-  - One **OUT** StockMovement for the source branch.
-  - One **IN** StockMovement for the destination branch.
+  - One **OUT** StockMovement at the source branch.
+  - One **IN** StockMovement at the destination branch.
 - Historical transfer records should never be deleted.
 - Supports offline-first synchronization using UUID.
-- Compatible with both SQLite and PostgreSQL.

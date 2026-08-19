@@ -117,7 +117,7 @@ PurchaseInvoice
 model PurchaseInvoice {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   purchaseInvoiceNumber  String   @unique
   supplierInvoiceNumber  String
@@ -129,14 +129,14 @@ model PurchaseInvoice {
   invoiceDate            DateTime
   dueDate                DateTime?
 
-  grossAmount            Decimal  @db.Decimal(14,2)
-  discountAmount         Decimal  @default(0) @db.Decimal(14,2)
-  taxAmount              Decimal  @default(0) @db.Decimal(14,2)
+  grossAmount            Decimal  
+  discountAmount         Decimal  @default(0) 
+  taxAmount              Decimal  @default(0) 
 
-  netAmount              Decimal  @db.Decimal(14,2)
+  netAmount              Decimal  
 
-  paidAmount             Decimal  @default(0) @db.Decimal(14,2)
-  balanceAmount          Decimal  @db.Decimal(14,2)
+  paidAmount             Decimal  @default(0) 
+  balanceAmount          Decimal  
 
   status                 String
 

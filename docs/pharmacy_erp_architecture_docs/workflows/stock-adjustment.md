@@ -2,106 +2,51 @@
 # Stock Adjustment
 
 ## Business Objective
-Manual stock correction workflow.
+
+Correct branch inventory when physical count differs from system stock.
+
+## Data Model
+
+- **StockAdjustment** — header with `branchId`; `adjustmentNumber` unique per branch
+- **StockAdjustmentItem** — batchId + signed quantity + unitCost
+- Updates **Stock** at `(branchId, batchId)` via **StockMovement**
 
 ## Business Owner
+
 - Pharmacy Manager
 - Store Manager
-- Finance
 - Inventory Team
 
-## Actors
-- User
-- ERP System
-- Inventory Service
-- Finance Service
-- Reporting Service
-
-## Trigger
-Business action initiates this workflow.
-
-## Preconditions
-- User authenticated
-- Permissions validated
-- Master data exists
-- Company and branch selected
-
 ## Main Flow
-1. Validate request.
-2. Load master data.
-3. Validate business rules.
-4. Execute transaction.
-5. Persist database changes.
-6. Publish domain events.
-7. Update reports and dashboards.
-8. Write audit trail.
-9. Notify dependent modules.
 
-## Alternate Flows
-- Validation failure
-- Duplicate transaction
-- Stock unavailable
-- Approval rejected
-
-## Exception Handling
-- Rollback transaction
-- Log technical error
-- Create audit record
-- Display user-friendly message
+1. Create StockAdjustment for branch.
+2. Add StockAdjustmentItems (batchId, quantity ±, unitCost).
+3. Submit for approval.
+4. On approval: create StockMovement(s) at `branchId`; update branch Stock.
+5. Write Outbox with `entityUuid` in same transaction.
 
 ## Business Rules
-- Soft delete only.
-- Every transaction is auditable.
-- No direct stock manipulation outside approved workflows.
-- Financial impact must be traceable.
+
+- Adjustments are branch-scoped (header.branchId).
+- Batch is org-global; branch context from header.
+- Approved adjustments are immutable — reversals use new movements.
+- Never update Stock directly.
 
 ## Database Tables
-- Product
-- Stock
-- Batch
-- User
-- AuditLog
-- Transaction specific tables
 
-## Domain Events
-- WorkflowStarted
-- ValidationCompleted
-- TransactionCommitted
-- NotificationPublished
+- StockAdjustment, StockAdjustmentItem
+- Stock, StockMovement, Batch, Branch
+- Outbox
 
-## Permissions
-- View
-- Create
-- Edit
-- Approve
-- Cancel
+## Adjustment Types (String)
 
-## KPIs
-- Processing time
-- Error rate
-- Approval time
-- Throughput
+DAMAGE, EXPIRED, LOST, FOUND, OPENING, CORRECTION, etc.
 
-## Mermaid Sequence
+## Example
 
-```mermaid
-sequenceDiagram
-actor User
-participant UI
-participant Service
-participant Database
-participant EventBus
-
-User->>UI: Submit
-UI->>Service: Validate
-Service->>Database: Save
-Database-->>Service: Success
-Service->>EventBus: Publish Events
-Service-->>UI: Completed
+```text
+Branch 1 — Batch 101: system 100, physical 97
+StockAdjustmentItem quantity = -3
+→ StockMovement OUT 3 at branch 1
+→ Stock.availableQuantity: 100 → 97
 ```
-
-## Future Improvements
-- AI recommendations
-- Predictive analytics
-- Automation
-- Offline synchronization

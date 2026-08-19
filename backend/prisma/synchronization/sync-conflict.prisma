@@ -1,12 +1,12 @@
 model SyncConflict {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   syncLogId BigInt @map("sync_log_id")
 
   entityType String @map("entity_type")
-  entityId   BigInt @map("entity_id")
+  entityUuid String @map("entity_uuid")
 
   conflictType String @map("conflict_type")
 
@@ -16,7 +16,7 @@ model SyncConflict {
   resolutionStatus   String  @map("resolution_status")
   resolutionStrategy String? @map("resolution_strategy")
 
-  resolvedBy String? @map("resolved_by")
+  resolvedBy String?   @map("resolved_by")
   resolvedAt DateTime? @map("resolved_at")
 
   remarks String?
@@ -28,7 +28,7 @@ model SyncConflict {
   syncLog SyncLog @relation(fields: [syncLogId], references: [id])
 
   @@index([syncLogId])
-  @@index([entityType, entityId])
+  @@index([entityType, entityUuid])
   @@index([resolutionStatus])
   @@index([conflictType])
   @@index([resolvedAt])

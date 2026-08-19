@@ -5,7 +5,6 @@ model StockTransferItem {
   stockTransferId BigInt @map("stock_transfer_id")
   batchId         BigInt @map("batch_id")
 
-  // Quantities
   sentQuantity     Decimal  @map("sent_quantity")
   receivedQuantity Decimal? @map("received_quantity")
   damagedQuantity  Decimal  @default(0) @map("damaged_quantity")
@@ -18,7 +17,6 @@ model StockTransferItem {
 
   version Int @default(1)
 
-  // Relations
   stockTransfer StockTransfer @relation(fields: [stockTransferId], references: [id])
   batch         Batch         @relation(fields: [batchId], references: [id])
 

@@ -2,106 +2,103 @@
 # Inventory Flow
 
 ## Business Objective
-Inventory movement and stock update workflow.
+
+Track inventory changes through an immutable ledger while maintaining branch-scoped stock balances.
+
+## Data Model (corrected)
+
+- **Batch** — org-global lot identity (no branchId, no saleRate)
+- **Stock** — one balance row per `(branchId, batchId)`
+- **StockMovement** — append-only ledger at branch level
+- **PriceListItem** — branch sale pricing (not Batch)
+
+```text
+Batch (org-global)
+   └── Stock (per branch)
+         └── updated by StockMovement (per branch)
+```
 
 ## Business Owner
+
 - Pharmacy Manager
 - Store Manager
-- Finance
 - Inventory Team
 
 ## Actors
+
 - User
-- ERP System
 - Inventory Service
-- Finance Service
-- Reporting Service
+- ERP System
 
 ## Trigger
-Business action initiates this workflow.
+
+Purchase receipt, sale, return, adjustment, transfer, or stock take.
 
 ## Preconditions
-- User authenticated
-- Permissions validated
-- Master data exists
-- Company and branch selected
+
+- User authenticated with branch selected
+- Batch exists (org-global) or is created on GRN
+- Stock row exists or is created for `(branchId, batchId)`
 
 ## Main Flow
-1. Validate request.
-2. Load master data.
-3. Validate business rules.
-4. Execute transaction.
-5. Persist database changes.
-6. Publish domain events.
-7. Update reports and dashboards.
-8. Write audit trail.
-9. Notify dependent modules.
+
+1. Validate branch context and permissions.
+2. Resolve Batch (org-global) and branch Stock balance.
+3. Validate business rules (FEFO, expiry, available quantity).
+4. Begin database transaction.
+5. Create business document (invoice, adjustment, etc.).
+6. Create **StockMovement** (branchId, batchId, IN/OUT).
+7. Update **Stock** quantities for that branch.
+8. Write **Outbox** record with `entityUuid` in same transaction.
+9. Commit transaction.
+10. Write audit trail.
 
 ## Alternate Flows
-- Validation failure
-- Duplicate transaction
-- Stock unavailable
-- Approval rejected
+
+- Insufficient stock at branch → reject or partial fulfil
+- Expired batch → block sale
+- Adjustment requires approval
 
 ## Exception Handling
-- Rollback transaction
-- Log technical error
-- Create audit record
-- Display user-friendly message
+
+- Rollback entire transaction (document + movement + stock + outbox)
+- Log error; no partial stock update
 
 ## Business Rules
-- Soft delete only.
-- Every transaction is auditable.
-- No direct stock manipulation outside approved workflows.
-- Financial impact must be traceable.
+
+- Never update Stock directly — always via StockMovement.
+- StockMovement records are immutable.
+- Batch 1:N Stock (one balance per branch per lot).
+- Document numbers are branch-scoped.
 
 ## Database Tables
-- Product
-- Stock
-- Batch
-- User
-- AuditLog
-- Transaction specific tables
 
-## Domain Events
-- WorkflowStarted
-- ValidationCompleted
-- TransactionCommitted
-- NotificationPublished
+- Batch, Stock, StockMovement
+- StockAdjustment, StockTransfer, StockTake (+ items)
+- Outbox, AuditLog
 
 ## Permissions
-- View
-- Create
-- Edit
-- Approve
-- Cancel
 
-## KPIs
-- Processing time
-- Error rate
-- Approval time
-- Throughput
+- View stock, Create movement, Approve adjustment/transfer
 
 ## Mermaid Sequence
 
 ```mermaid
 sequenceDiagram
 actor User
-participant UI
-participant Service
-participant Database
-participant EventBus
+participant InventoryService
+participant DB
 
-User->>UI: Submit
-UI->>Service: Validate
-Service->>Database: Save
-Database-->>Service: Success
-Service->>EventBus: Publish Events
-Service-->>UI: Completed
+User->>InventoryService: Submit transaction (branchId)
+InventoryService->>DB: BEGIN TRANSACTION
+InventoryService->>DB: Insert business document
+InventoryService->>DB: Insert StockMovement (branchId, batchId)
+InventoryService->>DB: Update Stock (branchId, batchId)
+InventoryService->>DB: Insert Outbox (entityUuid)
+InventoryService->>DB: COMMIT
 ```
 
 ## Future Improvements
-- AI recommendations
-- Predictive analytics
-- Automation
-- Offline synchronization
+
+- Predictive replenishment per branch
+- Automated FEFO allocation

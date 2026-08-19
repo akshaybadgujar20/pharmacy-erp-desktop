@@ -112,15 +112,15 @@ LoyaltyProgram
 model LoyaltyProgram {
   id                          BigInt   @id @default(autoincrement())
 
-  uuid                        String   @unique @db.Uuid
+  uuid                        String   @unique 
 
   programCode                 String   @unique
   programName                 String   @unique
 
   description                 String?
 
-  pointsPerAmount             Decimal  @db.Decimal(10,2)
-  redemptionValue             Decimal  @db.Decimal(10,2)
+  pointsPerAmount             Decimal  
+  redemptionValue             Decimal  
 
   minimumRedemptionPoints     Int
   maximumRedemptionPoints     Int?

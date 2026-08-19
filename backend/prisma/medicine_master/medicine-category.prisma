@@ -1,7 +1,7 @@
 model MedicineCategory {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   parentCategoryId BigInt? @map("parent_category_id")
 
@@ -23,7 +23,8 @@ model MedicineCategory {
   parentCategory  MedicineCategory?  @relation("CategoryHierarchy", fields: [parentCategoryId], references: [id])
   childCategories MedicineCategory[] @relation("CategoryHierarchy")
 
-  medicines Medicine[]
+  medicines     Medicine[]
+  discountRules DiscountRule[]
 
   @@index([parentCategoryId])
   @@index([displayOrder])

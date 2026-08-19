@@ -14,7 +14,7 @@ A Branch represents a physical or virtual operating unit responsible for:
 - Printers
 - Daily Operations
 
-Each Branch maintains its own inventory while sharing common master data from the Company.
+Each Branch maintains its own inventory balances via the **Stock** table (`branchId` + `batchId`) while sharing org-global master data (Medicine, Batch) from the Company.
 
 ---
 
@@ -23,7 +23,8 @@ Each Branch maintains its own inventory while sharing common master data from th
 - Every Branch belongs to exactly one Company.
 - Branch Code must be unique within the Company.
 - Only active branches can perform business transactions.
-- Each transaction (Sales, Purchase, Stock, Payment) belongs to one Branch.
+- Each transaction (Sales, Purchase, StockMovement, Payment) belongs to one Branch.
+- Per-branch inventory is stored in **Stock** rows keyed by `(branchId, batchId)` — one Batch can have Stock at many branches.
 - Branch GST Registration may differ depending on business requirements.
 - Branch records are rarely deleted and should be audited.
 - UUID is used for synchronization.
@@ -39,8 +40,10 @@ Company (1)
       │
       └──────< Branch (Many)
                     │
+                    ├────────► Stock (Many — one per batch per branch)
+                    ├────────► StockMovement
+                    ├────────► StockAdjustment
                     ├────────► User
-                    ├────────► Stock
                     ├────────► PurchaseInvoice
                     ├────────► SalesInvoice
                     ├────────► FinancialYear
@@ -120,7 +123,7 @@ Company (1)
 model Branch {
   id                  BigInt   @id @default(autoincrement())
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique @default(uuid())
 
   companyId           BigInt
 
@@ -156,6 +159,12 @@ model Branch {
 
   company             Company @relation(fields: [companyId], references: [id])
 
+  stocks                Stock[]
+  stockMovements        StockMovement[]
+  stockAdjustments      StockAdjustment[]
+  priceLists            PriceList[]
+  outboxEntries         Outbox[]
+
   @@unique([companyId, branchCode])
 
   @@index([companyId])
@@ -171,7 +180,9 @@ model Branch {
 
 - Represents one operational pharmacy location.
 - Every Sales, Purchase, Inventory, and Financial transaction should reference a Branch.
-- Inventory should be maintained separately for each Branch.
+- Inventory balances are maintained separately for each Branch via the **Stock** table (`@@unique([branchId, batchId])`).
+- **Batch** is org-global (lot identity); **Stock** is branch-local (quantities).
+- Branch-scoped sale pricing uses **PriceList** / **PriceListItem**, not Batch.
 - Sequence generators, printers, barcode settings, and application settings may be branch-specific.
 - Inter-branch stock movement should use the `StockTransfer` module.
 - Historical Branch records should not be deleted.

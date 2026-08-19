@@ -105,7 +105,7 @@ PurchaseOrder (1)
 model PurchaseOrderItem {
   id                 BigInt   @id @default(autoincrement())
 
-  uuid               String   @unique @db.Uuid
+  uuid               String   @unique 
 
   purchaseOrderId    BigInt
   medicineId         BigInt
@@ -113,14 +113,14 @@ model PurchaseOrderItem {
 
   lineNumber         Int
 
-  orderedQuantity    Decimal  @db.Decimal(14,3)
-  receivedQuantity   Decimal  @default(0) @db.Decimal(14,3)
+  orderedQuantity    Decimal  
+  receivedQuantity   Decimal  @default(0) 
 
-  unitPrice          Decimal  @db.Decimal(12,2)
-  discountPercent    Decimal? @db.Decimal(5,2)
-  taxPercent         Decimal? @db.Decimal(5,2)
+  unitPrice          Decimal  
+  discountPercent    Decimal? 
+  taxPercent         Decimal? 
 
-  lineAmount         Decimal  @db.Decimal(14,2)
+  lineAmount         Decimal  
 
   isClosed           Boolean  @default(false)
 

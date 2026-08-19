@@ -1,57 +1,36 @@
-enum PaymentMethod {
-  CASH
-  UPI // GPay, PhonePe, Paytm, BharatPe
-  CREDIT_CARD
-  DEBIT_CARD
-  CHEQUE
-  STORE_CREDIT
-  NET_BANKING
-}
-
-enum PaymentStatus {
-  COMPLETED
-  PENDING
-  FAILED
-  BOUNCED
-  REFUNDED
-}
-
 model SalesPayment {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  paymentNumber String @unique @map("payment_number") // e.g. 'PAY-2026-0001'
+  paymentNumber String @map("payment_number")
 
   salesInvoiceId BigInt @map("sales_invoice_id")
-  branchId       BigInt @map("branch_id") // ✅ Added: Essential for Daily Shift/Cash-drawer closing
+  branchId       BigInt @map("branch_id")
 
   paymentDate DateTime @default(now()) @map("payment_date")
 
-  // Payment Methods: 'CASH', 'UPI', 'CREDIT_CARD', 'DEBIT_CARD', 'CHEQUE', 'STORE_CREDIT'
-  paymentMethod PaymentMethod @map("payment_method")
-  paymentAmount Decimal       @map("payment_amount") // Net amount applied to bill
+  // paymentMethod: CASH, UPI, CREDIT_CARD, DEBIT_CARD, CHEQUE, STORE_CREDIT, NET_BANKING
+  paymentMethod String  @map("payment_method")
+  paymentAmount Decimal @map("payment_amount")
 
-  // Cash Drawer Tendering (Cashier Audit)
-  tenderedAmount Decimal? @map("tendered_amount") // Amount handed by customer (e.g., ₹500)
-  changeReturned Decimal? @default(0) @map("change_returned") // Change given back (e.g., ₹160)
+  tenderedAmount Decimal? @map("tendered_amount")
+  changeReturned Decimal? @default(0) @map("change_returned")
 
-  // Digital & Card Payment Details
-  transactionReference String? @map("transaction_reference") // UPI RRN / Gateway Order ID
-  cardLast4Digits      String? @map("card_last_4_digits") // e.g., '4021'
-  cardType             String? @map("card_type") // 'VISA', 'MASTERCARD', 'RUPAY'
-  posTerminalId        String? @map("pos_terminal_id") // Swipe machine identifier
+  transactionReference String? @map("transaction_reference")
+  cardLast4Digits      String? @map("card_last_4_digits")
+  cardType             String? @map("card_type")
+  posTerminalId        String? @map("pos_terminal_id")
 
-  // Cheque / Bank Transfer Details
   bankName     String?   @map("bank_name")
   chequeNumber String?   @map("cheque_number")
   chequeDate   DateTime? @map("cheque_date")
 
-  // Payment Statuses: 'COMPLETED', 'PENDING', 'FAILED', 'BOUNCED', 'REFUNDED'
-  status PaymentStatus @default(COMPLETED) @map("status")
+  // status: COMPLETED, PENDING, FAILED, BOUNCED, REFUNDED
+  status String @default("COMPLETED") @map("status")
 
   remarks String? @map("remarks")
 
-  createdBy BigInt? @map("created_by") // Cashier / Employee ID
+  createdBy BigInt? @map("created_by")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -59,10 +38,11 @@ model SalesPayment {
 
   version Int @default(1)
 
-  // Relations
-  salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
-  branch       Branch       @relation(fields: [branchId], references: [id])
+  salesInvoice  SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
+  branch        Branch       @relation(fields: [branchId], references: [id])
+  createdByUser User?        @relation("SalesPaymentCreatedBy", fields: [createdBy], references: [id])
 
+  @@unique([branchId, paymentNumber])
   @@index([salesInvoiceId])
   @@index([branchId])
   @@index([paymentDate])

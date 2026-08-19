@@ -14,9 +14,10 @@ Each synchronization attempt creates one SyncLog record.
 
 - Every synchronization session creates one SyncLog record.
 - A SyncLog may process multiple Outbox records.
-- Sync status is updated throughout the synchronization lifecycle.
+- Sync status is updated throughout the synchronization lifecycle (String field, not enum).
 - Completed logs are immutable.
 - Failed synchronizations retain complete error details.
+- `deviceId` identifies the client device that initiated the session.
 - Sync logs are retained for audit and troubleshooting.
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
@@ -31,27 +32,26 @@ Synchronization Service
           ▼
       SyncLog
           │
-          ├────────► Outbox
-          └────────► SyncConflict
+          └────────< SyncConflict
 ```
 
 ---
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
+| Category | Column | SQLite | PostgreSQL (JPA) | Nullable | Description |
+|----------|--------|---------|------------------|----------|-------------|
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Identifier | uuid | TEXT | UUID | No | Unique synchronization session identifier |
-| Business | syncType | TEXT | VARCHAR(20) | No | FULL, INCREMENTAL, MANUAL, STARTUP |
-| Business | syncDirection | TEXT | VARCHAR(20) | No | UPLOAD, DOWNLOAD, BIDIRECTIONAL |
+| Identifier | uuid | TEXT | UUID/TEXT | No | Unique synchronization session identifier |
+| Business | syncType | TEXT | VARCHAR(20) | No | FULL, INCREMENTAL, MANUAL, STARTUP (String) |
+| Business | syncDirection | TEXT | VARCHAR(20) | No | UPLOAD, DOWNLOAD, BIDIRECTIONAL (String) |
 | Business | startedAt | DATETIME | TIMESTAMP | No | Synchronization start time |
 | Business | completedAt | DATETIME | TIMESTAMP | Yes | Synchronization completion time |
 | Statistics | recordsUploaded | INTEGER | INTEGER | No | Number of uploaded records |
 | Statistics | recordsDownloaded | INTEGER | INTEGER | No | Number of downloaded records |
 | Statistics | conflictsDetected | INTEGER | INTEGER | No | Number of conflicts detected |
 | Statistics | failedRecords | INTEGER | INTEGER | No | Number of failed records |
-| Status | status | TEXT | VARCHAR(20) | No | RUNNING, SUCCESS, PARTIAL_SUCCESS, FAILED |
+| Status | status | TEXT | VARCHAR(20) | No | RUNNING, SUCCESS, PARTIAL_SUCCESS, FAILED (String) |
 | Business | errorMessage | TEXT | TEXT | Yes | Error details if synchronization fails |
 | Business | deviceId | TEXT | VARCHAR(100) | Yes | Client device identifier |
 | Business | appVersion | TEXT | VARCHAR(30) | Yes | Client application version |
@@ -64,9 +64,6 @@ Synchronization Service
 
 - Primary Key (id)
 - Unique (uuid)
-- CHECK (syncType IN ('FULL','INCREMENTAL','MANUAL','STARTUP'))
-- CHECK (syncDirection IN ('UPLOAD','DOWNLOAD','BIDIRECTIONAL'))
-- CHECK (status IN ('RUNNING','SUCCESS','PARTIAL_SUCCESS','FAILED'))
 - CHECK (recordsUploaded >= 0)
 - CHECK (recordsDownloaded >= 0)
 - CHECK (conflictsDetected >= 0)
@@ -89,11 +86,11 @@ Synchronization Service
 
 ## Sample Records
 
-| id | syncType | syncDirection | status | recordsUploaded | recordsDownloaded |
-|----|----------|---------------|---------|----------------:|------------------:|
-| 1 | INCREMENTAL | BIDIRECTIONAL | SUCCESS | 15 | 22 |
-| 2 | STARTUP | DOWNLOAD | SUCCESS | 0 | 350 |
-| 3 | MANUAL | UPLOAD | FAILED | 5 | 0 |
+| id | syncType | syncDirection | status | deviceId | recordsUploaded | recordsDownloaded |
+|----|----------|---------------|---------|----------|----------------:|------------------:|
+| 1 | INCREMENTAL | BIDIRECTIONAL | SUCCESS | DESK-001 | 15 | 22 |
+| 2 | STARTUP | DOWNLOAD | SUCCESS | DESK-001 | 0 | 350 |
+| 3 | MANUAL | UPLOAD | FAILED | DESK-002 | 5 | 0 |
 
 ---
 
@@ -101,32 +98,33 @@ Synchronization Service
 
 ```prisma
 model SyncLog {
-  id                   BigInt   @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid                 String   @unique @db.Uuid
+  syncType      String @map("sync_type")
+  syncDirection String @map("sync_direction")
 
-  syncType             String
-  syncDirection        String
+  startedAt   DateTime  @map("started_at")
+  completedAt DateTime? @map("completed_at")
 
-  startedAt            DateTime
-  completedAt          DateTime?
+  recordsUploaded   Int @default(0) @map("records_uploaded")
+  recordsDownloaded Int @default(0) @map("records_downloaded")
 
-  recordsUploaded      Int      @default(0)
-  recordsDownloaded    Int      @default(0)
+  conflictsDetected Int @default(0) @map("conflicts_detected")
+  failedRecords     Int @default(0) @map("failed_records")
 
-  conflictsDetected    Int      @default(0)
-  failedRecords        Int      @default(0)
+  status String
 
-  status               String
+  errorMessage String? @map("error_message")
 
-  errorMessage         String?
+  deviceId   String? @map("device_id")
+  appVersion String? @map("app_version")
 
-  deviceId             String?
-  appVersion           String?
+  createdAt DateTime @default(now()) @map("created_at")
 
-  createdAt            DateTime @default(now())
+  version Int @default(1)
 
-  version              Int      @default(1)
+  syncConflicts SyncConflict[]
 
   @@index([status])
   @@index([startedAt])
@@ -142,9 +140,6 @@ model SyncLog {
 
 - Stores synchronization **session history**, not business data.
 - One SyncLog represents one synchronization execution.
-- The Synchronization Service should update this record as synchronization progresses.
+- Related SyncConflict records reference `syncLogId`.
 - Error messages should contain only technical details; sensitive business data should not be stored.
-- SyncLog should reference related SyncConflict records through the synchronization session.
-- Old logs may be archived according to retention policies.
 - Supports offline-first synchronization using SQLite clients and PostgreSQL servers.
-- Compatible with both SQLite and PostgreSQL.

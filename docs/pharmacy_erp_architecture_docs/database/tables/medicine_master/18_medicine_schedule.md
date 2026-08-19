@@ -100,7 +100,7 @@ MedicineSchedule (1)
 model MedicineSchedule {
   id                        BigInt   @id @default(autoincrement())
 
-  uuid                      String   @unique @db.Uuid
+  uuid                      String   @unique 
 
   scheduleCode              String   @unique
   scheduleName              String   @unique

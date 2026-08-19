@@ -115,7 +115,7 @@ PurchaseInvoice (1)
 model PurchaseInvoiceItem {
   id                    BigInt   @id @default(autoincrement())
 
-  uuid                  String   @unique @db.Uuid
+  uuid                  String   @unique 
 
   purchaseInvoiceId      BigInt
   goodsReceiptItemId     BigInt?
@@ -126,17 +126,17 @@ model PurchaseInvoiceItem {
 
   lineNumber            Int
 
-  invoiceQuantity       Decimal  @db.Decimal(14,3)
+  invoiceQuantity       Decimal  
 
-  unitPrice             Decimal  @db.Decimal(12,2)
+  unitPrice             Decimal  
 
-  discountPercent       Decimal? @db.Decimal(5,2)
-  discountAmount        Decimal  @default(0) @db.Decimal(12,2)
+  discountPercent       Decimal? 
+  discountAmount        Decimal  @default(0) 
 
-  taxPercent            Decimal? @db.Decimal(5,2)
-  taxAmount             Decimal  @default(0) @db.Decimal(12,2)
+  taxPercent            Decimal? 
+  taxAmount             Decimal  @default(0) 
 
-  lineAmount            Decimal  @db.Decimal(14,2)
+  lineAmount            Decimal  
 
   remarks               String?
 

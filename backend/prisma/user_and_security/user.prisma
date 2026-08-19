@@ -3,7 +3,7 @@ model User {
 
   employeeId BigInt @unique @map("employee_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   username     String @unique
   passwordHash String @map("password_hash")
@@ -27,6 +27,26 @@ model User {
 
   userSessions UserSession[]
   auditLogs    AuditLog[]
+
+  partiesUpdated          Party[]           @relation("PartyUpdatedBy")
+  partiesDeleted          Party[]           @relation("PartyDeletedBy")
+  customersUpdated        Customer[]        @relation("CustomerUpdatedBy")
+  customersDeleted        Customer[]        @relation("CustomerDeletedBy")
+  suppliersUpdated        Supplier[]        @relation("SupplierUpdatedBy")
+  suppliersDeleted        Supplier[]        @relation("SupplierDeletedBy")
+  medicinesUpdated        Medicine[]        @relation("MedicineUpdatedBy")
+  medicinesDeleted        Medicine[]        @relation("MedicineDeletedBy")
+  batchesUpdated          Batch[]           @relation("BatchUpdatedBy")
+  batchesDeleted          Batch[]           @relation("BatchDeletedBy")
+  stockMovementsCreated   StockMovement[]   @relation("StockMovementCreatedBy")
+  stockAdjustmentsCreated StockAdjustment[] @relation("StockAdjustmentCreatedBy")
+  stockTransfersCreated   StockTransfer[]   @relation("StockTransferCreatedBy")
+  salesInvoicesCreated    SalesInvoice[]    @relation("SalesInvoiceCreatedBy")
+  salesPaymentsCreated    SalesPayment[]    @relation("SalesPaymentCreatedBy")
+  paymentsCreated         Payment[]         @relation("PaymentCreatedBy")
+  receiptsCreated         Receipt[]         @relation("ReceiptCreatedBy")
+  ledgerEntriesCreated    LedgerEntry[]     @relation("LedgerEntryCreatedBy")
+  expensesCreated         Expense[]         @relation("ExpenseCreatedBy")
 
   @@index([isActive])
   @@index([lastLoginAt])

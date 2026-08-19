@@ -111,13 +111,13 @@ Tax
 model Tax {
   id              BigInt   @id @default(autoincrement())
 
-  uuid            String   @unique @db.Uuid
+  uuid            String   @unique 
 
   taxCode         String   @unique
   taxName         String
 
   taxType         String
-  taxRate         Decimal  @db.Decimal(5,2)
+  taxRate         Decimal  
 
   effectiveFrom   DateTime
   effectiveTo     DateTime?

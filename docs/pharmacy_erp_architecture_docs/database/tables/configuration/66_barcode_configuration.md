@@ -110,7 +110,7 @@ BarcodeConfiguration
 model BarcodeConfiguration {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   companyId              BigInt
   branchId               BigInt?
@@ -120,8 +120,8 @@ model BarcodeConfiguration {
   barcodeType            String
   appliesTo              String
 
-  labelWidth             Decimal  @db.Decimal(8,2)
-  labelHeight            Decimal  @db.Decimal(8,2)
+  labelWidth             Decimal  
+  labelHeight            Decimal  
 
   dpi                    Int      @default(203)
 

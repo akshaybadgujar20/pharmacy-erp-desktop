@@ -2,22 +2,21 @@ model StockMovement {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  movementNumber String @unique @map("movement_number")
+  movementNumber String @map("movement_number")
 
-  branchId   BigInt @map("branch_id")   // ✅ Added: Branch context
-  medicineId BigInt @map("medicine_id") // ✅ Added: Denormalized for fast reporting
+  branchId   BigInt @map("branch_id")
+  medicineId BigInt @map("medicine_id")
   batchId    BigInt @map("batch_id")
 
-  // Types: 'PURCHASE_GRN', 'SALES_INVOICE', 'PURCHASE_RETURN', 'SALES_RETURN', 'TRANSFER_IN', 'TRANSFER_OUT', 'ADJUSTMENT_GAIN', 'ADJUSTMENT_LOSS'
+  // Types: PURCHASE_GRN, SALES_INVOICE, PURCHASE_RETURN, SALES_RETURN, TRANSFER_IN, TRANSFER_OUT, ADJUSTMENT_GAIN, ADJUSTMENT_LOSS
   movementType      String @map("movement_type")
-  movementDirection String @map("movement_direction") // 'IN', 'OUT'
+  movementDirection String @map("movement_direction") // IN, OUT
 
-  quantity     Decimal @map("quantity")      // Always positive magnitude (direction indicates sign)
-  unitCost     Decimal @map("unit_cost")     // ✅ Added: Valuation / Landed cost at movement time
-  balanceAfter Decimal @map("balance_after") // Running balance of (branch + batch) after this entry
+  quantity     Decimal @map("quantity")
+  unitCost     Decimal @map("unit_cost")
+  balanceAfter Decimal @map("balance_after")
 
-  // Polymorphic Reference to Source Document
-  referenceTable String @map("reference_table") // 'sales_invoices', 'goods_receipt_notes', 'stock_adjustments', etc.
+  referenceTable String @map("reference_table")
   referenceId    BigInt @map("reference_id")
 
   movementDate DateTime @default(now()) @map("movement_date")
@@ -25,15 +24,14 @@ model StockMovement {
   remarks   String? @map("remarks")
   createdBy BigInt? @map("created_by")
 
-  // Immutable audit timestamp (no deletedAt / no soft deletes on financial/inventory ledgers)
   createdAt DateTime @default(now()) @map("created_at")
 
-  // Relations
-  branch   Branch   @relation(fields: [branchId], references: [id])
-  medicine Medicine @relation(fields: [medicineId], references: [id])
-  batch    Batch    @relation(fields: [batchId], references: [id])
+  branch        Branch   @relation(fields: [branchId], references: [id])
+  medicine      Medicine @relation(fields: [medicineId], references: [id])
+  batch         Batch    @relation(fields: [batchId], references: [id])
+  createdByUser User?    @relation("StockMovementCreatedBy", fields: [createdBy], references: [id])
 
-  // Optimized Ledger Indexes for Fast Audits & Chronological Tracing
+  @@unique([branchId, movementNumber])
   @@index([branchId, batchId, movementDate])
   @@index([branchId, medicineId, movementDate])
   @@index([referenceTable, referenceId])

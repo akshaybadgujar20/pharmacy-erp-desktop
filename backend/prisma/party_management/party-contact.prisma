@@ -1,21 +1,12 @@
-enum ContactType {
-  PHONE
-  MOBILE
-  EMAIL
-  FAX
-  WHATSAPP
-  OTHER
-}
-
 model PartyContact {
   id      BigInt @id @default(autoincrement())
   partyId BigInt @map("party_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
-  contactType  ContactType @map("contact_type")
-  contactValue String      @map("contact_value")
-  countryCode  String?     @map("country_code")
+  contactType  String  @map("contact_type") // PHONE, MOBILE, EMAIL, FAX, WHATSAPP, OTHER
+  contactValue String  @map("contact_value")
+  countryCode  String? @map("country_code")
 
   isPrimary  Boolean @default(false) @map("is_primary")
   isVerified Boolean @default(false) @map("is_verified")

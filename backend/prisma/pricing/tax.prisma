@@ -1,7 +1,7 @@
 model Tax {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   taxCode String @unique @map("tax_code")
   taxName String @map("tax_name")

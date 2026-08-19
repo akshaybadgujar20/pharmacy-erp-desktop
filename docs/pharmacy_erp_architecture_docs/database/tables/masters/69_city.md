@@ -104,7 +104,7 @@ State (1)
 model City {
   id            BigInt   @id @default(autoincrement())
 
-  uuid          String   @unique @db.Uuid
+  uuid          String   @unique 
 
   stateId       BigInt
 

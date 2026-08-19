@@ -97,7 +97,7 @@ MedicineGeneric (1)
 model MedicineGeneric {
   id                    BigInt   @id @default(autoincrement())
 
-  uuid                  String   @unique @db.Uuid
+  uuid                  String   @unique 
 
   genericCode           String   @unique
   genericName           String   @unique

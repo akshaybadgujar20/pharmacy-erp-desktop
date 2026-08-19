@@ -1,9 +1,9 @@
 model Stock {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
-  batchId  BigInt @unique @map("batch_id")
+  batchId  BigInt @map("batch_id")
   branchId BigInt @map("branch_id")
 
   availableQuantity Decimal @default(0) @map("available_quantity")
@@ -22,14 +22,15 @@ model Stock {
 
   version Int @default(1)
 
-  batch Batch @relation(fields: [batchId], references: [id])
+  batch  Batch  @relation(fields: [batchId], references: [id])
+  branch Branch @relation(fields: [branchId], references: [id])
 
-  // One stock record per batch PER branch
+  // One stock balance record per batch per branch
   @@unique([branchId, batchId])
   @@index([branchId])
   @@index([batchId])
-  @@index([availableQuantity])
+  @@index([branchId, availableQuantity])
+  @@index([branchId, isActive])
   @@index([lastMovementAt])
-  @@index([isActive])
   @@map("stocks")
 }

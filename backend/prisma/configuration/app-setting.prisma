@@ -1,7 +1,7 @@
 model AppSetting {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   companyId BigInt  @map("company_id")
   branchId  BigInt? @map("branch_id")

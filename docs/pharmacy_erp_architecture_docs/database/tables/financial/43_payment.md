@@ -115,14 +115,14 @@ Payment
 model Payment {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   paymentNumber          String   @unique
 
   paymentType            String
   paymentDate            DateTime
 
-  amount                 Decimal  @db.Decimal(14,2)
+  amount                 Decimal  
 
   paymentMethod          String
 

@@ -103,7 +103,7 @@ model Manufacturer {
 
   partyId                  BigInt   @unique
 
-  uuid                     String   @unique @db.Uuid
+  uuid                     String   @unique 
 
   manufacturerCode         String   @unique
 

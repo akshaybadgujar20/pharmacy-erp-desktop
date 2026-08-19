@@ -98,7 +98,7 @@ Country (1)
 model State {
   id             BigInt   @id @default(autoincrement())
 
-  uuid           String   @unique @db.Uuid
+  uuid           String   @unique 
 
   countryId      BigInt
 

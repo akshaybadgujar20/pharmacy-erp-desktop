@@ -1,8 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Pharmacy ERP — local SQLite schema (Prisma).
+// Cloud sync target: Spring Boot + JPA + PostgreSQL (separate service).
+//
+// Alignment rules (local Prisma <-> cloud JPA):
+// - Sync identity: uuid String @unique @default(uuid()) — never sync local BigInt id
+// - Status/type fields: String (no Prisma enums); validate in app; use CHECK on Postgres
+// - Money/qty: Decimal; timestamps: DateTime; payloads: Json (-> JSONB in JPA)
+// - Column names: snake_case via @map; no @db.* native attributes in this schema
+// - Document numbers: unique per branch (composite), not globally unique
 
 datasource db {
   provider = "sqlite"

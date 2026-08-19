@@ -1,7 +1,7 @@
 model UnitOfMeasure {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   unitCode  String @unique @map("unit_code")
   unitName  String @unique @map("unit_name")
@@ -22,8 +22,15 @@ model UnitOfMeasure {
 
   version Int @default(1)
 
-  medicines        Medicine[]
-  saltCompositions SaltComposition[]
+  medicines            Medicine[]
+  saltCompositions     SaltComposition[]
+  prescriptionItems    PrescriptionItem[]
+  goodsReceiptItems    GoodsReceiptItem[]
+  purchaseInvoiceItems PurchaseInvoiceItem[]
+  purchaseOrderItems   PurchaseOrderItem[]
+  purchaseReturnItems  PurchaseReturnItem[]
+  salesInvoiceItems    SalesInvoiceItem[]
+  salesReturnItems     SalesReturnItem[]
 
   @@index([unitType])
   @@index([isActive])

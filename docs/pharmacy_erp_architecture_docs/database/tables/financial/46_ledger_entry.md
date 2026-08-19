@@ -121,7 +121,7 @@ Ledger (1)
 model LedgerEntry {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   ledgerId          BigInt
 
@@ -131,10 +131,10 @@ model LedgerEntry {
 
   transactionDate   DateTime
 
-  debitAmount       Decimal  @default(0) @db.Decimal(14,2)
-  creditAmount      Decimal  @default(0) @db.Decimal(14,2)
+  debitAmount       Decimal  @default(0) 
+  creditAmount      Decimal  @default(0) 
 
-  runningBalance    Decimal? @db.Decimal(14,2)
+  runningBalance    Decimal? 
 
   narration         String?
 

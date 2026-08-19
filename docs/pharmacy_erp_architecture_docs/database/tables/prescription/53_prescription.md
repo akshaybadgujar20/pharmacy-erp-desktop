@@ -110,7 +110,7 @@ Prescription
 model Prescription {
   id                  BigInt   @id @default(autoincrement())
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique 
 
   prescriptionNumber  String   @unique
 

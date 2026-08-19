@@ -1,7 +1,7 @@
 model Area {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   cityId BigInt @map("city_id")
 
@@ -28,7 +28,6 @@ model Area {
 
   @@unique([cityId, areaCode])
   @@unique([cityId, areaName])
-
   @@index([cityId])
   @@index([postalCode])
   @@index([deliveryZone])

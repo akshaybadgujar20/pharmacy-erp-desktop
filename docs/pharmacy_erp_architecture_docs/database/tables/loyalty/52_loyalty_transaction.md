@@ -116,7 +116,7 @@ LoyaltyProgram
 model LoyaltyTransaction {
   id                       BigInt   @id @default(autoincrement())
 
-  uuid                     String   @unique @db.Uuid
+  uuid                     String   @unique 
 
   loyaltyProgramId         BigInt
   customerId               BigInt
@@ -130,7 +130,7 @@ model LoyaltyTransaction {
 
   points                   Int
 
-  monetaryValue            Decimal? @db.Decimal(12,2)
+  monetaryValue            Decimal? 
 
   balanceAfterTransaction  Int?
 

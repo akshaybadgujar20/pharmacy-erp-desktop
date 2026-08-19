@@ -1,7 +1,7 @@
 model PriceListItem {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   priceListId BigInt @map("price_list_id")
   medicineId  BigInt @map("medicine_id")

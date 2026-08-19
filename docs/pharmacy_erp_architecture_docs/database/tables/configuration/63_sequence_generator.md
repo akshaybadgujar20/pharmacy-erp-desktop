@@ -121,7 +121,7 @@ SequenceGenerator
 model SequenceGenerator {
   id               BigInt   @id @default(autoincrement())
 
-  uuid             String   @unique @db.Uuid
+  uuid             String   @unique 
 
   companyId        BigInt
   branchId         BigInt?

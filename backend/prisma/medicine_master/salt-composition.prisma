@@ -1,7 +1,7 @@
 model SaltComposition {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   genericId BigInt @map("generic_id")
   unitId    BigInt @map("unit_id")

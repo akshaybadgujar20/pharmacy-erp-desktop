@@ -108,7 +108,7 @@ AuditLog
 model ChangeHistory {
   id            BigInt   @id @default(autoincrement())
 
-  uuid          String   @unique @db.Uuid
+  uuid          String   @unique 
 
   auditLogId    BigInt
 

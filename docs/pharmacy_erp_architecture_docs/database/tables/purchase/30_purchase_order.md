@@ -108,7 +108,7 @@ PurchaseOrder
 model PurchaseOrder {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   purchaseOrderNumber    String   @unique
 
@@ -118,9 +118,9 @@ model PurchaseOrder {
   orderDate              DateTime
   expectedDeliveryDate   DateTime?
 
-  totalAmount            Decimal  @db.Decimal(14,2)
-  taxAmount              Decimal  @default(0) @db.Decimal(14,2)
-  discountAmount         Decimal  @default(0) @db.Decimal(14,2)
+  totalAmount            Decimal  
+  taxAmount              Decimal  @default(0) 
+  discountAmount         Decimal  @default(0) 
 
   status                 String
 

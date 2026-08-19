@@ -109,7 +109,7 @@ GoodsReceipt
 model GoodsReceipt {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   goodsReceiptNumber     String   @unique
 

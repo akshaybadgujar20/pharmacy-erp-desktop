@@ -104,7 +104,7 @@ model UserRole {
   userId            BigInt
   roleId            BigInt
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   assignedAt        DateTime @default(now())
   assignedByUserId  BigInt?

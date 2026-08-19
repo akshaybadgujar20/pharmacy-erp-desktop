@@ -3,7 +3,7 @@ model UserSession {
 
   userId BigInt @map("user_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   sessionToken String  @unique @map("session_token")
   refreshToken String? @map("refresh_token")
@@ -15,13 +15,13 @@ model UserSession {
 
   ipAddress String? @map("ip_address")
 
-  loginTime       DateTime  @map("login_time")
-  lastActivityAt  DateTime  @map("last_activity_at")
-  logoutTime      DateTime? @map("logout_time")
-  expiresAt       DateTime  @map("expires_at")
+  loginTime      DateTime  @map("login_time")
+  lastActivityAt DateTime  @map("last_activity_at")
+  logoutTime     DateTime? @map("logout_time")
+  expiresAt      DateTime  @map("expires_at")
 
   isActive     Boolean @default(true) @map("is_active")
-  logoutReason String?  @map("logout_reason")
+  logoutReason String? @map("logout_reason")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")

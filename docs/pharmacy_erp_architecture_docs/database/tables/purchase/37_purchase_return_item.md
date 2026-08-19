@@ -110,7 +110,7 @@ PurchaseReturn (1)
 model PurchaseReturnItem {
   id                      BigInt   @id @default(autoincrement())
 
-  uuid                    String   @unique @db.Uuid
+  uuid                    String   @unique 
 
   purchaseReturnId         BigInt
   purchaseInvoiceItemId    BigInt
@@ -121,14 +121,14 @@ model PurchaseReturnItem {
 
   lineNumber              Int
 
-  returnQuantity          Decimal  @db.Decimal(14,3)
+  returnQuantity          Decimal  
 
-  unitPrice               Decimal  @db.Decimal(12,2)
+  unitPrice               Decimal  
 
-  discountAmount          Decimal  @default(0) @db.Decimal(12,2)
-  taxAmount               Decimal  @default(0) @db.Decimal(12,2)
+  discountAmount          Decimal  @default(0) 
+  taxAmount               Decimal  @default(0) 
 
-  lineAmount              Decimal  @db.Decimal(14,2)
+  lineAmount              Decimal  
 
   returnReason            String
   remarks                 String?

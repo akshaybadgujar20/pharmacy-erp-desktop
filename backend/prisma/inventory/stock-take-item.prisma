@@ -6,16 +6,16 @@ model StockTakeItem {
   batchId     BigInt @map("batch_id")
 
   // Quantities
-  systemQuantity   Decimal @map("system_quantity")   // What ERP thought was on shelf
+  systemQuantity   Decimal @map("system_quantity") // What ERP thought was on shelf
   physicalQuantity Decimal @map("physical_quantity") // What pharmacist actually counted
   varianceQuantity Decimal @map("variance_quantity") // (physical - system)
 
   // Financial Impact (Audit Valuation)
-  unitCost      Decimal @map("unit_cost")      // Landed cost of the batch
+  unitCost      Decimal @map("unit_cost") // Landed cost of the batch
   varianceValue Decimal @map("variance_value") // varianceQuantity * unitCost
 
-  // ✅ Variance Enum Applied Here
-  varianceType StockTakeVarianceType @default(MATCHED) @map("variance_type")
+  // varianceType: MATCHED, SURPLUS, DEFICIT
+  varianceType String @default("MATCHED") @map("variance_type")
 
   remarks String? @map("remarks")
 

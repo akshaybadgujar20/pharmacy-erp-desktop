@@ -4,7 +4,7 @@ model UserRole {
   userId BigInt @map("user_id")
   roleId BigInt @map("role_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   assignedAt       DateTime @default(now()) @map("assigned_at")
   assignedByUserId BigInt?  @map("assigned_by_user_id")

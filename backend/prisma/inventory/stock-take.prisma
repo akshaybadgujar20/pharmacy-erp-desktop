@@ -1,41 +1,17 @@
-// 1. Physical Inventory Count / Audit Scope
-enum StockTakeCountType {
-  FULL_AUDIT          // Complete count of all medicines in the branch
-  CYCLE_COUNT         // Periodic partial count (e.g., specific rack or high-value items)
-  SCHEDULE_H_AUDIT    // Statutory audit of Schedule H, H1, and Narcotic drugs
-  COLD_CHAIN_AUDIT    // Audit of refrigerated biologicals, vaccines, and insulin
-  NEAR_EXPIRY_AUDIT   // Audit focusing on batches expiring in the next 30–90 days
-}
-
-// 2. Stock Take Session Lifecycle Status
-enum StockTakeStatus {
-  DRAFT               // Audit session initialized & count sheets printed/loaded
-  IN_PROGRESS         // Pharmacists actively scanning/counting on shelves
-  COUNTED             // Physical counts entered, awaiting variance approval
-  RECONCILED          // Discrepancy adjustments posted to stock ledger
-  CANCELLED           // Audit session aborted without adjusting stock
-}
-
-// 3. Item Variance Outcome
-enum StockTakeVarianceType {
-  MATCHED             // Physical count matches system count exactly (Variance = 0)
-  SURPLUS             // Physical count > System count (Stock Found / Gain)
-  DEFICIT             // Physical count < System count (Stock Missing / Loss)
-}
-
 model StockTake {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  stockTakeNumber String @unique @map("stock_take_number")
+  stockTakeNumber String @map("stock_take_number")
 
   branchId BigInt @map("branch_id")
 
   stockTakeDate DateTime @map("stock_take_date")
 
-  // ✅ Enums Applied Here
-  countType StockTakeCountType @default(CYCLE_COUNT) @map("count_type")
-  status    StockTakeStatus    @default(DRAFT)       @map("status")
+  // countType: FULL_AUDIT, CYCLE_COUNT, SCHEDULE_H_AUDIT, COLD_CHAIN_AUDIT, NEAR_EXPIRY_AUDIT
+  countType String @default("CYCLE_COUNT") @map("count_type")
+  // status: DRAFT, IN_PROGRESS, COUNTED, RECONCILED, CANCELLED
+  status    String @default("DRAFT") @map("status")
 
   countedByEmployeeId  BigInt    @map("counted_by_employee_id")
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
@@ -49,13 +25,13 @@ model StockTake {
 
   version Int @default(1)
 
-  // Relations
   branch     Branch    @relation(fields: [branchId], references: [id])
   countedBy  Employee  @relation("CountedStockTakes", fields: [countedByEmployeeId], references: [id])
   approvedBy Employee? @relation("ApprovedStockTakes", fields: [approvedByEmployeeId], references: [id])
 
   items StockTakeItem[]
 
+  @@unique([branchId, stockTakeNumber])
   @@index([branchId])
   @@index([stockTakeDate])
   @@index([status])

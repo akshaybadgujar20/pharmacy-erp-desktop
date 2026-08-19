@@ -1,7 +1,7 @@
 model Permission {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   permissionCode String @unique @map("permission_code")
   permissionName String @map("permission_name")

@@ -101,14 +101,14 @@ StockTake (1)
 model StockTakeItem {
   id                 BigInt   @id @default(autoincrement())
 
-  uuid               String   @unique @db.Uuid
+  uuid               String   @unique 
 
   stockTakeId        BigInt
   batchId            BigInt
 
-  systemQuantity     Decimal  @db.Decimal(14,3)
-  physicalQuantity   Decimal  @db.Decimal(14,3)
-  varianceQuantity   Decimal  @db.Decimal(14,3)
+  systemQuantity     Decimal  
+  physicalQuantity   Decimal  
+  varianceQuantity   Decimal  
 
   varianceType       String
 

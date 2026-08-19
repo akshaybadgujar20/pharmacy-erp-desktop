@@ -1,17 +1,8 @@
-enum GoodsReceiptStatus {
-  DRAFT // Delivery arrived & unloading started
-  UNDER_INSPECTION // Quality inspection / batch & expiry check in progress
-  ACCEPTED // Fully accepted & stock added to active inventory
-  PARTIALLY_ACCEPTED // Some goods accepted, damaged/expired items rejected
-  REJECTED // Whole consignment rejected (e.g., cold-chain breach)
-  CANCELLED // Receipt voided
-}
-
 model GoodsReceipt {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  goodsReceiptNumber String @unique @map("goods_receipt_number")
+  goodsReceiptNumber String @map("goods_receipt_number")
 
   purchaseOrderId BigInt? @map("purchase_order_id")
   supplierId      BigInt  @map("supplier_id")
@@ -19,22 +10,19 @@ model GoodsReceipt {
 
   receiptDate DateTime @map("receipt_date")
 
-  // Supplier Inward Documents
   supplierChallanNo   String?   @map("supplier_challan_no")
   supplierChallanDate DateTime? @map("supplier_challan_date")
   supplierInvoiceNo   String?   @map("supplier_invoice_no")
   supplierInvoiceDate DateTime? @map("supplier_invoice_date")
   vehicleNumber       String?   @map("vehicle_number")
 
-  // Pharma Quality & Cold Chain Compliance
-  temperatureRecorded   Decimal? @map("temperature_recorded") // e.g., 4.5°C for cold-chain goods
+  temperatureRecorded   Decimal? @map("temperature_recorded")
   isColdChainMaintained Boolean  @default(true) @map("is_cold_chain_maintained")
 
-  // Statuses: 'DRAFT', 'UNDER_INSPECTION', 'ACCEPTED', 'PARTIALLY_ACCEPTED', 'REJECTED', 'CANCELLED'
-  status GoodsReceiptStatus @default(DRAFT) @map("status")
+  // status: DRAFT, UNDER_INSPECTION, ACCEPTED, PARTIALLY_ACCEPTED, REJECTED, CANCELLED
+  status String @default("DRAFT") @map("status")
 
-  // Billing Integration (3-Way Matching)
-  isBilled Boolean @default(false) @map("is_billed") // True once Purchase Invoice is generated
+  isBilled Boolean @default(false) @map("is_billed")
 
   remarks String? @map("remarks")
 
@@ -48,15 +36,18 @@ model GoodsReceipt {
 
   version Int @default(1)
 
-  // Relations
   purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
   supplier      Supplier       @relation(fields: [supplierId], references: [id])
   branch        Branch         @relation(fields: [branchId], references: [id])
   receivedBy    Employee       @relation("ReceivedGoodsReceipts", fields: [receivedByEmployeeId], references: [id])
   inspectedBy   Employee?      @relation("InspectedGoodsReceipts", fields: [inspectedByEmployeeId], references: [id])
 
-  items GoodsReceiptItem[]
+  items            GoodsReceiptItem[]
+  employee         Employee?          @relation(fields: [employeeId], references: [id])
+  employeeId       BigInt?
+  purchaseInvoices PurchaseInvoice[]
 
+  @@unique([branchId, goodsReceiptNumber])
   @@index([purchaseOrderId])
   @@index([supplierId])
   @@index([branchId])

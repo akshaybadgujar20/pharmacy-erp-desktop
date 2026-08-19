@@ -1,12 +1,13 @@
 model AuditLog {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   userId BigInt? @map("user_id")
 
   entityType String  @map("entity_type")
   entityId   BigInt? @map("entity_id")
+  entityUuid String? @map("entity_uuid")
 
   action String
   module String
@@ -25,11 +26,12 @@ model AuditLog {
 
   version Int @default(1)
 
-  user User? @relation(fields: [userId], references: [id])
+  user            User?           @relation(fields: [userId], references: [id])
   changeHistories ChangeHistory[]
 
   @@index([userId])
   @@index([entityType, entityId])
+  @@index([entityType, entityUuid])
   @@index([action])
   @@index([module])
   @@index([actionTimestamp])

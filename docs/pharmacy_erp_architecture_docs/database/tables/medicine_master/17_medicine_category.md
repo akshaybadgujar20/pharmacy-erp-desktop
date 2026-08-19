@@ -107,7 +107,7 @@ MedicineCategory
 model MedicineCategory {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   parentCategoryId  BigInt?
 

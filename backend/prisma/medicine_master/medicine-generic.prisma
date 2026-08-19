@@ -1,7 +1,7 @@
 model MedicineGeneric {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   genericCode String @unique @map("generic_code")
   genericName String @unique @map("generic_name")
@@ -19,7 +19,8 @@ model MedicineGeneric {
 
   version Int @default(1)
 
-  medicineSalts MedicineSalt[]
+  medicineSalts    MedicineSalt[]
+  saltCompositions SaltComposition[]
 
   @@index([therapeuticClass])
   @@index([isActive])

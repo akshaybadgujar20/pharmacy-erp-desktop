@@ -42,6 +42,8 @@ model PurchaseInvoiceItem {
   batch               Batch                @relation(fields: [batchId], references: [id])
   unit                UnitOfMeasure        @relation(fields: [unitId], references: [id])
   purchaseReturnItems PurchaseReturnItem[]
+  tax                 Tax?                 @relation(fields: [taxId], references: [id])
+  taxId               BigInt?
 
   @@index([purchaseInvoiceId])
   @@index([goodsReceiptItemId])

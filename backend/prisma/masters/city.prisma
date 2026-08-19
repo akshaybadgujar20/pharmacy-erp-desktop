@@ -1,7 +1,7 @@
 model City {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   stateId BigInt @map("state_id")
 
@@ -28,7 +28,6 @@ model City {
 
   @@unique([stateId, cityCode])
   @@unique([stateId, cityName])
-
   @@index([stateId])
   @@index([district])
   @@index([isActive])

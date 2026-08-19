@@ -113,7 +113,7 @@ Branch / Warehouse
 model StockTake {
   id                    BigInt   @id @default(autoincrement())
 
-  uuid                  String   @unique @db.Uuid
+  uuid                  String   @unique 
 
   stockTakeNumber       String   @unique
 

@@ -132,13 +132,13 @@ SalesInvoiceItem
 model DiscountRule {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   ruleCode          String   @unique
   ruleName          String
 
   discountType      String
-  discountValue     Decimal  @db.Decimal(12,2)
+  discountValue     Decimal  
 
   appliesTo         String
 
@@ -147,8 +147,8 @@ model DiscountRule {
   customerId        BigInt?
   priceListId       BigInt?
 
-  minimumQuantity   Decimal? @db.Decimal(14,3)
-  minimumAmount     Decimal? @db.Decimal(14,2)
+  minimumQuantity   Decimal? 
+  minimumAmount     Decimal? 
 
   priority          Int
 

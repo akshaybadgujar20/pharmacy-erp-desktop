@@ -99,7 +99,7 @@ Country
 model Country {
   id             BigInt   @id @default(autoincrement())
 
-  uuid           String   @unique @db.Uuid
+  uuid           String   @unique 
 
   countryCode    String   @unique
 

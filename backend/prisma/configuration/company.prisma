@@ -1,7 +1,7 @@
 model Company {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   companyCode String @unique @map("company_code")
   companyName String @unique @map("company_name")
@@ -11,10 +11,10 @@ model Company {
   panNumber         String? @map("pan_number")
   drugLicenseNumber String? @map("drug_license_number")
 
-  email        String?
-  phoneNumber  String? @map("phone_number")
-  website      String?
-  logoPath     String? @map("logo_path")
+  email       String?
+  phoneNumber String? @map("phone_number")
+  website     String?
+  logoPath    String? @map("logo_path")
 
   addressLine1 String? @map("address_line1")
   addressLine2 String? @map("address_line2")
@@ -32,8 +32,12 @@ model Company {
 
   version Int @default(1)
 
-  branches       Branch[]
-  financialYears FinancialYear[]
+  branches              Branch[]
+  financialYears        FinancialYear[]
+  appSettings           AppSetting[]
+  barcodeConfigurations BarcodeConfiguration[]
+  printerConfigurations PrinterConfiguration[]
+  sequenceGenerators    SequenceGenerator[]
 
   @@index([gstNumber])
   @@index([isActive])

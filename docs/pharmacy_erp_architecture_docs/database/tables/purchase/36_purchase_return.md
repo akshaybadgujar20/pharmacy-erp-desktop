@@ -121,7 +121,7 @@ PurchaseReturn
 model PurchaseReturn {
   id                      BigInt   @id @default(autoincrement())
 
-  uuid                    String   @unique @db.Uuid
+  uuid                    String   @unique 
 
   purchaseReturnNumber    String   @unique
 
@@ -133,7 +133,7 @@ model PurchaseReturn {
 
   returnReason            String
 
-  totalAmount             Decimal  @db.Decimal(14,2)
+  totalAmount             Decimal  
 
   status                  String
 

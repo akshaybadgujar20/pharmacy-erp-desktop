@@ -109,7 +109,7 @@ Prescription (1)
 model PrescriptionItem {
   id                   BigInt   @id @default(autoincrement())
 
-  uuid                 String   @unique @db.Uuid
+  uuid                 String   @unique 
 
   prescriptionId       BigInt
 
@@ -118,9 +118,9 @@ model PrescriptionItem {
 
   lineNumber           Int
 
-  prescribedQuantity   Decimal  @db.Decimal(14,3)
-  dispensedQuantity    Decimal  @default(0) @db.Decimal(14,3)
-  remainingQuantity    Decimal  @db.Decimal(14,3)
+  prescribedQuantity   Decimal  
+  dispensedQuantity    Decimal  @default(0) 
+  remainingQuantity    Decimal  
 
   dosage               String?
   frequency            String?

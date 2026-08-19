@@ -1,37 +1,8 @@
-// 1. Sales Return Reasons
-enum SalesReturnReason {
-  COURSE_CHANGED // Doctor changed patient prescription/dosage
-  PATIENT_DISCHARGED // Hospital patient discharged before consuming full course
-  WRONG_MEDICINE // Dispensed incorrect brand/strength by mistake
-  EXPIRED_ON_PURCHASE // Customer found near-expiry or expired medicine
-  DAMAGED_PACKAGING // Broken seal or crushed packaging
-  EXCESS_QUANTITY // Customer bought extra and returned unopened strips
-  ADVERSE_REACTION // Patient experienced side effects (clinical return)
-  OTHER
-}
-
-// 2. Refund & Payment Modes
-enum RefundMode {
-  CASH
-  UPI // GPay, PhonePe, Paytm, etc.
-  CARD_REVERSAL // Debit/Credit card reversal via POS terminal
-  STORE_CREDIT // Customer credit note / wallet balance
-  BANK_TRANSFER // NEFT / RTGS / IMPS
-}
-
-// 3. Document / Return Statuses
-enum SalesReturnStatus {
-  DRAFT // Return voucher initialized by cashier
-  APPROVED // Verified by head pharmacist / store manager
-  COMPLETED // Stock adjusted and refund issued
-  CANCELLED // Voucher voided
-}
-
 model SalesReturn {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  salesReturnNumber String @unique @map("sales_return_number") // Customer Credit Note No.
+  salesReturnNumber String @map("sales_return_number")
 
   salesInvoiceId BigInt  @map("sales_invoice_id")
   customerId     BigInt? @map("customer_id")
@@ -39,23 +10,22 @@ model SalesReturn {
 
   returnDate DateTime @default(now()) @map("return_date")
 
-  // Return Reasons: 'COURSE_CHANGED', 'PATIENT_DISCHARGED', 'WRONG_MEDICINE', 'EXPIRED_ON_PURCHASE'
-  returnReason SalesReturnReason @map("return_reason")
+  // returnReason: COURSE_CHANGED, PATIENT_DISCHARGED, WRONG_MEDICINE, EXPIRED_ON_PURCHASE, DAMAGED_PACKAGING, EXCESS_QUANTITY, ADVERSE_REACTION, OTHER
+  returnReason String @map("return_reason")
 
-  // Financial Breakdown (GST Credit Note values)
   grossAmount    Decimal @map("gross_amount")
   discountAmount Decimal @default(0) @map("discount_amount")
   taxAmount      Decimal @default(0) @map("tax_amount")
   roundOffAmount Decimal @default(0) @map("round_off_amount")
   netAmount      Decimal @map("net_amount")
 
-  // Refund Settlement
-  refundAmount     Decimal     @default(0) @map("refund_amount")
-  refundMode       RefundMode? @map("refund_mode") // 'CASH', 'UPI', 'STORE_CREDIT', 'CARD_REVERSAL'
-  creditNoteNumber String?     @map("credit_note_number") // If store credit voucher is given
+  refundAmount     Decimal @default(0) @map("refund_amount")
+  // refundMode: CASH, UPI, CARD_REVERSAL, STORE_CREDIT, BANK_TRANSFER
+  refundMode       String? @map("refund_mode")
+  creditNoteNumber String? @map("credit_note_number")
 
-  // Statuses: 'DRAFT', 'APPROVED', 'COMPLETED', 'CANCELLED'
-  status SalesReturnStatus @default(COMPLETED) @map("status")
+  // status: DRAFT, APPROVED, COMPLETED, CANCELLED
+  status String @default("COMPLETED") @map("status")
 
   remarks String? @map("remarks")
 
@@ -68,7 +38,6 @@ model SalesReturn {
 
   version Int @default(1)
 
-  // Relations
   salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
   customer     Customer?    @relation(fields: [customerId], references: [id])
   branch       Branch       @relation(fields: [branchId], references: [id])
@@ -76,6 +45,7 @@ model SalesReturn {
 
   items SalesReturnItem[]
 
+  @@unique([branchId, salesReturnNumber])
   @@index([salesInvoiceId])
   @@index([customerId])
   @@index([branchId])

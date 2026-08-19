@@ -114,7 +114,7 @@ SalesInvoice (1)
 model SalesPayment {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   salesInvoiceId         BigInt
 
@@ -122,7 +122,7 @@ model SalesPayment {
 
   paymentDate            DateTime
 
-  paymentAmount          Decimal  @db.Decimal(14,2)
+  paymentAmount          Decimal  
 
   paymentMethod          String
 

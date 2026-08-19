@@ -102,7 +102,7 @@ model User {
   id                    BigInt   @id @default(autoincrement())
   employeeId            BigInt   @unique
 
-  uuid                  String   @unique @db.Uuid
+  uuid                  String   @unique 
 
   username              String   @unique
   passwordHash          String

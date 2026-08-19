@@ -109,7 +109,7 @@ model UserSession {
 
   userId              BigInt
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique 
 
   sessionToken        String   @unique
   refreshToken        String?

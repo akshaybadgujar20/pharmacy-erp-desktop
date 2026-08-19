@@ -114,7 +114,7 @@ AuditLog
 model AuditLog {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   userId            BigInt?
 
@@ -132,7 +132,7 @@ model AuditLog {
 
   actionTimestamp   DateTime
 
-  correlationId     String?  @db.Uuid
+  correlationId     String?  
 
   createdAt         DateTime @default(now())
 

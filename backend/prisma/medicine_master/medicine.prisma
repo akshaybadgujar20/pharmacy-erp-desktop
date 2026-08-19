@@ -1,7 +1,7 @@
 model Medicine {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   medicineCode String @unique @map("medicine_code")
   medicineName String @map("medicine_name")
@@ -29,13 +29,17 @@ model Medicine {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  updatedBy BigInt?   @map("updated_by")
+  deletedBy BigInt?   @map("deleted_by")
 
   version Int @default(1)
 
-  manufacturer Manufacturer      @relation(fields: [manufacturerId], references: [id])
-  category     MedicineCategory  @relation(fields: [categoryId], references: [id])
-  schedule     MedicineSchedule? @relation(fields: [scheduleId], references: [id])
-  unit         UnitOfMeasure     @relation(fields: [unitId], references: [id])
+  manufacturer  Manufacturer      @relation(fields: [manufacturerId], references: [id])
+  category      MedicineCategory  @relation(fields: [categoryId], references: [id])
+  schedule      MedicineSchedule? @relation(fields: [scheduleId], references: [id])
+  unit          UnitOfMeasure     @relation(fields: [unitId], references: [id])
+  updatedByUser User?             @relation("MedicineUpdatedBy", fields: [updatedBy], references: [id])
+  deletedByUser User?             @relation("MedicineDeletedBy", fields: [deletedBy], references: [id])
 
   medicineSalts        MedicineSalt[]
   batches              Batch[]

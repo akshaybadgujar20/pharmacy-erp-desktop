@@ -1,7 +1,7 @@
 model PrescriptionItem {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   prescriptionId BigInt @map("prescription_id")
   medicineId     BigInt @map("medicine_id")
@@ -29,8 +29,8 @@ model PrescriptionItem {
 
   version Int @default(1)
 
-  prescription Prescription @relation(fields: [prescriptionId], references: [id])
-  medicine     Medicine     @relation(fields: [medicineId], references: [id])
+  prescription Prescription  @relation(fields: [prescriptionId], references: [id])
+  medicine     Medicine      @relation(fields: [medicineId], references: [id])
   unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
 
   @@index([prescriptionId])

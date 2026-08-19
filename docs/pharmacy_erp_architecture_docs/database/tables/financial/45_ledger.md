@@ -111,7 +111,7 @@ Ledger
 model Ledger {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique @db.Uuid
+  uuid              String   @unique 
 
   ledgerCode        String   @unique
   ledgerName        String

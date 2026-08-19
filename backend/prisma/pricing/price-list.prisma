@@ -1,7 +1,7 @@
 model PriceList {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   priceListCode String @unique @map("price_list_code")
   priceListName String @unique @map("price_list_name")
@@ -26,7 +26,8 @@ model PriceList {
 
   branch Branch? @relation(fields: [branchId], references: [id])
 
-  items PriceListItem[]
+  items         PriceListItem[]
+  discountRules DiscountRule[]
 
   @@index([branchId])
   @@index([priceListType])

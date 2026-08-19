@@ -1,7 +1,7 @@
 model LedgerEntry {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   ledgerId BigInt @map("ledger_id")
 
@@ -28,7 +28,8 @@ model LedgerEntry {
 
   version Int @default(1)
 
-  ledger Ledger @relation(fields: [ledgerId], references: [id])
+  ledger        Ledger @relation(fields: [ledgerId], references: [id])
+  createdByUser User?  @relation("LedgerEntryCreatedBy", fields: [createdBy], references: [id])
 
   @@index([ledgerId])
   @@index([transactionDate])

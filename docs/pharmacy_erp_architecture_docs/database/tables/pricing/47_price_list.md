@@ -2,13 +2,15 @@
 
 ## Purpose
 
-The PriceList table defines pricing policies for medicines and healthcare products.
+The PriceList table defines **branch-scoped selling price policies** for medicines and healthcare products.
 
 It allows the ERP to maintain multiple selling prices for different customer groups, branches, schemes, or time periods without modifying the Medicine or Batch master data.
 
+**Sale pricing lives here (PriceListItem), not on Batch.** Batch stores lot cost (`purchaseRate`) and statutory MRP only.
+
 Typical Price Lists include:
 
-- Retail Price
+- Retail Price (branch default)
 - Wholesale Price
 - Hospital Price
 - Distributor Price
@@ -27,7 +29,8 @@ Individual medicine prices are maintained in the **PriceListItem** table.
 - Only one Default Price List can exist for a Branch.
 - A Price List can have an Effective Date and Expiry Date.
 - Expired Price Lists cannot be used for billing.
-- Price Lists may be Branch-specific.
+- Price Lists may be branch-specific via `branchId` (null = company-wide default).
+- Billing selects branch PriceList → PriceListItem.sellingPrice (not Batch.saleRate).
 - UUID is used for synchronization.
 - BIGINT is used as the internal primary key.
 - Optimistic locking is maintained using the version column.
@@ -37,7 +40,7 @@ Individual medicine prices are maintained in the **PriceListItem** table.
 ## Relationships
 
 ```
-Branch
+Branch (optional)
    │
    ▼
 PriceList
@@ -48,21 +51,23 @@ PriceList
                 Medicine
 ```
 
+Batch (org-global) is **not** the source of sale price — only lot cost and MRP.
+
 ---
 
 ## Columns
 
-| Category | Column | SQLite | PostgreSQL | Nullable | Description |
-|----------|--------|---------|------------|----------|-------------|
+| Category | Column | SQLite | PostgreSQL (JPA) | Nullable | Description |
+|----------|--------|---------|------------------|----------|-------------|
 | Primary Key | id | INTEGER | BIGINT | No | Auto increment primary key |
-| Identifier | uuid | TEXT | UUID | No | Global unique identifier |
+| Identifier | uuid | TEXT | UUID/TEXT | No | Global unique identifier |
 | Business | priceListCode | TEXT | VARCHAR(20) | No | Unique price list code |
 | Business | priceListName | TEXT | VARCHAR(100) | No | Price list name |
-| Foreign Key | branchId | INTEGER | BIGINT | Yes | Applicable branch |
-| Business | priceListType | TEXT | VARCHAR(30) | No | RETAIL, WHOLESALE, HOSPITAL, CORPORATE, PROMOTIONAL |
+| Foreign Key | branchId | INTEGER | BIGINT | Yes | Applicable branch (null = org-wide) |
+| Business | priceListType | TEXT | VARCHAR(30) | No | RETAIL, WHOLESALE, etc. (String) |
 | Business | effectiveFrom | DATE | DATE | No | Effective date |
 | Business | effectiveTo | DATE | DATE | Yes | Expiry date |
-| Status | isDefault | INTEGER | BOOLEAN | No | Default price list |
+| Status | isDefault | INTEGER | BOOLEAN | No | Default price list for branch |
 | Status | isActive | INTEGER | BOOLEAN | No | Active status |
 | Business | remarks | TEXT | TEXT | Yes | Additional remarks |
 | Audit | createdAt | DATETIME | TIMESTAMP | No | Record creation timestamp |
@@ -79,7 +84,6 @@ PriceList
 - Unique (priceListCode)
 - Unique (priceListName)
 - Foreign Key (branchId → Branch.id)
-- CHECK (priceListType IN ('RETAIL','WHOLESALE','HOSPITAL','CORPORATE','PROMOTIONAL','GOVERNMENT'))
 - CHECK (effectiveTo IS NULL OR effectiveTo >= effectiveFrom)
 - CHECK (version >= 1)
 
@@ -100,11 +104,11 @@ PriceList
 
 ## Sample Records
 
-| id | priceListCode | priceListName | priceListType | effectiveFrom | isDefault |
-|----|---------------|---------------|---------------|---------------|-----------|
-| 1 | RETAIL | Retail Price | RETAIL | 2026-04-01 | Yes |
-| 2 | WHOLE | Wholesale Price | WHOLESALE | 2026-04-01 | No |
-| 3 | HOSP | Hospital Price | HOSPITAL | 2026-04-01 | No |
+| id | priceListCode | priceListName | branchId | priceListType | effectiveFrom | isDefault |
+|----|---------------|---------------|----------|---------------|---------------|-----------|
+| 1 | RETAIL-PUN | Pune Retail Price | 2 | RETAIL | 2026-04-01 | Yes |
+| 2 | RETAIL-MUM | Mumbai Retail Price | 3 | RETAIL | 2026-04-01 | Yes |
+| 3 | WHOLE | Wholesale Price | NULL | WHOLESALE | 2026-04-01 | No |
 
 ---
 
@@ -112,34 +116,33 @@ PriceList
 
 ```prisma
 model PriceList {
-  id              BigInt   @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid            String   @unique @db.Uuid
+  priceListCode String @unique @map("price_list_code")
+  priceListName String @unique @map("price_list_name")
 
-  priceListCode   String   @unique
-  priceListName   String   @unique
+  branchId BigInt? @map("branch_id")
 
-  branchId        BigInt?
+  priceListType String @map("price_list_type")
 
-  priceListType   String
+  effectiveFrom DateTime  @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
 
-  effectiveFrom   DateTime
-  effectiveTo     DateTime?
+  isDefault Boolean @default(false) @map("is_default")
+  isActive  Boolean @default(true) @map("is_active")
 
-  isDefault       Boolean  @default(false)
-  isActive        Boolean  @default(true)
+  remarks String?
 
-  remarks         String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  deletedAt       DateTime?
+  version Int @default(1)
 
-  version         Int      @default(1)
+  branch Branch? @relation(fields: [branchId], references: [id])
 
-  branch          Branch? @relation(fields: [branchId], references: [id])
-
-  items           PriceListItem[]
+  items PriceListItem[]
 
   @@index([branchId])
   @@index([priceListType])
@@ -152,10 +155,9 @@ model PriceList {
 
 ## Notes
 
-- This is the **header table** for medicine pricing.
-- Individual medicine prices are maintained in **PriceListItem**.
-- Multiple Price Lists may exist simultaneously for different customer categories.
-- The billing engine should automatically select the appropriate Price List based on customer type, branch, and effective date.
-- Historical Price Lists should never be modified after they become effective; create a new Price List for price revisions.
+- This is the **header table** for branch-scoped medicine pricing.
+- Individual selling prices are in **PriceListItem** — not on Batch.
+- The billing engine selects PriceList by branch + customer type + effective date, then reads `sellingPrice`.
+- Sales line items snapshot final price/MRP at transaction time.
+- Historical Price Lists should never be modified after they become effective.
 - Supports offline-first synchronization using UUID.
-- Compatible with both SQLite and PostgreSQL.

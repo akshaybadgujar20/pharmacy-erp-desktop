@@ -1,45 +1,8 @@
-// 1. Invoice Document Lifecycle Status
-enum SalesInvoiceStatus {
-  DRAFT // Cart saved / held at the counter
-  POSTED // Completed & printed bill (Inventory deducted)
-  PARTIALLY_RETURNED // Some items were returned by the customer
-  RETURNED // Entire invoice returned/reversed
-  CANCELLED // Bill voided (e.g., printed by mistake before customer paid)
-}
-
-// 2. Invoice Payment Settlement Status
-enum InvoicePaymentStatus {
-  PAID // Fully paid
-  PARTIALLY_PAID // Split or partial credit payment
-  UNPAID // B2B credit / patient hospital tab
-  REFUNDED // Money refunded back to customer
-}
-
-// 3. Primary Payment Mode
-enum PaymentMode {
-  CASH // Physical cash
-  UPI // QR Code (GPay, PhonePe, Paytm)
-  CARD // POS card swipe/tap
-  CREDIT // Account credit ledger / Hospital IP tab
-  SPLIT // Paid using multiple modes (e.g., Part Cash + Part UPI)
-  CHEQUE // Cheque payment
-  WALLET // Store loyalty points / Gift voucher
-}
-
-// 4. Sales Channel / Invoice Category (Optional & Recommended for Pharmacy)
-enum SalesType {
-  RETAIL_OTC // Over-the-counter walk-in sale
-  PRESCRIPTION // Doctor's prescription linked
-  IPD_INPATIENT // Hospital in-patient ward dispensing
-  OPD_OUTPATIENT // Clinic outpatient consultation dispensing
-  HOME_DELIVERY // Phone / Online order delivery
-}
-
 model SalesInvoice {
   id   BigInt @id @default(autoincrement())
   uuid String @unique @default(uuid())
 
-  invoiceNumber String @unique @map("invoice_number")
+  invoiceNumber String @map("invoice_number")
 
   customerId     BigInt? @map("customer_id")
   prescriptionId BigInt? @map("prescription_id")
@@ -47,26 +10,27 @@ model SalesInvoice {
 
   invoiceDate DateTime @default(now()) @map("invoice_date")
 
-  // Walk-in Customer & Doctor Tracking (Schedule H/H1 Compliance)
   patientName String? @map("patient_name")
   doctorName  String? @map("doctor_name")
 
-  // Financial Breakdown
   grossAmount    Decimal @map("gross_amount")
   discountAmount Decimal @default(0) @map("discount_amount")
   taxAmount      Decimal @default(0) @map("tax_amount")
-  roundOffAmount Decimal @default(0) @map("round_off_amount") // ✅ Added: Cash/POS Paise rounding
+  roundOffAmount Decimal @default(0) @map("round_off_amount")
   netAmount      Decimal @map("net_amount")
 
   paidAmount    Decimal @default(0) @map("paid_amount")
   balanceAmount Decimal @default(0) @map("balance_amount")
 
-  // Payment & Lifecycle Status
-  paymentMode   PaymentMode?         @map("payment_mode") // 'CASH', 'UPI', 'CARD', 'CREDIT', 'SPLIT'
-  paymentStatus InvoicePaymentStatus @default(PAID) @map("payment_status") // 'PAID', 'PARTIALLY_PAID', 'UNPAID'
-  status        SalesInvoiceStatus   @default(POSTED) @map("status") // 'POSTED', 'RETURNED', 'PARTIALLY_RETURNED', 'CANCELLED'
+  // paymentMode: CASH, UPI, CARD, CREDIT, SPLIT, CHEQUE, WALLET
+  paymentMode   String? @map("payment_mode")
+  // paymentStatus: PAID, PARTIALLY_PAID, UNPAID, REFUNDED
+  paymentStatus String  @default("PAID") @map("payment_status")
+  // status: DRAFT, POSTED, PARTIALLY_RETURNED, RETURNED, CANCELLED
+  status        String  @default("POSTED") @map("status")
 
-  salesType String @default(RETAIL_OTC) @map("sales_type") // or salesType SalesType
+  // salesType: RETAIL_OTC, PRESCRIPTION, IPD_INPATIENT, OPD_OUTPATIENT, HOME_DELIVERY
+  salesType String @default("RETAIL_OTC") @map("sales_type")
 
   remarks String? @map("remarks")
 
@@ -78,18 +42,22 @@ model SalesInvoice {
 
   version Int @default(1)
 
-  // Relations
-  customer     Customer?     @relation(fields: [customerId], references: [id])
-  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
-  branch       Branch        @relation(fields: [branchId], references: [id])
+  customer      Customer?     @relation(fields: [customerId], references: [id])
+  prescription  Prescription? @relation(fields: [prescriptionId], references: [id])
+  branch        Branch        @relation(fields: [branchId], references: [id])
+  createdByUser User?         @relation("SalesInvoiceCreatedBy", fields: [createdBy], references: [id])
 
-  items        SalesInvoiceItem[]
-  payments     SalesPayment[]
-  salesReturns SalesReturn[] // ✅ Added: Inverse relation for returns
+  items               SalesInvoiceItem[]
+  payments            SalesPayment[]
+  salesReturns        SalesReturn[]
+  loyaltyTransactions LoyaltyTransaction[]
 
+  @@unique([branchId, invoiceNumber])
   @@index([customerId])
   @@index([prescriptionId])
   @@index([branchId])
+  @@index([branchId, invoiceDate])
+  @@index([customerId, invoiceDate])
   @@index([invoiceDate])
   @@index([status])
   @@index([paymentStatus])

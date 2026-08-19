@@ -1,7 +1,7 @@
 model Role {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   roleCode String @unique @map("role_code")
   roleName String @unique @map("role_name")

@@ -42,6 +42,8 @@ model SalesInvoiceItem {
   unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
 
   salesReturnItems SalesReturnItem[] // ✅ Added: Inverse relation for return line items
+  tax              Tax?              @relation(fields: [taxId], references: [id])
+  taxId            BigInt?
 
   @@unique([salesInvoiceId, batchId]) // Prevent duplicate batch rows on the same bill
   @@index([salesInvoiceId])

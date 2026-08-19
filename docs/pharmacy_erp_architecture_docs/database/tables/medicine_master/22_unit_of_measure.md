@@ -113,7 +113,7 @@ UnitOfMeasure (1)
 model UnitOfMeasure {
   id               BigInt   @id @default(autoincrement())
 
-  uuid             String   @unique @db.Uuid
+  uuid             String   @unique 
 
   unitCode         String   @unique
   unitName         String   @unique

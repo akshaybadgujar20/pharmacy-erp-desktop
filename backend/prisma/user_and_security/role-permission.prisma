@@ -4,7 +4,7 @@ model RolePermission {
   roleId       BigInt @map("role_id")
   permissionId BigInt @map("permission_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   isGranted Boolean @default(true) @map("is_granted")
 

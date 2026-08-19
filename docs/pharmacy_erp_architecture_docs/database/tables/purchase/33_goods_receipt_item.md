@@ -120,7 +120,7 @@ GoodsReceipt (1)
 model GoodsReceiptItem {
   id                    BigInt   @id @default(autoincrement())
 
-  uuid                  String   @unique @db.Uuid
+  uuid                  String   @unique 
 
   goodsReceiptId        BigInt
   purchaseOrderItemId   BigInt?
@@ -135,13 +135,13 @@ model GoodsReceiptItem {
   manufacturingDate     DateTime?
   expiryDate            DateTime
 
-  receivedQuantity      Decimal  @db.Decimal(14,3)
+  receivedQuantity      Decimal  
 
-  purchaseRate          Decimal  @db.Decimal(12,2)
-  mrp                   Decimal  @db.Decimal(12,2)
-  saleRate              Decimal  @db.Decimal(12,2)
+  purchaseRate          Decimal  
+  mrp                   Decimal  
+  saleRate              Decimal  
 
-  lineAmount            Decimal  @db.Decimal(14,2)
+  lineAmount            Decimal  
 
   remarks               String?
 

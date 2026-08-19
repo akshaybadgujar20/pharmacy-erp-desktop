@@ -124,7 +124,7 @@ SalesInvoice
 model SalesInvoice {
   id                 BigInt   @id @default(autoincrement())
 
-  uuid               String   @unique @db.Uuid
+  uuid               String   @unique 
 
   invoiceNumber      String   @unique
 
@@ -134,13 +134,13 @@ model SalesInvoice {
 
   invoiceDate        DateTime
 
-  grossAmount        Decimal  @db.Decimal(14,2)
-  discountAmount     Decimal  @default(0) @db.Decimal(14,2)
-  taxAmount          Decimal  @default(0) @db.Decimal(14,2)
-  netAmount          Decimal  @db.Decimal(14,2)
+  grossAmount        Decimal  
+  discountAmount     Decimal  @default(0) 
+  taxAmount          Decimal  @default(0) 
+  netAmount          Decimal  
 
-  paidAmount         Decimal  @default(0) @db.Decimal(14,2)
-  balanceAmount      Decimal  @default(0) @db.Decimal(14,2)
+  paidAmount         Decimal  @default(0) 
+  balanceAmount      Decimal  @default(0) 
 
   paymentMode        String?
   status             String

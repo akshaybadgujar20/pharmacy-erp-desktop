@@ -1,7 +1,7 @@
 model DiscountRule {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   ruleCode String @unique @map("rule_code")
   ruleName String @map("rule_name")

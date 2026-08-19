@@ -1,7 +1,7 @@
 model PrinterConfiguration {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   companyId BigInt  @map("company_id")
   branchId  BigInt? @map("branch_id")
@@ -9,7 +9,7 @@ model PrinterConfiguration {
   printerName String @map("printer_name")
   printerType String @map("printer_type")
 
-  documentType String @map("document_type")
+  documentType String  @map("document_type")
   printerPath  String? @map("printer_path")
   paperSize    String? @map("paper_size")
 

@@ -101,7 +101,7 @@ Role (1)
 model Role {
   id             BigInt   @id @default(autoincrement())
 
-  uuid           String   @unique @db.Uuid
+  uuid           String   @unique 
 
   roleCode       String   @unique
   roleName       String   @unique

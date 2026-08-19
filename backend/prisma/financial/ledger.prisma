@@ -1,7 +1,7 @@
 model Ledger {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   ledgerCode String @unique @map("ledger_code")
   ledgerName String @map("ledger_name")

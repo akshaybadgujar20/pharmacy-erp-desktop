@@ -124,7 +124,7 @@ SalesReturn
 model SalesReturn {
   id                     BigInt   @id @default(autoincrement())
 
-  uuid                   String   @unique @db.Uuid
+  uuid                   String   @unique 
 
   salesReturnNumber      String   @unique
 
@@ -136,8 +136,8 @@ model SalesReturn {
 
   returnReason           String
 
-  totalAmount            Decimal  @db.Decimal(14,2)
-  refundAmount           Decimal  @default(0) @db.Decimal(14,2)
+  totalAmount            Decimal  
+  refundAmount           Decimal  @default(0) 
 
   status                 String
 

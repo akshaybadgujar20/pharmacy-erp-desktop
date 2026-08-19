@@ -105,7 +105,7 @@ Company
 model Company {
   id                  BigInt   @id @default(autoincrement())
 
-  uuid                String   @unique @db.Uuid
+  uuid                String   @unique 
 
   companyCode         String   @unique
   companyName         String   @unique

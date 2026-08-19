@@ -1,7 +1,7 @@
 model LoyaltyProgram {
   id BigInt @id @default(autoincrement())
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   programCode String @unique @map("program_code")
   programName String @unique @map("program_name")
