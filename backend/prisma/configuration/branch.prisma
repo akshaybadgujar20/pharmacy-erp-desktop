@@ -22,7 +22,7 @@ model Branch {
   country      String?
   pinCode      String? @map("pin_code")
 
-  managerName String? @map("manager_name")
+  managerName String?   @map("manager_name")
   openingDate DateTime? @map("opening_date")
 
   isHeadOffice Boolean @default(false) @map("is_head_office")
@@ -34,7 +34,25 @@ model Branch {
 
   version Int @default(1)
 
-  company Company @relation(fields: [companyId], references: [id])
+  company               Company                @relation(fields: [companyId], references: [id])
+  stockAdjustments      StockAdjustment[]
+  appSettings           AppSetting[]
+  barcodeConfigurations BarcodeConfiguration[]
+  financialYears        FinancialYear[]
+  printerConfigurations PrinterConfiguration[]
+  sequenceGenerators    SequenceGenerator[]
+  prescriptions         Prescription[]
+  priceLists            PriceList[]
+  goodsReceipts         GoodsReceipt[]
+  purchaseInvoices      PurchaseInvoice[]
+  purchaseOrders        PurchaseOrder[]
+  purchaseReturns       PurchaseReturn[]
+  salesInvoices         SalesInvoice[]
+  salesReturns          SalesReturn[]
+  stockMovements        StockMovement[]
+  stockTakes            StockTake[]
+  transfersSent         StockTransfer[]        @relation("SourceStockTransfers")
+  transfersReceived     StockTransfer[]        @relation("DestinationStockTransfers")
 
   @@unique([companyId, branchCode])
   @@index([companyId])

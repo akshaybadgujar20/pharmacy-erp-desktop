@@ -1,29 +1,64 @@
-model GoodsReceiptItem {
-  id BigInt @id @default(autoincrement())
+// 1. Line Item Quality Control Status
+enum ItemInspectionStatus {
+  PASSED // All items verified and accepted into stock
+  PARTIALLY_PASSED // Some units accepted, some rejected
+  FAILED // Entire line rejected (e.g., broken bottle, expired batch)
+  PENDING // Still waiting for physical count/pharmacist check
+}
 
-  uuid String @unique
+// 2. Reason for Inward Rejection (When rejectedQuantity > 0)
+enum InwardRejectionReason {
+  DAMAGED_PACKAGING // Crushed box or broken seal
+  BROKEN_OR_LEAKING // Broken vials / leaking syrups
+  NEAR_EXPIRY_DELIVERED // Distributor delivered stock expiring in < 3–6 months
+  EXPIRED_DELIVERED // Received already expired stock
+  TEMPERATURE_BREACH // Cold chain failure (e.g., insulin arrived warm)
+  LABEL_UNREADABLE // Batch number or expiry date is smudged/missing
+  WRONG_PRODUCT_DELIVERED // Discrepancy with PO (e.g., 250mg instead of 500mg)
+  EXCESS_UNORDERED // Received items not present on PO
+}
+
+model GoodsReceiptItem {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   goodsReceiptId      BigInt  @map("goods_receipt_id")
   purchaseOrderItemId BigInt? @map("purchase_order_item_id")
-
-  medicineId BigInt @map("medicine_id")
-  unitId     BigInt @map("unit_id")
+  medicineId          BigInt  @map("medicine_id")
+  batchId             BigInt? @map("batch_id")
+  unitId              BigInt  @map("unit_id")
 
   lineNumber Int @map("line_number")
 
+  // Batch Details captured during inward inspection
   batchNumber       String    @map("batch_number")
   manufacturingDate DateTime? @map("manufacturing_date")
   expiryDate        DateTime  @map("expiry_date")
 
+  // Quantities
   receivedQuantity Decimal @map("received_quantity")
+  freeQuantity     Decimal @default(0) @map("free_quantity")
+  rejectedQuantity Decimal @default(0) @map("rejected_quantity")
+  acceptedQuantity Decimal @map("accepted_quantity")
 
-  purchaseRate Decimal @map("purchase_rate")
-  mrp          Decimal
-  saleRate     Decimal @map("sale_rate")
+  // Quality & Rejection Enums
+  inspectionStatus ItemInspectionStatus   @default(PASSED) @map("inspection_status")
+  rejectionReason  InwardRejectionReason? @map("rejection_reason")
 
-  lineAmount Decimal @map("line_amount")
+  // Packaging Conversion (e.g., 1 Box = 10 Strips)
+  conversionFactor Decimal @default(1) @map("conversion_factor")
 
-  remarks String?
+  // Pricing & Commercials
+  purchaseRate    Decimal  @map("purchase_rate")
+  mrp             Decimal  @map("mrp")
+  saleRate        Decimal  @map("sale_rate")
+  discountPercent Decimal? @map("discount_percent")
+  discountAmount  Decimal  @default(0) @map("discount_amount")
+  taxPercent      Decimal? @map("tax_percent")
+  taxAmount       Decimal  @default(0) @map("tax_amount")
+  lineAmount      Decimal  @map("line_amount")
+
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -31,14 +66,20 @@ model GoodsReceiptItem {
 
   version Int @default(1)
 
-  goodsReceipt      GoodsReceipt       @relation(fields: [goodsReceiptId], references: [id])
-  purchaseOrderItem PurchaseOrderItem? @relation(fields: [purchaseOrderItemId], references: [id])
-  medicine          Medicine            @relation(fields: [medicineId], references: [id])
-  unit              UnitOfMeasure       @relation(fields: [unitId], references: [id])
+  // Relations
+  goodsReceipt         GoodsReceipt          @relation(fields: [goodsReceiptId], references: [id])
+  purchaseOrderItem    PurchaseOrderItem?    @relation(fields: [purchaseOrderItemId], references: [id])
+  medicine             Medicine              @relation(fields: [medicineId], references: [id])
+  batch                Batch?                @relation(fields: [batchId], references: [id])
+  unit                 UnitOfMeasure         @relation(fields: [unitId], references: [id])
+  purchaseInvoiceItems PurchaseInvoiceItem[]
 
   @@index([goodsReceiptId])
   @@index([purchaseOrderItemId])
   @@index([medicineId])
+  @@index([batchId])
   @@index([batchNumber])
   @@index([expiryDate])
+  @@index([inspectionStatus])
+  @@map("goods_receipt_items")
 }

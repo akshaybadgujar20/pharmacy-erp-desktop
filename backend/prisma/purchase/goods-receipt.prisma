@@ -1,7 +1,15 @@
-model GoodsReceipt {
-  id BigInt @id @default(autoincrement())
+enum GoodsReceiptStatus {
+  DRAFT // Delivery arrived & unloading started
+  UNDER_INSPECTION // Quality inspection / batch & expiry check in progress
+  ACCEPTED // Fully accepted & stock added to active inventory
+  PARTIALLY_ACCEPTED // Some goods accepted, damaged/expired items rejected
+  REJECTED // Whole consignment rejected (e.g., cold-chain breach)
+  CANCELLED // Receipt voided
+}
 
-  uuid String @unique
+model GoodsReceipt {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   goodsReceiptNumber String @unique @map("goods_receipt_number")
 
@@ -11,14 +19,28 @@ model GoodsReceipt {
 
   receiptDate DateTime @map("receipt_date")
 
-  supplierChallanNo String? @map("supplier_challan_no")
-  vehicleNumber     String? @map("vehicle_number")
+  // Supplier Inward Documents
+  supplierChallanNo   String?   @map("supplier_challan_no")
+  supplierChallanDate DateTime? @map("supplier_challan_date")
+  supplierInvoiceNo   String?   @map("supplier_invoice_no")
+  supplierInvoiceDate DateTime? @map("supplier_invoice_date")
+  vehicleNumber       String?   @map("vehicle_number")
 
-  status String
+  // Pharma Quality & Cold Chain Compliance
+  temperatureRecorded   Decimal? @map("temperature_recorded") // e.g., 4.5°C for cold-chain goods
+  isColdChainMaintained Boolean  @default(true) @map("is_cold_chain_maintained")
 
-  remarks String?
+  // Statuses: 'DRAFT', 'UNDER_INSPECTION', 'ACCEPTED', 'PARTIALLY_ACCEPTED', 'REJECTED', 'CANCELLED'
+  status GoodsReceiptStatus @default(DRAFT) @map("status")
 
-  receivedByEmployeeId BigInt @map("received_by_employee_id")
+  // Billing Integration (3-Way Matching)
+  isBilled Boolean @default(false) @map("is_billed") // True once Purchase Invoice is generated
+
+  remarks String? @map("remarks")
+
+  receivedByEmployeeId  BigInt    @map("received_by_employee_id")
+  inspectedByEmployeeId BigInt?   @map("inspected_by_employee_id")
+  inspectedAt           DateTime? @map("inspected_at")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -26,10 +48,12 @@ model GoodsReceipt {
 
   version Int @default(1)
 
+  // Relations
   purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
   supplier      Supplier       @relation(fields: [supplierId], references: [id])
   branch        Branch         @relation(fields: [branchId], references: [id])
-  receivedBy    Employee       @relation(fields: [receivedByEmployeeId], references: [id])
+  receivedBy    Employee       @relation("ReceivedGoodsReceipts", fields: [receivedByEmployeeId], references: [id])
+  inspectedBy   Employee?      @relation("InspectedGoodsReceipts", fields: [inspectedByEmployeeId], references: [id])
 
   items GoodsReceiptItem[]
 
@@ -38,4 +62,6 @@ model GoodsReceipt {
   @@index([branchId])
   @@index([receiptDate])
   @@index([status])
+  @@index([isBilled])
+  @@map("goods_receipts")
 }

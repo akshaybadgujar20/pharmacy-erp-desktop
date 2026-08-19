@@ -1,0 +1,28 @@
+model StockAdjustmentItem {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
+
+  stockAdjustmentId BigInt @map("stock_adjustment_id")
+  batchId           BigInt @map("batch_id")
+
+  // Quantity to adjust: can be positive (stock found) or negative (loss/damage)
+  quantity Decimal @map("quantity")
+  unitCost Decimal @map("unit_cost") // Purchase rate snapshot for accounting write-offs
+
+  remarks String? @map("remarks")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  version Int @default(1)
+
+  stockAdjustment StockAdjustment @relation(fields: [stockAdjustmentId], references: [id])
+  batch           Batch           @relation(fields: [batchId], references: [id])
+
+  // Prevent duplicate batch entries in the same adjustment document
+  @@unique([stockAdjustmentId, batchId])
+  @@index([stockAdjustmentId])
+  @@index([batchId])
+  @@map("stock_adjustment_items")
+}

@@ -1,7 +1,13 @@
-model SalesReturnItem {
-  id BigInt @id @default(autoincrement())
+// 4. Return Item Stock Disposition (Bonus: How physical stock is handled)
+enum StockDisposition {
+  RESTOCK // Returned to active sellable shelf (unopened/good condition)
+  DAMAGED_QUARANTINE // Placed in damaged/quarantine bin (broken seal/handling damage)
+  DISCARD // Destroyed/scrapped immediately (contaminated/opened liquids)
+}
 
-  uuid String @unique
+model SalesReturnItem {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   salesReturnId      BigInt @map("sales_return_id")
   salesInvoiceItemId BigInt @map("sales_invoice_item_id")
@@ -14,17 +20,23 @@ model SalesReturnItem {
 
   returnQuantity Decimal @map("return_quantity")
 
-  unitPrice Decimal @map("unit_price")
-
-  discountAmount Decimal @default(0) @map("discount_amount")
-  taxAmount      Decimal @default(0) @map("tax_amount")
-
-  lineAmount Decimal @map("line_amount")
+  // Pricing Reversal
+  unitPrice       Decimal  @map("unit_price")
+  discountPercent Decimal? @map("discount_percent")
+  discountAmount  Decimal  @default(0) @map("discount_amount")
+  taxPercent      Decimal? @map("tax_percent")
+  taxAmount       Decimal  @default(0) @map("tax_amount")
+  lineAmount      Decimal  @map("line_amount")
 
   returnReason String @map("return_reason")
-  disposition  String
 
-  remarks String?
+  // Critical Pharma Stock Disposition:
+  // 'RESTOCK' -> Back to available stock
+  // 'DAMAGED_QUARANTINE' -> Back to damaged stock (not saleable)
+  // 'DISCARD' -> Written off directly
+  disposition StockDisposition @default(RESTOCK) @map("disposition")
+
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -32,16 +44,19 @@ model SalesReturnItem {
 
   version Int @default(1)
 
+  // Relations
   salesReturn      SalesReturn      @relation(fields: [salesReturnId], references: [id])
   salesInvoiceItem SalesInvoiceItem @relation(fields: [salesInvoiceItemId], references: [id])
   medicine         Medicine         @relation(fields: [medicineId], references: [id])
   batch            Batch            @relation(fields: [batchId], references: [id])
   unit             UnitOfMeasure    @relation(fields: [unitId], references: [id])
 
+  @@unique([salesReturnId, batchId]) // Prevent duplicate batch rows on the same return slip
   @@index([salesReturnId])
   @@index([salesInvoiceItemId])
   @@index([batchId])
   @@index([medicineId])
   @@index([disposition])
   @@index([lineNumber])
+  @@map("sales_return_items")
 }

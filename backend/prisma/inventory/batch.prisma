@@ -3,8 +3,7 @@ model Batch {
 
   uuid String @unique
 
-  medicineId            BigInt  @map("medicine_id")
-  purchaseInvoiceItemId BigInt? @map("purchase_invoice_item_id")
+  medicineId BigInt @map("medicine_id")
 
   batchNumber String @map("batch_number")
 
@@ -19,8 +18,7 @@ model Batch {
 
   barcode String?
 
-  isExpired Boolean @default(false) @map("is_expired")
-  isActive  Boolean @default(true) @map("is_active")
+  isActive Boolean @default(true) @map("is_active")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -28,16 +26,22 @@ model Batch {
 
   version Int @default(1)
 
-  medicine            Medicine             @relation(fields: [medicineId], references: [id])
-  purchaseInvoiceItem PurchaseInvoiceItem? @relation(fields: [purchaseInvoiceItemId], references: [id])
+  medicine Medicine @relation(fields: [medicineId], references: [id])
 
-  stock          Stock?
-  stockMovements StockMovement[]
+  stock                Stock?
+  stockMovements       StockMovement[]
+  stockAdjustmentItems StockAdjustmentItem[]
+  stockTransferItems   StockTransferItem[]
+  stockTakeItems       StockTakeItem[]
+
+  purchaseInvoiceItems PurchaseInvoiceItem[]
+  purchaseReturnItems  PurchaseReturnItem[]
+  salesInvoiceItems    SalesInvoiceItem[]
+  salesReturnItems     SalesReturnItem[]
 
   @@unique([medicineId, batchNumber])
   @@index([medicineId])
   @@index([expiryDate])
   @@index([barcode])
-  @@index([isExpired])
   @@index([isActive])
 }

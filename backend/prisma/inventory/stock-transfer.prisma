@@ -1,7 +1,25 @@
-model StockTransfer {
-  id BigInt @id @default(autoincrement())
+// 1. Inter-Branch Stock Transfer Lifecycle Status
+enum StockTransferStatus {
+  DRAFT               // Transfer request created / items being picked
+  PENDING_APPROVAL    // Awaiting dispatch authorization
+  DISPATCHED          // Stock deducted from source branch and packed
+  IN_TRANSIT          // En route with courier / internal transport van
+  PARTIALLY_RECEIVED  // Destination received goods, but some items damaged/missing
+  COMPLETED           // Destination acknowledged and safely restocked all items
+  REJECTED            // Destination rejected transfer (e.g., cold-chain breach)
+  CANCELLED           // Cancelled before dispatch
+}
 
-  uuid String @unique
+// 2. Transfer Purpose / Priority (Optional)
+enum StockTransferType {
+  ROUTINE_REPLENISHMENT // Regular warehouse-to-store stock replenishment
+  EMERGENCY_TRANSFER    // Urgent patient prescription demand
+  EXCESS_REBALANCING    // Moving slow-moving inventory to high-demand branch
+}
+
+model StockTransfer {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   transferNumber String @unique @map("transfer_number")
 
@@ -12,11 +30,14 @@ model StockTransfer {
   expectedArrivalDate DateTime? @map("expected_arrival_date")
   receivedDate        DateTime? @map("received_date")
 
-  status String
+  // ✅ Enums Applied Here
+  status       StockTransferStatus @default(DRAFT) @map("status")
+  transferType StockTransferType   @default(ROUTINE_REPLENISHMENT) @map("transfer_type")
 
-  approvedByEmployeeId BigInt? @map("approved_by_employee_id")
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
 
-  remarks String?
+  remarks String? @map("remarks")
 
   createdBy BigInt? @map("created_by")
 
@@ -26,6 +47,10 @@ model StockTransfer {
 
   version Int @default(1)
 
+  // Named Branch Relations
+  sourceBranch      Branch @relation("SourceStockTransfers", fields: [sourceBranchId], references: [id])
+  destinationBranch Branch @relation("DestinationStockTransfers", fields: [destinationBranchId], references: [id])
+
   approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
 
   items StockTransferItem[]
@@ -34,4 +59,6 @@ model StockTransfer {
   @@index([destinationBranchId])
   @@index([transferDate])
   @@index([status])
+  @@index([transferType])
+  @@map("stock_transfers")
 }

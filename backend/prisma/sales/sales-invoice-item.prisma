@@ -1,19 +1,23 @@
 model SalesInvoiceItem {
-  id BigInt @id @default(autoincrement())
-
-  uuid String @unique
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   salesInvoiceId BigInt @map("sales_invoice_id")
-
-  medicineId BigInt @map("medicine_id")
-  batchId    BigInt @map("batch_id")
-  unitId     BigInt @map("unit_id")
+  medicineId     BigInt @map("medicine_id")
+  batchId        BigInt @map("batch_id")
+  unitId         BigInt @map("unit_id") // Sales UOM (e.g., Strip, Tablet, Bottle)
 
   lineNumber Int @map("line_number")
 
   soldQuantity Decimal @map("sold_quantity")
 
-  unitPrice Decimal @map("unit_price")
+  // Pricing & Compliance
+  mrp          Decimal  @map("mrp") // ✅ Added: Statutory MRP display on invoice
+  unitPrice    Decimal  @map("unit_price") // Selling price charged to customer
+  purchaseRate Decimal? @map("purchase_rate") // ✅ Added: For instant profit/margin calculation
+
+  // Packaging conversion (e.g. 1 strip = 10 tablets)
+  conversionFactor Decimal @default(1) @map("conversion_factor")
 
   discountPercent Decimal? @map("discount_percent")
   discountAmount  Decimal  @default(0) @map("discount_amount")
@@ -23,7 +27,7 @@ model SalesInvoiceItem {
 
   lineAmount Decimal @map("line_amount")
 
-  remarks String?
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -31,13 +35,18 @@ model SalesInvoiceItem {
 
   version Int @default(1)
 
-  salesInvoice SalesInvoice @relation(fields: [salesInvoiceId], references: [id])
-  medicine     Medicine     @relation(fields: [medicineId], references: [id])
-  batch        Batch        @relation(fields: [batchId], references: [id])
+  // Relations
+  salesInvoice SalesInvoice  @relation(fields: [salesInvoiceId], references: [id])
+  medicine     Medicine      @relation(fields: [medicineId], references: [id])
+  batch        Batch         @relation(fields: [batchId], references: [id])
   unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
 
+  salesReturnItems SalesReturnItem[] // ✅ Added: Inverse relation for return line items
+
+  @@unique([salesInvoiceId, batchId]) // Prevent duplicate batch rows on the same bill
   @@index([salesInvoiceId])
   @@index([medicineId])
   @@index([batchId])
   @@index([lineNumber])
+  @@map("sales_invoice_items")
 }

@@ -1,10 +1,9 @@
 model PurchaseReturnItem {
-  id BigInt @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid String @unique
-
-  purchaseReturnId      BigInt @map("purchase_return_id")
-  purchaseInvoiceItemId BigInt @map("purchase_invoice_item_id")
+  purchaseReturnId      BigInt  @map("purchase_return_id")
+  purchaseInvoiceItemId BigInt? @map("purchase_invoice_item_id")
 
   medicineId BigInt @map("medicine_id")
   batchId    BigInt @map("batch_id")
@@ -14,14 +13,15 @@ model PurchaseReturnItem {
 
   returnQuantity Decimal @map("return_quantity")
 
-  unitPrice      Decimal @map("unit_price")
-  discountAmount Decimal @default(0) @map("discount_amount")
-  taxAmount      Decimal @default(0) @map("tax_amount")
+  // Pricing & Reversal Values
+  unitPrice       Decimal  @map("unit_price")
+  discountPercent Decimal? @map("discount_percent")
+  discountAmount  Decimal  @default(0) @map("discount_amount")
+  taxPercent      Decimal? @map("tax_percent")
+  taxAmount       Decimal  @default(0) @map("tax_amount")
+  lineAmount      Decimal  @map("line_amount")
 
-  lineAmount Decimal @map("line_amount")
-
-  returnReason String @map("return_reason")
-  remarks      String?
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -29,15 +29,18 @@ model PurchaseReturnItem {
 
   version Int @default(1)
 
-  purchaseReturn      PurchaseReturn      @relation(fields: [purchaseReturnId], references: [id])
-  purchaseInvoiceItem PurchaseInvoiceItem @relation(fields: [purchaseInvoiceItemId], references: [id])
-  medicine            Medicine            @relation(fields: [medicineId], references: [id])
-  batch               Batch               @relation(fields: [batchId], references: [id])
-  unit                UnitOfMeasure       @relation(fields: [unitId], references: [id])
+  // Relations
+  purchaseReturn      PurchaseReturn       @relation(fields: [purchaseReturnId], references: [id])
+  purchaseInvoiceItem PurchaseInvoiceItem? @relation(fields: [purchaseInvoiceItemId], references: [id])
+  medicine            Medicine             @relation(fields: [medicineId], references: [id])
+  batch               Batch                @relation(fields: [batchId], references: [id])
+  unit                UnitOfMeasure        @relation(fields: [unitId], references: [id])
 
+  @@unique([purchaseReturnId, batchId]) // Prevent duplicate batch rows in the same return voucher
   @@index([purchaseReturnId])
   @@index([purchaseInvoiceItemId])
   @@index([batchId])
   @@index([medicineId])
   @@index([lineNumber])
+  @@map("purchase_return_items")
 }

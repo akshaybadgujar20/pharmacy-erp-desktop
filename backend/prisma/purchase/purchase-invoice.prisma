@@ -1,10 +1,24 @@
-model PurchaseInvoice {
-  id BigInt @id @default(autoincrement())
+// 1. Purchase Invoice Document Lifecycle Status
+enum PurchaseInvoiceStatus {
+  DRAFT // Bill entered by accounts clerk, pending verification/matching
+  POSTED // Verified & posted to Accounts Payable ledger
+  CANCELLED // Voided / Rejected bill
+}
 
-  uuid String @unique
+// 2. Vendor Payment Settlement Status
+enum PurchasePaymentStatus {
+  UNPAID // No payment made yet
+  PARTIALLY_PAID // Partial payment released to supplier
+  PAID // Fully settled
+  OVERDUE // Past due_date without full payment
+}
+
+model PurchaseInvoice {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   purchaseInvoiceNumber String @unique @map("purchase_invoice_number")
-  supplierInvoiceNumber String @map("supplier_invoice_number")
+  supplierInvoiceNumber String @map("supplier_invoice_number") // Vendor's bill number
 
   supplierId     BigInt  @map("supplier_id")
   goodsReceiptId BigInt? @map("goods_receipt_id")
@@ -13,17 +27,21 @@ model PurchaseInvoice {
   invoiceDate DateTime  @map("invoice_date")
   dueDate     DateTime? @map("due_date")
 
+  // Financial Breakdown
   grossAmount    Decimal @map("gross_amount")
   discountAmount Decimal @default(0) @map("discount_amount")
   taxAmount      Decimal @default(0) @map("tax_amount")
+  roundOffAmount Decimal @default(0) @map("round_off_amount")
 
   netAmount     Decimal @map("net_amount")
   paidAmount    Decimal @default(0) @map("paid_amount")
-  balanceAmount Decimal @map("balance_amount")
+  balanceAmount Decimal @default(0) @map("balance_amount")
 
-  status String
+  // Enums
+  status        PurchaseInvoiceStatus @default(DRAFT) @map("status")
+  paymentStatus PurchasePaymentStatus @default(UNPAID) @map("payment_status")
 
-  remarks String?
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -31,18 +49,22 @@ model PurchaseInvoice {
 
   version Int @default(1)
 
-  supplier     Supplier      @relation(fields: [supplierId], references: [id])
-  goodsReceipt GoodsReceipt? @relation(fields: [goodsReceiptId], references: [id])
-  branch       Branch        @relation(fields: [branchId], references: [id])
+  // Relations
+  supplier        Supplier              @relation(fields: [supplierId], references: [id])
+  goodsReceipt    GoodsReceipt?         @relation(fields: [goodsReceiptId], references: [id])
+  branch          Branch                @relation(fields: [branchId], references: [id])
+  items           PurchaseInvoiceItem[]
+  payments        Payment[]
+  purchaseReturns PurchaseReturn[] // Inverse relation for debit notes / returns
 
-  items    PurchaseInvoiceItem[]
-  payments Payment[]
-
+  // Prevent duplicate supplier bill entry
   @@unique([supplierId, supplierInvoiceNumber])
   @@index([supplierId])
   @@index([goodsReceiptId])
   @@index([branchId])
   @@index([invoiceDate])
   @@index([status])
+  @@index([paymentStatus])
   @@index([dueDate])
+  @@map("purchase_invoices")
 }

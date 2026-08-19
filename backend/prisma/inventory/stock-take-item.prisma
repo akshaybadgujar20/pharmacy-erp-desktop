@@ -1,20 +1,27 @@
 model StockTakeItem {
-  id BigInt @id @default(autoincrement())
-
-  uuid String @unique
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   stockTakeId BigInt @map("stock_take_id")
   batchId     BigInt @map("batch_id")
 
-  systemQuantity   Decimal @map("system_quantity")
-  physicalQuantity Decimal @map("physical_quantity")
-  varianceQuantity Decimal @map("variance_quantity")
+  // Quantities
+  systemQuantity   Decimal @map("system_quantity")   // What ERP thought was on shelf
+  physicalQuantity Decimal @map("physical_quantity") // What pharmacist actually counted
+  varianceQuantity Decimal @map("variance_quantity") // (physical - system)
 
-  varianceType String @map("variance_type")
+  // Financial Impact (Audit Valuation)
+  unitCost      Decimal @map("unit_cost")      // Landed cost of the batch
+  varianceValue Decimal @map("variance_value") // varianceQuantity * unitCost
 
-  remarks String?
+  // ✅ Variance Enum Applied Here
+  varianceType StockTakeVarianceType @default(MATCHED) @map("variance_type")
 
-  isReconciled Boolean @default(false) @map("is_reconciled")
+  remarks String? @map("remarks")
+
+  // Reconciliation Tracking
+  isReconciled      Boolean @default(false) @map("is_reconciled")
+  stockAdjustmentId BigInt? @map("stock_adjustment_id") // Link to auto-generated adjustment voucher
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -22,12 +29,16 @@ model StockTakeItem {
 
   version Int @default(1)
 
-  stockTake StockTake @relation(fields: [stockTakeId], references: [id])
-  batch    Batch     @relation(fields: [batchId], references: [id])
+  // Relations
+  stockTake       StockTake        @relation(fields: [stockTakeId], references: [id])
+  batch           Batch            @relation(fields: [batchId], references: [id])
+  stockAdjustment StockAdjustment? @relation(fields: [stockAdjustmentId], references: [id])
 
+  // Prevent counting the same batch multiple times in one audit session
   @@unique([stockTakeId, batchId])
   @@index([stockTakeId])
   @@index([batchId])
   @@index([varianceType])
   @@index([isReconciled])
+  @@map("stock_take_items")
 }

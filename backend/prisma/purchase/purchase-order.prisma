@@ -1,7 +1,18 @@
-model PurchaseOrder {
-  id BigInt @id @default(autoincrement())
+// Purchase Order Lifecycle Status
+enum PurchaseOrderStatus {
+  DRAFT               // Order being drafted by procurement staff
+  PENDING_APPROVAL    // Submitted, awaiting manager / head pharmacist approval
+  APPROVED            // Approved and ready to send
+  SENT_TO_SUPPLIER    // PO emailed/dispatched to distributor
+  PARTIALLY_RECEIVED  // Part of the ordered quantities received via GRN
+  COMPLETED           // All items fully received
+  FORCE_CLOSED        // Short-closed for remaining unavailable items
+  CANCELLED           // Order cancelled before delivery
+}
 
-  uuid String @unique
+model PurchaseOrder {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   purchaseOrderNumber String @unique @map("purchase_order_number")
 
@@ -11,13 +22,16 @@ model PurchaseOrder {
   orderDate            DateTime  @map("order_date")
   expectedDeliveryDate DateTime? @map("expected_delivery_date")
 
-  totalAmount    Decimal @map("total_amount")
-  taxAmount      Decimal @default(0) @map("tax_amount")
+  // Financial Breakdown
+  grossAmount    Decimal @map("gross_amount")
   discountAmount Decimal @default(0) @map("discount_amount")
+  taxAmount      Decimal @default(0) @map("tax_amount")
+  netAmount      Decimal @map("net_amount")
 
-  status String
+  // Enum Applied Here
+  status PurchaseOrderStatus @default(DRAFT) @map("status")
 
-  remarks String?
+  remarks String? @map("remarks")
 
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
   approvedAt           DateTime? @map("approved_at")
@@ -28,6 +42,7 @@ model PurchaseOrder {
 
   version Int @default(1)
 
+  // Relations
   supplier   Supplier  @relation(fields: [supplierId], references: [id])
   branch     Branch    @relation(fields: [branchId], references: [id])
   approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
@@ -39,4 +54,5 @@ model PurchaseOrder {
   @@index([branchId])
   @@index([orderDate])
   @@index([status])
+  @@map("purchase_orders")
 }

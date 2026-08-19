@@ -3,16 +3,14 @@ model Stock {
 
   uuid String @unique
 
-  batchId BigInt @unique @map("batch_id")
+  batchId  BigInt @unique @map("batch_id")
+  branchId BigInt @map("branch_id")
 
-  availableQuantity  Decimal @default(0) @map("available_quantity")
-  reservedQuantity   Decimal @default(0) @map("reserved_quantity")
-  damagedQuantity    Decimal @default(0) @map("damaged_quantity")
-  expiredQuantity    Decimal @default(0) @map("expired_quantity")
-  inTransitQuantity  Decimal @default(0) @map("in_transit_quantity")
-
-  reorderLevel Decimal? @map("reorder_level")
-  maximumLevel Decimal? @map("maximum_level")
+  availableQuantity Decimal @default(0) @map("available_quantity")
+  reservedQuantity  Decimal @default(0) @map("reserved_quantity")
+  damagedQuantity   Decimal @default(0) @map("damaged_quantity")
+  expiredQuantity   Decimal @default(0) @map("expired_quantity")
+  inTransitQuantity Decimal @default(0) @map("in_transit_quantity")
 
   lastMovementAt DateTime? @map("last_movement_at")
 
@@ -26,8 +24,12 @@ model Stock {
 
   batch Batch @relation(fields: [batchId], references: [id])
 
+  // One stock record per batch PER branch
+  @@unique([branchId, batchId])
+  @@index([branchId])
+  @@index([batchId])
   @@index([availableQuantity])
-  @@index([reorderLevel])
   @@index([lastMovementAt])
   @@index([isActive])
+  @@map("stocks")
 }

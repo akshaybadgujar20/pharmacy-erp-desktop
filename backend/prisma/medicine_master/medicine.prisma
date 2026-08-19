@@ -7,9 +7,9 @@ model Medicine {
   medicineName String @map("medicine_name")
 
   manufacturerId BigInt  @map("manufacturer_id")
-  categoryId    BigInt  @map("category_id")
-  scheduleId    BigInt? @map("schedule_id")
-  unitId        BigInt  @map("unit_id")
+  categoryId     BigInt  @map("category_id")
+  scheduleId     BigInt? @map("schedule_id")
+  unitId         BigInt  @map("unit_id")
 
   brandName  String? @map("brand_name")
   strength   String?
@@ -37,8 +37,18 @@ model Medicine {
   schedule     MedicineSchedule? @relation(fields: [scheduleId], references: [id])
   unit         UnitOfMeasure     @relation(fields: [unitId], references: [id])
 
-  medicineSalts MedicineSalt[]
-  batches       Batch[]
+  medicineSalts        MedicineSalt[]
+  batches              Batch[]
+  stockMovements       StockMovement[]
+  prescriptionItems    PrescriptionItem[]
+  discountRules        DiscountRule[]
+  priceListItems       PriceListItem[]
+  goodsReceiptItems    GoodsReceiptItem[]
+  purchaseInvoiceItems PurchaseInvoiceItem[]
+  purchaseOrderItems   PurchaseOrderItem[]
+  purchaseReturnItems  PurchaseReturnItem[]
+  salesInvoiceItems    SalesInvoiceItem[]
+  salesReturnItems     SalesReturnItem[]
 
   @@index([medicineName])
   @@index([manufacturerId])

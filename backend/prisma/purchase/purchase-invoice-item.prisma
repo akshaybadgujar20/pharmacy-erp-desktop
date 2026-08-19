@@ -1,7 +1,6 @@
 model PurchaseInvoiceItem {
-  id BigInt @id @default(autoincrement())
-
-  uuid String @unique
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   purchaseInvoiceId  BigInt  @map("purchase_invoice_id")
   goodsReceiptItemId BigInt? @map("goods_receipt_item_id")
@@ -12,9 +11,13 @@ model PurchaseInvoiceItem {
 
   lineNumber Int @map("line_number")
 
+  // Quantities
   invoiceQuantity Decimal @map("invoice_quantity")
+  freeQuantity    Decimal @default(0) @map("free_quantity")
 
+  // Pricing & Taxes
   unitPrice Decimal @map("unit_price")
+  mrp       Decimal @map("mrp")
 
   discountPercent Decimal? @map("discount_percent")
   discountAmount  Decimal  @default(0) @map("discount_amount")
@@ -24,7 +27,7 @@ model PurchaseInvoiceItem {
 
   lineAmount Decimal @map("line_amount")
 
-  remarks String?
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -32,15 +35,18 @@ model PurchaseInvoiceItem {
 
   version Int @default(1)
 
-  purchaseInvoice  PurchaseInvoice    @relation(fields: [purchaseInvoiceId], references: [id])
-  goodsReceiptItem GoodsReceiptItem?  @relation(fields: [goodsReceiptItemId], references: [id])
-  medicine         Medicine            @relation(fields: [medicineId], references: [id])
-  batch            Batch               @relation(fields: [batchId], references: [id])
-  unit             UnitOfMeasure       @relation(fields: [unitId], references: [id])
+  // Relations
+  purchaseInvoice     PurchaseInvoice      @relation(fields: [purchaseInvoiceId], references: [id])
+  goodsReceiptItem    GoodsReceiptItem?    @relation(fields: [goodsReceiptItemId], references: [id])
+  medicine            Medicine             @relation(fields: [medicineId], references: [id])
+  batch               Batch                @relation(fields: [batchId], references: [id])
+  unit                UnitOfMeasure        @relation(fields: [unitId], references: [id])
+  purchaseReturnItems PurchaseReturnItem[]
 
   @@index([purchaseInvoiceId])
   @@index([goodsReceiptItemId])
   @@index([medicineId])
   @@index([batchId])
   @@index([lineNumber])
+  @@map("purchase_invoice_items")
 }

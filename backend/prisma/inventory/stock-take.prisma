@@ -1,7 +1,31 @@
-model StockTake {
-  id BigInt @id @default(autoincrement())
+// 1. Physical Inventory Count / Audit Scope
+enum StockTakeCountType {
+  FULL_AUDIT          // Complete count of all medicines in the branch
+  CYCLE_COUNT         // Periodic partial count (e.g., specific rack or high-value items)
+  SCHEDULE_H_AUDIT    // Statutory audit of Schedule H, H1, and Narcotic drugs
+  COLD_CHAIN_AUDIT    // Audit of refrigerated biologicals, vaccines, and insulin
+  NEAR_EXPIRY_AUDIT   // Audit focusing on batches expiring in the next 30–90 days
+}
 
-  uuid String @unique
+// 2. Stock Take Session Lifecycle Status
+enum StockTakeStatus {
+  DRAFT               // Audit session initialized & count sheets printed/loaded
+  IN_PROGRESS         // Pharmacists actively scanning/counting on shelves
+  COUNTED             // Physical counts entered, awaiting variance approval
+  RECONCILED          // Discrepancy adjustments posted to stock ledger
+  CANCELLED           // Audit session aborted without adjusting stock
+}
+
+// 3. Item Variance Outcome
+enum StockTakeVarianceType {
+  MATCHED             // Physical count matches system count exactly (Variance = 0)
+  SURPLUS             // Physical count > System count (Stock Found / Gain)
+  DEFICIT             // Physical count < System count (Stock Missing / Loss)
+}
+
+model StockTake {
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
   stockTakeNumber String @unique @map("stock_take_number")
 
@@ -9,15 +33,15 @@ model StockTake {
 
   stockTakeDate DateTime @map("stock_take_date")
 
-  countType String @map("count_type")
-  status    String
+  // ✅ Enums Applied Here
+  countType StockTakeCountType @default(CYCLE_COUNT) @map("count_type")
+  status    StockTakeStatus    @default(DRAFT)       @map("status")
 
-  countedByEmployeeId  BigInt  @map("counted_by_employee_id")
-  approvedByEmployeeId BigInt? @map("approved_by_employee_id")
+  countedByEmployeeId  BigInt    @map("counted_by_employee_id")
+  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
+  approvedAt           DateTime? @map("approved_at")
 
-  approvedAt DateTime? @map("approved_at")
-
-  remarks String?
+  remarks String? @map("remarks")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -25,8 +49,10 @@ model StockTake {
 
   version Int @default(1)
 
-  countedBy  Employee  @relation("StockTakeCounter", fields: [countedByEmployeeId], references: [id])
-  approvedBy Employee? @relation("StockTakeApprover", fields: [approvedByEmployeeId], references: [id])
+  // Relations
+  branch     Branch    @relation(fields: [branchId], references: [id])
+  countedBy  Employee  @relation("CountedStockTakes", fields: [countedByEmployeeId], references: [id])
+  approvedBy Employee? @relation("ApprovedStockTakes", fields: [approvedByEmployeeId], references: [id])
 
   items StockTakeItem[]
 
@@ -34,4 +60,5 @@ model StockTake {
   @@index([stockTakeDate])
   @@index([status])
   @@index([countType])
+  @@map("stock_takes")
 }

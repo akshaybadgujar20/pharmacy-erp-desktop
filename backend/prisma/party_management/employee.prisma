@@ -2,7 +2,7 @@ model Employee {
   id      BigInt @id @default(autoincrement())
   partyId BigInt @unique @map("party_id")
 
-  uuid String @unique
+  uuid String @unique @default(uuid())
 
   employeeCode String @unique @map("employee_code")
 
@@ -25,10 +25,25 @@ model Employee {
 
   version Int @default(1)
 
-  party Party @relation(fields: [partyId], references: [id])
+  // Core Relations
+  party            Party             @relation(fields: [partyId], references: [id])
+  users            User[]
+  stockAdjustments StockAdjustment[]
+  stockTransfers   StockTransfer[]
+  goodsReceipts    GoodsReceipt[]
+  purchaseOrders   PurchaseOrder[]
+  purchaseReturns  PurchaseReturn[]
+  salesReturns     SalesReturn[]
+
+  // ✅ Disambiguated Named Relations for StockTakes
+  countedStockTakes      StockTake[]    @relation("CountedStockTakes")
+  approvedStockTakes     StockTake[]    @relation("ApprovedStockTakes")
+  receivedGoodsReceipts  GoodsReceipt[] @relation("ReceivedGoodsReceipts")
+  inspectedGoodsReceipts GoodsReceipt[] @relation("InspectedGoodsReceipts")
 
   @@index([department])
   @@index([designation])
   @@index([isPharmacist])
   @@index([isActive])
+  @@map("employees")
 }

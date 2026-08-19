@@ -17,9 +17,7 @@ model UserRole {
 
   version Int @default(1)
 
-  user       User  @relation("UserRoles", fields: [userId], references: [id])
-  role       Role  @relation(fields: [roleId], references: [id])
-  assignedBy User? @relation("AssignedRoles", fields: [assignedByUserId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
 
   @@unique([userId, roleId])
   @@index([userId])

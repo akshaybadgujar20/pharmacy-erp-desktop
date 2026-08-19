@@ -1,9 +1,10 @@
 model StockAdjustment {
-  id BigInt @id @default(autoincrement())
-
+  id   BigInt @id @default(autoincrement())
   uuid String @unique
 
   adjustmentNumber String @unique @map("adjustment_number")
+
+  branchId BigInt @map("branch_id")
 
   adjustmentType String   @map("adjustment_type")
   adjustmentDate DateTime @map("adjustment_date")
@@ -13,8 +14,7 @@ model StockAdjustment {
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
   approvedAt           DateTime? @map("approved_at")
 
-  status String
-
+  status   String
   isActive Boolean @default(true) @map("is_active")
 
   createdBy BigInt? @map("created_by")
@@ -25,12 +25,17 @@ model StockAdjustment {
 
   version Int @default(1)
 
+  // Relations
+  branch     Branch    @relation(fields: [branchId], references: [id])
   approvedBy Employee? @relation(fields: [approvedByEmployeeId], references: [id])
 
-  items StockAdjustmentItem[]
+  items          StockAdjustmentItem[]
+  stockTakeItems StockTakeItem[]
 
+  @@index([branchId])
   @@index([adjustmentDate])
   @@index([status])
   @@index([adjustmentType])
   @@index([approvedByEmployeeId])
+  @@map("stock_adjustments")
 }

@@ -26,6 +26,7 @@ model AuditLog {
   version Int @default(1)
 
   user User? @relation(fields: [userId], references: [id])
+  changeHistories ChangeHistory[]
 
   @@index([userId])
   @@index([entityType, entityId])

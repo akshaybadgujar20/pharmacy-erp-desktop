@@ -1,23 +1,53 @@
+// 1. Reason / Type of Purchase Return to Distributor
+enum PurchaseReturnType {
+  EXPIRED_GOODS // Expired stock return for distributor credit
+  DAMAGED_GOODS // Broken, leaking, or damaged packaging
+  BATCH_RECALL // Official manufacturer / drug authority recall
+  WRONG_ITEM_DELIVERED // Discrepancy with original PO
+  NEAR_EXPIRY // Return of stock with short remaining shelf-life
+  EXCESS_STOCK // Overstocked goods returned by mutual agreement
+}
+
+// 2. Purchase Return / Debit Note Lifecycle Status
+enum PurchaseReturnStatus {
+  DRAFT // Return debit note drafted
+  PENDING_APPROVAL // Awaiting manager / head pharmacist sign-off
+  DISPATCHED_TO_SUPPLIER // Box handed over to distributor runner / courier
+  ACCEPTED // Distributor acknowledged and accepted physical return
+  CREDITED // Supplier Credit Note received & settled against accounts payable
+  REJECTED // Return rejected by distributor (e.g., past claim window)
+  CANCELLED // Voucher voided
+}
+
 model PurchaseReturn {
-  id BigInt @id @default(autoincrement())
+  id   BigInt @id @default(autoincrement())
+  uuid String @unique @default(uuid())
 
-  uuid String @unique
-
-  purchaseReturnNumber String @unique @map("purchase_return_number")
+  purchaseReturnNumber String @unique @map("purchase_return_number") // Debit Note Number
 
   supplierId        BigInt  @map("supplier_id")
-  purchaseInvoiceId BigInt? @map("purchase_invoice_id")
+  purchaseInvoiceId BigInt? @map("purchase_invoice_id") // Optional link to original invoice
   branchId          BigInt  @map("branch_id")
 
-  returnDate   DateTime @map("return_date")
-  returnReason String   @map("return_reason")
+  returnDate DateTime @map("return_date")
 
-  totalAmount Decimal @map("total_amount")
+  // ✅ Enums Applied Here
+  returnType   PurchaseReturnType   @map("return_type")
+  status       PurchaseReturnStatus @default(DRAFT) @map("status")
+  returnReason String?              @map("return_reason")
 
-  status String
+  // Financial Breakdown (GST Debit Note values)
+  grossAmount    Decimal @map("gross_amount")
+  discountAmount Decimal @default(0) @map("discount_amount")
+  taxAmount      Decimal @default(0) @map("tax_amount")
+  netAmount      Decimal @map("net_amount")
 
-  supplierCreditNoteNo String? @map("supplier_credit_note_no")
-  remarks              String?
+  // Supplier Settlement (Distributor Credit Note)
+  supplierCreditNoteNo   String?   @map("supplier_credit_note_no")
+  supplierCreditNoteDate DateTime? @map("supplier_credit_note_date")
+  isSettled              Boolean   @default(false) @map("is_settled")
+
+  remarks String? @map("remarks")
 
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
   approvedAt           DateTime? @map("approved_at")
@@ -28,6 +58,7 @@ model PurchaseReturn {
 
   version Int @default(1)
 
+  // Relations
   supplier        Supplier         @relation(fields: [supplierId], references: [id])
   purchaseInvoice PurchaseInvoice? @relation(fields: [purchaseInvoiceId], references: [id])
   branch          Branch           @relation(fields: [branchId], references: [id])
@@ -40,4 +71,7 @@ model PurchaseReturn {
   @@index([branchId])
   @@index([returnDate])
   @@index([status])
+  @@index([returnType])
+  @@index([isSettled])
+  @@map("purchase_returns")
 }
