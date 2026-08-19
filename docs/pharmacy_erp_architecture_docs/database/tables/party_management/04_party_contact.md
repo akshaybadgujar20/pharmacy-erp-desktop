@@ -99,25 +99,15 @@ Party (1)
 ## Prisma Model
 
 ```prisma
-enum ContactType {
-  PHONE
-  MOBILE
-  EMAIL
-  FAX
-  WHATSAPP
-  OTHER
-}
-```
-
-
-```prisma
+// contactType stored as String (no Prisma enums on SQLite).
+// Allowed values: PHONE, MOBILE, EMAIL, FAX, WHATSAPP, OTHER
 model PartyContact {
   id            BigInt   @id @default(autoincrement())
   partyId       BigInt   @map("party_id")
 
-  uuid          String   @unique
+  uuid          String   @unique @default(uuid())
 
-  contactType   ContactType @map("contact_type")
+  contactType   String   @map("contact_type") // PHONE, MOBILE, EMAIL, FAX, WHATSAPP, OTHER
   contactValue  String   @map("contact_value")
   countryCode   String?  @map("country_code")
 

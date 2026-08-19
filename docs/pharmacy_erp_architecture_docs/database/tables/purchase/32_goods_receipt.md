@@ -71,7 +71,7 @@ GoodsReceipt
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (goodsReceiptNumber)
+- Unique (branchId, goodsReceiptNumber) — document numbers are unique per branch, not globally
 - Foreign Key (purchaseOrderId → PurchaseOrder.id)
 - Foreign Key (supplierId → Supplier.id)
 - Foreign Key (branchId → Branch.id)

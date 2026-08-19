@@ -62,7 +62,8 @@ AuditLog
 | Identifier | uuid | TEXT | UUID | No | Global unique identifier |
 | Foreign Key | userId | INTEGER | BIGINT | Yes | User performing the action |
 | Business | entityType | TEXT | VARCHAR(100) | No | Business entity name |
-| Business | entityId | INTEGER | BIGINT | Yes | Business entity ID |
+| Business | entityId | INTEGER | BIGINT | Yes | Local business entity ID (not synced) |
+| Business | entityUuid | TEXT | UUID | Yes | Global business entity UUID (sync-safe reference) |
 | Business | action | TEXT | VARCHAR(30) | No | CREATE, UPDATE, DELETE, LOGIN, LOGOUT, APPROVE, POST |
 | Business | module | TEXT | VARCHAR(50) | No | ERP module |
 | Business | description | TEXT | TEXT | Yes | Human-readable description |
@@ -91,6 +92,7 @@ AuditLog
 - UK_AuditLog_UUID
 - IDX_AuditLog_User
 - IDX_AuditLog_Entity
+- IDX_AuditLog_EntityUuid
 - IDX_AuditLog_Action
 - IDX_AuditLog_Module
 - IDX_AuditLog_Timestamp
@@ -114,12 +116,13 @@ AuditLog
 model AuditLog {
   id                BigInt   @id @default(autoincrement())
 
-  uuid              String   @unique 
+  uuid              String   @unique @default(uuid())
 
   userId            BigInt?
 
   entityType        String
   entityId          BigInt?
+  entityUuid        String?
 
   action            String
   module            String
@@ -142,6 +145,7 @@ model AuditLog {
 
   @@index([userId])
   @@index([entityType, entityId])
+  @@index([entityType, entityUuid])
   @@index([action])
   @@index([module])
   @@index([actionTimestamp])

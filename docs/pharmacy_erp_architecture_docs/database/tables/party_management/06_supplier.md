@@ -110,24 +110,16 @@ Party (1)
 ## Prisma Model
 
 ```prisma
-enum SupplierType {
-  MANUFACTURER
-  DISTRIBUTOR
-  WHOLESALER
-  OTHER
-}
-```
-
-
-```prisma
+// supplierType stored as String (no Prisma enums on SQLite).
+// Allowed values: MANUFACTURER, DISTRIBUTOR, WHOLESALER, OTHER
 model Supplier {
   id                  BigInt   @id @default(autoincrement())
   partyId             BigInt   @unique @map("party_id")
 
-  uuid                String   @unique
+  uuid                String   @unique @default(uuid())
 
   supplierCode        String   @unique @map("supplier_code")
-  supplierType        SupplierType @map("supplier_type")
+  supplierType        String   @map("supplier_type") // MANUFACTURER, DISTRIBUTOR, WHOLESALER, OTHER
 
   gstin               String?  @unique
   drugLicenseNumber   String? @map("drug_license_number")

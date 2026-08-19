@@ -82,7 +82,7 @@ SalesInvoice
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (invoiceNumber)
+- Unique (branchId, invoiceNumber) — document numbers are unique per branch, not globally
 - Foreign Key (customerId → Customer.id)
 - Foreign Key (prescriptionId → Prescription.id)
 - Foreign Key (branchId → Branch.id)

@@ -59,7 +59,8 @@ AuditLog
 | Identifier | uuid | TEXT | UUID | No | Global unique identifier |
 | Foreign Key | auditLogId | INTEGER | BIGINT | No | References AuditLog.id |
 | Business | entityType | TEXT | VARCHAR(100) | No | Entity name |
-| Business | entityId | INTEGER | BIGINT | No | Business entity ID |
+| Business | entityId | INTEGER | BIGINT | No | Local business entity ID (not synced) |
+| Business | entityUuid | TEXT | UUID | Yes | Global business entity UUID (sync-safe reference) |
 | Business | fieldName | TEXT | VARCHAR(100) | No | Modified field name |
 | Business | oldValue | TEXT | TEXT | Yes | Previous value |
 | Business | newValue | TEXT | TEXT | Yes | Updated value |
@@ -87,6 +88,7 @@ AuditLog
 - UK_ChangeHistory_UUID
 - IDX_ChangeHistory_AuditLog
 - IDX_ChangeHistory_Entity
+- IDX_ChangeHistory_EntityUuid
 - IDX_ChangeHistory_Field
 - IDX_ChangeHistory_ChangedAt
 
@@ -108,12 +110,13 @@ AuditLog
 model ChangeHistory {
   id            BigInt   @id @default(autoincrement())
 
-  uuid          String   @unique 
+  uuid          String   @unique @default(uuid())
 
   auditLogId    BigInt
 
   entityType    String
   entityId      BigInt
+  entityUuid    String?
 
   fieldName     String
 
@@ -132,6 +135,7 @@ model ChangeHistory {
 
   @@index([auditLogId])
   @@index([entityType, entityId])
+  @@index([entityType, entityUuid])
   @@index([fieldName])
   @@index([changedAt])
 }

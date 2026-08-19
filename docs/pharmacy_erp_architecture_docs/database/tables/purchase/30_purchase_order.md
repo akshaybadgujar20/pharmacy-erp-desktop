@@ -70,7 +70,7 @@ PurchaseOrder
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (purchaseOrderNumber)
+- Unique (branchId, purchaseOrderNumber) — document numbers are unique per branch, not globally
 - Foreign Key (supplierId → Supplier.id)
 - Foreign Key (branchId → Branch.id)
 - Foreign Key (approvedByEmployeeId → Employee.id)

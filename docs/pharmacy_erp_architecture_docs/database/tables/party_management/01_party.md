@@ -99,15 +99,11 @@ Party (1)
 ## Prisma Model
 
 ```prisma
-enum PartyType {
-  PERSON
-  ORGANIZATION
-}
-
+// partyType stored as String (no Prisma enums on SQLite). Allowed values: PERSON, ORGANIZATION
 model Party {
   id               BigInt    @id @default(autoincrement())
-  uuid             String    @unique
-  partyType        PartyType @map("party_type")   
+  uuid             String    @unique @default(uuid())
+  partyType        String    @map("party_type") // PERSON, ORGANIZATION
   displayName      String    @map("display_name")
 
   firstName        String? @map("first_name")

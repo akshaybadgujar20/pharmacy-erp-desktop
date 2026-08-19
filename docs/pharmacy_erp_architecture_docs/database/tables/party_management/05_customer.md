@@ -103,23 +103,16 @@ Party (1)
 ## Prisma Model
 
 ```prisma
-enum CustomerType {
-  RETAIL
-  WHOLESALE
-  CORPORATE
-}
-```
-
-
-```prisma
+// customerType stored as String (no Prisma enums on SQLite).
+// Allowed values: RETAIL, WHOLESALE, CORPORATE
 model Customer {
   id                 BigInt    @id @default(autoincrement())
   partyId            BigInt     @unique @map("party_id")
 
-  uuid               String     @unique
+  uuid               String     @unique @default(uuid())
 
   customerCode       String     @unique @map("customer_code")
-  customerType       CustomerType @map("customer_type")
+  customerType       String     @map("customer_type") // RETAIL, WHOLESALE, CORPORATE
 
   creditLimit        Decimal    @default(0) @map("credit_limit")
   outstandingAmount  Decimal    @default(0) @map("outstanding_amount")

@@ -74,7 +74,7 @@ PurchaseInvoice
 
 - Primary Key (id)
 - Unique (uuid)
-- Unique (purchaseInvoiceNumber)
+- Unique (branchId, purchaseInvoiceNumber) — document numbers are unique per branch, not globally
 - Unique (supplierId, supplierInvoiceNumber)
 - Foreign Key (supplierId → Supplier.id)
 - Foreign Key (goodsReceiptId → GoodsReceipt.id)

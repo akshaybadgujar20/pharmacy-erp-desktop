@@ -105,25 +105,15 @@ Party (1)
 ## Prisma Model
 
 ```prisma
-enum AddressType {
-  HOME
-  WORK
-  BILLING
-  SHIPPING
-  REGISTERED
-  OTHER
-}
-```
-
-
-```prisma
+// addressType stored as String (no Prisma enums on SQLite).
+// Allowed values: HOME, WORK, BILLING, SHIPPING, REGISTERED, OTHER
 model PartyAddress {
   id            BigInt   @id @default(autoincrement())
   partyId       BigInt   @map("party_id")
 
-  uuid          String   @unique
+  uuid          String   @unique @default(uuid())
 
-  addressType   AddressType @map("address_type")
+  addressType   String   @map("address_type") // HOME, WORK, BILLING, SHIPPING, REGISTERED, OTHER
 
   addressLine1  String   @map("address_line1")
   addressLine2  String?  @map("address_line2")
