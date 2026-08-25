@@ -16,3 +16,16 @@ export function isPaginatedResult<T>(
 ): value is PaginatedResult<T> {
   return value instanceof PaginatedResult;
 }
+
+export function buildPagination(
+  total: number,
+  page: number,
+  pageSize: number,
+): Pagination {
+  return {
+    page,
+    pageSize,
+    total,
+    totalPages: Math.ceil(total / pageSize) || 0,
+  };
+}

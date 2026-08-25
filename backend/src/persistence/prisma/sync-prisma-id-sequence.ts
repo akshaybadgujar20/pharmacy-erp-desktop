@@ -75,6 +75,18 @@ export async function syncPrismaIdSequenceFromDatabase(
           select: { id: true },
         }),
       ),
+      maxId(client, () =>
+        client.userSession.findFirst({
+          orderBy: { id: 'desc' },
+          select: { id: true },
+        }),
+      ),
+      maxId(client, () =>
+        client.auditLog.findFirst({
+          orderBy: { id: 'desc' },
+          select: { id: true },
+        }),
+      ),
     ]);
 
     const peak = ids.reduce((a, b) => (b > a ? b : a), 0n);
