@@ -22,7 +22,7 @@ const config: Config = {
     'node_modules/(?!(.*\\.mjs$))'
   ],
 
-  testMatch: ['**/*.spec.ts']
+  testMatch: ['<rootDir>/src/**/*.spec.ts']
 };
 
 export default config;

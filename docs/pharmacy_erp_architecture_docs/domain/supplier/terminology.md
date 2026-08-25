@@ -1,61 +1,62 @@
-# Supplier - Terminology
+# Supplier — Terminology
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+Ubiquitous language for the Supplier bounded context aligned with party management and financial payment vocabulary.
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Map business terms to database columns and cross-context references.
 
 ## Scope
-### In Scope
-- ...
 
-### Out of Scope
-- ...
+Supplier master data and payment terminology; not purchase invoice line items.
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+[06_supplier.md](../../database/tables/party_management/06_supplier.md), [financial.md](../../database/tables/financial/financial.md).
+
+## Glossary
+
+| Term | Definition | Persistence |
+|------|------------|-------------|
+| **Supplier** | Party in vendor role | `Supplier` + Party |
+| **Supplier Code** | Unique code (`SUP00001`) | `Supplier.supplierCode` |
+| **Supplier Type** | MANUFACTURER, DISTRIBUTOR, WHOLESALER, OTHER | `Supplier.supplierType` |
+| **GSTIN** | GST Identification Number (India) | `Supplier.gstin` |
+| **Drug License Number** | State drug license for pharma vendors | `Supplier.drugLicenseNumber` |
+| **PAN** | Permanent Account Number | `Supplier.panNumber` |
+| **Preferred Supplier** | Suggested default on PO entry | `Supplier.preferredSupplier` |
+| **Payable Outstanding** | Amount owed to supplier | `Supplier.outstandingAmount`; ledger-derived |
+| **Payment Terms** | Credit days from supplier | `Supplier.paymentTermsDays` |
+| **Supplier Payment** | Outgoing payment voucher | `Payment.paymentType = SUPPLIER_PAYMENT` |
+| **Party** | Shared identity root | `Party` |
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+- Use **Supplier** in purchasing screens; **Party** in unified master-data admin.
+- **Vendor** is an acceptable synonym in UI labels but code uses Supplier.
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+`SupplierPaymentCompleted` refers to Finance Payment post, not PurchaseInvoice creation.
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+**Inactive supplier** — no new POs; existing payables remain.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
+
+Payment references supplier via business reference fields on `Payment` — see [payments.md](payments.md).
 
 ## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+
+GSTIN/PAN are tax identifiers — restrict export in reports.
 
 ## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+
+Autocomplete searches `displayName` (Party) and `supplierCode`.
 
 ## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+
+**Contract** term reserved for future module — see [contracts.md](contracts.md).

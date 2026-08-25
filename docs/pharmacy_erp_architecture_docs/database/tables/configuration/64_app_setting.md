@@ -1,5 +1,7 @@
 # AppSetting
 
+**Runtime access:** `SettingsService` (`backend/src/settings/`) — see [Early foundations — settings](../../architecture/early-foundations.md#configuration-driven-settings-appsetting).
+
 ## Purpose
 
 The AppSetting table stores configurable application settings used throughout the Pharmacy ERP.

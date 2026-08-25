@@ -2,106 +2,100 @@
 # Payment Flow
 
 ## Business Objective
-Customer and supplier payment processing.
+
+Record customer receipts and supplier payments, update invoice balances, and post ledger entries without breaking inventory integrity.
+
+## Data Model
+
+- **SalesPayment** — payments against `SalesInvoice` (Cash, UPI, Card, Credit, Split)
+- **Receipt** — formal incoming money document (finance)
+- **Payment** — outgoing money to suppliers (finance)
+- **LedgerEntry** — double-entry journal lines from posted payments/receipts
+- **SalesInvoice.paymentStatus** — `UNPAID`, `PARTIALLY_PAID`, `PAID`, `REFUNDED`
 
 ## Business Owner
-- Pharmacy Manager
-- Store Manager
+
 - Finance
-- Inventory Team
+- Store Manager
+- Cashier
 
 ## Actors
-- User
-- ERP System
-- Inventory Service
-- Finance Service
-- Reporting Service
+
+- Cashier / Accountant
+- FinanceService
+- UnitOfWork
 
 ## Trigger
-Business action initiates this workflow.
+
+Customer pays at sale, partial payment on credit invoice, supplier payment against purchase invoice, or refund on return.
 
 ## Preconditions
-- User authenticated
-- Permissions validated
-- Master data exists
-- Company and branch selected
 
-## Main Flow
-1. Validate request.
-2. Load master data.
-3. Validate business rules.
-4. Execute transaction.
-5. Persist database changes.
-6. Publish domain events.
-7. Update reports and dashboards.
-8. Write audit trail.
-9. Notify dependent modules.
+- User authenticated with branch context
+- Source invoice posted and not cancelled
+- Permission for payment create (finance / sales as applicable)
+
+## Main Flow (customer receipt at sale)
+
+1. Post or open `SalesInvoice` with `paymentStatus` default.
+2. Create `SalesPayment` row(s) for each mode (Cash + UPI split).
+3. Update `SalesInvoice.paidAmount`, `balanceAmount`, `paymentStatus`.
+4. Optional: create `Receipt` + `LedgerEntry` pair for accounting.
+5. `AuditService.log` + `Outbox` with `entityUuid` in same transaction.
+6. Commit.
+
+## Main Flow (supplier payment)
+
+1. Select posted `PurchaseInvoice` with outstanding balance.
+2. Create `Payment` with mode, amount, reference.
+3. Post `LedgerEntry` (supplier account credit, bank/cash debit).
+4. Audit + outbox atomically.
 
 ## Alternate Flows
-- Validation failure
-- Duplicate transaction
-- Stock unavailable
-- Approval rejected
+
+- Partial payment → `PARTIALLY_PAID` until balance zero
+- Overpayment → reject or store as advance (policy)
+- Refund on sales return → `REFUNDED` or offset against new payment
 
 ## Exception Handling
-- Rollback transaction
-- Log technical error
-- Create audit record
-- Display user-friendly message
+
+- Rollback entire transaction — no partial payment without invoice update
+- Idempotent payment reference where gateway provides transaction id
 
 ## Business Rules
-- Soft delete only.
-- Every transaction is auditable.
-- No direct stock manipulation outside approved workflows.
-- Financial impact must be traceable.
+
+- Payment amounts cannot exceed invoice balance without approval
+- Mixed modes sum to payment total
+- Financial posting must balance (debit = credit) in `LedgerEntry`
+- Never adjust stock in payment flow
 
 ## Database Tables
-- Product
-- Stock
-- Batch
-- User
-- AuditLog
-- Transaction specific tables
 
-## Domain Events
-- WorkflowStarted
-- ValidationCompleted
-- TransactionCommitted
-- NotificationPublished
+- SalesPayment, SalesInvoice
+- Payment, Receipt, Ledger, LedgerEntry
+- AuditLog, Outbox
 
 ## Permissions
-- View
-- Create
-- Edit
-- Approve
-- Cancel
 
-## KPIs
-- Processing time
-- Error rate
-- Approval time
-- Throughput
+- Sales payment at counter — `SALES:SALES_INVOICE:CREATE`
+- Finance payment/receipt — finance permissions (seed expanding)
 
 ## Mermaid Sequence
 
 ```mermaid
 sequenceDiagram
-actor User
-participant UI
-participant Service
-participant Database
-participant EventBus
+actor Cashier
+participant PaymentService
+participant DB
 
-User->>UI: Submit
-UI->>Service: Validate
-Service->>Database: Save
-Database-->>Service: Success
-Service->>EventBus: Publish Events
-Service-->>UI: Completed
+Cashier->>PaymentService: Record payment (invoiceId)
+PaymentService->>DB: SalesPayment + update invoice balances
+PaymentService->>DB: LedgerEntry (optional)
+PaymentService->>DB: AuditLog + Outbox (entityUuid)
+PaymentService->>DB: COMMIT
 ```
 
-## Future Improvements
-- AI recommendations
-- Predictive analytics
-- Automation
-- Offline synchronization
+## Related
+
+- [Sales flow](./sales-flow.md)
+- [Finance domain](../domain/finance/README.md)

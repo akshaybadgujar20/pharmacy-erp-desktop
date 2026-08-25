@@ -1,61 +1,84 @@
-# Purchasing - Future
+# Purchasing — Future Enhancements
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+Roadmap for procurement capabilities beyond current PO → GRN → invoice → return implementation.
+
+**Database reference (current):** [Purchase overview](../../database/tables/purchase/purchase.md)
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Guide prioritization without committing delivery dates
+- Flag cross-domain dependencies
 
 ## Scope
+
 ### In Scope
-- ...
+
+- Planned purchasing features
+- Integration and permission expansions
 
 ### Out of Scope
-- ...
+
+- Detailed technical design for unreleased work
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+Current eight purchase tables; future tables for RFQ, contracts, ASN.
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+Future work must preserve:
+
+- GRN as sole inbound stock creation path (unless explicit ADR for consignment)
+- Branch-scoped document numbers
+- Atomic post with outbox + audit
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+Extend [events.md](./events.md) with versioned payloads when adding RFQ/contract events.
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+New documents (RFQ, ASN) need distinct status enums — do not overload PO status.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
 
-## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+| Initiative | Touchpoints |
+|------------|-------------|
+| Three-way match | PO, GRN, invoice lines |
+| Supplier portal | PO send, ASN inbound |
+| Reorder automation | Inventory min/max, PO generate |
+| Landed cost | GRN freight allocation to batch cost |
+| EDI | External message maps to PO/GRN |
+| Quality hold | GRN post to quarantine stock status |
 
-## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+## Security
 
-## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+- Expand seed: `PURCHASE:GOODS_RECEIPT:POST`, `PURCHASE:PURCHASE_ORDER:APPROVE`, `PURCHASE:PURCHASE_INVOICE:CREATE`, `PURCHASE:PURCHASE_RETURN:APPROVE`
+- API keys for supplier portal scoped per supplier
+
+## Performance
+
+- HO consolidation: nightly sync of posted GRNs vs real-time outbox
+- Archive completed POs older than retention window
+
+## Future
+
+### Near term
+
+1. Full permission matrix in security seed
+2. PO approval threshold and segregation of duties setting
+3. GRN–invoice qty/cost variance report
+
+### Medium term
+
+4. Approved vendor list per medicine
+5. OCR supplier invoice capture
+6. Debit note from purchase return
+
+### Long term
+
+7. RFQ and comparative quote tables
+8. Import shipment with customs landed cost
+9. Direct distributor catalog sync (API ordering)

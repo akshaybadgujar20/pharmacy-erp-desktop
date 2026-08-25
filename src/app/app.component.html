@@ -1,61 +1,67 @@
-<div class="layout">
-  <aside class="navigation-pane" [class.collapsed]="isCollapsed">
-    <div class="nav-header">
-      @if (!isCollapsed) {
-        <h2>ERP</h2>
-      }
-
-      <button mat-icon-button type="button" (click)="toggleSidebar()">
-        <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
-      </button>
-    </div>
-
-    <nav class="nav-menu">
-      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>dashboard</mat-icon>
+@if (!isLoginRoute()) {
+  <div class="layout">
+    <aside class="navigation-pane" [class.collapsed]="isCollapsed">
+      <div class="nav-header">
         @if (!isCollapsed) {
-          <span>Dashboard</span>
+          <h2>ERP</h2>
         }
-      </a>
 
-      <a class="nav-item" routerLink="/patients" routerLinkActive="active">
-        <mat-icon>groups</mat-icon>
-        @if (!isCollapsed) {
-          <span>Patients</span>
-        }
-      </a>
+        <button mat-icon-button type="button" (click)="toggleSidebar()">
+          <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+        </button>
+      </div>
 
-      <a class="nav-item" routerLink="/inventory" routerLinkActive="active">
-        <mat-icon>inventory_2</mat-icon>
-        @if (!isCollapsed) {
-          <span>Inventory</span>
-        }
-      </a>
+      <nav class="nav-menu">
+        <a class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon>dashboard</mat-icon>
+          @if (!isCollapsed) {
+            <span>Dashboard</span>
+          }
+        </a>
 
-      <a class="nav-item" routerLink="/billing" routerLinkActive="active">
-        <mat-icon>receipt_long</mat-icon>
-        @if (!isCollapsed) {
-          <span>Billing</span>
-        }
-      </a>
+        <a class="nav-item" routerLink="/patients" routerLinkActive="active">
+          <mat-icon>groups</mat-icon>
+          @if (!isCollapsed) {
+            <span>Patients</span>
+          }
+        </a>
 
-      <a class="nav-item" routerLink="/reports" routerLinkActive="active">
-        <mat-icon>analytics</mat-icon>
-        @if (!isCollapsed) {
-          <span>Reports</span>
-        }
-      </a>
+        <a class="nav-item" routerLink="/inventory" routerLinkActive="active">
+          <mat-icon>inventory_2</mat-icon>
+          @if (!isCollapsed) {
+            <span>Inventory</span>
+          }
+        </a>
 
-      <a class="nav-item" routerLink="/settings" routerLinkActive="active">
-        <mat-icon>settings</mat-icon>
-        @if (!isCollapsed) {
-          <span>Settings</span>
-        }
-      </a>
-    </nav>
-  </aside>
+        <a class="nav-item" routerLink="/billing" routerLinkActive="active">
+          <mat-icon>receipt_long</mat-icon>
+          @if (!isCollapsed) {
+            <span>Billing</span>
+          }
+        </a>
 
-  <main class="content-pane">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+        <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+          <mat-icon>analytics</mat-icon>
+          @if (!isCollapsed) {
+            <span>Reports</span>
+          }
+        </a>
+
+        <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+          <mat-icon>settings</mat-icon>
+          @if (!isCollapsed) {
+            <span>Settings</span>
+          }
+        </a>
+      </nav>
+    </aside>
+
+    <main class="content-pane">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}
+
+<app-shortcut-help></app-shortcut-help>

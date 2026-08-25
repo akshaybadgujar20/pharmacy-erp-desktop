@@ -1,5 +1,8 @@
 <a id="pharmacy-erp-system-design-document"></a>
 # Pharmacy ERP System Design Document
+
+> **Archived.** This monolithic handbook is legacy. For maintained architecture docs, see [Architecture index](./pharmacy_erp_architecture_docs/architecture/README.md).
+
 **Version:** 1.0  
 **Status:** Living Architecture Document  
 **Author:** Your Engineering Team  

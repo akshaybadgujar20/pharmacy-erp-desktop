@@ -2,106 +2,92 @@
 # Month End Closing
 
 ## Business Objective
-Financial and inventory month-end closing.
+
+Close the accounting period for a branch or company: freeze postings, reconcile stock and ledgers, and produce month-end reports for GST and management.
+
+## Data Model
+
+- **FinancialYear** — open/closed accounting period
+- **LedgerEntry** — all posted journal lines for the period
+- **Stock** + **StockMovement** — inventory valuation at period end
+- **SalesInvoice**, **PurchaseInvoice** — revenue and purchase totals
+- Optional **StockTake** — physical verification before close
 
 ## Business Owner
-- Pharmacy Manager
-- Store Manager
+
 - Finance
-- Inventory Team
+- Store Manager
 
 ## Actors
-- User
-- ERP System
-- Inventory Service
-- Finance Service
-- Reporting Service
+
+- Accountant
+- Inventory manager
+- ClosingService (future)
 
 ## Trigger
-Business action initiates this workflow.
+
+Last business day of month or financial year; or manual close initiated by finance.
 
 ## Preconditions
-- User authenticated
-- Permissions validated
-- Master data exists
-- Company and branch selected
+
+- No pending draft documents in branch (or policy allows carry-forward)
+- Bank/cash reconciliation completed
+- Stock take completed or variances approved (recommended)
+- User has finance admin permission
 
 ## Main Flow
-1. Validate request.
-2. Load master data.
-3. Validate business rules.
-4. Execute transaction.
-5. Persist database changes.
-6. Publish domain events.
-7. Update reports and dashboards.
-8. Write audit trail.
-9. Notify dependent modules.
+
+1. **Pre-close checks** — list open POs, unpaid invoices, pending transfers in `IN_TRANSIT`.
+2. **Stock reconciliation** — optional `StockTake`; approve adjustments.
+3. **Ledger review** — Trial balance from `LedgerEntry` for period.
+4. **GST summary** — aggregate tax from posted sales/purchase invoices.
+5. **Mark period** — update `FinancialYear` status or branch period flag (implementation-specific).
+6. **Lock postings** — reject new invoices dated in closed period (service rule).
+7. **Archive reports** — export P&L, stock valuation, GST files.
+8. Audit close action via `AuditService`.
 
 ## Alternate Flows
-- Validation failure
-- Duplicate transaction
-- Stock unavailable
-- Approval rejected
+
+- Material variance found → block close until adjustment approved
+- Late supplier invoice → backdated posting with finance approval only
 
 ## Exception Handling
-- Rollback transaction
-- Log technical error
-- Create audit record
-- Display user-friendly message
+
+- Close is reversible only by finance admin with audit reason (reopen period)
 
 ## Business Rules
-- Soft delete only.
-- Every transaction is auditable.
-- No direct stock manipulation outside approved workflows.
-- Financial impact must be traceable.
+
+- Inventory value = sum of `Stock.availableQuantity × Batch.purchaseRate` (or movement-based COGS policy)
+- No stock quantity changes without movement even during close
+- Document numbers and sequences continue in new period via `SequenceGenerator`
+- Branch-scoped reports roll up to company for consolidated view
 
 ## Database Tables
-- Product
-- Stock
-- Batch
-- User
-- AuditLog
-- Transaction specific tables
 
-## Domain Events
-- WorkflowStarted
-- ValidationCompleted
-- TransactionCommitted
-- NotificationPublished
+- FinancialYear, Ledger, LedgerEntry
+- SalesInvoice, PurchaseInvoice, Payment, Receipt
+- Stock, StockMovement, Batch
+- StockTake (optional)
+- AuditLog
 
 ## Permissions
-- View
-- Create
-- Edit
-- Approve
-- Cancel
+
+- Finance close — admin/finance role (seed: extend beyond `REPORT:REPORT:READ`)
 
 ## KPIs
-- Processing time
-- Error rate
-- Approval time
-- Throughput
 
-## Mermaid Sequence
-
-```mermaid
-sequenceDiagram
-actor User
-participant UI
-participant Service
-participant Database
-participant EventBus
-
-User->>UI: Submit
-UI->>Service: Validate
-Service->>Database: Save
-Database-->>Service: Success
-Service->>EventBus: Publish Events
-Service-->>UI: Completed
-```
+- Days to close
+- Stock variance % at count
+- Unposted document count at close
 
 ## Future Improvements
-- AI recommendations
-- Predictive analytics
-- Automation
-- Offline synchronization
+
+- Automated close checklist UI
+- Scheduled close reminders
+- Multi-branch consolidated close wizard
+
+## Related
+
+- [Inventory flow](./inventory-flow.md)
+- [Finance domain](../domain/finance/README.md)
+- [Payment flow](./payment-flow.md)

@@ -1,61 +1,71 @@
-# Purchasing - Purchase-Return
+# Purchasing — Purchase Return
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+`PurchaseReturn` handles sending stock back to a supplier — damaged goods, wrong items, near-expiry returns under agreement, or post-invoice adjustments. Posting decreases branch `Stock` and creates OUT `StockMovement` records.
+
+**Database reference:** [PurchaseReturn](../../database/tables/purchase/36_purchase_return.md) · [PurchaseReturnItem](../../database/tables/purchase/37_purchase_return_item.md) · [Purchase overview](../../database/tables/purchase/purchase.md)
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Document return authorization with supplier reference
+- Line-level batch and quantity returned
+- Reduce inventory at branch
+- Link to purchase invoice or GRN when applicable for credit note tracking
 
 ## Scope
+
 ### In Scope
-- ...
+
+- Return to supplier with reason codes
+- Partial batch qty return
+- Approval before post (policy)
 
 ### Out of Scope
-- ...
+
+- Customer sales returns (Sales domain)
+- Destruction / write-off without supplier return (Inventory adjustment)
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+- `PurchaseReturnItem`
+- `Batch`, `Stock`, `StockMovement` (OUT)
+- `Supplier`, `PurchaseInvoice`, `GoodsReceipt`
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+- At least one return line.
+- Return qty ≤ available branch stock for specified `batchId`.
+- Cannot return more than received on linked GRN line when traceability enforced.
+- On post: OUT movement, decrement stock, optional AP credit expectation in Finance.
+- Return number unique per branch.
+- Status flow: `DRAFT` → `APPROVED` / `POSTED` → `CANCELLED` per table definition.
+- Expired batch return may require supplier RMA number in `remarks`.
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+- `PurchaseReturnCreated`, `PurchaseReturnApproved`, `PurchaseReturnCancelled`
+- Inventory OUT paired with stock movement event
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+Draft editable; posted locked; cancellation reverses stock if policy allows.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
 
-## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+- **Finance:** Supplier credit note / debit note expectation
+- **Supplier:** RMA reference fields
+- **Outbox:** Sync return to HO
 
-## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+## Security
 
-## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+- Return approval often manager-only — future `PURCHASE:PURCHASE_RETURN:APPROVE`.
+
+## Performance
+
+- Validate stock availability in single query per line before post.
+
+## Future
+
+- Debit note auto-generation from return post
+- Return shipment tracking number

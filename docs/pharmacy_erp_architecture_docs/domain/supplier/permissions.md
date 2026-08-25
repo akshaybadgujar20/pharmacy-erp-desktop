@@ -1,61 +1,67 @@
-# Supplier - Permissions
+# Supplier — Permissions
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+Authorization for supplier master-data and payment operations.
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Map operations to RBAC permission codes.
 
 ## Scope
-### In Scope
-- ...
 
-### Out of Scope
-- ...
+Party/supplier writes and financial payment actions.
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+Seed: `PARTY_MANAGE` → `PARTY:PARTY:UPDATE`.
+
+## Permission Model
+
+| Permission | Module:Resource:Action | Seeded | Use |
+|------------|------------------------|--------|-----|
+| `PARTY:PARTY:UPDATE` | PARTY:PARTY:UPDATE | Yes | Register, update, deactivate supplier |
+| `PARTY:PARTY:READ` | PARTY:PARTY:READ | Planned | View supplier master |
+| `FINANCE:PAYMENT:CREATE` | FINANCE:PAYMENT:CREATE | Planned | Post supplier payment |
+| `FINANCE:PAYMENT:READ` | FINANCE:PAYMENT:READ | Planned | View payment history |
+| `FINANCE:PAYMENT:CANCEL` | FINANCE:PAYMENT:CANCEL | Planned | Cancel/reverse payment |
+| `PURCHASE:SUPPLIER:READ` | PURCHASE:SUPPLIER:READ | Planned | PO entry lookup |
+
+## Operation Matrix
+
+| Operation | Permission |
+|-----------|------------|
+| Register / update supplier | `PARTY:PARTY:UPDATE` |
+| View supplier on PO screen | `PURCHASE_CREATE` or `PARTY:PARTY:READ` |
+| Create supplier payment | `FINANCE:PAYMENT:CREATE` |
+| View supplier ledger | `FINANCE:PAYMENT:READ` or `REPORT:REPORT:READ` |
+| Cancel posted payment | `FINANCE:PAYMENT:CANCEL` + supervisor |
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+- Payment permissions strictly separate from party edit — accounts payable clerk may pay without editing GSTIN.
+- Statutory field edit may require manager role mapping on `PARTY:PARTY:UPDATE`.
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+Audit captures user and permission set on mutations.
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+Read permissions allow viewing inactive suppliers for history.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
+
+NestJS `@RequirePermissions` guards; JWT carries permission codes.
 
 ## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+
+Segregation of duties: user who creates supplier should not approve own first payment (future policy).
 
 ## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+
+Permission cache in JWT session.
 
 ## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+
+Branch-scoped supplier visibility permission.

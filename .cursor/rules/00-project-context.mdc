@@ -106,6 +106,7 @@ If a pre-existing defect is found, **document it** and **do not fix** unless the
 
 ## Architecture references
 
+- Early foundations (auth, env, settings, Angular/Electron): `docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md`
 - Persistence patterns: `docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md`
 - Database overview: `docs/pharmacy_erp_architecture_docs/database/database_overview.md`
 - Agent onboarding: `backend/AGENTS.md`

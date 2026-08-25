@@ -171,3 +171,17 @@ Seed code under `backend/seed/`:
 - Update `Stock.quantity` or `SequenceGenerator.currentNumber` outside dedicated persistence services
 - Enqueue outbox rows outside an active transaction
 - Skip `RequestContextService.run()` for business writes that need tenant/device context
+
+---
+
+## Branch / company scoping
+
+Feature queries must scope by tenant from `RequestContextService` (populated by auth + `ContextEnrichInterceptor`).
+
+Use helpers in [tenant-scope.util.ts](backend/src/persistence/context/tenant-scope.util.ts):
+
+- `getTenantScope(requestContext)` — returns `{ companyId, branchId }`
+- `withBranchScope(scope, where)` — adds `branchId` to a Prisma `where` object
+- `withCompanyScope(scope, where)` — adds `companyId` to a Prisma `where` object
+
+Never trust client `x-company-id` / `x-branch-id` headers for authorization in production; JWT + context enrichment are the source of truth.

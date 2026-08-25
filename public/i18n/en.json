@@ -1,0 +1,23 @@
+{
+  "auth": {
+    "loginTitle": "Pharmacy ERP",
+    "loginSubtitle": "Sign in to continue",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "demoHint": "Demo: admin / admin123"
+  },
+  "keyboard": {
+    "helpTitle": "Keyboard Shortcuts",
+    "helpHint": "Press F1 or ? to toggle this panel. Press Esc to close.",
+    "newSale": "New sale",
+    "searchMedicine": "Search medicine",
+    "payment": "Payment",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "app": {
+    "title": "Pharmacy ERP"
+  }
+}

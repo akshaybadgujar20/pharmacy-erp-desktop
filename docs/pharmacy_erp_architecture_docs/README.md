@@ -1,45 +1,29 @@
 # Pharmacy ERP Knowledge Base
 
-## Documentation
+## Architecture
 
-- [Vision & Product Philosophy](vision.md)
-- [Design Principles](design-principles.md)
-- [Overall Architecture](system-overview.md)
-- [Technology Stack](technology-stack.md)
-- [Module Architecture](module-architecture.md)
-- [Electron Architecture](electron-architecture.md)
-- [Angular Architecture](angular-architecture.md)
-- [NestJS Architecture](nestjs-architecture.md)
-- [Database Design](database-design.md)
-- [Prisma ORM](prisma.md)
-- [Authentication](authentication.md)
-- [Offline First](offline-first.md)
-- [Synchronization Strategy](synchronization.md)
-- [Event Driven Architecture](event-driven.md)
-- [API Design](api-design.md)
-- [Domain Driven Design](domain-driven-design.md)
-- [UX Guidelines](ux-guidelines.md)
-- [Keyboard First Philosophy](keyboard-first.md)
-- [Workflow Driven UI](workflow-driven-ui.md)
-- [Configuration Driven Development](configuration-driven.md)
-- [Performance Guidelines](performance.md)
-- [Hardware Integration](hardware.md)
-- [Printing](printing.md)
-- [Barcode](barcode.md)
-- [Reporting](reporting.md)
-- [Audit Logging](audit-logging.md)
-- [Error Handling](error-handling.md)
-- [Backup & Recovery](backup-recovery.md)
-- [Security](security.md)
-- [Coding Standards](coding-standards.md)
-- [Testing](testing.md)
-- [CI/CD](ci-cd.md)
-- [Observability](observability.md)
-- [Telemetry & Analytics](telemetry.md)
-- [Feature Flags](feature-flags.md)
-- [Multi Store Architecture](multi-store.md)
-- [Migration Strategy](migration.md)
-- [Localization](localization.md)
-- [Disaster Recovery](disaster-recovery.md)
-- [Future Roadmap](future-roadmap.md)
-- [Engineering Checklist](engineering-checklist.md)
+Start at [Architecture index](./architecture/README.md).
+
+| Topic | Doc |
+|-------|-----|
+| Overview & principles | [overview.md](./architecture/overview.md) |
+| Implemented platform layer | [early-foundations.md](./architecture/early-foundations.md) |
+| Angular / Electron / NestJS | [application-architecture.md](./architecture/application-architecture.md) |
+| Offline-first & sync | [data-and-sync.md](./architecture/data-and-sync.md) |
+| Product & UX | [product-ux.md](./architecture/product-ux.md) |
+| Integrations | [integrations.md](./architecture/integrations.md) |
+| Security | [security.md](./architecture/security.md) |
+| Logging & audit | [logging-and-audit.md](./architecture/logging-and-audit.md) |
+| Engineering standards | [engineering-standards.md](./architecture/engineering-standards.md) |
+
+## Database
+
+- [Database overview](./database/database_overview.md)
+- [Persistence patterns](./database/persistence-patterns.md)
+- [Prisma / SQLite / Postgres alignment](./database/prisma_sqlite_jpa_postgres_alignment.md)
+- [Architecture review](./database/architecture-review.md)
+- Table specs: `./database/tables/`
+
+## Legacy
+
+- [Monolithic handbook](../pharmacy_erp_architecture_handbook.md) — archived; prefer topic docs above

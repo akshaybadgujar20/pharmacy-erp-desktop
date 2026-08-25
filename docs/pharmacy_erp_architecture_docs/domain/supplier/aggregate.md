@@ -1,61 +1,88 @@
-# Supplier - Aggregate
+# Supplier — Aggregate Design
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+Define aggregate boundaries for supplier master data ensuring Party identity, SUPPLIER role, statutory fields, and procurement attributes remain consistent within one transactional unit.
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Party as root; Supplier as owned entity.
+- Coordinate PartyRole, PartyAddress, PartyContact mutations.
+- Expose supplier reference to Purchasing without leaking Party complexity.
 
 ## Scope
+
 ### In Scope
-- ...
+
+- Party + Supplier + SUPPLIER role registration and update.
 
 ### Out of Scope
-- ...
+
+- Payment aggregate (Finance) — references Supplier by id.
+- PurchaseInvoice aggregate — references Supplier by id.
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+```
+Party (root)
+├── PartyRole[]       — SUPPLIER role
+├── PartyAddress[]
+├── PartyContact[]
+└── Supplier?         — 0..1 detail
+         └── referenced by PurchaseOrder, Payment, etc.
+```
+
+[party_management.md](../../database/tables/party_management/party_management.md)
+
+## Aggregates
+
+### Party Aggregate (Supplier context)
+
+| Component | Type | Notes |
+|-----------|------|-------|
+| Party | Root | Identity and isActive |
+| PartyRole | Entity | roleType = SUPPLIER |
+| PartyAddress | Entity | Registered office, warehouse |
+| PartyContact | Entity | Accounts payable contacts |
+| Supplier | Entity | supplierCode, gstin, drugLicenseNumber, credit fields |
+
+**Consistency:** Supplier row must not exist without SUPPLIER PartyRole.
+
+### Payment Aggregate (Finance — associated)
+
+| Component | Type | Notes |
+|-----------|------|-------|
+| Payment | Root | Outgoing money; see [43_payment.md](../../database/tables/financial/43_payment.md) |
+
+Payment is **not** part of Party aggregate; linked via `referenceType` / supplier id.
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+- Unique `partyId` on Supplier.
+- GSTIN validated for format when present (Indian GST 15-char pattern).
+- `preferredSupplier` boolean; multiple preferred allowed per company policy.
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+- `SupplierRegistered`, `SupplierUpdated`, `SupplierDeactivated` on aggregate commit.
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+Operational supplier requires Active Party, active SUPPLIER role, `Supplier.isActive = true`.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
+
+- SequenceGenerator for `supplierCode`.
+- AuditService + Outbox on writes.
 
 ## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+
+- Statutory field edits require `PARTY:PARTY:UPDATE` and audit reason.
 
 ## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+
+- Optimistic locking via `version` on Party and Supplier.
 
 ## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+
+- Sub-aggregate for supplier bank accounts when payment file export added.

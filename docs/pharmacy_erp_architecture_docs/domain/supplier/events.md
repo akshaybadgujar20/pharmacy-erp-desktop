@@ -1,61 +1,71 @@
-# Supplier - Events
+# Supplier — Domain Events
 
 ## Purpose
-Describe why this concept exists from a business perspective.
+
+Catalog domain events for supplier master data changes and finance-triggered payment events affecting supplier payables.
 
 ## Responsibilities
-- Own business logic
-- Define invariants
-- Coordinate related entities
+
+- Event names, payloads, producers, consumers.
 
 ## Scope
-### In Scope
-- ...
 
-### Out of Scope
-- ...
+Supplier aggregate events; Payment events consumed by supplier context.
 
 ## Related Entities
-- Product
-- Supplier
-- Customer
-- Order
-- Stock
+
+Supplier, Payment — [financial.md](../../database/tables/financial/financial.md).
+
+## Event Catalog
+
+### Supplier master events
+
+| Event | Trigger | Payload | Consumers |
+|-------|---------|---------|-----------|
+| `SupplierRegistered` | Onboarding complete | `supplierUuid`, `partyUuid`, `supplierCode`, `supplierType`, `gstin` | Audit, outbox, search |
+| `SupplierUpdated` | Profile/statutory edit | `supplierUuid`, `changedFields[]`, `version` | Audit, purchasing cache |
+| `SupplierDeactivated` | isActive false | `supplierUuid`, `reason` | PO block list |
+| `SupplierReactivated` | Reverse deactivation | `supplierUuid` | PO allow list |
+| `SupplierPreferredChanged` | preferredSupplier toggle | `supplierUuid`, `preferred` | PO sort cache |
+
+### Finance events (consumed)
+
+| Event | Producer | Payload | Supplier impact |
+|-------|----------|---------|-----------------|
+| `SupplierPaymentCompleted` | Payment service | `paymentUuid`, `supplierUuid`, `amount`, `paymentNumber` | Reduce outstanding cache |
+| `SupplierPaymentCancelled` | Payment reversal | `paymentUuid`, `reversalEntries` | Restore outstanding |
+| `PurchaseInvoicePosted` | Purchasing | `supplierUuid`, `payableAmount` | Increase outstanding |
 
 ## Business Rules
-- Rule 1
-- Rule 2
-- Rule 3
+
+- Events use uuid identifiers for sync.
+- `PurchaseInvoicePosted` owned by Purchasing but updates Supplier denormalized balance.
 
 ## Domain Events
-- Created
-- Updated
-- Deleted
-- Approved
-- Cancelled
+
+Emit after UnitOfWork commit via outbox.
 
 ## State Model
-- Draft
-- Active
-- Closed
-- Archived
+
+`SupplierDeactivated` does not auto-cancel open POs — separate purchasing policy.
 
 ## Integrations
-- API
-- Reporting
-- Notifications
+
+| Consumer | Events |
+|----------|--------|
+| AuditService | All supplier master events |
+| Outbox | Registered, Updated |
+| Purchasing UI | Deactivated, PreferredChanged |
+| Reconciliation job | PaymentCompleted, PurchaseInvoicePosted |
 
 ## Security Considerations
-- Authorization
-- Audit
-- Data ownership
+
+Mask PAN in event payloads on sync to branch devices.
 
 ## Performance Considerations
-- Caching
-- Transactions
-- Concurrency
+
+Debounce rapid PreferredChanged during bulk import.
 
 ## Future Enhancements
-- Extensibility
-- Versioning
-- Automation
+
+`SupplierContractSigned` when contracts module exists.
