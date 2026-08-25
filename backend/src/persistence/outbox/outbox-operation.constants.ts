@@ -4,7 +4,8 @@ export const OutboxOperation = {
   DELETE: 'DELETE',
 } as const;
 
-export type OutboxOperation = (typeof OutboxOperation)[keyof typeof OutboxOperation];
+export type OutboxOperation =
+  (typeof OutboxOperation)[keyof typeof OutboxOperation];
 
 export const OutboxSyncStatus = {
   PENDING: 'PENDING',

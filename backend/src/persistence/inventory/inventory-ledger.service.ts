@@ -41,7 +41,11 @@ export class InventoryLedgerService {
     }
 
     const stock = await tx.stock.findFirst({
-      where: { branchId: input.branchId, batchId: input.batchId, deletedAt: null },
+      where: {
+        branchId: input.branchId,
+        batchId: input.batchId,
+        deletedAt: null,
+      },
     });
 
     const currentAvailable = new Prisma.Decimal(stock?.availableQuantity ?? 0);
@@ -63,7 +67,10 @@ export class InventoryLedgerService {
           ErrorCode.STOCK_INSUFFICIENT,
           'Insufficient stock for movement',
           HttpStatus.CONFLICT,
-          { available: currentAvailable.toString(), requested: quantity.toString() },
+          {
+            available: currentAvailable.toString(),
+            requested: quantity.toString(),
+          },
         );
       }
       nextAvailable = currentAvailable.sub(quantity);

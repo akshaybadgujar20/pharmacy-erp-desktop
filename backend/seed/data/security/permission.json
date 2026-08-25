@@ -8,5 +8,7 @@
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb07", "permissionCode": "PARTY_MANAGE", "permissionName": "Manage Parties", "module": "PARTY", "resource": "PARTY", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb08", "permissionCode": "REPORT_VIEW", "permissionName": "View Reports", "module": "REPORT", "resource": "REPORT", "action": "READ", "isSystemPermission": true, "isActive": true},
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb09", "permissionCode": "USER_ADMIN", "permissionName": "User Administration", "module": "SECURITY", "resource": "USER", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
-  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb10", "permissionCode": "SYNC_RUN", "permissionName": "Run Sync", "module": "SYNC", "resource": "SYNC", "action": "EXECUTE", "isSystemPermission": true, "isActive": true}
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb10", "permissionCode": "SYNC_RUN", "permissionName": "Run Sync", "module": "SYNC", "resource": "SYNC", "action": "EXECUTE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb11", "permissionCode": "SETTINGS_READ", "permissionName": "Read App Settings", "module": "CONFIGURATION", "resource": "APP_SETTING", "action": "READ", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb12", "permissionCode": "SETTINGS_UPDATE", "permissionName": "Update App Settings", "module": "CONFIGURATION", "resource": "APP_SETTING", "action": "UPDATE", "isSystemPermission": true, "isActive": true}
 ]

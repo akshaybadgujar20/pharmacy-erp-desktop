@@ -13,7 +13,9 @@ export function runWithRequestContext<T>(
 export function getRequestContext(): RequestContextData {
   const ctx = storage.getStore();
   if (!ctx) {
-    throw new Error('RequestContext is not set. Use runWithRequestContext() or RequestContextService.run().');
+    throw new Error(
+      'RequestContext is not set. Use runWithRequestContext() or RequestContextService.run().',
+    );
   }
   return ctx;
 }

@@ -7,7 +7,10 @@ import { rethrowAsApplicationException } from '../prisma/prisma-error.mapper';
 import type { TxClient } from '../prisma/prisma-tx.type';
 
 function isRetryableTransactionError(error: unknown): boolean {
-  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034') {
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === 'P2034'
+  ) {
     return true;
   }
   return (
@@ -25,7 +28,10 @@ export class UnitOfWorkService {
     return this.runOnce(fn);
   }
 
-  private async runOnce<T>(fn: (tx: TxClient) => Promise<T>, attempt = 0): Promise<T> {
+  private async runOnce<T>(
+    fn: (tx: TxClient) => Promise<T>,
+    attempt = 0,
+  ): Promise<T> {
     try {
       return await this.prisma.$transaction(fn);
     } catch (error) {

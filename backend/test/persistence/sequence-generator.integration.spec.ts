@@ -8,9 +8,13 @@ import {
 
 describe('SequenceGeneratorService (integration)', () => {
   let sequenceGenerator: SequenceGeneratorService;
-  let services: Awaited<ReturnType<typeof createPersistenceTestContext>>['services'];
+  let services: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['services'];
   let seed: Awaited<ReturnType<typeof loadSeededBranch>>;
-  let moduleRef: Awaited<ReturnType<typeof createPersistenceTestContext>>['moduleRef'];
+  let moduleRef: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['moduleRef'];
 
   beforeAll(async () => {
     const ctx = await createPersistenceTestContext();
@@ -43,8 +47,7 @@ describe('SequenceGeneratorService (integration)', () => {
       }),
     );
 
-    expect(results[1]!.sequenceValue > results[0]!.sequenceValue).toBe(true);
-    expect(results[0]!.documentNumber).toContain(seed.branch.branchCode);
+    expect(results[1].sequenceValue > results[0].sequenceValue).toBe(true);
+    expect(results[0].documentNumber).toContain(seed.branch.branchCode);
   });
 });
-

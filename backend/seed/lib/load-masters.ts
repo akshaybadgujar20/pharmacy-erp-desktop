@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import { loadJson } from './load-json';
 import { decimal, register, resolve } from './id-registry';
 import type { SeedContext } from './seed-context';
@@ -375,6 +376,7 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
     'cccccccc-cccc-4ccc-8ccc-cccccccccc05',
   ];
   const usernames = ['admin', 'pharmacist1', 'cashier1', 'procurement1', 'manager1', 'pharmacist2', 'cashier2', 'procurement2', 'manager2', 'support1'];
+  const defaultPasswordHash = bcrypt.hashSync('admin123', 10);
 
   for (let i = 0; i < usernames.length && i < ctx.employeeIds.length; i++) {
     const userUuid = `17171717-1717-4717-8717-1717171717${String(i + 1).padStart(2, '0')}`;
@@ -383,7 +385,7 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
         uuid: userUuid,
         employeeId: ctx.employeeIds[i]!,
         username: usernames[i]!,
-        passwordHash: '$2b$10$placeholder.hash.for.demo.only',
+        passwordHash: defaultPasswordHash,
         isActive: true,
       },
     });

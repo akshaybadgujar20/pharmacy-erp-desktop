@@ -1,6 +1,7 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import type { Batch, Branch, Company, Stock } from '@prisma/client';
+import { AuditService } from '../../src/audit/audit.service';
 import { PrismaService } from '../../src/prisma.service';
 import { RequestContextService } from '../../src/persistence/context/request-context.service';
 import type { RequestContextData } from '../../src/persistence/context/request-context';
@@ -24,6 +25,7 @@ export interface PersistenceTestServices {
   prisma: PrismaService;
   unitOfWork: UnitOfWorkService;
   requestContext: RequestContextService;
+  auditService: AuditService;
 }
 
 export async function createPersistenceTestContext(): Promise<{
@@ -42,11 +44,14 @@ export async function createPersistenceTestContext(): Promise<{
       prisma: moduleRef.get(PrismaService),
       unitOfWork: moduleRef.get(UnitOfWorkService),
       requestContext: moduleRef.get(RequestContextService),
+      auditService: moduleRef.get(AuditService),
     },
   };
 }
 
-export async function loadSeededBranch(prisma: PrismaService): Promise<SeededBranchContext> {
+export async function loadSeededBranch(
+  prisma: PrismaService,
+): Promise<SeededBranchContext> {
   const branch = await prisma.client.branch.findFirst({
     orderBy: { id: 'asc' },
   });
@@ -70,7 +75,9 @@ export async function loadSeededBatchWithStock(
   if (!stock) {
     throw new Error(`No stock for branch ${branchId}`);
   }
-  const batch = await prisma.client.batch.findUniqueOrThrow({ where: { id: stock.batchId } });
+  const batch = await prisma.client.batch.findUniqueOrThrow({
+    where: { id: stock.batchId },
+  });
   return { stock, batch };
 }
 
@@ -158,10 +165,16 @@ export async function ensureStockMovementSequence(
   companyId: bigint,
   branchId: bigint,
 ): Promise<void> {
-  await syncSequenceBaseline(prisma, companyId, branchId, DocumentType.STOCK_MOVEMENT, {
-    prefix: 'SM',
-    format: 'SM-{BR}-{SEQ}',
-  });
+  await syncSequenceBaseline(
+    prisma,
+    companyId,
+    branchId,
+    DocumentType.STOCK_MOVEMENT,
+    {
+      prefix: 'SM',
+      format: 'SM-{BR}-{SEQ}',
+    },
+  );
 }
 
 export async function ensureSalesInvoiceSequence(
@@ -169,14 +182,22 @@ export async function ensureSalesInvoiceSequence(
   companyId: bigint,
   branchId: bigint,
 ): Promise<void> {
-  await syncSequenceBaseline(prisma, companyId, branchId, DocumentType.SALES_INVOICE, {
-    prefix: 'SI',
-    format: 'SI-{BR}-{SEQ}',
-    resetPolicy: 'YEARLY',
-  });
+  await syncSequenceBaseline(
+    prisma,
+    companyId,
+    branchId,
+    DocumentType.SALES_INVOICE,
+    {
+      prefix: 'SI',
+      format: 'SI-{BR}-{SEQ}',
+      resetPolicy: 'YEARLY',
+    },
+  );
 }
 
-export function buildTestRequestContext(seed: SeededBranchContext): RequestContextData {
+export function buildTestRequestContext(
+  seed: SeededBranchContext,
+): RequestContextData {
   return {
     companyId: seed.company.id,
     branchId: seed.branch.id,

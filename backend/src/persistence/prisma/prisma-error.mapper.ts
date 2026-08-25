@@ -10,7 +10,10 @@ export function mapPrismaError(error: unknown): ApplicationException | null {
 
   switch (error.code) {
     case 'P2002':
-      if (error.meta?.target && String(error.meta.target).includes('operation_id')) {
+      if (
+        error.meta?.target &&
+        String(error.meta.target).includes('operation_id')
+      ) {
         return new ApplicationException(
           ErrorCode.OUTBOX_DUPLICATE_OPERATION,
           'Duplicate outbox operationId',

@@ -81,6 +81,13 @@ See [persistence-patterns.md](../docs/pharmacy_erp_architecture_docs/database/pe
 
 Global `ValidationPipe` with `whitelist`, `transform`, `forbidNonWhitelisted`. All request DTOs use class-validator decorators.
 
+### Logging and audit
+
+- **Technical logs:** inject `AppLogger` (`src/common/logging/app-logger.service.ts`) for structured Winston logging
+- **Business audit:** `AuditService.log(tx, …)` inside `UnitOfWorkService.run()` — same transaction as the mutation
+- **Correlation:** HTTP requests get `correlationId` via `CorrelationMiddleware`; propagated to logs and `AuditLog`
+- Full guide: [logging-and-audit.md](../docs/pharmacy_erp_architecture_docs/architecture/logging-and-audit.md)
+
 ## Cursor rules
 
 Scoped rules in `.cursor/rules/` (repo root):
@@ -95,7 +102,9 @@ Scoped rules in `.cursor/rules/` (repo root):
 
 ## Architecture docs
 
+- [Early foundations](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) — auth, env vars, settings, Angular/Electron layer
 - [Persistence patterns](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md)
+- [Logging and audit](../docs/pharmacy_erp_architecture_docs/architecture/logging-and-audit.md)
 - [Database overview](../docs/pharmacy_erp_architecture_docs/database/database_overview.md)
 - [Prisma/SQLite/Postgres alignment](../docs/pharmacy_erp_architecture_docs/database/prisma_sqlite_jpa_postgres_alignment.md)
 - Table specs: `docs/pharmacy_erp_architecture_docs/database/tables/`

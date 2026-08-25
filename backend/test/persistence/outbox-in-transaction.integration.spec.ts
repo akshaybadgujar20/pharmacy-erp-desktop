@@ -10,9 +10,13 @@ import {
 
 describe('OutboxService (integration)', () => {
   let outbox: OutboxService;
-  let services: Awaited<ReturnType<typeof createPersistenceTestContext>>['services'];
+  let services: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['services'];
   let seed: Awaited<ReturnType<typeof loadSeededBranch>>;
-  let moduleRef: Awaited<ReturnType<typeof createPersistenceTestContext>>['moduleRef'];
+  let moduleRef: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['moduleRef'];
 
   beforeAll(async () => {
     const ctx = await createPersistenceTestContext();
@@ -52,4 +56,3 @@ describe('OutboxService (integration)', () => {
     expect(after).toBe(before);
   });
 });
-

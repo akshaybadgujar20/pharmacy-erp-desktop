@@ -3,7 +3,10 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { RequestContextService } from '../context/request-context.service';
 import type { TxClient } from '../prisma/prisma-tx.type';
-import { OutboxOperation, OutboxSyncStatus } from './outbox-operation.constants';
+import {
+  OutboxOperation,
+  OutboxSyncStatus,
+} from './outbox-operation.constants';
 
 export interface OutboxEnqueueInput {
   entityType: string;

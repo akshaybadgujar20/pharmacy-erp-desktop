@@ -24,4 +24,3 @@ import { UnitOfWorkService } from './unit-of-work/unit-of-work.service';
   ],
 })
 export class PersistenceModule {}
-

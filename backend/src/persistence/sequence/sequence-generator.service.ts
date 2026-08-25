@@ -17,7 +17,11 @@ export interface SequenceNextResult {
   documentNumber: string;
 }
 
-function shouldResetSequence(resetPolicy: string, lastUpdatedAt: Date, now: Date): boolean {
+function shouldResetSequence(
+  resetPolicy: string,
+  lastUpdatedAt: Date,
+  now: Date,
+): boolean {
   switch (resetPolicy) {
     case ResetPolicy.NEVER:
       return false;
@@ -35,7 +39,10 @@ function shouldResetSequence(resetPolicy: string, lastUpdatedAt: Date, now: Date
 
 @Injectable()
 export class SequenceGeneratorService {
-  async next(tx: TxClient, input: SequenceNextInput): Promise<SequenceNextResult> {
+  async next(
+    tx: TxClient,
+    input: SequenceNextInput,
+  ): Promise<SequenceNextResult> {
     const row = await tx.sequenceGenerator.findFirst({
       where: {
         companyId: input.companyId,

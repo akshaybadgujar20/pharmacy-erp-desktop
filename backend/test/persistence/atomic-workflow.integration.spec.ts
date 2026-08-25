@@ -18,9 +18,13 @@ describe('Atomic workflow (integration)', () => {
   let sequences: SequenceGeneratorService;
   let inventoryLedger: InventoryLedgerService;
   let outbox: OutboxService;
-  let services: Awaited<ReturnType<typeof createPersistenceTestContext>>['services'];
+  let services: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['services'];
   let seed: Awaited<ReturnType<typeof loadSeededBranch>>;
-  let moduleRef: Awaited<ReturnType<typeof createPersistenceTestContext>>['moduleRef'];
+  let moduleRef: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['moduleRef'];
 
   beforeAll(async () => {
     const ctx = await createPersistenceTestContext();
@@ -30,8 +34,16 @@ describe('Atomic workflow (integration)', () => {
     inventoryLedger = moduleRef.get(InventoryLedgerService);
     outbox = moduleRef.get(OutboxService);
     seed = await loadSeededBranch(services.prisma);
-    await ensureStockMovementSequence(services.prisma, seed.company.id, seed.branch.id);
-    await ensureSalesInvoiceSequence(services.prisma, seed.company.id, seed.branch.id);
+    await ensureStockMovementSequence(
+      services.prisma,
+      seed.company.id,
+      seed.branch.id,
+    );
+    await ensureSalesInvoiceSequence(
+      services.prisma,
+      seed.company.id,
+      seed.branch.id,
+    );
   });
 
   afterAll(async () => {
@@ -39,7 +51,10 @@ describe('Atomic workflow (integration)', () => {
   });
 
   it('creates invoice, stock movement, and outbox rows in one transaction', async () => {
-    const { stock, batch } = await loadSeededBatchWithStock(services.prisma, seed.branch.id);
+    const { stock, batch } = await loadSeededBatchWithStock(
+      services.prisma,
+      seed.branch.id,
+    );
     const invoiceUuid = randomUUID();
     const qty = new Prisma.Decimal(1);
 
@@ -81,7 +96,10 @@ describe('Atomic workflow (integration)', () => {
           entityType: 'SalesInvoice',
           entityUuid: invoice.uuid,
           operation: OutboxOperation.CREATE,
-          payload: { invoiceNumber: invoice.invoiceNumber, netAmount: invoice.netAmount.toString() },
+          payload: {
+            invoiceNumber: invoice.invoiceNumber,
+            netAmount: invoice.netAmount.toString(),
+          },
           branchId: seed.branch.id,
         });
 
@@ -89,7 +107,10 @@ describe('Atomic workflow (integration)', () => {
           entityType: 'StockMovement',
           entityUuid: movement.uuid,
           operation: OutboxOperation.CREATE,
-          payload: { movementNumber: movement.movementNumber, quantity: movement.quantity.toString() },
+          payload: {
+            movementNumber: movement.movementNumber,
+            quantity: movement.quantity.toString(),
+          },
           branchId: seed.branch.id,
         });
 
@@ -97,9 +118,10 @@ describe('Atomic workflow (integration)', () => {
       }),
     );
 
-    const persistedInvoice = await services.prisma.client.salesInvoice.findUnique({
-      where: { uuid: invoiceUuid },
-    });
+    const persistedInvoice =
+      await services.prisma.client.salesInvoice.findUnique({
+        where: { uuid: invoiceUuid },
+      });
     expect(persistedInvoice).not.toBeNull();
 
     const outboxRows = await services.prisma.client.outbox.findMany({
@@ -109,8 +131,13 @@ describe('Atomic workflow (integration)', () => {
     });
     expect(outboxRows).toHaveLength(2);
 
-    const updatedStock = await services.prisma.client.stock.findFirstOrThrow({ where: { id: stock.id } });
-    expect(new Prisma.Decimal(updatedStock.availableQuantity).lt(stock.availableQuantity)).toBe(true);
+    const updatedStock = await services.prisma.client.stock.findFirstOrThrow({
+      where: { id: stock.id },
+    });
+    expect(
+      new Prisma.Decimal(updatedStock.availableQuantity).lt(
+        stock.availableQuantity,
+      ),
+    ).toBe(true);
   });
 });
-

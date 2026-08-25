@@ -29,4 +29,3 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
     },
   }) as unknown as PrismaClient;
 }
-

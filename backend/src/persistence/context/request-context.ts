@@ -3,4 +3,7 @@ export interface RequestContextData {
   branchId: bigint;
   userId?: bigint;
   deviceId: string;
+  correlationId?: string;
+  ipAddress?: string;
+  sessionId?: string;
 }

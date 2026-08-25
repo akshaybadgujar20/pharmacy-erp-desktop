@@ -12,9 +12,13 @@ import {
 
 describe('InventoryLedgerService (integration)', () => {
   let inventoryLedger: InventoryLedgerService;
-  let services: Awaited<ReturnType<typeof createPersistenceTestContext>>['services'];
+  let services: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['services'];
   let seed: Awaited<ReturnType<typeof loadSeededBranch>>;
-  let moduleRef: Awaited<ReturnType<typeof createPersistenceTestContext>>['moduleRef'];
+  let moduleRef: Awaited<
+    ReturnType<typeof createPersistenceTestContext>
+  >['moduleRef'];
 
   beforeAll(async () => {
     const ctx = await createPersistenceTestContext();
@@ -22,7 +26,11 @@ describe('InventoryLedgerService (integration)', () => {
     services = ctx.services;
     inventoryLedger = moduleRef.get(InventoryLedgerService);
     seed = await loadSeededBranch(services.prisma);
-    await ensureStockMovementSequence(services.prisma, seed.company.id, seed.branch.id);
+    await ensureStockMovementSequence(
+      services.prisma,
+      seed.company.id,
+      seed.branch.id,
+    );
   });
 
   afterAll(async () => {
@@ -30,7 +38,10 @@ describe('InventoryLedgerService (integration)', () => {
   });
 
   it('IN increases stock and OUT decreases stock', async () => {
-    const { stock, batch } = await loadSeededBatchWithStock(services.prisma, seed.branch.id);
+    const { stock, batch } = await loadSeededBatchWithStock(
+      services.prisma,
+      seed.branch.id,
+    );
     const before = new Prisma.Decimal(stock.availableQuantity);
 
     await runWithTestContext(services, seed, () =>
@@ -54,7 +65,9 @@ describe('InventoryLedgerService (integration)', () => {
     const afterIn = await services.prisma.client.stock.findFirstOrThrow({
       where: { id: stock.id },
     });
-    expect(new Prisma.Decimal(afterIn.availableQuantity).equals(before.add(5))).toBe(true);
+    expect(
+      new Prisma.Decimal(afterIn.availableQuantity).equals(before.add(5)),
+    ).toBe(true);
 
     await runWithTestContext(services, seed, () =>
       services.unitOfWork.run(async (tx) =>
@@ -77,14 +90,22 @@ describe('InventoryLedgerService (integration)', () => {
     const afterOut = await services.prisma.client.stock.findFirstOrThrow({
       where: { id: stock.id },
     });
-    expect(new Prisma.Decimal(afterOut.availableQuantity).equals(before.add(2))).toBe(true);
+    expect(
+      new Prisma.Decimal(afterOut.availableQuantity).equals(before.add(2)),
+    ).toBe(true);
   });
 
   it('throws STOCK_INSUFFICIENT when OUT exceeds available quantity', async () => {
-    const { stock, batch } = await loadSeededBatchWithStock(services.prisma, seed.branch.id);
+    const { stock, batch } = await loadSeededBatchWithStock(
+      services.prisma,
+      seed.branch.id,
+    );
     const available = new Prisma.Decimal(
-      (await services.prisma.client.stock.findFirstOrThrow({ where: { id: stock.id } }))
-        .availableQuantity,
+      (
+        await services.prisma.client.stock.findFirstOrThrow({
+          where: { id: stock.id },
+        })
+      ).availableQuantity,
     );
 
     await expect(
@@ -110,4 +131,3 @@ describe('InventoryLedgerService (integration)', () => {
     });
   });
 });
-
