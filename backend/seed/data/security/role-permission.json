@@ -33,5 +33,6 @@
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd32", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb28"},
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd33", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb29"},
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd34", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb30"},
-  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd35", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb31"}
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd35", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb31"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd36", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb32"}
 ]

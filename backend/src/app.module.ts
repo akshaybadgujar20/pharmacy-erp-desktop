@@ -34,6 +34,7 @@ import { PersistenceModule } from './persistence/persistence.module';
 
 import { SettingsModule } from './settings/settings.module';
 import { PartyModule } from './party/party.module';
+import { ReportingModule } from './reporting/reporting.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { PartyModule } from './party/party.module';
 
     SettingsModule,
     PartyModule,
+    ReportingModule,
   ],
 
   controllers: [AppController],

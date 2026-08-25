@@ -59,11 +59,15 @@ Run from `backend/`:
 | `npm run lint` | ESLint (auto-fix) |
 | `npm run format` | Prettier write |
 | `npm run test` | Unit tests (`src/**/*.spec.ts`) |
+| `npm run test:watch` | Unit tests watch mode |
+| `npm run test:cov` | Unit tests with coverage |
 | `npm run test:persistence` | Persistence integration tests (`--runInBand`) |
-| `npm run test:e2e` | End-to-end tests |
+| `npm run test:e2e` | End-to-end HTTP tests |
 | `npm run db:seed` | Seed database |
 | `npm run db:seed:fresh` | Wipe + seed |
 | `npm run db:reset` | Force-reset schema + fresh seed |
+
+**Feature / single-file examples** (from `backend/`): `npm run test -- --testPathPatterns=party`, `npm run test -- party/customer.service.spec.ts`, `npm run test:e2e -- --testPathPatterns=auth.e2e-spec`. Angular unit tests from repo root: `npm test`. Full guide: `docs/pharmacy_erp_architecture_docs/architecture/testing.md`.
 
 Before finishing backend changes, run `npm run lint` and relevant tests.
 

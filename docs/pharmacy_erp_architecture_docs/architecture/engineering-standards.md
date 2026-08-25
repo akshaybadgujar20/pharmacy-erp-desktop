@@ -23,7 +23,7 @@
 
 Automate critical business flows.
 
-Commands: [Early foundations — Tests](./early-foundations.md#tests).
+**Commands and feature-based test runs:** [Testing](./testing.md) (canonical). Quick links: [Early foundations — Tests](./early-foundations.md#tests).
 
 ## CI/CD
 

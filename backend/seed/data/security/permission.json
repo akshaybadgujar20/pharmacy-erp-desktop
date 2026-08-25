@@ -29,5 +29,6 @@
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb28", "permissionCode": "EMPLOYEE_READ", "permissionName": "Read Employees", "module": "PARTY", "resource": "EMPLOYEE", "action": "READ", "isSystemPermission": true, "isActive": true},
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb29", "permissionCode": "EMPLOYEE_CREATE", "permissionName": "Create Employees", "module": "PARTY", "resource": "EMPLOYEE", "action": "CREATE", "isSystemPermission": true, "isActive": true},
   {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb30", "permissionCode": "EMPLOYEE_UPDATE", "permissionName": "Update Employees", "module": "PARTY", "resource": "EMPLOYEE", "action": "UPDATE", "isSystemPermission": true, "isActive": true},
-  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb31", "permissionCode": "EMPLOYEE_DELETE", "permissionName": "Delete Employees", "module": "PARTY", "resource": "EMPLOYEE", "action": "DELETE", "isSystemPermission": true, "isActive": true}
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb31", "permissionCode": "EMPLOYEE_DELETE", "permissionName": "Delete Employees", "module": "PARTY", "resource": "EMPLOYEE", "action": "DELETE", "isSystemPermission": true, "isActive": true},
+  {"uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb32", "permissionCode": "REPORT_PARTY_VIEW", "permissionName": "View Party Reports", "module": "REPORT", "resource": "PARTY_REPORT", "action": "READ", "isSystemPermission": true, "isActive": true}
 ]

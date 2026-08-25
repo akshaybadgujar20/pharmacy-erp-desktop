@@ -63,7 +63,7 @@ Keep:
 - DTOs validated
 - Business rules in services
 
-Implemented modules: [Early foundations](./early-foundations.md) (auth, settings, logging, persistence).
+Implemented modules: [Early foundations](./early-foundations.md) (auth, settings, logging, persistence), [Reporting](./reporting.md) (report registry, party reports, export).
 
 ## API Design
 
@@ -80,7 +80,11 @@ DELETE /sales/{id}
 
 Return standard error structures. Version APIs when needed.
 
-The backend wraps responses in `{ success, data }` / `{ success, error }` — see `ApiService` in the Angular client layer.
+The backend wraps responses in `{ success, data }` / `{ success, error }` — see `ApiService` in the Angular client layer. Report exports (`format=csv|xlsx|pdf`) return binary streams instead of the JSON envelope.
+
+Reporting endpoints: `GET /reports`, `GET /reports/:reportId` — see [Reporting](./reporting.md).
+
+Testing: [Testing](./testing.md) — Jest commands for backend, persistence, e2e, and Angular.
 
 ## Related docs
 

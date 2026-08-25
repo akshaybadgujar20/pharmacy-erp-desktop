@@ -38,13 +38,26 @@ npm run start:dev        # dev server (port 3000)
 npm run build            # compile
 npm run lint             # ESLint with auto-fix
 npm run format           # Prettier write
-npm run test             # unit tests
-npm run test:persistence # persistence integration tests (--runInBand)
-npm run test:e2e         # end-to-end tests
+npm run test             # unit tests (src/**/*.spec.ts)
+npm run test:watch       # unit watch mode
+npm run test:cov         # unit coverage
+npm run test:persistence # persistence integration (--runInBand)
+npm run test:e2e         # HTTP e2e tests
 npm run db:seed          # seed database
 npm run db:seed:fresh    # wipe + seed
 npm run db:reset         # force-reset schema + fresh seed
 ```
+
+Feature / file examples (from `backend/`):
+
+```bash
+npm run test -- --testPathPatterns=reporting
+npm run test -- party/customer.service.spec.ts
+npm run test:persistence -- --testPathPatterns=sequence-generator
+npm run test:e2e -- --testPathPatterns=auth.e2e-spec
+```
+
+Full guide: [testing.md](../docs/pharmacy_erp_architecture_docs/architecture/testing.md).
 
 ## Key conventions
 
@@ -77,6 +90,14 @@ Multi-write flows use `UnitOfWorkService.run(tx => …)` with `RequestContextSer
 
 See [persistence-patterns.md](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md).
 
+### Reporting
+
+Read-only reports use `PrismaService` directly (no UnitOfWork). Domain modules register `ReportDefinition`s into `ReportRegistryService` at startup.
+
+- Endpoints: `GET /reports`, `GET /reports/:reportId`
+- Export: `format=json|csv|xlsx|pdf`
+- Guide: [reporting.md](../docs/pharmacy_erp_architecture_docs/architecture/reporting.md)
+
 ### Validation
 
 Global `ValidationPipe` with `whitelist`, `transform`, `forbidNonWhitelisted`. All request DTOs use class-validator decorators.
@@ -103,6 +124,8 @@ Scoped rules in `.cursor/rules/` (repo root):
 ## Architecture docs
 
 - [Early foundations](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) — auth, env vars, settings, Angular/Electron layer
+- [Testing](../docs/pharmacy_erp_architecture_docs/architecture/testing.md) — unit, persistence, e2e, feature/file commands
+- [Reporting](../docs/pharmacy_erp_architecture_docs/architecture/reporting.md) — report registry, API, extension guide
 - [Persistence patterns](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md)
 - [Logging and audit](../docs/pharmacy_erp_architecture_docs/architecture/logging-and-audit.md)
 - [Database overview](../docs/pharmacy_erp_architecture_docs/database/database_overview.md)

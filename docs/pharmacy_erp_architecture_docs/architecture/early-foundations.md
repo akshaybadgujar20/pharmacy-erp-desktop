@@ -248,6 +248,19 @@ Routes: `/login` (public), `/dashboard` (guarded).
 
 ---
 
+## Reporting API
+
+Implemented read-only reporting with JWT auth (same as other endpoints).
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /reports` | List reports the user may run (`REPORT_VIEW`) |
+| `GET /reports/:reportId` | Run report; query `format=json\|csv\|xlsx\|pdf` |
+
+Use the admin demo user for party reports (`REPORT_VIEW` + `REPORT_PARTY_VIEW`). Full API examples, permissions, and extension guide: [Reporting](./reporting.md).
+
+---
+
 ## Electron IPC
 
 `electron/preload.js` exposes `window.electronAPI`:
@@ -291,11 +304,25 @@ Registered in `KeyboardShortcutService` (handlers are no-ops until features exis
 
 ## Tests
 
+See [Testing](./testing.md) for the full command reference (unit, persistence, e2e, Angular, single-file, feature filters).
+
 | Suite | Command |
 |-------|---------|
-| Auth/settings unit | `cd backend && npm run test -- --testPathPatterns="auth.service.spec\|permissions.guard.spec\|settings.service.spec"` |
+| Auth/settings unit | `cd backend && npm run test -- --testPathPatterns=auth` |
+| Party unit | `cd backend && npm run test -- --testPathPatterns=party` |
+| Reporting unit | `cd backend && npm run test -- --testPathPatterns=reporting` |
 | Auth e2e | `cd backend && npm run test:e2e -- --testPathPatterns=auth.e2e-spec` |
-| Angular core | `npm test -- --testPathPatterns="src/app/core/services/(api\|auth).service.spec"` |
+| Party e2e | `cd backend && npm run test:e2e -- --testPathPatterns=party.e2e-spec` |
+| Persistence | `cd backend && npm run test:persistence` |
+| Angular core | `npm test -- --testPathPatterns=src/app/core` |
+
+Single file examples:
+
+```bash
+cd backend && npm run test -- party/customer.service.spec.ts
+cd backend && npm run test -- reporting/core/report-registry.service.spec.ts
+npm test -- --testPathPatterns=auth.service.spec
+```
 
 E2e auth tests reset user password hashes to `admin123` in `beforeEach`.
 
@@ -307,6 +334,7 @@ E2e auth tests reset user password hashes to `admin123` in `beforeEach`.
 |------|------|
 | Auth module | `backend/src/auth/` |
 | Settings module | `backend/src/settings/` |
+| Reporting module | `backend/src/reporting/` |
 | Context enrich | `backend/src/common/interceptors/context-enrich.interceptor.ts` |
 | Tenant scope | `backend/src/persistence/context/tenant-scope.util.ts` |
 | Angular core | `src/app/core/` |
@@ -316,6 +344,8 @@ E2e auth tests reset user password hashes to `admin123` in `beforeEach`.
 ## Related docs
 
 - [Security](./security.md)
+- [Reporting](./reporting.md)
+- [Testing](./testing.md)
 - [Logging and audit](./logging-and-audit.md)
 - [Persistence patterns](../database/persistence-patterns.md)
 - [AppSetting table](../database/tables/configuration/64_app_setting.md)

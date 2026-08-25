@@ -79,9 +79,15 @@ describe('Party Management (e2e)', () => {
       select: { id: true },
     });
     for (const party of staleParties) {
-      await prisma.client.partyRole.deleteMany({ where: { partyId: party.id } });
-      await prisma.client.partyAddress.deleteMany({ where: { partyId: party.id } });
-      await prisma.client.partyContact.deleteMany({ where: { partyId: party.id } });
+      await prisma.client.partyRole.deleteMany({
+        where: { partyId: party.id },
+      });
+      await prisma.client.partyAddress.deleteMany({
+        where: { partyId: party.id },
+      });
+      await prisma.client.partyContact.deleteMany({
+        where: { partyId: party.id },
+      });
       await prisma.client.party.deleteMany({ where: { id: party.id } });
     }
 
@@ -297,8 +303,8 @@ describe('Party Management (e2e)', () => {
       .expect(200);
 
     const currentVersion =
-      (getBeforeUpdate.body as ApiEnvelope<{ version: number }>).data?.version ??
-      partyVersion;
+      (getBeforeUpdate.body as ApiEnvelope<{ version: number }>).data
+        ?.version ?? partyVersion;
 
     const updateRes = await request(app.getHttpServer())
       .patch(`/parties/${partyId}`)

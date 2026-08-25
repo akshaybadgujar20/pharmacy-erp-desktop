@@ -38,21 +38,37 @@ This will compile your project and store the build artifacts in the `dist/` dire
 
 ## Running unit tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+This project uses **Jest** (not Karma). From the repository root:
 
 ```bash
-ng test
+npm test                  # all Angular unit tests (src/**/*.spec.ts)
+npm run test:watch        # watch mode
+npm run test:coverage     # with coverage
+npm test -- --testPathPatterns=auth.service.spec   # single file / pattern
 ```
+
+Full testing guide (backend + Angular, feature filters, e2e, persistence): [Testing architecture doc](docs/pharmacy_erp_architecture_docs/architecture/testing.md).
+
+### Backend tests
+
+From `backend/`:
+
+```bash
+npm run test              # unit tests (src/**/*.spec.ts)
+npm run test:persistence  # persistence integration (seeded SQLite)
+npm run test:e2e          # HTTP e2e (auth, party, app)
+npm run test -- --testPathPatterns=reporting   # feature filter example
+```
+
+See [backend/README.md](backend/README.md#run-tests) and [testing.md](docs/pharmacy_erp_architecture_docs/architecture/testing.md).
 
 ## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+Angular CLI e2e (`ng e2e`) is not configured. Backend API e2e:
 
 ```bash
-ng e2e
+cd backend && npm run test:e2e
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
 ## Additional Resources
 

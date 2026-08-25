@@ -129,16 +129,27 @@ Assert **behavior** (return values, side effects, thrown codes) — not implemen
 
 ## Running tests
 
+Canonical doc: [testing.md](docs/pharmacy_erp_architecture_docs/architecture/testing.md).
+
 ```bash
-# Unit tests
+# From backend/ — unit (all or by feature)
 npm run test
+npm run test -- --testPathPatterns=auth|party|reporting|settings
+npm run test -- party/customer.service.spec.ts    # single file (path under src/)
 
-# Single file
-npx jest src/persistence/sequence/sequence-generator.service.spec.ts
-
-# Persistence integration (serial)
+# Persistence integration (seed DB first if needed)
 npm run test:persistence
+npm run test:persistence -- --testPathPatterns=sequence-generator
 
-# With coverage
+# HTTP e2e
+npm run test:e2e
+npm run test:e2e -- --testPathPatterns=auth.e2e-spec
+
+# Watch / coverage
+npm run test:watch
 npm run test:cov
+
+# From repo root — Angular unit (Jest)
+npm test
+npm test -- --testPathPatterns=auth.service.spec
 ```

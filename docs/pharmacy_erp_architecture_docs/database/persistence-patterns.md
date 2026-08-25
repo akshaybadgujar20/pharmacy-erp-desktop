@@ -61,10 +61,19 @@ SQLite schemas omit autoincrement for some tables. `createPrismaClient()` extend
 Persistence integration tests use the seeded SQLite file and run with:
 
 ```bash
+cd backend
+npm run db:seed:fresh   # if DB not seeded
 npm run test:persistence
 ```
 
-See `test/persistence/` for examples (`runWithTestContext`, `deviceId: test-device-001`).
+Filter by integration file:
+
+```bash
+npm run test:persistence -- --testPathPatterns=sequence-generator
+npm run test:persistence -- --testPathPatterns=outbox-in-transaction
+```
+
+See `test/persistence/` for examples (`runWithTestContext`, `deviceId: test-device-001`). Full test commands: [Testing architecture](../architecture/testing.md).
 
 ## Related docs
 

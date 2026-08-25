@@ -34,20 +34,17 @@ Support:
 
 ## Reporting
 
-Provide:
+**Implemented (backend):** extensible report registry with party reports and CSV / Excel / PDF export. See [Reporting architecture](./reporting.md) for API usage, permissions, and how to add providers.
 
-- Sales
-- Purchase
-- Stock
-- Profit
-- GST
-- Expiry
-- Fast-moving medicines
-- Slow-moving medicines
+**Planned product coverage** (future providers):
 
-Reports should be exportable to PDF and Excel.
+- Sales, purchase, stock, profit, GST
+- Expiry, fast/slow-moving medicines
+
+Reports should be exportable to PDF and Excel (supported via `format=pdf` and `format=xlsx`).
 
 ## Related docs
 
+- [Reporting (implemented)](./reporting.md) — API, extension guide, party reports
 - [Application architecture](./application-architecture.md) — Electron main process for hardware
 - [Early foundations](./early-foundations.md) — Electron IPC

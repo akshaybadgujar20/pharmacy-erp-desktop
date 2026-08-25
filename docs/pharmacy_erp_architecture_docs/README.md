@@ -14,6 +14,8 @@ Start at [Architecture index](./architecture/README.md).
 | Integrations | [integrations.md](./architecture/integrations.md) |
 | Security | [security.md](./architecture/security.md) |
 | Logging & audit | [logging-and-audit.md](./architecture/logging-and-audit.md) |
+| Reporting | [reporting.md](./architecture/reporting.md) |
+| Testing | [testing.md](./architecture/testing.md) |
 | Engineering standards | [engineering-standards.md](./architecture/engineering-standards.md) |
 
 ## Database

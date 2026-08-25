@@ -246,15 +246,62 @@ npm run test:persistence
 ```
 ## Run tests
 
-``` bash
-# unit tests
+Full reference: [Testing architecture doc](../docs/pharmacy_erp_architecture_docs/architecture/testing.md).
+
+### All suites
+
+```bash
+# Unit tests (src/**/*.spec.ts) — mocked, no database
 npm run test
 
-# e2e tests
-npm run test:e2e
-
-# test coverage
+# Watch / coverage / debug
+npm run test:watch
 npm run test:cov
+npm run test:debug
+
+# Persistence integration (seeded db/pharmacy.sqlite, --runInBand)
+npm run test:persistence
+
+# HTTP e2e (auth, party, app)
+npm run test:e2e
+```
+
+Seed before persistence or e2e if needed: `npm run db:seed:fresh`.
+
+### Feature-based (unit)
+
+```bash
+npm run test -- --testPathPatterns=auth
+npm run test -- --testPathPatterns=party
+npm run test -- --testPathPatterns=reporting
+npm run test -- --testPathPatterns=settings
+npm run test -- --testPathPatterns=src/common
+```
+
+### Single file (unit)
+
+Path relative to `src/` (Jest `rootDir`):
+
+```bash
+npm run test -- party/customer.service.spec.ts
+npm run test -- reporting/core/report-registry.service.spec.ts
+npm run test -- auth/auth.service.spec.ts
+```
+
+### Feature-based (persistence / e2e)
+
+```bash
+npm run test:persistence -- --testPathPatterns=sequence-generator
+npm run test:persistence -- --testPathPatterns=outbox-in-transaction
+npm run test:e2e -- --testPathPatterns=auth.e2e-spec
+npm run test:e2e -- --testPathPatterns=party.e2e-spec
+```
+
+### Lint before tests
+
+```bash
+npm run lint
+npm run format
 ```
 
 ## Deployment
