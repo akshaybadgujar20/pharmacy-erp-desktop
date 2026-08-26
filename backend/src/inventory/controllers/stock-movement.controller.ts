@@ -1,0 +1,58 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
+import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
+import { EmployeeService } from '../services/employee.service';
+import { CreateStockAdjustmentDto } from '../dto/create-stock-adjustment.dto';
+import { UpdateStockAdjustmentDto } from '../dto/update-stock-adjustment.dto';
+
+@Controller('stocks/:stockId/movement')
+export class StockMovementController {
+  constructor(private readonly employeeService: EmployeeService) {}
+
+  @Get()
+  @RequirePermissions('PARTY:EMPLOYEE:READ')
+  list(@Query() query: PaginationQueryDto) {
+    return this.employeeService.list(query);
+  }
+
+  @Get(':id')
+  @RequirePermissions('PARTY:EMPLOYEE:READ')
+  getById(@Param('id', ParseBigIntPipe) id: bigint) {
+    return this.employeeService.getById(id);
+  }
+
+  @Post()
+  @RequirePermissions('PARTY:EMPLOYEE:CREATE')
+  create(@Body() dto: CreateStockAdjustmentDto) {
+    return this.employeeService.create(dto);
+  }
+
+  @Patch(':id')
+  @RequirePermissions('PARTY:EMPLOYEE:UPDATE')
+  update(
+    @Param('id', ParseBigIntPipe) id: bigint,
+    @Body() dto: UpdateStockAdjustmentDto,
+  ) {
+    return this.employeeService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @RequirePermissions('PARTY:EMPLOYEE:DELETE')
+  delete(
+    @Param('id', ParseBigIntPipe) id: bigint,
+    @Query() query: DeleteEntityQueryDto,
+  ) {
+    return this.employeeService.delete(id, query.version);
+  }
+}
