@@ -35,23 +35,19 @@ import { PersistenceModule } from './persistence/persistence.module';
 import { SettingsModule } from './settings/settings.module';
 import { PartyModule } from './party/party.module';
 import { ReportingModule } from './reporting/reporting.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
     PrismaModule,
-
     PersistenceModule,
-
     LoggingModule,
-
     AuditModule,
-
     AuthModule,
-
     SettingsModule,
     PartyModule,
+    InventoryModule,
     ReportingModule,
   ],
 
@@ -59,17 +55,11 @@ import { ReportingModule } from './reporting/reporting.module';
 
   providers: [
     AppService,
-
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
-
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
-
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
-
     { provide: APP_INTERCEPTOR, useClass: ContextEnrichInterceptor },
-
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-
     { provide: APP_GUARD, useClass: PermissionsGuard },
   ],
 })
