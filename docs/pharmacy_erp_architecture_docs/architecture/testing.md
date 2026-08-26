@@ -21,8 +21,11 @@ Persistence and e2e tests share the SQLite file — run persistence with `--runI
 
 ```bash
 cd backend
-npm run db:seed:fresh   # or npm run db:seed if DB already matches schema
+npm run db:seed:fresh   # recommended: clean baseline before integration/e2e
+# npm run db:seed       # append only if DB already matches schema and you need more rows
 ```
+
+Seed modes: `db:seed:fresh` wipes and reseeds; `db:seed` appends; `--only <phase>` resumes from a phase. Details: [backend/seed/README.md](../../../backend/seed/README.md).
 
 ---
 

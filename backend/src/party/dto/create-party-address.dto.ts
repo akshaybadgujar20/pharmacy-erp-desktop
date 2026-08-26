@@ -1,4 +1,3 @@
-import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsIn,
@@ -8,6 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
 import { AddressType } from '../constants/party.constants';
 
 export class CreatePartyAddressDto {
@@ -36,22 +36,13 @@ export class CreatePartyAddressDto {
   @MaxLength(200)
   area?: string;
 
-  @IsOptional()
-  @Transform(({ value }: { value: string | undefined }) =>
-    value !== undefined && value !== null ? BigInt(value) : undefined,
-  )
+  @OptionalBigIntField()
   cityId?: bigint;
 
-  @IsOptional()
-  @Transform(({ value }: { value: string | undefined }) =>
-    value !== undefined && value !== null ? BigInt(value) : undefined,
-  )
+  @OptionalBigIntField()
   stateId?: bigint;
 
-  @IsOptional()
-  @Transform(({ value }: { value: string | undefined }) =>
-    value !== undefined && value !== null ? BigInt(value) : undefined,
-  )
+  @OptionalBigIntField()
   countryId?: bigint;
 
   @IsOptional()

@@ -27,6 +27,21 @@ describe('ResponseInterceptor', () => {
     });
   });
 
+  it('serializes bigint in response data', async () => {
+    const next: CallHandler = {
+      handle: () => of({ id: 42n }),
+    };
+
+    const result = await lastValueFrom(
+      interceptor.intercept(mockContext, next),
+    );
+
+    expect(result).toEqual({
+      success: true,
+      data: { id: '42' },
+    });
+  });
+
   it('unwraps PaginatedResult with pagination', async () => {
     const pagination = { page: 1, pageSize: 10, total: 2, totalPages: 1 };
     const paginated = PaginatedResult.of([{ id: 1 }, { id: 2 }], pagination);

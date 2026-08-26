@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
@@ -50,8 +51,8 @@ export class SupplierController {
   @RequirePermissions('PARTY:SUPPLIER:DELETE')
   delete(
     @Param('id', ParseBigIntPipe) id: bigint,
-    @Query('version') version: string,
+    @Query() query: DeleteEntityQueryDto,
   ) {
-    return this.supplierService.delete(id, Number(version));
+    return this.supplierService.delete(id, query.version);
   }
 }

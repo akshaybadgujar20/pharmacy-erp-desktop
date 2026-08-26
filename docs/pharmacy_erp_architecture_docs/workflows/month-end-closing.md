@@ -89,5 +89,5 @@ Last business day of month or financial year; or manual close initiated by finan
 ## Related
 
 - [Inventory flow](./inventory-flow.md)
-- [Finance domain](../domain/finance/README.md)
+- [Finance domain](../domain/finance.md)
 - [Payment flow](./payment-flow.md)

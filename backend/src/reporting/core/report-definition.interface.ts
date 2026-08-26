@@ -38,7 +38,7 @@ export interface ReportParams {
   search?: string;
   fromDate?: string;
   toDate?: string;
-  branchId?: number;
+  branchId?: bigint;
   [key: string]: unknown;
 }
 

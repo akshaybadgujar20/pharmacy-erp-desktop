@@ -1,12 +1,15 @@
 import type { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { loadJson } from './load-json';
-import { decimal, register, resolve } from './id-registry';
+import { decimal, register, resolve, tryResolve } from './id-registry';
 import type { SeedContext } from './seed-context';
 
 type Row = Record<string, unknown>;
 
-export async function loadMasters(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function loadMasters(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   await loadGeo(prisma);
   await loadConfiguration(prisma, ctx);
   await loadMedicineRefs(prisma);
@@ -16,6 +19,7 @@ export async function loadMasters(prisma: PrismaClient, ctx: SeedContext): Promi
 
 async function loadGeo(prisma: PrismaClient): Promise<void> {
   for (const row of loadJson<Row>('geo/country.json')) {
+    if (tryResolve('Country', row.uuid as string) !== undefined) continue;
     const created = await prisma.country.create({
       data: {
         uuid: row.uuid as string,
@@ -34,6 +38,7 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('geo/state.json')) {
+    if (tryResolve('State', row.uuid as string) !== undefined) continue;
     const created = await prisma.state.create({
       data: {
         uuid: row.uuid as string,
@@ -49,6 +54,7 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('geo/city.json')) {
+    if (tryResolve('City', row.uuid as string) !== undefined) continue;
     const created = await prisma.city.create({
       data: {
         uuid: row.uuid as string,
@@ -64,6 +70,7 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('geo/area.json')) {
+    if (tryResolve('Area', row.uuid as string) !== undefined) continue;
     const created = await prisma.area.create({
       data: {
         uuid: row.uuid as string,
@@ -79,8 +86,12 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
   }
 }
 
-async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+async function loadConfiguration(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   for (const row of loadJson<Row>('configuration/company.json')) {
+    if (tryResolve('Company', row.uuid as string) !== undefined) continue;
     const created = await prisma.company.create({
       data: {
         uuid: row.uuid as string,
@@ -106,6 +117,7 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/branch.json')) {
+    if (tryResolve('Branch', row.uuid as string) !== undefined) continue;
     const created = await prisma.branch.create({
       data: {
         uuid: row.uuid as string,
@@ -136,11 +148,14 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/financial-year.json')) {
+    if (tryResolve('FinancialYear', row.uuid as string) !== undefined) continue;
     const created = await prisma.financialYear.create({
       data: {
         uuid: row.uuid as string,
         companyId: resolve('Company', row.companyUuid as string),
-        branchId: row.branchUuid ? resolve('Branch', row.branchUuid as string) : undefined,
+        branchId: row.branchUuid
+          ? resolve('Branch', row.branchUuid as string)
+          : undefined,
         financialYearCode: row.financialYearCode as string,
         financialYearName: row.financialYearName as string,
         startDate: new Date(row.startDate as string),
@@ -153,11 +168,15 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/sequence-generator.json')) {
+    if (tryResolve('SequenceGenerator', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.sequenceGenerator.create({
       data: {
         uuid: row.uuid as string,
         companyId: resolve('Company', row.companyUuid as string),
-        branchId: row.branchUuid ? resolve('Branch', row.branchUuid as string) : undefined,
+        branchId: row.branchUuid
+          ? resolve('Branch', row.branchUuid as string)
+          : undefined,
         documentType: row.documentType as string,
         prefix: row.prefix as string | undefined,
         suffix: row.suffix as string | undefined,
@@ -171,11 +190,14 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/app-setting.json')) {
+    if (tryResolve('AppSetting', row.uuid as string) !== undefined) continue;
     const created = await prisma.appSetting.create({
       data: {
         uuid: row.uuid as string,
         companyId: resolve('Company', row.companyUuid as string),
-        branchId: row.branchUuid ? resolve('Branch', row.branchUuid as string) : undefined,
+        branchId: row.branchUuid
+          ? resolve('Branch', row.branchUuid as string)
+          : undefined,
         settingKey: row.settingKey as string,
         settingName: row.settingName as string,
         settingValue: row.settingValue as string | undefined,
@@ -192,11 +214,15 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/barcode-configuration.json')) {
+    if (tryResolve('BarcodeConfiguration', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.barcodeConfiguration.create({
       data: {
         uuid: row.uuid as string,
         companyId: resolve('Company', row.companyUuid as string),
-        branchId: row.branchUuid ? resolve('Branch', row.branchUuid as string) : undefined,
+        branchId: row.branchUuid
+          ? resolve('Branch', row.branchUuid as string)
+          : undefined,
         configurationName: row.configurationName as string,
         barcodeType: row.barcodeType as string,
         appliesTo: row.appliesTo as string,
@@ -212,11 +238,15 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
   }
 
   for (const row of loadJson<Row>('configuration/printer-configuration.json')) {
+    if (tryResolve('PrinterConfiguration', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.printerConfiguration.create({
       data: {
         uuid: row.uuid as string,
         companyId: resolve('Company', row.companyUuid as string),
-        branchId: row.branchUuid ? resolve('Branch', row.branchUuid as string) : undefined,
+        branchId: row.branchUuid
+          ? resolve('Branch', row.branchUuid as string)
+          : undefined,
         printerName: row.printerName as string,
         printerType: row.printerType as string,
         documentType: row.documentType as string,
@@ -234,6 +264,7 @@ async function loadConfiguration(prisma: PrismaClient, ctx: SeedContext): Promis
 
 async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
   for (const row of loadJson<Row>('medicine/unit-of-measure.json')) {
+    if (tryResolve('UnitOfMeasure', row.uuid as string) !== undefined) continue;
     const created = await prisma.unitOfMeasure.create({
       data: {
         uuid: row.uuid as string,
@@ -250,6 +281,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('medicine/medicine-category.json')) {
+    if (tryResolve('MedicineCategory', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.medicineCategory.create({
       data: {
         uuid: row.uuid as string,
@@ -262,6 +295,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('medicine/medicine-schedule.json')) {
+    if (tryResolve('MedicineSchedule', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.medicineSchedule.create({
       data: {
         uuid: row.uuid as string,
@@ -276,6 +311,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('medicine/medicine-generic.json')) {
+    if (tryResolve('MedicineGeneric', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.medicineGeneric.create({
       data: {
         uuid: row.uuid as string,
@@ -289,6 +326,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('medicine/salt-composition.json')) {
+    if (tryResolve('SaltComposition', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.saltComposition.create({
       data: {
         uuid: row.uuid as string,
@@ -306,6 +345,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
 
 async function loadTax(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
   for (const row of loadJson<Row>('pricing/tax.json')) {
+    const existingId = tryResolve('Tax', row.uuid as string);
+    if (existingId !== undefined) continue;
     const created = await prisma.tax.create({
       data: {
         uuid: row.uuid as string,
@@ -314,7 +355,9 @@ async function loadTax(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
         taxType: row.taxType as string,
         taxRate: decimal(row.taxRate as string | number),
         effectiveFrom: new Date(row.effectiveFrom as string),
-        effectiveTo: row.effectiveTo ? new Date(row.effectiveTo as string) : undefined,
+        effectiveTo: row.effectiveTo
+          ? new Date(row.effectiveTo as string)
+          : undefined,
         isActive: row.isActive as boolean,
       },
     });
@@ -325,6 +368,7 @@ async function loadTax(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
 
 async function loadSecurity(prisma: PrismaClient): Promise<void> {
   for (const row of loadJson<Row>('security/permission.json')) {
+    if (tryResolve('Permission', row.uuid as string) !== undefined) continue;
     const created = await prisma.permission.create({
       data: {
         uuid: row.uuid as string,
@@ -341,6 +385,7 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('security/role.json')) {
+    if (tryResolve('Role', row.uuid as string) !== undefined) continue;
     const created = await prisma.role.create({
       data: {
         uuid: row.uuid as string,
@@ -355,6 +400,8 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
   }
 
   for (const row of loadJson<Row>('security/role-permission.json')) {
+    if (tryResolve('RolePermission', row.uuid as string) !== undefined)
+      continue;
     const created = await prisma.rolePermission.create({
       data: {
         uuid: row.uuid as string,
@@ -367,7 +414,10 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
   }
 }
 
-export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function loadUsers(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const roles = [
     'cccccccc-cccc-4ccc-8ccc-cccccccccc01',
     'cccccccc-cccc-4ccc-8ccc-cccccccccc02',
@@ -375,16 +425,36 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
     'cccccccc-cccc-4ccc-8ccc-cccccccccc04',
     'cccccccc-cccc-4ccc-8ccc-cccccccccc05',
   ];
-  const usernames = ['admin', 'pharmacist1', 'cashier1', 'procurement1', 'manager1', 'pharmacist2', 'cashier2', 'procurement2', 'manager2', 'support1'];
+  const usernames = [
+    'admin',
+    'pharmacist1',
+    'cashier1',
+    'procurement1',
+    'manager1',
+    'pharmacist2',
+    'cashier2',
+    'procurement2',
+    'manager2',
+    'support1',
+  ];
   const defaultPasswordHash = bcrypt.hashSync('admin123', 10);
 
   for (let i = 0; i < usernames.length && i < ctx.employeeIds.length; i++) {
     const userUuid = `17171717-1717-4717-8717-1717171717${String(i + 1).padStart(2, '0')}`;
+    const existingUser = await prisma.user.findUnique({
+      where: { uuid: userUuid },
+    });
+    if (existingUser) {
+      register('User', userUuid, existingUser.id);
+      if (!ctx.userIds.includes(existingUser.id))
+        ctx.userIds.push(existingUser.id);
+      continue;
+    }
     const user = await prisma.user.create({
       data: {
         uuid: userUuid,
-        employeeId: ctx.employeeIds[i]!,
-        username: usernames[i]!,
+        employeeId: ctx.employeeIds[i],
+        username: usernames[i],
         passwordHash: defaultPasswordHash,
         isActive: true,
       },
@@ -392,7 +462,7 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
     register('User', userUuid, user.id);
     ctx.userIds.push(user.id);
 
-    const roleUuid = roles[i % roles.length]!;
+    const roleUuid = roles[i % roles.length];
     const userRoleUuid = `18181818-1818-4818-8818-1818181818${String(i + 1).padStart(2, '0')}`;
     await prisma.userRole.create({
       data: {
@@ -405,10 +475,21 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
 
     const sessionUuid = `19191919-1919-4919-8919-1919191919${String(i + 1).padStart(2, '0')}`;
     const now = new Date();
+    const branch =
+      ctx.branchRecords[i % ctx.branchRecords.length] ?? ctx.branchRecords[0];
+    const branchRow = await prisma.branch.findUnique({
+      where: { id: branch.id },
+      select: { companyId: true },
+    });
+    if (!branchRow) {
+      throw new Error(`Branch not found for seed session: ${branch.id}`);
+    }
     await prisma.userSession.create({
       data: {
         uuid: sessionUuid,
         userId: user.id,
+        companyId: branchRow.companyId,
+        branchId: branch.id,
         sessionToken: `session-token-${i + 1}-${Date.now()}`,
         deviceName: 'Seed Desktop Client',
         deviceType: 'DESKTOP',
@@ -419,5 +500,42 @@ export async function loadUsers(prisma: PrismaClient, ctx: SeedContext): Promise
         isActive: i < 5,
       },
     });
+  }
+
+  await seedUserBranches(prisma, ctx);
+}
+
+export async function seedUserBranches(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
+  for (let i = 0; i < ctx.userIds.length; i++) {
+    const userId = ctx.userIds[i];
+    const isAdmin = i === 0;
+
+    for (let j = 0; j < ctx.branchRecords.length; j++) {
+      if (!isAdmin && j !== i % ctx.branchRecords.length) {
+        continue;
+      }
+
+      const branch = ctx.branchRecords[j];
+      const uuid = `1a1a1a1a-1a1a-4a1a-8a1a-1a1a1a1a1a${String(i + 1).padStart(2, '0')}${String(j + 1).padStart(2, '0')}`;
+
+      const existing = await prisma.userBranch.findFirst({
+        where: { userId, branchId: branch.id },
+      });
+      if (existing) {
+        continue;
+      }
+
+      await prisma.userBranch.create({
+        data: {
+          uuid,
+          userId,
+          branchId: branch.id,
+          isActive: true,
+        },
+      });
+    }
   }
 }

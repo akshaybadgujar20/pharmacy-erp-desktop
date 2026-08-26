@@ -21,7 +21,8 @@ export type SettingCategory =
 
 export const SettingDataType = {
   STRING: 'STRING',
-  NUMBER: 'NUMBER',
+  INTEGER: 'INTEGER',
+  DECIMAL: 'DECIMAL',
   BOOLEAN: 'BOOLEAN',
   JSON: 'JSON',
 } as const;

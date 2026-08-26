@@ -8,7 +8,7 @@ import { DocumentType, ResetPolicy } from './document-type.constants';
 export interface SequenceNextInput {
   companyId: bigint;
   branchId: bigint;
-  documentType: DocumentType | string;
+  documentType: DocumentType;
   branchCode?: string;
 }
 
@@ -31,6 +31,12 @@ function shouldResetSequence(
       return (
         lastUpdatedAt.getFullYear() !== now.getFullYear() ||
         lastUpdatedAt.getMonth() !== now.getMonth()
+      );
+    case ResetPolicy.DAILY:
+      return (
+        lastUpdatedAt.getFullYear() !== now.getFullYear() ||
+        lastUpdatedAt.getMonth() !== now.getMonth() ||
+        lastUpdatedAt.getDate() !== now.getDate()
       );
     default:
       return false;
@@ -80,7 +86,8 @@ export class SequenceGeneratorService {
         ErrorCode.SEQUENCE_CONFLICT,
         'Sequence row was modified concurrently',
         HttpStatus.CONFLICT,
-        { sequenceId: row.id },
+        { sequenceId: row.id.toString() },
+        true,
       );
     }
 

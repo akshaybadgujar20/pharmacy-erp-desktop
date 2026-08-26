@@ -9,6 +9,7 @@ import {
 } from '../../constants/reporting.constants';
 import {
   ReportColumnTypes,
+  type ReportContext,
   type ReportDefinition,
   type ReportParams,
   type ReportResult,
@@ -95,7 +96,7 @@ export class PartyReportsProvider implements OnModuleInit {
       name: 'Customer List',
       category: ReportCategory.PARTY,
       permission: ReportPermission.PARTY_VIEW,
-      run: (params) => this.runCustomerList(params),
+      run: (params, ctx) => this.runCustomerList(params, ctx),
     };
   }
 
@@ -105,7 +106,7 @@ export class PartyReportsProvider implements OnModuleInit {
       name: 'Supplier List',
       category: ReportCategory.PARTY,
       permission: ReportPermission.PARTY_VIEW,
-      run: (params) => this.runSupplierList(params),
+      run: (params, ctx) => this.runSupplierList(params, ctx),
     };
   }
 
@@ -115,11 +116,15 @@ export class PartyReportsProvider implements OnModuleInit {
       name: 'Customer Outstanding',
       category: ReportCategory.PARTY,
       permission: ReportPermission.PARTY_VIEW,
-      run: (params) => this.runCustomerOutstanding(params),
+      run: (params, ctx) => this.runCustomerOutstanding(params, ctx),
     };
   }
 
-  private async runCustomerList(params: ReportParams): Promise<ReportResult> {
+  private async runCustomerList(
+    params: ReportParams,
+    ctx: ReportContext,
+  ): Promise<ReportResult> {
+    void ctx;
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
     const search =
@@ -165,7 +170,11 @@ export class PartyReportsProvider implements OnModuleInit {
     };
   }
 
-  private async runSupplierList(params: ReportParams): Promise<ReportResult> {
+  private async runSupplierList(
+    params: ReportParams,
+    ctx: ReportContext,
+  ): Promise<ReportResult> {
+    void ctx;
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
     const search =
@@ -213,16 +222,20 @@ export class PartyReportsProvider implements OnModuleInit {
 
   private async runCustomerOutstanding(
     params: ReportParams,
+    ctx: ReportContext,
   ): Promise<ReportResult> {
+    void ctx;
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
     const search =
       typeof params.search === 'string' ? params.search.trim() : '';
+    const dateFilter = this.buildCreatedAtFilter(params);
 
     const where: Prisma.CustomerWhereInput = {
       deletedAt: null,
       party: { deletedAt: null },
       outstandingAmount: { gt: 0 },
+      ...(dateFilter ? { createdAt: dateFilter } : {}),
       ...(search
         ? {
             OR: [
@@ -233,7 +246,7 @@ export class PartyReportsProvider implements OnModuleInit {
         : {}),
     };
 
-    const [total, rows, aggregate] = await Promise.all([
+    const [total, rows] = await Promise.all([
       this.prisma.client.customer.count({ where }),
       this.prisma.client.customer.findMany({
         where,
@@ -242,21 +255,24 @@ export class PartyReportsProvider implements OnModuleInit {
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
-      this.prisma.client.customer.aggregate({
-        where,
-        _sum: { outstandingAmount: true },
-      }),
     ]);
+
+    const mappedRows = rows.map((row) => ({
+      customerCode: row.customerCode,
+      displayName: row.party.displayName,
+      outstandingAmount: serializeDecimal(row.outstandingAmount) ?? '0',
+    }));
+
+    const grandTotal = mappedRows.reduce(
+      (sum, row) => sum.add(new Prisma.Decimal(row.outstandingAmount)),
+      new Prisma.Decimal(0),
+    );
 
     return {
       columns: CUSTOMER_OUTSTANDING_COLUMNS,
-      rows: rows.map((row) => ({
-        customerCode: row.customerCode,
-        displayName: row.party.displayName,
-        outstandingAmount: serializeDecimal(row.outstandingAmount) ?? '0',
-      })),
+      rows: mappedRows,
       totals: {
-        grandTotal: serializeDecimal(aggregate._sum.outstandingAmount) ?? '0',
+        grandTotal: serializeDecimal(grandTotal) ?? '0',
       },
       pagination: buildPagination(total, page, pageSize),
     };
@@ -271,7 +287,14 @@ export class PartyReportsProvider implements OnModuleInit {
 
     return {
       ...(params.fromDate ? { gte: new Date(params.fromDate) } : {}),
-      ...(params.toDate ? { lte: new Date(params.toDate) } : {}),
+      ...(params.toDate ? { lte: this.endOfDay(params.toDate) } : {}),
     };
+  }
+
+  private endOfDay(dateStr: string): Date {
+    const date = new Date(dateStr);
+    date.setHours(23, 59, 59, 999);
+
+    return date;
   }
 }

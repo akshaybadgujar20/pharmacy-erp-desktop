@@ -35,6 +35,7 @@ export class CreateEmployeeDto {
 
   @IsOptional()
   @IsString()
+  @Matches(/^\d+(\.\d{1,2})?$/)
   salary?: string;
 
   @IsOptional()

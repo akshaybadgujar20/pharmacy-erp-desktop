@@ -1,5 +1,7 @@
+import { HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
+import { ErrorCode } from '../common/exceptions/error-code';
 import { RequestContextService } from '../persistence/context/request-context.service';
 import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { AuditAction } from './audit-action.constants';
@@ -52,6 +54,8 @@ describe('AuditService', () => {
           {
             data: {
               userId: bigint;
+              companyId: bigint;
+              branchId: bigint;
               entityType: string;
               entityId: bigint;
               action: string;
@@ -69,6 +73,8 @@ describe('AuditService', () => {
     )[0][0];
 
     expect(createArgs.data.userId).toBe(25n);
+    expect(createArgs.data.companyId).toBe(1n);
+    expect(createArgs.data.branchId).toBe(2n);
     expect(createArgs.data.entityType).toBe('SalesInvoice');
     expect(createArgs.data.entityId).toBe(501n);
     expect(createArgs.data.action).toBe(AuditAction.POST);
@@ -79,5 +85,50 @@ describe('AuditService', () => {
     expect(createArgs.data.ipAddress).toBe('127.0.0.1');
     expect(createArgs.data.sessionId).toBe('session-1');
     expect(createArgs.data.actionTimestamp).toBeInstanceOf(Date);
+  });
+
+  it('rejects empty entityType', async () => {
+    const tx = { auditLog: { create: auditLogCreate } } as unknown as TxClient;
+
+    await expect(
+      auditService.log(tx, {
+        entityType: '   ',
+        action: AuditAction.CREATE,
+        module: AuditModuleName.PARTY,
+      }),
+    ).rejects.toMatchObject({
+      code: ErrorCode.VALIDATION_ERROR,
+      statusCode: HttpStatus.BAD_REQUEST,
+    });
+  });
+
+  it('rejects invalid action', async () => {
+    const tx = { auditLog: { create: auditLogCreate } } as unknown as TxClient;
+
+    await expect(
+      auditService.log(tx, {
+        entityType: 'Customer',
+        action: 'INVALID' as AuditAction,
+        module: AuditModuleName.PARTY,
+      }),
+    ).rejects.toMatchObject({
+      code: ErrorCode.VALIDATION_ERROR,
+      statusCode: HttpStatus.BAD_REQUEST,
+    });
+  });
+
+  it('rejects invalid module', async () => {
+    const tx = { auditLog: { create: auditLogCreate } } as unknown as TxClient;
+
+    await expect(
+      auditService.log(tx, {
+        entityType: 'Customer',
+        action: AuditAction.CREATE,
+        module: 'InvalidModule' as AuditModuleName,
+      }),
+    ).rejects.toMatchObject({
+      code: ErrorCode.VALIDATION_ERROR,
+      statusCode: HttpStatus.BAD_REQUEST,
+    });
   });
 });

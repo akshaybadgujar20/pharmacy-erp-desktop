@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 
 const SEED = 42_026;
 
-export function initFaker(): void {
-  faker.seed(SEED);
+export function initFaker(appendRun = false): void {
+  faker.seed(appendRun ? SEED + (Date.now() % 1_000_000) : SEED);
 }
 
 export { faker };

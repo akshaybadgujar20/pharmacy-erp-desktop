@@ -4,16 +4,27 @@ import { decimal, docNumber } from '../id-registry';
 import type { SeedContext } from '../seed-context';
 import { recordMovement } from './inventory.generator';
 
-export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
-  const employeeId = ctx.employeeIds[0]!;
+export async function seedPurchase(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
+  const employeeId = ctx.employeeIds[0];
   const userId = ctx.userIds[0];
-  const poRecords: Array<{ id: bigint; branchId: bigint; branchCode: string; supplierId: bigint }> = [];
+  const poRecords: Array<{
+    id: bigint;
+    branchId: bigint;
+    branchCode: string;
+    supplierId: bigint;
+  }> = [];
 
   for (let i = 0; i < 30; i++) {
     const branch = faker.helpers.arrayElement(ctx.branchRecords);
     const supplierId = faker.helpers.arrayElement(ctx.supplierIds);
     const seq = ctx.nextPoSeq(branch.branchCode);
-    const medicines = faker.helpers.arrayElements(ctx.medicineRecords, faker.number.int({ min: 1, max: 3 }));
+    const medicines = faker.helpers.arrayElements(
+      ctx.medicineRecords,
+      faker.number.int({ min: 1, max: 3 }),
+    );
 
     let gross = 0;
     let tax = 0;
@@ -34,7 +45,12 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
         approvedAt: new Date(),
       },
     });
-    poRecords.push({ id: po.id, branchId: branch.id, branchCode: branch.branchCode, supplierId });
+    poRecords.push({
+      id: po.id,
+      branchId: branch.id,
+      branchCode: branch.branchCode,
+      supplierId,
+    });
 
     let line = 1;
     for (const medicine of medicines) {
@@ -73,11 +89,12 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
     });
   }
 
-  let grnCount = 0;
   for (const po of poRecords.slice(0, 25)) {
-    grnCount++;
     const seq = ctx.nextGrnSeq(po.branchCode);
-    const items = await prisma.purchaseOrderItem.findMany({ where: { purchaseOrderId: po.id } });
+    const piSeq = ctx.nextPurchaseInvoiceSeq(po.branchCode);
+    const items = await prisma.purchaseOrderItem.findMany({
+      where: { purchaseOrderId: po.id },
+    });
 
     const grnUuid = uuid();
     const grn = await prisma.goodsReceipt.create({
@@ -102,7 +119,9 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
     let invoiceTax = 0;
 
     for (const item of items) {
-      const medicineBatches = ctx.batchRecords.filter((b) => b.medicineId === item.medicineId);
+      const medicineBatches = ctx.batchRecords.filter(
+        (b) => b.medicineId === item.medicineId,
+      );
       const chosenBatch = medicineBatches.length
         ? faker.helpers.arrayElement(medicineBatches)
         : faker.helpers.arrayElement(ctx.batchRecords);
@@ -157,8 +176,8 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
     await prisma.purchaseInvoice.create({
       data: {
         uuid: piUuid,
-        purchaseInvoiceNumber: docNumber('PI', po.branchCode, grnCount),
-        supplierInvoiceNumber: `VENDOR-${grnCount}-${faker.string.numeric(5)}`,
+        purchaseInvoiceNumber: docNumber('PI', po.branchCode, piSeq),
+        supplierInvoiceNumber: `VENDOR-${po.branchCode}-${piSeq}-${faker.string.numeric(5)}`,
         supplierId: po.supplierId,
         goodsReceiptId: grn.id,
         branchId: po.branchId,
@@ -179,7 +198,9 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
     const branch = faker.helpers.arrayElement(ctx.branchRecords);
     const supplierId = faker.helpers.arrayElement(ctx.supplierIds);
     const medicine = faker.helpers.arrayElement(ctx.medicineRecords);
-    const medicineBatches = ctx.batchRecords.filter((b) => b.medicineId === medicine.id);
+    const medicineBatches = ctx.batchRecords.filter(
+      (b) => b.medicineId === medicine.id,
+    );
     const batch = medicineBatches.length
       ? faker.helpers.arrayElement(medicineBatches)
       : faker.helpers.arrayElement(ctx.batchRecords);
@@ -189,7 +210,11 @@ export async function seedPurchase(prisma: PrismaClient, ctx: SeedContext): Prom
     const ret = await prisma.purchaseReturn.create({
       data: {
         uuid: uuid(),
-        purchaseReturnNumber: docNumber('PR', branch.branchCode, i + 1),
+        purchaseReturnNumber: docNumber(
+          'PR',
+          branch.branchCode,
+          ctx.nextPurchaseReturnSeq(branch.branchCode),
+        ),
         supplierId,
         branchId: branch.id,
         returnDate: faker.date.recent({ days: 20 }),

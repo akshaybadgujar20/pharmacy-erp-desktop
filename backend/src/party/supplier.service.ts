@@ -16,11 +16,16 @@ import { OutboxOperation } from '../persistence/outbox/outbox-operation.constant
 import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { PartyRoleType } from './constants/party.constants';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { toSupplierResponse } from './mappers/supplier.mapper';
 import {
+  activePartyFilter,
+  assertNonNegativeDecimal,
   assertPartyExists,
+  assertUniqueBusinessCode,
+  ensurePartyRole,
   optimisticUpdate,
   throwConflict,
   throwNotFound,
@@ -43,12 +48,18 @@ export class SupplierService {
 
     const where: Prisma.SupplierWhereInput = {
       deletedAt: null,
+      party: { deletedAt: null },
       ...(search
         ? {
             OR: [
               { supplierCode: { contains: search } },
               { gstin: { contains: search } },
-              { party: { displayName: { contains: search } } },
+              {
+                party: {
+                  displayName: { contains: search },
+                  deletedAt: null,
+                },
+              },
             ],
           }
         : {}),
@@ -72,7 +83,7 @@ export class SupplierService {
 
   async getById(id: bigint) {
     const supplier = await this.prisma.client.supplier.findFirst({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: null, ...activePartyFilter },
     });
 
     if (!supplier) {
@@ -85,36 +96,76 @@ export class SupplierService {
   }
 
   async create(dto: CreateSupplierDto) {
+    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
+
     return this.unitOfWork.run(async (tx) => {
-      await assertPartyExists(tx, BigInt(dto.partyId));
-
       const partyId = BigInt(dto.partyId);
+      await assertPartyExists(tx, partyId);
+      await ensurePartyRole(tx, partyId, PartyRoleType.SUPPLIER);
+      await assertUniqueBusinessCode(
+        tx,
+        'supplier',
+        'supplierCode',
+        dto.supplierCode,
+        'Supplier code',
+      );
+      if (dto.gstin) {
+        await assertUniqueBusinessCode(
+          tx,
+          'supplier',
+          'gstin',
+          dto.gstin,
+          'GSTIN',
+        );
+      }
 
-      const existingDetail = await tx.supplier.findFirst({
+      const existingActive = await tx.supplier.findFirst({
         where: { partyId, deletedAt: null },
       });
 
-      if (existingDetail) {
+      if (existingActive) {
         throwConflict(`Supplier already exists for party: ${partyId}`, {
           partyId: partyId.toString(),
         });
       }
 
-      const supplier = await tx.supplier.create({
-        data: {
-          uuid: randomUUID(),
-          partyId,
-          supplierCode: dto.supplierCode,
-          supplierType: dto.supplierType,
-          gstin: dto.gstin,
-          drugLicenseNumber: dto.drugLicenseNumber,
-          panNumber: dto.panNumber,
-          creditLimit: dto.creditLimit ?? '0',
-          paymentTermsDays: dto.paymentTermsDays ?? 0,
-          preferredSupplier: dto.preferredSupplier ?? false,
-          isActive: dto.isActive ?? true,
-        },
+      const softDeleted = await tx.supplier.findFirst({
+        where: { partyId, deletedAt: { not: null } },
       });
+
+      const supplier = softDeleted
+        ? await tx.supplier.update({
+            where: { id: softDeleted.id },
+            data: {
+              supplierCode: dto.supplierCode,
+              supplierType: dto.supplierType,
+              gstin: dto.gstin,
+              drugLicenseNumber: dto.drugLicenseNumber,
+              panNumber: dto.panNumber,
+              creditLimit: dto.creditLimit ?? '0',
+              paymentTermsDays: dto.paymentTermsDays ?? 0,
+              preferredSupplier: dto.preferredSupplier ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              deletedBy: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.supplier.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              supplierCode: dto.supplierCode,
+              supplierType: dto.supplierType,
+              gstin: dto.gstin,
+              drugLicenseNumber: dto.drugLicenseNumber,
+              panNumber: dto.panNumber,
+              creditLimit: dto.creditLimit ?? '0',
+              paymentTermsDays: dto.paymentTermsDays ?? 0,
+              preferredSupplier: dto.preferredSupplier ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.SUPPLIER,
@@ -136,6 +187,8 @@ export class SupplierService {
   }
 
   async update(id: bigint, dto: UpdateSupplierDto) {
+    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.supplier.findFirst({
         where: { id, deletedAt: null },
@@ -146,6 +199,26 @@ export class SupplierService {
           ErrorCode.SUPPLIER_NOT_FOUND,
           `Supplier not found: ${id}`,
           { id: id.toString() },
+        );
+      }
+
+      if (dto.supplierCode && dto.supplierCode !== existing.supplierCode) {
+        await assertUniqueBusinessCode(
+          tx,
+          'supplier',
+          'supplierCode',
+          dto.supplierCode,
+          'Supplier code',
+        );
+      }
+
+      if (dto.gstin && dto.gstin !== existing.gstin) {
+        await assertUniqueBusinessCode(
+          tx,
+          'supplier',
+          'gstin',
+          dto.gstin,
+          'GSTIN',
         );
       }
 
@@ -168,9 +241,8 @@ export class SupplierService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.SUPPLIER_NOT_FOUND,
-        `Supplier version conflict or not found: ${id}`,
         id,
+        `Supplier version conflict or not found: ${id}`,
       );
 
       const supplier = await tx.supplier.findFirstOrThrow({ where: { id } });
@@ -219,9 +291,8 @@ export class SupplierService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.SUPPLIER_NOT_FOUND,
-        `Supplier version conflict or not found: ${id}`,
         id,
+        `Supplier version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

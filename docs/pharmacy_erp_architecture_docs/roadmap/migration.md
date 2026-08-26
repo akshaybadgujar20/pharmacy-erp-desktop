@@ -12,6 +12,8 @@
 | Area | Approach |
 |------|----------|
 | Fresh dev DB | `cd backend && npm run db:seed:fresh` or `db:reset` |
+| Append demo data | `cd backend && npm run db:seed` (no wipe) |
+| Resume seed phase | `npm run db:seed -- --only <phase>` (see `backend/seed/README.md`) |
 | Schema changes | Prisma migration + review in release checklist |
 | ID strategy | BigInt local PK + UUID sync identity on all syncable entities |
 | Status fields | String (not Prisma enums) for SQLite/Postgres parity |

@@ -24,6 +24,7 @@ describe('CustomerService', () => {
   let requestContext: { tryGet: jest.Mock };
   let tx: {
     party: { findFirst: jest.Mock };
+    partyRole: { findFirst: jest.Mock; create: jest.Mock };
     customer: {
       findFirst: jest.Mock;
       create: jest.Mock;
@@ -35,6 +36,7 @@ describe('CustomerService', () => {
   beforeEach(async () => {
     tx = {
       party: { findFirst: jest.fn() },
+      partyRole: { findFirst: jest.fn(), create: jest.fn() },
       customer: {
         findFirst: jest.fn(),
         create: jest.fn(),
@@ -84,7 +86,10 @@ describe('CustomerService', () => {
 
   it('throws CONFLICT when customer already exists for party', async () => {
     tx.party.findFirst.mockResolvedValue({ id: 1n, uuid: 'party-uuid' });
-    tx.customer.findFirst.mockResolvedValue({ id: 2n });
+    tx.partyRole.findFirst.mockResolvedValue({ id: 10n });
+    tx.customer.findFirst
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({ id: 2n });
 
     await expect(
       service.create({
@@ -100,7 +105,12 @@ describe('CustomerService', () => {
 
   it('creates customer when party exists', async () => {
     tx.party.findFirst.mockResolvedValue({ id: 1n, uuid: 'party-uuid' });
-    tx.customer.findFirst.mockResolvedValue(null);
+    tx.partyRole.findFirst.mockResolvedValue(null);
+    tx.partyRole.create.mockResolvedValue({ id: 10n });
+    tx.customer.findFirst
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null);
     tx.customer.create.mockResolvedValue({
       id: 3n,
       partyId: 1n,

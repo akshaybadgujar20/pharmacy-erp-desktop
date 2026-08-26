@@ -18,13 +18,17 @@ Start at [Architecture index](./architecture/README.md).
 | Testing | [testing.md](./architecture/testing.md) |
 | Engineering standards | [engineering-standards.md](./architecture/engineering-standards.md) |
 
+## Domain
+
+Start at [Domain index](./domain/README.md). Bounded contexts: [customer](./domain/customer.md), [sales](./domain/sales.md), [inventory](./domain/inventory.md), [product](./domain/product.md), [purchasing](./domain/purchasing.md), [supplier](./domain/supplier.md), [finance](./domain/finance.md).
+
 ## Database
 
 - [Database overview](./database/database_overview.md)
 - [Persistence patterns](./database/persistence-patterns.md)
 - [Prisma / SQLite / Postgres alignment](./database/prisma_sqlite_jpa_postgres_alignment.md)
 - [Architecture review](./database/architecture-review.md)
-- Table specs: `./database/tables/`
+- Table specs: `./database/tables/<category>/<category>.md` (e.g. [sales](./database/tables/sales/sales.md)); Prisma models in `backend/prisma/schema.prisma`
 
 ## Legacy
 

@@ -1,10 +1,12 @@
 import {
   IsBoolean,
+  IsEmail,
   IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
 import { ContactType } from '../constants/party.constants';
 
@@ -17,6 +19,10 @@ export class CreatePartyContactDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
+  @ValidateIf(
+    (dto: CreatePartyContactDto) => dto.contactType === ContactType.EMAIL,
+  )
+  @IsEmail()
   contactValue!: string;
 
   @IsOptional()

@@ -98,4 +98,4 @@ PaymentService->>DB: COMMIT
 ## Related
 
 - [Sales flow](./sales-flow.md)
-- [Finance domain](../domain/finance/README.md)
+- [Finance domain](../domain/finance.md)

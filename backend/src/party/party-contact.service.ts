@@ -15,12 +15,14 @@ import { OutboxOperation } from '../persistence/outbox/outbox-operation.constant
 import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { ContactType } from './constants/party.constants';
 import { CreatePartyContactDto } from './dto/create-party-contact.dto';
 import { UpdatePartyContactDto } from './dto/update-party-contact.dto';
 import { toPartyContactResponse } from './mappers/party-contact.mapper';
 import {
   assertPartyExists,
   optimisticUpdate,
+  throwConflict,
   throwNotFound,
 } from './utils/party.util';
 
@@ -61,6 +63,7 @@ export class PartyContactService {
   }
 
   async getById(partyId: bigint, id: bigint) {
+    await this.ensurePartyExists(partyId);
     const contact = await this.findActive(partyId, id);
     return toPartyContactResponse(contact);
   }
@@ -69,18 +72,78 @@ export class PartyContactService {
     return this.unitOfWork.run(async (tx) => {
       await assertPartyExists(tx, partyId);
 
-      const contact = await tx.partyContact.create({
-        data: {
-          uuid: randomUUID(),
+      const contactValue = this.normalizeContactValue(
+        dto.contactType,
+        dto.contactValue,
+      );
+
+      const existingActive = await tx.partyContact.findFirst({
+        where: {
           partyId,
           contactType: dto.contactType,
-          contactValue: dto.contactValue,
-          countryCode: dto.countryCode,
-          isPrimary: dto.isPrimary ?? false,
-          isVerified: dto.isVerified ?? false,
-          isActive: dto.isActive ?? true,
+          contactValue,
+          deletedAt: null,
         },
       });
+
+      if (existingActive) {
+        throwConflict(
+          `Party contact already exists: ${dto.contactType} ${contactValue}`,
+          {
+            partyId: partyId.toString(),
+            contactType: dto.contactType,
+            contactValue,
+          },
+        );
+      }
+
+      const softDeleted = await tx.partyContact.findFirst({
+        where: {
+          partyId,
+          contactType: dto.contactType,
+          contactValue,
+          deletedAt: { not: null },
+        },
+      });
+
+      if (dto.isPrimary ?? false) {
+        await tx.partyContact.updateMany({
+          where: {
+            partyId,
+            contactType: dto.contactType,
+            isPrimary: true,
+            deletedAt: null,
+          },
+          data: { isPrimary: false },
+        });
+      }
+
+      const contact = softDeleted
+        ? await tx.partyContact.update({
+            where: { id: softDeleted.id },
+            data: {
+              contactType: dto.contactType,
+              contactValue,
+              countryCode: dto.countryCode,
+              isPrimary: dto.isPrimary ?? false,
+              isVerified: dto.isVerified ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.partyContact.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              contactType: dto.contactType,
+              contactValue,
+              countryCode: dto.countryCode,
+              isPrimary: dto.isPrimary ?? false,
+              isVerified: dto.isVerified ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.PARTY_CONTACT,
@@ -115,11 +178,33 @@ export class PartyContactService {
         );
       }
 
+      const contactType = dto.contactType ?? existing.contactType;
+      const contactValue =
+        dto.contactValue !== undefined || dto.contactType !== undefined
+          ? this.normalizeContactValue(
+              contactType,
+              dto.contactValue ?? existing.contactValue,
+            )
+          : undefined;
+
+      if (dto.isPrimary ?? false) {
+        await tx.partyContact.updateMany({
+          where: {
+            partyId,
+            contactType,
+            isPrimary: true,
+            deletedAt: null,
+            NOT: { id },
+          },
+          data: { isPrimary: false },
+        });
+      }
+
       const updateResult = await tx.partyContact.updateMany({
         where: { id, partyId, version: dto.version, deletedAt: null },
         data: {
           contactType: dto.contactType,
-          contactValue: dto.contactValue,
+          contactValue,
           countryCode: dto.countryCode,
           isPrimary: dto.isPrimary,
           isVerified: dto.isVerified,
@@ -130,9 +215,8 @@ export class PartyContactService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_CONTACT_NOT_FOUND,
-        `Party contact version conflict or not found: ${id}`,
         id,
+        `Party contact version conflict or not found: ${id}`,
       );
 
       const contact = await tx.partyContact.findFirstOrThrow({ where: { id } });
@@ -177,9 +261,8 @@ export class PartyContactService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_CONTACT_NOT_FOUND,
-        `Party contact version conflict or not found: ${id}`,
         id,
+        `Party contact version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {
@@ -199,6 +282,12 @@ export class PartyContactService {
 
       return { id: id.toString(), deleted: true };
     });
+  }
+
+  private normalizeContactValue(contactType: string, contactValue: string) {
+    return contactType === ContactType.EMAIL
+      ? contactValue.toLowerCase()
+      : contactValue;
   }
 
   private async ensurePartyExists(partyId: bigint) {

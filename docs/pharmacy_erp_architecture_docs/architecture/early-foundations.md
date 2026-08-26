@@ -59,9 +59,11 @@ All seeded users share password `admin123`. Change before any production deploym
 
 ```bash
 cd backend
-npm run db:seed:fresh   # wipe transactional data + re-seed
+npm run db:seed:fresh   # wipe seed tables + full reseed
 npm run db:reset        # force-reset schema + fresh seed
 ```
+
+To add more demo rows without wiping: `npm run db:seed`. To re-run later phases only: `npm run db:seed -- --only <phase>`. See [backend/seed/README.md](../../../backend/seed/README.md).
 
 ---
 
@@ -216,7 +218,7 @@ From `backend/seed/data/configuration/app-setting.json`:
 | `NEAR_EXPIRY_DAYS` | `90` | INVENTORY | Yes | Expiry alert window |
 | `DEFAULT_PAYMENT_MODE` | `CASH` | SALES | Yes | Billing default |
 
-Table spec: [AppSetting](../database/tables/configuration/64_app_setting.md)
+Table spec: [AppSetting](../database/tables/configuration/configuration.md#appsetting)
 
 ### Recommended approach for new features
 
@@ -348,4 +350,4 @@ E2e auth tests reset user password hashes to `admin123` in `beforeEach`.
 - [Testing](./testing.md)
 - [Logging and audit](./logging-and-audit.md)
 - [Persistence patterns](../database/persistence-patterns.md)
-- [AppSetting table](../database/tables/configuration/64_app_setting.md)
+- [AppSetting table](../database/tables/configuration/configuration.md#appsetting)

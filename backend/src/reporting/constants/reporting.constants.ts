@@ -21,3 +21,5 @@ export const ReportPermission = {
 export const ReportCategory = {
   PARTY: 'party',
 } as const;
+
+export const EXPORT_MAX_ROWS = 10_000;

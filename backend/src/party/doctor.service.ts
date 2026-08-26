@@ -15,11 +15,16 @@ import { OutboxOperation } from '../persistence/outbox/outbox-operation.constant
 import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { PartyRoleType } from './constants/party.constants';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { toDoctorResponse } from './mappers/doctor.mapper';
 import {
+  activePartyFilter,
+  assertNonNegativeDecimal,
   assertPartyExists,
+  assertUniqueBusinessCode,
+  ensurePartyRole,
   optimisticUpdate,
   throwConflict,
   throwNotFound,
@@ -41,12 +46,18 @@ export class DoctorService {
 
     const where: Prisma.DoctorWhereInput = {
       deletedAt: null,
+      party: { deletedAt: null },
       ...(search
         ? {
             OR: [
               { doctorCode: { contains: search } },
               { registrationNumber: { contains: search } },
-              { party: { displayName: { contains: search } } },
+              {
+                party: {
+                  displayName: { contains: search },
+                  deletedAt: null,
+                },
+              },
             ],
           }
         : {}),
@@ -70,7 +81,7 @@ export class DoctorService {
 
   async getById(id: bigint) {
     const doctor = await this.prisma.client.doctor.findFirst({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: null, ...activePartyFilter },
     });
 
     if (!doctor) {
@@ -83,35 +94,71 @@ export class DoctorService {
   }
 
   async create(dto: CreateDoctorDto) {
+    assertNonNegativeDecimal(dto.consultationFee, 'consultationFee');
+
     return this.unitOfWork.run(async (tx) => {
-      await assertPartyExists(tx, BigInt(dto.partyId));
-
       const partyId = BigInt(dto.partyId);
+      await assertPartyExists(tx, partyId);
+      await ensurePartyRole(tx, partyId, PartyRoleType.DOCTOR);
+      await assertUniqueBusinessCode(
+        tx,
+        'doctor',
+        'doctorCode',
+        dto.doctorCode,
+        'Doctor code',
+      );
+      await assertUniqueBusinessCode(
+        tx,
+        'doctor',
+        'registrationNumber',
+        dto.registrationNumber,
+        'Registration number',
+      );
 
-      const existingDetail = await tx.doctor.findFirst({
+      const existingActive = await tx.doctor.findFirst({
         where: { partyId, deletedAt: null },
       });
 
-      if (existingDetail) {
+      if (existingActive) {
         throwConflict(`Doctor already exists for party: ${partyId}`, {
           partyId: partyId.toString(),
         });
       }
 
-      const doctor = await tx.doctor.create({
-        data: {
-          uuid: randomUUID(),
-          partyId,
-          doctorCode: dto.doctorCode,
-          registrationNumber: dto.registrationNumber,
-          qualification: dto.qualification,
-          specialization: dto.specialization,
-          hospitalName: dto.hospitalName,
-          consultationFee: dto.consultationFee,
-          isVisitingDoctor: dto.isVisitingDoctor ?? false,
-          isActive: dto.isActive ?? true,
-        },
+      const softDeleted = await tx.doctor.findFirst({
+        where: { partyId, deletedAt: { not: null } },
       });
+
+      const doctor = softDeleted
+        ? await tx.doctor.update({
+            where: { id: softDeleted.id },
+            data: {
+              doctorCode: dto.doctorCode,
+              registrationNumber: dto.registrationNumber,
+              qualification: dto.qualification,
+              specialization: dto.specialization,
+              hospitalName: dto.hospitalName,
+              consultationFee: dto.consultationFee,
+              isVisitingDoctor: dto.isVisitingDoctor ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.doctor.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              doctorCode: dto.doctorCode,
+              registrationNumber: dto.registrationNumber,
+              qualification: dto.qualification,
+              specialization: dto.specialization,
+              hospitalName: dto.hospitalName,
+              consultationFee: dto.consultationFee,
+              isVisitingDoctor: dto.isVisitingDoctor ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.DOCTOR,
@@ -133,6 +180,8 @@ export class DoctorService {
   }
 
   async update(id: bigint, dto: UpdateDoctorDto) {
+    assertNonNegativeDecimal(dto.consultationFee, 'consultationFee');
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.doctor.findFirst({
         where: { id, deletedAt: null },
@@ -142,6 +191,29 @@ export class DoctorService {
         throwNotFound(ErrorCode.DOCTOR_NOT_FOUND, `Doctor not found: ${id}`, {
           id: id.toString(),
         });
+      }
+
+      if (dto.doctorCode && dto.doctorCode !== existing.doctorCode) {
+        await assertUniqueBusinessCode(
+          tx,
+          'doctor',
+          'doctorCode',
+          dto.doctorCode,
+          'Doctor code',
+        );
+      }
+
+      if (
+        dto.registrationNumber &&
+        dto.registrationNumber !== existing.registrationNumber
+      ) {
+        await assertUniqueBusinessCode(
+          tx,
+          'doctor',
+          'registrationNumber',
+          dto.registrationNumber,
+          'Registration number',
+        );
       }
 
       const updateResult = await tx.doctor.updateMany({
@@ -161,9 +233,8 @@ export class DoctorService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.DOCTOR_NOT_FOUND,
-        `Doctor version conflict or not found: ${id}`,
         id,
+        `Doctor version conflict or not found: ${id}`,
       );
 
       const doctor = await tx.doctor.findFirstOrThrow({ where: { id } });
@@ -206,9 +277,8 @@ export class DoctorService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.DOCTOR_NOT_FOUND,
-        `Doctor version conflict or not found: ${id}`,
         id,
+        `Doctor version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

@@ -36,7 +36,7 @@ export class PermissionsGuard implements CanActivate {
       );
     }
 
-    const hasPermission = requiredPermissions.some((permission) =>
+    const hasPermission = requiredPermissions.every((permission) =>
       user.permissions.includes(permission),
     );
 

@@ -40,6 +40,7 @@ export class CreateDoctorDto {
 
   @IsOptional()
   @IsString()
+  @Matches(/^\d+(\.\d{1,2})?$/)
   consultationFee?: string;
 
   @IsOptional()

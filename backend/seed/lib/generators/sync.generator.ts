@@ -1,15 +1,23 @@
 import type { PrismaClient } from '@prisma/client';
 import { faker, uuid } from '../faker';
-import { decimal } from '../id-registry';
+import { decimal, docNumber } from '../id-registry';
 import type { SeedContext } from '../seed-context';
 
-export async function seedSync(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function seedSync(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const deviceId = 'desktop-seed-001';
-  let sequenceNo = 1n;
+  const existingOutboxCount = await prisma.outbox.count();
+  const maxSequenceRow = await prisma.outbox.aggregate({
+    _max: { sequenceNo: true },
+  });
+  let sequenceNo = (maxSequenceRow._max.sequenceNo ?? 0n) + 1n;
 
-  const entityPool = ctx.entityUuidsForOutbox.length > 0
-    ? ctx.entityUuidsForOutbox
-    : ctx.batchRecords.map((b) => b.uuid);
+  const entityPool =
+    ctx.entityUuidsForOutbox.length > 0
+      ? ctx.entityUuidsForOutbox
+      : ctx.batchRecords.map((b) => b.uuid);
 
   for (let i = 0; i < 100; i++) {
     const entityUuid = faker.helpers.arrayElement(entityPool);
@@ -18,16 +26,22 @@ export async function seedSync(prisma: PrismaClient, ctx: SeedContext): Promise<
     await prisma.outbox.create({
       data: {
         uuid: uuid(),
-        entityType: i % 3 === 0 ? 'SalesInvoice' : i % 3 === 1 ? 'Batch' : 'StockMovement',
+        entityType:
+          i % 3 === 0
+            ? 'SalesInvoice'
+            : i % 3 === 1
+              ? 'Batch'
+              : 'StockMovement',
         entityUuid,
         operation: faker.helpers.arrayElement(['CREATE', 'UPDATE']),
-        payload: { seed: true, index: i },
+        payload: { seed: true, index: existingOutboxCount + i },
         deviceId,
         branchId: branch.id,
-        operationId: `op-${deviceId}-${i + 1}`,
+        operationId: `op-${deviceId}-${existingOutboxCount + i + 1}`,
         sequenceNo,
         syncStatus,
-        processedAt: syncStatus === 'SYNCED' ? faker.date.recent({ days: 5 }) : undefined,
+        processedAt:
+          syncStatus === 'SYNCED' ? faker.date.recent({ days: 5 }) : undefined,
       },
     });
     sequenceNo++;
@@ -58,7 +72,7 @@ export async function seedSync(prisma: PrismaClient, ctx: SeedContext): Promise<
     await prisma.syncConflict.create({
       data: {
         uuid: uuid(),
-        syncLogId: syncLogIds[i % syncLogIds.length]!,
+        syncLogId: syncLogIds[i % syncLogIds.length],
         entityType: 'SalesInvoice',
         entityUuid: faker.helpers.arrayElement(entityPool),
         conflictType: 'VERSION_MISMATCH',
@@ -71,20 +85,32 @@ export async function seedSync(prisma: PrismaClient, ctx: SeedContext): Promise<
   }
 }
 
-export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function seedFinancialAndAudit(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const userId = ctx.userIds[0];
+  const paymentOffset = await prisma.payment.count();
+  const receiptOffset = await prisma.receipt.count();
+  const loyaltyTxnOffset = await prisma.loyaltyTransaction.count();
+  const ledgerEntryOffset = await prisma.ledgerEntry.count();
 
-  const ledger = await prisma.ledger.create({
-    data: {
-      uuid: uuid(),
-      ledgerCode: 'CASH-MAIN',
-      ledgerName: 'Main Cash Ledger',
-      ledgerType: 'ASSET',
-      normalBalance: 'DEBIT',
-      isSystem: false,
-      isActive: true,
-    },
+  let ledger = await prisma.ledger.findUnique({
+    where: { ledgerCode: 'CASH-MAIN' },
   });
+  if (!ledger) {
+    ledger = await prisma.ledger.create({
+      data: {
+        uuid: uuid(),
+        ledgerCode: 'CASH-MAIN',
+        ledgerName: 'Main Cash Ledger',
+        ledgerType: 'ASSET',
+        normalBalance: 'DEBIT',
+        isSystem: false,
+        isActive: true,
+      },
+    });
+  }
 
   for (let i = 0; i < 10; i++) {
     const amount = faker.number.int({ min: 100, max: 5000 });
@@ -94,8 +120,8 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
         uuid: uuid(),
         ledgerId: ledger.id,
         voucherType: 'SALES_INVOICE',
-        voucherId: BigInt(i + 1),
-        voucherNumber: `SI-REF-${i + 1}`,
+        voucherId: BigInt(ledgerEntryOffset + i + 1),
+        voucherNumber: `SI-REF-${ledgerEntryOffset + i + 1}`,
         transactionDate: faker.date.recent({ days: 30 }),
         debitAmount: decimal(isDebit ? amount : 0),
         creditAmount: decimal(isDebit ? 0 : amount),
@@ -109,7 +135,7 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
     await prisma.payment.create({
       data: {
         uuid: uuid(),
-        paymentNumber: `PAY-SEED-${String(i + 1).padStart(4, '0')}`,
+        paymentNumber: `PAY-SEED-${String(paymentOffset + i + 1).padStart(4, '0')}`,
         paymentType: 'SUPPLIER_PAYMENT',
         paymentDate: faker.date.recent({ days: 20 }),
         amount: decimal(faker.number.int({ min: 1000, max: 25000 })),
@@ -124,7 +150,7 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
     await prisma.receipt.create({
       data: {
         uuid: uuid(),
-        receiptNumber: `RCP-SEED-${String(i + 1).padStart(4, '0')}`,
+        receiptNumber: `RCP-SEED-${String(receiptOffset + i + 1).padStart(4, '0')}`,
         receiptType: 'CUSTOMER_RECEIPT',
         receiptDate: faker.date.recent({ days: 15 }),
         amount: decimal(faker.number.int({ min: 200, max: 8000 })),
@@ -137,12 +163,17 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
 
   for (let i = 0; i < 5; i++) {
     const branch = faker.helpers.arrayElement(ctx.branchRecords);
+    const expenseSeq = ctx.nextExpenseSeq(branch.branchCode);
     await prisma.expense.create({
       data: {
         uuid: uuid(),
-        expenseNumber: `EXP-${branch.branchCode}-${i + 1}`,
+        expenseNumber: docNumber('EXP', branch.branchCode, expenseSeq, 4),
         branchId: branch.id,
-        category: faker.helpers.arrayElement(['RENT', 'UTILITIES', 'STATIONERY']),
+        category: faker.helpers.arrayElement([
+          'RENT',
+          'UTILITIES',
+          'STATIONERY',
+        ]),
         amount: decimal(faker.number.int({ min: 500, max: 15000 })),
         expenseDate: faker.date.recent({ days: 10 }),
         paymentMethod: 'CASH',
@@ -177,7 +208,7 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
     await prisma.changeHistory.create({
       data: {
         uuid: uuid(),
-        auditLogId: auditLogs[i % auditLogs.length]!,
+        auditLogId: auditLogs[i % auditLogs.length],
         entityType: 'Medicine',
         entityId: medicine.id,
         entityUuid: medicine.uuid,
@@ -189,19 +220,24 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
     });
   }
 
-  const loyaltyProgram = await prisma.loyaltyProgram.create({
-    data: {
-      uuid: uuid(),
-      programCode: 'APEX-REWARDS',
-      programName: 'Apex Rewards',
-      pointsPerAmount: decimal(1),
-      redemptionValue: decimal(0.25),
-      minimumRedemptionPoints: 100,
-      effectiveFrom: new Date('2024-04-01'),
-      isDefault: true,
-      isActive: true,
-    },
+  let loyaltyProgram = await prisma.loyaltyProgram.findUnique({
+    where: { programCode: 'APEX-REWARDS' },
   });
+  if (!loyaltyProgram) {
+    loyaltyProgram = await prisma.loyaltyProgram.create({
+      data: {
+        uuid: uuid(),
+        programCode: 'APEX-REWARDS',
+        programName: 'Apex Rewards',
+        pointsPerAmount: decimal(1),
+        redemptionValue: decimal(0.25),
+        minimumRedemptionPoints: 100,
+        effectiveFrom: new Date('2024-04-01'),
+        isDefault: true,
+        isActive: true,
+      },
+    });
+  }
 
   for (let i = 0; i < 5; i++) {
     await prisma.loyaltyTransaction.create({
@@ -209,7 +245,7 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
         uuid: uuid(),
         loyaltyProgramId: loyaltyProgram.id,
         customerId: faker.helpers.arrayElement(ctx.customerIds),
-        transactionNumber: `LT-SEED-${String(i + 1).padStart(4, '0')}`,
+        transactionNumber: `LT-SEED-${String(loyaltyTxnOffset + i + 1).padStart(4, '0')}`,
         transactionType: 'EARN',
         transactionDate: faker.date.recent({ days: 20 }),
         points: faker.number.int({ min: 10, max: 200 }),
@@ -224,11 +260,12 @@ export async function seedFinancialAndAudit(prisma: PrismaClient, ctx: SeedConte
     const branch = faker.helpers.arrayElement(ctx.branchRecords);
     const medicine = faker.helpers.arrayElement(ctx.medicineRecords);
     const qty = faker.number.int({ min: 10, max: 30 });
+    const rxSeq = ctx.nextPrescriptionSeq(branch.branchCode);
 
     const prescription = await prisma.prescription.create({
       data: {
         uuid: uuid(),
-        prescriptionNumber: `RX-${branch.branchCode}-${String(i + 1).padStart(4, '0')}`,
+        prescriptionNumber: `RX-${branch.branchCode}-${String(rxSeq).padStart(4, '0')}`,
         doctorId,
         customerId,
         branchId: branch.id,

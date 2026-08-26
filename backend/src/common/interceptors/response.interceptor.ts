@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isPaginatedResult } from '../response/paginated-result';
 import { ApiSuccessResponse } from '../response/api-response.types';
+import { serializeForJson } from '../serialization/serialize-for-json';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<
@@ -28,14 +29,14 @@ export class ResponseInterceptor<T> implements NestInterceptor<
         if (isPaginatedResult(result)) {
           return {
             success: true,
-            data: result.data,
+            data: serializeForJson(result.data),
             pagination: result.pagination,
           };
         }
 
         return {
           success: true,
-          data: result,
+          data: serializeForJson(result),
         };
       }),
     );

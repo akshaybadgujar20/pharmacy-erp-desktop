@@ -30,6 +30,7 @@ model Outbox {
 
   branch Branch? @relation(fields: [branchId], references: [id])
 
+  @@unique([deviceId, sequenceNo])
   @@index([syncStatus])
   @@index([createdAt])
   @@index([entityType, entityUuid])

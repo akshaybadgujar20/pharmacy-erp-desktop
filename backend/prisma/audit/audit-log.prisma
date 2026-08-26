@@ -5,6 +5,9 @@ model AuditLog {
 
   userId BigInt? @map("user_id")
 
+  companyId BigInt? @map("company_id")
+  branchId  BigInt? @map("branch_id")
+
   entityType String  @map("entity_type")
   entityId   BigInt? @map("entity_id")
   entityUuid String? @map("entity_uuid")
@@ -27,9 +30,13 @@ model AuditLog {
   version Int @default(1)
 
   user            User?           @relation(fields: [userId], references: [id])
+  company         Company?        @relation(fields: [companyId], references: [id])
+  branch          Branch?         @relation(fields: [branchId], references: [id])
   changeHistories ChangeHistory[]
 
   @@index([userId])
+  @@index([companyId])
+  @@index([branchId])
   @@index([entityType, entityId])
   @@index([entityType, entityUuid])
   @@index([action])

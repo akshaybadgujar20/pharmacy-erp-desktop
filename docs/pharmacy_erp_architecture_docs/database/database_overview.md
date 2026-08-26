@@ -33,7 +33,7 @@ It explains how the database is designed to:
 
 The Prisma schema in `backend/prisma/` is the **local source of truth**. Cloud JPA entities mirror the same logical model; PostgreSQL-specific types (JSONB, NUMERIC precision) are applied in JPA mappings only — not via `@db.*` in Prisma.
 
-See [[prisma_sqlite_jpa_postgres_alignment]] for the full alignment guide.
+See [prisma_sqlite_jpa_postgres_alignment.md](./prisma_sqlite_jpa_postgres_alignment.md) for the full alignment guide.
 
 ---
 
@@ -131,7 +131,7 @@ Audit
 
 # Functional Modules
 
-## 1. [[party_management| Party Management]]
+## 1. [Party Management](./tables/party_management/party_management.md)
 
 Responsible for managing every person and organization in the ERP.
 
@@ -148,7 +148,7 @@ Tables
 
 ---
 
-## 2. [[user_and_security|User & Security]]
+## 2. [User & Security](./tables/user_and_security/user_and_security.md)
 
 Responsible for authentication and authorization.
 
@@ -163,7 +163,7 @@ Tables
 
 ---
 
-## 3. [[medicine_master | Medicine Master]]
+## 3. [Medicine Master](./tables/medicine_master/medicine_master.md)
 
 Stores all medicine-related master data.
 
@@ -180,7 +180,7 @@ Tables
 
 ---
 
-## 4. [[database/tables/inventory/inventory|Inventory]]
+## 4. [Inventory](./tables/inventory/inventory.md)
 
 Responsible for inventory tracking.
 
@@ -196,7 +196,7 @@ Tables
 
 ---
 
-## 5. [[purchase|Purchase]]
+## 5. [Purchase](./tables/purchase/purchase.md)
 
 Responsible for procurement.
 
@@ -213,7 +213,7 @@ Tables
 
 ---
 
-## 6. [[database/tables/sales/sales|Sales]]
+## 6. [Sales](./tables/sales/sales.md)
 
 Responsible for customer billing.
 
@@ -227,7 +227,7 @@ Tables
 
 ---
 
-## 7. [[finanacial | Financial]]
+## 7. [Financial](./tables/financial/financial.md)
 
 Accounting and payment tracking.
 
@@ -240,7 +240,7 @@ Tables
 
 ---
 
-## 8. [[pharmacy_erp_architecture_docs/domain/sales/pricing|Pricing]]
+## 8. [Pricing](./tables/pricing/pricing.md)
 
 Pricing and taxation.
 
@@ -253,7 +253,7 @@ Tables
 
 ---
 
-## 9. [[loyalty | Loyalty]]
+## 9. [Loyalty](./tables/loyalty/loyalty.md)
 
 Customer reward programs.
 
@@ -264,7 +264,7 @@ Tables
 
 ---
 
-## 10. [[prescription | Prescription]]
+## 10. [Prescription](./tables/prescription/prescription.md)
 
 Prescription management.
 
@@ -275,7 +275,7 @@ Tables
 
 ---
 
-## 11. [[database/tables/synchronization/synchronization|Synchronization]]
+## 11. [Synchronization](./tables/synchronization/synchronization.md)
 
 Offline and cloud synchronization.
 
@@ -287,7 +287,7 @@ Tables
 
 ---
 
-## 12. [[audit|Audit]]
+## 12. [Audit](./tables/audit/audit.md)
 
 Tracks all changes made in the ERP.
 
@@ -298,7 +298,7 @@ Tables
 
 ---
 
-## 13. [[configuration | Configuration]]
+## 13. [Configuration](./tables/configuration/configuration.md)
 
 System-wide configuration.
 
@@ -314,7 +314,7 @@ Tables
 
 ---
 
-## 14. [[masters | Masters]]
+## 14. [Masters](./tables/masters/masters.md)
 
 Reference data used throughout the ERP.
 
@@ -330,18 +330,21 @@ Tables
 # Documentation Structure
 
 ```text
-docs/database/
+docs/pharmacy_erp_architecture_docs/database/
 
-000_database_overview.md
-001_table_catalog.md
+database_overview.md
+persistence-patterns.md
+prisma_sqlite_jpa_postgres_alignment.md
 
 tables/
-    001_party.md
-    002_party_role.md
-    003_party_address.md
-    ...
-    070_area.md
+    table_catalog.md          — human-readable catalog
+    party_management/party_management.md
+    sales/sales.md
+    inventory/inventory.md
+    ...                       — one self-contained file per category
 ```
+
+Each category file contains a relationship diagram, how-the-tables-work-together summary, and per-table column/constraint/index specs. Prisma models live in `backend/prisma/schema.prisma` (not duplicated in docs).
 
 ---
 

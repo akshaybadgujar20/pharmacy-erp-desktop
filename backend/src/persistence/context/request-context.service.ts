@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { ApplicationException } from '../../common/exceptions/application.exception';
+import { ErrorCode } from '../../common/exceptions/error-code';
 import type { RequestContextData } from './request-context';
 import {
   getRequestContext,
@@ -23,7 +25,29 @@ export class RequestContextService {
     return tryGetRequestContext();
   }
 
-  getDeviceId(fallback = process.env.DEVICE_ID ?? 'desktop-dev-001'): string {
-    return this.tryGet()?.deviceId ?? fallback;
+  getDeviceId(): string {
+    const deviceId = this.tryGet()?.deviceId;
+    const isProd = process.env.NODE_ENV === 'production';
+
+    if (!deviceId) {
+      if (isProd) {
+        throw new ApplicationException(
+          ErrorCode.BAD_REQUEST,
+          'deviceId is required in request context',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return process.env.DEVICE_ID ?? 'desktop-dev-001';
+    }
+
+    if (isProd && deviceId === 'desktop-dev-001') {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'deviceId is required in request context',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return deviceId;
   }
 }

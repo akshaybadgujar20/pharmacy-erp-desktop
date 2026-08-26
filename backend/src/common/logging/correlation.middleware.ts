@@ -39,7 +39,7 @@ export class CorrelationMiddleware implements NestMiddleware {
     const context = this.buildContext(req);
     res.setHeader(CORRELATION_HEADER, context.correlationId ?? '');
 
-    this.requestContext.run(context, () => {
+    void this.requestContext.run(context, () => {
       next();
     });
   }
@@ -54,30 +54,29 @@ export class CorrelationMiddleware implements NestMiddleware {
 
     const isDev = process.env.NODE_ENV !== 'production';
 
-    return {
-      companyId: isDev
-        ? parseRequiredBigInt(
-            req.headers[COMPANY_ID_HEADER] as string | undefined,
-            'COMPANY_ID',
-            '1',
-          )
-        : BigInt(process.env.COMPANY_ID ?? '1'),
-      branchId: isDev
-        ? parseRequiredBigInt(
-            req.headers[BRANCH_ID_HEADER] as string | undefined,
-            'BRANCH_ID',
-            '1',
-          )
-        : BigInt(process.env.BRANCH_ID ?? '1'),
-      userId: isDev
-        ? parseBigIntHeader(req.headers[USER_ID_HEADER] as string | undefined)
-        : undefined,
+    const context: RequestContextData = {
       deviceId,
       correlationId,
       ipAddress: req.ip ?? req.socket.remoteAddress,
-      sessionId: isDev
-        ? (req.headers[SESSION_ID_HEADER] as string | undefined)
-        : undefined,
     };
+
+    if (isDev) {
+      context.companyId = parseRequiredBigInt(
+        req.headers[COMPANY_ID_HEADER] as string | undefined,
+        'COMPANY_ID',
+        '1',
+      );
+      context.branchId = parseRequiredBigInt(
+        req.headers[BRANCH_ID_HEADER] as string | undefined,
+        'BRANCH_ID',
+        '1',
+      );
+      context.userId = parseBigIntHeader(
+        req.headers[USER_ID_HEADER] as string | undefined,
+      );
+      context.sessionId = req.headers[SESSION_ID_HEADER] as string | undefined;
+    }
+
+    return context;
   }
 }

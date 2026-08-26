@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { Observable } from 'rxjs';
-import { RequestContextService } from '../../persistence/context/request-context.service';
 import type { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+import { RequestContextService } from '../../persistence/context/request-context.service';
 
 @Injectable()
 export class ContextEnrichInterceptor implements NestInterceptor {
@@ -20,10 +20,18 @@ export class ContextEnrichInterceptor implements NestInterceptor {
     if (user) {
       const ctx = this.requestContext.tryGet();
       if (ctx) {
-        ctx.userId = user.userId;
-        ctx.companyId = user.companyId;
-        ctx.branchId = user.branchId;
-        ctx.sessionId = user.sessionUuid;
+        const enriched = {
+          ...ctx,
+          userId: user.userId,
+          companyId: user.companyId,
+          branchId: user.branchId,
+          sessionId: user.sessionUuid,
+        };
+        return new Observable((subscriber) => {
+          void this.requestContext.run(enriched, () => {
+            next.handle().subscribe(subscriber);
+          });
+        });
       }
     }
 

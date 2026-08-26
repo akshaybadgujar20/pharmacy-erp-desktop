@@ -43,8 +43,9 @@ npm run test:watch       # unit watch mode
 npm run test:cov         # unit coverage
 npm run test:persistence # persistence integration (--runInBand)
 npm run test:e2e         # HTTP e2e tests
-npm run db:seed          # seed database
-npm run db:seed:fresh    # wipe + seed
+npm run db:seed          # append seed (no wipe; adds demo data)
+npm run db:seed:fresh    # wipe seed tables + full reseed
+npm run db:seed -- --only sales   # resume from phase (see seed/README.md)
 npm run db:reset         # force-reset schema + fresh seed
 ```
 
@@ -124,13 +125,14 @@ Scoped rules in `.cursor/rules/` (repo root):
 ## Architecture docs
 
 - [Early foundations](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) — auth, env vars, settings, Angular/Electron layer
+- [Extending the backend](../docs/pharmacy_erp_architecture_docs/architecture/extending-the-backend.md) — step-by-step guide for adding new feature modules
 - [Testing](../docs/pharmacy_erp_architecture_docs/architecture/testing.md) — unit, persistence, e2e, feature/file commands
 - [Reporting](../docs/pharmacy_erp_architecture_docs/architecture/reporting.md) — report registry, API, extension guide
 - [Persistence patterns](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md)
 - [Logging and audit](../docs/pharmacy_erp_architecture_docs/architecture/logging-and-audit.md)
 - [Database overview](../docs/pharmacy_erp_architecture_docs/database/database_overview.md)
 - [Prisma/SQLite/Postgres alignment](../docs/pharmacy_erp_architecture_docs/database/prisma_sqlite_jpa_postgres_alignment.md)
-- Table specs: `docs/pharmacy_erp_architecture_docs/database/tables/`
+- Table specs: `docs/pharmacy_erp_architecture_docs/database/tables/<category>/<category>.md`; Prisma models in `backend/prisma/schema.prisma`
 
 ## Before finishing
 

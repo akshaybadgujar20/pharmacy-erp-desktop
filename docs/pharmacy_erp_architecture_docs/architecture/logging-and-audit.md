@@ -186,7 +186,7 @@ Feature Service
 
 ## Related docs
 
-- [AuditLog table spec](../database/tables/audit/58_audit_log.md)
+- [AuditLog table spec](../database/tables/audit/audit.md#auditlog)
 - [Persistence patterns](../database/persistence-patterns.md)
 - [Application architecture](./application-architecture.md)
 - [Early foundations](./early-foundations.md) — auth, request context, settings, Angular/Electron

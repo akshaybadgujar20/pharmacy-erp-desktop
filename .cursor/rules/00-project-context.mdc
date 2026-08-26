@@ -63,8 +63,8 @@ Run from `backend/`:
 | `npm run test:cov` | Unit tests with coverage |
 | `npm run test:persistence` | Persistence integration tests (`--runInBand`) |
 | `npm run test:e2e` | End-to-end HTTP tests |
-| `npm run db:seed` | Seed database |
-| `npm run db:seed:fresh` | Wipe + seed |
+| `npm run db:seed` | Append seed (hydrate from DB, add demo data; no wipe) |
+| `npm run db:seed:fresh` | Wipe seed tables + full reseed |
 | `npm run db:reset` | Force-reset schema + fresh seed |
 
 **Feature / single-file examples** (from `backend/`): `npm run test -- --testPathPatterns=party`, `npm run test -- party/customer.service.spec.ts`, `npm run test:e2e -- --testPathPatterns=auth.e2e-spec`. Angular unit tests from repo root: `npm test`. Full guide: `docs/pharmacy_erp_architecture_docs/architecture/testing.md`.

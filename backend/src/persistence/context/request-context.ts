@@ -1,6 +1,6 @@
 export interface RequestContextData {
-  companyId: bigint;
-  branchId: bigint;
+  companyId?: bigint;
+  branchId?: bigint;
   userId?: bigint;
   deviceId: string;
   correlationId?: string;

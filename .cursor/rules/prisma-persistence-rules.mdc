@@ -160,7 +160,9 @@ Seed code under `backend/seed/`:
 
 - Use deterministic JSON fixtures in `seed/data/`
 - Generators in `seed/lib/generators/` for derived data
-- Run via `npm run db:seed` or `npm run db:seed:fresh`
+- `npm run db:seed:fresh` — wipe + full reseed (use after schema or master JSON changes)
+- `npm run db:seed` — append mode (hydrate from DB, add rows; no wipe)
+- `npm run db:seed -- --only <phase>` — resume from a phase (see `backend/seed/README.md`)
 - Seed scripts may use `PrismaService` directly (not `UnitOfWorkService`) but should respect the same schema contracts
 
 ---

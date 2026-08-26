@@ -15,10 +15,10 @@ export function formatDocumentNumber(input: FormatDocumentNumberInput): string {
 
   if (input.format) {
     return input.format
-      .replace('{PREFIX}', prefix)
-      .replace('{BR}', branchCode)
-      .replace('{SEQ}', seq)
-      .replace('{SUFFIX}', suffix);
+      .replace(/\{PREFIX\}/g, prefix)
+      .replace(/\{BR\}/g, branchCode)
+      .replace(/\{SEQ\}/g, seq)
+      .replace(/\{SUFFIX\}/g, suffix);
   }
 
   if (prefix && branchCode) {

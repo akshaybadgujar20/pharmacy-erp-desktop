@@ -26,6 +26,7 @@ model User {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   userSessions UserSession[]
+  userBranches UserBranch[]
   auditLogs    AuditLog[]
 
   partiesUpdated          Party[]           @relation("PartyUpdatedBy")

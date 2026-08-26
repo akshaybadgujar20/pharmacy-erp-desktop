@@ -5,17 +5,60 @@ import type { SeedContext } from '../seed-context';
 
 const CUSTOMER_TYPES = ['RETAIL', 'WHOLESALE', 'CORPORATE'] as const;
 const SUPPLIER_TYPES = ['MANUFACTURER', 'DISTRIBUTOR', 'WHOLESALER'] as const;
-const INDIAN_FIRST = ['Rajesh', 'Priya', 'Amit', 'Sneha', 'Vikram', 'Anita', 'Karthik', 'Deepa', 'Rahul', 'Meera'];
-const INDIAN_LAST = ['Patil', 'Shah', 'Desai', 'Rao', 'Iyer', 'Mehta', 'Kulkarni', 'Joshi', 'Nair', 'Reddy'];
+const INDIAN_FIRST = [
+  'Rajesh',
+  'Priya',
+  'Amit',
+  'Sneha',
+  'Vikram',
+  'Anita',
+  'Karthik',
+  'Deepa',
+  'Rahul',
+  'Meera',
+];
+const INDIAN_LAST = [
+  'Patil',
+  'Shah',
+  'Desai',
+  'Rao',
+  'Iyer',
+  'Mehta',
+  'Kulkarni',
+  'Joshi',
+  'Nair',
+  'Reddy',
+];
 const CITY_MAP: Record<string, { city: string; state: string }> = {
-  Pune: { city: '33333333-3333-4333-8333-333333333301', state: '22222222-2222-4222-8222-222222222201' },
-  Mumbai: { city: '33333333-3333-4333-8333-333333333302', state: '22222222-2222-4222-8222-222222222201' },
-  Bengaluru: { city: '33333333-3333-4333-8333-333333333304', state: '22222222-2222-4222-8222-222222222202' },
-  Ahmedabad: { city: '33333333-3333-4333-8333-333333333306', state: '22222222-2222-4222-8222-222222222203' },
-  Chennai: { city: '33333333-3333-4333-8333-333333333309', state: '22222222-2222-4222-8222-222222222205' },
+  Pune: {
+    city: '33333333-3333-4333-8333-333333333301',
+    state: '22222222-2222-4222-8222-222222222201',
+  },
+  Mumbai: {
+    city: '33333333-3333-4333-8333-333333333302',
+    state: '22222222-2222-4222-8222-222222222201',
+  },
+  Bengaluru: {
+    city: '33333333-3333-4333-8333-333333333304',
+    state: '22222222-2222-4222-8222-222222222202',
+  },
+  Ahmedabad: {
+    city: '33333333-3333-4333-8333-333333333306',
+    state: '22222222-2222-4222-8222-222222222203',
+  },
+  Chennai: {
+    city: '33333333-3333-4333-8333-333333333309',
+    state: '22222222-2222-4222-8222-222222222205',
+  },
 };
 const COUNTRY_UUID = '11111111-1111-4111-8111-111111111101';
-const SPECIALIZATIONS = ['General Physician', 'Cardiologist', 'Pediatrician', 'Dermatologist', 'Orthopedic'];
+const SPECIALIZATIONS = [
+  'General Physician',
+  'Cardiologist',
+  'Pediatrician',
+  'Dermatologist',
+  'Orthopedic',
+];
 
 interface PartySpec {
   roleType: 'CUSTOMER' | 'SUPPLIER' | 'DOCTOR' | 'EMPLOYEE';
@@ -30,11 +73,20 @@ const SPECS: PartySpec[] = [
   { roleType: 'EMPLOYEE', count: 10 },
 ];
 
-export async function seedParties(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
-  let seq = 1;
+export async function seedParties(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
+  let seq =
+    ctx.customerIds.length +
+    ctx.supplierIds.length +
+    ctx.doctorIds.length +
+    ctx.employeeIds.length +
+    1;
   for (const spec of SPECS) {
     for (let i = 0; i < spec.count; i++) {
-      const isOrg = spec.orgRatio !== undefined && faker.number.float() < spec.orgRatio;
+      const isOrg =
+        spec.orgRatio !== undefined && faker.number.float() < spec.orgRatio;
       const first = faker.helpers.arrayElement(INDIAN_FIRST);
       const last = faker.helpers.arrayElement(INDIAN_LAST);
       const displayName = isOrg
@@ -67,7 +119,7 @@ export async function seedParties(prisma: PrismaClient, ctx: SeedContext): Promi
       });
 
       const cityName = faker.helpers.arrayElement(Object.keys(CITY_MAP));
-      const geo = CITY_MAP[cityName]!;
+      const geo = CITY_MAP[cityName];
       await prisma.partyAddress.create({
         data: {
           uuid: uuid(),
@@ -102,7 +154,9 @@ export async function seedParties(prisma: PrismaClient, ctx: SeedContext): Promi
             uuid: uuid(),
             partyId: party.id,
             contactType: 'EMAIL',
-            contactValue: faker.internet.email({ firstName: first, lastName: last }).toLowerCase(),
+            contactValue: faker.internet
+              .email({ firstName: first, lastName: last })
+              .toLowerCase(),
             isPrimary: false,
             isActive: true,
           },
@@ -149,7 +203,9 @@ export async function seedParties(prisma: PrismaClient, ctx: SeedContext): Promi
             qualification: 'MBBS',
             specialization: faker.helpers.arrayElement(SPECIALIZATIONS),
             hospitalName: `${cityName} General Hospital`,
-            consultationFee: faker.number.int({ min: 300, max: 1500 }).toFixed(2),
+            consultationFee: faker.number
+              .int({ min: 300, max: 1500 })
+              .toFixed(2),
             isActive: true,
           },
         });
@@ -160,7 +216,14 @@ export async function seedParties(prisma: PrismaClient, ctx: SeedContext): Promi
             uuid: uuid(),
             partyId: party.id,
             employeeCode: code,
-            designation: i === 0 ? 'Admin' : i < 4 ? 'Pharmacist' : i < 7 ? 'Cashier' : 'Store Manager',
+            designation:
+              i === 0
+                ? 'Admin'
+                : i < 4
+                  ? 'Pharmacist'
+                  : i < 7
+                    ? 'Cashier'
+                    : 'Store Manager',
             department: 'Operations',
             joiningDate: faker.date.past({ years: 3 }),
             isPharmacist: i > 0 && i < 4,

@@ -53,8 +53,12 @@ export class AppLogger implements LoggerService {
     const base: Record<string, unknown> = {};
 
     if (ctx) {
-      base.companyId = ctx.companyId.toString();
-      base.branchId = ctx.branchId.toString();
+      if (ctx.companyId !== undefined) {
+        base.companyId = ctx.companyId.toString();
+      }
+      if (ctx.branchId !== undefined) {
+        base.branchId = ctx.branchId.toString();
+      }
       if (ctx.userId !== undefined) {
         base.userId = ctx.userId.toString();
       }

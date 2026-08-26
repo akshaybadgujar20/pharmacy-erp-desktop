@@ -3,10 +3,13 @@ model UserSession {
 
   userId BigInt @map("user_id")
 
+  companyId BigInt @map("company_id")
+  branchId  BigInt @map("branch_id")
+
   uuid String @unique @default(uuid())
 
   sessionToken String  @unique @map("session_token")
-  refreshToken String? @map("refresh_token")
+  refreshToken String? @unique @map("refresh_token")
 
   deviceName         String? @map("device_name")
   deviceType         String? @map("device_type")
@@ -32,6 +35,8 @@ model UserSession {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+  @@index([companyId])
+  @@index([branchId])
   @@index([isActive])
   @@index([loginTime])
   @@index([expiresAt])

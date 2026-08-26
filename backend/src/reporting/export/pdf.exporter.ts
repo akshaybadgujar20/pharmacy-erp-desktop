@@ -11,19 +11,31 @@ const pdfmake = require('pdfmake') as {
 import type { ExportInput, ExportOutput } from './csv.exporter';
 import { formatCellValue } from '../utils/report.util';
 
-const pdfmakeRoot = path.dirname(require.resolve('pdfmake/package.json'));
-const robotoDir = path.join(pdfmakeRoot, 'build', 'fonts', 'Roboto');
+let fontsInitialized = false;
 
-pdfmake.setFonts({
-  Roboto: {
-    normal: path.join(robotoDir, 'Roboto-Regular.ttf'),
-    bold: path.join(robotoDir, 'Roboto-Medium.ttf'),
-    italics: path.join(robotoDir, 'Roboto-Italic.ttf'),
-    bolditalics: path.join(robotoDir, 'Roboto-MediumItalic.ttf'),
-  },
-});
+function ensurePdfFonts(): void {
+  if (fontsInitialized) {
+    return;
+  }
+
+  const pdfmakeRoot = path.dirname(require.resolve('pdfmake/package.json'));
+  const robotoDir = path.join(pdfmakeRoot, 'build', 'fonts', 'Roboto');
+
+  pdfmake.setFonts({
+    Roboto: {
+      normal: path.join(robotoDir, 'Roboto-Regular.ttf'),
+      bold: path.join(robotoDir, 'Roboto-Medium.ttf'),
+      italics: path.join(robotoDir, 'Roboto-Italic.ttf'),
+      bolditalics: path.join(robotoDir, 'Roboto-MediumItalic.ttf'),
+    },
+  });
+
+  fontsInitialized = true;
+}
 
 export async function exportPdf(input: ExportInput): Promise<ExportOutput> {
+  ensurePdfFonts();
+
   const headerLines: string[] = [input.reportName];
   if (input.fromDate || input.toDate) {
     headerLines.push(`Period: ${input.fromDate ?? ''} - ${input.toDate ?? ''}`);

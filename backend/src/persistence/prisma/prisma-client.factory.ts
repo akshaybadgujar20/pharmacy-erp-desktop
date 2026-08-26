@@ -25,6 +25,15 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
           }
           return query(args);
         },
+        async createMany({ args, query }) {
+          const rows = args.data as Array<Record<string, unknown>>;
+          if (Array.isArray(rows)) {
+            args.data = rows.map((row) =>
+              row.id === undefined ? { ...row, id: nextBigIntId() } : row,
+            ) as typeof args.data;
+          }
+          return query(args);
+        },
       },
     },
   }) as unknown as PrismaClient;

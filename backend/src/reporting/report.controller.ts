@@ -15,11 +15,14 @@ import { ErrorCode } from '../common/exceptions/error-code';
 import { PaginatedResult } from '../common/response/paginated-result';
 import { getTenantScope } from '../persistence/context/tenant-scope.util';
 import { RequestContextService } from '../persistence/context/request-context.service';
-import { ReportFormat } from './constants/reporting.constants';
+import { ReportFormat, EXPORT_MAX_ROWS } from './constants/reporting.constants';
 import { ReportRegistryService } from './core/report-registry.service';
 import { ReportQueryDto } from './dto/report-query.dto';
 import { ReportExporterService } from './export/report-exporter.service';
-import { validateReportDateRange } from './utils/report.util';
+import {
+  validateReportDateRange,
+  buildContentDisposition,
+} from './utils/report.util';
 
 @Controller('reports')
 export class ReportController {
@@ -58,27 +61,35 @@ export class ReportController {
     validateReportDateRange(query.fromDate, query.toDate);
 
     const scope = getTenantScope(this.requestContext);
-    const result = await definition.run(
-      { ...query },
-      {
-        scope,
-        userId: user.userId,
-      },
-    );
+    const ctx = {
+      scope,
+      userId: user.userId,
+    };
 
     const format = query.format ?? ReportFormat.JSON;
+    const reportParams =
+      format !== ReportFormat.JSON
+        ? { ...query, page: 1, pageSize: EXPORT_MAX_ROWS }
+        : { ...query };
+
+    const result = await definition.run(reportParams, ctx);
+
     if (format !== ReportFormat.JSON) {
+      const effectiveBranchId = query.branchId ?? scope.branchId;
       const exported = await this.exporter.export(
         definition.id,
         definition.name,
         result,
-        query,
+        {
+          ...query,
+          branchId: effectiveBranchId,
+        },
         format,
       );
 
       return new StreamableFile(exported.buffer, {
         type: exported.contentType,
-        disposition: `attachment; filename="${exported.filename}"`,
+        disposition: buildContentDisposition(exported.filename),
       });
     }
 

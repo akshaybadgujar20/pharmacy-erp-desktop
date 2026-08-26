@@ -16,11 +16,16 @@ import { OutboxOperation } from '../persistence/outbox/outbox-operation.constant
 import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { PartyRoleType } from './constants/party.constants';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { toCustomerResponse } from './mappers/customer.mapper';
 import {
+  activePartyFilter,
+  assertNonNegativeDecimal,
   assertPartyExists,
+  assertUniqueBusinessCode,
+  ensurePartyRole,
   optimisticUpdate,
   throwConflict,
   throwNotFound,
@@ -43,11 +48,12 @@ export class CustomerService {
 
     const where: Prisma.CustomerWhereInput = {
       deletedAt: null,
+      party: { deletedAt: null },
       ...(search
         ? {
             OR: [
               { customerCode: { contains: search } },
-              { party: { displayName: { contains: search } } },
+              { party: { displayName: { contains: search }, deletedAt: null } },
             ],
           }
         : {}),
@@ -71,7 +77,7 @@ export class CustomerService {
 
   async getById(id: bigint) {
     const customer = await this.prisma.client.customer.findFirst({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: null, ...activePartyFilter },
     });
 
     if (!customer) {
@@ -84,33 +90,61 @@ export class CustomerService {
   }
 
   async create(dto: CreateCustomerDto) {
+    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
+
     return this.unitOfWork.run(async (tx) => {
-      await assertPartyExists(tx, BigInt(dto.partyId));
-
       const partyId = BigInt(dto.partyId);
+      await assertPartyExists(tx, partyId);
+      await ensurePartyRole(tx, partyId, PartyRoleType.CUSTOMER);
+      await assertUniqueBusinessCode(
+        tx,
+        'customer',
+        'customerCode',
+        dto.customerCode,
+        'Customer code',
+      );
 
-      const existingDetail = await tx.customer.findFirst({
+      const existingActive = await tx.customer.findFirst({
         where: { partyId, deletedAt: null },
       });
 
-      if (existingDetail) {
+      if (existingActive) {
         throwConflict(`Customer already exists for party: ${partyId}`, {
           partyId: partyId.toString(),
         });
       }
 
-      const customer = await tx.customer.create({
-        data: {
-          uuid: randomUUID(),
-          partyId,
-          customerCode: dto.customerCode,
-          customerType: dto.customerType,
-          creditLimit: dto.creditLimit ?? '0',
-          paymentTermsDays: dto.paymentTermsDays ?? 0,
-          isTaxExempt: dto.isTaxExempt ?? false,
-          isActive: dto.isActive ?? true,
-        },
+      const softDeleted = await tx.customer.findFirst({
+        where: { partyId, deletedAt: { not: null } },
       });
+
+      const customer = softDeleted
+        ? await tx.customer.update({
+            where: { id: softDeleted.id },
+            data: {
+              customerCode: dto.customerCode,
+              customerType: dto.customerType,
+              creditLimit: dto.creditLimit ?? '0',
+              paymentTermsDays: dto.paymentTermsDays ?? 0,
+              isTaxExempt: dto.isTaxExempt ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              deletedBy: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.customer.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              customerCode: dto.customerCode,
+              customerType: dto.customerType,
+              creditLimit: dto.creditLimit ?? '0',
+              paymentTermsDays: dto.paymentTermsDays ?? 0,
+              isTaxExempt: dto.isTaxExempt ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.CUSTOMER,
@@ -132,6 +166,8 @@ export class CustomerService {
   }
 
   async update(id: bigint, dto: UpdateCustomerDto) {
+    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.customer.findFirst({
         where: { id, deletedAt: null },
@@ -142,6 +178,16 @@ export class CustomerService {
           ErrorCode.CUSTOMER_NOT_FOUND,
           `Customer not found: ${id}`,
           { id: id.toString() },
+        );
+      }
+
+      if (dto.customerCode && dto.customerCode !== existing.customerCode) {
+        await assertUniqueBusinessCode(
+          tx,
+          'customer',
+          'customerCode',
+          dto.customerCode,
+          'Customer code',
         );
       }
 
@@ -161,9 +207,8 @@ export class CustomerService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.CUSTOMER_NOT_FOUND,
-        `Customer version conflict or not found: ${id}`,
         id,
+        `Customer version conflict or not found: ${id}`,
       );
 
       const customer = await tx.customer.findFirstOrThrow({ where: { id } });
@@ -212,9 +257,8 @@ export class CustomerService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.CUSTOMER_NOT_FOUND,
-        `Customer version conflict or not found: ${id}`,
         id,
+        `Customer version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

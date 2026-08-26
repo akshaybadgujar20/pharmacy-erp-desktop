@@ -43,6 +43,7 @@ model Branch {
   printerConfigurations PrinterConfiguration[]
   sequenceGenerators    SequenceGenerator[]
   prescriptions         Prescription[]
+  auditLogs             AuditLog[]
   priceLists            PriceList[]
   goodsReceipts         GoodsReceipt[]
   purchaseInvoices      PurchaseInvoice[]
@@ -57,6 +58,7 @@ model Branch {
   transfersReceived     StockTransfer[]        @relation("DestinationStockTransfers")
   expenses              Expense[]
   outboxEntries         Outbox[]
+  userBranches          UserBranch[]
 
   @@unique([companyId, branchCode])
   @@index([companyId])

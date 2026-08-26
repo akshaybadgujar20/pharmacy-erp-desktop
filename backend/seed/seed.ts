@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 import { clearRegistry } from './lib/id-registry';
 import { initFaker } from './lib/faker';
+import { hydrateFromDb } from './lib/hydrate';
 import { loadMasters, loadUsers } from './lib/load-masters';
 import { disconnectPrisma, getPrisma } from './lib/prisma-client';
 import { SeedContext } from './lib/seed-context';
@@ -10,7 +11,10 @@ import { seedMedicine, seedPricing } from './lib/generators/medicine.generator';
 import { seedInventory } from './lib/generators/inventory.generator';
 import { seedPurchase } from './lib/generators/purchase.generator';
 import { seedSales } from './lib/generators/sales.generator';
-import { seedFinancialAndAudit, seedSync } from './lib/generators/sync.generator';
+import {
+  seedFinancialAndAudit,
+  seedSync,
+} from './lib/generators/sync.generator';
 
 type Phase =
   | 'masters'
@@ -36,19 +40,23 @@ const PHASE_ORDER: Phase[] = [
 ];
 
 function parseArgs(argv: string[]): { fresh: boolean; only?: Phase } {
-  const fresh = !argv.includes('--no-wipe');
+  const fresh = argv.includes('--fresh') && !argv.includes('--no-wipe');
   const onlyIdx = argv.indexOf('--only');
-  const only = onlyIdx >= 0 ? (argv[onlyIdx + 1] as Phase | undefined) : undefined;
+  const only =
+    onlyIdx >= 0 ? (argv[onlyIdx + 1] as Phase | undefined) : undefined;
   return { fresh, only };
 }
 
-function shouldRun(phase: Phase, only: Phase | undefined, startIdx: number, phaseIdx: number): boolean {
+function shouldRun(phase: Phase, only: Phase | undefined): boolean {
   if (!only) return true;
   const onlyIdx = PHASE_ORDER.indexOf(only);
+  const phaseIdx = PHASE_ORDER.indexOf(phase);
   return phaseIdx >= onlyIdx;
 }
 
-async function printSummary(prisma: ReturnType<typeof getPrisma>): Promise<void> {
+async function printSummary(
+  prisma: ReturnType<typeof getPrisma>,
+): Promise<void> {
   const counts = await Promise.all([
     prisma.salesInvoice.count(),
     prisma.batch.count(),
@@ -69,23 +77,27 @@ async function printSummary(prisma: ReturnType<typeof getPrisma>): Promise<void>
 
 async function main(): Promise<void> {
   const { fresh, only } = parseArgs(process.argv.slice(2));
-  initFaker();
+  initFaker(!fresh);
   clearRegistry();
 
   const prisma = getPrisma();
   const ctx = new SeedContext(prisma);
 
-  console.log(`Pharmacy ERP seed starting (fresh=${fresh}${only ? `, only=${only}` : ''})`);
+  console.log(
+    `Pharmacy ERP seed starting (fresh=${fresh}${only ? `, only=${only}` : ''})`,
+  );
 
   if (fresh && !only) {
     console.log('Wiping existing data...');
     await wipeDatabase(prisma);
     clearRegistry();
+  } else {
+    console.log('Hydrating id registry and context from database...');
+    await hydrateFromDb(prisma, ctx);
   }
 
   const run = (phase: Phase, fn: () => Promise<void>) => {
-    const idx = PHASE_ORDER.indexOf(phase);
-    if (!shouldRun(phase, only, 0, idx)) return Promise.resolve();
+    if (!shouldRun(phase, only)) return Promise.resolve();
     console.log(`Phase: ${phase}`);
     return fn();
   };

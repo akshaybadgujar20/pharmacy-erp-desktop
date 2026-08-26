@@ -1,20 +1,20 @@
 # Domain Layer
 
-Business knowledge independent of UI and persistence implementation. Each subfolder is a **bounded context** aligned to the Prisma schema and implemented backend.
+Business knowledge independent of UI and persistence. Each bounded context is documented in a single markdown file aligned to the Prisma schema and implemented backend.
 
 **Anchor reference:** [ANCHOR_FACTS.md](./ANCHOR_FACTS.md) — identity, inventory model, outbox, auth, vocabulary mapping.
 
 ## Bounded contexts
 
-| Folder | Schema focus | Table overview |
+| Context | Schema focus | Table overview |
 |--------|--------------|----------------|
-| [product/](./product/README.md) | Medicine master (`Medicine`, salts, manufacturer) | [medicine_master](../database/tables/medicine_master/medicine_master.md) |
-| [inventory/](./inventory/README.md) | `Batch`, `Stock`, `StockMovement`, adjustments, transfers | [inventory](../database/tables/inventory/inventory.md) |
-| [sales/](./sales/README.md) | `SalesInvoice`, payments, returns (invoice-first) | [sales](../database/tables/sales/sales.md) |
-| [purchasing/](./purchasing/README.md) | PO → GRN → invoice → return | [purchase](../database/tables/purchase/purchase.md) |
-| [customer/](./customer/README.md) | `Party` + `Customer`, loyalty | [party_management](../database/tables/party_management/party_management.md) |
-| [supplier/](./supplier/README.md) | `Party` + `Supplier`, payments | [party_management](../database/tables/party_management/party_management.md) |
-| [finance/](./finance/README.md) | `Ledger`, `LedgerEntry`, `Payment`, `Receipt` | [financial](../database/tables/financial/financial.md) |
+| [product.md](./product.md) | Medicine master (`Medicine`, salts, manufacturer) | [medicine_master](../database/tables/medicine_master/medicine_master.md) |
+| [inventory.md](./inventory.md) | `Batch`, `Stock`, `StockMovement`, adjustments, transfers | [inventory](../database/tables/inventory/inventory.md) |
+| [sales.md](./sales.md) | `SalesInvoice`, payments, returns (invoice-first) | [sales](../database/tables/sales/sales.md) |
+| [purchasing.md](./purchasing.md) | PO → GRN → invoice → return | [purchase](../database/tables/purchase/purchase.md) |
+| [customer.md](./customer.md) | `Party` + `Customer`, loyalty | [party_management](../database/tables/party_management/party_management.md) |
+| [supplier.md](./supplier.md) | `Party` + `Supplier`, payments | [party_management](../database/tables/party_management/party_management.md) |
+| [finance.md](./finance.md) | `Ledger`, `LedgerEntry`, `Payment`, `Receipt` | [financial](../database/tables/financial/financial.md) |
 
 ## Cross-cutting (implemented)
 
@@ -25,7 +25,7 @@ Business knowledge independent of UI and persistence implementation. Each subfol
 
 ## Document structure
 
-Each domain file documents: Purpose, Responsibilities, Scope, Related Entities, Business Rules, Domain Events, State Model, Integrations, Security, Performance, Future Enhancements.
+One file per bounded context (e.g. `customer.md`, `sales.md`). Include a section only when it has content — typical sections: Overview & Aggregate, Terminology, Business Rules & Invariants, Lifecycle & States, Domain Events, Permissions, Workflows, Integrations. Planned capabilities live in [future-roadmap](../roadmap/future-roadmap.md), not inline.
 
 ## Related
 

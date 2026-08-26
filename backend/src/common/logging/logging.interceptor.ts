@@ -26,7 +26,7 @@ export class LoggingInterceptor implements NestInterceptor {
         this.logger.info(
           {
             method: req.method,
-            url: req.originalUrl ?? req.url,
+            path: req.path,
             statusCode: res.statusCode,
             durationMs,
           },

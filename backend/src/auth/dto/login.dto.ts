@@ -1,5 +1,15 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+
+const DEVICE_TYPES = ['DESKTOP', 'MOBILE', 'TABLET', 'WEB'] as const;
 
 export class LoginDto {
   @IsString()
@@ -9,10 +19,13 @@ export class LoginDto {
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(6)
   @MaxLength(200)
   password!: string;
 
   @IsOptional()
+  @IsString()
+  @Matches(/^\d+$/, { message: 'branchId must be a numeric string' })
   @Transform(({ value }: { value: string | undefined }) =>
     value !== undefined && value !== null ? BigInt(value) : undefined,
   )
@@ -25,6 +38,7 @@ export class LoginDto {
 
   @IsOptional()
   @IsString()
+  @IsIn(DEVICE_TYPES)
   @MaxLength(50)
   deviceType?: string;
 

@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
 import { DoctorService } from './doctor.service';
@@ -50,8 +51,8 @@ export class DoctorController {
   @RequirePermissions('PARTY:DOCTOR:DELETE')
   delete(
     @Param('id', ParseBigIntPipe) id: bigint,
-    @Query('version') version: string,
+    @Query() query: DeleteEntityQueryDto,
   ) {
-    return this.doctorService.delete(id, Number(version));
+    return this.doctorService.delete(id, query.version);
   }
 }

@@ -21,6 +21,7 @@ import { toPartyRoleResponse } from './mappers/party-role.mapper';
 import {
   assertPartyExists,
   optimisticUpdate,
+  throwConflict,
   throwNotFound,
 } from './utils/party.util';
 
@@ -69,15 +70,45 @@ export class PartyRoleService {
     return this.unitOfWork.run(async (tx) => {
       await assertPartyExists(tx, partyId);
 
-      const role = await tx.partyRole.create({
-        data: {
-          uuid: randomUUID(),
+      const existingActive = await tx.partyRole.findFirst({
+        where: { partyId, roleType: dto.roleType, deletedAt: null },
+      });
+
+      if (existingActive) {
+        throwConflict(`Party role already exists: ${dto.roleType}`, {
+          partyId: partyId.toString(),
+          roleType: dto.roleType,
+        });
+      }
+
+      const softDeleted = await tx.partyRole.findFirst({
+        where: {
           partyId,
           roleType: dto.roleType,
-          isPrimary: dto.isPrimary ?? false,
-          isActive: dto.isActive ?? true,
+          deletedAt: { not: null },
         },
       });
+
+      const role = softDeleted
+        ? await tx.partyRole.update({
+            where: { id: softDeleted.id },
+            data: {
+              roleType: dto.roleType,
+              isPrimary: dto.isPrimary ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.partyRole.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              roleType: dto.roleType,
+              isPrimary: dto.isPrimary ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.PARTY_ROLE,
@@ -128,9 +159,8 @@ export class PartyRoleService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_ROLE_NOT_FOUND,
-        `Party role version conflict or not found: ${id}`,
         id,
+        `Party role version conflict or not found: ${id}`,
       );
 
       const role = await tx.partyRole.findFirstOrThrow({ where: { id } });
@@ -175,9 +205,8 @@ export class PartyRoleService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_ROLE_NOT_FOUND,
-        `Party role version conflict or not found: ${id}`,
         id,
+        `Party role version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

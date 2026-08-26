@@ -15,11 +15,16 @@ import { OutboxOperation } from '../persistence/outbox/outbox-operation.constant
 import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { PartyRoleType } from './constants/party.constants';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { toEmployeeResponse } from './mappers/employee.mapper';
 import {
+  activePartyFilter,
+  assertNonNegativeDecimal,
   assertPartyExists,
+  assertUniqueBusinessCode,
+  ensurePartyRole,
   optimisticUpdate,
   throwConflict,
   throwNotFound,
@@ -41,12 +46,18 @@ export class EmployeeService {
 
     const where: Prisma.EmployeeWhereInput = {
       deletedAt: null,
+      party: { deletedAt: null },
       ...(search
         ? {
             OR: [
               { employeeCode: { contains: search } },
               { designation: { contains: search } },
-              { party: { displayName: { contains: search } } },
+              {
+                party: {
+                  displayName: { contains: search },
+                  deletedAt: null,
+                },
+              },
             ],
           }
         : {}),
@@ -70,7 +81,7 @@ export class EmployeeService {
 
   async getById(id: bigint) {
     const employee = await this.prisma.client.employee.findFirst({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: null, ...activePartyFilter },
     });
 
     if (!employee) {
@@ -83,35 +94,68 @@ export class EmployeeService {
   }
 
   async create(dto: CreateEmployeeDto) {
+    assertNonNegativeDecimal(dto.salary, 'salary');
+
     return this.unitOfWork.run(async (tx) => {
-      await assertPartyExists(tx, BigInt(dto.partyId));
-
       const partyId = BigInt(dto.partyId);
+      await assertPartyExists(tx, partyId);
+      await ensurePartyRole(tx, partyId, PartyRoleType.EMPLOYEE);
+      await assertUniqueBusinessCode(
+        tx,
+        'employee',
+        'employeeCode',
+        dto.employeeCode,
+        'Employee code',
+      );
 
-      const existingDetail = await tx.employee.findFirst({
+      const existingActive = await tx.employee.findFirst({
         where: { partyId, deletedAt: null },
       });
 
-      if (existingDetail) {
+      if (existingActive) {
         throwConflict(`Employee already exists for party: ${partyId}`, {
           partyId: partyId.toString(),
         });
       }
 
-      const employee = await tx.employee.create({
-        data: {
-          uuid: randomUUID(),
-          partyId,
-          employeeCode: dto.employeeCode,
-          designation: dto.designation,
-          department: dto.department,
-          joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : undefined,
-          salary: dto.salary,
-          licenseNumber: dto.licenseNumber,
-          isPharmacist: dto.isPharmacist ?? false,
-          isActive: dto.isActive ?? true,
-        },
+      const softDeleted = await tx.employee.findFirst({
+        where: { partyId, deletedAt: { not: null } },
       });
+
+      const employee = softDeleted
+        ? await tx.employee.update({
+            where: { id: softDeleted.id },
+            data: {
+              employeeCode: dto.employeeCode,
+              designation: dto.designation,
+              department: dto.department,
+              joiningDate: dto.joiningDate
+                ? new Date(dto.joiningDate)
+                : undefined,
+              salary: dto.salary,
+              licenseNumber: dto.licenseNumber,
+              isPharmacist: dto.isPharmacist ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              version: { increment: 1 },
+            },
+          })
+        : await tx.employee.create({
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              employeeCode: dto.employeeCode,
+              designation: dto.designation,
+              department: dto.department,
+              joiningDate: dto.joiningDate
+                ? new Date(dto.joiningDate)
+                : undefined,
+              salary: dto.salary,
+              licenseNumber: dto.licenseNumber,
+              isPharmacist: dto.isPharmacist ?? false,
+              isActive: dto.isActive ?? true,
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.EMPLOYEE,
@@ -133,6 +177,8 @@ export class EmployeeService {
   }
 
   async update(id: bigint, dto: UpdateEmployeeDto) {
+    assertNonNegativeDecimal(dto.salary, 'salary');
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.employee.findFirst({
         where: { id, deletedAt: null },
@@ -143,6 +189,16 @@ export class EmployeeService {
           ErrorCode.EMPLOYEE_NOT_FOUND,
           `Employee not found: ${id}`,
           { id: id.toString() },
+        );
+      }
+
+      if (dto.employeeCode && dto.employeeCode !== existing.employeeCode) {
+        await assertUniqueBusinessCode(
+          tx,
+          'employee',
+          'employeeCode',
+          dto.employeeCode,
+          'Employee code',
         );
       }
 
@@ -164,9 +220,8 @@ export class EmployeeService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.EMPLOYEE_NOT_FOUND,
-        `Employee version conflict or not found: ${id}`,
         id,
+        `Employee version conflict or not found: ${id}`,
       );
 
       const employee = await tx.employee.findFirstOrThrow({ where: { id } });
@@ -211,9 +266,8 @@ export class EmployeeService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.EMPLOYEE_NOT_FOUND,
-        `Employee version conflict or not found: ${id}`,
         id,
+        `Employee version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

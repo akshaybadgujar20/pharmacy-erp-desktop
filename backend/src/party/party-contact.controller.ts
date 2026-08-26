@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
 import { CreatePartyContactDto } from './dto/create-party-contact.dto';
@@ -61,8 +62,8 @@ export class PartyContactController {
   delete(
     @Param('partyId', ParseBigIntPipe) partyId: bigint,
     @Param('id', ParseBigIntPipe) id: bigint,
-    @Query('version') version: string,
+    @Query() query: DeleteEntityQueryDto,
   ) {
-    return this.partyContactService.delete(partyId, id, Number(version));
+    return this.partyContactService.delete(partyId, id, query.version);
   }
 }

@@ -1,36 +1,199 @@
 import type { PrismaClient } from '@prisma/client';
 import { faker, gstin, uuid } from '../faker';
-import { decimal, register, resolve } from '../id-registry';
+import { decimal, register, resolve, tryResolve } from '../id-registry';
 import type { SeedContext } from '../seed-context';
 
 const MANUFACTURERS = [
-  'Sun Pharma', 'Cipla', 'Dr Reddys', 'Lupin', 'Torrent', 'Glenmark',
-  'Abbott', 'Alkem', 'Mankind', 'Zydus', 'Biocon', 'Pfizer India',
-  'Micro Labs', 'Intas', 'Emcure', 'Wockhardt', 'Cadila', 'Ranbaxy Legacy',
-  'Himalaya', 'Dabur',
+  'Sun Pharma',
+  'Cipla',
+  'Dr Reddys',
+  'Lupin',
+  'Torrent',
+  'Glenmark',
+  'Abbott',
+  'Alkem',
+  'Mankind',
+  'Zydus',
+  'Biocon',
+  'Pfizer India',
+  'Micro Labs',
+  'Intas',
+  'Emcure',
+  'Wockhardt',
+  'Cadila',
+  'Ranbaxy Legacy',
+  'Himalaya',
+  'Dabur',
 ];
 
-const MEDICINES: Array<{ name: string; brand: string; hsn: string; dosage: string; schedule: string; category: string }> = [
-  { name: 'Paracetamol 650mg Tablet', brand: 'Dolo 650', hsn: '30049099', dosage: 'Tablet', schedule: 'OTC', category: 'GEN' },
-  { name: 'Paracetamol 500mg Tablet', brand: 'Crocin Advance', hsn: '30049099', dosage: 'Tablet', schedule: 'OTC', category: 'GEN' },
-  { name: 'Azithromycin 500mg Tablet', brand: 'Azithral 500', hsn: '30042019', dosage: 'Tablet', schedule: 'H1', category: 'ANT' },
-  { name: 'Amoxicillin 500mg Capsule', brand: 'Mox 500', hsn: '30041010', dosage: 'Capsule', schedule: 'H', category: 'ANT' },
-  { name: 'Metformin 500mg Tablet', brand: 'Glycomet 500', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'DIA' },
-  { name: 'Atorvastatin 10mg Tablet', brand: 'Atorva 10', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'CVS' },
-  { name: 'Pantoprazole 40mg Tablet', brand: 'Pan 40', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'GEN' },
-  { name: 'Omeprazole 20mg Capsule', brand: 'Omez 20', hsn: '30049099', dosage: 'Capsule', schedule: 'H', category: 'GEN' },
-  { name: 'Cetirizine 10mg Tablet', brand: 'Cetriz 10', hsn: '30049099', dosage: 'Tablet', schedule: 'OTC', category: 'OTC' },
-  { name: 'Diclofenac 50mg Tablet', brand: 'Voveran 50', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'GEN' },
-  { name: 'Telmisartan 40mg Tablet', brand: 'Telma 40', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'CVS' },
-  { name: 'Amlodipine 5mg Tablet', brand: 'Amlong 5', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'CVS' },
-  { name: 'Salbutamol Inhaler', brand: 'Asthalin', hsn: '30049099', dosage: 'Inhaler', schedule: 'H', category: 'GEN' },
-  { name: 'Montelukast 10mg Tablet', brand: 'Montair 10', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'GEN' },
-  { name: 'Clopidogrel 75mg Tablet', brand: 'Clopilet 75', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'CVS' },
-  { name: 'Levocetirizine 5mg Tablet', brand: 'Levocet 5', hsn: '30049099', dosage: 'Tablet', schedule: 'OTC', category: 'OTC' },
-  { name: 'Rabeprazole 20mg Tablet', brand: 'Razo 20', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'GEN' },
-  { name: 'Cefixime 200mg Tablet', brand: 'Taxim O 200', hsn: '30042019', dosage: 'Tablet', schedule: 'H1', category: 'ANT' },
-  { name: 'Levofloxacin 500mg Tablet', brand: 'Levoflox 500', hsn: '30042019', dosage: 'Tablet', schedule: 'H1', category: 'ANT' },
-  { name: 'Metoprolol 50mg Tablet', brand: 'Betaloc 50', hsn: '30049099', dosage: 'Tablet', schedule: 'H', category: 'CVS' },
+const MEDICINES: Array<{
+  name: string;
+  brand: string;
+  hsn: string;
+  dosage: string;
+  schedule: string;
+  category: string;
+}> = [
+  {
+    name: 'Paracetamol 650mg Tablet',
+    brand: 'Dolo 650',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'OTC',
+    category: 'GEN',
+  },
+  {
+    name: 'Paracetamol 500mg Tablet',
+    brand: 'Crocin Advance',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'OTC',
+    category: 'GEN',
+  },
+  {
+    name: 'Azithromycin 500mg Tablet',
+    brand: 'Azithral 500',
+    hsn: '30042019',
+    dosage: 'Tablet',
+    schedule: 'H1',
+    category: 'ANT',
+  },
+  {
+    name: 'Amoxicillin 500mg Capsule',
+    brand: 'Mox 500',
+    hsn: '30041010',
+    dosage: 'Capsule',
+    schedule: 'H',
+    category: 'ANT',
+  },
+  {
+    name: 'Metformin 500mg Tablet',
+    brand: 'Glycomet 500',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'DIA',
+  },
+  {
+    name: 'Atorvastatin 10mg Tablet',
+    brand: 'Atorva 10',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'CVS',
+  },
+  {
+    name: 'Pantoprazole 40mg Tablet',
+    brand: 'Pan 40',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Omeprazole 20mg Capsule',
+    brand: 'Omez 20',
+    hsn: '30049099',
+    dosage: 'Capsule',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Cetirizine 10mg Tablet',
+    brand: 'Cetriz 10',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'OTC',
+    category: 'OTC',
+  },
+  {
+    name: 'Diclofenac 50mg Tablet',
+    brand: 'Voveran 50',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Telmisartan 40mg Tablet',
+    brand: 'Telma 40',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'CVS',
+  },
+  {
+    name: 'Amlodipine 5mg Tablet',
+    brand: 'Amlong 5',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'CVS',
+  },
+  {
+    name: 'Salbutamol Inhaler',
+    brand: 'Asthalin',
+    hsn: '30049099',
+    dosage: 'Inhaler',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Montelukast 10mg Tablet',
+    brand: 'Montair 10',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Clopidogrel 75mg Tablet',
+    brand: 'Clopilet 75',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'CVS',
+  },
+  {
+    name: 'Levocetirizine 5mg Tablet',
+    brand: 'Levocet 5',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'OTC',
+    category: 'OTC',
+  },
+  {
+    name: 'Rabeprazole 20mg Tablet',
+    brand: 'Razo 20',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'GEN',
+  },
+  {
+    name: 'Cefixime 200mg Tablet',
+    brand: 'Taxim O 200',
+    hsn: '30042019',
+    dosage: 'Tablet',
+    schedule: 'H1',
+    category: 'ANT',
+  },
+  {
+    name: 'Levofloxacin 500mg Tablet',
+    brand: 'Levoflox 500',
+    hsn: '30042019',
+    dosage: 'Tablet',
+    schedule: 'H1',
+    category: 'ANT',
+  },
+  {
+    name: 'Metoprolol 50mg Tablet',
+    brand: 'Betaloc 50',
+    hsn: '30049099',
+    dosage: 'Tablet',
+    schedule: 'H',
+    category: 'CVS',
+  },
 ];
 
 const SCHEDULE_MAP: Record<string, string> = {
@@ -61,11 +224,15 @@ const SALT_UUIDS = [
   'ffffffff-ffff-4fff-8fff-fffffffffff10',
 ];
 
-export async function seedMedicine(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function seedMedicine(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const manufacturerIds: bigint[] = [];
+  const mfgOffset = await prisma.manufacturer.count();
 
   for (let i = 0; i < MANUFACTURERS.length; i++) {
-    const name = MANUFACTURERS[i]!;
+    const name = MANUFACTURERS[i];
     const partyUuid = uuid();
     const party = await prisma.party.create({
       data: {
@@ -79,14 +246,20 @@ export async function seedMedicine(prisma: PrismaClient, ctx: SeedContext): Prom
     register('Party', partyUuid, party.id);
 
     await prisma.partyRole.create({
-      data: { uuid: uuid(), partyId: party.id, roleType: 'OTHER', isPrimary: true, isActive: true },
+      data: {
+        uuid: uuid(),
+        partyId: party.id,
+        roleType: 'OTHER',
+        isPrimary: true,
+        isActive: true,
+      },
     });
 
     const mfg = await prisma.manufacturer.create({
       data: {
         uuid: uuid(),
         partyId: party.id,
-        manufacturerCode: `MFG-${String(i + 1).padStart(3, '0')}`,
+        manufacturerCode: `MFG-${String(mfgOffset + i + 1).padStart(3, '0')}`,
         gstin: gstin(),
         isPreferred: i < 5,
         isActive: true,
@@ -105,18 +278,19 @@ export async function seedMedicine(prisma: PrismaClient, ctx: SeedContext): Prom
     });
   }
 
+  const medicineOffset = ctx.medicineRecords.length;
   for (let i = 0; i < 50; i++) {
-    const med = medicineList[i]!;
+    const med = medicineList[i];
     const medUuid = uuid();
     const mrp = faker.number.int({ min: 25, max: 450 });
     const created = await prisma.medicine.create({
       data: {
         uuid: medUuid,
-        medicineCode: `MED-${String(i + 1).padStart(5, '0')}`,
+        medicineCode: `MED-${String(medicineOffset + i + 1).padStart(5, '0')}`,
         medicineName: med.name,
         manufacturerId: faker.helpers.arrayElement(manufacturerIds),
-        categoryId: resolve('MedicineCategory', CATEGORY_MAP[med.category]!),
-        scheduleId: resolve('MedicineSchedule', SCHEDULE_MAP[med.schedule]!),
+        categoryId: resolve('MedicineCategory', CATEGORY_MAP[med.category]),
+        scheduleId: resolve('MedicineSchedule', SCHEDULE_MAP[med.schedule]),
         unitId: resolve('UnitOfMeasure', TAB_UNIT),
         brandName: med.brand,
         dosageForm: med.dosage,
@@ -128,21 +302,26 @@ export async function seedMedicine(prisma: PrismaClient, ctx: SeedContext): Prom
       },
     });
     register('Medicine', medUuid, created.id);
-    ctx.medicineRecords.push({ id: created.id, uuid: medUuid, unitId: created.unitId, mrp: decimal(mrp) });
+    ctx.medicineRecords.push({
+      id: created.id,
+      uuid: medUuid,
+      unitId: created.unitId,
+      mrp: decimal(mrp),
+    });
 
     if (i < SALT_UUIDS.length) {
       await prisma.medicineSalt.create({
         data: {
           uuid: uuid(),
           medicineId: created.id,
-          saltCompositionId: resolve('SaltComposition', SALT_UUIDS[i]!),
+          saltCompositionId: resolve('SaltComposition', SALT_UUIDS[i]),
           sequenceNo: 1,
         },
       });
     }
   }
 
-  let batchSeq = 1;
+  let batchSeq = ctx.batchRecords.length + 1;
   for (let i = 0; i < 100; i++) {
     const medicine = faker.helpers.arrayElement(ctx.medicineRecords);
     const purchaseRate = faker.number.int({ min: 10, max: 300 });
@@ -173,13 +352,19 @@ export async function seedMedicine(prisma: PrismaClient, ctx: SeedContext): Prom
   }
 }
 
-export async function seedPricing(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function seedPricing(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const effectiveFrom = new Date('2024-04-01');
   const defaultTaxId = ctx.taxIds[0];
+  const existingPriceListCount = await prisma.priceList.count();
 
   for (let i = 0; i < ctx.branchRecords.length; i++) {
-    const branch = ctx.branchRecords[i]!;
+    const branch = ctx.branchRecords[i];
     const plUuid = `20202020-2020-4202-8202-2020202020${String(i + 1).padStart(2, '0')}`;
+    const existingPriceListId = tryResolve('PriceList', plUuid);
+    if (existingPriceListId !== undefined) continue;
     const priceList = await prisma.priceList.create({
       data: {
         uuid: plUuid,
@@ -222,17 +407,30 @@ export async function seedPricing(prisma: PrismaClient, ctx: SeedContext): Promi
   }
 
   for (let i = 0; i < 20; i++) {
+    const ruleCode = `DISC-${String(existingPriceListCount * 20 + i + 1).padStart(3, '0')}`;
+    const existingRule = await prisma.discountRule.findUnique({
+      where: { ruleCode },
+    });
+    if (existingRule) continue;
     const medicine = faker.helpers.arrayElement(ctx.medicineRecords);
     await prisma.discountRule.create({
       data: {
         uuid: uuid(),
-        ruleCode: `DISC-${String(i + 1).padStart(3, '0')}`,
+        ruleCode,
         ruleName: `Bulk discount ${i + 1}`,
         discountType: i % 2 === 0 ? 'PERCENT' : 'FLAT',
-        discountValue: decimal(i % 2 === 0 ? faker.number.int({ min: 2, max: 15 }) : faker.number.int({ min: 5, max: 50 })),
-        appliesTo: i % 3 === 0 ? 'MEDICINE' : i % 3 === 1 ? 'CATEGORY' : 'CUSTOMER',
+        discountValue: decimal(
+          i % 2 === 0
+            ? faker.number.int({ min: 2, max: 15 })
+            : faker.number.int({ min: 5, max: 50 }),
+        ),
+        appliesTo:
+          i % 3 === 0 ? 'MEDICINE' : i % 3 === 1 ? 'CATEGORY' : 'CUSTOMER',
         medicineId: i % 3 === 0 ? medicine.id : undefined,
-        minimumQuantity: i % 2 === 0 ? decimal(faker.number.int({ min: 2, max: 10 })) : undefined,
+        minimumQuantity:
+          i % 2 === 0
+            ? decimal(faker.number.int({ min: 2, max: 10 }))
+            : undefined,
         priority: i + 1,
         effectiveFrom,
         isActive: true,

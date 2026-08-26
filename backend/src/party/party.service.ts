@@ -19,7 +19,11 @@ import { PrismaService } from '../prisma.service';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
 import { toPartyResponse } from './mappers/party.mapper';
-import { optimisticUpdate, throwNotFound } from './utils/party.util';
+import {
+  optimisticUpdate,
+  throwConflict,
+  throwNotFound,
+} from './utils/party.util';
 
 @Injectable()
 export class PartyService {
@@ -143,9 +147,8 @@ export class PartyService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_NOT_FOUND,
-        `Party version conflict or not found: ${id}`,
         id,
+        `Party version conflict or not found: ${id}`,
       );
 
       const party = await tx.party.findFirstOrThrow({ where: { id } });
@@ -181,6 +184,59 @@ export class PartyService {
         });
       }
 
+      const [
+        activeCustomer,
+        activeSupplier,
+        activeDoctor,
+        activeEmployee,
+        activeRole,
+        activeContact,
+        activeAddress,
+      ] = await Promise.all([
+        tx.customer.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.supplier.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.doctor.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.employee.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.partyRole.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.partyContact.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+        tx.partyAddress.findFirst({
+          where: { partyId: id, deletedAt: null },
+          select: { id: true },
+        }),
+      ]);
+
+      if (
+        activeCustomer ||
+        activeSupplier ||
+        activeDoctor ||
+        activeEmployee ||
+        activeRole ||
+        activeContact ||
+        activeAddress
+      ) {
+        throwConflict(`Cannot delete party with active children: ${id}`, {
+          partyId: id.toString(),
+        });
+      }
+
       const updateResult = await tx.party.updateMany({
         where: { id, version, deletedAt: null },
         data: {
@@ -192,9 +248,8 @@ export class PartyService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_NOT_FOUND,
-        `Party version conflict or not found: ${id}`,
         id,
+        `Party version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

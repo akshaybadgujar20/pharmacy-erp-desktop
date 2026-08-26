@@ -38,6 +38,7 @@ model Company {
   barcodeConfigurations BarcodeConfiguration[]
   printerConfigurations PrinterConfiguration[]
   sequenceGenerators    SequenceGenerator[]
+  auditLogs             AuditLog[]
 
   @@index([gstNumber])
   @@index([isActive])

@@ -10,6 +10,9 @@ export function getTenantScope(
   requestContext: RequestContextService,
 ): TenantScope {
   const ctx = requestContext.get();
+  if (ctx.companyId == null || ctx.branchId == null) {
+    throw new Error('Tenant scope is not available in request context');
+  }
   return {
     companyId: ctx.companyId,
     branchId: ctx.branchId,
@@ -30,8 +33,13 @@ export function withCompanyScope<T extends Record<string, unknown>>(
   return { ...where, companyId: scope.companyId };
 }
 
-export function isRequestContextPopulated(
+export function isUserContextPopulated(
   ctx: RequestContextData | undefined,
 ): boolean {
-  return ctx?.userId !== undefined;
+  return (
+    ctx?.userId !== undefined &&
+    ctx.companyId !== undefined &&
+    ctx.branchId !== undefined &&
+    ctx.deviceId !== undefined
+  );
 }

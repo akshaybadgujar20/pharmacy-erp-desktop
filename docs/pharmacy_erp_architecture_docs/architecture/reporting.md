@@ -11,7 +11,7 @@ Domain modules contribute report definitions at startup. The reporting core hand
 ### Prerequisites
 
 1. Backend running (`cd backend && npm run start:dev`).
-2. Seeded database with permissions (`npm run db:seed` or `npm run db:seed:fresh`).
+2. Seeded database with permissions (`npm run db:seed:fresh` after changing seed JSON; `npm run db:seed` if permissions are already loaded).
 3. JWT from login (see [Early foundations — demo login](./early-foundations.md#demo-login-seeded-database)).
 
 The seeded **Administrator** role has `REPORT_VIEW` and `REPORT_PARTY_VIEW`.

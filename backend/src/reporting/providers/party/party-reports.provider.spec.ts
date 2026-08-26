@@ -11,7 +11,6 @@ describe('PartyReportsProvider', () => {
     customer: {
       count: jest.Mock;
       findMany: jest.Mock;
-      aggregate: jest.Mock;
     };
     supplier: {
       count: jest.Mock;
@@ -29,7 +28,6 @@ describe('PartyReportsProvider', () => {
       customer: {
         count: jest.fn(),
         findMany: jest.fn(),
-        aggregate: jest.fn(),
       },
       supplier: {
         count: jest.fn(),
@@ -100,7 +98,7 @@ describe('PartyReportsProvider', () => {
     });
   });
 
-  it('runs customer-outstanding with aggregate totals', async () => {
+  it('runs customer-outstanding with totals from returned rows', async () => {
     prisma.customer.count.mockResolvedValue(1);
     prisma.customer.findMany.mockResolvedValue([
       {
@@ -109,9 +107,6 @@ describe('PartyReportsProvider', () => {
         party: { displayName: 'Alice Customer' },
       },
     ]);
-    prisma.customer.aggregate.mockResolvedValue({
-      _sum: { outstandingAmount: new Prisma.Decimal('75') },
-    });
 
     const definition = registry.get('party.customer-outstanding');
     const result = await definition.run({ page: 1, pageSize: 20 }, ctx);

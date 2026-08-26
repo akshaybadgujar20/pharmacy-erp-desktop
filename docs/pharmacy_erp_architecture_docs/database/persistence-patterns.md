@@ -62,7 +62,7 @@ Persistence integration tests use the seeded SQLite file and run with:
 
 ```bash
 cd backend
-npm run db:seed:fresh   # if DB not seeded
+npm run db:seed:fresh   # wipe + reseed (recommended before integration tests)
 npm run test:persistence
 ```
 
@@ -79,5 +79,5 @@ See `test/persistence/` for examples (`runWithTestContext`, `deviceId: test-devi
 
 - [prisma_sqlite_jpa_postgres_alignment.md](./prisma_sqlite_jpa_postgres_alignment.md)
 - [database_overview.md](./database_overview.md)
-- Outbox table: `tables/synchronization/55_outbox.md`
-- Sequence table: `tables/configuration/63_sequence_generator.md`
+- Outbox table: [synchronization/synchronization.md](./tables/synchronization/synchronization.md#outbox)
+- Sequence table: [configuration/configuration.md](./tables/configuration/configuration.md#sequencegenerator)

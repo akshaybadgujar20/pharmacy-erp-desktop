@@ -61,6 +61,7 @@ export class PartyAddressService {
   }
 
   async getById(partyId: bigint, id: bigint) {
+    await this.ensurePartyExists(partyId);
     const address = await this.findActive(partyId, id);
     return toPartyAddressResponse(address);
   }
@@ -68,6 +69,18 @@ export class PartyAddressService {
   async create(partyId: bigint, dto: CreatePartyAddressDto) {
     return this.unitOfWork.run(async (tx) => {
       await assertPartyExists(tx, partyId);
+
+      if (dto.isDefault ?? false) {
+        await tx.partyAddress.updateMany({
+          where: {
+            partyId,
+            addressType: dto.addressType,
+            isDefault: true,
+            deletedAt: null,
+          },
+          data: { isDefault: false },
+        });
+      }
 
       const address = await tx.partyAddress.create({
         data: {
@@ -122,6 +135,21 @@ export class PartyAddressService {
         );
       }
 
+      const addressType = dto.addressType ?? existing.addressType;
+
+      if (dto.isDefault ?? false) {
+        await tx.partyAddress.updateMany({
+          where: {
+            partyId,
+            addressType,
+            isDefault: true,
+            deletedAt: null,
+            NOT: { id },
+          },
+          data: { isDefault: false },
+        });
+      }
+
       const updateResult = await tx.partyAddress.updateMany({
         where: { id, partyId, version: dto.version, deletedAt: null },
         data: {
@@ -144,9 +172,8 @@ export class PartyAddressService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_ADDRESS_NOT_FOUND,
-        `Party address version conflict or not found: ${id}`,
         id,
+        `Party address version conflict or not found: ${id}`,
       );
 
       const address = await tx.partyAddress.findFirstOrThrow({ where: { id } });
@@ -191,9 +218,8 @@ export class PartyAddressService {
 
       optimisticUpdate(
         updateResult,
-        ErrorCode.PARTY_ADDRESS_NOT_FOUND,
-        `Party address version conflict or not found: ${id}`,
         id,
+        `Party address version conflict or not found: ${id}`,
       );
 
       await this.auditService.log(tx, {

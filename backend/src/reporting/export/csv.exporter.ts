@@ -1,5 +1,5 @@
 import type { ReportColumn } from '../core/report-definition.interface';
-import { buildCsvContent } from '../utils/report.util';
+import { buildCsvContent, formatCellValue } from '../utils/report.util';
 
 export interface ExportInput {
   reportId: string;
@@ -19,8 +19,18 @@ export interface ExportOutput {
 }
 
 export function exportCsv(input: ExportInput): ExportOutput {
-  const csvContent = buildCsvContent(input.columns, input.rows);
-  const buffer = Buffer.from(csvContent, 'utf-8');
+  const lines = [buildCsvContent(input.columns, input.rows)];
+
+  if (input.totals) {
+    lines.push('');
+    lines.push(
+      Object.entries(input.totals)
+        .map(([key, value]) => `${key}: ${formatCellValue(value)}`)
+        .join('\n'),
+    );
+  }
+
+  const buffer = Buffer.from(lines.join('\n'), 'utf-8');
 
   return {
     buffer,

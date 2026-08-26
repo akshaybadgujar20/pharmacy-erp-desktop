@@ -155,7 +155,6 @@ Document numbers are **branch-scoped** (or source-branch-scoped for transfers):
 
 ## Related documents
 
-- [[database_overview]]
-- [[architecture-review]]
-- [[multi-store]]
-- Table specs: `23_batch.md`, `24_stock.md`, `55_outbox.md`
+- [database_overview.md](./database_overview.md)
+- [architecture-review.md](./architecture-review.md)
+- Table specs: [inventory/inventory.md](./tables/inventory/inventory.md) (`Batch`, `Stock`), [synchronization/synchronization.md](./tables/synchronization/synchronization.md) (`Outbox`)

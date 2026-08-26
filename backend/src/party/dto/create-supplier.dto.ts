@@ -44,6 +44,7 @@ export class CreateSupplierDto {
 
   @IsOptional()
   @IsString()
+  @Matches(/^\d+(\.\d{1,2})?$/)
   creditLimit?: string;
 
   @IsOptional()

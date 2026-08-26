@@ -6,17 +6,28 @@ import { recordMovement } from './inventory.generator';
 
 function pickBatchFefo(ctx: SeedContext, branchId: bigint, medicineId: bigint) {
   const candidates = ctx.batchRecords
-    .filter((b) => b.medicineId === medicineId && ctx.getStock(branchId, b.id) > 0)
+    .filter(
+      (b) => b.medicineId === medicineId && ctx.getStock(branchId, b.id) > 0,
+    )
     .sort((a, b) => a.expiryDate.getTime() - b.expiryDate.getTime());
   return candidates[0];
 }
 
-export async function seedSales(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
+export async function seedSales(
+  prisma: PrismaClient,
+  ctx: SeedContext,
+): Promise<void> {
   const userId = ctx.userIds[0];
-  const invoices: Array<{ id: bigint; branchId: bigint; branchCode: string; netAmount: string; uuid: string }> = [];
+  const invoices: Array<{
+    id: bigint;
+    branchId: bigint;
+    branchCode: string;
+    netAmount: string;
+    uuid: string;
+  }> = [];
 
   for (let i = 0; i < 100; i++) {
-    const branch = ctx.branchRecords[i % ctx.branchRecords.length]!;
+    const branch = ctx.branchRecords[i % ctx.branchRecords.length];
     const customerId = faker.helpers.arrayElement(ctx.customerIds);
     const lineCount = faker.number.int({ min: 1, max: 3 });
     const seq = ctx.nextSalesSeq(branch.branchCode);
@@ -133,11 +144,20 @@ export async function seedSales(prisma: PrismaClient, ctx: SeedContext): Promise
     await prisma.salesPayment.create({
       data: {
         uuid: uuid(),
-        paymentNumber: docNumber('SP', invoice.branchCode, i + 1),
+        paymentNumber: docNumber(
+          'SP',
+          invoice.branchCode,
+          ctx.nextPaymentSeq(invoice.branchCode),
+        ),
         salesInvoiceId: invoice.id,
         branchId: invoice.branchId,
         paymentDate: faker.date.recent({ days: 25 }),
-        paymentMethod: faker.helpers.arrayElement(['CASH', 'UPI', 'CREDIT_CARD', 'DEBIT_CARD']),
+        paymentMethod: faker.helpers.arrayElement([
+          'CASH',
+          'UPI',
+          'CREDIT_CARD',
+          'DEBIT_CARD',
+        ]),
         paymentAmount: invoice.netAmount,
         status: 'COMPLETED',
         createdBy: userId,
@@ -147,16 +167,26 @@ export async function seedSales(prisma: PrismaClient, ctx: SeedContext): Promise
 
   for (let i = 0; i < 15; i++) {
     const invoice = faker.helpers.arrayElement(invoices);
-    const items = await prisma.salesInvoiceItem.findMany({ where: { salesInvoiceId: invoice.id }, take: 1 });
+    const items = await prisma.salesInvoiceItem.findMany({
+      where: { salesInvoiceId: invoice.id },
+      take: 1,
+    });
     const item = items[0];
     if (!item) continue;
 
-    const qty = faker.number.int({ min: 1, max: Math.min(2, Number(item.soldQuantity)) });
+    const qty = faker.number.int({
+      min: 1,
+      max: Math.min(2, Number(item.soldQuantity)),
+    });
     const amount = Number(item.unitPrice) * qty;
     const ret = await prisma.salesReturn.create({
       data: {
         uuid: uuid(),
-        salesReturnNumber: docNumber('SR', invoice.branchCode, i + 1),
+        salesReturnNumber: docNumber(
+          'SR',
+          invoice.branchCode,
+          ctx.nextSalesReturnSeq(invoice.branchCode),
+        ),
         salesInvoiceId: invoice.id,
         customerId: faker.helpers.arrayElement(ctx.customerIds),
         branchId: invoice.branchId,

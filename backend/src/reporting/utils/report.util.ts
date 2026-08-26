@@ -17,6 +17,14 @@ export function validateReportDateRange(
   }
 }
 
+export function sanitizeExportCell(value: string): string {
+  if (/^[=+\-@\t\r]/.test(value)) {
+    return `'${value}`;
+  }
+
+  return value;
+}
+
 export function formatCellValue(value: unknown): string {
   if (value == null) {
     return '';
@@ -52,9 +60,31 @@ export function buildCsvContent(
 }
 
 function escapeCsvCell(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-    return `"${value.replace(/"/g, '""')}"`;
+  const sanitized = sanitizeExportCell(value);
+
+  if (
+    sanitized.includes(',') ||
+    sanitized.includes('"') ||
+    sanitized.includes('\n') ||
+    sanitized.includes('\r')
+  ) {
+    return `"${sanitized.replace(/"/g, '""')}"`;
   }
 
-  return value;
+  return sanitized;
+}
+
+export function buildContentDisposition(filename: string): string {
+  const asciiFallback = filename
+    .replace(/[^\x20-\x7E]/g, '_')
+    .replace(/["\\]/g, '_');
+  const encoded = encodeURIComponent(filename);
+
+  return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encoded}`;
+}
+
+export function sanitizeWorksheetName(name: string): string {
+  const sanitized = name.replace(/[\\/*?:[\]]/g, '_').slice(0, 31);
+
+  return sanitized.length > 0 ? sanitized : 'Report';
 }

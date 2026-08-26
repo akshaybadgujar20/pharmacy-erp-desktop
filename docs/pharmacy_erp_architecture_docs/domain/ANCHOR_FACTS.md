@@ -1,6 +1,6 @@
 # Domain Documentation — Anchor Facts
 
-Apply these decisions consistently across all `domain/**` docs. Sources: `backend/prisma/**`, [architecture-review](../database/architecture-review.md), [early-foundations](../architecture/early-foundations.md).
+Apply these decisions consistently across all `domain/*.md` docs. Sources: `backend/prisma/**`, [architecture-review](../database/architecture-review.md), [early-foundations](../architecture/early-foundations.md).
 
 ## Identity & persistence
 
@@ -32,16 +32,16 @@ Apply these decisions consistently across all `domain/**` docs. Sources: `backen
 
 ## Vocabulary mapping
 
-| Domain folder | Prisma / tables |
+| Domain doc | Prisma / tables |
 |---------------|-----------------|
-| `product/` | Medicine master (`Medicine`, generics, salts, manufacturer) + links to `PriceList`/`Tax` |
-| `customer/` | `Party` + `Customer` role, `LoyaltyProgram`/`LoyaltyTransaction` |
-| `supplier/` | `Party` + `Supplier` role, `Payment` |
-| `inventory/` | `Batch`, `Stock`, `StockMovement`, adjustments, transfers, stock take |
-| `purchasing/` | PO → GRN → PurchaseInvoice → PurchaseReturn |
-| `sales/` | `SalesInvoice` (+ items, payment, return) — no SalesOrder/Quotation tables |
-| `finance/` | `Ledger`, `LedgerEntry`, `Payment`, `Receipt`, `Expense`, `Tax` |
+| [product.md](product.md) | Medicine master (`Medicine`, generics, salts, manufacturer) + links to `PriceList`/`Tax` |
+| [customer.md](customer.md) | `Party` + `Customer` role, `LoyaltyProgram`/`LoyaltyTransaction` |
+| [supplier.md](supplier.md) | `Party` + `Supplier` role, `Payment` |
+| [inventory.md](inventory.md) | `Batch`, `Stock`, `StockMovement`, adjustments, transfers, stock take |
+| [purchasing.md](purchasing.md) | PO → GRN → PurchaseInvoice → PurchaseReturn |
+| [sales.md](sales.md) | `SalesInvoice` (+ items, payment, return) — no SalesOrder/Quotation tables |
+| [finance.md](finance.md) | `Ledger`, `LedgerEntry`, `Payment`, `Receipt`, `Expense`, `Tax` |
 
 ## Table spec cross-links
 
-Use `database/tables/<category>/<category>.md` overviews and `NN_*.md` per table.
+Use `database/tables/<category>/<category>.md` — one self-contained file per category. Prisma models: `backend/prisma/schema.prisma`.

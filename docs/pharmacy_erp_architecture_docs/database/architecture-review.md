@@ -4,7 +4,7 @@ _Principal-architect review of the Pharmacy ERP database and persistence archite
 _Review date: 2026-08-20. Scope: Prisma schema (72 models), migrations, and `docs/pharmacy_erp_architecture_docs/database`._
 
 > **Remediation status: COMPLETE (2026-08-20)**  
-> All critical and high findings below were addressed in the Prisma schema and aligned documentation. Post-remediation scorecard: **10/10 across all areas**. See [[prisma_sqlite_jpa_postgres_alignment]] and updated table/workflow docs.
+> All critical and high findings below were addressed in the Prisma schema and aligned documentation. Post-remediation scorecard: **10/10 across all areas**. See [prisma_sqlite_jpa_postgres_alignment.md](./prisma_sqlite_jpa_postgres_alignment.md) and updated table/workflow docs.
 
 ---
 
@@ -103,7 +103,7 @@ Company
 Medicine → Batch (1) → Stock (0..1 globally, not per branch)
 ```
 
-The docs in `24_stock.md` explicitly state "Each Batch has exactly one Stock record" and `Unique (batchId)`. That design is **wrong for multi-branch pharmacy** and contradicts `61_branch.md` ("Inventory should be maintained separately for each Branch").
+The docs in [inventory/inventory.md](./tables/inventory/inventory.md) (`Stock`) previously stated "Each Batch has exactly one Stock record" and `Unique (batchId)`. That design is **wrong for multi-branch pharmacy** and contradicts [configuration/configuration.md](./tables/configuration/configuration.md) (`Branch`: "Inventory should be maintained separately for each Branch").
 
 ---
 
@@ -775,7 +775,7 @@ Remediation completed 2026-08-20. All minimum approval gates are satisfied:
 2. ✅ All enums replaced with String fields  
 3. ✅ `uuid @default(uuid())` standardized; Outbox uses `entityUuid`  
 4. ✅ Document number uniqueness scoped to branch  
-5. ✅ Documentation aligned (`24_stock.md`, `23_batch.md`, sync docs, workflows, alignment guide)  
+5. ✅ Documentation aligned (`inventory/inventory.md`, sync docs, workflows, alignment guide)  
 
 The domain decomposition — Party master, immutable stock movement ledger, transactional outbox, branch-scoped operations — is sound and now consistently implemented.
 
@@ -791,4 +791,4 @@ Corrective implementation tracked in the approved plan (`pharmacy_erp_db_review_
 | Phase 2 — Prisma schema remediation | ✅ Complete |
 | Phase 3 — Documentation alignment | ✅ Complete |
 
-See [[prisma_sqlite_jpa_postgres_alignment]] for ongoing local/cloud schema parity rules.
+See [prisma_sqlite_jpa_postgres_alignment.md](./prisma_sqlite_jpa_postgres_alignment.md) for ongoing local/cloud schema parity rules.

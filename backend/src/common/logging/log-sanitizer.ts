@@ -1,13 +1,19 @@
 import { Prisma } from '@prisma/client';
 
-const SENSITIVE_KEYS = new Set([
+const SENSITIVE_KEY_PATTERNS = [
   'password',
   'pin',
   'token',
-  'accessToken',
-  'refreshToken',
+  'secret',
   'authorization',
-]);
+  'apikey',
+  'api_key',
+];
+
+function isSensitiveKey(key: string): boolean {
+  const normalized = key.toLowerCase();
+  return SENSITIVE_KEY_PATTERNS.some((pattern) => normalized.includes(pattern));
+}
 
 export function safeSerializeValue(value: unknown): unknown {
   if (value === null || value === undefined) {
@@ -43,7 +49,7 @@ export function safeSerializeValue(value: unknown): unknown {
     const result: Record<string, unknown> = {};
 
     for (const [key, nested] of Object.entries(record)) {
-      if (SENSITIVE_KEYS.has(key)) {
+      if (isSensitiveKey(key)) {
         result[key] = '[REDACTED]';
         continue;
       }

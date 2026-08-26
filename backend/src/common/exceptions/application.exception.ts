@@ -6,6 +6,7 @@ export class ApplicationException extends Error {
     message: string,
     public readonly statusCode: number = HttpStatus.BAD_REQUEST,
     public readonly details: unknown = null,
+    public readonly retryable = false,
   ) {
     super(message);
 

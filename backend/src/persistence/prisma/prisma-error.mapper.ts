@@ -12,7 +12,7 @@ export function mapPrismaError(error: unknown): ApplicationException | null {
     case 'P2002':
       if (
         error.meta?.target &&
-        String(error.meta.target).includes('operation_id')
+        JSON.stringify(error.meta.target).includes('operation_id')
       ) {
         return new ApplicationException(
           ErrorCode.OUTBOX_DUPLICATE_OPERATION,
@@ -31,6 +31,13 @@ export function mapPrismaError(error: unknown): ApplicationException | null {
         ErrorCode.TRANSACTION_FAILED,
         'Foreign key constraint violation',
         HttpStatus.BAD_REQUEST,
+        error.meta,
+      );
+    case 'P2025':
+      return new ApplicationException(
+        ErrorCode.NOT_FOUND,
+        'Record not found',
+        HttpStatus.NOT_FOUND,
         error.meta,
       );
     case 'P2034':

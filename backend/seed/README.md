@@ -9,6 +9,7 @@ seed/
 ├── seed.ts                 # CLI entrypoint
 ├── lib/
 │   ├── prisma-client.ts    # Prisma + better-sqlite3 adapter
+│   ├── hydrate.ts          # DB re-sync for append / --only resume
 │   ├── load-json.ts
 │   ├── id-registry.ts
 │   ├── seed-context.ts
@@ -31,7 +32,7 @@ seed/
 
 Transactional rows use `@faker-js/faker` with seed `42026` for repeatability (UUIDs are random but volume/structure is stable).
 
-## Target volumes (approximate)
+## Target volumes (approximate, per fresh run)
 
 | Domain | Target |
 |--------|--------|
@@ -39,18 +40,45 @@ Transactional rows use `@faker-js/faker` with seed `42026` for repeatability (UU
 | Batches | 100 |
 | Stock movements | 100+ |
 | Outbox | 100 |
-| Parties | ~80 |
+| Parties | 100 (80 business parties + 20 manufacturers) |
 | Medicines | 50 |
 
 ## CLI
 
+Run from `backend/`:
+
 ``` bash
-npx tsx seed/seed.ts              # default: wipe + full seed
-npx tsx seed/seed.ts --no-wipe    # append mode
-npx tsx seed/seed.ts --only sales # from sales phase onward
+npm run db:seed:fresh          # wipe database, then full seed
+npm run db:seed                # append / idempotent re-run (no wipe)
+npm run db:seed -- --only sales   # resume from sales phase onward
+npm run db:reset               # prisma db push --force-reset + fresh seed
 ```
 
+Direct invocation:
+
+``` bash
+npx tsx seed/seed.ts --fresh
+npx tsx seed/seed.ts
+npx tsx seed/seed.ts --only sales
+```
+
+### Modes
+
+| Mode | Flags | Behavior |
+|------|-------|----------|
+| Fresh | `--fresh` | Wipes all seed tables, then runs all phases from scratch |
+| Append | (default) | Hydrates id registry + context from DB, skips existing master UUIDs, adds new generated rows |
+| Resume | `--only <phase>` | Hydrates from DB, runs `<phase>` and all later phases only |
+
 Phases (in order): `masters` → `party` → `medicine` → `pricing` → `inventory` → `purchase` → `sales` → `sync` → `financial`.
+
+Resume assumes earlier phases have already completed and later phases have not yet run on the current database.
+
+`--no-wipe` is accepted as a deprecated alias for append mode (omit `--fresh`).
+
+## BIGINT IDs and document numbers
+
+SQLite BIGINT primary keys from `db push` do not auto-increment reliably. The seed client assigns ids via an in-memory counter (same pattern as the NestJS app). On append or `--only`, the counter and branch-scoped document-number sequences are re-synced from the database before new rows are inserted.
 
 ## Schema rules enforced
 
@@ -69,3 +97,5 @@ npx prisma studio
 ```
 
 Spot-check: 100 sales invoices, 100 batches, 100 outbox rows, no negative `availableQuantity` on stock.
+
+Default seed users (password `admin123`): `admin`, `pharmacist1`, `cashier1`, `procurement1`, `manager1`, and others.

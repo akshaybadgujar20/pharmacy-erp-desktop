@@ -2,14 +2,24 @@ import { randomUUID } from 'crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
+import { AuditAction } from '../audit/audit-action.constants';
+import { AuditModule } from '../audit/audit-module.constants';
+import { AuditService } from '../audit/audit.service';
 import { ApplicationException } from '../common/exceptions/application.exception';
 import { ErrorCode } from '../common/exceptions/error-code';
+import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AUTH_CONSTANTS } from './constants/auth.constants';
 import type { LoginDto } from './dto/login.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
 import { PasswordService } from './password.service';
+import {
+  generateRefreshToken,
+  hashRefreshToken,
+  parseDurationMs,
+  safeBigInt,
+} from './utils/auth-token.util';
 
 export interface AuthTokenResponse {
   accessToken: string;
@@ -31,6 +41,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
+    private readonly unitOfWork: UnitOfWorkService,
+    private readonly auditService: AuditService,
   ) {}
 
   async login(dto: LoginDto, req: Request): Promise<AuthTokenResponse> {
@@ -51,10 +63,9 @@ export class AuthService {
 
     if (user.lockedUntil && user.lockedUntil > new Date()) {
       throw new ApplicationException(
-        ErrorCode.AUTH_ACCOUNT_LOCKED,
-        'Account is temporarily locked due to failed login attempts',
-        HttpStatus.FORBIDDEN,
-        { lockedUntil: user.lockedUntil.toISOString() },
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or password',
+        HttpStatus.UNAUTHORIZED,
       );
     }
 
@@ -64,7 +75,8 @@ export class AuthService {
     );
 
     if (!passwordValid) {
-      await this.recordFailedLogin(user.id, user.failedLoginAttempts);
+      await this.recordFailedLogin(user.id);
+      await this.auditLoginFailure(user.id, dto.username, 'Invalid password');
       throw new ApplicationException(
         ErrorCode.AUTH_INVALID_CREDENTIALS,
         'Invalid username or password',
@@ -72,38 +84,69 @@ export class AuthService {
       );
     }
 
-    const { companyId, branchId } = await this.resolveTenantScope(dto.branchId);
+    if (user.mustChangePassword) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
+        'Password change is required before login',
+        HttpStatus.FORBIDDEN,
+        { userId: user.id.toString() },
+      );
+    }
+
+    const { companyId, branchId } = await this.resolveTenantScope(
+      user.id,
+      dto.branchId,
+    );
     const { roles, permissions } = await this.loadRolesAndPermissions(user.id);
 
     const sessionToken = randomUUID();
-    const refreshToken = randomUUID();
+    const refreshToken = generateRefreshToken();
+    const hashedRefreshToken = hashRefreshToken(refreshToken);
     const now = new Date();
-    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(
+      now.getTime() + parseDurationMs(AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY),
+    );
 
-    const session = await this.prisma.client.userSession.create({
-      data: {
+    const session = await this.unitOfWork.run(async (tx) => {
+      const createdSession = await tx.userSession.create({
+        data: {
+          userId: user.id,
+          companyId,
+          branchId,
+          sessionToken,
+          refreshToken: hashedRefreshToken,
+          deviceName: dto.deviceName,
+          deviceType: dto.deviceType ?? 'DESKTOP',
+          operatingSystem: dto.operatingSystem,
+          applicationVersion: dto.applicationVersion,
+          ipAddress: req.ip ?? req.socket.remoteAddress,
+          loginTime: now,
+          lastActivityAt: now,
+          expiresAt,
+          isActive: true,
+        },
+      });
+
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          failedLoginAttempts: 0,
+          lockedUntil: null,
+          lastLoginAt: now,
+        },
+      });
+
+      await this.auditService.log(tx, {
+        entityType: 'UserSession',
+        entityUuid: createdSession.uuid,
+        entityId: createdSession.id,
+        action: AuditAction.LOGIN,
+        module: AuditModule.SECURITY,
+        description: `Login success for ${user.username}`,
         userId: user.id,
-        sessionToken,
-        refreshToken,
-        deviceName: dto.deviceName,
-        deviceType: dto.deviceType ?? 'DESKTOP',
-        operatingSystem: dto.operatingSystem,
-        applicationVersion: dto.applicationVersion,
-        ipAddress: req.ip ?? req.socket.remoteAddress,
-        loginTime: now,
-        lastActivityAt: now,
-        expiresAt,
-        isActive: true,
-      },
-    });
+      });
 
-    await this.prisma.client.user.update({
-      where: { id: user.id },
-      data: {
-        failedLoginAttempts: 0,
-        lockedUntil: null,
-        lastLoginAt: now,
-      },
+      return createdSession;
     });
 
     const payload: JwtPayload = {
@@ -133,9 +176,10 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string): Promise<AuthTokenResponse> {
+    const hashedToken = hashRefreshToken(refreshToken);
     const session = await this.prisma.client.userSession.findFirst({
       where: {
-        refreshToken,
+        refreshToken: hashedToken,
         isActive: true,
         deletedAt: null,
       },
@@ -159,14 +203,65 @@ export class AuthService {
       );
     }
 
+    if (user.lockedUntil && user.lockedUntil > new Date()) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'Session is no longer valid',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (user.passwordChangedAt && session.loginTime < user.passwordChangedAt) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'Session is no longer valid',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (user.mustChangePassword) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
+        'Password change is required',
+        HttpStatus.FORBIDDEN,
+        { userId: user.id.toString() },
+      );
+    }
+
     const { roles, permissions } = await this.loadRolesAndPermissions(user.id);
-    const branch = await this.prisma.client.branch.findFirst({
-      where: { isActive: true, deletedAt: null, isHeadOffice: true },
-      orderBy: { id: 'asc' },
+    const companyId = session.companyId;
+    const branchId = session.branchId;
+
+    const newRefreshToken = generateRefreshToken();
+    const hashedNewRefreshToken = hashRefreshToken(newRefreshToken);
+
+    const rotated = await this.prisma.client.userSession.updateMany({
+      where: {
+        id: session.id,
+        refreshToken: hashedToken,
+        isActive: true,
+      },
+      data: {
+        refreshToken: hashedNewRefreshToken,
+        lastActivityAt: new Date(),
+      },
     });
 
-    const branchId = branch?.id ?? 1n;
-    const companyId = branch?.companyId ?? 1n;
+    if (rotated.count !== 1) {
+      await this.prisma.client.userSession.updateMany({
+        where: { id: session.id },
+        data: {
+          isActive: false,
+          logoutTime: new Date(),
+          logoutReason: 'TOKEN_REUSE',
+        },
+      });
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'Session has expired. Please log in again.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
     const payload: JwtPayload = {
       sub: user.id.toString(),
@@ -178,14 +273,17 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload);
-    const newRefreshToken = randomUUID();
 
-    await this.prisma.client.userSession.update({
-      where: { id: session.id },
-      data: {
-        refreshToken: newRefreshToken,
-        lastActivityAt: new Date(),
-      },
+    await this.unitOfWork.run(async (tx) => {
+      await this.auditService.log(tx, {
+        entityType: 'UserSession',
+        entityUuid: session.uuid,
+        entityId: session.id,
+        action: AuditAction.LOGIN,
+        module: AuditModule.SECURITY,
+        description: `Token refresh for ${user.username}`,
+        userId: user.id,
+      });
     });
 
     return {
@@ -204,13 +302,33 @@ export class AuthService {
   }
 
   async logout(sessionUuid: string): Promise<void> {
-    await this.prisma.client.userSession.updateMany({
+    const session = await this.prisma.client.userSession.findFirst({
       where: { uuid: sessionUuid, isActive: true },
-      data: {
-        isActive: false,
-        logoutTime: new Date(),
-        logoutReason: 'USER_LOGOUT',
-      },
+    });
+
+    if (!session) {
+      return;
+    }
+
+    await this.unitOfWork.run(async (tx) => {
+      await tx.userSession.updateMany({
+        where: { uuid: sessionUuid, isActive: true },
+        data: {
+          isActive: false,
+          logoutTime: new Date(),
+          logoutReason: 'USER_LOGOUT',
+        },
+      });
+
+      await this.auditService.log(tx, {
+        entityType: 'UserSession',
+        entityUuid: sessionUuid,
+        entityId: session.id,
+        action: AuditAction.LOGOUT,
+        module: AuditModule.SECURITY,
+        description: 'User logout',
+        userId: session.userId,
+      });
     });
   }
 
@@ -228,7 +346,11 @@ export class AuthService {
   async validateSession(
     payload: JwtPayload,
   ): Promise<AuthenticatedUser | null> {
-    const userId = BigInt(payload.sub);
+    const userId = safeBigInt(payload.sub);
+    if (!userId) {
+      return null;
+    }
+
     const session = await this.prisma.client.userSession.findFirst({
       where: {
         uuid: payload.sessionId,
@@ -248,36 +370,72 @@ export class AuthService {
       return null;
     }
 
+    if (user.lockedUntil && user.lockedUntil > new Date()) {
+      return null;
+    }
+
+    if (user.passwordChangedAt && session.loginTime < user.passwordChangedAt) {
+      return null;
+    }
+
+    if (user.mustChangePassword) {
+      return null;
+    }
+
+    const { roles, permissions } = await this.loadRolesAndPermissions(userId);
+
     return {
       userId,
       sessionUuid: session.uuid,
-      companyId: BigInt(payload.companyId),
-      branchId: BigInt(payload.branchId),
-      roles: payload.roles,
-      permissions: payload.permissions,
+      companyId: session.companyId,
+      branchId: session.branchId,
+      roles,
+      permissions,
       username: user.username,
     };
   }
 
-  private async recordFailedLogin(
+  private async auditLoginFailure(
     userId: bigint,
-    currentAttempts: number,
+    username: string,
+    reason: string,
   ): Promise<void> {
-    const attempts = currentAttempts + 1;
-    const shouldLock = attempts >= AUTH_CONSTANTS.MAX_FAILED_LOGIN_ATTEMPTS;
-
-    await this.prisma.client.user.update({
-      where: { id: userId },
-      data: {
-        failedLoginAttempts: attempts,
-        lockedUntil: shouldLock
-          ? new Date(Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS)
-          : undefined,
-      },
+    await this.unitOfWork.run(async (tx) => {
+      await this.auditService.log(tx, {
+        entityType: 'User',
+        entityId: userId,
+        action: AuditAction.LOGIN,
+        module: AuditModule.SECURITY,
+        description: `Login failed for ${username}: ${reason}`,
+        userId,
+      });
     });
   }
 
-  private async resolveTenantScope(branchId?: bigint): Promise<{
+  private async recordFailedLogin(userId: bigint): Promise<void> {
+    const updated = await this.prisma.client.user.update({
+      where: { id: userId },
+      data: { failedLoginAttempts: { increment: 1 } },
+    });
+
+    if (
+      updated.failedLoginAttempts >= AUTH_CONSTANTS.MAX_FAILED_LOGIN_ATTEMPTS
+    ) {
+      await this.prisma.client.user.update({
+        where: { id: userId },
+        data: {
+          lockedUntil: new Date(
+            Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS,
+          ),
+        },
+      });
+    }
+  }
+
+  private async resolveTenantScope(
+    userId: bigint,
+    branchId?: bigint,
+  ): Promise<{
     companyId: bigint;
     branchId: bigint;
   }> {
@@ -295,7 +453,25 @@ export class AuthService {
         );
       }
 
+      await this.assertUserCanAccessBranch(userId, branch.id);
+
       return { companyId: branch.companyId, branchId: branch.id };
+    }
+
+    const defaultAssignment = await this.prisma.client.userBranch.findFirst({
+      where: { userId, isActive: true, deletedAt: null },
+      include: { branch: true },
+      orderBy: { branchId: 'asc' },
+    });
+
+    if (
+      defaultAssignment?.branch.isActive &&
+      !defaultAssignment.branch.deletedAt
+    ) {
+      return {
+        companyId: defaultAssignment.branch.companyId,
+        branchId: defaultAssignment.branchId,
+      };
     }
 
     const defaultBranch = await this.prisma.client.branch.findFirst({
@@ -317,16 +493,43 @@ export class AuthService {
         );
       }
 
+      await this.assertUserCanAccessBranch(userId, fallbackBranch.id);
+
       return {
         companyId: fallbackBranch.companyId,
         branchId: fallbackBranch.id,
       };
     }
 
+    await this.assertUserCanAccessBranch(userId, defaultBranch.id);
+
     return {
       companyId: defaultBranch.companyId,
       branchId: defaultBranch.id,
     };
+  }
+
+  private async assertUserCanAccessBranch(
+    userId: bigint,
+    branchId: bigint,
+  ): Promise<void> {
+    const assignment = await this.prisma.client.userBranch.findFirst({
+      where: {
+        userId,
+        branchId,
+        isActive: true,
+        deletedAt: null,
+      },
+    });
+
+    if (!assignment) {
+      throw new ApplicationException(
+        ErrorCode.FORBIDDEN,
+        'Branch access denied',
+        HttpStatus.FORBIDDEN,
+        { branchId: branchId.toString() },
+      );
+    }
   }
 
   private async loadRolesAndPermissions(userId: bigint): Promise<{
@@ -350,9 +553,14 @@ export class AuthService {
       },
     });
 
+    const activeRoleIds = roles.map((role) => role.id);
+    if (activeRoleIds.length === 0) {
+      return { roles: [], permissions: [] };
+    }
+
     const rolePermissions = await this.prisma.client.rolePermission.findMany({
       where: {
-        roleId: { in: roleIds },
+        roleId: { in: activeRoleIds },
         isGranted: true,
         deletedAt: null,
       },

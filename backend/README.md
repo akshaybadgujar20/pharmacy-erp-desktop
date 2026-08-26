@@ -80,41 +80,55 @@ discovers the schema files from the configured schema directory.
 
 Sample data lives under `seed/`. Static **JSON masters** (geo, company, branches, medicine references, tax, security) use stable UUIDs; **generators** create parties, medicines, inventory, purchase/sales flows, sync outbox, and financial/audit samples.
 
+Full reference: [seed/README.md](seed/README.md).
+
 ### Prerequisites
 
 1. Apply the schema to SQLite (`db push` or `migrate dev`).
 2. Run `npx prisma generate`.
 
-### Commands
+### First-time setup
 
 ``` bash
 cd backend
 npm install
 npx prisma generate
-# prepare DB (choose one):
-npx prisma db push
-# or: npx prisma migrate dev --name init
-npm run db:seed:fresh
-npx prisma studio
+npx prisma db push          # or: npx prisma migrate dev --name init
+npm run db:seed:fresh       # wipe + full seed
+npx prisma studio           # optional: inspect data
 ```
 
-Other scripts:
+### Seed commands (from `backend/`)
+
+| Command | Behavior |
+|---------|----------|
+| `npm run db:seed:fresh` | Wipe all seed tables, then run all phases from scratch |
+| `npm run db:seed` | Append mode — hydrate from DB, skip existing master UUIDs, add new generated rows |
+| `npm run db:seed -- --only <phase>` | Resume from `<phase>` onward (hydrates first; earlier phases must already be seeded) |
+| `npm run db:reset` | `prisma db push --force-reset` + fresh seed |
+| `npx prisma db seed` | Same as `db:seed:fresh` (uses `package.json` `prisma.seed` hook) |
+
+Phases (in order): `masters` → `party` → `medicine` → `pricing` → `inventory` → `purchase` → `sales` → `sync` → `financial`.
+
+Examples:
 
 ``` bash
-npm run db:seed          # seed (default: wipe + reseed)
-npm run db:seed:fresh    # explicit fresh seed
-npm run db:reset         # force-reset DB + seed
-npx prisma db seed       # uses package.json prisma.seed hook
+npm run db:seed:fresh
+npm run db:seed                              # add another batch of demo data
+npm run db:seed -- --only sales              # re-run sales → sync → financial
+npx tsx seed/seed.ts --fresh
+npx tsx seed/seed.ts --only inventory
 ```
 
-Use `--no-wipe` to append (may hit unique constraints). Use `--only sales` to re-run from a phase onward.
+`--no-wipe` is accepted as a deprecated alias for append mode (omit `--fresh`).
 
-See [seed/README.md](seed/README.md) for folder layout and row-count targets.
+After seeding, demo login: `admin` / `admin123` (see [early-foundations.md](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md)).
 
 ### Troubleshooting
 
-- **FK errors** - run `npx prisma db push` or `migrate dev` before seeding.
-- **Unique constraint** - re-run with `npm run db:seed:fresh` or `db:reset.
+- **FK errors** — run `npx prisma db push` or `migrate dev` before seeding.
+- **Unique constraint on append** — use `npm run db:seed:fresh` or `db:reset` for a clean slate.
+- **Empty context on `--only`** — run a full fresh seed first, or ensure the target phase’s dependencies exist in the DB.
 
 ### Format and validate the Prisma schema
 

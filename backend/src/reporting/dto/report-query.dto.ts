@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsDateString } from 'class-validator';
+import { IsIn, IsOptional, IsDateString } from 'class-validator';
+import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { REPORT_FORMATS, ReportFormat } from '../constants/reporting.constants';
 
@@ -12,10 +12,8 @@ export class ReportQueryDto extends PaginationQueryDto {
   @IsDateString()
   toDate?: string;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  branchId?: number;
+  @OptionalBigIntField()
+  branchId?: bigint;
 
   @IsOptional()
   @IsIn(REPORT_FORMATS)

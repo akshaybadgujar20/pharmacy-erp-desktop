@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
+import { ListSettingsQueryDto } from './dto/list-settings-query.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsService } from './settings.service';
 
@@ -9,8 +10,8 @@ export class SettingsController {
 
   @Get()
   @RequirePermissions('CONFIGURATION:APP_SETTING:READ')
-  list(@Query('category') category?: string) {
-    return this.settingsService.listByCategory(category);
+  list(@Query() query: ListSettingsQueryDto) {
+    return this.settingsService.listByCategory(query.category);
   }
 
   @Put(':key')
