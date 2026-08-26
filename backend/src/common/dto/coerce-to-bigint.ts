@@ -1,5 +1,5 @@
 const BIGINT_STRING_PATTERN = /^\d+$/;
-const MAX_BIGINT_DIGITS = 20;
+const MAX_BIGINT_DIGITS = 19;
 
 export function coerceToBigInt(value: unknown): bigint | undefined {
   if (value === undefined || value === null || value === '') {
