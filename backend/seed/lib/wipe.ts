@@ -39,6 +39,7 @@ export const SEED_TABLES: (keyof PrismaClient)[] = [
   'manufacturer',
   'userSession',
   'userRole',
+  'userBranch',
   'user',
   'customer',
   'supplier',
