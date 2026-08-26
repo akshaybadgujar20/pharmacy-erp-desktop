@@ -1,27 +1,38 @@
 import { Transform } from 'class-transformer';
-import { IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsOptional,
+  Validate,
+  ValidatorConstraint,
+  type ValidatorConstraintInterface,
+} from 'class-validator';
+import { coerceToBigInt } from './coerce-to-bigint';
 
-export function optionalBigIntTransform({
-  value,
-}: {
-  value: string | undefined;
-}): bigint | undefined {
-  if (value === undefined || value === null || value === '') {
-    return undefined;
+@ValidatorConstraint({ name: 'isBigInt', async: false })
+export class IsBigIntConstraint implements ValidatorConstraintInterface {
+  validate(value: unknown): boolean {
+    return typeof value === 'bigint';
   }
-  if (!/^\d+$/.test(value)) {
-    return undefined;
+
+  defaultMessage(): string {
+    return 'must be a numeric string';
   }
-  return BigInt(value);
 }
 
 export function OptionalBigIntField() {
   return function (target: object, propertyKey: string) {
     IsOptional()(target, propertyKey);
-    IsString()(target, propertyKey);
-    Matches(/^\d+$/, {
+    Transform(({ value }: { value: unknown }) => {
+      const coerced = coerceToBigInt(value);
+      if (coerced !== undefined) {
+        return coerced;
+      }
+      if (value === undefined || value === null || value === '') {
+        return undefined;
+      }
+      return value;
+    })(target, propertyKey);
+    Validate(IsBigIntConstraint, {
       message: `${propertyKey} must be a numeric string`,
     })(target, propertyKey);
-    Transform(optionalBigIntTransform)(target, propertyKey);
   };
 }

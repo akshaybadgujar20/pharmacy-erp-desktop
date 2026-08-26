@@ -64,12 +64,12 @@ export class CorrelationMiddleware implements NestMiddleware {
       context.companyId = parseRequiredBigInt(
         req.headers[COMPANY_ID_HEADER] as string | undefined,
         'COMPANY_ID',
-        '1',
+        '37',
       );
       context.branchId = parseRequiredBigInt(
         req.headers[BRANCH_ID_HEADER] as string | undefined,
         'BRANCH_ID',
-        '1',
+        '38',
       );
       context.userId = parseBigIntHeader(
         req.headers[USER_ID_HEADER] as string | undefined,

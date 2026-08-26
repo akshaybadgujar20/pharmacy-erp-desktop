@@ -1,13 +1,12 @@
-import { Transform } from 'class-transformer';
 import {
   IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
 
 const DEVICE_TYPES = ['DESKTOP', 'MOBILE', 'TABLET', 'WEB'] as const;
 
@@ -23,12 +22,7 @@ export class LoginDto {
   @MaxLength(200)
   password!: string;
 
-  @IsOptional()
-  @IsString()
-  @Matches(/^\d+$/, { message: 'branchId must be a numeric string' })
-  @Transform(({ value }: { value: string | undefined }) =>
-    value !== undefined && value !== null ? BigInt(value) : undefined,
-  )
+  @OptionalBigIntField()
   branchId?: bigint;
 
   @IsOptional()
