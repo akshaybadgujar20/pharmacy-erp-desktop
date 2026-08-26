@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsNotEmpty,
   IsOptional,
   Validate,
   ValidatorConstraint,
@@ -30,6 +31,21 @@ export function OptionalBigIntField() {
         return undefined;
       }
       return value;
+    })(target, propertyKey);
+    Validate(IsBigIntConstraint, {
+      message: `${propertyKey} must be a numeric string`,
+    })(target, propertyKey);
+  };
+}
+
+export function MandatoryBigIntField() {
+  return function (target: object, propertyKey: string) {
+    IsNotEmpty()(target, propertyKey);
+    Transform(({ value }: { value: unknown }) => {
+      const coerced = coerceToBigInt(value);
+      if (coerced !== undefined) {
+        return coerced;
+      }
     })(target, propertyKey);
     Validate(IsBigIntConstraint, {
       message: `${propertyKey} must be a numeric string`,

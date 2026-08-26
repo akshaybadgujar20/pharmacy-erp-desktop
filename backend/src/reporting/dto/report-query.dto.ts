@@ -1,5 +1,5 @@
 import { IsIn, IsOptional, IsDateString } from 'class-validator';
-import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { REPORT_FORMATS, ReportFormat } from '../constants/reporting.constants';
 

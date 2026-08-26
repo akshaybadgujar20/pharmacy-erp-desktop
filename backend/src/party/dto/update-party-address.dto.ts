@@ -8,7 +8,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 import { AddressType } from '../constants/party.constants';
 
 export class UpdatePartyAddressDto {

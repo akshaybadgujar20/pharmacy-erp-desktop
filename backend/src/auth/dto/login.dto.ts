@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { OptionalBigIntField } from '../../common/dto/optional-bigint.decorator';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 const DEVICE_TYPES = ['DESKTOP', 'MOBILE', 'TABLET', 'WEB'] as const;
 
