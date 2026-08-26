@@ -8,13 +8,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
-import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
-import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
-import { UpdateSupplierDto } from './dto/update-supplier.dto';
-import { SupplierService } from './supplier.service';
+import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
+import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
+import { CreateSupplierDto } from '../dto/create-supplier.dto';
+import { UpdateSupplierDto } from '../dto/update-supplier.dto';
+import { SupplierService } from '../services/supplier.service';
 
 @Controller('suppliers')
 export class SupplierController {

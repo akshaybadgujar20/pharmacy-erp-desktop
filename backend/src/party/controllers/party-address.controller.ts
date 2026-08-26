@@ -8,13 +8,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
-import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
-import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
-import { CreatePartyAddressDto } from './dto/create-party-address.dto';
-import { UpdatePartyAddressDto } from './dto/update-party-address.dto';
-import { PartyAddressService } from './party-address.service';
+import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
+import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
+import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
+import { CreatePartyAddressDto } from '../dto/create-party-address.dto';
+import { UpdatePartyAddressDto } from '../dto/update-party-address.dto';
+import { PartyAddressService } from '../services/party-address.service';
 
 @Controller('parties/:partyId/addresses')
 export class PartyAddressController {

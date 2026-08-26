@@ -2,22 +2,22 @@ import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
 import { PrismaModule } from '../prisma.module';
 import { PersistenceModule } from '../persistence/persistence.module';
-import { CustomerController } from './customer.controller';
-import { CustomerService } from './customer.service';
-import { DoctorController } from './doctor.controller';
-import { DoctorService } from './doctor.service';
-import { EmployeeController } from './employee.controller';
-import { EmployeeService } from './employee.service';
-import { PartyAddressController } from './party-address.controller';
-import { PartyAddressService } from './party-address.service';
-import { PartyContactController } from './party-contact.controller';
-import { PartyContactService } from './party-contact.service';
-import { PartyRoleController } from './party-role.controller';
-import { PartyRoleService } from './party-role.service';
-import { PartyController } from './party.controller';
-import { PartyService } from './party.service';
-import { SupplierController } from './supplier.controller';
-import { SupplierService } from './supplier.service';
+import { CustomerController } from './controllers/customer.controller';
+import { CustomerService } from './services/customer.service';
+import { DoctorController } from './controllers/doctor.controller';
+import { DoctorService } from './services/doctor.service';
+import { EmployeeController } from './controllers/employee.controller';
+import { EmployeeService } from './services/employee.service';
+import { PartyAddressController } from './controllers/party-address.controller';
+import { PartyAddressService } from './services/party-address.service';
+import { PartyContactController } from './controllers/party-contact.controller';
+import { PartyContactService } from './services/party-contact.service';
+import { PartyRoleController } from './controllers/party-role.controller';
+import { PartyRoleService } from './services/party-role.service';
+import { PartyController } from './controllers/party.controller';
+import { PartyService } from './services/party.service';
+import { SupplierController } from './controllers/supplier.controller';
+import { SupplierService } from './services/supplier.service';
 
 @Module({
   imports: [PrismaModule, PersistenceModule, AuditModule],

@@ -1,28 +1,28 @@
 import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { AuditAction } from '../audit/audit-action.constants';
-import { AuditModule } from '../audit/audit-module.constants';
-import { AuditService } from '../audit/audit.service';
-import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
-import { ErrorCode } from '../common/exceptions/error-code';
+import { AuditAction } from '../../audit/audit-action.constants';
+import { AuditModule } from '../../audit/audit-module.constants';
+import { AuditService } from '../../audit/audit.service';
+import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { ErrorCode } from '../../common/exceptions/error-code';
 import {
   buildPagination,
   PaginatedResult,
-} from '../common/response/paginated-result';
-import { OutboxEntityType } from '../persistence/outbox/entity-type.constants';
-import { OutboxOperation } from '../persistence/outbox/outbox-operation.constants';
-import { OutboxService } from '../persistence/outbox/outbox.service';
-import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
-import { PrismaService } from '../prisma.service';
-import { CreatePartyAddressDto } from './dto/create-party-address.dto';
-import { UpdatePartyAddressDto } from './dto/update-party-address.dto';
-import { toPartyAddressResponse } from './mappers/party-address.mapper';
+} from '../../common/response/paginated-result';
+import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
+import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
+import { OutboxService } from '../../persistence/outbox/outbox.service';
+import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
+import { PrismaService } from '../../prisma.service';
+import { CreatePartyAddressDto } from '../dto/create-party-address.dto';
+import { UpdatePartyAddressDto } from '../dto/update-party-address.dto';
+import { toPartyAddressResponse } from '../mappers/party-address.mapper';
 import {
   assertPartyExists,
   optimisticUpdate,
   throwNotFound,
-} from './utils/party.util';
+} from '../utils/party.util';
 
 @Injectable()
 export class PartyAddressService {

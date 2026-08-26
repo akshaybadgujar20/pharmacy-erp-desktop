@@ -1,12 +1,12 @@
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuditService } from '../audit/audit.service';
-import { ErrorCode } from '../common/exceptions/error-code';
-import { RequestContextService } from '../persistence/context/request-context.service';
-import { OutboxService } from '../persistence/outbox/outbox.service';
-import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
-import { PrismaService } from '../prisma.service';
-import { CustomerType } from './constants/party.constants';
+import { AuditService } from '../../audit/audit.service';
+import { ErrorCode } from '../../common/exceptions/error-code';
+import { RequestContextService } from '../../persistence/context/request-context.service';
+import { OutboxService } from '../../persistence/outbox/outbox.service';
+import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
+import { PrismaService } from '../../prisma.service';
+import { CustomerType } from '../constants/party.constants';
 import { CustomerService } from './customer.service';
 
 describe('CustomerService', () => {
