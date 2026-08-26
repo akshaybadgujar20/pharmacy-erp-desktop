@@ -46,6 +46,7 @@ export function MandatoryBigIntField() {
       if (coerced !== undefined) {
         return coerced;
       }
+      return value;
     })(target, propertyKey);
     Validate(IsBigIntConstraint, {
       message: `${propertyKey} must be a numeric string`,
