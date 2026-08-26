@@ -19,12 +19,12 @@ model StockMovement {
   referenceTable String @map("reference_table")
   referenceId    BigInt @map("reference_id")
 
-  movementDate DateTime @default(now()) @map("movement_date")
+  movementDate BigInt @map("movement_date")
 
   remarks   String? @map("remarks")
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt BigInt @map("created_at")
 
   branch        Branch   @relation(fields: [branchId], references: [id])
   medicine      Medicine @relation(fields: [medicineId], references: [id])

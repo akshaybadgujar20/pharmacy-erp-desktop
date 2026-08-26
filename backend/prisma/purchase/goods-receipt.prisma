@@ -8,12 +8,12 @@ model GoodsReceipt {
   supplierId      BigInt  @map("supplier_id")
   branchId        BigInt  @map("branch_id")
 
-  receiptDate DateTime @map("receipt_date")
+  receiptDate BigInt @map("receipt_date")
 
   supplierChallanNo   String?   @map("supplier_challan_no")
-  supplierChallanDate DateTime? @map("supplier_challan_date")
+  supplierChallanDate BigInt? @map("supplier_challan_date")
   supplierInvoiceNo   String?   @map("supplier_invoice_no")
-  supplierInvoiceDate DateTime? @map("supplier_invoice_date")
+  supplierInvoiceDate BigInt? @map("supplier_invoice_date")
   vehicleNumber       String?   @map("vehicle_number")
 
   temperatureRecorded   Decimal? @map("temperature_recorded")
@@ -28,11 +28,11 @@ model GoodsReceipt {
 
   receivedByEmployeeId  BigInt    @map("received_by_employee_id")
   inspectedByEmployeeId BigInt?   @map("inspected_by_employee_id")
-  inspectedAt           DateTime? @map("inspected_at")
+  inspectedAt           BigInt? @map("inspected_at")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

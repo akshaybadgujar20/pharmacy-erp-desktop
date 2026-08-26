@@ -9,8 +9,8 @@ model PurchaseInvoice {
   goodsReceiptId BigInt? @map("goods_receipt_id")
   branchId       BigInt  @map("branch_id")
 
-  invoiceDate DateTime  @map("invoice_date")
-  dueDate     DateTime? @map("due_date")
+  invoiceDate BigInt  @map("invoice_date")
+  dueDate     BigInt? @map("due_date")
 
   grossAmount    Decimal @map("gross_amount")
   discountAmount Decimal @default(0) @map("discount_amount")
@@ -28,9 +28,9 @@ model PurchaseInvoice {
 
   remarks String? @map("remarks")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

@@ -18,17 +18,17 @@ model UserSession {
 
   ipAddress String? @map("ip_address")
 
-  loginTime      DateTime  @map("login_time")
-  lastActivityAt DateTime  @map("last_activity_at")
-  logoutTime     DateTime? @map("logout_time")
-  expiresAt      DateTime  @map("expires_at")
+  loginTime      BigInt  @map("login_time")
+  lastActivityAt BigInt  @map("last_activity_at")
+  logoutTime     BigInt? @map("logout_time")
+  expiresAt      BigInt  @map("expires_at")
 
   isActive     Boolean @default(true) @map("is_active")
   logoutReason String? @map("logout_reason")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

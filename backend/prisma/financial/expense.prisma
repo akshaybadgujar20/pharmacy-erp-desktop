@@ -6,10 +6,10 @@ model Expense {
 
   branchId BigInt @map("branch_id")
 
-  category    String   @map("category")
-  description String?  @map("description")
-  amount      Decimal  @map("amount")
-  expenseDate DateTime @map("expense_date")
+  category    String  @map("category")
+  description String? @map("description")
+  amount      Decimal @map("amount")
+  expenseDate BigInt  @map("expense_date")
 
   paymentMethod String? @map("payment_method")
   reference     String? @map("reference")
@@ -18,9 +18,9 @@ model Expense {
 
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

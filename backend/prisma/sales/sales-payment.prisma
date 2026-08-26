@@ -7,7 +7,7 @@ model SalesPayment {
   salesInvoiceId BigInt @map("sales_invoice_id")
   branchId       BigInt @map("branch_id")
 
-  paymentDate DateTime @default(now()) @map("payment_date")
+  paymentDate BigInt @map("payment_date")
 
   // paymentMethod: CASH, UPI, CREDIT_CARD, DEBIT_CARD, CHEQUE, STORE_CREDIT, NET_BANKING
   paymentMethod String  @map("payment_method")
@@ -23,7 +23,7 @@ model SalesPayment {
 
   bankName     String?   @map("bank_name")
   chequeNumber String?   @map("cheque_number")
-  chequeDate   DateTime? @map("cheque_date")
+  chequeDate   BigInt? @map("cheque_date")
 
   // status: COMPLETED, PENDING, FAILED, BOUNCED, REFUNDED
   status String @default("COMPLETED") @map("status")
@@ -32,9 +32,9 @@ model SalesPayment {
 
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

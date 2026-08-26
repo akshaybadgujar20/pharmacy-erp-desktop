@@ -8,7 +8,7 @@ model SalesInvoice {
   prescriptionId BigInt? @map("prescription_id")
   branchId       BigInt  @map("branch_id")
 
-  invoiceDate DateTime @default(now()) @map("invoice_date")
+  invoiceDate BigInt @map("invoice_date")
 
   patientName String? @map("patient_name")
   doctorName  String? @map("doctor_name")
@@ -36,9 +36,9 @@ model SalesInvoice {
 
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

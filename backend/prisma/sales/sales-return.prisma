@@ -8,7 +8,7 @@ model SalesReturn {
   customerId     BigInt? @map("customer_id")
   branchId       BigInt  @map("branch_id")
 
-  returnDate DateTime @default(now()) @map("return_date")
+  returnDate BigInt @map("return_date")
 
   // returnReason: COURSE_CHANGED, PATIENT_DISCHARGED, WRONG_MEDICINE, EXPIRED_ON_PURCHASE, DAMAGED_PACKAGING, EXCESS_QUANTITY, ADVERSE_REACTION, OTHER
   returnReason String @map("return_reason")
@@ -30,11 +30,11 @@ model SalesReturn {
   remarks String? @map("remarks")
 
   approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
-  approvedAt           DateTime? @map("approved_at")
+  approvedAt           BigInt? @map("approved_at")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

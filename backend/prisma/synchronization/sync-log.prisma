@@ -6,8 +6,8 @@ model SyncLog {
   syncType      String @map("sync_type")
   syncDirection String @map("sync_direction")
 
-  startedAt   DateTime  @map("started_at")
-  completedAt DateTime? @map("completed_at")
+  startedAt   BigInt  @map("started_at")
+  completedAt BigInt? @map("completed_at")
 
   recordsUploaded   Int @default(0) @map("records_uploaded")
   recordsDownloaded Int @default(0) @map("records_downloaded")
@@ -22,7 +22,7 @@ model SyncLog {
   deviceId   String? @map("device_id")
   appVersion String? @map("app_version")
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt BigInt @map("created_at")
 
   version Int @default(1)
 

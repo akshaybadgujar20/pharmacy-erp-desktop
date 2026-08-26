@@ -17,7 +17,7 @@ model ChangeHistory {
   dataType   String? @map("data_type")
   changeType String  @map("change_type")
 
-  changedAt DateTime @default(now()) @map("changed_at")
+  changedAt BigInt @map("changed_at")
 
   version Int @default(1)
 

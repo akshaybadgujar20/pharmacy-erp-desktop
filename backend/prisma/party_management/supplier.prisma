@@ -19,9 +19,9 @@ model Supplier {
   preferredSupplier Boolean @default(false) @map("preferred_supplier")
   isActive          Boolean @default(true) @map("is_active")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
   updatedBy BigInt?   @map("updated_by")
   deletedBy BigInt?   @map("deleted_by")
 

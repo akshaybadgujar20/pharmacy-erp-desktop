@@ -7,25 +7,25 @@ model StockTransfer {
   sourceBranchId      BigInt @map("source_branch_id")
   destinationBranchId BigInt @map("destination_branch_id")
 
-  transferDate        DateTime  @map("transfer_date")
-  expectedArrivalDate DateTime? @map("expected_arrival_date")
-  receivedDate        DateTime? @map("received_date")
+  transferDate        BigInt  @map("transfer_date")
+  expectedArrivalDate BigInt? @map("expected_arrival_date")
+  receivedDate        BigInt? @map("received_date")
 
   // Status: DRAFT, PENDING_APPROVAL, DISPATCHED, IN_TRANSIT, PARTIALLY_RECEIVED, COMPLETED, REJECTED, CANCELLED
   status       String @default("DRAFT") @map("status")
   // Type: ROUTINE_REPLENISHMENT, EMERGENCY_TRANSFER, EXCESS_REBALANCING
   transferType String @default("ROUTINE_REPLENISHMENT") @map("transfer_type")
 
-  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
-  approvedAt           DateTime? @map("approved_at")
+  approvedByEmployeeId BigInt? @map("approved_by_employee_id")
+  approvedAt           BigInt? @map("approved_at")
 
   remarks String? @map("remarks")
 
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

@@ -21,11 +21,11 @@ model AuditLog {
   deviceId  String? @map("device_id")
   sessionId String? @map("session_id")
 
-  actionTimestamp DateTime @map("action_timestamp")
+  actionTimestamp BigInt @map("action_timestamp")
 
   correlationId String? @map("correlation_id")
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt BigInt @map("created_at")
 
   version Int @default(1)
 

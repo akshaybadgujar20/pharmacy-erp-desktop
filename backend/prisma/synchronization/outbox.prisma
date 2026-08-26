@@ -23,8 +23,8 @@ model Outbox {
 
   lastError String? @map("last_error")
 
-  createdAt   DateTime  @default(now()) @map("created_at")
-  processedAt DateTime? @map("processed_at")
+  createdAt   BigInt  @map("created_at")
+  processedAt BigInt? @map("processed_at")
 
   version Int @default(1)
 

@@ -5,8 +5,8 @@ model Receipt {
 
   receiptNumber String @unique @map("receipt_number")
 
-  receiptType String   @map("receipt_type")
-  receiptDate DateTime @map("receipt_date")
+  receiptType String @map("receipt_type")
+  receiptDate BigInt @map("receipt_date")
 
   amount Decimal @map("amount")
 
@@ -23,9 +23,9 @@ model Receipt {
 
   createdBy BigInt? @map("created_by")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 

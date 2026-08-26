@@ -6,22 +6,22 @@ model StockTake {
 
   branchId BigInt @map("branch_id")
 
-  stockTakeDate DateTime @map("stock_take_date")
+  stockTakeDate BigInt @map("stock_take_date")
 
   // countType: FULL_AUDIT, CYCLE_COUNT, SCHEDULE_H_AUDIT, COLD_CHAIN_AUDIT, NEAR_EXPIRY_AUDIT
   countType String @default("CYCLE_COUNT") @map("count_type")
   // status: DRAFT, IN_PROGRESS, COUNTED, RECONCILED, CANCELLED
   status    String @default("DRAFT") @map("status")
 
-  countedByEmployeeId  BigInt    @map("counted_by_employee_id")
-  approvedByEmployeeId BigInt?   @map("approved_by_employee_id")
-  approvedAt           DateTime? @map("approved_at")
+  countedByEmployeeId  BigInt  @map("counted_by_employee_id")
+  approvedByEmployeeId BigInt? @map("approved_by_employee_id")
+  approvedAt           BigInt? @map("approved_at")
 
   remarks String? @map("remarks")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
 
   version Int @default(1)
 
