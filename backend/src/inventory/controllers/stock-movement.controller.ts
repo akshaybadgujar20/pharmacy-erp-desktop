@@ -12,30 +12,29 @@ import { RequirePermissions } from '../../auth/decorators/require-permissions.de
 import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
-import { EmployeeService } from '../services/employee.service';
 import { CreateStockAdjustmentDto } from '../dto/create-stock-adjustment.dto';
 import { UpdateStockAdjustmentDto } from '../dto/update-stock-adjustment.dto';
 
 @Controller('stocks/:stockId/movement')
 export class StockMovementController {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor() {}
 
   @Get()
   @RequirePermissions('PARTY:EMPLOYEE:READ')
   list(@Query() query: PaginationQueryDto) {
-    return this.employeeService.list(query);
+    return query;
   }
 
   @Get(':id')
   @RequirePermissions('PARTY:EMPLOYEE:READ')
   getById(@Param('id', ParseBigIntPipe) id: bigint) {
-    return this.employeeService.getById(id);
+    return id;
   }
 
   @Post()
   @RequirePermissions('PARTY:EMPLOYEE:CREATE')
   create(@Body() dto: CreateStockAdjustmentDto) {
-    return this.employeeService.create(dto);
+    return dto;
   }
 
   @Patch(':id')
@@ -44,7 +43,7 @@ export class StockMovementController {
     @Param('id', ParseBigIntPipe) id: bigint,
     @Body() dto: UpdateStockAdjustmentDto,
   ) {
-    return this.employeeService.update(id, dto);
+    return dto;
   }
 
   @Delete(':id')
@@ -53,6 +52,6 @@ export class StockMovementController {
     @Param('id', ParseBigIntPipe) id: bigint,
     @Query() query: DeleteEntityQueryDto,
   ) {
-    return this.employeeService.delete(id, query.version);
+    return query;
   }
 }

@@ -14,28 +14,27 @@ import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreateStockTake } from '../dto/create-stock-take';
 import { UpdateStockTakeDto } from '../dto/update-stock-take.dto';
-import { SupplierService } from '../services/supplier.service';
 
 @Controller('stocks/:stockId/take')
 export class StockTakeController {
-  constructor(private readonly supplierService: SupplierService) {}
+  constructor() {}
 
   @Get()
   @RequirePermissions('PARTY:SUPPLIER:READ')
   list(@Query() query: PaginationQueryDto) {
-    return this.supplierService.list(query);
+    return query;
   }
 
   @Get(':id')
   @RequirePermissions('PARTY:SUPPLIER:READ')
   getById(@Param('id', ParseBigIntPipe) id: bigint) {
-    return this.supplierService.getById(id);
+    return id;
   }
 
   @Post()
   @RequirePermissions('PARTY:SUPPLIER:CREATE')
   create(@Body() dto: CreateStockTake) {
-    return this.supplierService.create(dto);
+    return dto;
   }
 
   @Patch(':id')
@@ -44,7 +43,7 @@ export class StockTakeController {
     @Param('id', ParseBigIntPipe) id: bigint,
     @Body() dto: UpdateStockTakeDto,
   ) {
-    return this.supplierService.update(id, dto);
+    return dto;
   }
 
   @Delete(':id')
@@ -53,6 +52,6 @@ export class StockTakeController {
     @Param('id', ParseBigIntPipe) id: bigint,
     @Query() query: DeleteEntityQueryDto,
   ) {
-    return this.supplierService.delete(id, query.version);
+    return query;
   }
 }

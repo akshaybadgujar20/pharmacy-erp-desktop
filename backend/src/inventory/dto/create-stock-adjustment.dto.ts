@@ -1,51 +1,31 @@
 import {
   IsBoolean,
-  IsDateString,
-  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  Matches,
-  MaxLength,
+  Min,
 } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateStockAdjustmentDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @MandatoryBigIntField()
+  batchId!: bigint;
+
+  @IsNumber()
+  @Min(0)
+  adjustmentNumber!: number;
 
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  employeeCode!: string;
+  adjustmentType!: string;
 
-  @IsOptional()
   @IsString()
-  @MaxLength(100)
-  designation?: string;
+  reason!: string;
 
-  @IsOptional()
   @IsString()
-  @MaxLength(100)
-  department?: string;
+  status!: string;
 
-  @IsOptional()
-  @IsDateString()
-  joiningDate?: string;
-
-  @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  salary?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  licenseNumber?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isPharmacist?: boolean;
+  @MandatoryBigIntField()
+  createdBy!: bigint;
 
   @IsOptional()
   @IsBoolean()
