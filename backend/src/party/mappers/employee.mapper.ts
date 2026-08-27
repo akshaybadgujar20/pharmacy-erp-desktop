@@ -10,7 +10,7 @@ export interface EmployeeResponse {
   department: string | null;
   joiningDate: bigint | null;
   leavingDate: bigint | null;
-  salary: string | null;
+  salary: number | null;
   licenseNumber: string | null;
   isPharmacist: boolean;
   isActive: boolean;

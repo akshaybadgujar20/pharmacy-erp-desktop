@@ -10,7 +10,7 @@ export interface DoctorResponse {
   qualification: string | null;
   specialization: string | null;
   hospitalName: string | null;
-  consultationFee: string | null;
+  consultationFee: number | null;
   isVisitingDoctor: boolean;
   isActive: boolean;
   createdAt: bigint;

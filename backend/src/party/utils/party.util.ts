@@ -12,8 +12,8 @@ export function serializeBigInt(
 
 export function serializeDecimal(
   value: Prisma.Decimal | null | undefined,
-): string | null {
-  return value != null ? value.toString() : null;
+): number | null {
+  return value != null ? value.toNumber() : null;
 }
 
 export function serializeDate(value: Date | null | undefined): string | null {

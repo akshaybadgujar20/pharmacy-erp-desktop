@@ -3,6 +3,7 @@ import {
   IsIn,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
@@ -10,6 +11,7 @@ import {
   Min,
 } from 'class-validator';
 import { SupplierType } from '../constants/party.constants';
+import { Type } from 'class-transformer';
 
 export class CreateSupplierDto {
   @IsString()
@@ -43,9 +45,10 @@ export class CreateSupplierDto {
   panNumber?: string;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  creditLimit?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  creditLimit?: number;
 
   @IsOptional()
   @IsInt()

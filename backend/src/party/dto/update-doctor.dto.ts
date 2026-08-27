@@ -1,11 +1,13 @@
 import {
   IsBoolean,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateDoctorDto {
   @IsInt()
@@ -38,8 +40,10 @@ export class UpdateDoctorDto {
   hospitalName?: string;
 
   @IsOptional()
-  @IsString()
-  consultationFee?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  consultationFee?: number;
 
   @IsOptional()
   @IsBoolean()

@@ -22,7 +22,6 @@ import { UpdateCustomerDto } from '../dto/update-customer.dto';
 import { toCustomerResponse } from '../mappers/customer.mapper';
 import {
   activePartyFilter,
-  assertNonNegativeDecimal,
   assertPartyExists,
   assertUniqueBusinessCode,
   ensurePartyRole,
@@ -90,8 +89,6 @@ export class CustomerService {
   }
 
   async create(dto: CreateCustomerDto) {
-    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
-
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
       await assertPartyExists(tx, partyId);
@@ -168,8 +165,6 @@ export class CustomerService {
   }
 
   async update(id: bigint, dto: UpdateCustomerDto) {
-    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
-
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.customer.findFirst({
         where: { id, deletedAt: null },

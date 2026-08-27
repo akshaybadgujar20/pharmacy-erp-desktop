@@ -22,7 +22,6 @@ import { UpdateSupplierDto } from '../dto/update-supplier.dto';
 import { toSupplierResponse } from '../mappers/supplier.mapper';
 import {
   activePartyFilter,
-  assertNonNegativeDecimal,
   assertPartyExists,
   assertUniqueBusinessCode,
   ensurePartyRole,
@@ -96,7 +95,6 @@ export class SupplierService {
   }
 
   async create(dto: CreateSupplierDto) {
-    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
 
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
@@ -189,7 +187,6 @@ export class SupplierService {
   }
 
   async update(id: bigint, dto: UpdateSupplierDto) {
-    assertNonNegativeDecimal(dto.creditLimit, 'creditLimit');
 
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.supplier.findFirst({

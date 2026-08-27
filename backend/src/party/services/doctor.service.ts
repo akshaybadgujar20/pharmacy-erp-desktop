@@ -21,7 +21,6 @@ import { UpdateDoctorDto } from '../dto/update-doctor.dto';
 import { toDoctorResponse } from '../mappers/doctor.mapper';
 import {
   activePartyFilter,
-  assertNonNegativeDecimal,
   assertPartyExists,
   assertUniqueBusinessCode,
   ensurePartyRole,
@@ -94,8 +93,6 @@ export class DoctorService {
   }
 
   async create(dto: CreateDoctorDto) {
-    assertNonNegativeDecimal(dto.consultationFee, 'consultationFee');
-
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
       await assertPartyExists(tx, partyId);
@@ -182,8 +179,6 @@ export class DoctorService {
   }
 
   async update(id: bigint, dto: UpdateDoctorDto) {
-    assertNonNegativeDecimal(dto.consultationFee, 'consultationFee');
-
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.doctor.findFirst({
         where: { id, deletedAt: null },

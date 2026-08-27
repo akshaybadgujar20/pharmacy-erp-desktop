@@ -1,12 +1,15 @@
 import {
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
+import { Type } from 'class-transformer';
 
 export class CreateEmployeeDto {
   @IsString()
@@ -33,9 +36,10 @@ export class CreateEmployeeDto {
   joiningDate?: bigint;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  salary?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  salary?: number;
 
   @IsOptional()
   @IsString()

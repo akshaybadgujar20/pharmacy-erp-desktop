@@ -21,7 +21,6 @@ import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 import { toEmployeeResponse } from '../mappers/employee.mapper';
 import {
   activePartyFilter,
-  assertNonNegativeDecimal,
   assertPartyExists,
   assertUniqueBusinessCode,
   ensurePartyRole,
@@ -94,7 +93,6 @@ export class EmployeeService {
   }
 
   async create(dto: CreateEmployeeDto) {
-    assertNonNegativeDecimal(dto.salary, 'salary');
 
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
@@ -175,7 +173,6 @@ export class EmployeeService {
   }
 
   async update(id: bigint, dto: UpdateEmployeeDto) {
-    assertNonNegativeDecimal(dto.salary, 'salary');
 
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.employee.findFirst({

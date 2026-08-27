@@ -10,8 +10,8 @@ export interface SupplierResponse {
   gstin: string | null;
   drugLicenseNumber: string | null;
   panNumber: string | null;
-  creditLimit: string;
-  outstandingAmount: string;
+  creditLimit: number | null;
+  outstandingAmount: number | null;
   paymentTermsDays: number;
   preferredSupplier: boolean;
   isActive: boolean;
@@ -33,8 +33,8 @@ export function toSupplierResponse(supplier: Supplier): SupplierResponse {
     gstin: supplier.gstin,
     drugLicenseNumber: supplier.drugLicenseNumber,
     panNumber: supplier.panNumber,
-    creditLimit: serializeDecimal(supplier.creditLimit) ?? '0',
-    outstandingAmount: serializeDecimal(supplier.outstandingAmount) ?? '0',
+    creditLimit: serializeDecimal(supplier.creditLimit),
+    outstandingAmount: serializeDecimal(supplier.outstandingAmount),
     paymentTermsDays: supplier.paymentTermsDays,
     preferredSupplier: supplier.preferredSupplier,
     isActive: supplier.isActive,

@@ -2,12 +2,14 @@ import {
   IsBoolean,
   IsIn,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
 import { SupplierType } from '../constants/party.constants';
+import { Type } from 'class-transformer';
 
 export class UpdateSupplierDto {
   @IsInt()
@@ -40,8 +42,10 @@ export class UpdateSupplierDto {
   panNumber?: string;
 
   @IsOptional()
-  @IsString()
-  creditLimit?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  creditLimit?: number;
 
   @IsOptional()
   @IsInt()

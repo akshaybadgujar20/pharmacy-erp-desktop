@@ -1,11 +1,14 @@
 import {
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateDoctorDto {
   @IsString()
@@ -39,9 +42,10 @@ export class CreateDoctorDto {
   hospitalName?: string;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  consultationFee?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  consultationFee?: number;
 
   @IsOptional()
   @IsBoolean()

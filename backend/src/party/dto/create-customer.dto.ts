@@ -3,6 +3,7 @@ import {
   IsIn,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
@@ -10,6 +11,7 @@ import {
   Min,
 } from 'class-validator';
 import { CustomerType } from '../constants/party.constants';
+import { Type } from 'class-transformer';
 
 export class CreateCustomerDto {
   @IsString()
@@ -28,9 +30,16 @@ export class CreateCustomerDto {
   customerType!: string;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  creditLimit?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  creditLimit?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  outstandingAmount?: number;
 
   @IsOptional()
   @IsInt()

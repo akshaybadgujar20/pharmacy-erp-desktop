@@ -1,12 +1,14 @@
 import {
   IsBoolean,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
+import { Type } from 'class-transformer';
 
 export class UpdateEmployeeDto {
   @IsInt()
@@ -35,8 +37,10 @@ export class UpdateEmployeeDto {
   leavingDate?: bigint;
 
   @IsOptional()
-  @IsString()
-  salary?: string;
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  salary?: number;
 
   @IsOptional()
   @IsString()

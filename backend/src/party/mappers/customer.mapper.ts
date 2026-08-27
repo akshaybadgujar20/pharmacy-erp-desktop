@@ -7,8 +7,8 @@ export interface CustomerResponse {
   uuid: string;
   customerCode: string;
   customerType: string;
-  creditLimit: string;
-  outstandingAmount: string;
+  creditLimit: number | null;
+  outstandingAmount: number | null;
   paymentTermsDays: number;
   loyaltyPoints: number;
   isTaxExempt: boolean;
@@ -28,8 +28,8 @@ export function toCustomerResponse(customer: Customer): CustomerResponse {
     uuid: customer.uuid,
     customerCode: customer.customerCode,
     customerType: customer.customerType,
-    creditLimit: serializeDecimal(customer.creditLimit) ?? '0',
-    outstandingAmount: serializeDecimal(customer.outstandingAmount) ?? '0',
+    creditLimit: serializeDecimal(customer.creditLimit),
+    outstandingAmount: serializeDecimal(customer.outstandingAmount),
     paymentTermsDays: customer.paymentTermsDays,
     loyaltyPoints: customer.loyaltyPoints,
     isTaxExempt: customer.isTaxExempt,
