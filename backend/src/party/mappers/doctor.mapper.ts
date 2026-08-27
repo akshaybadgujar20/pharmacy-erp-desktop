@@ -1,5 +1,5 @@
 import { Doctor } from '@prisma/client';
-import { serializeDate, serializeDecimal } from '../utils/party.util';
+import { serializeDecimal } from '../utils/party.util';
 
 export interface DoctorResponse {
   id: string;
@@ -13,9 +13,9 @@ export interface DoctorResponse {
   consultationFee: string | null;
   isVisitingDoctor: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   version: number;
 }
 
@@ -32,9 +32,9 @@ export function toDoctorResponse(doctor: Doctor): DoctorResponse {
     consultationFee: serializeDecimal(doctor.consultationFee),
     isVisitingDoctor: doctor.isVisitingDoctor,
     isActive: doctor.isActive,
-    createdAt: doctor.createdAt.toISOString(),
-    updatedAt: doctor.updatedAt.toISOString(),
-    deletedAt: serializeDate(doctor.deletedAt),
+    createdAt: doctor.createdAt,
+    updatedAt: doctor.updatedAt,
+    deletedAt: doctor.deletedAt,
     version: doctor.version,
   };
 }

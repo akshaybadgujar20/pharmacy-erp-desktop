@@ -1,5 +1,4 @@
 import { PartyRole } from '@prisma/client';
-import { serializeDate } from '../utils/party.util';
 
 export interface PartyRoleResponse {
   id: string;
@@ -8,9 +7,9 @@ export interface PartyRoleResponse {
   roleType: string;
   isPrimary: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   version: number;
 }
 
@@ -22,9 +21,9 @@ export function toPartyRoleResponse(role: PartyRole): PartyRoleResponse {
     roleType: role.roleType,
     isPrimary: role.isPrimary,
     isActive: role.isActive,
-    createdAt: role.createdAt.toISOString(),
-    updatedAt: role.updatedAt.toISOString(),
-    deletedAt: serializeDate(role.deletedAt),
+    createdAt: role.createdAt,
+    updatedAt: role.updatedAt,
+    deletedAt: role.deletedAt,
     version: role.version,
   };
 }

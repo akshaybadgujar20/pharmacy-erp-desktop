@@ -1,5 +1,5 @@
 import { Party } from '@prisma/client';
-import { serializeBigInt, serializeDate } from '../utils/party.util';
+import { serializeBigInt } from '../utils/party.util';
 
 export interface PartyResponse {
   id: string;
@@ -11,9 +11,9 @@ export interface PartyResponse {
   lastName: string | null;
   organizationName: string | null;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
   version: number;
@@ -30,9 +30,9 @@ export function toPartyResponse(party: Party): PartyResponse {
     lastName: party.lastName,
     organizationName: party.organizationName,
     isActive: party.isActive,
-    createdAt: party.createdAt.toISOString(),
-    updatedAt: party.updatedAt.toISOString(),
-    deletedAt: serializeDate(party.deletedAt),
+    createdAt: party.createdAt,
+    updatedAt: party.updatedAt,
+    deletedAt: party.deletedAt,
     updatedBy: serializeBigInt(party.updatedBy),
     deletedBy: serializeBigInt(party.deletedBy),
     version: party.version,

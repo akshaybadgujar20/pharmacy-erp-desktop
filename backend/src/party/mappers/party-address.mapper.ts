@@ -1,5 +1,5 @@
 import { PartyAddress } from '@prisma/client';
-import { serializeBigInt, serializeDate } from '../utils/party.util';
+import { serializeBigInt } from '../utils/party.util';
 
 export interface PartyAddressResponse {
   id: string;
@@ -18,9 +18,9 @@ export interface PartyAddressResponse {
   longitude: number | null;
   isDefault: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   version: number;
 }
 
@@ -44,9 +44,9 @@ export function toPartyAddressResponse(
     longitude: address.longitude,
     isDefault: address.isDefault,
     isActive: address.isActive,
-    createdAt: address.createdAt.toISOString(),
-    updatedAt: address.updatedAt.toISOString(),
-    deletedAt: serializeDate(address.deletedAt),
+    createdAt: address.createdAt,
+    updatedAt: address.updatedAt,
+    deletedAt: address.deletedAt,
     version: address.version,
   };
 }

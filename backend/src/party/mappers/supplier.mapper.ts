@@ -1,9 +1,5 @@
 import { Supplier } from '@prisma/client';
-import {
-  serializeBigInt,
-  serializeDate,
-  serializeDecimal,
-} from '../utils/party.util';
+import { serializeBigInt, serializeDecimal } from '../utils/party.util';
 
 export interface SupplierResponse {
   id: string;
@@ -19,9 +15,9 @@ export interface SupplierResponse {
   paymentTermsDays: number;
   preferredSupplier: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
   version: number;
@@ -42,9 +38,9 @@ export function toSupplierResponse(supplier: Supplier): SupplierResponse {
     paymentTermsDays: supplier.paymentTermsDays,
     preferredSupplier: supplier.preferredSupplier,
     isActive: supplier.isActive,
-    createdAt: supplier.createdAt.toISOString(),
-    updatedAt: supplier.updatedAt.toISOString(),
-    deletedAt: serializeDate(supplier.deletedAt),
+    createdAt: supplier.createdAt,
+    updatedAt: supplier.updatedAt,
+    deletedAt: supplier.deletedAt,
     updatedBy: serializeBigInt(supplier.updatedBy),
     deletedBy: serializeBigInt(supplier.deletedBy),
     version: supplier.version,

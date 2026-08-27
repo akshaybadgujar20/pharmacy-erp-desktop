@@ -1,5 +1,5 @@
 import { Employee } from '@prisma/client';
-import { serializeDate, serializeDecimal } from '../utils/party.util';
+import { serializeDecimal } from '../utils/party.util';
 
 export interface EmployeeResponse {
   id: string;
@@ -8,15 +8,15 @@ export interface EmployeeResponse {
   employeeCode: string;
   designation: string | null;
   department: string | null;
-  joiningDate: string | null;
-  leavingDate: string | null;
+  joiningDate: bigint | null;
+  leavingDate: bigint | null;
   salary: string | null;
   licenseNumber: string | null;
   isPharmacist: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   version: number;
 }
 
@@ -28,15 +28,15 @@ export function toEmployeeResponse(employee: Employee): EmployeeResponse {
     employeeCode: employee.employeeCode,
     designation: employee.designation,
     department: employee.department,
-    joiningDate: serializeDate(employee.joiningDate),
-    leavingDate: serializeDate(employee.leavingDate),
+    joiningDate: employee.joiningDate,
+    leavingDate: employee.leavingDate,
     salary: serializeDecimal(employee.salary),
     licenseNumber: employee.licenseNumber,
     isPharmacist: employee.isPharmacist,
     isActive: employee.isActive,
-    createdAt: employee.createdAt.toISOString(),
-    updatedAt: employee.updatedAt.toISOString(),
-    deletedAt: serializeDate(employee.deletedAt),
+    createdAt: employee.createdAt,
+    updatedAt: employee.updatedAt,
+    deletedAt: employee.deletedAt,
     version: employee.version,
   };
 }

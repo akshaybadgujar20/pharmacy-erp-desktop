@@ -1,5 +1,4 @@
 import { PartyContact } from '@prisma/client';
-import { serializeDate } from '../utils/party.util';
 
 export interface PartyContactResponse {
   id: string;
@@ -11,9 +10,9 @@ export interface PartyContactResponse {
   isPrimary: boolean;
   isVerified: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   version: number;
 }
 
@@ -30,9 +29,9 @@ export function toPartyContactResponse(
     isPrimary: contact.isPrimary,
     isVerified: contact.isVerified,
     isActive: contact.isActive,
-    createdAt: contact.createdAt.toISOString(),
-    updatedAt: contact.updatedAt.toISOString(),
-    deletedAt: serializeDate(contact.deletedAt),
+    createdAt: contact.createdAt,
+    updatedAt: contact.updatedAt,
+    deletedAt: contact.deletedAt,
     version: contact.version,
   };
 }
