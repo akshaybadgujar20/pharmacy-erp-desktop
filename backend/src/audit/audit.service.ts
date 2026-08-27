@@ -52,8 +52,9 @@ export class AuditService {
         ipAddress: ctx?.ipAddress,
         deviceId: ctx?.deviceId,
         sessionId: ctx?.sessionId,
-        actionTimestamp: new Date(),
+        actionTimestamp: BigInt(Date.now()),
         correlationId: ctx?.correlationId,
+        createdAt: BigInt(Date.now()),
       },
     });
   }

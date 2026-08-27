@@ -61,7 +61,7 @@ export class AuthService {
       );
     }
 
-    if (user.lockedUntil && user.lockedUntil > new Date()) {
+    if (user.lockedUntil && user.lockedUntil > BigInt(Date.now())) {
       throw new ApplicationException(
         ErrorCode.AUTH_INVALID_CREDENTIALS,
         'Invalid username or password',
@@ -102,9 +102,12 @@ export class AuthService {
     const sessionToken = randomUUID();
     const refreshToken = generateRefreshToken();
     const hashedRefreshToken = hashRefreshToken(refreshToken);
-    const now = new Date();
-    const expiresAt = new Date(
-      now.getTime() + parseDurationMs(AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY),
+    const now = BigInt(Date.now());
+    const expiresAt = BigInt(
+      new Date(
+        new Date().getTime() +
+          parseDurationMs(AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY),
+      ).getTime(),
     );
 
     const session = await this.unitOfWork.run(async (tx) => {
@@ -124,6 +127,8 @@ export class AuthService {
           lastActivityAt: now,
           expiresAt,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -186,7 +191,7 @@ export class AuthService {
       include: { user: true },
     });
 
-    if (!session || session.expiresAt < new Date()) {
+    if (!session || session.expiresAt < BigInt(Date.now())) {
       throw new ApplicationException(
         ErrorCode.AUTH_SESSION_EXPIRED,
         'Session has expired. Please log in again.',
@@ -203,7 +208,7 @@ export class AuthService {
       );
     }
 
-    if (user.lockedUntil && user.lockedUntil > new Date()) {
+    if (user.lockedUntil && user.lockedUntil > BigInt(Date.now())) {
       throw new ApplicationException(
         ErrorCode.AUTH_SESSION_EXPIRED,
         'Session is no longer valid',
@@ -243,7 +248,7 @@ export class AuthService {
       },
       data: {
         refreshToken: hashedNewRefreshToken,
-        lastActivityAt: new Date(),
+        lastActivityAt: BigInt(Date.now()),
       },
     });
 
@@ -252,7 +257,7 @@ export class AuthService {
         where: { id: session.id },
         data: {
           isActive: false,
-          logoutTime: new Date(),
+          logoutTime: BigInt(Date.now()),
           logoutReason: 'TOKEN_REUSE',
         },
       });
@@ -315,7 +320,7 @@ export class AuthService {
         where: { uuid: sessionUuid, isActive: true },
         data: {
           isActive: false,
-          logoutTime: new Date(),
+          logoutTime: BigInt(Date.now()),
           logoutReason: 'USER_LOGOUT',
         },
       });
@@ -361,7 +366,7 @@ export class AuthService {
       include: { user: true },
     });
 
-    if (!session || session.expiresAt < new Date()) {
+    if (!session || session.expiresAt < BigInt(Date.now())) {
       return null;
     }
 
@@ -370,7 +375,7 @@ export class AuthService {
       return null;
     }
 
-    if (user.lockedUntil && user.lockedUntil > new Date()) {
+    if (user.lockedUntil && user.lockedUntil > BigInt(Date.now())) {
       return null;
     }
 
@@ -424,8 +429,8 @@ export class AuthService {
       await this.prisma.client.user.update({
         where: { id: userId },
         data: {
-          lockedUntil: new Date(
-            Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS,
+          lockedUntil: BigInt(
+            new Date(Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS).getTime()
           ),
         },
       });
