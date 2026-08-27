@@ -1,49 +1,44 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsInt, IsNumber, IsOptional, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdateStockDto {
   @IsInt()
   @Min(1)
   version!: number;
 
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  doctorCode?: string;
+  @MandatoryBigIntField()
+  batchId!: bigint;
+
+  @MandatoryBigIntField()
+  branchId!: bigint;
+
+  @IsNumber()
+  @Min(0)
+  availableQuantity!: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  registrationNumber?: string;
+  @IsNumber()
+  @Min(0)
+  reservedQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  qualification?: string;
+  @IsNumber()
+  @Min(0)
+  damagedQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  specialization?: string;
+  @IsNumber()
+  @Min(0)
+  expiredQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(200)
-  hospitalName?: string;
+  @IsNumber()
+  @Min(0)
+  inTransitQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  consultationFee?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isVisitingDoctor?: boolean;
+  @MandatoryBigIntField()
+  lastMovementAt?: bigint;
 
   @IsOptional()
   @IsBoolean()

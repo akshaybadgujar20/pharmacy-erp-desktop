@@ -1,51 +1,40 @@
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Matches,
-  MaxLength,
-} from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateStockDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @MandatoryBigIntField()
+  batchId!: bigint;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  doctorCode!: string;
+  @MandatoryBigIntField()
+  branchId!: bigint;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  registrationNumber!: string;
+  @IsNumber()
+  @Min(0)
+  availableQuantity!: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  qualification?: string;
+  @IsNumber()
+  @Min(0)
+  reservedQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  specialization?: string;
+  @IsNumber()
+  @Min(0)
+  damagedQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(200)
-  hospitalName?: string;
+  @IsNumber()
+  @Min(0)
+  expiredQuantity?: number;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/)
-  consultationFee?: string;
+  @IsNumber()
+  @Min(0)
+  inTransitQuantity?: number;
 
   @IsOptional()
-  @IsBoolean()
-  isVisitingDoctor?: boolean;
+  @MandatoryBigIntField()
+  lastMovementAt?: bigint;
 
   @IsOptional()
   @IsBoolean()
