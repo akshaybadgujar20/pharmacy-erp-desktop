@@ -1,12 +1,12 @@
 import {
   IsBoolean,
-  IsDateString,
   IsInt,
   IsOptional,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdateEmployeeDto {
   @IsInt()
@@ -28,13 +28,11 @@ export class UpdateEmployeeDto {
   @MaxLength(100)
   department?: string;
 
-  @IsOptional()
-  @IsDateString()
-  joiningDate?: string;
+  @OptionalBigIntField()
+  joiningDate?: bigint;
 
-  @IsOptional()
-  @IsDateString()
-  leavingDate?: string;
+  @OptionalBigIntField()
+  leavingDate?: bigint;
 
   @IsOptional()
   @IsString()
