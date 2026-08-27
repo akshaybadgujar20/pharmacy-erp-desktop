@@ -241,6 +241,8 @@ export async function seedMedicine(
         displayName: name,
         organizationName: name,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Party', partyUuid, party.id);
@@ -252,6 +254,8 @@ export async function seedMedicine(
         roleType: 'OTHER',
         isPrimary: true,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -263,6 +267,8 @@ export async function seedMedicine(
         gstin: gstin(),
         isPreferred: i < 5,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     manufacturerIds.push(mfg.id);
@@ -299,6 +305,8 @@ export async function seedMedicine(
         barcode: faker.string.numeric(13),
         requiresPrescription: med.schedule !== 'OTC',
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Medicine', medUuid, created.id);
@@ -333,11 +341,13 @@ export async function seedMedicine(
         uuid: batchUuid,
         medicineId: medicine.id,
         batchNumber: `B${String(batchSeq++).padStart(6, '0')}`,
-        manufacturingDate: faker.date.past({ years: 1 }),
-        expiryDate: faker.date.soon({ days: expiryMonths * 30 }),
+        manufacturingDate: BigInt(faker.date.past({ years: 1 }).getTime()),
+        expiryDate: BigInt(faker.date.soon({ days: expiryMonths * 30 }).getTime()),
         purchaseRate: decimal(purchaseRate),
         mrp: decimal(mrp),
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now())
       },
     });
     ctx.batchRecords.push({
@@ -356,7 +366,7 @@ export async function seedPricing(
   prisma: PrismaClient,
   ctx: SeedContext,
 ): Promise<void> {
-  const effectiveFrom = new Date('2024-04-01');
+  const effectiveFrom = BigInt(new Date('2024-04-01').getTime());
   const defaultTaxId = ctx.taxIds[0];
   const existingPriceListCount = await prisma.priceList.count();
 
@@ -375,6 +385,8 @@ export async function seedPricing(
         effectiveFrom,
         isDefault: i === 0,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('PriceList', plUuid, priceList.id);
@@ -393,6 +405,8 @@ export async function seedPricing(
           taxId: defaultTaxId,
           effectiveFrom,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
       if (i === 0) {
@@ -434,6 +448,8 @@ export async function seedPricing(
         priority: i + 1,
         effectiveFrom,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }

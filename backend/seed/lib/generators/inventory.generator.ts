@@ -39,14 +39,19 @@ async function recordMovement(
         branchId: params.branchId,
         batchId: params.batchId,
         availableQuantity: decimal(balance),
-        lastMovementAt: new Date(),
+        lastMovementAt: BigInt(new Date().getTime()),
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   } else {
     await prisma.stock.updateMany({
       where: { branchId: params.branchId, batchId: params.batchId },
-      data: { availableQuantity: decimal(balance), lastMovementAt: new Date() },
+      data: {
+        availableQuantity: decimal(balance),
+        lastMovementAt: BigInt(new Date().getTime()),
+      },
     });
   }
 
@@ -65,8 +70,9 @@ async function recordMovement(
       balanceAfter: decimal(balance),
       referenceTable: params.referenceTable,
       referenceId: params.referenceId,
-      movementDate: faker.date.recent({ days: 60 }),
+      movementDate: BigInt(faker.date.recent({ days: 60 }).getTime()),
       createdBy: params.createdBy,
+      createdAt: BigInt(Date.now()),
     },
   });
 }
@@ -104,6 +110,8 @@ export async function seedInventory(
           branchId: branch.id,
           availableQuantity: decimal(qty),
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
       ctx.setStock(branch.id, batch.id, qty);
@@ -123,8 +131,9 @@ export async function seedInventory(
           balanceAfter: decimal(qty),
           referenceTable: 'seed_initial',
           referenceId: batch.id,
-          movementDate: faker.date.past({ days: 90 }),
+          movementDate: BigInt(faker.date.recent({ days: 90 }).getTime()),
           createdBy: userId,
+          createdAt: BigInt(Date.now()),
         },
       });
     }
@@ -180,14 +189,16 @@ export async function seedInventory(
         adjustmentNumber: docNumber('ADJ', branch.branchCode, adjSeq),
         branchId: branch.id,
         adjustmentType: i % 2 === 0 ? 'GAIN' : 'LOSS',
-        adjustmentDate: faker.date.recent({ days: 30 }),
+        adjustmentDate: BigInt(faker.date.recent({ days: 30 }).getTime()),
         reason:
           i % 2 === 0 ? 'Physical count surplus' : 'Damaged units written off',
         status: 'POSTED',
         approvedByEmployeeId: ctx.employeeIds[0],
-        approvedAt: new Date(),
+        approvedAt: BigInt(new Date().getTime()),
         createdBy: userId,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -210,6 +221,8 @@ export async function seedInventory(
           batchId: batch.id,
           quantity: decimal(i % 2 === 0 ? qty : -qty),
           unitCost: batch.purchaseRate,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
     }
@@ -229,9 +242,11 @@ export async function seedInventory(
         transferNumber: docNumber('ST', from.branchCode, transferSeq),
         sourceBranchId: from.id,
         destinationBranchId: to.id,
-        transferDate: faker.date.recent({ days: 20 }),
+        transferDate: BigInt(faker.date.recent({ days: 20 }).getTime()),
         status: 'COMPLETED',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -252,6 +267,8 @@ export async function seedInventory(
           batchId: batch.id,
           sentQuantity: decimal(qty),
           receivedQuantity: decimal(qty),
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
     }
@@ -266,11 +283,13 @@ export async function seedInventory(
         uuid: uuid(),
         stockTakeNumber: docNumber('TK', branch.branchCode, takeSeq),
         branchId: branch.id,
-        stockTakeDate: faker.date.recent({ days: 15 }),
+        stockTakeDate: BigInt(faker.date.recent({ days: 15 }).getTime()),
         status: 'RECONCILED',
         countedByEmployeeId: ctx.employeeIds[1] ?? ctx.employeeIds[0],
         approvedByEmployeeId: ctx.employeeIds[0],
-        approvedAt: new Date(),
+        approvedAt: BigInt(new Date().getTime()),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -301,6 +320,8 @@ export async function seedInventory(
             Math.abs(variance) * Number(batch.purchaseRate),
           ),
           varianceType,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
     }

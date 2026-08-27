@@ -9,7 +9,11 @@ function pickBatchFefo(ctx: SeedContext, branchId: bigint, medicineId: bigint) {
     .filter(
       (b) => b.medicineId === medicineId && ctx.getStock(branchId, b.id) > 0,
     )
-    .sort((a, b) => a.expiryDate.getTime() - b.expiryDate.getTime());
+    .sort((a, b) => {
+      if (a.expiryDate < b.expiryDate) return -1;
+      if (a.expiryDate > b.expiryDate) return 1;
+      return 0;
+    });
   return candidates[0];
 }
 
@@ -43,7 +47,7 @@ export async function seedSales(
         invoiceNumber: docNumber('SI', branch.branchCode, seq),
         customerId,
         branchId: branch.id,
-        invoiceDate: faker.date.recent({ days: 30 }),
+        invoiceDate: BigInt(faker.date.recent({ days: 30 }).getTime()),
         grossAmount: '0',
         discountAmount: '0',
         taxAmount: '0',
@@ -55,6 +59,8 @@ export async function seedSales(
         status: 'POSTED',
         salesType: faker.helpers.arrayElement(['RETAIL_OTC', 'PRESCRIPTION']),
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -98,6 +104,8 @@ export async function seedSales(
           taxAmount: decimal(lineTax),
           lineAmount: decimal(lineGross - lineDiscount + lineTax),
           taxId: pricing?.taxId,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -151,7 +159,7 @@ export async function seedSales(
         ),
         salesInvoiceId: invoice.id,
         branchId: invoice.branchId,
-        paymentDate: faker.date.recent({ days: 25 }),
+        paymentDate: BigInt(faker.date.recent({ days: 25 }).getTime()),
         paymentMethod: faker.helpers.arrayElement([
           'CASH',
           'UPI',
@@ -161,6 +169,8 @@ export async function seedSales(
         paymentAmount: invoice.netAmount,
         status: 'COMPLETED',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -190,7 +200,7 @@ export async function seedSales(
         salesInvoiceId: invoice.id,
         customerId: faker.helpers.arrayElement(ctx.customerIds),
         branchId: invoice.branchId,
-        returnDate: faker.date.recent({ days: 10 }),
+        returnDate: BigInt(faker.date.recent({ days: 10 }).getTime()),
         returnReason: 'OTHER',
         grossAmount: decimal(amount),
         taxAmount: decimal(amount * 0.12),
@@ -199,7 +209,9 @@ export async function seedSales(
         refundMode: 'CASH',
         status: 'COMPLETED',
         approvedByEmployeeId: ctx.employeeIds[0],
-        approvedAt: new Date(),
+        approvedAt: BigInt(new Date().getTime()),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -216,6 +228,8 @@ export async function seedSales(
         unitPrice: item.unitPrice,
         lineAmount: decimal(amount),
         returnReason: 'OTHER',
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }

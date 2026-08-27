@@ -35,14 +35,16 @@ export async function seedPurchase(
         purchaseOrderNumber: docNumber('PO', branch.branchCode, seq),
         supplierId,
         branchId: branch.id,
-        orderDate: faker.date.recent({ days: 60 }),
-        expectedDeliveryDate: faker.date.soon({ days: 14 }),
+        orderDate: BigInt(faker.date.recent({ days: 60 }).getTime()),
+        expectedDeliveryDate: BigInt(faker.date.soon({ days: 14 }).getTime()),
         grossAmount: '0',
         taxAmount: '0',
         netAmount: '0',
         status: i < 25 ? 'COMPLETED' : 'APPROVED',
         approvedByEmployeeId: employeeId,
-        approvedAt: new Date(),
+        approvedAt: BigInt(new Date().getTime()),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     poRecords.push({
@@ -75,6 +77,8 @@ export async function seedPurchase(
           taxAmount: decimal(lineTax),
           lineAmount: decimal(lineAmount + lineTax),
           isClosed: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
     }
@@ -104,14 +108,16 @@ export async function seedPurchase(
         purchaseOrderId: po.id,
         supplierId: po.supplierId,
         branchId: po.branchId,
-        receiptDate: faker.date.recent({ days: 45 }),
+        receiptDate: BigInt(faker.date.recent({ days: 45 }).getTime()),
         supplierChallanNo: `CH-${faker.string.numeric(6)}`,
         supplierInvoiceNo: `SUP-INV-${faker.string.numeric(6)}`,
         status: 'ACCEPTED',
         isBilled: true,
         receivedByEmployeeId: employeeId,
         inspectedByEmployeeId: employeeId,
-        inspectedAt: new Date(),
+        inspectedAt: BigInt(new Date().getTime()),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -153,6 +159,8 @@ export async function seedPurchase(
           taxPercent: decimal(12),
           taxAmount: decimal(lineTax),
           lineAmount: decimal(lineAmount + lineTax),
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -181,8 +189,8 @@ export async function seedPurchase(
         supplierId: po.supplierId,
         goodsReceiptId: grn.id,
         branchId: po.branchId,
-        invoiceDate: faker.date.recent({ days: 40 }),
-        dueDate: faker.date.soon({ days: 30 }),
+        invoiceDate: BigInt(faker.date.recent({ days: 40 }).getTime()),
+        dueDate: BigInt(faker.date.soon({ days: 30 }).getTime()),
         grossAmount: decimal(invoiceGross),
         taxAmount: decimal(invoiceTax),
         netAmount: decimal(net),
@@ -190,6 +198,8 @@ export async function seedPurchase(
         balanceAmount: decimal(0),
         status: 'POSTED',
         paymentStatus: 'PAID',
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -217,14 +227,16 @@ export async function seedPurchase(
         ),
         supplierId,
         branchId: branch.id,
-        returnDate: faker.date.recent({ days: 20 }),
+        returnDate: BigInt(faker.date.recent({ days: 20 }).getTime()),
         returnType: 'NEAR_EXPIRY',
         grossAmount: decimal(amount),
         taxAmount: decimal(amount * 0.12),
         netAmount: decimal(amount * 1.12),
         status: 'ACCEPTED',
         approvedByEmployeeId: employeeId,
-        approvedAt: new Date(),
+        approvedAt: BigInt(new Date().getTime()),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -239,6 +251,8 @@ export async function seedPurchase(
         returnQuantity: decimal(qty),
         unitPrice: batch.purchaseRate,
         lineAmount: decimal(amount),
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }

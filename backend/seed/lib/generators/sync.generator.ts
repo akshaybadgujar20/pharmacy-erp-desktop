@@ -41,7 +41,10 @@ export async function seedSync(
         sequenceNo,
         syncStatus,
         processedAt:
-          syncStatus === 'SYNCED' ? faker.date.recent({ days: 5 }) : undefined,
+          syncStatus === 'SYNCED'
+            ? BigInt(faker.date.recent({ days: 5 }).getTime())
+            : undefined,
+        createdAt: BigInt(Date.now()),
       },
     });
     sequenceNo++;
@@ -49,20 +52,25 @@ export async function seedSync(
 
   const syncLogIds: bigint[] = [];
   for (let i = 0; i < 5; i++) {
-    const startedAt = faker.date.recent({ days: 7 });
+    const startedAt = BigInt(faker.date.recent({ days: 7 }).getTime());
     const log = await prisma.syncLog.create({
       data: {
         uuid: uuid(),
         syncType: 'INCREMENTAL',
         syncDirection: 'BIDIRECTIONAL',
         startedAt,
-        completedAt: faker.date.between({ from: startedAt, to: new Date() }),
+        completedAt: BigInt(
+          faker.date
+            .between({ from: Number(startedAt), to: new Date() })
+            .getTime(),
+        ),
         recordsUploaded: faker.number.int({ min: 10, max: 50 }),
         recordsDownloaded: faker.number.int({ min: 0, max: 20 }),
         conflictsDetected: i === 0 ? 1 : 0,
         status: 'COMPLETED',
         deviceId,
         appVersion: '1.0.0-seed',
+        createdAt: BigInt(Date.now()),
       },
     });
     syncLogIds.push(log.id);
@@ -79,7 +87,11 @@ export async function seedSync(
         localPayload: { version: 1 },
         serverPayload: { version: 2 },
         resolutionStatus: i === 0 ? 'PENDING' : 'RESOLVED',
-        resolvedAt: i === 0 ? undefined : faker.date.recent({ days: 2 }),
+        resolvedAt:
+          i === 0
+            ? undefined
+            : BigInt(faker.date.recent({ days: 2 }).getTime()),
+        createdAt: BigInt(Date.now()),
       },
     });
   }
@@ -108,6 +120,8 @@ export async function seedFinancialAndAudit(
         normalBalance: 'DEBIT',
         isSystem: false,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -122,11 +136,13 @@ export async function seedFinancialAndAudit(
         voucherType: 'SALES_INVOICE',
         voucherId: BigInt(ledgerEntryOffset + i + 1),
         voucherNumber: `SI-REF-${ledgerEntryOffset + i + 1}`,
-        transactionDate: faker.date.recent({ days: 30 }),
+        transactionDate: BigInt(faker.date.recent({ days: 30 }).getTime()),
         debitAmount: decimal(isDebit ? amount : 0),
         creditAmount: decimal(isDebit ? 0 : amount),
         narration: 'Seed ledger entry',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -137,11 +153,13 @@ export async function seedFinancialAndAudit(
         uuid: uuid(),
         paymentNumber: `PAY-SEED-${String(paymentOffset + i + 1).padStart(4, '0')}`,
         paymentType: 'SUPPLIER_PAYMENT',
-        paymentDate: faker.date.recent({ days: 20 }),
+        paymentDate: BigInt(faker.date.recent({ days: 20 }).getTime()),
         amount: decimal(faker.number.int({ min: 1000, max: 25000 })),
         paymentMethod: 'NEFT',
         status: 'COMPLETED',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -152,11 +170,13 @@ export async function seedFinancialAndAudit(
         uuid: uuid(),
         receiptNumber: `RCP-SEED-${String(receiptOffset + i + 1).padStart(4, '0')}`,
         receiptType: 'CUSTOMER_RECEIPT',
-        receiptDate: faker.date.recent({ days: 15 }),
+        receiptDate: BigInt(faker.date.recent({ days: 15 }).getTime()),
         amount: decimal(faker.number.int({ min: 200, max: 8000 })),
         receiptMethod: 'CASH',
         status: 'COMPLETED',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -175,10 +195,12 @@ export async function seedFinancialAndAudit(
           'STATIONERY',
         ]),
         amount: decimal(faker.number.int({ min: 500, max: 15000 })),
-        expenseDate: faker.date.recent({ days: 10 }),
+        expenseDate: BigInt(faker.date.recent({ days: 10 }).getTime()),
         paymentMethod: 'CASH',
         status: 'POSTED',
         createdBy: userId,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -197,7 +219,8 @@ export async function seedFinancialAndAudit(
         module: 'SALES',
         ipAddress: '127.0.0.1',
         deviceId: 'desktop-seed-001',
-        actionTimestamp: faker.date.recent({ days: 20 }),
+        actionTimestamp: BigInt(faker.date.recent({ days: 20 }).getTime()),
+        createdAt: BigInt(Date.now()),
       },
     });
     auditLogs.push(log.id);
@@ -216,6 +239,7 @@ export async function seedFinancialAndAudit(
         oldValue: medicine.uuid,
         newValue: `${medicine.uuid}-updated`,
         changeType: 'UPDATE',
+        changedAt: BigInt(new Date().getTime()),
       },
     });
   }
@@ -232,9 +256,11 @@ export async function seedFinancialAndAudit(
         pointsPerAmount: decimal(1),
         redemptionValue: decimal(0.25),
         minimumRedemptionPoints: 100,
-        effectiveFrom: new Date('2024-04-01'),
+        effectiveFrom: BigInt(new Date('2024-04-01').getTime()),
         isDefault: true,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -247,9 +273,11 @@ export async function seedFinancialAndAudit(
         customerId: faker.helpers.arrayElement(ctx.customerIds),
         transactionNumber: `LT-SEED-${String(loyaltyTxnOffset + i + 1).padStart(4, '0')}`,
         transactionType: 'EARN',
-        transactionDate: faker.date.recent({ days: 20 }),
+        transactionDate: BigInt(faker.date.recent({ days: 20 }).getTime()),
         points: faker.number.int({ min: 10, max: 200 }),
         remarks: 'Seed loyalty earn',
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -269,8 +297,10 @@ export async function seedFinancialAndAudit(
         doctorId,
         customerId,
         branchId: branch.id,
-        prescriptionDate: faker.date.recent({ days: 7 }),
+        prescriptionDate: BigInt(faker.date.recent({ days: 7 }).getTime()),
         status: 'ACTIVE',
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
@@ -287,6 +317,8 @@ export async function seedFinancialAndAudit(
         frequency: 'Twice daily',
         instructions: 'After food',
         status: 'ACTIVE',
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }

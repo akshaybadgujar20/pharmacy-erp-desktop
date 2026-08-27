@@ -32,6 +32,8 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
         currencyCode: row.currencyCode as string,
         timezone: row.timezone as string,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Country', row.uuid as string, created.id);
@@ -48,6 +50,8 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
         gstStateCode: row.gstStateCode as string | undefined,
         isoCode: row.isoCode as string | undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('State', row.uuid as string, created.id);
@@ -64,6 +68,8 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
         district: row.district as string | undefined,
         postalRegion: row.postalRegion as string | undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('City', row.uuid as string, created.id);
@@ -80,6 +86,8 @@ async function loadGeo(prisma: PrismaClient): Promise<void> {
         postalCode: row.postalCode as string | undefined,
         deliveryZone: row.deliveryZone as string | undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Area', row.uuid as string, created.id);
@@ -111,6 +119,8 @@ async function loadConfiguration(
         pinCode: row.pinCode as string | undefined,
         isDefault: row.isDefault as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Company', row.uuid as string, created.id);
@@ -137,6 +147,8 @@ async function loadConfiguration(
         managerName: row.managerName as string | undefined,
         isHeadOffice: row.isHeadOffice as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Branch', row.uuid as string, created.id);
@@ -158,10 +170,12 @@ async function loadConfiguration(
           : undefined,
         financialYearCode: row.financialYearCode as string,
         financialYearName: row.financialYearName as string,
-        startDate: new Date(row.startDate as string),
-        endDate: new Date(row.endDate as string),
+        startDate: BigInt(row.startDate as string | number),
+        endDate: BigInt(row.endDate as string | number),
         status: row.status as string,
         isCurrent: row.isCurrent as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('FinancialYear', row.uuid as string, created.id);
@@ -184,6 +198,8 @@ async function loadConfiguration(
         resetPolicy: row.resetPolicy as string,
         format: row.format as string | undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('SequenceGenerator', row.uuid as string, created.id);
@@ -208,6 +224,8 @@ async function loadConfiguration(
         isEditable: row.isEditable as boolean,
         isEncrypted: (row.isEncrypted as boolean) ?? false,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('AppSetting', row.uuid as string, created.id);
@@ -232,6 +250,8 @@ async function loadConfiguration(
         showHumanReadableText: (row.showHumanReadableText as boolean) ?? true,
         isDefault: row.isDefault as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('BarcodeConfiguration', row.uuid as string, created.id);
@@ -256,6 +276,8 @@ async function loadConfiguration(
         printOrientation: (row.printOrientation as string) ?? 'PORTRAIT',
         isDefault: row.isDefault as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('PrinterConfiguration', row.uuid as string, created.id);
@@ -275,6 +297,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
         decimalAllowed: row.decimalAllowed as boolean,
         isSystemUnit: row.isSystemUnit as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('UnitOfMeasure', row.uuid as string, created.id);
@@ -289,6 +313,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
         categoryCode: row.categoryCode as string,
         categoryName: row.categoryName as string,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('MedicineCategory', row.uuid as string, created.id);
@@ -305,6 +331,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
         requiresPrescription: row.requiresPrescription as boolean,
         isSystemSchedule: true,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('MedicineSchedule', row.uuid as string, created.id);
@@ -320,6 +348,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
         genericName: row.genericName as string,
         therapeuticClass: row.therapeuticClass as string | undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('MedicineGeneric', row.uuid as string, created.id);
@@ -337,6 +367,8 @@ async function loadMedicineRefs(prisma: PrismaClient): Promise<void> {
         strength: decimal(row.strength as string | number),
         strengthUnit: row.strengthUnit as string,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('SaltComposition', row.uuid as string, created.id);
@@ -354,11 +386,13 @@ async function loadTax(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
         taxName: row.taxName as string,
         taxType: row.taxType as string,
         taxRate: decimal(row.taxRate as string | number),
-        effectiveFrom: new Date(row.effectiveFrom as string),
+        effectiveFrom: BigInt(row.effectiveFrom as string | number),
         effectiveTo: row.effectiveTo
-          ? new Date(row.effectiveTo as string)
+          ? BigInt(row.effectiveTo as string | number)
           : undefined,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Tax', row.uuid as string, created.id);
@@ -379,6 +413,8 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
         action: row.action as string,
         isSystemPermission: row.isSystemPermission as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Permission', row.uuid as string, created.id);
@@ -394,6 +430,8 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
         description: row.description as string | undefined,
         isSystemRole: row.isSystemRole as boolean,
         isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('Role', row.uuid as string, created.id);
@@ -408,6 +446,8 @@ async function loadSecurity(prisma: PrismaClient): Promise<void> {
         roleId: resolve('Role', row.roleUuid as string),
         permissionId: resolve('Permission', row.permissionUuid as string),
         isGranted: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('RolePermission', row.uuid as string, created.id);
@@ -457,6 +497,8 @@ export async function loadUsers(
         username: usernames[i],
         passwordHash: defaultPasswordHash,
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
     register('User', userUuid, user.id);
@@ -467,14 +509,17 @@ export async function loadUsers(
     await prisma.userRole.create({
       data: {
         uuid: userRoleUuid,
+        assignedAt: BigInt(Date.now()),
         userId: user.id,
         roleId: resolve('Role', roleUuid),
         isActive: true,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
 
     const sessionUuid = `19191919-1919-4919-8919-1919191919${String(i + 1).padStart(2, '0')}`;
-    const now = new Date();
+    const now = BigInt(Date.now());
     const branch =
       ctx.branchRecords[i % ctx.branchRecords.length] ?? ctx.branchRecords[0];
     const branchRow = await prisma.branch.findUnique({
@@ -496,8 +541,10 @@ export async function loadUsers(
         ipAddress: '127.0.0.1',
         loginTime: now,
         lastActivityAt: now,
-        expiresAt: new Date(Date.now() + 86_400_000),
+        expiresAt: BigInt(new Date(Date.now() + 86_400_000).getTime()),
         isActive: i < 5,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
       },
     });
   }
@@ -534,6 +581,8 @@ export async function seedUserBranches(
           userId,
           branchId: branch.id,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
     }

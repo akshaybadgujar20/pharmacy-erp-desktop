@@ -18,7 +18,7 @@ export interface BatchRecord {
   uuid: string;
   medicineId: bigint;
   batchNumber: string;
-  expiryDate: Date;
+  expiryDate: bigint;
   purchaseRate: string;
   mrp: string;
 }

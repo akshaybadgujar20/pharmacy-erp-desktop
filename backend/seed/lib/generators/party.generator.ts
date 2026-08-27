@@ -103,6 +103,8 @@ export async function seedParties(
           lastName: isOrg ? undefined : last,
           organizationName: isOrg ? displayName : undefined,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
       register('Party', partyUuid, party.id);
@@ -115,6 +117,8 @@ export async function seedParties(
           roleType: spec.roleType,
           isPrimary: true,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -133,6 +137,8 @@ export async function seedParties(
           postalCode: faker.location.zipCode('######'),
           isDefault: true,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -145,6 +151,8 @@ export async function seedParties(
           countryCode: '+91',
           isPrimary: true,
           isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -159,6 +167,8 @@ export async function seedParties(
               .toLowerCase(),
             isPrimary: false,
             isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
           },
         });
       }
@@ -175,6 +185,8 @@ export async function seedParties(
             customerType: faker.helpers.arrayElement(CUSTOMER_TYPES),
             creditLimit: faker.number.int({ min: 0, max: 50000 }).toFixed(2),
             isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
           },
         });
         ctx.customerIds.push(row.id);
@@ -190,6 +202,8 @@ export async function seedParties(
             panNumber: pan(),
             preferredSupplier: i < 3,
             isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
           },
         });
         ctx.supplierIds.push(row.id);
@@ -207,6 +221,8 @@ export async function seedParties(
               .int({ min: 300, max: 1500 })
               .toFixed(2),
             isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
           },
         });
         ctx.doctorIds.push(row.id);
@@ -225,9 +241,11 @@ export async function seedParties(
                     ? 'Cashier'
                     : 'Store Manager',
             department: 'Operations',
-            joiningDate: faker.date.past({ years: 3 }),
+            joiningDate: BigInt(faker.date.past({ years: 3 }).getTime()),
             isPharmacist: i > 0 && i < 4,
             isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
           },
         });
         ctx.employeeIds.push(row.id);
