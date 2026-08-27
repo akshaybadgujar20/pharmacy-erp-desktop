@@ -1,15 +1,11 @@
 import {
   IsBoolean,
-  IsDateString,
-  IsIn,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   Min,
 } from 'class-validator';
-import { CustomerType } from '../constants/inventory.constants';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateBatchDto {
@@ -20,11 +16,11 @@ export class CreateBatchDto {
   @IsNotEmpty()
   batchNumber!: string;
 
-  @IsDateString()
-  manufacturingDate!: string;
+  @MandatoryBigIntField()
+  manufacturingDate!: bigint;
 
-  @IsDateString()
-  expiryDate!: string;
+  @MandatoryBigIntField()
+  expiryDate!: bigint;
 
   @IsOptional()
   @IsNumber()
@@ -34,7 +30,7 @@ export class CreateBatchDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
-  mrp!: boolean;
+  mrp!: number;
 
   @IsOptional()
   @IsString()

@@ -1,41 +1,45 @@
 import {
   IsBoolean,
-  IsIn,
   IsInt,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  MaxLength,
   Min,
 } from 'class-validator';
-import { CustomerType } from '../constants/inventory.constants';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdateBatchDto {
   @IsInt()
   @Min(1)
   version!: number;
 
-  @IsOptional()
+  @MandatoryBigIntField()
+  medicineId!: bigint;
+
   @IsString()
-  @MaxLength(50)
-  customerCode?: string;
+  @IsNotEmpty()
+  batchNumber!: string;
+
+  @MandatoryBigIntField()
+  manufacturingDate!: bigint;
+
+  @MandatoryBigIntField()
+  expiryDate!: bigint;
 
   @IsOptional()
-  @IsString()
-  @IsIn(Object.values(CustomerType))
-  customerType?: string;
-
-  @IsOptional()
-  @IsString()
-  creditLimit?: string;
-
-  @IsOptional()
-  @IsInt()
+  @IsNumber()
   @Min(0)
-  paymentTermsDays?: number;
+  purchaseRate!: number;
 
   @IsOptional()
-  @IsBoolean()
-  isTaxExempt?: boolean;
+  @IsNumber()
+  @Min(0)
+  mrp!: number;
+
+  @IsOptional()
+  @IsString()
+  barcode?: string;
 
   @IsOptional()
   @IsBoolean()
