@@ -96,6 +96,8 @@ export class PartyService {
           lastName: dto.lastName,
           organizationName: dto.organizationName,
           isActive: dto.isActive ?? true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -240,7 +242,7 @@ export class PartyService {
       const updateResult = await tx.party.updateMany({
         where: { id, version, deletedAt: null },
         data: {
-          deletedAt: new Date(),
+          deletedAt: BigInt(Date.now()),
           deletedBy: this.requestContext.tryGet()?.userId,
           version: { increment: 1 },
         },

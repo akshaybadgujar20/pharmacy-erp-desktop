@@ -120,30 +120,32 @@ export class PartyContactService {
 
       const contact = softDeleted
         ? await tx.partyContact.update({
-            where: { id: softDeleted.id },
-            data: {
-              contactType: dto.contactType,
-              contactValue,
-              countryCode: dto.countryCode,
-              isPrimary: dto.isPrimary ?? false,
-              isVerified: dto.isVerified ?? false,
-              isActive: dto.isActive ?? true,
-              deletedAt: null,
-              version: { increment: 1 },
-            },
-          })
+          where: { id: softDeleted.id },
+          data: {
+            contactType: dto.contactType,
+            contactValue,
+            countryCode: dto.countryCode,
+            isPrimary: dto.isPrimary ?? false,
+            isVerified: dto.isVerified ?? false,
+            isActive: dto.isActive ?? true,
+            deletedAt: null,
+            version: { increment: 1 },
+          },
+        })
         : await tx.partyContact.create({
-            data: {
-              uuid: randomUUID(),
-              partyId,
-              contactType: dto.contactType,
-              contactValue,
-              countryCode: dto.countryCode,
-              isPrimary: dto.isPrimary ?? false,
-              isVerified: dto.isVerified ?? false,
-              isActive: dto.isActive ?? true,
-            },
-          });
+          data: {
+            uuid: randomUUID(),
+            partyId,
+            contactType: dto.contactType,
+            contactValue,
+            countryCode: dto.countryCode,
+            isPrimary: dto.isPrimary ?? false,
+            isVerified: dto.isVerified ?? false,
+            isActive: dto.isActive ?? true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
+          },
+        });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.PARTY_CONTACT,
@@ -182,9 +184,9 @@ export class PartyContactService {
       const contactValue =
         dto.contactValue !== undefined || dto.contactType !== undefined
           ? this.normalizeContactValue(
-              contactType,
-              dto.contactValue ?? existing.contactValue,
-            )
+            contactType,
+            dto.contactValue ?? existing.contactValue,
+          )
           : undefined;
 
       if (dto.isPrimary ?? false) {
@@ -256,7 +258,7 @@ export class PartyContactService {
 
       const updateResult = await tx.partyContact.updateMany({
         where: { id, partyId, version, deletedAt: null },
-        data: { deletedAt: new Date(), version: { increment: 1 } },
+        data: { deletedAt: BigInt(Date.now()), version: { increment: 1 } },
       });
 
       optimisticUpdate(

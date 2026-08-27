@@ -129,9 +129,7 @@ export class EmployeeService {
               employeeCode: dto.employeeCode,
               designation: dto.designation,
               department: dto.department,
-              joiningDate: dto.joiningDate
-                ? new Date(dto.joiningDate)
-                : undefined,
+              joiningDate: dto.joiningDate ? dto.joiningDate : undefined,
               salary: dto.salary,
               licenseNumber: dto.licenseNumber,
               isPharmacist: dto.isPharmacist ?? false,
@@ -147,13 +145,13 @@ export class EmployeeService {
               employeeCode: dto.employeeCode,
               designation: dto.designation,
               department: dto.department,
-              joiningDate: dto.joiningDate
-                ? new Date(dto.joiningDate)
-                : undefined,
+              joiningDate: dto.joiningDate ? dto.joiningDate : undefined,
               salary: dto.salary,
               licenseNumber: dto.licenseNumber,
               isPharmacist: dto.isPharmacist ?? false,
               isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
             },
           });
 
@@ -208,8 +206,8 @@ export class EmployeeService {
           employeeCode: dto.employeeCode,
           designation: dto.designation,
           department: dto.department,
-          joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : undefined,
-          leavingDate: dto.leavingDate ? new Date(dto.leavingDate) : undefined,
+          joiningDate: dto.joiningDate ? dto.joiningDate : undefined,
+          leavingDate: dto.leavingDate ? dto.leavingDate : undefined,
           salary: dto.salary,
           licenseNumber: dto.licenseNumber,
           isPharmacist: dto.isPharmacist,
@@ -261,7 +259,7 @@ export class EmployeeService {
 
       const updateResult = await tx.employee.updateMany({
         where: { id, version, deletedAt: null },
-        data: { deletedAt: new Date(), version: { increment: 1 } },
+        data: { deletedAt: BigInt(Date.now()), version: { increment: 1 } },
       });
 
       optimisticUpdate(

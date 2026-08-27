@@ -107,6 +107,8 @@ export class PartyRoleService {
               roleType: dto.roleType,
               isPrimary: dto.isPrimary ?? false,
               isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
             },
           });
 
@@ -200,7 +202,7 @@ export class PartyRoleService {
 
       const updateResult = await tx.partyRole.updateMany({
         where: { id, partyId, version, deletedAt: null },
-        data: { deletedAt: new Date(), version: { increment: 1 } },
+        data: { deletedAt: BigInt(Date.now()), version: { increment: 1 } },
       });
 
       optimisticUpdate(

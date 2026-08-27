@@ -164,6 +164,8 @@ export class SupplierService {
               paymentTermsDays: dto.paymentTermsDays ?? 0,
               preferredSupplier: dto.preferredSupplier ?? false,
               isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
             },
           });
 
@@ -283,7 +285,7 @@ export class SupplierService {
       const updateResult = await tx.supplier.updateMany({
         where: { id, version, deletedAt: null },
         data: {
-          deletedAt: new Date(),
+          deletedAt: BigInt(Date.now()),
           deletedBy: this.requestContext.tryGet()?.userId,
           version: { increment: 1 },
         },

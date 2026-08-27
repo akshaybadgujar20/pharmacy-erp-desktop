@@ -99,6 +99,8 @@ export class PartyAddressService {
           longitude: dto.longitude,
           isDefault: dto.isDefault ?? false,
           isActive: dto.isActive ?? true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
         },
       });
 
@@ -213,7 +215,7 @@ export class PartyAddressService {
 
       const updateResult = await tx.partyAddress.updateMany({
         where: { id, partyId, version, deletedAt: null },
-        data: { deletedAt: new Date(), version: { increment: 1 } },
+        data: { deletedAt: BigInt(Date.now()), version: { increment: 1 } },
       });
 
       optimisticUpdate(

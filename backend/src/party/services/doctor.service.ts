@@ -157,6 +157,8 @@ export class DoctorService {
               consultationFee: dto.consultationFee,
               isVisitingDoctor: dto.isVisitingDoctor ?? false,
               isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
             },
           });
 
@@ -272,7 +274,7 @@ export class DoctorService {
 
       const updateResult = await tx.doctor.updateMany({
         where: { id, version, deletedAt: null },
-        data: { deletedAt: new Date(), version: { increment: 1 } },
+        data: { deletedAt: BigInt(Date.now()), version: { increment: 1 } },
       });
 
       optimisticUpdate(

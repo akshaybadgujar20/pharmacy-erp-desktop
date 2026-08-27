@@ -143,6 +143,8 @@ export class CustomerService {
               paymentTermsDays: dto.paymentTermsDays ?? 0,
               isTaxExempt: dto.isTaxExempt ?? false,
               isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
             },
           });
 
@@ -249,7 +251,7 @@ export class CustomerService {
       const updateResult = await tx.customer.updateMany({
         where: { id, version, deletedAt: null },
         data: {
-          deletedAt: new Date(),
+          deletedAt: BigInt(Date.now()),
           deletedBy: this.requestContext.tryGet()?.userId,
           version: { increment: 1 },
         },
