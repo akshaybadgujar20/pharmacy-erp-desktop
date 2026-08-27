@@ -90,6 +90,8 @@ export async function ensurePartyRole(
       partyId,
       roleType,
       isActive: true,
+      createdAt: BigInt(Date.now()),
+      updatedAt: BigInt(Date.now()),
     },
   });
 }
