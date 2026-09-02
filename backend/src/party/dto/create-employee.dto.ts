@@ -12,10 +12,8 @@ import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 import { Type } from 'class-transformer';
 
 export class CreateEmployeeDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @OptionalBigIntField()
+  partyId!: bigint;
 
   @IsString()
   @IsNotEmpty()

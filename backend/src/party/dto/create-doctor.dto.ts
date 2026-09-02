@@ -9,12 +9,11 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateDoctorDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @OptionalBigIntField()
+  partyId!: bigint;
 
   @IsString()
   @IsNotEmpty()

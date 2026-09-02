@@ -12,12 +12,11 @@ import {
 } from 'class-validator';
 import { SupplierType } from '../constants/party.constants';
 import { Type } from 'class-transformer';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateSupplierDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @OptionalBigIntField()
+  partyId!: bigint;
 
   @IsString()
   @IsNotEmpty()

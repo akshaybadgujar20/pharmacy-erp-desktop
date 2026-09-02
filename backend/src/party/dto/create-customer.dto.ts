@@ -6,18 +6,16 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  Matches,
   MaxLength,
   Min,
 } from 'class-validator';
 import { CustomerType } from '../constants/party.constants';
 import { Type } from 'class-transformer';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreateCustomerDto {
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d+$/)
-  partyId!: string;
+  @OptionalBigIntField()
+  partyId!: bigint;
 
   @IsString()
   @IsNotEmpty()
