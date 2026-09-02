@@ -1,9 +1,5 @@
 import { Customer } from '@prisma/client';
-import {
-  serializeBigInt,
-  serializeDate,
-  serializeDecimal,
-} from '../utils/inventory.util';
+import { serializeBigInt, serializeDecimal } from '../utils/inventory.util';
 
 export interface CustomerResponse {
   id: string;
@@ -17,9 +13,9 @@ export interface CustomerResponse {
   loyaltyPoints: number;
   isTaxExempt: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: bigint;
+  updatedAt: bigint;
+  deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
   version: number;
@@ -38,9 +34,9 @@ export function toCustomerResponse(customer: Customer): CustomerResponse {
     loyaltyPoints: customer.loyaltyPoints,
     isTaxExempt: customer.isTaxExempt,
     isActive: customer.isActive,
-    createdAt: customer.createdAt.toISOString(),
-    updatedAt: customer.updatedAt.toISOString(),
-    deletedAt: serializeDate(customer.deletedAt),
+    createdAt: customer.createdAt,
+    updatedAt: customer.updatedAt,
+    deletedAt: customer.deletedAt,
     updatedBy: serializeBigInt(customer.updatedBy),
     deletedBy: serializeBigInt(customer.deletedBy),
     version: customer.version,

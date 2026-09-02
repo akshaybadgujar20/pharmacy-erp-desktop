@@ -114,7 +114,7 @@ export class InventoryLedgerService {
       branchCode: input.branchCode,
     });
 
-    const now = new Date();
+    const now = BigInt(new Date().getTime());
 
     if (stock) {
       const updated = await tx.stock.updateMany({
@@ -154,6 +154,7 @@ export class InventoryLedgerService {
         movementDate: now,
         remarks: input.remarks,
         createdBy: input.createdBy,
+        createdAt: now,
       },
     });
   }
@@ -162,7 +163,7 @@ export class InventoryLedgerService {
     tx: TxClient,
     input: ApplyMovementInput,
     nextAvailable: Prisma.Decimal,
-    now: Date,
+    now: bigint,
   ): Promise<void> {
     try {
       await tx.stock.create({
@@ -172,6 +173,8 @@ export class InventoryLedgerService {
           availableQuantity: nextAvailable,
           lastMovementAt: now,
           isActive: true,
+          createdAt: now,
+          updatedAt: now,
         },
       });
     } catch (error) {

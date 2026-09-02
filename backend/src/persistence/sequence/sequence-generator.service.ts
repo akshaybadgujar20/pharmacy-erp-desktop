@@ -19,9 +19,11 @@ export interface SequenceNextResult {
 
 function shouldResetSequence(
   resetPolicy: string,
-  lastUpdatedAt: Date,
-  now: Date,
+  lastUpdatedAtMs: bigint,
+  nowMs: bigint,
 ): boolean {
+  const lastUpdatedAt = new Date(Number(lastUpdatedAtMs));
+  const now = new Date(Number(nowMs));
   switch (resetPolicy) {
     case ResetPolicy.NEVER:
       return false;
@@ -67,7 +69,7 @@ export class SequenceGeneratorService {
       );
     }
 
-    const now = new Date();
+    const now = BigInt(new Date().getTime());
     const reset = shouldResetSequence(row.resetPolicy, row.updatedAt, now);
     const increment = BigInt(row.incrementBy);
     const nextValue = reset ? increment : row.currentNumber + increment;

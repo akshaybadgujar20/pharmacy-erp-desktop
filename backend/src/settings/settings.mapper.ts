@@ -15,8 +15,8 @@ export interface AppSettingResponse {
   isEditable: boolean;
   isEncrypted: boolean;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: bigint;
+  updatedAt: bigint;
   version: number;
 }
 
@@ -36,8 +36,8 @@ export function toAppSettingResponse(setting: AppSetting): AppSettingResponse {
     isEditable: setting.isEditable,
     isEncrypted: setting.isEncrypted,
     isActive: setting.isActive,
-    createdAt: setting.createdAt.toISOString(),
-    updatedAt: setting.updatedAt.toISOString(),
+    createdAt: setting.createdAt,
+    updatedAt: setting.updatedAt,
     version: setting.version,
   };
 }

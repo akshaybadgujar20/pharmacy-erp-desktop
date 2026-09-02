@@ -42,7 +42,7 @@ export class OutboxService {
         _max: { sequenceNo: true },
       });
       const sequenceNo = (aggregate._max.sequenceNo ?? 0n) + 1n;
-
+      const now = BigInt(new Date().getTime());
       try {
         return await tx.outbox.create({
           data: {
@@ -56,6 +56,7 @@ export class OutboxService {
             operationId,
             sequenceNo,
             syncStatus: OutboxSyncStatus.PENDING,
+            createdAt: now,
           },
         });
       } catch (error) {
