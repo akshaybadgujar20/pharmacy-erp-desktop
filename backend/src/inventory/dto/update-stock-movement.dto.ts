@@ -7,17 +7,11 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { PartyType } from '../constants/inventory.constants';
 
 export class UpdateStockMovementDto {
   @IsInt()
   @Min(1)
   version!: number;
-
-  @IsOptional()
-  @IsString()
-  @IsIn(Object.values(PartyType))
-  partyType?: string;
 
   @IsOptional()
   @IsString()

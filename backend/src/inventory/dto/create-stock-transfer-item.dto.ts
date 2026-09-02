@@ -1,18 +1,6 @@
-import {
-  IsBoolean,
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { PartyRoleType } from '../constants/inventory.constants';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateStockTransferItemDto {
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(Object.values(PartyRoleType))
-  roleType!: string;
-
   @IsOptional()
   @IsBoolean()
   isPrimary?: boolean;

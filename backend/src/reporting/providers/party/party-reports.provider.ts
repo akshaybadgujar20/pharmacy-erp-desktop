@@ -280,14 +280,18 @@ export class PartyReportsProvider implements OnModuleInit {
 
   private buildCreatedAtFilter(
     params: ReportParams,
-  ): Prisma.DateTimeFilter | undefined {
+  ): Prisma.BigIntFilter | undefined {
     if (!params.fromDate && !params.toDate) {
       return undefined;
     }
 
     return {
-      ...(params.fromDate ? { gte: new Date(params.fromDate) } : {}),
-      ...(params.toDate ? { lte: this.endOfDay(params.toDate) } : {}),
+      ...(params.fromDate
+        ? { gte: BigInt(new Date(params.fromDate).getTime()) }
+        : {}),
+      ...(params.toDate
+        ? { lte: BigInt(this.endOfDay(params.toDate).getTime()) }
+        : {}),
     };
   }
 

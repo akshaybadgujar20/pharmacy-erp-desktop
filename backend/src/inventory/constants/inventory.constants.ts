@@ -1,17 +1,3 @@
-export const PartyType = {
-  PERSON: 'PERSON',
-  ORGANIZATION: 'ORGANIZATION',
-} as const;
-
-export const PartyRoleType = {
-  CUSTOMER: 'CUSTOMER',
-  SUPPLIER: 'SUPPLIER',
-  DOCTOR: 'DOCTOR',
-  EMPLOYEE: 'EMPLOYEE',
-  ADMIN: 'ADMIN',
-  OTHER: 'OTHER',
-} as const;
-
 export const AddressType = {
   HOME: 'HOME',
   WORK: 'WORK',

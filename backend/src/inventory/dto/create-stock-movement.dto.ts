@@ -1,19 +1,12 @@
 import {
   IsBoolean,
-  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
-import { PartyType } from '../constants/inventory.constants';
 
 export class CreateStockMovementDto {
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(Object.values(PartyType))
-  partyType!: string;
-
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
