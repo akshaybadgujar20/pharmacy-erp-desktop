@@ -4,9 +4,14 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   Min,
 } from 'class-validator';
-import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { Type } from 'class-transformer';
+import {
+  MandatoryBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
 
 export class CreateBatchDto {
   @MandatoryBigIntField()
@@ -14,26 +19,28 @@ export class CreateBatchDto {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(50)
   batchNumber!: string;
 
-  @MandatoryBigIntField()
-  manufacturingDate!: bigint;
+  @OptionalBigIntField()
+  manufacturingDate?: bigint;
 
   @MandatoryBigIntField()
   expiryDate!: bigint;
 
-  @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   purchaseRate!: number;
 
-  @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   mrp!: number;
 
   @IsOptional()
   @IsString()
+  @MaxLength(50)
   barcode?: string;
 
   @IsOptional()

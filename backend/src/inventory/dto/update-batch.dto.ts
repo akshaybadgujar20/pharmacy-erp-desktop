@@ -1,44 +1,55 @@
 import {
   IsBoolean,
   IsInt,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   Min,
 } from 'class-validator';
-import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { Type } from 'class-transformer';
+import {
+  MandatoryBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
 
 export class UpdateBatchDto {
   @IsInt()
   @Min(1)
   version!: number;
 
-  @MandatoryBigIntField()
-  medicineId!: bigint;
-
-  @IsString()
-  @IsNotEmpty()
-  batchNumber!: string;
-
-  @MandatoryBigIntField()
-  manufacturingDate!: bigint;
-
-  @MandatoryBigIntField()
-  expiryDate!: bigint;
-
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  purchaseRate!: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  mrp!: number;
+  @MandatoryBigIntField()
+  medicineId?: bigint;
 
   @IsOptional()
   @IsString()
+  @MaxLength(50)
+  batchNumber?: string;
+
+  @IsOptional()
+  @OptionalBigIntField()
+  manufacturingDate?: bigint;
+
+  @IsOptional()
+  @MandatoryBigIntField()
+  expiryDate?: bigint;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  purchaseRate?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  mrp?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
   barcode?: string;
 
   @IsOptional()

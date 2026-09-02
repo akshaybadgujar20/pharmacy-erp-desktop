@@ -1,30 +1,70 @@
-export const AddressType = {
-  HOME: 'HOME',
-  WORK: 'WORK',
-  BILLING: 'BILLING',
-  SHIPPING: 'SHIPPING',
-  REGISTERED: 'REGISTERED',
-  OTHER: 'OTHER',
+export const StockMovementType = {
+  PURCHASE_GRN: 'PURCHASE_GRN',
+  SALES_INVOICE: 'SALES_INVOICE',
+  PURCHASE_RETURN: 'PURCHASE_RETURN',
+  SALES_RETURN: 'SALES_RETURN',
+  TRANSFER_IN: 'TRANSFER_IN',
+  TRANSFER_OUT: 'TRANSFER_OUT',
+  ADJUSTMENT_GAIN: 'ADJUSTMENT_GAIN',
+  ADJUSTMENT_LOSS: 'ADJUSTMENT_LOSS',
 } as const;
 
-export const ContactType = {
-  PHONE: 'PHONE',
-  MOBILE: 'MOBILE',
-  EMAIL: 'EMAIL',
-  FAX: 'FAX',
-  WHATSAPP: 'WHATSAPP',
-  OTHER: 'OTHER',
+export const StockMovementDirection = {
+  IN: 'IN',
+  OUT: 'OUT',
 } as const;
 
-export const CustomerType = {
-  RETAIL: 'RETAIL',
-  WHOLESALE: 'WHOLESALE',
-  CORPORATE: 'CORPORATE',
+export const StockAdjustmentType = {
+  DAMAGE: 'DAMAGE',
+  EXPIRED: 'EXPIRED',
+  LOST: 'LOST',
+  FOUND: 'FOUND',
+  THEFT: 'THEFT',
+  GAIN: 'GAIN',
+  LOSS: 'LOSS',
 } as const;
 
-export const SupplierType = {
-  MANUFACTURER: 'MANUFACTURER',
-  DISTRIBUTOR: 'DISTRIBUTOR',
-  WHOLESALER: 'WHOLESALER',
-  OTHER: 'OTHER',
+export const StockAdjustmentStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const StockTransferStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  DISPATCHED: 'DISPATCHED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  PARTIALLY_RECEIVED: 'PARTIALLY_RECEIVED',
+  COMPLETED: 'COMPLETED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const StockTransferType = {
+  ROUTINE_REPLENISHMENT: 'ROUTINE_REPLENISHMENT',
+  EMERGENCY_TRANSFER: 'EMERGENCY_TRANSFER',
+  EXCESS_REBALANCING: 'EXCESS_REBALANCING',
+} as const;
+
+export const StockTakeCountType = {
+  FULL_AUDIT: 'FULL_AUDIT',
+  CYCLE_COUNT: 'CYCLE_COUNT',
+  SCHEDULE_H_AUDIT: 'SCHEDULE_H_AUDIT',
+  COLD_CHAIN_AUDIT: 'COLD_CHAIN_AUDIT',
+  NEAR_EXPIRY_AUDIT: 'NEAR_EXPIRY_AUDIT',
+} as const;
+
+export const StockTakeStatus = {
+  DRAFT: 'DRAFT',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COUNTED: 'COUNTED',
+  RECONCILED: 'RECONCILED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const StockTakeVarianceType = {
+  MATCHED: 'MATCHED',
+  SURPLUS: 'SURPLUS',
+  DEFICIT: 'DEFICIT',
 } as const;

@@ -430,7 +430,7 @@ export class AuthService {
         where: { id: userId },
         data: {
           lockedUntil: BigInt(
-            new Date(Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS).getTime()
+            new Date(Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS).getTime(),
           ),
         },
       });

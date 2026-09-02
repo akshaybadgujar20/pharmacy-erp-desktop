@@ -8,14 +8,14 @@ import {
 import { Type } from 'class-transformer';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
-export class CreateStockTransferItemDto {
+export class CreateStockTakeItemDto {
   @MandatoryBigIntField()
   batchId!: bigint;
 
   @Type(() => Number)
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
-  sentQuantity!: number;
+  physicalQuantity!: number;
 
   @IsOptional()
   @IsString()

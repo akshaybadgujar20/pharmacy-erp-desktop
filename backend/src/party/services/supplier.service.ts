@@ -95,7 +95,6 @@ export class SupplierService {
   }
 
   async create(dto: CreateSupplierDto) {
-
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
       await assertPartyExists(tx, partyId);
@@ -187,7 +186,6 @@ export class SupplierService {
   }
 
   async update(id: bigint, dto: UpdateSupplierDto) {
-
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.supplier.findFirst({
         where: { id, deletedAt: null },

@@ -1,58 +1,26 @@
 import {
-  IsBoolean,
-  IsIn,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
-import { SupplierType } from '../constants/inventory.constants';
+import { Type } from 'class-transformer';
 
-export class UpdateStockTakeDto {
+export class UpdateStockTakeItemDto {
   @IsInt()
   @Min(1)
   version!: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  supplierCode?: string;
-
-  @IsOptional()
-  @IsString()
-  @IsIn(Object.values(SupplierType))
-  supplierType?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(20)
-  gstin?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  drugLicenseNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(20)
-  panNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  creditLimit?: string;
-
-  @IsOptional()
-  @IsInt()
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
-  paymentTermsDays?: number;
+  physicalQuantity?: number;
 
   @IsOptional()
-  @IsBoolean()
-  preferredSupplier?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
+  @IsString()
+  @MaxLength(255)
+  remarks?: string;
 }

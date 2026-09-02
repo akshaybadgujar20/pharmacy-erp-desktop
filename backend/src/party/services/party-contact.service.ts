@@ -120,32 +120,32 @@ export class PartyContactService {
 
       const contact = softDeleted
         ? await tx.partyContact.update({
-          where: { id: softDeleted.id },
-          data: {
-            contactType: dto.contactType,
-            contactValue,
-            countryCode: dto.countryCode,
-            isPrimary: dto.isPrimary ?? false,
-            isVerified: dto.isVerified ?? false,
-            isActive: dto.isActive ?? true,
-            deletedAt: null,
-            version: { increment: 1 },
-          },
-        })
+            where: { id: softDeleted.id },
+            data: {
+              contactType: dto.contactType,
+              contactValue,
+              countryCode: dto.countryCode,
+              isPrimary: dto.isPrimary ?? false,
+              isVerified: dto.isVerified ?? false,
+              isActive: dto.isActive ?? true,
+              deletedAt: null,
+              version: { increment: 1 },
+            },
+          })
         : await tx.partyContact.create({
-          data: {
-            uuid: randomUUID(),
-            partyId,
-            contactType: dto.contactType,
-            contactValue,
-            countryCode: dto.countryCode,
-            isPrimary: dto.isPrimary ?? false,
-            isVerified: dto.isVerified ?? false,
-            isActive: dto.isActive ?? true,
-            createdAt: BigInt(Date.now()),
-            updatedAt: BigInt(Date.now()),
-          },
-        });
+            data: {
+              uuid: randomUUID(),
+              partyId,
+              contactType: dto.contactType,
+              contactValue,
+              countryCode: dto.countryCode,
+              isPrimary: dto.isPrimary ?? false,
+              isVerified: dto.isVerified ?? false,
+              isActive: dto.isActive ?? true,
+              createdAt: BigInt(Date.now()),
+              updatedAt: BigInt(Date.now()),
+            },
+          });
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.PARTY_CONTACT,
@@ -184,9 +184,9 @@ export class PartyContactService {
       const contactValue =
         dto.contactValue !== undefined || dto.contactType !== undefined
           ? this.normalizeContactValue(
-            contactType,
-            dto.contactValue ?? existing.contactValue,
-          )
+              contactType,
+              dto.contactValue ?? existing.contactValue,
+            )
           : undefined;
 
       if (dto.isPrimary ?? false) {

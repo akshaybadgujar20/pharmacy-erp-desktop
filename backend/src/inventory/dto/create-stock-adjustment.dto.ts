@@ -1,31 +1,30 @@
 import {
   IsBoolean,
-  IsNumber,
+  IsIn,
+  IsNotEmpty,
   IsOptional,
   IsString,
-  Min,
+  MaxLength,
 } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { StockAdjustmentType } from '../constants/inventory.constants';
 
 export class CreateStockAdjustmentDto {
   @MandatoryBigIntField()
-  batchId!: bigint;
-
-  @IsNumber()
-  @Min(0)
-  adjustmentNumber!: number;
+  branchId!: bigint;
 
   @IsString()
+  @IsNotEmpty()
+  @IsIn(Object.values(StockAdjustmentType))
   adjustmentType!: string;
 
-  @IsString()
-  reason!: string;
-
-  @IsString()
-  status!: string;
-
   @MandatoryBigIntField()
-  createdBy!: bigint;
+  adjustmentDate!: bigint;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(500)
+  reason!: string;
 
   @IsOptional()
   @IsBoolean()

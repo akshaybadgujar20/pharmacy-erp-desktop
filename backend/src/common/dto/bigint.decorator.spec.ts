@@ -3,7 +3,6 @@ import { LoginDto } from '../../auth/dto/login.dto';
 import { OptionalBigIntField } from './bigint.decorator';
 import { describe, expect, it } from '@jest/globals';
 
-
 class OptionalBigIntDto {
   @OptionalBigIntField()
   branchId?: bigint;

@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsIn,
   IsInt,
   IsOptional,
@@ -7,7 +6,11 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { SupplierType } from '../constants/inventory.constants';
+import {
+  MandatoryBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
+import { StockTakeCountType } from '../constants/inventory.constants';
 
 export class UpdateStockTakeDto {
   @IsInt()
@@ -15,44 +18,20 @@ export class UpdateStockTakeDto {
   version!: number;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  supplierCode?: string;
+  @OptionalBigIntField()
+  stockTakeDate?: bigint;
 
   @IsOptional()
   @IsString()
-  @IsIn(Object.values(SupplierType))
-  supplierType?: string;
+  @IsIn(Object.values(StockTakeCountType))
+  countType?: string;
+
+  @IsOptional()
+  @MandatoryBigIntField()
+  countedByEmployeeId?: bigint;
 
   @IsOptional()
   @IsString()
-  @MaxLength(20)
-  gstin?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  drugLicenseNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(20)
-  panNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  creditLimit?: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  paymentTermsDays?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  preferredSupplier?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
+  @MaxLength(500)
+  remarks?: string;
 }

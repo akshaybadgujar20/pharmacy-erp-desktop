@@ -93,7 +93,6 @@ export class EmployeeService {
   }
 
   async create(dto: CreateEmployeeDto) {
-
     return this.unitOfWork.run(async (tx) => {
       const partyId = BigInt(dto.partyId);
       await assertPartyExists(tx, partyId);
@@ -173,7 +172,6 @@ export class EmployeeService {
   }
 
   async update(id: bigint, dto: UpdateEmployeeDto) {
-
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.employee.findFirst({
         where: { id, deletedAt: null },

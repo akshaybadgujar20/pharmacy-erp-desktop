@@ -1,44 +1,30 @@
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 import {
-  IsBoolean,
-  IsEmail,
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-  ValidateIf,
-} from 'class-validator';
-import { ContactType } from '../constants/inventory.constants';
+  MandatoryBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
+import { StockTransferType } from '../constants/inventory.constants';
 
 export class CreateStockTransferDto {
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(Object.values(ContactType))
-  contactType!: string;
+  @MandatoryBigIntField()
+  sourceBranchId!: bigint;
+
+  @MandatoryBigIntField()
+  destinationBranchId!: bigint;
+
+  @MandatoryBigIntField()
+  transferDate!: bigint;
 
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(200)
-  @ValidateIf(
-    (dto: CreateStockTransferDto) => dto.contactType === ContactType.EMAIL,
-  )
-  @IsEmail()
-  contactValue!: string;
+  @IsIn(Object.values(StockTransferType))
+  transferType!: string;
+
+  @IsOptional()
+  @OptionalBigIntField()
+  expectedArrivalDate?: bigint;
 
   @IsOptional()
   @IsString()
-  @MaxLength(10)
-  countryCode?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isPrimary?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  isVerified?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
+  @MaxLength(500)
+  remarks?: string;
 }
