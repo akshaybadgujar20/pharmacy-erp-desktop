@@ -1,0 +1,15 @@
+{
+  "app": {
+    "title": "Pharmacy ERP"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "sales": "Sales",
+    "inventory": "Inventory"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}
