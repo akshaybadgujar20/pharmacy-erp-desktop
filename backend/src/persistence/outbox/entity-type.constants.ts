@@ -13,6 +13,9 @@ export const OutboxEntityType = {
   EMPLOYEE: 'Employee',
   MEDICINE: 'Medicine',
   BATCH: 'Batch',
+  STOCK: 'Stock',
+  STOCK_TRANSFER: 'StockTransfer',
+  STOCK_TAKE: 'StockTake',
 } as const;
 
 export type OutboxEntityType =

@@ -1,0 +1,52 @@
+---
+description: Party module conventions — read memory doc before editing backend/src/party
+globs: backend/src/party/**
+alwaysApply: false
+---
+
+# Party module
+
+**Read the full memory model first:** [`.cursor/rules/docs/party-module.md`](docs/party-module.md)
+
+This is the **canonical CRUD template** for backend feature modules. Inventory and other modules mirror these patterns.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in the same transaction (`AuditModule.PARTY`).
+3. **Org-global** — no branch scoping on list/get.
+4. **Two nesting patterns** (do not conflate):
+   - Shared children (`roles`, `addresses`, `contacts`): `partyId` from **route param**
+   - Role details (`customers`, `suppliers`, `doctors`, `employees`): `partyId` in **create body**, top-level routes
+5. Role detail create calls `ensurePartyRole` + `assertUniqueBusinessCode`; restores soft-deleted row for same `partyId`.
+6. **Party delete** blocked when any active child exists.
+
+## Lifecycle (no workflows)
+
+| Rule | Where |
+|------|-------|
+| Soft delete | `deletedAt`; filter `deletedAt: null` |
+| Optimistic lock | `version` on update/delete; `optimisticUpdate()` |
+| Default address | Clears other defaults of same `addressType` |
+| Active party join | `activePartyFilter` on role-detail queries |
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; no `partyId` in nested child create; `partyId` required in role-detail create.
+- **Mappers:** one-way `to{Entity}Response()`; IDs as strings; `serializeDecimal` / `serializeDate`.
+- **Services:** `assertPartyExists` for nested routes; exported services for cross-module use.
+- **Permissions:** `PARTY:RESOURCE:ACTION` on every endpoint (`@RequirePermissions`).
+- **Constants/enums:** [`party.constants.ts`](../backend/src/party/constants/party.constants.ts).
+- **Utils:** [`party.util.ts`](../backend/src/party/utils/party.util.ts).
+
+## Reporting
+
+Three reports in [`party-reports.provider.ts`](../backend/src/reporting/providers/party/party-reports.provider.ts): `party.customer-list`, `party.supplier-list`, `party.customer-outstanding` (permission `REPORT_PARTY_VIEW`).
+
+## Not implemented
+
+E2E party tests, Angular clients, cascade delete, `ADMIN`/`OTHER` detail tables, entity-specific list-query DTOs.
+
+## Architecture reference
+
+Table specs: [`party_management.md`](../docs/pharmacy_erp_architecture_docs/database/tables/party_management/party_management.md). Persistence: [`persistence-patterns.md`](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md).

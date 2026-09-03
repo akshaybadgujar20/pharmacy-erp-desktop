@@ -1,0 +1,53 @@
+---
+description: Inventory module conventions — read memory doc before editing backend/src/inventory
+globs: backend/src/inventory/**
+alwaysApply: false
+---
+
+# Inventory module
+
+**Read the full memory model first:** [`.cursor/rules/docs/inventory-module.md`](docs/inventory-module.md)
+
+Match the party module CRUD template ([`backend/src/party/`](../backend/src/party/)): thin controllers, `prisma.client` for reads, `unitOfWork.run` for writes, audit + outbox in the same transaction.
+
+## Golden rules
+
+1. **Never** mutate `Stock.availableQuantity` directly — use `InventoryLedgerService.applyMovement` only.
+2. **`StockMovement` is immutable** — read-only API; ledger creates movements.
+3. **`Batch` is org-global**; `Stock`, adjustments, stock-takes are **branch-scoped** via `RequestContext`.
+4. Document numbers from `SequenceGeneratorService` inside `unitOfWork.run`.
+5. Nested items: parent FK from **route param**, not create body (no `items[]` on header create).
+
+## Status machines
+
+| Document | Flow | Workflow routes |
+|----------|------|-----------------|
+| StockAdjustment | DRAFT → APPROVED | `POST :id/approve` |
+| StockTransfer | DRAFT → DISPATCHED → COMPLETED / PARTIALLY_RECEIVED | `POST :id/dispatch`, `POST :id/receive` |
+| StockTake | DRAFT → IN_PROGRESS → COUNTED → RECONCILED | `POST :id/start`, `POST :id/complete`, `POST :id/reconcile` |
+
+Header/item edits and deletes only in **DRAFT** (`assertDraftStatus`). Stock-take items also allow CRUD when parent is `IN_PROGRESS`.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; no server-managed fields on create; signed qty only on adjustment items.
+- **Mappers:** one-way `to{Entity}Response()`; IDs as strings; `serializeDecimal` for decimals.
+- **Services:** optimistic lock via `updateMany` + `optimisticUpdate()`; workflow guards before ledger calls.
+- **Permissions:** `INVENTORY:RESOURCE:ACTION` on every endpoint (`@RequirePermissions`).
+- **Constants/enums:** [`inventory.constants.ts`](../backend/src/inventory/constants/inventory.constants.ts).
+- **Utils:** [`inventory.util.ts`](../backend/src/inventory/utils/inventory.util.ts) — asserts, serializers.
+
+## Workflow ledger (summary)
+
+- Approve adjustment → `ADJUSTMENT_GAIN` / `ADJUSTMENT_LOSS` per item
+- Dispatch transfer → `TRANSFER_OUT` at source branch
+- Receive transfer → `TRANSFER_IN` at destination (`receivedQuantity ?? sentQuantity`)
+- Reconcile stock-take → auto-approved adjustment + ledger for non-zero variances
+
+## Not implemented
+
+E2E inventory tests, Angular clients, `inTransitQuantity`/`reservedQuantity` buckets, transfer approval step, reporting providers.
+
+## Architecture reference
+
+Table specs: [`docs/.../inventory/inventory.md`](../docs/pharmacy_erp_architecture_docs/database/tables/inventory/inventory.md). Persistence: [`persistence-patterns.md`](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md).

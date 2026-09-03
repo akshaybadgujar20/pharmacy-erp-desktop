@@ -121,6 +121,12 @@ Scoped rules in `.cursor/rules/` (repo root):
 | `nestjs-rules.mdc` | `backend/src/**/*.ts` — modules, DI, DTOs, errors |
 | `prisma-persistence-rules.mdc` | `backend/src/persistence/**`, `backend/seed/**` |
 | `testing-rules.mdc` | `backend/**/*.spec.ts`, `backend/test/**` |
+| `inventory-module.mdc` | `backend/src/inventory/**` — see [module memory doc](../.cursor/rules/docs/inventory-module.md) |
+| `party-module.mdc` | `backend/src/party/**` — see [module memory doc](../.cursor/rules/docs/party-module.md) |
+
+## Module memory docs
+
+Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [party-module.md](../.cursor/rules/docs/party-module.md).
 
 ## Architecture docs
 
