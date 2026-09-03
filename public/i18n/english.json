@@ -1,0 +1,17 @@
+{
+  "app": {
+    "title": "Pharmacy ERP"
+  },
+  "navigation": {
+    "title": "Navigation",
+    "home": "Home",
+    "inbox": "Inbox",
+    "search": "Search",
+    "notifications": "Notifications"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

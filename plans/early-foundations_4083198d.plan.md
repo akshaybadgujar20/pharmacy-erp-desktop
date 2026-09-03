@@ -39,7 +39,7 @@ todos:
     content: Add KeyboardShortcutService registry with global listener, help overlay, placeholder F-key bindings
     status: completed
   - id: i18n
-    content: Add @ngx-translate runtime i18n, en.json, LOCALE_ID/date-currency setup, no-hardcoded-strings convention
+    content: Add @ngx-translate runtime i18n, english.json, LOCALE_ID/date-currency setup, no-hardcoded-strings convention
     status: completed
   - id: electron-secure-store
     content: Add Electron preload IPC for device info + safeStorage-backed secure token storage; Angular uses it when available

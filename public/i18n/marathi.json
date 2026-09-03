@@ -1,0 +1,17 @@
+{
+  "app": {
+    "title": "फार्मसी ERP"
+  },
+  "navigation": {
+    "title": "नेव्हिगेशन",
+    "home": "मुख्यपृष्ठ",
+    "inbox": "इनबॉक्स",
+    "search": "शोध",
+    "notifications": "सूचना"
+  },
+  "common": {
+    "save": "जतन करा",
+    "cancel": "रद्द करा",
+    "delete": "हटवा"
+  }
+}
