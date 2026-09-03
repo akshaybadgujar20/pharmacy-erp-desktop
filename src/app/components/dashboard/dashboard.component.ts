@@ -1,14 +1,12 @@
-import {AfterViewInit, Component, ElementRef, inject, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ColDef} from 'ag-grid-community';
 import {AgGridAngular} from 'ag-grid-angular';
-import { ToastrService } from 'ngx-toastr';
 
 import {
   Chart,
   ChartConfiguration,
   registerables
 } from 'chart.js';
-import {MatButtonToggle} from '@angular/material/button-toggle';
 
 Chart.register(...registerables);
 
@@ -16,18 +14,16 @@ Chart.register(...registerables);
   selector: 'app-dashboard',
   imports: [
     AgGridAngular,
-    MatButtonToggle,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class DashboardComponent implements AfterViewInit {
 
-  toastr = inject(ToastrService);
-
   showSuccess() {
-    this.toastr.success('Hello world!', 'Toastr fun!');
+    //TODO: add error handler
   }
 
   columnDefs: ColDef[] = [

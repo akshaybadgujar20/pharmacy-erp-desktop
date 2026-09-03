@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { KeyboardShortcutService } from '../../../core/services/keyboard-shortcut.service';
 
@@ -24,6 +24,7 @@ import { KeyboardShortcutService } from '../../../core/services/keyboard-shortcu
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .shortcut-overlay {
       position: fixed;

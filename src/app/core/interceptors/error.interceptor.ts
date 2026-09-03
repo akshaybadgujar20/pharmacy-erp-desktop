@@ -1,13 +1,11 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
 import { ApiClientError } from '../models/api-response.types';
 import { AuthService } from '../services/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const toastr = inject(ToastrService);
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -33,18 +31,18 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             authService.clearSession();
             router.navigate(['/login']);
           } else {
-            toastr.error(clientError.message, 'Error');
+            //TODO: add error handler
           }
 
           return throwError(() => clientError);
         }
 
-        toastr.error(error.message || 'Network error', 'Error');
+        //TODO: add error handler
         return throwError(() => error);
       }
 
       if (error instanceof ApiClientError) {
-        toastr.error(error.message, 'Error');
+        //TODO: add error handler
       }
 
       return throwError(() => error);
