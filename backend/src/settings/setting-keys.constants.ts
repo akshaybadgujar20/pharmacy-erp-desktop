@@ -4,6 +4,7 @@ export const SettingKey = {
   BARCODE_FORMAT: 'barcode.format',
   PRINTER_RECEIPT_MAPPING: 'printer.receipt_mapping',
   STORE_DISPLAY_NAME: 'store.display_name',
+  PURCHASE_ALLOW_GRN_WITHOUT_PO: 'purchase.allow_grn_without_po',
 } as const;
 
 export type SettingKey = (typeof SettingKey)[keyof typeof SettingKey];

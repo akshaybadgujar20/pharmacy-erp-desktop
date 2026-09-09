@@ -36,6 +36,7 @@ import { SettingsModule } from './settings/settings.module';
 import { PartyModule } from './party/party.module';
 import { ReportingModule } from './reporting/reporting.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { InventoryModule } from './inventory/inventory.module';
     SettingsModule,
     PartyModule,
     InventoryModule,
+    PurchaseModule,
     ReportingModule,
   ],
 

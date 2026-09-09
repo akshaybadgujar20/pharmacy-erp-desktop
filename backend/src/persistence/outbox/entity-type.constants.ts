@@ -1,6 +1,9 @@
 export const OutboxEntityType = {
   SALES_INVOICE: 'SalesInvoice',
+  PURCHASE_ORDER: 'PurchaseOrder',
+  GOODS_RECEIPT: 'GoodsReceipt',
   PURCHASE_INVOICE: 'PurchaseInvoice',
+  PURCHASE_RETURN: 'PurchaseReturn',
   STOCK_MOVEMENT: 'StockMovement',
   STOCK_ADJUSTMENT: 'StockAdjustment',
   PARTY: 'Party',

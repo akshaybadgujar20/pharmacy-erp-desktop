@@ -1,0 +1,55 @@
+---
+description: Purchase module conventions — read memory doc before editing backend/src/purchase
+globs: backend/src/purchase/**
+alwaysApply: false
+---
+
+# Purchase module
+
+**Read the full memory model first:** [`.cursor/rules/docs/purchase-module.md`](docs/purchase-module.md)
+
+Match the inventory module CRUD template ([`backend/src/inventory/`](../backend/src/inventory/)): thin controllers, `prisma.client` for reads, `unitOfWork.run` for writes, audit + outbox in the same transaction.
+
+## Golden rules
+
+1. **Never** mutate `Stock.availableQuantity` directly — use `InventoryLedgerService.applyMovement` only.
+2. **PO and Invoice do not change stock** — inventory inbound is **GRN accept** only; outbound is **Purchase Return approve**.
+3. **Branch-scoped** documents via `RequestContext` (`getTenantScope` + `withBranchScope`).
+4. Document numbers from `SequenceGeneratorService` inside `unitOfWork.run`.
+5. Nested items: parent FK from **route param**, not create body (no `items[]` on header create).
+6. **GRN without PO** gated by `SettingsService.getBoolean(SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO)`.
+
+## Status machines
+
+| Document | Flow | Workflow routes |
+|----------|------|-----------------|
+| PurchaseOrder | DRAFT → PENDING_APPROVAL → APPROVED → SENT → PARTIALLY_RECEIVED → COMPLETED / FORCE_CLOSED / CANCELLED | `submit`, `approve`, `reject`, `send`, `force-close`, `cancel` |
+| GoodsReceipt | DRAFT → UNDER_INSPECTION → ACCEPTED / PARTIALLY_ACCEPTED / REJECTED | `submit-inspection`, `accept`, `reject`, `cancel` |
+| PurchaseInvoice | DRAFT → POSTED → CANCELLED | `post`, `cancel` |
+| PurchaseReturn | DRAFT → PENDING_APPROVAL → DISPATCHED_TO_SUPPLIER | `submit`, `approve`, `reject`, `cancel` |
+
+Header/item edits and deletes only in **DRAFT** (PO also editable in PENDING_APPROVAL until rejected).
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; no server-managed fields on create; header totals server-computed from lines.
+- **Mappers:** one-way `to{Entity}Response()`; IDs as strings; `serializeDecimal` for decimals.
+- **Services:** optimistic lock via `updateMany` + `optimisticUpdate()`; workflow guards before ledger calls.
+- **Permissions:** `PURCHASE:RESOURCE:ACTION` on every endpoint (`@RequirePermissions`).
+- **Constants/enums:** [`purchase.constants.ts`](../backend/src/purchase/constants/purchase.constants.ts).
+- **Utils:** [`purchase.util.ts`](../backend/src/purchase/utils/purchase.util.ts) — asserts, batch resolve, PO rollup.
+
+## Workflow ledger (summary)
+
+- GRN accept → `PURCHASE_GRN` IN per accepted line; creates/resolves `Batch`
+- GRN cancel (posted) → `PURCHASE_GRN` OUT reversal per accepted line
+- Return approve → `PURCHASE_RETURN` OUT per line
+- Invoice post → status + audit/outbox only (no stock, no Finance ledger)
+
+## Not implemented
+
+Unit/persistence/e2e tests, Angular clients, Finance AP ledger on invoice post, three-way match strictness, over-receipt tolerance settings.
+
+## Architecture reference
+
+Table specs: [`docs/.../purchase/purchase.md`](../docs/pharmacy_erp_architecture_docs/database/tables/purchase/purchase.md). Domain: [`purchasing.md`](../docs/pharmacy_erp_architecture_docs/domain/purchasing.md).

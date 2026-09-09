@@ -1,0 +1,69 @@
+export const PurchaseOrderStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  SENT_TO_SUPPLIER: 'SENT_TO_SUPPLIER',
+  PARTIALLY_RECEIVED: 'PARTIALLY_RECEIVED',
+  COMPLETED: 'COMPLETED',
+  FORCE_CLOSED: 'FORCE_CLOSED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const GoodsReceiptStatus = {
+  DRAFT: 'DRAFT',
+  UNDER_INSPECTION: 'UNDER_INSPECTION',
+  ACCEPTED: 'ACCEPTED',
+  PARTIALLY_ACCEPTED: 'PARTIALLY_ACCEPTED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const GoodsReceiptInspectionStatus = {
+  PASSED: 'PASSED',
+  PARTIALLY_PASSED: 'PARTIALLY_PASSED',
+  FAILED: 'FAILED',
+  PENDING: 'PENDING',
+} as const;
+
+export const PurchaseInvoiceStatus = {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const PurchaseInvoicePaymentStatus = {
+  UNPAID: 'UNPAID',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+} as const;
+
+export const PurchaseReturnStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  DISPATCHED_TO_SUPPLIER: 'DISPATCHED_TO_SUPPLIER',
+  ACCEPTED: 'ACCEPTED',
+  CREDITED: 'CREDITED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const PurchaseReturnType = {
+  EXPIRED_GOODS: 'EXPIRED_GOODS',
+  DAMAGED_GOODS: 'DAMAGED_GOODS',
+  BATCH_RECALL: 'BATCH_RECALL',
+  WRONG_ITEM_DELIVERED: 'WRONG_ITEM_DELIVERED',
+  NEAR_EXPIRY: 'NEAR_EXPIRY',
+  EXCESS_STOCK: 'EXCESS_STOCK',
+} as const;
+
+export const PURCHASE_ORDER_RECEIVABLE_STATUSES = [
+  PurchaseOrderStatus.APPROVED,
+  PurchaseOrderStatus.SENT_TO_SUPPLIER,
+  PurchaseOrderStatus.PARTIALLY_RECEIVED,
+] as const;
+
+export const GOODS_RECEIPT_STOCK_POSTED_STATUSES = [
+  GoodsReceiptStatus.ACCEPTED,
+  GoodsReceiptStatus.PARTIALLY_ACCEPTED,
+] as const;
