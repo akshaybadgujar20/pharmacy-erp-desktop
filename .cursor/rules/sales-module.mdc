@@ -1,0 +1,55 @@
+---
+description: Sales module conventions — read memory doc before editing backend/src/sales
+globs: backend/src/sales/**
+alwaysApply: false
+---
+
+# Sales module
+
+**Read the full memory model first:** [`.cursor/rules/docs/sales-module.md`](docs/sales-module.md)
+
+Match purchase/inventory patterns: thin controllers, `prisma.client` for reads, `unitOfWork.run` for writes, audit + outbox in the same transaction.
+
+## Golden rules
+
+1. **Never** mutate `Stock.availableQuantity` directly — use `InventoryLedgerService.applyMovement` only.
+2. **Stock OUT on invoice post**, IN on posted-invoice cancel and return approve (RESTOCK only).
+3. **Branch-scoped** documents via `RequestContext` (`getTenantScope` + `withBranchScope`).
+4. Document numbers from `SequenceGeneratorService` inside `unitOfWork.run` (invoice number at post; payment/return at create).
+5. Nested items/payments: parent FK from **route param**, not create body.
+6. **PriceList** auto-resolve and **FEFO** batch allocation at invoice post.
+7. **Prescription FK** validation only (no workflow integration).
+
+## Status machines
+
+| Document | Flow | Workflow routes |
+|----------|------|-----------------|
+| SalesInvoice | DRAFT → POSTED → PARTIALLY_RETURNED / RETURNED / CANCELLED | `post`, `cancel` |
+| SalesPayment | PENDING → COMPLETED / CANCELLED | `complete`, `cancel` |
+| SalesReturn | DRAFT → COMPLETED (via approve) / CANCELLED | `approve`, `cancel` |
+
+Header/item edits and deletes only in **DRAFT**.
+
+## Workflow ledger (summary)
+
+- Invoice post → `SALES_INVOICE` OUT per line + `LedgerPostingService` (DR CUST001, CR SALE001/GSTOUT001) + customer outstanding
+- Invoice cancel (posted) → ledger reversal + `SALES_INVOICE` IN per line + outstanding reversal
+- Payment complete → `buildSalesPaymentLedgerLines` + `recomputeSalesInvoiceSettlement` + outstanding reduction
+- Return approve → `SALES_RETURN` IN (RESTOCK) + proportional ledger reversal + invoice return status rollup
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; workflow uses `SalesWorkflowDto`.
+- **Mappers:** one-way `to{Entity}Response()`; `serializeDecimal` for amounts.
+- **Services:** optimistic lock via `updateMany` + `optimisticUpdate()`.
+- **Permissions:** `SALES:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`sales.constants.ts`](../backend/src/sales/constants/sales.constants.ts).
+- **Utils:** [`sales.util.ts`](../backend/src/sales/utils/sales.util.ts) — FEFO, price resolution, asserts.
+
+## Not implemented
+
+Unit/persistence/e2e tests, Angular clients, non-RESTOCK return dispositions, loyalty hooks.
+
+## Architecture reference
+
+Table specs: [`docs/.../sales/sales.md`](../docs/pharmacy_erp_architecture_docs/database/tables/sales/sales.md).

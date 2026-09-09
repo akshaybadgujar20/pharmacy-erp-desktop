@@ -1,0 +1,88 @@
+export const SalesInvoiceStatus = {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  PARTIALLY_RETURNED: 'PARTIALLY_RETURNED',
+  RETURNED: 'RETURNED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const SalesInvoicePaymentStatus = {
+  UNPAID: 'UNPAID',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export const SalesPaymentStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  BOUNCED: 'BOUNCED',
+  REFUNDED: 'REFUNDED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const SalesReturnStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const SalesType = {
+  RETAIL_OTC: 'RETAIL_OTC',
+  PRESCRIPTION: 'PRESCRIPTION',
+  IPD_INPATIENT: 'IPD_INPATIENT',
+  OPD_OUTPATIENT: 'OPD_OUTPATIENT',
+  HOME_DELIVERY: 'HOME_DELIVERY',
+} as const;
+
+export const SalesPaymentMode = {
+  CASH: 'CASH',
+  UPI: 'UPI',
+  CARD: 'CARD',
+  CREDIT: 'CREDIT',
+  SPLIT: 'SPLIT',
+  CHEQUE: 'CHEQUE',
+  WALLET: 'WALLET',
+} as const;
+
+export const SalesPaymentMethod = {
+  CASH: 'CASH',
+  UPI: 'UPI',
+  CREDIT_CARD: 'CREDIT_CARD',
+  DEBIT_CARD: 'DEBIT_CARD',
+  CHEQUE: 'CHEQUE',
+  STORE_CREDIT: 'STORE_CREDIT',
+  NET_BANKING: 'NET_BANKING',
+} as const;
+
+export const SalesReturnReason = {
+  COURSE_CHANGED: 'COURSE_CHANGED',
+  PATIENT_DISCHARGED: 'PATIENT_DISCHARGED',
+  WRONG_MEDICINE: 'WRONG_MEDICINE',
+  EXPIRED_ON_PURCHASE: 'EXPIRED_ON_PURCHASE',
+  DAMAGED_PACKAGING: 'DAMAGED_PACKAGING',
+  EXCESS_QUANTITY: 'EXCESS_QUANTITY',
+  ADVERSE_REACTION: 'ADVERSE_REACTION',
+  OTHER: 'OTHER',
+} as const;
+
+export const SalesReturnDisposition = {
+  RESTOCK: 'RESTOCK',
+  DAMAGED_QUARANTINE: 'DAMAGED_QUARANTINE',
+  DISCARD: 'DISCARD',
+} as const;
+
+export const SalesRefundMode = {
+  CASH: 'CASH',
+  UPI: 'UPI',
+  CARD_REVERSAL: 'CARD_REVERSAL',
+  STORE_CREDIT: 'STORE_CREDIT',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+} as const;
+
+export const SALES_INVOICE_CANCELLABLE_STATUSES = [
+  SalesInvoiceStatus.DRAFT,
+  SalesInvoiceStatus.POSTED,
+] as const;

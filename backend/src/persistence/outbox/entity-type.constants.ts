@@ -1,5 +1,7 @@
 export const OutboxEntityType = {
   SALES_INVOICE: 'SalesInvoice',
+  SALES_PAYMENT: 'SalesPayment',
+  SALES_RETURN: 'SalesReturn',
   PURCHASE_ORDER: 'PurchaseOrder',
   GOODS_RECEIPT: 'GoodsReceipt',
   PURCHASE_INVOICE: 'PurchaseInvoice',

@@ -38,6 +38,7 @@ import { ReportingModule } from './reporting/reporting.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { FinanceModule } from './finance/finance.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { FinanceModule } from './finance/finance.module';
     InventoryModule,
     PurchaseModule,
     FinanceModule,
+    SalesModule,
     ReportingModule,
   ],
 
