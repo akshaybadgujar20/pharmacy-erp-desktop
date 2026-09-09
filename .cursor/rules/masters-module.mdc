@@ -1,0 +1,30 @@
+---
+description: Masters (lookup) module conventions — read memory doc before editing backend/src/masters
+globs: backend/src/masters/**
+alwaysApply: false
+---
+
+# Masters (lookup) module
+
+**Read the full memory model first:** [`.cursor/rules/docs/masters-module.md`](docs/masters-module.md)
+
+Org-global geographic reference data: Country → State → City → Area.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in same transaction (`AuditModule.LOOKUP`).
+3. **Flat CRUD** — `/countries`, `/states`, `/cities`, `/areas` with parent FK filters on list.
+4. **Parent validation** — State→Country, City→State, Area→City on create/update.
+5. **UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
+6. **Strict delete guards** — block when child geo rows or `PartyAddress` FK refs exist.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`.
+- **Permissions:** `LOOKUP:RESOURCE:ACTION` on every endpoint.
+- **Utils:** [`masters.util.ts`](../backend/src/masters/utils/masters.util.ts).
+
+## Architecture reference
+
+Table specs: [`masters.md`](../docs/pharmacy_erp_architecture_docs/database/tables/masters/masters.md).

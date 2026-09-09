@@ -43,6 +43,9 @@ import { SecurityModule } from './security/security.module';
 import { MedicineModule } from './medicine/medicine.module';
 import { PricingModule } from './pricing/pricing.module';
 import { PrescriptionModule } from './prescription/prescription.module';
+import { ConfigurationModule } from './configuration/configuration.module';
+import { SyncModule } from './sync/sync.module';
+import { MastersModule } from './masters/masters.module';
 
 @Module({
   imports: [
@@ -62,6 +65,9 @@ import { PrescriptionModule } from './prescription/prescription.module';
     MedicineModule,
     PricingModule,
     PrescriptionModule,
+    ConfigurationModule,
+    SyncModule,
+    MastersModule,
     ReportingModule,
   ],
 

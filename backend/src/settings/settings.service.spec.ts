@@ -2,6 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuditService } from '../audit/audit.service';
 import { ErrorCode } from '../common/exceptions/error-code';
+import { OutboxService } from '../persistence/outbox/outbox.service';
 import { RequestContextService } from '../persistence/context/request-context.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
@@ -20,7 +21,8 @@ describe('SettingsService', () => {
   };
   let requestContext: { get: jest.Mock };
   let unitOfWork: { run: jest.Mock };
-  let auditService: { log: jest.Mock };
+  let auditService: { log: jest.Mock; logFieldChanges: jest.Mock };
+  let outboxService: { enqueue: jest.Mock };
 
   beforeEach(async () => {
     prisma = {
@@ -41,7 +43,12 @@ describe('SettingsService', () => {
     };
 
     auditService = {
-      log: jest.fn().mockResolvedValue(undefined),
+      log: jest.fn().mockResolvedValue(1n),
+      logFieldChanges: jest.fn().mockResolvedValue(undefined),
+    };
+
+    outboxService = {
+      enqueue: jest.fn().mockResolvedValue(undefined),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -51,6 +58,7 @@ describe('SettingsService', () => {
         { provide: RequestContextService, useValue: requestContext },
         { provide: UnitOfWorkService, useValue: unitOfWork },
         { provide: AuditService, useValue: auditService },
+        { provide: OutboxService, useValue: outboxService },
       ],
     }).compile();
 
@@ -129,7 +137,7 @@ describe('SettingsService', () => {
     await expect(
       service.updateSetting('locked.key', 'new-value'),
     ).rejects.toMatchObject({
-      code: ErrorCode.FORBIDDEN,
+      code: ErrorCode.APP_SETTING_NOT_EDITABLE,
       statusCode: HttpStatus.FORBIDDEN,
     });
   });

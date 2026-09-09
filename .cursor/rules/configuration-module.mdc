@@ -1,0 +1,33 @@
+---
+description: Configuration module conventions — read memory doc before editing backend/src/configuration
+globs: backend/src/configuration/**
+alwaysApply: false
+---
+
+# Configuration module
+
+**Read the full memory model first:** [`.cursor/rules/docs/configuration-module.md`](docs/configuration-module.md)
+
+Org structure and device/runtime config (except AppSetting CRUD in SettingsModule).
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in same transaction (`AuditModule.CONFIGURATION`).
+3. **Branch-scoped resources** — tenant via `getTenantScope`; company-wide rows use `branchId: null`.
+4. **Default flags** — `isDefault` / `isHeadOffice` / `isCurrent` clear siblings in same scope.
+5. **UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
+6. **FinancialYear** — `POST :id/close` when OPEN; block update/delete on CLOSED/ARCHIVED.
+7. **SequenceGenerator** — admin CRUD only; document allocation stays internal via `SequenceGeneratorService.next()`.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; dates as BIGINT epoch ms.
+- **Mappers:** epoch ms → ISO strings; decimals as strings.
+- **Permissions:** `CONFIGURATION:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`configuration.constants.ts`](../backend/src/configuration/constants/configuration.constants.ts).
+- **Utils:** [`configuration.util.ts`](../backend/src/configuration/utils/configuration.util.ts).
+
+## Architecture reference
+
+Table specs: [`configuration.md`](../docs/pharmacy_erp_architecture_docs/database/tables/configuration/configuration.md).

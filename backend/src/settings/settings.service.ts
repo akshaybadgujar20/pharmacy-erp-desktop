@@ -1,17 +1,25 @@
+import { randomUUID } from 'crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { AppSetting } from '@prisma/client';
 import { AuditAction } from '../audit/audit-action.constants';
 import { AuditModule } from '../audit/audit-module.constants';
 import { AuditService } from '../audit/audit.service';
+import { auditAndLogChanges } from '../audit/utils/audit.util';
 import { ApplicationException } from '../common/exceptions/application.exception';
 import { ErrorCode } from '../common/exceptions/error-code';
 import { RequestContextService } from '../persistence/context/request-context.service';
 import { getTenantScope } from '../persistence/context/tenant-scope.util';
+import { OutboxEntityType } from '../persistence/outbox/entity-type.constants';
+import { OutboxOperation } from '../persistence/outbox/outbox-operation.constants';
+import { OutboxService } from '../persistence/outbox/outbox.service';
 import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { CreateSettingDto } from './dto/create-setting.dto';
 import { SettingDataType } from './setting-keys.constants';
 import { AppSettingResponse, toAppSettingResponse } from './settings.mapper';
+
+const APP_SETTING_AUDIT_FIELDS = [{ name: 'settingValue' }];
 
 interface CachedSetting {
   row: {
@@ -33,6 +41,7 @@ export class SettingsService {
     private readonly requestContext: RequestContextService,
     private readonly unitOfWork: UnitOfWorkService,
     private readonly auditService: AuditService,
+    private readonly outboxService: OutboxService,
   ) {}
 
   async listByCategory(category?: string): Promise<AppSettingResponse[]> {
@@ -50,6 +59,66 @@ export class SettingsService {
     });
 
     return this.dedupeSettings(rows, branchId).map(toAppSettingResponse);
+  }
+
+  async getByKey(key: string): Promise<AppSettingResponse> {
+    const row = await this.findSettingRow(key);
+    if (!row) {
+      throw new ApplicationException(
+        ErrorCode.APP_SETTING_NOT_FOUND,
+        `Setting not found: ${key}`,
+        HttpStatus.NOT_FOUND,
+        { settingKey: key },
+      );
+    }
+    return toAppSettingResponse(row);
+  }
+
+  async createSetting(dto: CreateSettingDto): Promise<AppSettingResponse> {
+    const { companyId } = getTenantScope(this.requestContext);
+    const branchId = dto.branchId ?? null;
+
+    if (dto.settingValue != null) {
+      this.validateSettingValue(dto.dataType, dto.settingValue, dto.settingKey);
+    }
+
+    return this.unitOfWork.run(async (tx) => {
+      await this.assertSettingKeyUnique(
+        tx,
+        companyId,
+        branchId,
+        dto.settingKey,
+      );
+
+      const now = BigInt(Date.now());
+      const setting = await tx.appSetting.create({
+        data: {
+          uuid: randomUUID(),
+          companyId,
+          branchId,
+          settingKey: dto.settingKey,
+          settingName: dto.settingName,
+          settingValue: dto.settingValue ?? null,
+          dataType: dto.dataType,
+          category: dto.category,
+          defaultValue: dto.defaultValue ?? null,
+          description: dto.description ?? null,
+          isEditable: dto.isEditable ?? true,
+          isActive: dto.isActive ?? true,
+          createdAt: now,
+          updatedAt: now,
+        },
+      });
+
+      await this.emitChange(
+        tx,
+        setting,
+        AuditAction.CREATE,
+        OutboxOperation.CREATE,
+      );
+      this.invalidateCache(companyId, dto.settingKey);
+      return toAppSettingResponse(setting);
+    });
   }
 
   async getString(key: string, defaultValue?: string): Promise<string> {
@@ -130,22 +199,14 @@ export class SettingsService {
 
       if (!row) {
         throw new ApplicationException(
-          ErrorCode.NOT_FOUND,
+          ErrorCode.APP_SETTING_NOT_FOUND,
           `Setting not found: ${key}`,
           HttpStatus.NOT_FOUND,
           { settingKey: key },
         );
       }
 
-      if (!row.isEditable) {
-        throw new ApplicationException(
-          ErrorCode.FORBIDDEN,
-          `Setting ${key} is not editable`,
-          HttpStatus.FORBIDDEN,
-          { settingKey: key },
-        );
-      }
-
+      this.assertEditable(row, key);
       this.validateSettingValue(row.dataType, settingValue, key);
 
       const updateResult = await tx.appSetting.updateMany({
@@ -157,6 +218,7 @@ export class SettingsService {
         },
         data: {
           settingValue,
+          updatedAt: BigInt(Date.now()),
           version: { increment: 1 },
         },
       });
@@ -174,17 +236,86 @@ export class SettingsService {
         where: { id: row.id },
       });
 
-      await this.auditService.log(tx, {
-        entityType: 'AppSetting',
-        entityId: updated.id,
+      await auditAndLogChanges(
+        tx,
+        this.auditService,
+        {
+          entityType: OutboxEntityType.APP_SETTING,
+          entityId: updated.id,
+          entityUuid: updated.uuid,
+          action: AuditAction.UPDATE,
+          module: AuditModule.CONFIGURATION,
+          description: `Updated setting ${key}`,
+        },
+        row as unknown as Record<string, unknown>,
+        updated as unknown as Record<string, unknown>,
+        APP_SETTING_AUDIT_FIELDS,
+      );
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.APP_SETTING,
         entityUuid: updated.uuid,
-        action: AuditAction.UPDATE,
-        module: AuditModule.CONFIGURATION,
-        description: `Updated setting ${key}`,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          uuid: updated.uuid,
+          settingKey: updated.settingKey,
+        },
       });
 
       this.invalidateCache(companyId, key);
       return toAppSettingResponse(updated);
+    });
+  }
+
+  async deleteSetting(
+    key: string,
+    version: number,
+  ): Promise<{ settingKey: string; deleted: true }> {
+    const { companyId, branchId } = getTenantScope(this.requestContext);
+
+    return this.unitOfWork.run(async (tx) => {
+      const row = await this.findSettingInTx(tx, companyId, branchId, key);
+
+      if (!row) {
+        throw new ApplicationException(
+          ErrorCode.APP_SETTING_NOT_FOUND,
+          `Setting not found: ${key}`,
+          HttpStatus.NOT_FOUND,
+          { settingKey: key },
+        );
+      }
+
+      this.assertEditable(row, key);
+
+      const updateResult = await tx.appSetting.updateMany({
+        where: {
+          id: row.id,
+          version,
+          deletedAt: null,
+        },
+        data: {
+          deletedAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
+          version: { increment: 1 },
+        },
+      });
+
+      if (updateResult.count === 0) {
+        throw new ApplicationException(
+          ErrorCode.ENTITY_VERSION_CONFLICT,
+          `Setting version conflict or not found: ${key}`,
+          HttpStatus.CONFLICT,
+          { id: row.id.toString() },
+        );
+      }
+
+      await this.emitChange(
+        tx,
+        row,
+        AuditAction.DELETE,
+        OutboxOperation.DELETE,
+      );
+      this.invalidateCache(companyId, key);
+      return { settingKey: key, deleted: true };
     });
   }
 
@@ -221,6 +352,69 @@ export class SettingsService {
         }
       default:
         return value;
+    }
+  }
+
+  private async emitChange(
+    tx: TxClient,
+    setting: AppSetting,
+    action: (typeof AuditAction)[keyof typeof AuditAction],
+    operation: (typeof OutboxOperation)[keyof typeof OutboxOperation],
+  ): Promise<void> {
+    await this.auditService.log(tx, {
+      entityType: OutboxEntityType.APP_SETTING,
+      entityId: setting.id,
+      entityUuid: setting.uuid,
+      action,
+      module: AuditModule.CONFIGURATION,
+      description: `${action} setting ${setting.settingKey}`,
+    });
+
+    await this.outboxService.enqueue(tx, {
+      entityType: OutboxEntityType.APP_SETTING,
+      entityUuid: setting.uuid,
+      operation,
+      payload: {
+        uuid: setting.uuid,
+        settingKey: setting.settingKey,
+      },
+    });
+  }
+
+  private async assertSettingKeyUnique(
+    tx: TxClient,
+    companyId: bigint,
+    branchId: bigint | null,
+    settingKey: string,
+  ): Promise<void> {
+    const existing = await tx.appSetting.findFirst({
+      where: {
+        companyId,
+        branchId,
+        settingKey,
+        deletedAt: null,
+      },
+      select: { id: true },
+    });
+
+    if (existing) {
+      throw new ApplicationException(
+        ErrorCode.APP_SETTING_CONFLICT,
+        `Setting already exists: ${settingKey}`,
+        HttpStatus.CONFLICT,
+        { settingKey },
+      );
+    }
+  }
+
+  private assertEditable(row: AppSetting, key: string): void {
+    if (!row.isEditable) {
+      throw new ApplicationException(
+        ErrorCode.APP_SETTING_NOT_EDITABLE,
+        `Setting ${key} is not editable`,
+        HttpStatus.FORBIDDEN,
+        { settingKey: key },
+      );
     }
   }
 
@@ -306,6 +500,34 @@ export class SettingsService {
       HttpStatus.BAD_REQUEST,
       { settingKey, dataType, value },
     );
+  }
+
+  private async findSettingRow(key: string): Promise<AppSetting | null> {
+    const { companyId, branchId } = getTenantScope(this.requestContext);
+
+    const branchScoped = await this.prisma.client.appSetting.findFirst({
+      where: {
+        companyId,
+        branchId,
+        settingKey: key,
+        isActive: true,
+        deletedAt: null,
+      },
+    });
+
+    if (branchScoped) {
+      return branchScoped;
+    }
+
+    return this.prisma.client.appSetting.findFirst({
+      where: {
+        companyId,
+        branchId: null,
+        settingKey: key,
+        isActive: true,
+        deletedAt: null,
+      },
+    });
   }
 
   private async findSettingInTx(

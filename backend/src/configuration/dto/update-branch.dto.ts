@@ -1,0 +1,97 @@
+import {
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
+
+export class UpdateBranchDto {
+  @IsInt()
+  @Min(1)
+  version!: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  branchCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  branchName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  displayName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  gstNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  drugLicenseNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  phoneNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  addressLine1?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  addressLine2?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  state?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  pinCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  managerName?: string;
+
+  @IsOptional()
+  @OptionalBigIntField()
+  openingDate?: bigint;
+
+  @IsOptional()
+  @IsBoolean()
+  isHeadOffice?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}

@@ -10,6 +10,7 @@ export const AuditModule = {
   SYNCHRONIZATION: 'Synchronization',
   PRICING: 'Pricing',
   PRESCRIPTION: 'Prescription',
+  LOOKUP: 'Lookup',
 } as const;
 
 export type AuditModule = (typeof AuditModule)[keyof typeof AuditModule];

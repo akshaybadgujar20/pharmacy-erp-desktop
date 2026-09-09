@@ -131,10 +131,13 @@ Scoped rules in `.cursor/rules/` (repo root):
 | `pricing-module.mdc` | `backend/src/pricing/**` — see [module memory doc](../.cursor/rules/docs/pricing-module.md) |
 | `prescription-module.mdc` | `backend/src/prescription/**` — see [module memory doc](../.cursor/rules/docs/prescription-module.md) |
 | `audit-module.mdc` | `backend/src/audit/**` — see [module memory doc](../.cursor/rules/docs/audit-module.md) |
+| `configuration-module.mdc` | `backend/src/configuration/**` — see [module memory doc](../.cursor/rules/docs/configuration-module.md) |
+| `sync-module.mdc` | `backend/src/sync/**` — see [module memory doc](../.cursor/rules/docs/sync-module.md) |
+| `masters-module.mdc` | `backend/src/masters/**` — see [module memory doc](../.cursor/rules/docs/masters-module.md) |
 
 ## Module memory docs
 
-Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [purchase-module.md](../.cursor/rules/docs/purchase-module.md), [finance-module.md](../.cursor/rules/docs/finance-module.md), [party-module.md](../.cursor/rules/docs/party-module.md), [medicine-module.md](../.cursor/rules/docs/medicine-module.md), [sales-module.md](../.cursor/rules/docs/sales-module.md), [security-module.md](../.cursor/rules/docs/security-module.md), [pricing-module.md](../.cursor/rules/docs/pricing-module.md), [prescription-module.md](../.cursor/rules/docs/prescription-module.md), [audit-module.md](../.cursor/rules/docs/audit-module.md).
+Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [purchase-module.md](../.cursor/rules/docs/purchase-module.md), [finance-module.md](../.cursor/rules/docs/finance-module.md), [party-module.md](../.cursor/rules/docs/party-module.md), [medicine-module.md](../.cursor/rules/docs/medicine-module.md), [sales-module.md](../.cursor/rules/docs/sales-module.md), [security-module.md](../.cursor/rules/docs/security-module.md), [pricing-module.md](../.cursor/rules/docs/pricing-module.md), [prescription-module.md](../.cursor/rules/docs/prescription-module.md), [audit-module.md](../.cursor/rules/docs/audit-module.md), [configuration-module.md](../.cursor/rules/docs/configuration-module.md), [sync-module.md](../.cursor/rules/docs/sync-module.md), [masters-module.md](../.cursor/rules/docs/masters-module.md).
 
 ## Architecture docs
 

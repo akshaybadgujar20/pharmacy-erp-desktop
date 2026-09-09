@@ -1,0 +1,29 @@
+---
+description: Sync module conventions — read memory doc before editing backend/src/sync
+globs: backend/src/sync/**
+alwaysApply: false
+---
+
+# Sync module
+
+**Read the full memory model first:** [`.cursor/rules/docs/sync-module.md`](docs/sync-module.md)
+
+Read-only sync monitoring + admin retry/resolve. No cloud worker in v1.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **Admin mutations** — audit only (`AuditModule.SYNCHRONIZATION`); **no outbox enqueue**.
+3. **Outbox retry** — only `FAILED` or stuck `PROCESSING` → `PENDING`; bump `retryCount`, clear `lastError`.
+4. **Conflict resolve** — metadata only (v1); does not merge payloads into business tables.
+5. **SyncLog** — read-only HTTP; logs created by future sync worker.
+
+## Layer checklist
+
+- **Permissions:** `SYNC:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`sync.constants.ts`](../backend/src/sync/constants/sync.constants.ts).
+- **Utils:** [`sync.util.ts`](../backend/src/sync/utils/sync.util.ts).
+
+## Architecture reference
+
+Table specs: [`synchronization.md`](../docs/pharmacy_erp_architecture_docs/database/tables/synchronization/synchronization.md).

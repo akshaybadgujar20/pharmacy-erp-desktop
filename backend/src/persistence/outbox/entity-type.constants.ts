@@ -45,6 +45,17 @@ export const OutboxEntityType = {
   DISCOUNT_RULE: 'DiscountRule',
   PRESCRIPTION: 'Prescription',
   PRESCRIPTION_ITEM: 'PrescriptionItem',
+  COMPANY: 'Company',
+  BRANCH: 'Branch',
+  FINANCIAL_YEAR: 'FinancialYear',
+  SEQUENCE_GENERATOR: 'SequenceGenerator',
+  APP_SETTING: 'AppSetting',
+  PRINTER_CONFIGURATION: 'PrinterConfiguration',
+  BARCODE_CONFIGURATION: 'BarcodeConfiguration',
+  COUNTRY: 'Country',
+  STATE: 'State',
+  CITY: 'City',
+  AREA: 'Area',
 } as const;
 
 export type OutboxEntityType =
