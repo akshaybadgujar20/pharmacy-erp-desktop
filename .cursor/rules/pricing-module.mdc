@@ -1,0 +1,33 @@
+---
+description: Pricing module conventions — read memory doc before editing backend/src/pricing
+globs: backend/src/pricing/**
+alwaysApply: false
+---
+
+# Pricing module
+
+**Read the full memory model first:** [`.cursor/rules/docs/pricing-module.md`](docs/pricing-module.md)
+
+Branch-scoped price lists + org-global tax/discount rules. Match medicine/sales patterns.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in same transaction (`AuditModule.PRICING`).
+3. **PriceList** — JWT branch + org-wide (`branchId: null`); `buildPriceListBranchFilter`.
+4. **Default price list** — `clearOtherDefaults` when `isDefault=true` for same branch scope.
+5. **Tax/DiscountRule/PriceList UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
+6. **Tax delete** blocked when FK refs exist (`TAX_IN_USE`).
+7. **Nested PriceListItem** — parent FK from route; `PUT .../replace` bulk replace.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; nested create has no parent FK in body.
+- **Mappers:** epoch ms → ISO strings; decimals as strings.
+- **Permissions:** `PRICING:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`pricing.constants.ts`](../backend/src/pricing/constants/pricing.constants.ts).
+- **Utils:** [`pricing.util.ts`](../backend/src/pricing/utils/pricing.util.ts).
+
+## Architecture reference
+
+Table specs: [`pricing.md`](../docs/pharmacy_erp_architecture_docs/database/tables/pricing/pricing.md).

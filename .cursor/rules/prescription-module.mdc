@@ -1,0 +1,35 @@
+---
+description: Prescription module conventions — read memory doc before editing backend/src/prescription
+globs: backend/src/prescription/**
+alwaysApply: false
+---
+
+# Prescription module
+
+**Read the full memory model first:** [`.cursor/rules/docs/prescription-module.md`](docs/prescription-module.md)
+
+Branch-scoped prescription documents with workflow transitions.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in same transaction (`AuditModule.PRESCRIPTION`).
+3. **Branch-scoped** via `getTenantScope` + `withBranchScope`.
+4. **Create** in `DRAFT`; client provides `prescriptionNumber`.
+5. **Items editable only in DRAFT** — `assertPrescriptionDraft`.
+6. **Workflow:** `activate` (DRAFT→ACTIVE), `cancel`, `expire` — `PrescriptionWorkflowDto`.
+7. **Prescription UPDATE** — `auditAndLogChanges` for field-level history.
+8. **dispensedQuantity/remainingQuantity/status** read-only on API (not in update DTOs).
+9. **Sales dispensing hook** — out of scope.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; workflow uses `PrescriptionWorkflowDto`.
+- **Mappers:** epoch ms → ISO strings; decimals as strings.
+- **Permissions:** `PRESCRIPTION:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`prescription.constants.ts`](../backend/src/prescription/constants/prescription.constants.ts).
+- **Utils:** [`prescription.util.ts`](../backend/src/prescription/utils/prescription.util.ts).
+
+## Architecture reference
+
+Table specs: [`prescription.md`](../docs/pharmacy_erp_architecture_docs/database/tables/prescription/prescription.md).

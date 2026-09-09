@@ -41,6 +41,8 @@ import { FinanceModule } from './finance/finance.module';
 import { SalesModule } from './sales/sales.module';
 import { SecurityModule } from './security/security.module';
 import { MedicineModule } from './medicine/medicine.module';
+import { PricingModule } from './pricing/pricing.module';
+import { PrescriptionModule } from './prescription/prescription.module';
 
 @Module({
   imports: [
@@ -58,6 +60,8 @@ import { MedicineModule } from './medicine/medicine.module';
     SalesModule,
     SecurityModule,
     MedicineModule,
+    PricingModule,
+    PrescriptionModule,
     ReportingModule,
   ],
 

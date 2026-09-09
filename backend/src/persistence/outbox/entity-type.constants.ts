@@ -39,6 +39,12 @@ export const OutboxEntityType = {
   ROLE_PERMISSION: 'RolePermission',
   USER_BRANCH: 'UserBranch',
   USER_SESSION: 'UserSession',
+  PRICE_LIST: 'PriceList',
+  PRICE_LIST_ITEM: 'PriceListItem',
+  TAX: 'Tax',
+  DISCOUNT_RULE: 'DiscountRule',
+  PRESCRIPTION: 'Prescription',
+  PRESCRIPTION_ITEM: 'PrescriptionItem',
 } as const;
 
 export type OutboxEntityType =

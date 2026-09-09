@@ -1,0 +1,28 @@
+---
+description: Audit module conventions — read memory doc before editing backend/src/audit
+globs: backend/src/audit/**
+alwaysApply: false
+---
+
+# Audit module
+
+**Read the full memory model first:** [`.cursor/rules/docs/audit-module.md`](docs/audit-module.md)
+
+Write-side `AuditService` + read APIs for audit logs and change history.
+
+## Golden rules
+
+1. **Writes** — `AuditService.log(tx, …)` inside `unitOfWork.run`; returns `auditLogId`.
+2. **Field changes** — `buildFieldChanges` + `logFieldChanges` for pricing/prescription UPDATE.
+3. **Read APIs** — `prisma.client` only; audit logs default-filter JWT `branchId`.
+4. **Immutable** — no update/delete endpoints for audit data.
+5. Use `AuditAction` and `AuditModule` constants — not string literals.
+
+## Layer checklist
+
+- **Permissions:** `AUDIT:AUDIT_LOG:READ`, `AUDIT:CHANGE_HISTORY:READ`.
+- **Utils:** [`audit.util.ts`](../backend/src/audit/utils/audit.util.ts) — `buildFieldChanges`, `auditAndLogChanges`.
+
+## Architecture reference
+
+Table specs: [`audit.md`](../docs/pharmacy_erp_architecture_docs/database/tables/audit/audit.md).

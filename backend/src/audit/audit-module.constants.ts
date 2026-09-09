@@ -8,6 +8,8 @@ export const AuditModule = {
   SECURITY: 'Security',
   CONFIGURATION: 'Configuration',
   SYNCHRONIZATION: 'Synchronization',
+  PRICING: 'Pricing',
+  PRESCRIPTION: 'Prescription',
 } as const;
 
 export type AuditModule = (typeof AuditModule)[keyof typeof AuditModule];

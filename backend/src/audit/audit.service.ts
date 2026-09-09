@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 
 import { ApplicationException } from '../common/exceptions/application.exception';
@@ -6,6 +7,7 @@ import { RequestContextService } from '../persistence/context/request-context.se
 import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { AuditAction } from './audit-action.constants';
 import { AuditModule } from './audit-module.constants';
+import type { FieldChangeInput } from './utils/audit.util';
 
 export interface AuditLogInput {
   entityType: string;
@@ -26,7 +28,7 @@ export class AuditService {
 
   constructor(private readonly requestContext: RequestContextService) {}
 
-  async log(tx: TxClient, input: AuditLogInput): Promise<void> {
+  async log(tx: TxClient, input: AuditLogInput): Promise<bigint> {
     this.validateInput(input);
 
     const ctx = this.requestContext.tryGet();
@@ -38,7 +40,7 @@ export class AuditService {
       );
     }
 
-    await tx.auditLog.create({
+    const auditLog = await tx.auditLog.create({
       data: {
         userId,
         companyId: ctx?.companyId,
@@ -57,6 +59,38 @@ export class AuditService {
         createdAt: BigInt(Date.now()),
       },
     });
+
+    return auditLog.id;
+  }
+
+  async logFieldChanges(
+    tx: TxClient,
+    auditLogId: bigint,
+    changes: FieldChangeInput[],
+  ): Promise<void> {
+    if (changes.length === 0) {
+      return;
+    }
+
+    const changedAt = BigInt(Date.now());
+
+    for (const change of changes) {
+      await tx.changeHistory.create({
+        data: {
+          uuid: randomUUID(),
+          auditLogId,
+          entityType: change.entityType,
+          entityId: change.entityId,
+          entityUuid: change.entityUuid,
+          fieldName: change.fieldName,
+          oldValue: change.oldValue,
+          newValue: change.newValue,
+          dataType: change.dataType,
+          changeType: change.changeType,
+          changedAt,
+        },
+      });
+    }
   }
 
   private validateInput(input: AuditLogInput): void {
