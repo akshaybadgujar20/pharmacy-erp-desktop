@@ -10,10 +10,13 @@ import { ErrorCode } from '../common/exceptions/error-code';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AUTH_CONSTANTS } from './constants/auth.constants';
+import type { ChangePasswordDto } from './dto/change-password.dto';
 import type { LoginDto } from './dto/login.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
 import { PasswordService } from './password.service';
+import { LogoutReason } from '../security/constants/security.constants';
+import { invalidateUserSessions } from '../security/utils/session.util';
 import {
   generateRefreshToken,
   hashRefreshToken,
@@ -346,6 +349,66 @@ export class AuthService {
       companyId: user.companyId.toString(),
       branchId: user.branchId.toString(),
     };
+  }
+
+  async changePassword(userId: bigint, dto: ChangePasswordDto) {
+    const user = await this.prisma.client.user.findFirst({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new ApplicationException(
+        ErrorCode.USER_NOT_FOUND,
+        `User not found: ${userId}`,
+        HttpStatus.NOT_FOUND,
+        { userId: userId.toString() },
+      );
+    }
+
+    const currentValid = await this.passwordService.verify(
+      dto.currentPassword,
+      user.passwordHash,
+    );
+
+    if (!currentValid) {
+      throw new ApplicationException(
+        ErrorCode.INVALID_CURRENT_PASSWORD,
+        'Current password is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const passwordHash = await this.passwordService.hash(dto.newPassword);
+    const now = BigInt(Date.now());
+
+    return this.unitOfWork.run(async (tx) => {
+      const updatedUser = await tx.user.update({
+        where: { id: userId },
+        data: {
+          passwordHash,
+          passwordChangedAt: now,
+          mustChangePassword: false,
+          failedLoginAttempts: 0,
+          lockedUntil: null,
+          updatedAt: now,
+          version: { increment: 1 },
+        },
+      });
+
+      await invalidateUserSessions(tx, userId, LogoutReason.PASSWORD_CHANGED);
+
+      await this.auditService.log(tx, {
+        entityType: 'User',
+        entityId: updatedUser.id,
+        entityUuid: updatedUser.uuid,
+        action: AuditAction.UPDATE,
+        module: AuditModule.SECURITY,
+        description: `Password changed for ${updatedUser.username}`,
+        userId,
+      });
+
+      return { message: 'Password changed successfully' };
+    });
   }
 
   async validateSession(

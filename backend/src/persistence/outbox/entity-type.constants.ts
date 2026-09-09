@@ -25,6 +25,13 @@ export const OutboxEntityType = {
   LEDGER_ENTRY: 'LedgerEntry',
   PAYMENT: 'Payment',
   RECEIPT: 'Receipt',
+  USER: 'User',
+  ROLE: 'Role',
+  PERMISSION: 'Permission',
+  USER_ROLE: 'UserRole',
+  ROLE_PERMISSION: 'RolePermission',
+  USER_BRANCH: 'UserBranch',
+  USER_SESSION: 'UserSession',
 } as const;
 
 export type OutboxEntityType =

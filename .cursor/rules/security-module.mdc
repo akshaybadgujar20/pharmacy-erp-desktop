@@ -1,0 +1,48 @@
+---
+description: Security module conventions — read memory doc before editing backend/src/security
+globs: backend/src/security/**
+alwaysApply: false
+---
+
+# Security module
+
+**Read the full memory model first:** [`.cursor/rules/docs/security-module.md`](docs/security-module.md)
+
+User & Security admin APIs live in `backend/src/security/`. Auth login/logout/refresh/me/change-password stay in `backend/src/auth/`.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in the same transaction (`AuditModule.SECURITY`).
+3. **Org-global** — no branch scoping on list/get (except session records carry `branchId` from login).
+4. **Nested junctions** — parent FK from **route param** (`userId`, `roleId`), not create body.
+5. **Never expose** `passwordHash` in API responses.
+6. **Invalidate sessions** on user deactivate, password reset, role/permission changes.
+
+## Lifecycle (no workflows)
+
+| Rule | Where |
+|------|-------|
+| Soft delete | `deletedAt`; filter `deletedAt: null` |
+| Optimistic lock | `version` on update/delete; `optimisticUpdate()` |
+| Role delete | Block if `userRoles` exist (`ROLE_IN_USE`) |
+| Permission delete | Block if `rolePermissions` exist (`PERMISSION_IN_USE`) |
+| User create | `employeeId` FK validation only; hash password via `PasswordService` |
+| Junction replace | `PUT .../replace` — soft-delete removed, upsert new; invalidate sessions |
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; nested create has parent FK from route only.
+- **Mappers:** one-way `to{Entity}Response()`; IDs as strings; never map `passwordHash`.
+- **Services:** `assertUserExists` / `assertRoleExists` for nested routes.
+- **Permissions:** `SECURITY:RESOURCE:ACTION` on every endpoint (`@RequirePermissions`).
+- **Constants:** [`security.constants.ts`](../backend/src/security/constants/security.constants.ts) — `LogoutReason`.
+- **Utils:** [`security.util.ts`](../backend/src/security/utils/security.util.ts), [`session.util.ts`](../backend/src/security/utils/session.util.ts).
+
+## Not implemented
+
+Unit/persistence/e2e tests, Angular clients, MFA, password policy settings.
+
+## Architecture reference
+
+Table specs: [`user_and_security.md`](../docs/pharmacy_erp_architecture_docs/database/tables/user_and_security/user_and_security.md). Persistence: [`persistence-patterns.md`](../docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md).

@@ -40,6 +40,6 @@ import { getJwtSecret } from './utils/auth-config.util';
   ],
   controllers: [AuthController],
   providers: [AuthService, PasswordService, JwtStrategy],
-  exports: [AuthService, JwtModule],
+  exports: [AuthService, JwtModule, PasswordService],
 })
 export class AuthModule {}
