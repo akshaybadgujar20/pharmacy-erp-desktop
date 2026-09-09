@@ -16,6 +16,7 @@ import {
   withBranchScope,
 } from '../../persistence/context/tenant-scope.util';
 import { RequestContextService } from '../../persistence/context/request-context.service';
+import { LedgerPostingService } from '../../persistence/ledger/ledger-posting.service';
 import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
 import { OutboxService } from '../../persistence/outbox/outbox.service';
@@ -23,6 +24,11 @@ import { DocumentType } from '../../persistence/sequence/document-type.constants
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { VoucherType } from '../../finance/constants/finance.constants';
+import {
+  adjustSupplierOutstanding,
+  buildPurchaseInvoiceLedgerLines,
+} from '../../finance/utils/finance.util';
 import {
   PurchaseInvoicePaymentStatus,
   PurchaseInvoiceStatus,
@@ -48,6 +54,7 @@ export class PurchaseInvoiceService {
     private readonly outboxService: OutboxService,
     private readonly requestContext: RequestContextService,
     private readonly sequences: SequenceGeneratorService,
+    private readonly ledgerPosting: LedgerPostingService,
   ) {}
 
   async list(query: PaginationQueryDto) {
@@ -312,6 +319,29 @@ export class PurchaseInvoiceService {
 
       const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
 
+      const branch = await tx.branch.findFirstOrThrow({
+        where: { id: invoice.branchId, deletedAt: null },
+        select: { companyId: true },
+      });
+
+      const ledgerLines = await buildPurchaseInvoiceLedgerLines(tx, {
+        netAmount,
+        taxAmount,
+        narration: `Purchase invoice ${invoice.purchaseInvoiceNumber}`,
+      });
+
+      await this.ledgerPosting.postVoucher(tx, {
+        companyId: branch.companyId,
+        voucherType: VoucherType.PURCHASE,
+        voucherId: invoice.id,
+        voucherNumber: invoice.purchaseInvoiceNumber,
+        transactionDate: invoice.invoiceDate,
+        lines: ledgerLines,
+        createdBy: this.requestContext.tryGet()?.userId,
+      });
+
+      await adjustSupplierOutstanding(tx, invoice.supplierId, netAmount);
+
       const updateResult = await tx.purchaseInvoice.updateMany({
         where: { id, version: dto.version, deletedAt: null },
         data: {
@@ -368,6 +398,29 @@ export class PurchaseInvoiceService {
           { status: invoice.status },
         );
       }
+
+      const branch = await tx.branch.findFirstOrThrow({
+        where: { id: invoice.branchId, deletedAt: null },
+        select: { companyId: true },
+      });
+
+      await this.ledgerPosting.reverseVoucher(tx, {
+        companyId: branch.companyId,
+        voucherType: VoucherType.PURCHASE,
+        voucherId: invoice.id,
+        reversalVoucherType: VoucherType.PURCHASE,
+        reversalVoucherId: invoice.id,
+        reversalVoucherNumber: `${invoice.purchaseInvoiceNumber}-REV`,
+        transactionDate: BigInt(Date.now()),
+        createdBy: this.requestContext.tryGet()?.userId,
+        narration: dto.remarks,
+      });
+
+      await adjustSupplierOutstanding(
+        tx,
+        invoice.supplierId,
+        new Prisma.Decimal(invoice.netAmount).neg(),
+      );
 
       const updateResult = await tx.purchaseInvoice.updateMany({
         where: { id, version: dto.version, deletedAt: null },

@@ -66,5 +66,22 @@
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd53", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb62"},
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd54", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb63"},
   {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd55", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb64"},
-  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd56", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb65"}
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd56", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb65"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd57", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb66"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd58", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb67"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd59", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb68"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5a", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb69"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5b", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6a"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5c", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6b"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5d", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6c"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5e", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6d"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd5f", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6e"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd60", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb6f"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd61", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb70"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd62", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb71"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd63", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb72"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd64", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb73"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd65", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb74"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd66", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb75"},
+  {"uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd67", "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01", "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb76"}
 ]

@@ -1,0 +1,52 @@
+---
+description: Finance module conventions — read memory doc before editing backend/src/finance
+globs: backend/src/finance/**
+alwaysApply: false
+---
+
+# Finance module
+
+**Read the full memory model first:** [`.cursor/rules/docs/finance-module.md`](docs/finance-module.md)
+
+Match purchase/inventory patterns: thin controllers, `prisma.client` for reads, `unitOfWork.run` for writes, audit + outbox in the same transaction.
+
+## Golden rules
+
+1. **Ledger balance is derived** — never store balance on `Ledger`; sum `LedgerEntry` rows.
+2. **LedgerEntry is immutable** — no update/delete HTTP; cancellations create reversal vouchers via `LedgerPostingService.reverseVoucher`.
+3. **All ledger posts** go through `LedgerPostingService` (`postVoucher` / `reverseVoucher`) with strict open financial-year validation.
+4. **Double-entry invariant:** Σ debits = Σ credits per voucher (`voucherType` + `voucherId`).
+5. **Payment/Receipt are org-global** — no `branchId` on models; sequence allocation still uses context `branchId` for `PAY-{BR}-{SEQ}` / `REC-{BR}-{SEQ}` uniqueness.
+6. **System ledgers** (`isSystem: true`) cannot be deleted; resolve by code via `resolveSystemLedger(tx, SystemLedgerCode.*)`.
+
+## Status machines
+
+| Document | Flow | Workflow routes |
+|----------|------|-----------------|
+| Payment | PENDING → COMPLETED / FAILED / CANCELLED | `complete`, `cancel` |
+| Receipt | PENDING → COMPLETED / CANCELLED / REVERSED | `complete`, `cancel` |
+| Ledger (COA) | CRUD with hierarchy guards | standard REST |
+
+## Cross-module hooks
+
+- **Purchase invoice post** — `LedgerPostingService.postVoucher` (DR Purchase + GST Input, CR Supplier Payable) + `adjustSupplierOutstanding` (in `purchase-invoice.service.ts`).
+- **Purchase invoice cancel** — `reverseVoucher` + outstanding reversal.
+- **Supplier payment complete** — ledger post + purchase invoice allocation when `referenceType = PURCHASE_INVOICE`.
+- **Customer receipt complete** — ledger post + `adjustCustomerOutstanding`; `SALES_INVOICE` reference returns `SALES_INVOICE_NOT_FOUND` until sales module exists.
+
+## Layer checklist
+
+- **DTOs:** update requires `version`; workflow uses `FinanceWorkflowDto`.
+- **Mappers:** one-way `to{Entity}Response()`; `serializeDecimal` for amounts.
+- **Services:** optimistic lock via `updateMany` + `optimisticUpdate()`.
+- **Permissions:** `FINANCE:RESOURCE:ACTION` on every endpoint.
+- **Constants:** [`finance.constants.ts`](../backend/src/finance/constants/finance.constants.ts) — statuses, voucher types, `SystemLedgerCode`.
+- **Utils:** [`finance.util.ts`](../backend/src/finance/utils/finance.util.ts) — FY assert, ledger line builders, outstanding helpers.
+
+## Not implemented
+
+Unit/persistence/e2e tests, Angular clients, manual journal API, trial balance / P&L / balance sheet reports, Expense table CRUD (use `Payment` with `paymentType=EXPENSE`).
+
+## Architecture reference
+
+Table specs: [`docs/.../financial/financial.md`](../docs/pharmacy_erp_architecture_docs/database/tables/financial/financial.md). Domain: [`finance.md`](../docs/pharmacy_erp_architecture_docs/domain/finance.md).

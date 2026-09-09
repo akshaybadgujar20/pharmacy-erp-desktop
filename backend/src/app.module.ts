@@ -37,6 +37,7 @@ import { PartyModule } from './party/party.module';
 import { ReportingModule } from './reporting/reporting.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { FinanceModule } from './finance/finance.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { PurchaseModule } from './purchase/purchase.module';
     PartyModule,
     InventoryModule,
     PurchaseModule,
+    FinanceModule,
     ReportingModule,
   ],
 

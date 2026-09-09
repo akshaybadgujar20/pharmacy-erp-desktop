@@ -8,6 +8,8 @@ export const DocumentType = {
   STOCK_TAKE: 'STOCK_TAKE',
   PURCHASE_INVOICE: 'PURCHASE_INVOICE',
   PURCHASE_RETURN: 'PURCHASE_RETURN',
+  PAYMENT: 'PAYMENT',
+  RECEIPT: 'RECEIPT',
 } as const;
 
 export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType];

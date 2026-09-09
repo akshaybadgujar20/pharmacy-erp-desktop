@@ -123,11 +123,12 @@ Scoped rules in `.cursor/rules/` (repo root):
 | `testing-rules.mdc` | `backend/**/*.spec.ts`, `backend/test/**` |
 | `inventory-module.mdc` | `backend/src/inventory/**` — see [module memory doc](../.cursor/rules/docs/inventory-module.md) |
 | `purchase-module.mdc` | `backend/src/purchase/**` — see [module memory doc](../.cursor/rules/docs/purchase-module.md) |
+| `finance-module.mdc` | `backend/src/finance/**` — see [module memory doc](../.cursor/rules/docs/finance-module.md) |
 | `party-module.mdc` | `backend/src/party/**` — see [module memory doc](../.cursor/rules/docs/party-module.md) |
 
 ## Module memory docs
 
-Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [purchase-module.md](../.cursor/rules/docs/purchase-module.md), [party-module.md](../.cursor/rules/docs/party-module.md).
+Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [purchase-module.md](../.cursor/rules/docs/purchase-module.md), [finance-module.md](../.cursor/rules/docs/finance-module.md), [party-module.md](../.cursor/rules/docs/party-module.md).
 
 ## Architecture docs
 

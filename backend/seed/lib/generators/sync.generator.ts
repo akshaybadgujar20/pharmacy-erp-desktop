@@ -108,17 +108,17 @@ export async function seedFinancialAndAudit(
   const ledgerEntryOffset = await prisma.ledgerEntry.count();
 
   let ledger = await prisma.ledger.findUnique({
-    where: { ledgerCode: 'CASH-MAIN' },
+    where: { ledgerCode: 'CASH001' },
   });
   if (!ledger) {
     ledger = await prisma.ledger.create({
       data: {
         uuid: uuid(),
-        ledgerCode: 'CASH-MAIN',
-        ledgerName: 'Main Cash Ledger',
+        ledgerCode: 'CASH001',
+        ledgerName: 'Cash in Hand',
         ledgerType: 'ASSET',
         normalBalance: 'DEBIT',
-        isSystem: false,
+        isSystem: true,
         isActive: true,
         createdAt: BigInt(Date.now()),
         updatedAt: BigInt(Date.now()),

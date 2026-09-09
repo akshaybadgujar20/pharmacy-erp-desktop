@@ -14,6 +14,7 @@ Implementation-grounded reference for `backend/src/purchase/`. For table-level d
 | **Services** | 8 |
 | **Exports** | None |
 | **Inventory alignment** | GRN accept / return approve call `InventoryLedgerService`; invoice post does not touch stock |
+| **Finance alignment** | Invoice post/cancel call `LedgerPostingService` + supplier outstanding (see finance module) |
 
 ---
 
@@ -113,4 +114,4 @@ Plus standard list/get/create/patch/delete with `GOODS_RECEIPT` permissions.
 
 ## 5. Not implemented
 
-Unit/persistence/e2e tests, Angular clients, Finance AP ledger on invoice post, reporting providers.
+Unit/persistence/e2e tests, Angular clients, reporting providers.

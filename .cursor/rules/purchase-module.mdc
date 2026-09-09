@@ -44,11 +44,11 @@ Header/item edits and deletes only in **DRAFT** (PO also editable in PENDING_APP
 - GRN accept → `PURCHASE_GRN` IN per accepted line; creates/resolves `Batch`
 - GRN cancel (posted) → `PURCHASE_GRN` OUT reversal per accepted line
 - Return approve → `PURCHASE_RETURN` OUT per line
-- Invoice post → status + audit/outbox only (no stock, no Finance ledger)
+- Invoice post → `LedgerPostingService` AP voucher + supplier outstanding (no stock)
 
 ## Not implemented
 
-Unit/persistence/e2e tests, Angular clients, Finance AP ledger on invoice post, three-way match strictness, over-receipt tolerance settings.
+Unit/persistence/e2e tests, Angular clients, three-way match strictness, over-receipt tolerance settings.
 
 ## Architecture reference
 

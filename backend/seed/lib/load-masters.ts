@@ -12,6 +12,7 @@ export async function loadMasters(
 ): Promise<void> {
   await loadGeo(prisma);
   await loadConfiguration(prisma, ctx);
+  await loadFinancialLedgers(prisma);
   await loadMedicineRefs(prisma);
   await loadTax(prisma, ctx);
   await loadSecurity(prisma);
@@ -397,6 +398,26 @@ async function loadTax(prisma: PrismaClient, ctx: SeedContext): Promise<void> {
     });
     register('Tax', row.uuid as string, created.id);
     ctx.taxIds.push(created.id);
+  }
+}
+
+async function loadFinancialLedgers(prisma: PrismaClient): Promise<void> {
+  for (const row of loadJson<Row>('financial/ledger.json')) {
+    if (tryResolve('Ledger', row.uuid as string) !== undefined) continue;
+    const created = await prisma.ledger.create({
+      data: {
+        uuid: row.uuid as string,
+        ledgerCode: row.ledgerCode as string,
+        ledgerName: row.ledgerName as string,
+        ledgerType: row.ledgerType as string,
+        normalBalance: row.normalBalance as string,
+        isSystem: row.isSystem as boolean,
+        isActive: row.isActive as boolean,
+        createdAt: BigInt(Date.now()),
+        updatedAt: BigInt(Date.now()),
+      },
+    });
+    register('Ledger', row.uuid as string, created.id);
   }
 }
 

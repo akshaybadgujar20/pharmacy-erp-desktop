@@ -1,12 +1,21 @@
 [
-  {"uuid": "12121212-1212-4212-8212-121212121201", "companyUuid": "55555555-5555-4555-8555-555555555501", "financialYearCode": "FY2425", "financialYearName": "FY 2024-25", "startDate": 1787791100000, "endDate": 1787791130000, "status": "OPEN", "isCurrent": true},
+  {
+    "uuid": "12121212-1212-4212-8212-121212121201",
+    "companyUuid": "55555555-5555-4555-8555-555555555501",
+    "financialYearCode": "FY2627",
+    "financialYearName": "FY 2026-27",
+    "startDate": 1775001600000,
+    "endDate": 1806537599999,
+    "status": "OPEN",
+    "isCurrent": true
+  },
   {
     "uuid": "12121212-1212-4212-8212-121212121202",
     "companyUuid": "55555555-5555-4555-8555-555555555501",
-    "financialYearCode": "FY2324",
-    "financialYearName": "FY 2023-24",
-    "startDate": 1787791144000,
-    "endDate": 1787791141000,
+    "financialYearCode": "FY2526",
+    "financialYearName": "FY 2025-26",
+    "startDate": 1743465600000,
+    "endDate": 1775001599999,
     "status": "CLOSED",
     "isCurrent": false
   }

@@ -1,0 +1,11 @@
+[
+  {"uuid": "13131313-1313-4313-8313-131313131301", "ledgerCode": "CASH001", "ledgerName": "Cash in Hand", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131302", "ledgerCode": "BANK001", "ledgerName": "Primary Bank", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131303", "ledgerCode": "CUST001", "ledgerName": "Customer Receivable", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131304", "ledgerCode": "SUP001", "ledgerName": "Supplier Payable", "ledgerType": "LIABILITY", "normalBalance": "CREDIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131305", "ledgerCode": "SALE001", "ledgerName": "Sales Revenue", "ledgerType": "INCOME", "normalBalance": "CREDIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131306", "ledgerCode": "PUR001", "ledgerName": "Purchase Account", "ledgerType": "EXPENSE", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131307", "ledgerCode": "GSTIN001", "ledgerName": "GST Input", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131308", "ledgerCode": "GSTOUT001", "ledgerName": "GST Output", "ledgerType": "LIABILITY", "normalBalance": "CREDIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131309", "ledgerCode": "INV001", "ledgerName": "Inventory Asset", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true}
+]

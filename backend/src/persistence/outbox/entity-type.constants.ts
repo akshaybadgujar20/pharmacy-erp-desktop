@@ -19,6 +19,10 @@ export const OutboxEntityType = {
   STOCK: 'Stock',
   STOCK_TRANSFER: 'StockTransfer',
   STOCK_TAKE: 'StockTake',
+  LEDGER: 'Ledger',
+  LEDGER_ENTRY: 'LedgerEntry',
+  PAYMENT: 'Payment',
+  RECEIPT: 'Receipt',
 } as const;
 
 export type OutboxEntityType =
