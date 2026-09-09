@@ -40,6 +40,7 @@ import { PurchaseModule } from './purchase/purchase.module';
 import { FinanceModule } from './finance/finance.module';
 import { SalesModule } from './sales/sales.module';
 import { SecurityModule } from './security/security.module';
+import { MedicineModule } from './medicine/medicine.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { SecurityModule } from './security/security.module';
     FinanceModule,
     SalesModule,
     SecurityModule,
+    MedicineModule,
     ReportingModule,
   ],
 
