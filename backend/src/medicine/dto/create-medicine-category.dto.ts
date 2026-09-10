@@ -7,7 +7,10 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
+import {
+  NullableBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
 
 export class CreateMedicineCategoryDto {
   @OptionalBigIntField()
@@ -43,7 +46,7 @@ export class UpdateMedicineCategoryDto {
   @Min(1)
   version!: number;
 
-  @OptionalBigIntField()
+  @NullableBigIntField()
   parentCategoryId?: bigint | null;
 
   @IsOptional()

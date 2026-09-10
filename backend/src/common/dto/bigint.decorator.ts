@@ -71,6 +71,9 @@ export function ClearableOptionalBigIntField() {
   };
 }
 
+/** Preserves `null` to clear nullable FK fields on PATCH; omits when `undefined`. */
+export const NullableBigIntField = ClearableOptionalBigIntField;
+
 export function MandatoryBigIntField() {
   return function (target: object, propertyKey: string) {
     IsNotEmpty()(target, propertyKey);

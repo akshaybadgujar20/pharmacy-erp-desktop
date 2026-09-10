@@ -1,6 +1,6 @@
 export const UnitType = {
   COUNT: 'COUNT',
-  PACK: 'PACK',
+  PACKAGING: 'PACKAGING',
   VOLUME: 'VOLUME',
   WEIGHT: 'WEIGHT',
 } as const;

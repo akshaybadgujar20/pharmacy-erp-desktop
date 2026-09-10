@@ -8,7 +8,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
+import {
+  RequireAnyPermission,
+  RequirePermissions,
+} from '../../auth/decorators/require-permissions.decorator';
 import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreateMedicineDto } from '../dto/create-medicine.dto';
@@ -21,13 +24,13 @@ export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
   @Get()
-  @RequirePermissions('MASTER:MEDICINE:READ')
+  @RequireAnyPermission('MASTER:MEDICINE:READ', 'MASTER:MEDICINE:UPDATE')
   list(@Query() query: MedicineListQueryDto) {
     return this.medicineService.list(query);
   }
 
   @Get(':id')
-  @RequirePermissions('MASTER:MEDICINE:READ')
+  @RequireAnyPermission('MASTER:MEDICINE:READ', 'MASTER:MEDICINE:UPDATE')
   getById(@Param('id', ParseBigIntPipe) id: bigint) {
     return this.medicineService.getById(id);
   }

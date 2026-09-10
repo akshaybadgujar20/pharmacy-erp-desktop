@@ -264,6 +264,65 @@ export async function assertMedicineCodeUnique(
   }
 }
 
+export async function assertBarcodeUnique(
+  tx: TxClient,
+  barcode: string | null | undefined,
+  excludeId?: bigint,
+): Promise<void> {
+  const normalized = barcode?.trim();
+  if (!normalized) {
+    return;
+  }
+
+  const existing = await tx.medicine.findFirst({
+    where: {
+      barcode: normalized,
+      deletedAt: null,
+      ...(excludeId ? { NOT: { id: excludeId } } : {}),
+    },
+    select: { id: true },
+  });
+
+  if (existing) {
+    throwConflict(
+      ErrorCode.MEDICINE_BARCODE_ALREADY_EXISTS,
+      `Medicine barcode already exists: ${normalized}`,
+      { barcode: normalized },
+    );
+  }
+}
+
+export async function assertSaltCompositionCompositeUnique(
+  tx: TxClient,
+  genericId: bigint,
+  strength: Prisma.Decimal | string,
+  strengthUnit: string,
+  excludeId?: bigint,
+): Promise<void> {
+  const existing = await tx.saltComposition.findFirst({
+    where: {
+      genericId,
+      strength,
+      strengthUnit,
+      deletedAt: null,
+      ...(excludeId ? { NOT: { id: excludeId } } : {}),
+    },
+    select: { id: true },
+  });
+
+  if (existing) {
+    throwConflict(
+      ErrorCode.SALT_COMPOSITION_ALREADY_EXISTS,
+      'Salt composition already exists for generic, strength, and unit',
+      {
+        genericId: genericId.toString(),
+        strength: strength.toString(),
+        strengthUnit,
+      },
+    );
+  }
+}
+
 export async function assertMedicineNameUniquePerManufacturer(
   tx: TxClient,
   manufacturerId: bigint,
@@ -345,6 +404,15 @@ export async function assertNoCategoryCycle(
     currentParentId = parent.parentCategoryId;
     depth += 1;
   }
+
+  if (currentParentId != null && depth >= CATEGORY_HIERARCHY_MAX_DEPTH) {
+    throw new ApplicationException(
+      ErrorCode.CATEGORY_HIERARCHY_TOO_DEEP,
+      'Category hierarchy exceeds maximum depth',
+      HttpStatus.BAD_REQUEST,
+      { maxDepth: CATEGORY_HIERARCHY_MAX_DEPTH.toString() },
+    );
+  }
 }
 
 export async function assertUniqueActiveField(
@@ -413,6 +481,8 @@ export async function assertMedicineNotInUse(
     salesInvoiceItems,
     salesReturnItems,
     priceListItems,
+    prescriptionItems,
+    discountRules,
   ] = await Promise.all([
     tx.batch.count({ where: { medicineId } }),
     tx.stockMovement.count({ where: { medicineId } }),
@@ -423,6 +493,8 @@ export async function assertMedicineNotInUse(
     tx.salesInvoiceItem.count({ where: { medicineId } }),
     tx.salesReturnItem.count({ where: { medicineId } }),
     tx.priceListItem.count({ where: { medicineId } }),
+    tx.prescriptionItem.count({ where: { medicineId } }),
+    tx.discountRule.count({ where: { medicineId, deletedAt: null } }),
   ]);
 
   const total =
@@ -434,7 +506,9 @@ export async function assertMedicineNotInUse(
     purchaseReturnItems +
     salesInvoiceItems +
     salesReturnItems +
-    priceListItems;
+    priceListItems +
+    prescriptionItems +
+    discountRules;
 
   if (total > 0) {
     throwConflict(

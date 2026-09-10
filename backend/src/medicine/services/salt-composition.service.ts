@@ -21,6 +21,7 @@ import { UpdateSaltCompositionDto } from '../dto/update-salt-composition.dto';
 import { toSaltCompositionResponse } from '../mappers/salt-composition.mapper';
 import {
   assertGenericExists,
+  assertSaltCompositionCompositeUnique,
   assertSaltCompositionNotInUse,
   assertUniqueActiveField,
   assertUnitExists,
@@ -100,6 +101,12 @@ export class SaltCompositionService {
         dto.compositionCode,
         'Composition code',
       );
+      await assertSaltCompositionCompositeUnique(
+        tx,
+        dto.genericId,
+        dto.strength,
+        dto.strengthUnit,
+      );
 
       const now = BigInt(Date.now());
       const saltComposition = await tx.saltComposition.create({
@@ -159,6 +166,24 @@ export class SaltCompositionService {
           'compositionCode',
           dto.compositionCode,
           'Composition code',
+          id,
+        );
+      }
+
+      const genericId = dto.genericId ?? existing.genericId;
+      const strength = dto.strength ?? existing.strength;
+      const strengthUnit = dto.strengthUnit ?? existing.strengthUnit;
+
+      if (
+        genericId !== existing.genericId ||
+        strength.toString() !== existing.strength.toString() ||
+        strengthUnit !== existing.strengthUnit
+      ) {
+        await assertSaltCompositionCompositeUnique(
+          tx,
+          genericId,
+          strength,
+          strengthUnit,
           id,
         );
       }

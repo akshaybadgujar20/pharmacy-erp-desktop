@@ -44,8 +44,11 @@ Permissions use `MASTER:RESOURCE:ACTION`. Delete endpoints require `DeleteEntity
 ### Medicine
 
 - Client provides `medicineCode` (unique, immutable after create)
-- `medicineName` unique within `manufacturerId`
-- Soft delete blocked when downstream refs exist (`MEDICINE_IN_USE`)
+- `medicineName` unique within `manufacturerId` (checked on create and when either name or manufacturer changes)
+- Optional `barcode` unique when provided (non-empty)
+- `scheduleId` clearable via PATCH `{ "scheduleId": null }` (`NullableBigIntField`)
+- Soft delete blocked when downstream refs exist (`MEDICINE_IN_USE`, including prescriptions and discount rules)
+- GET list/get accepts `MASTER:MEDICINE:READ` **or** legacy `MASTER:MEDICINE:UPDATE` (`@RequireAnyPermission`)
 
 ### Manufacturer
 
@@ -55,15 +58,25 @@ Permissions use `MASTER:RESOURCE:ACTION`. Delete endpoints require `DeleteEntity
 
 ### MedicineCategory
 
-- Flat CRUD with optional `parentCategoryId`
-- Circular parent check via `assertNoCategoryCycle`
+- Flat CRUD with optional `parentCategoryId` (clearable via `{ "parentCategoryId": null }`)
+- Circular parent check via `assertNoCategoryCycle`; max depth `CATEGORY_HIERARCHY_MAX_DEPTH` (100)
 - Delete blocked when children or medicines exist
+
+### SaltComposition
+
+- Unique `(genericId, strength, strengthUnit)` — `SALT_COMPOSITION_ALREADY_EXISTS`
 
 ### MedicineSalt
 
 - Hard delete (no `deletedAt`)
 - Auto-set `medicineGenericId` from `SaltComposition.genericId` on create
-- Replace: delete all existing rows, insert new set in one transaction
+- Mutations require active medicine (`isActive: true`)
+- `percentage` clearable via `{ "percentage": null }` on update
+- Replace: delete all existing rows, insert new set in one transaction; empty `items` requires `confirmClear: true`
+
+### UnitOfMeasure
+
+- `unitType` values: `COUNT`, `PACKAGING`, `VOLUME`, `WEIGHT` (seed JSON uses `PACKAGING`; run `db:seed:fresh` to update existing DB rows from legacy `PACK`)
 
 ### System rows
 
@@ -86,7 +99,7 @@ Permissions use `MASTER:RESOURCE:ACTION`. Delete endpoints require `DeleteEntity
 
 ## 5. Permissions seed
 
-33 new permissions from `bbbb...a7` through `bbbb...c7`. Legacy `MASTER_MEDICINE` (`bbbb...06`, UPDATE only) retained. Admin role mappings: `dddd...98` through `dddd...b8`.
+33 new permissions from `bbbb...a7` through `bbbb...c7`. Legacy `MASTER_MEDICINE` (`bbbb...06`, grants `MASTER:MEDICINE:UPDATE` only) retained — sufficient for medicine GET endpoints via `@RequireAnyPermission`; assign `MASTER:MEDICINE:READ` for read-only roles. Admin role mappings: `dddd...98` through `dddd...b8`.
 
 ---
 

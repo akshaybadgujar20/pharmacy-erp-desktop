@@ -71,7 +71,7 @@ export class MedicineSaltService {
 
   async create(medicineId: bigint, dto: CreateMedicineSaltDto) {
     return this.unitOfWork.run(async (tx) => {
-      await assertMedicineExists(tx, medicineId, false);
+      await assertMedicineExists(tx, medicineId);
 
       const saltComposition = await assertSaltCompositionExists(
         tx,
@@ -116,6 +116,8 @@ export class MedicineSaltService {
 
   async update(medicineId: bigint, id: bigint, dto: UpdateMedicineSaltDto) {
     return this.unitOfWork.run(async (tx) => {
+      await assertMedicineExists(tx, medicineId);
+
       const existing = await tx.medicineSalt.findFirst({
         where: { id, medicineId },
       });
@@ -163,8 +165,12 @@ export class MedicineSaltService {
         data: {
           saltCompositionId,
           medicineGenericId,
-          sequenceNo: dto.sequenceNo,
-          percentage: dto.percentage,
+          ...(dto.sequenceNo !== undefined
+            ? { sequenceNo: dto.sequenceNo }
+            : {}),
+          ...(dto.percentage !== undefined
+            ? { percentage: dto.percentage }
+            : {}),
           version: { increment: 1 },
         },
       });
@@ -190,6 +196,8 @@ export class MedicineSaltService {
 
   async delete(medicineId: bigint, id: bigint, version: number) {
     return this.unitOfWork.run(async (tx) => {
+      await assertMedicineExists(tx, medicineId);
+
       const existing = await tx.medicineSalt.findFirst({
         where: { id, medicineId, version },
       });
@@ -229,7 +237,16 @@ export class MedicineSaltService {
 
   async replace(medicineId: bigint, dto: ReplaceMedicineSaltsDto) {
     return this.unitOfWork.run(async (tx) => {
-      await assertMedicineExists(tx, medicineId, false);
+      await assertMedicineExists(tx, medicineId);
+
+      if (dto.items.length === 0 && dto.confirmClear !== true) {
+        throw new ApplicationException(
+          ErrorCode.VALIDATION_ERROR,
+          'confirmClear is required to remove all medicine salts',
+          HttpStatus.BAD_REQUEST,
+          { medicineId: medicineId.toString() },
+        );
+      }
 
       const compositionIds = dto.items.map((item) => item.saltCompositionId);
       const uniqueCompositionIds = new Set(

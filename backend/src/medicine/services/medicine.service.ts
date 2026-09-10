@@ -21,6 +21,7 @@ import { MedicineListQueryDto } from '../dto/medicine-list-query.dto';
 import { UpdateMedicineDto } from '../dto/update-medicine.dto';
 import { toMedicineResponse } from '../mappers/medicine.mapper';
 import {
+  assertBarcodeUnique,
   assertCategoryExists,
   assertManufacturerExists,
   assertMedicineCodeUnique,
@@ -118,6 +119,7 @@ export class MedicineService {
         dto.manufacturerId,
         dto.medicineName,
       );
+      await assertBarcodeUnique(tx, dto.barcode);
 
       const now = BigInt(Date.now());
       const medicine = await tx.medicine.create({
@@ -184,14 +186,13 @@ export class MedicineService {
         await assertUnitExists(tx, dto.unitId);
       }
 
-      if (dto.scheduleId) {
+      if (dto.scheduleId !== undefined && dto.scheduleId != null) {
         await assertScheduleExists(tx, dto.scheduleId);
       }
 
       if (
-        dto.medicineName &&
-        (dto.medicineName !== existing.medicineName ||
-          manufacturerId !== existing.manufacturerId)
+        manufacturerId !== existing.manufacturerId ||
+        medicineName !== existing.medicineName
       ) {
         await assertMedicineNameUniquePerManufacturer(
           tx,
@@ -201,13 +202,19 @@ export class MedicineService {
         );
       }
 
+      if (dto.barcode !== undefined && dto.barcode !== existing.barcode) {
+        await assertBarcodeUnique(tx, dto.barcode, id);
+      }
+
       const updateResult = await tx.medicine.updateMany({
         where: { id, version: dto.version, deletedAt: null },
         data: {
           medicineName: dto.medicineName,
           manufacturerId: dto.manufacturerId,
           categoryId: dto.categoryId,
-          scheduleId: dto.scheduleId,
+          ...(dto.scheduleId !== undefined
+            ? { scheduleId: dto.scheduleId }
+            : {}),
           unitId: dto.unitId,
           brandName: dto.brandName,
           strength: dto.strength,

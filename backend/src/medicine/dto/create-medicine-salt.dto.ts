@@ -1,4 +1,5 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Min, ValidateIf } from 'class-validator';
 import {
   MandatoryBigIntField,
   OptionalBigIntField,
@@ -13,8 +14,10 @@ export class CreateMedicineSaltDto {
   sequenceNo!: number;
 
   @IsOptional()
+  @ValidateIf((_, value) => value !== null)
   @IsString()
-  percentage?: string;
+  @Transform(({ value }: { value: unknown }) => (value === null ? null : value))
+  percentage?: string | null;
 }
 
 export class UpdateMedicineSaltDto {
@@ -31,6 +34,8 @@ export class UpdateMedicineSaltDto {
   sequenceNo?: number;
 
   @IsOptional()
+  @ValidateIf((_, value) => value !== null)
   @IsString()
-  percentage?: string;
+  @Transform(({ value }: { value: unknown }) => (value === null ? null : value))
+  percentage?: string | null;
 }
