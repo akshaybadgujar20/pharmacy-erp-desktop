@@ -52,8 +52,8 @@ Cross-cutting decisions that constrain multiple modules. Listed here for quick r
 
 | Theme | ADR IDs | Notes |
 |-------|---------|-------|
-| Database & persistence | ADR-001, ADR-002, ADR-003, ADR-005 | Schema strategy, statuses, stock, numbering |
-| Auth & tenant scope | — | Pending Tier 0 recovery |
+| Database & persistence | ADR-001–010 | Schema, UoW, outbox, ledger, context |
+| Auth & tenant scope | — | Pending Doc 04 |
 | Offline-first & sync | — | Pending Tier 1 recovery |
 | Module boundaries | — | Pending Tier 2 recovery |
 
@@ -63,7 +63,8 @@ Cross-cutting decisions that constrain multiple modules. Listed here for quick r
 
 | Module | ADR count | Sources processed | Gaps / needs confirmation |
 |--------|-----------|-------------------|---------------------------|
-| Infrastructure / persistence | 5 | Doc 01 | — |
+| Infrastructure / persistence | 10 | Doc 01–02 | — |
+| Inventory | 1 | Doc 02 | ADR-008 |
 | Auth | 0 | — | Pending |
 | Audit | 0 | — | Pending |
 | Security | 0 | — | Pending |
@@ -111,7 +112,8 @@ Documents analyzed in dependency order. One git commit per row when complete.
 | Doc # | Source | Commit | Status |
 |-------|--------|--------|--------|
 | — | Scaffold | 4d6aeb4 | Done |
-| 01 | `plans/pharmacy_erp_db_review_cfc2c0b5.plan.md` | — | In progress |
+| 01 | `plans/pharmacy_erp_db_review_cfc2c0b5.plan.md` | c763869 | Done |
+| 02 | `plans/persistence_foundation_patterns_3af5df7a.plan.md` | — | In progress |
 
 ---
 
