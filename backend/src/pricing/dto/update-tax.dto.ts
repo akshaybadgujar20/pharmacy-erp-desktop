@@ -7,7 +7,7 @@ import {
   Min,
 } from 'class-validator';
 import {
-  ClearableOptionalBigIntField,
+  NullableBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
 
@@ -40,7 +40,7 @@ export class UpdateTaxDto {
   effectiveFrom?: bigint;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   effectiveTo?: bigint | null;
 
   @IsOptional()

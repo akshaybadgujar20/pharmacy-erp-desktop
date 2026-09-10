@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { PriceList, Prisma } from '@prisma/client';
+import { PriceList } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
@@ -26,6 +26,7 @@ import { toPriceListResponse } from '../mappers/price-list.mapper';
 import {
   assertPriceListNotInUse,
   buildPriceListBranchFilter,
+  buildPriceListListWhere,
   clearOtherDefaults,
   optimisticUpdate,
   throwConflict,
@@ -58,27 +59,8 @@ export class PriceListService {
     const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
-    const search = query.search?.trim();
 
-    const where: Prisma.PriceListWhereInput = {
-      deletedAt: null,
-      ...(query.priceListType ? { priceListType: query.priceListType } : {}),
-      ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
-      ...(query.isDefault !== undefined ? { isDefault: query.isDefault } : {}),
-      AND: [
-        buildPriceListBranchFilter(scope.branchId),
-        ...(search
-          ? [
-              {
-                OR: [
-                  { priceListCode: { contains: search } },
-                  { priceListName: { contains: search } },
-                ],
-              },
-            ]
-          : []),
-      ],
-    };
+    const where = buildPriceListListWhere(scope.branchId, query);
 
     const [total, rows] = await Promise.all([
       this.prisma.client.priceList.count({ where }),

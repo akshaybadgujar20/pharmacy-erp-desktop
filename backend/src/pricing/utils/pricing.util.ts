@@ -62,12 +62,38 @@ export function buildPriceListBranchFilter(
   };
 }
 
-export interface DiscountRuleAppliesToInput {
-  appliesTo: string;
-  medicineId?: bigint | null;
-  categoryId?: bigint | null;
-  customerId?: bigint | null;
-  priceListId?: bigint | null;
+export type PriceListListFilters = {
+  priceListType?: string;
+  isActive?: boolean;
+  isDefault?: boolean;
+  search?: string;
+};
+
+export function buildPriceListListWhere(
+  branchId: bigint,
+  query: PriceListListFilters,
+): Prisma.PriceListWhereInput {
+  const search = query.search?.trim();
+
+  return {
+    deletedAt: null,
+    ...(query.priceListType ? { priceListType: query.priceListType } : {}),
+    ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
+    ...(query.isDefault !== undefined ? { isDefault: query.isDefault } : {}),
+    AND: [
+      buildPriceListBranchFilter(branchId),
+      ...(search
+        ? [
+            {
+              OR: [
+                { priceListCode: { contains: search } },
+                { priceListName: { contains: search } },
+              ],
+            },
+          ]
+        : []),
+    ],
+  };
 }
 
 export interface ResolvedDiscountRuleFks {

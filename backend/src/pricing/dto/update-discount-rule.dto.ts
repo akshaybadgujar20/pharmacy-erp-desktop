@@ -7,7 +7,7 @@ import {
   Min,
 } from 'class-validator';
 import {
-  ClearableOptionalBigIntField,
+  NullableBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
 
@@ -41,19 +41,19 @@ export class UpdateDiscountRuleDto {
   appliesTo?: string;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   medicineId?: bigint | null;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   categoryId?: bigint | null;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   customerId?: bigint | null;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   priceListId?: bigint | null;
 
   @IsOptional()
@@ -74,7 +74,7 @@ export class UpdateDiscountRuleDto {
   effectiveFrom?: bigint;
 
   @IsOptional()
-  @ClearableOptionalBigIntField()
+  @NullableBigIntField()
   effectiveTo?: bigint | null;
 
   @IsOptional()

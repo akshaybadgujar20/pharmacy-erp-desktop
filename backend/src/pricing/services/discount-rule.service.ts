@@ -213,9 +213,7 @@ export class DiscountRuleService {
           minimumAmount: dto.minimumAmount,
           priority: dto.priority,
           effectiveFrom: dto.effectiveFrom,
-          ...(dto.effectiveTo !== undefined
-            ? { effectiveTo: dto.effectiveTo }
-            : {}),
+          effectiveTo: dto.effectiveTo,
           isActive: dto.isActive,
           remarks: dto.remarks,
           updatedAt: BigInt(Date.now()),

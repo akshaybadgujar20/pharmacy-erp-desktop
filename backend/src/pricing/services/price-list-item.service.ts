@@ -189,11 +189,9 @@ export class PriceListItemService {
           mrp: dto.mrp,
           minimumSellingPrice: dto.minimumSellingPrice,
           discountPercent: dto.discountPercent,
-          ...(dto.taxId !== undefined ? { taxId: dto.taxId } : {}),
+          taxId: dto.taxId,
           effectiveFrom: dto.effectiveFrom,
-          ...(dto.effectiveTo !== undefined
-            ? { effectiveTo: dto.effectiveTo }
-            : {}),
+          effectiveTo: dto.effectiveTo,
           isActive: dto.isActive,
           remarks: dto.remarks,
           updatedAt: BigInt(Date.now()),

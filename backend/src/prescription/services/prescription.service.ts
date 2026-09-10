@@ -214,29 +214,12 @@ export class PrescriptionService {
       const prescription = await tx.prescription.findFirstOrThrow({
         where: { id },
       });
-      await auditAndLogChanges(
+      await this.auditAndEnqueuePrescriptionUpdate(
         tx,
-        this.auditService,
-        {
-          entityType: OutboxEntityType.PRESCRIPTION,
-          entityId: prescription.id,
-          entityUuid: prescription.uuid,
-          action: AuditAction.UPDATE,
-          module: AuditModule.PRESCRIPTION,
-        },
-        existing as unknown as Record<string, unknown>,
-        prescription as unknown as Record<string, unknown>,
-        PRESCRIPTION_AUDIT_FIELDS,
+        existing,
+        prescription,
+        AuditAction.UPDATE,
       );
-      await this.outboxService.enqueue(tx, {
-        entityType: OutboxEntityType.PRESCRIPTION,
-        entityUuid: prescription.uuid,
-        operation: OutboxOperation.UPDATE,
-        payload: {
-          uuid: prescription.uuid,
-          prescriptionNumber: prescription.prescriptionNumber,
-        },
-      });
       return toPrescriptionResponse(prescription);
     });
   }
@@ -372,30 +355,44 @@ export class PrescriptionService {
       const prescription = await tx.prescription.findFirstOrThrow({
         where: { id },
       });
-      await auditAndLogChanges(
+      await this.auditAndEnqueuePrescriptionUpdate(
         tx,
-        this.auditService,
-        {
-          entityType: OutboxEntityType.PRESCRIPTION,
-          entityId: prescription.id,
-          entityUuid: prescription.uuid,
-          action,
-          module: AuditModule.PRESCRIPTION,
-        },
-        existing as unknown as Record<string, unknown>,
-        prescription as unknown as Record<string, unknown>,
-        PRESCRIPTION_AUDIT_FIELDS,
+        existing,
+        prescription,
+        action,
       );
-      await this.outboxService.enqueue(tx, {
-        entityType: OutboxEntityType.PRESCRIPTION,
-        entityUuid: prescription.uuid,
-        operation: OutboxOperation.UPDATE,
-        payload: {
-          uuid: prescription.uuid,
-          prescriptionNumber: prescription.prescriptionNumber,
-        },
-      });
       return toPrescriptionResponse(prescription);
+    });
+  }
+
+  private async auditAndEnqueuePrescriptionUpdate(
+    tx: TxClient,
+    existing: Prescription,
+    prescription: Prescription,
+    action: (typeof AuditAction)[keyof typeof AuditAction],
+  ): Promise<void> {
+    await auditAndLogChanges(
+      tx,
+      this.auditService,
+      {
+        entityType: OutboxEntityType.PRESCRIPTION,
+        entityId: prescription.id,
+        entityUuid: prescription.uuid,
+        action,
+        module: AuditModule.PRESCRIPTION,
+      },
+      existing as unknown as Record<string, unknown>,
+      prescription as unknown as Record<string, unknown>,
+      PRESCRIPTION_AUDIT_FIELDS,
+    );
+    await this.outboxService.enqueue(tx, {
+      entityType: OutboxEntityType.PRESCRIPTION,
+      entityUuid: prescription.uuid,
+      operation: OutboxOperation.UPDATE,
+      payload: {
+        uuid: prescription.uuid,
+        prescriptionNumber: prescription.prescriptionNumber,
+      },
     });
   }
 
