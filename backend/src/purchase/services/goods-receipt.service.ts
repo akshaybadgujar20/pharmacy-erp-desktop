@@ -30,9 +30,9 @@ import { GoodsReceiptStatus } from '../constants/purchase.constants';
 import { CreateGoodsReceiptDto } from '../dto/create-goods-receipt.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdateGoodsReceiptDto } from '../dto/update-goods-receipt.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toGoodsReceiptResponse } from '../mappers/goods-receipt.mapper';
 import {
-  assertBranchExists,
   assertDraftStatus,
   assertEmployeeExists,
   assertGrnPurchaseOrderLink,

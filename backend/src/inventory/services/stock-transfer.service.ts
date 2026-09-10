@@ -29,8 +29,8 @@ import { DispatchStockTransferDto } from '../dto/dispatch-stock-transfer.dto';
 import { ReceiveStockTransferDto } from '../dto/receive-stock-transfer.dto';
 import { UpdateStockTransferDto } from '../dto/update-stock-transfer.dto';
 import { toStockTransferResponse } from '../mappers/stock-transfer.mapper';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
-  assertBranchExists,
   assertDraftStatus,
   optimisticUpdate,
   throwConflict,

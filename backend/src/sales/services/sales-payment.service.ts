@@ -37,9 +37,9 @@ import { SalesPaymentStatus } from '../constants/sales.constants';
 import { CreateSalesPaymentDto } from '../dto/create-sales-payment.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesPaymentDto } from '../dto/update-sales-payment.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toSalesPaymentResponse } from '../mappers/sales-payment.mapper';
 import {
-  assertBranchExists,
   assertInvoicePosted,
   optimisticUpdate,
   throwNotFound,

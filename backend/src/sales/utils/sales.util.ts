@@ -78,27 +78,6 @@ export function assertDraftStatus(
   }
 }
 
-export async function assertBranchExists(
-  tx: TxClient,
-  branchId: bigint,
-): Promise<{ id: bigint; branchCode: string; companyId: bigint }> {
-  const branch = await tx.branch.findFirst({
-    where: { id: branchId, deletedAt: null },
-    select: { id: true, branchCode: true, companyId: true },
-  });
-
-  if (!branch) {
-    throw new ApplicationException(
-      ErrorCode.NOT_FOUND,
-      `Branch not found: ${branchId}`,
-      HttpStatus.NOT_FOUND,
-      { branchId: branchId.toString() },
-    );
-  }
-
-  return branch;
-}
-
 export async function assertCustomerActive(
   tx: TxClient,
   customerId: bigint,

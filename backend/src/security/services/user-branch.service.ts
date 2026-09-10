@@ -19,9 +19,9 @@ import { LogoutReason } from '../constants/security.constants';
 import { CreateUserBranchDto } from '../dto/create-user-branch.dto';
 import { UpdateUserBranchDto } from '../dto/update-user-branch.dto';
 import { toUserBranchResponse } from '../mappers/user-branch.mapper';
-import { invalidateUserSessions } from '../utils/session.util';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import { invalidateUserSessions } from '../../persistence/user-session/session.util';
 import {
-  assertBranchExists,
   assertUserExists,
   optimisticUpdate,
   throwConflict,
@@ -38,7 +38,7 @@ export class UserBranchService {
   ) {}
 
   async list(userId: bigint, query: PaginationQueryDto) {
-    await this.ensureUserExists(userId);
+    await assertUserExists(this.prisma.client, userId);
 
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -250,19 +250,6 @@ export class UserBranchService {
 
       return { id: id.toString(), deleted: true };
     });
-  }
-
-  private async ensureUserExists(userId: bigint) {
-    const user = await this.prisma.client.user.findFirst({
-      where: { id: userId, deletedAt: null },
-      select: { id: true },
-    });
-
-    if (!user) {
-      throwNotFound(ErrorCode.USER_NOT_FOUND, `User not found: ${userId}`, {
-        userId: userId.toString(),
-      });
-    }
   }
 
   private async findActive(userId: bigint, id: bigint) {

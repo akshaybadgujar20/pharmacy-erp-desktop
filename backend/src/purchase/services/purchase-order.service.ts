@@ -27,9 +27,9 @@ import { PurchaseOrderStatus } from '../constants/purchase.constants';
 import { CreatePurchaseOrderDto } from '../dto/create-purchase-order.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdatePurchaseOrderDto } from '../dto/update-purchase-order.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toPurchaseOrderResponse } from '../mappers/purchase-order.mapper';
 import {
-  assertBranchExists,
   assertPoEditableStatus,
   assertPurchaseOrderHasNoReceipts,
   assertSupplierActive,

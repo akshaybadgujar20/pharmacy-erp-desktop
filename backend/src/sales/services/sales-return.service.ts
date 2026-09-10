@@ -44,9 +44,9 @@ import {
 import { CreateSalesReturnDto } from '../dto/create-sales-return.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesReturnDto } from '../dto/update-sales-return.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toSalesReturnResponse } from '../mappers/sales-return.mapper';
 import {
-  assertBranchExists,
   assertCustomerActive,
   assertDraftStatus,
   assertInvoicePosted,

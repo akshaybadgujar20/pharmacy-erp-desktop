@@ -34,8 +34,8 @@ import { CreateStockTakeDto } from '../dto/create-stock-take.dto';
 import { ReconcileStockTakeDto } from '../dto/reconcile-stock-take.dto';
 import { UpdateStockTakeDto } from '../dto/update-stock-take.dto';
 import { toStockTakeResponse } from '../mappers/stock-take.mapper';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
-  assertBranchExists,
   assertDraftStatus,
   assertEmployeeExists,
   optimisticUpdate,

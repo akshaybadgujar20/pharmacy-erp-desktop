@@ -162,7 +162,8 @@ List supports optional `userId`, `branchId`, `isActive`, `loginFrom`, `loginTo` 
 |------|------|
 | `constants/security.constants.ts` | `LogoutReason` enum |
 | `utils/security.util.ts` | Serializers, asserts, `optimisticUpdate`, `throwNotFound` |
-| `utils/session.util.ts` | `invalidateUserSessions`, `invalidateSessionsForRole` |
+| `persistence/user-session/session.util.ts` | `invalidateUserSessions`, `invalidateSessionsForRole` |
+| `configuration/utils/configuration.util.ts` | shared `assertBranchExists` (used by UserBranch create) |
 
 ---
 

@@ -32,8 +32,8 @@ import {
   StockAdjustmentStatus,
   StockMovementType,
 } from '../constants/inventory.constants';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
-  assertBranchExists,
   assertDraftStatus,
   optimisticUpdate,
   throwNotFound,

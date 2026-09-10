@@ -1,4 +1,4 @@
-import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
+import type { TxClient } from '../prisma/prisma-tx.type';
 
 export async function invalidateUserSessions(
   tx: TxClient,

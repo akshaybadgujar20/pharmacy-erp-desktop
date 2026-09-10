@@ -10,6 +10,7 @@ import { ErrorCode } from '../common/exceptions/error-code';
 import { OutboxEntityType } from '../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../persistence/outbox/outbox-operation.constants';
 import { OutboxService } from '../persistence/outbox/outbox.service';
+import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AUTH_CONSTANTS } from './constants/auth.constants';
@@ -19,8 +20,8 @@ import type { LoginDto } from './dto/login.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
 import { PasswordService } from './password.service';
-import { LogoutReason } from '../security/constants/security.constants';
-import { invalidateUserSessions } from '../security/utils/session.util';
+import { LogoutReason } from '../persistence/user-session/logout-reason.constants';
+import { invalidateUserSessions } from '../persistence/user-session/session.util';
 import {
   generateRefreshToken,
   hashRefreshToken,
@@ -402,40 +403,14 @@ export class AuthService {
     }
 
     const passwordHash = await this.passwordService.hash(dto.newPassword);
-    const now = BigInt(Date.now());
 
     return this.unitOfWork.run(async (tx) => {
-      const updatedUser = await tx.user.update({
-        where: { id: user.id },
-        data: {
-          passwordHash,
-          passwordChangedAt: now,
-          mustChangePassword: false,
-          failedLoginAttempts: 0,
-          lockedUntil: null,
-          updatedAt: now,
-          version: { increment: 1 },
-        },
-      });
-
-      await invalidateUserSessions(tx, user.id, LogoutReason.PASSWORD_CHANGED);
-
-      await this.auditService.log(tx, {
-        entityType: OutboxEntityType.USER,
-        entityId: updatedUser.id,
-        entityUuid: updatedUser.uuid,
-        action: AuditAction.UPDATE,
-        module: AuditModule.SECURITY,
-        description: `Required password changed for ${updatedUser.username}`,
-        userId: user.id,
-      });
-
-      await this.outboxService.enqueue(tx, {
-        entityType: OutboxEntityType.USER,
-        entityUuid: updatedUser.uuid,
-        operation: OutboxOperation.UPDATE,
-        payload: { uuid: updatedUser.uuid, username: updatedUser.username },
-      });
+      await this.applyPasswordChange(
+        tx,
+        user,
+        passwordHash,
+        `Required password changed for ${user.username}`,
+      );
 
       return { message: 'Password changed successfully' };
     });
@@ -469,40 +444,14 @@ export class AuthService {
     }
 
     const passwordHash = await this.passwordService.hash(dto.newPassword);
-    const now = BigInt(Date.now());
 
     return this.unitOfWork.run(async (tx) => {
-      const updatedUser = await tx.user.update({
-        where: { id: userId },
-        data: {
-          passwordHash,
-          passwordChangedAt: now,
-          mustChangePassword: false,
-          failedLoginAttempts: 0,
-          lockedUntil: null,
-          updatedAt: now,
-          version: { increment: 1 },
-        },
-      });
-
-      await invalidateUserSessions(tx, userId, LogoutReason.PASSWORD_CHANGED);
-
-      await this.auditService.log(tx, {
-        entityType: OutboxEntityType.USER,
-        entityId: updatedUser.id,
-        entityUuid: updatedUser.uuid,
-        action: AuditAction.UPDATE,
-        module: AuditModule.SECURITY,
-        description: `Password changed for ${updatedUser.username}`,
-        userId,
-      });
-
-      await this.outboxService.enqueue(tx, {
-        entityType: OutboxEntityType.USER,
-        entityUuid: updatedUser.uuid,
-        operation: OutboxOperation.UPDATE,
-        payload: { uuid: updatedUser.uuid, username: updatedUser.username },
-      });
+      await this.applyPasswordChange(
+        tx,
+        user,
+        passwordHash,
+        `Password changed for ${user.username}`,
+      );
 
       return { message: 'Password changed successfully' };
     });
@@ -672,6 +621,47 @@ export class AuthService {
       companyId: defaultBranch.companyId,
       branchId: defaultBranch.id,
     };
+  }
+
+  private async applyPasswordChange(
+    tx: TxClient,
+    user: { id: bigint; uuid: string; username: string },
+    passwordHash: string,
+    auditDescription: string,
+  ): Promise<void> {
+    const now = BigInt(Date.now());
+
+    const updatedUser = await tx.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash,
+        passwordChangedAt: now,
+        mustChangePassword: false,
+        failedLoginAttempts: 0,
+        lockedUntil: null,
+        updatedAt: now,
+        version: { increment: 1 },
+      },
+    });
+
+    await invalidateUserSessions(tx, user.id, LogoutReason.PASSWORD_CHANGED);
+
+    await this.auditService.log(tx, {
+      entityType: OutboxEntityType.USER,
+      entityId: updatedUser.id,
+      entityUuid: updatedUser.uuid,
+      action: AuditAction.UPDATE,
+      module: AuditModule.SECURITY,
+      description: auditDescription,
+      userId: user.id,
+    });
+
+    await this.outboxService.enqueue(tx, {
+      entityType: OutboxEntityType.USER,
+      entityUuid: updatedUser.uuid,
+      operation: OutboxOperation.UPDATE,
+      payload: { uuid: updatedUser.uuid, username: updatedUser.username },
+    });
   }
 
   private async assertUserCanAccessBranch(

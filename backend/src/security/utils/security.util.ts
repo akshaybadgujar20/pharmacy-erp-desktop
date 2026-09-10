@@ -4,6 +4,10 @@ import { ApplicationException } from '../../common/exceptions/application.except
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 
+type UserLookup = Pick<TxClient, 'user'>;
+type RoleLookup = Pick<TxClient, 'role'>;
+type PermissionLookup = Pick<TxClient, 'permission'>;
+
 export function serializeBigInt(
   value: bigint | null | undefined,
 ): string | null {
@@ -52,10 +56,10 @@ export function throwConflict(
 }
 
 export async function assertUserExists(
-  tx: TxClient,
+  db: UserLookup,
   userId: bigint,
 ): Promise<{ id: bigint; uuid: string }> {
-  const user = await tx.user.findFirst({
+  const user = await db.user.findFirst({
     where: { id: userId, deletedAt: null },
     select: { id: true, uuid: true },
   });
@@ -70,10 +74,10 @@ export async function assertUserExists(
 }
 
 export async function assertRoleExists(
-  tx: TxClient,
+  db: RoleLookup,
   roleId: bigint,
 ): Promise<{ id: bigint; uuid: string }> {
-  const role = await tx.role.findFirst({
+  const role = await db.role.findFirst({
     where: { id: roleId, deletedAt: null },
     select: { id: true, uuid: true },
   });
@@ -88,10 +92,10 @@ export async function assertRoleExists(
 }
 
 export async function assertPermissionExists(
-  tx: TxClient,
+  db: PermissionLookup,
   permissionId: bigint,
 ): Promise<{ id: bigint; uuid: string }> {
-  const permission = await tx.permission.findFirst({
+  const permission = await db.permission.findFirst({
     where: { id: permissionId, deletedAt: null },
     select: { id: true, uuid: true },
   });
@@ -159,22 +163,4 @@ export async function assertEmployeeAvailableForUser(
       { employeeId: employeeId.toString() },
     );
   }
-}
-
-export async function assertBranchExists(
-  tx: TxClient,
-  branchId: bigint,
-): Promise<{ id: bigint }> {
-  const branch = await tx.branch.findFirst({
-    where: { id: branchId, deletedAt: null },
-    select: { id: true },
-  });
-
-  if (!branch) {
-    throwNotFound(ErrorCode.BRANCH_NOT_FOUND, `Branch not found: ${branchId}`, {
-      branchId: branchId.toString(),
-    });
-  }
-
-  return branch;
 }

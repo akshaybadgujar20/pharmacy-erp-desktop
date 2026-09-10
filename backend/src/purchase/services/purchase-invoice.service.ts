@@ -36,9 +36,9 @@ import {
 import { CreatePurchaseInvoiceDto } from '../dto/create-purchase-invoice.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdatePurchaseInvoiceDto } from '../dto/update-purchase-invoice.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toPurchaseInvoiceResponse } from '../mappers/purchase-invoice.mapper';
 import {
-  assertBranchExists,
   assertDraftStatus,
   assertSupplierActive,
   buildPurchaseDocumentListFilters,

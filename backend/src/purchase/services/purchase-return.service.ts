@@ -29,9 +29,9 @@ import { PurchaseReturnStatus } from '../constants/purchase.constants';
 import { CreatePurchaseReturnDto } from '../dto/create-purchase-return.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdatePurchaseReturnDto } from '../dto/update-purchase-return.dto';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import { toPurchaseReturnResponse } from '../mappers/purchase-return.mapper';
 import {
-  assertBranchExists,
   assertDraftStatus,
   assertReturnQuantityAvailable,
   assertSupplierActive,

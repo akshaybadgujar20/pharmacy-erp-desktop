@@ -20,7 +20,7 @@ import { CreateRolePermissionDto } from '../dto/create-role-permission.dto';
 import { ReplaceRolePermissionsDto } from '../dto/replace-role-permissions.dto';
 import { UpdateRolePermissionDto } from '../dto/update-role-permission.dto';
 import { toRolePermissionResponse } from '../mappers/role-permission.mapper';
-import { invalidateSessionsForRole } from '../utils/session.util';
+import { invalidateSessionsForRole } from '../../persistence/user-session/session.util';
 import {
   assertPermissionExists,
   assertRoleExists,
@@ -39,7 +39,7 @@ export class RolePermissionService {
   ) {}
 
   async list(roleId: bigint, query: PaginationQueryDto) {
-    await this.ensureRoleExists(roleId);
+    await assertRoleExists(this.prisma.client, roleId);
 
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -329,19 +329,6 @@ export class RolePermissionService {
 
       return results.map(toRolePermissionResponse);
     });
-  }
-
-  private async ensureRoleExists(roleId: bigint) {
-    const role = await this.prisma.client.role.findFirst({
-      where: { id: roleId, deletedAt: null },
-      select: { id: true },
-    });
-
-    if (!role) {
-      throwNotFound(ErrorCode.ROLE_NOT_FOUND, `Role not found: ${roleId}`, {
-        roleId: roleId.toString(),
-      });
-    }
   }
 
   private async findActive(roleId: bigint, id: bigint) {

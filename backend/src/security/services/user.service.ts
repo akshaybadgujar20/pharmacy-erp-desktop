@@ -21,7 +21,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { toUserResponse } from '../mappers/user.mapper';
-import { invalidateUserSessions } from '../utils/session.util';
+import { invalidateUserSessions } from '../../persistence/user-session/session.util';
 import {
   assertEmployeeAvailableForUser,
   assertUsernameUnique,

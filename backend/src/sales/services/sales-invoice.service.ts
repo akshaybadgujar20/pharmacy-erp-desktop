@@ -44,9 +44,9 @@ import { CreateSalesInvoiceDto } from '../dto/create-sales-invoice.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesInvoiceDto } from '../dto/update-sales-invoice.dto';
 import { toSalesInvoiceResponse } from '../mappers/sales-invoice.mapper';
+import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
   allocateFefoBatches,
-  assertBranchExists,
   assertCustomerActive,
   assertDraftStatus,
   assertPrescriptionExists,

@@ -107,6 +107,24 @@ export async function assertCompanyExists(
   return company;
 }
 
+export async function assertBranchExists(
+  tx: TxClient,
+  branchId: bigint,
+): Promise<{ id: bigint; branchCode: string; companyId: bigint }> {
+  const branch = await tx.branch.findFirst({
+    where: { id: branchId, deletedAt: null },
+    select: { id: true, branchCode: true, companyId: true },
+  });
+
+  if (!branch) {
+    throwNotFound(ErrorCode.BRANCH_NOT_FOUND, `Branch not found: ${branchId}`, {
+      branchId: branchId.toString(),
+    });
+  }
+
+  return branch;
+}
+
 export async function clearOtherCompanyDefaults(
   tx: TxClient,
   excludeId?: bigint,

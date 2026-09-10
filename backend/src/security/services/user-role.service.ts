@@ -21,7 +21,7 @@ import { CreateUserRoleDto } from '../dto/create-user-role.dto';
 import { ReplaceUserRolesDto } from '../dto/replace-user-roles.dto';
 import { UpdateUserRoleDto } from '../dto/update-user-role.dto';
 import { toUserRoleResponse } from '../mappers/user-role.mapper';
-import { invalidateUserSessions } from '../utils/session.util';
+import { invalidateUserSessions } from '../../persistence/user-session/session.util';
 import {
   assertRoleExists,
   assertUserExists,
@@ -41,7 +41,7 @@ export class UserRoleService {
   ) {}
 
   async list(userId: bigint, query: PaginationQueryDto) {
-    await this.ensureUserExists(userId);
+    await assertUserExists(this.prisma.client, userId);
 
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -338,19 +338,6 @@ export class UserRoleService {
 
       return results.map(toUserRoleResponse);
     });
-  }
-
-  private async ensureUserExists(userId: bigint) {
-    const user = await this.prisma.client.user.findFirst({
-      where: { id: userId, deletedAt: null },
-      select: { id: true },
-    });
-
-    if (!user) {
-      throwNotFound(ErrorCode.USER_NOT_FOUND, `User not found: ${userId}`, {
-        userId: userId.toString(),
-      });
-    }
   }
 
   private async findActive(userId: bigint, id: bigint) {
