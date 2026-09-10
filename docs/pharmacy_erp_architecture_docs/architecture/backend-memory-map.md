@@ -36,6 +36,11 @@ This document preserves **why** the backend is designed the way it is: questions
 | [ADR-003](./adrs/ADR-003-multi-branch-stock-per-batch.md) | Stock per (branchId, batchId) | Inventory | Active | Explicit | Doc 01 |
 | [ADR-004](./adrs/ADR-004-sync-entity-uuid-identity.md) | Outbox uses entityUuid + deviceId | Sync, persistence | Active | Explicit | Doc 01 |
 | [ADR-005](./adrs/ADR-005-branch-scoped-document-numbers.md) | Document numbers unique per branch | Sequence, workflows | Active | Explicit | Doc 01 |
+| [ADR-006](./adrs/ADR-006-unit-of-work-all-writes.md) | All writes via UnitOfWorkService.run | Persistence, all modules | Active | Explicit | Doc 02 |
+| [ADR-007](./adrs/ADR-007-outbox-in-same-transaction.md) | Outbox in same transaction | Persistence, sync | Active | Explicit | Doc 02 |
+| [ADR-008](./adrs/ADR-008-inventory-ledger-only-stock-path.md) | InventoryLedgerService only stock path | Inventory, purchase, sales | Active | Explicit | Doc 02 |
+| [ADR-009](./adrs/ADR-009-bigint-id-extension-sqlite.md) | BIGINT id Prisma extension | Prisma | Active | Explicit | Doc 02 |
+| [ADR-010](./adrs/ADR-010-request-context-async-local-storage.md) | RequestContext AsyncLocalStorage | Persistence | Active | Explicit | Doc 02 |
 
 Full records: [`adrs/`](./adrs/)
 
@@ -47,7 +52,7 @@ Cross-cutting decisions that constrain multiple modules. Listed here for quick r
 
 | Theme | ADR IDs | Notes |
 |-------|---------|-------|
-| Database & persistence | — | Pending Tier 0 recovery |
+| Database & persistence | ADR-001, ADR-002, ADR-003, ADR-005 | Schema strategy, statuses, stock, numbering |
 | Auth & tenant scope | — | Pending Tier 0 recovery |
 | Offline-first & sync | — | Pending Tier 1 recovery |
 | Module boundaries | — | Pending Tier 2 recovery |
@@ -58,7 +63,7 @@ Cross-cutting decisions that constrain multiple modules. Listed here for quick r
 
 | Module | ADR count | Sources processed | Gaps / needs confirmation |
 |--------|-----------|-------------------|---------------------------|
-| Infrastructure / persistence | 0 | — | Pending |
+| Infrastructure / persistence | 5 | Doc 01 | — |
 | Auth | 0 | — | Pending |
 | Audit | 0 | — | Pending |
 | Security | 0 | — | Pending |
@@ -73,7 +78,7 @@ Cross-cutting decisions that constrain multiple modules. Listed here for quick r
 | Purchase | 0 | — | Pending |
 | Sales | 0 | — | Pending |
 | Finance | 0 | — | Pending |
-| Sync | 0 | — | Pending |
+| Sync | 1 | Doc 01 | ADR-004 |
 | Reporting | 0 | — | Pending |
 
 ---
@@ -105,7 +110,8 @@ Documents analyzed in dependency order. One git commit per row when complete.
 
 | Doc # | Source | Commit | Status |
 |-------|--------|--------|--------|
-| — | Scaffold | — | In progress |
+| — | Scaffold | 4d6aeb4 | Done |
+| 01 | `plans/pharmacy_erp_db_review_cfc2c0b5.plan.md` | — | In progress |
 
 ---
 

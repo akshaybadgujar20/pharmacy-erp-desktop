@@ -38,4 +38,8 @@ Do not invent rationale. State when reasoning was not recorded.
 
 | File | Title | Status |
 |------|-------|--------|
-| — | *Recovery in progress* | — |
+| [ADR-001](./ADR-001-sqlite-postgres-single-schema.md) | SQLite + PostgreSQL single schema | Active |
+| [ADR-002](./ADR-002-string-status-not-enums.md) | String status not enums | Active |
+| [ADR-003](./ADR-003-multi-branch-stock-per-batch.md) | Multi-branch stock per batch | Active |
+| [ADR-004](./ADR-004-sync-entity-uuid-identity.md) | Sync entityUuid identity | Active |
+| [ADR-005](./ADR-005-branch-scoped-document-numbers.md) | Branch-scoped document numbers | Active |
