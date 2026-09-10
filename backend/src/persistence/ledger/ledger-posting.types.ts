@@ -21,6 +21,7 @@ export interface ReverseVoucherInput {
   companyId: bigint;
   originalVoucherType: string;
   originalVoucherId: bigint;
+  originalVoucherNumber: string;
   reversalVoucherType: string;
   reversalVoucherId: bigint;
   reversalVoucherNumber: string;

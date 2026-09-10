@@ -146,6 +146,44 @@ export class LedgerService {
         });
       }
 
+      if (existing.isSystem) {
+        if (dto.ledgerCode && dto.ledgerCode !== existing.ledgerCode) {
+          throw new ApplicationException(
+            ErrorCode.LEDGER_IS_SYSTEM,
+            'System ledger code cannot be changed',
+            HttpStatus.CONFLICT,
+            { id: id.toString() },
+          );
+        }
+        if (dto.ledgerType && dto.ledgerType !== existing.ledgerType) {
+          throw new ApplicationException(
+            ErrorCode.LEDGER_IS_SYSTEM,
+            'System ledger type cannot be changed',
+            HttpStatus.CONFLICT,
+            { id: id.toString() },
+          );
+        }
+        if (dto.normalBalance && dto.normalBalance !== existing.normalBalance) {
+          throw new ApplicationException(
+            ErrorCode.LEDGER_IS_SYSTEM,
+            'System ledger normal balance cannot be changed',
+            HttpStatus.CONFLICT,
+            { id: id.toString() },
+          );
+        }
+        if (
+          dto.parentLedgerId !== undefined &&
+          dto.parentLedgerId !== existing.parentLedgerId
+        ) {
+          throw new ApplicationException(
+            ErrorCode.LEDGER_IS_SYSTEM,
+            'System ledger parent cannot be changed',
+            HttpStatus.CONFLICT,
+            { id: id.toString() },
+          );
+        }
+      }
+
       if (dto.ledgerCode && dto.ledgerCode !== existing.ledgerCode) {
         const duplicate = await tx.ledger.findFirst({
           where: { ledgerCode: dto.ledgerCode, deletedAt: null, NOT: { id } },
@@ -211,6 +249,19 @@ export class LedgerService {
         throw new ApplicationException(
           ErrorCode.LEDGER_IS_SYSTEM,
           'System ledgers cannot be deleted',
+          HttpStatus.CONFLICT,
+          { id: id.toString() },
+        );
+      }
+
+      const entryCount = await tx.ledgerEntry.count({
+        where: { ledgerId: id, deletedAt: null },
+      });
+
+      if (entryCount > 0) {
+        throw new ApplicationException(
+          ErrorCode.LEDGER_HAS_ENTRIES,
+          'Ledger with posted entries cannot be deleted',
           HttpStatus.CONFLICT,
           { id: id.toString() },
         );

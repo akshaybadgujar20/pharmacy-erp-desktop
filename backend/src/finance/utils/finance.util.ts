@@ -4,14 +4,24 @@ import { Prisma } from '@prisma/client';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
+import { assertTransactionDateInOpenYear as assertTransactionDateInOpenYearImpl } from '../../persistence/ledger/ledger-posting.util';
 import {
   BANK_PAYMENT_METHODS,
   CASH_PAYMENT_METHODS,
   FinanceReferenceType,
   PaymentType,
-  ReceiptStatus,
   SystemLedgerCode,
 } from '../constants/finance.constants';
+
+export const assertTransactionDateInOpenYear =
+  assertTransactionDateInOpenYearImpl;
+
+const LEDGER_SUPPORTED_PAYMENT_TYPES = [
+  PaymentType.SUPPLIER_PAYMENT,
+  PaymentType.EXPENSE,
+  PaymentType.CUSTOMER_REFUND,
+  PaymentType.PURCHASE_REFUND,
+] as const;
 
 export function serializeBigInt(
   value: bigint | null | undefined,
@@ -48,41 +58,15 @@ export function throwNotFound(
   throw new ApplicationException(code, message, HttpStatus.NOT_FOUND, details);
 }
 
-export async function assertTransactionDateInOpenYear(
-  tx: TxClient,
-  companyId: bigint,
-  transactionDate: bigint,
-): Promise<void> {
-  const financialYear = await tx.financialYear.findFirst({
-    where: {
-      companyId,
-      isCurrent: true,
-      status: 'OPEN',
-      deletedAt: null,
-    },
-  });
-
-  if (!financialYear) {
-    throw new ApplicationException(
-      ErrorCode.FINANCIAL_YEAR_CLOSED,
-      'No open financial year configured for company',
-      HttpStatus.CONFLICT,
-      { companyId: companyId.toString() },
-    );
-  }
-
+export function assertPaymentTypeSupportsLedger(paymentType: string): void {
   if (
-    transactionDate < financialYear.startDate ||
-    transactionDate > financialYear.endDate
+    !(LEDGER_SUPPORTED_PAYMENT_TYPES as readonly string[]).includes(paymentType)
   ) {
     throw new ApplicationException(
-      ErrorCode.FINANCIAL_YEAR_CLOSED,
-      'Transaction date is outside the open financial year',
-      HttpStatus.CONFLICT,
-      {
-        transactionDate: transactionDate.toString(),
-        financialYearCode: financialYear.financialYearCode,
-      },
+      ErrorCode.PAYMENT_TYPE_NOT_SUPPORTED,
+      'Payment type is not supported for ledger posting',
+      HttpStatus.BAD_REQUEST,
+      { paymentType },
     );
   }
 }
@@ -115,7 +99,7 @@ export async function adjustSupplierOutstanding(
 ): Promise<void> {
   const supplier = await tx.supplier.findFirst({
     where: { id: supplierId, deletedAt: null },
-    select: { id: true, outstandingAmount: true },
+    select: { id: true, outstandingAmount: true, version: true },
   });
 
   if (!supplier) {
@@ -127,15 +111,22 @@ export async function adjustSupplierOutstanding(
     );
   }
 
-  await tx.supplier.update({
-    where: { id: supplierId },
+  const updateResult = await tx.supplier.updateMany({
+    where: { id: supplierId, version: supplier.version, deletedAt: null },
     data: {
       outstandingAmount: new Prisma.Decimal(supplier.outstandingAmount).add(
         delta,
       ),
       updatedAt: BigInt(Date.now()),
+      version: { increment: 1 },
     },
   });
+
+  optimisticUpdate(
+    updateResult,
+    supplierId,
+    `Supplier outstanding version conflict: ${supplierId}`,
+  );
 }
 
 export async function adjustCustomerOutstanding(
@@ -145,7 +136,7 @@ export async function adjustCustomerOutstanding(
 ): Promise<void> {
   const customer = await tx.customer.findFirst({
     where: { id: customerId, deletedAt: null },
-    select: { id: true, outstandingAmount: true },
+    select: { id: true, outstandingAmount: true, version: true },
   });
 
   if (!customer) {
@@ -157,15 +148,22 @@ export async function adjustCustomerOutstanding(
     );
   }
 
-  await tx.customer.update({
-    where: { id: customerId },
+  const updateResult = await tx.customer.updateMany({
+    where: { id: customerId, version: customer.version, deletedAt: null },
     data: {
       outstandingAmount: new Prisma.Decimal(customer.outstandingAmount).add(
         delta,
       ),
       updatedAt: BigInt(Date.now()),
+      version: { increment: 1 },
     },
   });
+
+  optimisticUpdate(
+    updateResult,
+    customerId,
+    `Customer outstanding version conflict: ${customerId}`,
+  );
 }
 
 export interface JournalLineInput {
@@ -254,24 +252,140 @@ export async function buildPaymentLedgerLines(
     ];
   }
 
-  const payable = await resolveSystemLedger(
-    tx,
-    SystemLedgerCode.SUPPLIER_PAYABLE,
+  if (input.paymentType === PaymentType.CUSTOMER_REFUND) {
+    const receivable = await resolveSystemLedger(
+      tx,
+      SystemLedgerCode.CUSTOMER_RECEIVABLE,
+    );
+    return [
+      {
+        ledgerId: receivable.id,
+        debitAmount: amount,
+        creditAmount: new Prisma.Decimal(0),
+        narration: input.narration,
+      },
+      {
+        ledgerId: cashOrBankLedgerId,
+        debitAmount: new Prisma.Decimal(0),
+        creditAmount: amount,
+        narration: input.narration,
+      },
+    ];
+  }
+
+  if (input.paymentType === PaymentType.PURCHASE_REFUND) {
+    const payable = await resolveSystemLedger(
+      tx,
+      SystemLedgerCode.SUPPLIER_PAYABLE,
+    );
+    return [
+      {
+        ledgerId: cashOrBankLedgerId,
+        debitAmount: amount,
+        creditAmount: new Prisma.Decimal(0),
+        narration: input.narration,
+      },
+      {
+        ledgerId: payable.id,
+        debitAmount: new Prisma.Decimal(0),
+        creditAmount: amount,
+        narration: input.narration,
+      },
+    ];
+  }
+
+  throw new ApplicationException(
+    ErrorCode.PAYMENT_TYPE_NOT_SUPPORTED,
+    'Payment type is not supported for ledger posting',
+    HttpStatus.BAD_REQUEST,
+    { paymentType: input.paymentType },
   );
-  return [
-    {
-      ledgerId: payable.id,
-      debitAmount: amount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
+}
+
+export async function applyPurchaseInvoicePaymentAllocation(
+  tx: TxClient,
+  invoiceId: bigint,
+  amount: Prisma.Decimal,
+): Promise<{ supplierId: bigint }> {
+  const invoice = await tx.purchaseInvoice.findFirst({
+    where: { id: invoiceId, deletedAt: null },
+  });
+
+  if (!invoice) {
+    throwNotFound(
+      ErrorCode.PURCHASE_INVOICE_NOT_FOUND,
+      `Purchase invoice not found: ${invoiceId}`,
+      { id: invoiceId.toString() },
+    );
+  }
+
+  const paidAmount = new Prisma.Decimal(invoice.paidAmount).add(amount);
+  const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(paidAmount);
+
+  const updateResult = await tx.purchaseInvoice.updateMany({
+    where: { id: invoiceId, version: invoice.version, deletedAt: null },
+    data: {
+      paidAmount,
+      balanceAmount,
+      paymentStatus: computePurchaseInvoicePaymentStatus(
+        new Prisma.Decimal(invoice.netAmount),
+        paidAmount,
+      ),
+      updatedAt: BigInt(Date.now()),
+      version: { increment: 1 },
     },
-    {
-      ledgerId: cashOrBankLedgerId,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: amount,
-      narration: input.narration,
+  });
+
+  optimisticUpdate(
+    updateResult,
+    invoiceId,
+    `Purchase invoice allocation version conflict: ${invoiceId}`,
+  );
+
+  return { supplierId: invoice.supplierId };
+}
+
+export async function reversePurchaseInvoicePaymentAllocation(
+  tx: TxClient,
+  invoiceId: bigint,
+  amount: Prisma.Decimal,
+): Promise<{ supplierId: bigint }> {
+  const invoice = await tx.purchaseInvoice.findFirst({
+    where: { id: invoiceId, deletedAt: null },
+  });
+
+  if (!invoice) {
+    throwNotFound(
+      ErrorCode.PURCHASE_INVOICE_NOT_FOUND,
+      `Purchase invoice not found: ${invoiceId}`,
+      { id: invoiceId.toString() },
+    );
+  }
+
+  const paidAmount = new Prisma.Decimal(invoice.paidAmount).sub(amount);
+  const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(paidAmount);
+
+  const updateResult = await tx.purchaseInvoice.updateMany({
+    where: { id: invoiceId, version: invoice.version, deletedAt: null },
+    data: {
+      paidAmount,
+      balanceAmount,
+      paymentStatus: computePurchaseInvoicePaymentStatus(
+        new Prisma.Decimal(invoice.netAmount),
+        paidAmount,
+      ),
+      updatedAt: BigInt(Date.now()),
+      version: { increment: 1 },
     },
-  ];
+  });
+
+  optimisticUpdate(
+    updateResult,
+    invoiceId,
+    `Purchase invoice allocation version conflict: ${invoiceId}`,
+  );
+
+  return { supplierId: invoice.supplierId };
 }
 
 export async function buildReceiptLedgerLines(
@@ -370,88 +484,6 @@ export function computePurchaseInvoicePaymentStatus(
   return 'PARTIALLY_PAID';
 }
 
-export function computeSalesInvoicePaymentStatus(
-  netAmount: Prisma.Decimal,
-  paidAmount: Prisma.Decimal,
-): string {
-  if (paidAmount.lte(0)) {
-    return 'UNPAID';
-  }
-  if (netAmount.gt(0) && paidAmount.gt(netAmount)) {
-    return 'REFUNDED';
-  }
-  if (paidAmount.gte(netAmount)) {
-    return 'PAID';
-  }
-  return 'PARTIALLY_PAID';
-}
-
-export async function computeSalesInvoiceEffectiveNet(
-  tx: TxClient,
-  invoiceId: bigint,
-): Promise<Prisma.Decimal> {
-  const invoice = await tx.salesInvoice.findFirst({
-    where: { id: invoiceId, deletedAt: null },
-    select: { netAmount: true },
-  });
-
-  if (!invoice) {
-    throwNotFound(
-      ErrorCode.SALES_INVOICE_NOT_FOUND,
-      `Sales invoice not found: ${invoiceId}`,
-      { id: invoiceId.toString() },
-    );
-  }
-
-  const returns = await tx.salesReturn.findMany({
-    where: {
-      salesInvoiceId: invoiceId,
-      status: 'COMPLETED',
-      deletedAt: null,
-    },
-    select: { netAmount: true },
-  });
-
-  let returnTotal = new Prisma.Decimal(0);
-  for (const row of returns) {
-    returnTotal = returnTotal.add(row.netAmount);
-  }
-
-  return new Prisma.Decimal(invoice.netAmount).sub(returnTotal);
-}
-
-export async function assertSalesInvoiceReceiptAmount(
-  tx: TxClient,
-  invoiceId: bigint,
-  receiptAmount: Prisma.Decimal,
-): Promise<{ customerId: bigint | null }> {
-  const invoice = await tx.salesInvoice.findFirst({
-    where: { id: invoiceId, deletedAt: null },
-  });
-
-  if (!invoice) {
-    throwNotFound(
-      ErrorCode.SALES_INVOICE_NOT_FOUND,
-      `Sales invoice not found: ${invoiceId}`,
-      { id: invoiceId.toString() },
-    );
-  }
-
-  if (receiptAmount.gt(invoice.balanceAmount)) {
-    throw new ApplicationException(
-      ErrorCode.BAD_REQUEST,
-      'Receipt amount exceeds sales invoice balance',
-      HttpStatus.BAD_REQUEST,
-      {
-        receiptAmount: receiptAmount.toString(),
-        balanceAmount: invoice.balanceAmount.toString(),
-      },
-    );
-  }
-
-  return { customerId: invoice.customerId };
-}
-
 export async function assertLedgerExists(
   tx: TxClient,
   ledgerId: bigint,
@@ -534,239 +566,4 @@ export function isPurchaseInvoiceReference(
 
 export function isSalesInvoiceReference(referenceType: string | null): boolean {
   return referenceType === FinanceReferenceType.SALES_INVOICE;
-}
-
-const SALES_CASH_METHODS = [
-  'CASH',
-  'UPI',
-  'CARD',
-  'CREDIT_CARD',
-  'DEBIT_CARD',
-  'STORE_CREDIT',
-] as const;
-
-const SALES_BANK_METHODS = ['CHEQUE', 'BANK_TRANSFER', 'NET_BANKING'] as const;
-
-async function resolveSalesCashOrBankLedger(
-  tx: TxClient,
-  paymentMethod: string,
-): Promise<bigint> {
-  const isBank = (SALES_BANK_METHODS as readonly string[]).includes(
-    paymentMethod,
-  );
-  const isCash = (SALES_CASH_METHODS as readonly string[]).includes(
-    paymentMethod,
-  );
-
-  if (!isBank && !isCash) {
-    throw new ApplicationException(
-      ErrorCode.BAD_REQUEST,
-      `Unsupported sales payment method: ${paymentMethod}`,
-      HttpStatus.BAD_REQUEST,
-      { paymentMethod },
-    );
-  }
-
-  const ledgerCode = isBank ? SystemLedgerCode.BANK : SystemLedgerCode.CASH;
-  const ledger = await resolveSystemLedger(tx, ledgerCode);
-  return ledger.id;
-}
-
-export async function buildSalesInvoiceLedgerLines(
-  tx: TxClient,
-  input: {
-    netAmount: Prisma.Decimal;
-    taxAmount: Prisma.Decimal;
-    customerId?: bigint | null;
-    narration?: string;
-  },
-): Promise<JournalLineInput[]> {
-  const netAmount = new Prisma.Decimal(input.netAmount);
-  const taxAmount = new Prisma.Decimal(input.taxAmount);
-  const salesAmount = netAmount.sub(taxAmount);
-
-  const debitLedger = input.customerId
-    ? await resolveSystemLedger(tx, SystemLedgerCode.CUSTOMER_RECEIVABLE)
-    : await resolveSystemLedger(tx, SystemLedgerCode.CASH);
-  const sales = await resolveSystemLedger(tx, SystemLedgerCode.SALES);
-  const gstOutput = await resolveSystemLedger(tx, SystemLedgerCode.GST_OUTPUT);
-
-  const lines: JournalLineInput[] = [
-    {
-      ledgerId: debitLedger.id,
-      debitAmount: netAmount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
-    },
-  ];
-
-  if (salesAmount.gt(0)) {
-    lines.push({
-      ledgerId: sales.id,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: salesAmount,
-      narration: input.narration,
-    });
-  }
-
-  if (taxAmount.gt(0)) {
-    lines.push({
-      ledgerId: gstOutput.id,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: taxAmount,
-      narration: input.narration,
-    });
-  }
-
-  return lines;
-}
-
-export async function buildSalesPaymentLedgerLines(
-  tx: TxClient,
-  input: {
-    amount: Prisma.Decimal;
-    paymentMethod: string;
-    customerId?: bigint | null;
-    narration?: string;
-  },
-): Promise<JournalLineInput[]> {
-  if (!input.customerId) {
-    throw new ApplicationException(
-      ErrorCode.BAD_REQUEST,
-      'Sales payment requires a customer on the invoice',
-      HttpStatus.BAD_REQUEST,
-    );
-  }
-
-  const amount = new Prisma.Decimal(input.amount);
-  const cashOrBankLedgerId = await resolveSalesCashOrBankLedger(
-    tx,
-    input.paymentMethod,
-  );
-  const receivable = await resolveSystemLedger(
-    tx,
-    SystemLedgerCode.CUSTOMER_RECEIVABLE,
-  );
-
-  return [
-    {
-      ledgerId: cashOrBankLedgerId,
-      debitAmount: amount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
-    },
-    {
-      ledgerId: receivable.id,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: amount,
-      narration: input.narration,
-    },
-  ];
-}
-
-export async function buildSalesReturnLedgerLines(
-  tx: TxClient,
-  input: {
-    netAmount: Prisma.Decimal;
-    taxAmount: Prisma.Decimal;
-    customerId?: bigint | null;
-    narration?: string;
-  },
-): Promise<JournalLineInput[]> {
-  const netAmount = new Prisma.Decimal(input.netAmount);
-  const taxAmount = new Prisma.Decimal(input.taxAmount);
-  const salesAmount = netAmount.sub(taxAmount);
-
-  const creditLedger = input.customerId
-    ? await resolveSystemLedger(tx, SystemLedgerCode.CUSTOMER_RECEIVABLE)
-    : await resolveSystemLedger(tx, SystemLedgerCode.CASH);
-  const sales = await resolveSystemLedger(tx, SystemLedgerCode.SALES);
-  const gstOutput = await resolveSystemLedger(tx, SystemLedgerCode.GST_OUTPUT);
-
-  const lines: JournalLineInput[] = [
-    {
-      ledgerId: creditLedger.id,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: netAmount,
-      narration: input.narration,
-    },
-  ];
-
-  if (salesAmount.gt(0)) {
-    lines.push({
-      ledgerId: sales.id,
-      debitAmount: salesAmount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
-    });
-  }
-
-  if (taxAmount.gt(0)) {
-    lines.push({
-      ledgerId: gstOutput.id,
-      debitAmount: taxAmount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
-    });
-  }
-
-  return lines;
-}
-
-export async function recomputeSalesInvoiceSettlement(
-  tx: TxClient,
-  invoiceId: bigint,
-): Promise<void> {
-  const invoice = await tx.salesInvoice.findFirst({
-    where: { id: invoiceId, deletedAt: null },
-  });
-
-  if (!invoice) {
-    throwNotFound(
-      ErrorCode.SALES_INVOICE_NOT_FOUND,
-      `Sales invoice not found: ${invoiceId}`,
-      { id: invoiceId.toString() },
-    );
-  }
-
-  const [payments, receipts] = await Promise.all([
-    tx.salesPayment.findMany({
-      where: {
-        salesInvoiceId: invoiceId,
-        status: 'COMPLETED',
-        deletedAt: null,
-      },
-      select: { paymentAmount: true },
-    }),
-    tx.receipt.findMany({
-      where: {
-        referenceType: FinanceReferenceType.SALES_INVOICE,
-        referenceId: invoiceId,
-        status: ReceiptStatus.COMPLETED,
-        deletedAt: null,
-      },
-      select: { amount: true },
-    }),
-  ]);
-
-  let paidAmount = new Prisma.Decimal(0);
-  for (const payment of payments) {
-    paidAmount = paidAmount.add(payment.paymentAmount);
-  }
-  for (const receipt of receipts) {
-    paidAmount = paidAmount.add(receipt.amount);
-  }
-
-  const effectiveNet = await computeSalesInvoiceEffectiveNet(tx, invoiceId);
-  const balanceAmount = effectiveNet.sub(paidAmount);
-
-  await tx.salesInvoice.update({
-    where: { id: invoiceId },
-    data: {
-      paidAmount,
-      balanceAmount,
-      paymentStatus: computeSalesInvoicePaymentStatus(effectiveNet, paidAmount),
-      updatedAt: BigInt(Date.now()),
-    },
-  });
 }

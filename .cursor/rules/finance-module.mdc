@@ -31,8 +31,10 @@ Match purchase/inventory patterns: thin controllers, `prisma.client` for reads, 
 
 - **Purchase invoice post** — `LedgerPostingService.postVoucher` (DR Purchase + GST Input, CR Supplier Payable) + `adjustSupplierOutstanding` (in `purchase-invoice.service.ts`).
 - **Purchase invoice cancel** — `reverseVoucher` + outstanding reversal.
-- **Supplier payment complete** — ledger post + purchase invoice allocation when `referenceType = PURCHASE_INVOICE`.
-- **Customer receipt complete** — ledger post + `adjustCustomerOutstanding`; `SALES_INVOICE` reference returns `SALES_INVOICE_NOT_FOUND` until sales module exists.
+- **Supplier payment complete** — ledger post + purchase invoice allocation when `referenceType = PURCHASE_INVOICE` (invoice must be POSTED).
+- **Purchase invoice cancel** — blocked when `paidAmount > 0` (`PURCHASE_INVOICE_HAS_PAYMENTS`).
+- **Customer receipt complete** — ledger post + `adjustCustomerOutstanding`; `CUSTOMER_PAYMENT` requires `referenceId` as customer.
+- **Reversals** — `reverseVoucher` scopes by `originalVoucherNumber`; posts under `*-REV` number.
 
 ## Layer checklist
 

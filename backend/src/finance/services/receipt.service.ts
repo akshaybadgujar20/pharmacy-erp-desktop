@@ -21,8 +21,13 @@ import { SequenceGeneratorService } from '../../persistence/sequence/sequence-ge
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import {
+  assertSalesInvoiceReceiptAmount,
+  recomputeSalesInvoiceSettlement,
+} from '../../sales/utils/sales.util';
+import {
   FinanceReferenceType,
   ReceiptStatus,
+  ReceiptType,
   VoucherType,
 } from '../constants/finance.constants';
 import { CreateReceiptDto } from '../dto/create-receipt.dto';
@@ -32,12 +37,10 @@ import { UpdateReceiptDto } from '../dto/update-receipt.dto';
 import { toReceiptResponse } from '../mappers/receipt.mapper';
 import {
   adjustCustomerOutstanding,
-  assertSalesInvoiceReceiptAmount,
   assertTransactionDateInOpenYear,
   buildReceiptLedgerLines,
   isSalesInvoiceReference,
   optimisticUpdate,
-  recomputeSalesInvoiceSettlement,
   throwNotFound,
 } from '../utils/finance.util';
 
@@ -293,6 +296,19 @@ export class ReceiptService {
         customerId = invoiceCustomerId ?? undefined;
       } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
         customerId = receipt.referenceId ?? undefined;
+      } else if (
+        receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT &&
+        receipt.referenceId
+      ) {
+        customerId = receipt.referenceId;
+      }
+
+      if (receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT && !customerId) {
+        throw new ApplicationException(
+          ErrorCode.BAD_REQUEST,
+          'Customer reference is required for customer payment receipts',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       const lines = await buildReceiptLedgerLines(tx, {
@@ -381,8 +397,9 @@ export class ReceiptService {
       if (receipt.status === ReceiptStatus.COMPLETED) {
         await this.ledgerPosting.reverseVoucher(tx, {
           companyId: branch.companyId,
-          voucherType: VoucherType.RECEIPT,
-          voucherId: receipt.id,
+          originalVoucherType: VoucherType.RECEIPT,
+          originalVoucherId: receipt.id,
+          originalVoucherNumber: receipt.receiptNumber,
           reversalVoucherType: VoucherType.RECEIPT,
           reversalVoucherId: receipt.id,
           reversalVoucherNumber: `${receipt.receiptNumber}-REV`,
@@ -401,6 +418,11 @@ export class ReceiptService {
           customerId = invoice.customerId ?? undefined;
         } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
           customerId = receipt.referenceId ?? undefined;
+        } else if (
+          receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT &&
+          receipt.referenceId
+        ) {
+          customerId = receipt.referenceId;
         }
       }
 

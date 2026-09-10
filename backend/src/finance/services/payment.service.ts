@@ -20,6 +20,7 @@ import { DocumentType } from '../../persistence/sequence/document-type.constants
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { PurchaseInvoiceStatus } from '../../purchase/constants/purchase.constants';
 import { PaymentStatus, VoucherType } from '../constants/finance.constants';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { FinanceWorkflowDto } from '../dto/finance-workflow.dto';
@@ -28,11 +29,13 @@ import { UpdatePaymentDto } from '../dto/update-payment.dto';
 import { toPaymentResponse } from '../mappers/payment.mapper';
 import {
   adjustSupplierOutstanding,
+  applyPurchaseInvoicePaymentAllocation,
+  assertPaymentTypeSupportsLedger,
   assertTransactionDateInOpenYear,
   buildPaymentLedgerLines,
-  computePurchaseInvoicePaymentStatus,
   isPurchaseInvoiceReference,
   optimisticUpdate,
+  reversePurchaseInvoicePaymentAllocation,
   throwNotFound,
 } from '../utils/finance.util';
 
@@ -270,6 +273,8 @@ export class PaymentService {
       const amount = new Prisma.Decimal(payment.amount);
       let supplierId: bigint | undefined;
 
+      assertPaymentTypeSupportsLedger(payment.paymentType);
+
       if (isPurchaseInvoiceReference(payment.referenceType)) {
         if (!payment.referenceId) {
           throw new ApplicationException(
@@ -291,9 +296,18 @@ export class PaymentService {
           );
         }
 
+        if (invoice.status !== PurchaseInvoiceStatus.POSTED) {
+          throw new ApplicationException(
+            ErrorCode.INVOICE_NOT_POSTED,
+            'Purchase invoice must be posted before payment allocation',
+            HttpStatus.CONFLICT,
+            { status: invoice.status },
+          );
+        }
+
         if (amount.gt(invoice.balanceAmount)) {
           throw new ApplicationException(
-            ErrorCode.BAD_REQUEST,
+            ErrorCode.PAYMENT_ALLOCATION_EXCEEDED,
             'Payment amount exceeds purchase invoice balance',
             HttpStatus.BAD_REQUEST,
             {
@@ -302,8 +316,6 @@ export class PaymentService {
             },
           );
         }
-
-        supplierId = invoice.supplierId;
       }
 
       const lines = await buildPaymentLedgerLines(tx, {
@@ -339,27 +351,12 @@ export class PaymentService {
         isPurchaseInvoiceReference(payment.referenceType) &&
         payment.referenceId
       ) {
-        const invoice = await tx.purchaseInvoice.findFirstOrThrow({
-          where: { id: payment.referenceId },
-        });
-
-        const paidAmount = new Prisma.Decimal(invoice.paidAmount).add(amount);
-        const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(
-          paidAmount,
+        const allocation = await applyPurchaseInvoicePaymentAllocation(
+          tx,
+          payment.referenceId,
+          amount,
         );
-
-        await tx.purchaseInvoice.update({
-          where: { id: invoice.id },
-          data: {
-            paidAmount,
-            balanceAmount,
-            paymentStatus: computePurchaseInvoicePaymentStatus(
-              new Prisma.Decimal(invoice.netAmount),
-              paidAmount,
-            ),
-            updatedAt: BigInt(Date.now()),
-          },
-        });
+        supplierId = allocation.supplierId;
       }
 
       if (supplierId) {
@@ -413,8 +410,9 @@ export class PaymentService {
       if (payment.status === PaymentStatus.COMPLETED) {
         await this.ledgerPosting.reverseVoucher(tx, {
           companyId: branch.companyId,
-          voucherType: VoucherType.PAYMENT,
-          voucherId: payment.id,
+          originalVoucherType: VoucherType.PAYMENT,
+          originalVoucherId: payment.id,
+          originalVoucherNumber: payment.paymentNumber,
           reversalVoucherType: VoucherType.PAYMENT,
           reversalVoucherId: payment.id,
           reversalVoucherNumber: `${payment.paymentNumber}-REV`,
@@ -427,29 +425,12 @@ export class PaymentService {
           isPurchaseInvoiceReference(payment.referenceType) &&
           payment.referenceId
         ) {
-          const invoice = await tx.purchaseInvoice.findFirstOrThrow({
-            where: { id: payment.referenceId },
-          });
-
-          const paidAmount = new Prisma.Decimal(invoice.paidAmount).sub(amount);
-          const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(
-            paidAmount,
+          const allocation = await reversePurchaseInvoicePaymentAllocation(
+            tx,
+            payment.referenceId,
+            amount,
           );
-
-          await tx.purchaseInvoice.update({
-            where: { id: invoice.id },
-            data: {
-              paidAmount,
-              balanceAmount,
-              paymentStatus: computePurchaseInvoicePaymentStatus(
-                new Prisma.Decimal(invoice.netAmount),
-                paidAmount,
-              ),
-              updatedAt: BigInt(Date.now()),
-            },
-          });
-
-          supplierId = invoice.supplierId;
+          supplierId = allocation.supplierId;
         }
       }
 

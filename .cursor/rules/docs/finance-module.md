@@ -92,11 +92,15 @@ Filters: `ledgerId`, `voucherType`, `voucherId`, `fromDate`, `toDate`, `isPosted
 | Event | Ledger effect |
 |-------|---------------|
 | Purchase invoice post | DR `PUR001` (net − tax), DR `GSTIN001` (tax), CR `SUP001` (net) |
-| Purchase invoice cancel | Reversal voucher |
+| Purchase invoice cancel | Reversal voucher (blocked when `paidAmount > 0`) |
 | Payment complete (`SUPPLIER_PAYMENT`) | DR `SUP001`, CR Cash/Bank |
-| Payment + `PURCHASE_INVOICE` ref | Updates invoice `paidAmount` / `balanceAmount` / `paymentStatus` |
-| Receipt complete (`CUSTOMER_PAYMENT`) | DR Cash/Bank, CR `CUST001`; adjusts customer outstanding |
-| Receipt + `SALES_INVOICE` ref | `SALES_INVOICE_NOT_FOUND` until sales module exists |
+| Payment complete (`CUSTOMER_REFUND`) | DR `CUST001`, CR Cash/Bank |
+| Payment complete (`PURCHASE_REFUND`) | DR Cash/Bank, CR `SUP001` |
+| Payment + `PURCHASE_INVOICE` ref | Requires POSTED invoice; optimistic allocation to `paidAmount` / `balanceAmount` |
+| Receipt complete (`CUSTOMER_PAYMENT`) | DR Cash/Bank, CR `CUST001`; requires `referenceId` (customer); adjusts outstanding |
+| Receipt + `SALES_INVOICE` ref | Validates balance via sales settlement helpers |
+
+**Reversal rule:** `reverseVoucher` scopes originals by exact `originalVoucherNumber`; reversal lines post under `*-REV` voucher number.
 
 Document numbers: `DocumentType.PAYMENT` / `RECEIPT` via `SequenceGeneratorService` (`PAY-{BR}-{SEQ}`, `REC-{BR}-{SEQ}`).
 

@@ -15,9 +15,11 @@ import { VoucherType } from '../../finance/constants/finance.constants';
 import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
+} from '../../finance/utils/finance.util';
+import {
   buildSalesReturnLedgerLines,
   recomputeSalesInvoiceSettlement,
-} from '../../finance/utils/finance.util';
+} from '../utils/sales.util';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
 import {
   getTenantScope,
@@ -492,8 +494,9 @@ export class SalesReturnService {
 
         await this.ledgerPosting.reverseVoucher(tx, {
           companyId: branch.companyId,
-          voucherType: VoucherType.SALES,
-          voucherId: salesReturn.id,
+          originalVoucherType: VoucherType.SALES,
+          originalVoucherId: salesReturn.id,
+          originalVoucherNumber: salesReturn.salesReturnNumber,
           reversalVoucherType: VoucherType.SALES,
           reversalVoucherId: salesReturn.id,
           reversalVoucherNumber: `${salesReturn.salesReturnNumber}-REV`,

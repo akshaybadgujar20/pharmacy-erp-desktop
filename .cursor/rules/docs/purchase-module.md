@@ -95,7 +95,7 @@ Plus standard list/get/create/patch/delete with `GOODS_RECEIPT` permissions.
 | Method | Path | Permission |
 |--------|------|------------|
 | POST | `/purchase-invoices/:id/post` | `PURCHASE:PURCHASE_INVOICE:POST` |
-| POST | `/purchase-invoices/:id/cancel` | `PURCHASE:PURCHASE_INVOICE:CANCEL` |
+| POST | `/purchase-invoices/:id/cancel` | `PURCHASE:PURCHASE_INVOICE:CANCEL` (blocked when `paidAmount > 0`; cancel finance payments first) |
 
 ### Purchase Return — header
 

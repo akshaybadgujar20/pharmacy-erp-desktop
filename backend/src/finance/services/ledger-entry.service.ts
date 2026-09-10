@@ -69,9 +69,13 @@ export class LedgerEntryService {
     });
 
     if (!entry) {
-      throwNotFound(ErrorCode.NOT_FOUND, `Ledger entry not found: ${id}`, {
-        id: id.toString(),
-      });
+      throwNotFound(
+        ErrorCode.LEDGER_ENTRY_NOT_FOUND,
+        `Ledger entry not found: ${id}`,
+        {
+          id: id.toString(),
+        },
+      );
     }
 
     return toLedgerEntryResponse(entry);

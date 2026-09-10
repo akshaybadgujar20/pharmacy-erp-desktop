@@ -321,6 +321,15 @@ export class PurchaseInvoiceService {
 
       const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
 
+      if (netAmount.lte(0)) {
+        throw new ApplicationException(
+          ErrorCode.BAD_REQUEST,
+          'Purchase invoice net amount must be greater than zero to post',
+          HttpStatus.BAD_REQUEST,
+          { netAmount: netAmount.toString() },
+        );
+      }
+
       const branch = await tx.branch.findFirstOrThrow({
         where: { id: invoice.branchId, deletedAt: null },
         select: { companyId: true },
@@ -401,6 +410,18 @@ export class PurchaseInvoiceService {
         );
       }
 
+      if (new Prisma.Decimal(invoice.paidAmount).gt(0)) {
+        throw new ApplicationException(
+          ErrorCode.PURCHASE_INVOICE_HAS_PAYMENTS,
+          'Cancel finance payments against this invoice before cancelling the invoice',
+          HttpStatus.CONFLICT,
+          {
+            paidAmount: invoice.paidAmount.toString(),
+            purchaseInvoiceId: id.toString(),
+          },
+        );
+      }
+
       const branch = await tx.branch.findFirstOrThrow({
         where: { id: invoice.branchId, deletedAt: null },
         select: { companyId: true },
@@ -408,8 +429,9 @@ export class PurchaseInvoiceService {
 
       await this.ledgerPosting.reverseVoucher(tx, {
         companyId: branch.companyId,
-        voucherType: VoucherType.PURCHASE,
-        voucherId: invoice.id,
+        originalVoucherType: VoucherType.PURCHASE,
+        originalVoucherId: invoice.id,
+        originalVoucherNumber: invoice.purchaseInvoiceNumber,
         reversalVoucherType: VoucherType.PURCHASE,
         reversalVoucherId: invoice.id,
         reversalVoucherNumber: `${invoice.purchaseInvoiceNumber}-REV`,

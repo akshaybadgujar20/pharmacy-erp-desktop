@@ -15,9 +15,11 @@ import { VoucherType } from '../../finance/constants/finance.constants';
 import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
+} from '../../finance/utils/finance.util';
+import {
   buildSalesPaymentLedgerLines,
   recomputeSalesInvoiceSettlement,
-} from '../../finance/utils/finance.util';
+} from '../utils/sales.util';
 import {
   getTenantScope,
   withBranchScope,
@@ -423,8 +425,9 @@ export class SalesPaymentService {
         const branch = await assertBranchExists(tx, payment.branchId);
         await this.ledgerPosting.reverseVoucher(tx, {
           companyId: branch.companyId,
-          voucherType: VoucherType.PAYMENT,
-          voucherId: payment.id,
+          originalVoucherType: VoucherType.PAYMENT,
+          originalVoucherId: payment.id,
+          originalVoucherNumber: payment.paymentNumber,
           reversalVoucherType: VoucherType.PAYMENT,
           reversalVoucherId: payment.id,
           reversalVoucherNumber: `${payment.paymentNumber}-REV`,

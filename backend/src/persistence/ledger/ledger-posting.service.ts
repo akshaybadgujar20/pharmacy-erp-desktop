@@ -3,32 +3,16 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
-import { assertTransactionDateInOpenYear } from '../../finance/utils/finance.util';
-import type { JournalLineInput } from '../../finance/utils/finance.util';
-import { NormalBalance } from '../../finance/constants/finance.constants';
+import { NormalBalance } from './ledger-posting.constants';
+import type {
+  JournalLineInput,
+  PostVoucherInput,
+  ReverseVoucherInput,
+} from './ledger-posting.types';
+import { assertTransactionDateInOpenYear } from './ledger-posting.util';
 import type { TxClient } from '../prisma/prisma-tx.type';
 
-export interface PostVoucherInput {
-  companyId: bigint;
-  voucherType: string;
-  voucherId: bigint;
-  voucherNumber: string;
-  transactionDate: bigint;
-  lines: JournalLineInput[];
-  createdBy?: bigint;
-}
-
-export interface ReverseVoucherInput {
-  companyId: bigint;
-  voucherType: string;
-  voucherId: bigint;
-  reversalVoucherType: string;
-  reversalVoucherId: bigint;
-  reversalVoucherNumber: string;
-  transactionDate: bigint;
-  createdBy?: bigint;
-  narration?: string;
-}
+export type { JournalLineInput, PostVoucherInput, ReverseVoucherInput };
 
 @Injectable()
 export class LedgerPostingService {
@@ -177,10 +161,28 @@ export class LedgerPostingService {
   }
 
   async reverseVoucher(tx: TxClient, input: ReverseVoucherInput) {
+    const existingReversal = await tx.ledgerEntry.count({
+      where: {
+        voucherNumber: input.reversalVoucherNumber,
+        deletedAt: null,
+        isPosted: true,
+      },
+    });
+
+    if (existingReversal > 0) {
+      throw new ApplicationException(
+        ErrorCode.CONFLICT,
+        'Voucher reversal already posted',
+        HttpStatus.CONFLICT,
+        { reversalVoucherNumber: input.reversalVoucherNumber },
+      );
+    }
+
     const originalEntries = await tx.ledgerEntry.findMany({
       where: {
-        voucherType: input.voucherType,
-        voucherId: input.voucherId,
+        voucherType: input.originalVoucherType,
+        voucherId: input.originalVoucherId,
+        voucherNumber: input.originalVoucherNumber,
         deletedAt: null,
         isPosted: true,
       },
@@ -192,8 +194,9 @@ export class LedgerPostingService {
         'No posted ledger entries found for voucher reversal',
         HttpStatus.NOT_FOUND,
         {
-          voucherType: input.voucherType,
-          voucherId: input.voucherId.toString(),
+          voucherType: input.originalVoucherType,
+          voucherId: input.originalVoucherId.toString(),
+          voucherNumber: input.originalVoucherNumber,
         },
       );
     }
@@ -204,7 +207,7 @@ export class LedgerPostingService {
       creditAmount: entry.debitAmount,
       narration:
         input.narration ??
-        `Reversal of ${input.voucherType} ${input.voucherId.toString()}`,
+        `Reversal of ${input.originalVoucherType} ${input.originalVoucherNumber}`,
     }));
 
     return this.postVoucher(tx, {
