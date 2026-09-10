@@ -1,4 +1,5 @@
 import { AppSetting } from '@prisma/client';
+import { serializeEpochMs } from './utils/settings.util';
 
 export interface AppSettingResponse {
   id: string;
@@ -15,8 +16,8 @@ export interface AppSettingResponse {
   isEditable: boolean;
   isEncrypted: boolean;
   isActive: boolean;
-  createdAt: bigint;
-  updatedAt: bigint;
+  createdAt: string;
+  updatedAt: string;
   version: number;
 }
 
@@ -36,8 +37,8 @@ export function toAppSettingResponse(setting: AppSetting): AppSettingResponse {
     isEditable: setting.isEditable,
     isEncrypted: setting.isEncrypted,
     isActive: setting.isActive,
-    createdAt: setting.createdAt,
-    updatedAt: setting.updatedAt,
+    createdAt: serializeEpochMs(setting.createdAt) ?? '',
+    updatedAt: serializeEpochMs(setting.updatedAt) ?? '',
     version: setting.version,
   };
 }

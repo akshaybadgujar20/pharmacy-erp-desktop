@@ -54,14 +54,6 @@ export function throwConflict(
   throw new ApplicationException(code, message, HttpStatus.CONFLICT, details);
 }
 
-export function buildCompanyBranchFilter(branchId: bigint): {
-  OR: Array<{ branchId: bigint | null }>;
-} {
-  return {
-    OR: [{ branchId }, { branchId: null }],
-  };
-}
-
 export function validateFinancialYearDates(
   startDate: bigint,
   endDate: bigint,
@@ -113,25 +105,6 @@ export async function assertCompanyExists(
   }
 
   return company;
-}
-
-export async function assertBranchInCompany(
-  tx: TxClient,
-  companyId: bigint,
-  branchId: bigint,
-): Promise<{ id: bigint; uuid: string }> {
-  const branch = await tx.branch.findFirst({
-    where: { id: branchId, companyId, deletedAt: null },
-    select: { id: true, uuid: true },
-  });
-
-  if (!branch) {
-    throwNotFound(ErrorCode.BRANCH_NOT_FOUND, `Branch not found: ${branchId}`, {
-      id: branchId.toString(),
-    });
-  }
-
-  return branch;
 }
 
 export async function clearOtherCompanyDefaults(

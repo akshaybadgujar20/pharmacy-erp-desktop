@@ -1,17 +1,21 @@
 import { randomUUID } from 'crypto';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BarcodeConfiguration, Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
 import { auditAndLogChanges } from '../../audit/utils/audit.util';
-import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
   buildPagination,
   PaginatedResult,
 } from '../../common/response/paginated-result';
 import { getTenantScope } from '../../persistence/context/tenant-scope.util';
+import {
+  assertBranchInCompany,
+  assertJwtBranchOrCompanyWide,
+  buildCompanyBranchFilter,
+} from '../../persistence/context/branch-scope.util';
 import { RequestContextService } from '../../persistence/context/request-context.service';
 import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
@@ -24,8 +28,6 @@ import { BarcodeConfigurationListQueryDto } from '../dto/barcode-configuration-l
 import { UpdateBarcodeConfigurationDto } from '../dto/update-barcode-configuration.dto';
 import { toBarcodeConfigurationResponse } from '../mappers/barcode-configuration.mapper';
 import {
-  assertBranchInCompany,
-  buildCompanyBranchFilter,
   clearOtherBarcodeDefaults,
   optimisticUpdate,
   throwConflict,
@@ -125,7 +127,11 @@ export class BarcodeConfigurationService {
 
   async create(dto: CreateBarcodeConfigurationDto) {
     const scope = getTenantScope(this.requestContext);
-    this.validateBranchId(dto.branchId, scope.branchId);
+    assertJwtBranchOrCompanyWide(
+      dto.branchId,
+      scope.branchId,
+      'Barcode configuration',
+    );
 
     return this.unitOfWork.run(async (tx) => {
       const branchId = dto.branchId ?? null;
@@ -203,7 +209,11 @@ export class BarcodeConfigurationService {
       }
 
       if (dto.branchId !== undefined) {
-        this.validateBranchId(dto.branchId, scope.branchId);
+        assertJwtBranchOrCompanyWide(
+          dto.branchId,
+          scope.branchId,
+          'Barcode configuration',
+        );
       }
 
       const branchId =
@@ -337,20 +347,6 @@ export class BarcodeConfigurationService {
       );
       return { id: id.toString(), deleted: true };
     });
-  }
-
-  private validateBranchId(
-    branchId: bigint | undefined | null,
-    jwtBranchId: bigint,
-  ): void {
-    if (branchId != null && branchId !== jwtBranchId) {
-      throw new ApplicationException(
-        ErrorCode.FORBIDDEN,
-        'Barcode configuration branch must match JWT branch or be company-wide',
-        HttpStatus.FORBIDDEN,
-        { branchId: branchId.toString() },
-      );
-    }
   }
 
   private async assertConfigurationNameUnique(

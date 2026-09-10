@@ -8,6 +8,10 @@ import { auditAndLogChanges } from '../audit/utils/audit.util';
 import { ApplicationException } from '../common/exceptions/application.exception';
 import { ErrorCode } from '../common/exceptions/error-code';
 import { RequestContextService } from '../persistence/context/request-context.service';
+import {
+  assertBranchInCompany,
+  buildCompanyBranchFilter,
+} from '../persistence/context/branch-scope.util';
 import { getTenantScope } from '../persistence/context/tenant-scope.util';
 import { OutboxEntityType } from '../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../persistence/outbox/outbox-operation.constants';
@@ -15,11 +19,11 @@ import { OutboxService } from '../persistence/outbox/outbox.service';
 import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
-import { assertBranchInCompany } from '../configuration/utils/configuration.util';
 import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingDataType } from './setting-keys.constants';
 import { AppSettingResponse, toAppSettingResponse } from './settings.mapper';
+import { optimisticUpdate } from './utils/settings.util';
 
 const APP_SETTING_AUDIT_FIELDS = [{ name: 'settingValue' }];
 
@@ -52,7 +56,7 @@ export class SettingsService {
     const rows = await this.prisma.client.appSetting.findMany({
       where: {
         companyId,
-        OR: [{ branchId }, { branchId: null }],
+        ...buildCompanyBranchFilter(branchId),
         isActive: true,
         deletedAt: null,
         ...(category ? { category } : {}),
@@ -229,14 +233,11 @@ export class SettingsService {
         },
       });
 
-      if (updateResult.count === 0) {
-        throw new ApplicationException(
-          ErrorCode.ENTITY_VERSION_CONFLICT,
-          `Setting version conflict or not found: ${key}`,
-          HttpStatus.CONFLICT,
-          { id: row.id.toString() },
-        );
-      }
+      optimisticUpdate(
+        updateResult,
+        row.id,
+        `Setting version conflict or not found: ${key}`,
+      );
 
       const updated = await tx.appSetting.findFirstOrThrow({
         where: { id: row.id },
@@ -305,14 +306,11 @@ export class SettingsService {
         },
       });
 
-      if (updateResult.count === 0) {
-        throw new ApplicationException(
-          ErrorCode.ENTITY_VERSION_CONFLICT,
-          `Setting version conflict or not found: ${key}`,
-          HttpStatus.CONFLICT,
-          { id: row.id.toString() },
-        );
-      }
+      optimisticUpdate(
+        updateResult,
+        row.id,
+        `Setting version conflict or not found: ${key}`,
+      );
 
       await this.emitChange(
         tx,

@@ -15,10 +15,11 @@ Org structure and device/runtime config (except AppSetting CRUD in SettingsModul
 1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
 2. **All mutations** — audit + outbox in same transaction (`AuditModule.CONFIGURATION`).
 3. **Branch-scoped resources** — tenant via `getTenantScope`; company-wide rows use `branchId: null`.
-4. **Default flags** — `isDefault` / `isHeadOffice` / `isCurrent` clear siblings in same scope.
-5. **UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
-6. **FinancialYear** — `POST :id/close` when OPEN; block update/delete on CLOSED/ARCHIVED.
-7. **SequenceGenerator** — admin CRUD via `SequenceGeneratorConfigService`; document allocation stays internal via persistence `SequenceGeneratorService.next()`; deactivate before delete.
+4. **Company API** — list/get/update/delete scoped to JWT `companyId` only.
+5. **Default flags** — `isDefault` / `isHeadOffice` / `isCurrent` clear siblings in same scope.
+6. **UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
+7. **FinancialYear** — `POST :id/close` when OPEN; block update/delete on CLOSED/ARCHIVED.
+8. **SequenceGenerator** — admin CRUD via `SequenceGeneratorConfigService`; document allocation stays internal via persistence `SequenceGeneratorService.next()`; deactivate before delete.
 
 ## Layer checklist
 

@@ -12,6 +12,7 @@ import {
   PaginatedResult,
 } from '../../common/response/paginated-result';
 import { getTenantScope } from '../../persistence/context/tenant-scope.util';
+import { buildCompanyBranchFilter } from '../../persistence/context/branch-scope.util';
 import { RequestContextService } from '../../persistence/context/request-context.service';
 import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
@@ -25,7 +26,6 @@ import { UpdatePriceListDto } from '../dto/update-price-list.dto';
 import { toPriceListResponse } from '../mappers/price-list.mapper';
 import {
   assertPriceListNotInUse,
-  buildPriceListBranchFilter,
   buildPriceListListWhere,
   clearOtherDefaults,
   optimisticUpdate,
@@ -84,7 +84,7 @@ export class PriceListService {
       where: {
         id,
         deletedAt: null,
-        ...buildPriceListBranchFilter(scope.branchId),
+        ...buildCompanyBranchFilter(scope.branchId),
       },
     });
 
@@ -147,7 +147,7 @@ export class PriceListService {
         where: {
           id,
           deletedAt: null,
-          ...buildPriceListBranchFilter(scope.branchId),
+          ...buildCompanyBranchFilter(scope.branchId),
         },
       });
 
@@ -237,7 +237,7 @@ export class PriceListService {
         where: {
           id,
           deletedAt: null,
-          ...buildPriceListBranchFilter(scope.branchId),
+          ...buildCompanyBranchFilter(scope.branchId),
         },
       });
 

@@ -1,0 +1,30 @@
+---
+description: Settings module conventions — read memory doc before editing backend/src/settings
+globs: backend/src/settings/**
+alwaysApply: false
+---
+
+# Settings module
+
+**Read the full memory model first:** [`.cursor/rules/docs/settings-module.md`](docs/settings-module.md)
+
+AppSetting CRUD, typed getters, and cache. Org structure CRUD is in Configuration module.
+
+## Golden rules
+
+1. **Reads** use `prisma.client`; **writes** use `unitOfWork.run` only.
+2. **All mutations** — audit + outbox in same transaction (`AuditModule.CONFIGURATION`).
+3. **Resolution** — branch row overrides company-wide row for same key.
+4. **PUT** — body requires `{ version, settingValue }`; use `optimisticUpdate` from `utils/settings.util.ts`.
+5. **Keys** — use `SettingKey` constants from `setting-keys.constants.ts`.
+6. **Branch validation** — `assertBranchInCompany` from `persistence/context/branch-scope.util.ts`.
+
+## Layer checklist
+
+- **Mapper:** epoch ms → ISO strings via `serializeEpochMs`.
+- **Permissions:** `CONFIGURATION:APP_SETTING:ACTION` on every endpoint.
+- **Utils:** [`settings.util.ts`](../backend/src/settings/utils/settings.util.ts).
+
+## Architecture reference
+
+Early foundations: [early-foundations.md](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md).

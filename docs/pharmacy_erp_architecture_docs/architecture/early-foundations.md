@@ -182,7 +182,10 @@ Code: `backend/src/settings/`
 | API | Permission |
 |-----|------------|
 | `GET /settings?category=` | `CONFIGURATION:APP_SETTING:READ` |
-| `PUT /settings/:key` | `CONFIGURATION:APP_SETTING:UPDATE` |
+| `GET /settings/:key` | `CONFIGURATION:APP_SETTING:READ` |
+| `POST /settings` | `CONFIGURATION:APP_SETTING:CREATE` |
+| `PUT /settings/:key` | `CONFIGURATION:APP_SETTING:UPDATE` — body requires `{ version, settingValue }` |
+| `DELETE /settings/:key?version=` | `CONFIGURATION:APP_SETTING:DELETE` |
 
 Resolution order: **branch-scoped row** → **company-wide row** (`branchId` null) → error or caller default.
 

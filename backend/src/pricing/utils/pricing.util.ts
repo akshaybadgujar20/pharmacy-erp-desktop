@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
+import { buildCompanyBranchFilter } from '../../persistence/context/branch-scope.util';
 import { AppliesTo } from '../constants/pricing.constants';
 
 export function serializeEpochMs(
@@ -54,14 +55,6 @@ export function throwConflict(
   throw new ApplicationException(code, message, HttpStatus.CONFLICT, details);
 }
 
-export function buildPriceListBranchFilter(
-  branchId: bigint,
-): Prisma.PriceListWhereInput {
-  return {
-    OR: [{ branchId }, { branchId: null }],
-  };
-}
-
 export type PriceListListFilters = {
   priceListType?: string;
   isActive?: boolean;
@@ -81,7 +74,7 @@ export function buildPriceListListWhere(
     ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
     ...(query.isDefault !== undefined ? { isDefault: query.isDefault } : {}),
     AND: [
-      buildPriceListBranchFilter(branchId),
+      buildCompanyBranchFilter(branchId),
       ...(search
         ? [
             {
@@ -278,7 +271,7 @@ export async function assertPriceListExists(
       id: priceListId,
       deletedAt: null,
       ...(requireActive ? { isActive: true } : {}),
-      ...buildPriceListBranchFilter(branchId),
+      ...buildCompanyBranchFilter(branchId),
     },
     select: { id: true, uuid: true, branchId: true },
   });

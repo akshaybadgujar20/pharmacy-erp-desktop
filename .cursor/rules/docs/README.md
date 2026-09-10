@@ -37,6 +37,7 @@ Module memory docs below describe **what exists**; coding principles govern **ho
 | [purchase-module.md](purchase-module.md) | `backend/src/purchase/` | [purchase-module.mdc](../purchase-module.mdc) |
 | [sales-module.md](sales-module.md) | `backend/src/sales/` | [sales-module.mdc](../sales-module.mdc) |
 | [security-module.md](security-module.md) | `backend/src/security/` | [security-module.mdc](../security-module.mdc) |
+| [settings-module.md](settings-module.md) | `backend/src/settings/` | [settings-module.mdc](../settings-module.mdc) |
 | [sync-module.md](sync-module.md) | `backend/src/sync/` | [sync-module.mdc](../sync-module.mdc) |
 
 ## Adding a new module doc

@@ -12,6 +12,7 @@ import {
   PaginatedResult,
 } from '../../common/response/paginated-result';
 import { getTenantScope } from '../../persistence/context/tenant-scope.util';
+import { assertBranchInCompany } from '../../persistence/context/branch-scope.util';
 import { RequestContextService } from '../../persistence/context/request-context.service';
 import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
@@ -25,7 +26,6 @@ import { FinancialYearListQueryDto } from '../dto/financial-year-list-query.dto'
 import { UpdateFinancialYearDto } from '../dto/update-financial-year.dto';
 import { toFinancialYearResponse } from '../mappers/financial-year.mapper';
 import {
-  assertBranchInCompany,
   assertFinancialYearMutable,
   assertFinancialYearNoOverlap,
   clearOtherCurrentFinancialYears,
