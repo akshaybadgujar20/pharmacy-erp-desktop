@@ -532,6 +532,8 @@ Controllers, generic CRUD services, DTOs, and mappers are omitted (same pattern 
 
 **Logical dependencies:** Everything depends on infrastructure; no business FKs.
 
+**Key decisions:** [ADR-006](./adrs/ADR-006-unit-of-work-all-writes.md), [ADR-007](./adrs/ADR-007-outbox-in-same-transaction.md), [ADR-010](./adrs/ADR-010-request-context-async-local-storage.md) — see [memory map](./backend-memory-map.md).
+
 **Pointers:** [persistence-patterns.md](../database/persistence-patterns.md), [logging-and-audit.md](./logging-and-audit.md), [extending-the-backend.md](./extending-the-backend.md)
 
 ---
@@ -676,6 +678,8 @@ flowchart TB
 **Logical dependencies:** Referenced by purchase (supplier), sales (customer), prescription (doctor), medicine (manufacturer `partyId`). No Nest import — FK only.
 
 **Rules:** Nested children get `partyId` from route; role details get `partyId` in create body. `party-contact.service.ts` is an audit convention exception (see [Known gaps](#known-gaps)).
+
+**Key decisions:** [ADR-015](./adrs/ADR-015-party-crud-reference-template.md) (CRUD template), [ADR-020](./adrs/ADR-020-org-global-party-masters.md).
 
 **Pointers:** [party-module.md](../../../.cursor/rules/docs/party-module.md), [party_management.md](../database/tables/party_management/party_management.md)
 
@@ -926,6 +930,8 @@ flowchart TB
 
 **Rules:** PO and invoice never touch stock. GRN accept is the inbound boundary.
 
+**Key decisions:** [ADR-047](./adrs/ADR-047-purchase-all-four-document-types.md), [ADR-048](./adrs/ADR-048-purchase-prisma-source-of-truth.md), [ADR-049](./adrs/ADR-049-grn-full-inspection-workflow.md), [ADR-135](./adrs/ADR-135-grn-accept-stock-inbound-boundary.md).
+
 **Pointers:** [purchase-module.md](../../../.cursor/rules/docs/purchase-module.md), [purchase-flow.md](../workflows/purchase-flow.md), [purchase.md](../database/tables/purchase/purchase.md)
 
 ---
@@ -967,6 +973,8 @@ flowchart TB
 
 **Not implemented:** Loyalty, non-RESTOCK dispositions.
 
+**Key decisions:** [ADR-068](./adrs/ADR-068-sales-all-five-tables-v1.md), [ADR-072](./adrs/ADR-072-fefo-batch-allocation-at-post.md), [ADR-076](./adrs/ADR-076-block-sales-cancel-when-paid-or-return.md), [ADR-136](./adrs/ADR-136-sales-post-stock-outbound-boundary.md).
+
 **Pointers:** [sales-module.md](../../../.cursor/rules/docs/sales-module.md), [sales-flow.md](../workflows/sales-flow.md), [sales.md](../database/tables/sales/sales.md)
 
 ---
@@ -1007,6 +1015,8 @@ flowchart TB
 **Rules:** Ledger balance never stored — derived from `LedgerEntry`. Entries immutable after post.
 
 **Not implemented:** Manual journal API, trial balance/P&L reports, expense CRUD.
+
+**Key decisions:** [ADR-055](./adrs/ADR-055-finance-four-tables-v1.md), [ADR-056](./adrs/ADR-056-finance-full-cross-module-hooks.md), [ADR-064](./adrs/ADR-064-block-purchase-invoice-cancel-when-paid.md), [ADR-065](./adrs/ADR-065-voucher-reversal-by-voucher-number-rev-suffix.md).
 
 **Pointers:** [finance-module.md](../../../.cursor/rules/docs/finance-module.md), [financial.md](../database/tables/financial/financial.md)
 
@@ -1107,6 +1117,8 @@ flowchart TB
 **Logical dependencies:** Reads security tables (user, role, permission) at login. RBAC CRUD is in `security/`.
 
 **Split:** User/role/permission admin → `security/`. Token lifecycle → `auth/`.
+
+**Key decisions:** [ADR-012](./adrs/ADR-012-jwt-global-auth-guards.md), [ADR-080](./adrs/ADR-080-auth-security-module-split.md), [ADR-086](./adrs/ADR-086-session-invalidation-on-security-changes.md).
 
 **Pointers:** [early-foundations.md](./early-foundations.md), [security.md](./security.md)
 

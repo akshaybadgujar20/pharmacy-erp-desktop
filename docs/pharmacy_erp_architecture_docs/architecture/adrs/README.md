@@ -4,42 +4,45 @@ Full decision records recovered from historical chats, plans, and architecture d
 
 ## Index
 
-The canonical index lives in [Backend Memory Map](../backend-memory-map.md#architectural-decision-index).
+The canonical navigable index lives in [Backend Memory Map](../backend-memory-map.md#architectural-decision-index).
 
 ## ID convention
 
 - Format: `ADR-001`, `ADR-002`, … (three digits, zero-padded)
-- Filename: `ADR-001-short-slug.md` (slug matches title)
+- Filename: `ADR-001-short-slug.md`
 - IDs are **stable** once assigned — never renumber
-- Index in `backend-memory-map.md` is the source of truth
 
 ## When to add a new ADR
 
-After any architectural choice that:
-
-- Was discussed with alternatives
-- Affects multiple modules
-- Would be costly to rediscover later
-- Changes or refines a prior decision (mark old ADR as Superseded or Refined)
-
-Copy [templates/adr-template.md](../templates/adr-template.md) and add a row to the memory map index.
+After any architectural choice with alternatives, cross-module impact, or hard-to-rediscover context. Copy [templates/adr-template.md](../templates/adr-template.md) and add a row to the memory map index.
 
 ## Confidence levels
 
 | Level | Meaning |
 |-------|---------|
-| **Explicit** | Question, options, and choice directly present in source |
-| **Strongly inferred** | Choice clear from plan lock-in table or implementation, not one explicit sentence |
-| **Weakly inferred** | Indications only — mark `Needs Confirmation` if uncertain |
+| **Explicit** | Question, options, and choice in source |
+| **Strongly inferred** | Clear from plan lock-in or implementation |
+| **Weakly inferred** | Indications only — use Needs Confirmation |
 
-Do not invent rationale. State when reasoning was not recorded.
+## Records (recovered 2026-09-10)
 
-## Records
+| Range | Theme |
+|-------|-------|
+| ADR-001–005 | Database schema (Doc 01) |
+| ADR-006–010 | Persistence foundation (Doc 02) |
+| ADR-011 | Ledger posting (Doc 03) |
+| ADR-012–014, 018–019 | Early foundations (Doc 04) |
+| ADR-016–017 | Logging vs audit (Doc 05) |
+| ADR-015, 020 | Party template (Doc 06) |
+| ADR-021–026 | Architecture docs (Doc 07–10) |
+| ADR-047–053, 135 | Purchase (Doc 12) |
+| ADR-055–056, 064–065 | Finance (Doc 13) |
+| ADR-068–069, 072, 076, 136 | Sales (Doc 14) |
+| ADR-080, 086 | Security (Doc 15) |
+| ADR-089 | Medicine (Doc 16) |
+| ADR-101 | Pricing/Prescription/Audit (Doc 17) |
+| ADR-114, 127, 130, 138 | SCM (Doc 18) |
+| ADR-133–134 | Documentation governance (Doc 25–26) |
+| ADR-137 | Cross-module coupling (Doc 09) |
 
-| File | Title | Status |
-|------|-------|--------|
-| [ADR-001](./ADR-001-sqlite-postgres-single-schema.md) | SQLite + PostgreSQL single schema | Active |
-| [ADR-002](./ADR-002-string-status-not-enums.md) | String status not enums | Active |
-| [ADR-003](./ADR-003-multi-branch-stock-per-batch.md) | Multi-branch stock per batch | Active |
-| [ADR-004](./ADR-004-sync-entity-uuid-identity.md) | Sync entityUuid identity | Active |
-| [ADR-005](./ADR-005-branch-scoped-document-numbers.md) | Branch-scoped document numbers | Active |
+See memory map for full table with status and confidence per ADR.
