@@ -28,6 +28,7 @@ import {
   assertDraftStatus,
   assertMedicineExists,
   assertRestockDisposition,
+  assertReturnItemMatchesInvoiceLine,
   assertReturnQuantityWithinSold,
   computeLineAmounts,
   getNextLineNumber,
@@ -123,10 +124,17 @@ export class SalesReturnItemService {
       assertRestockDisposition(disposition);
 
       await assertMedicineExists(tx, dto.medicineId);
+      await assertReturnItemMatchesInvoiceLine(
+        tx,
+        dto.salesInvoiceItemId,
+        dto.medicineId,
+        dto.batchId,
+      );
       await assertReturnQuantityWithinSold(
         tx,
         dto.salesInvoiceItemId,
         new Prisma.Decimal(dto.returnQuantity),
+        salesReturnId,
       );
 
       const duplicate = await tx.salesReturnItem.findFirst({
@@ -211,11 +219,21 @@ export class SalesReturnItemService {
       const returnQuantity = dto.returnQuantity ?? existing.returnQuantity;
       const unitPrice = dto.unitPrice ?? existing.unitPrice;
 
+      if (dto.batchId != null) {
+        await assertReturnItemMatchesInvoiceLine(
+          tx,
+          existing.salesInvoiceItemId,
+          existing.medicineId,
+          dto.batchId,
+        );
+      }
+
       if (dto.returnQuantity) {
         await assertReturnQuantityWithinSold(
           tx,
           existing.salesInvoiceItemId,
           new Prisma.Decimal(returnQuantity),
+          salesReturnId,
         );
       }
 

@@ -188,7 +188,7 @@ export class SalesPaymentService {
 
   async update(salesInvoiceId: bigint, id: bigint, dto: UpdateSalesPaymentDto) {
     return this.unitOfWork.run(async (tx) => {
-      await this.findParentTx(tx, salesInvoiceId);
+      const invoice = await this.findParentTx(tx, salesInvoiceId);
       const existing = await tx.salesPayment.findFirst({
         where: { id, salesInvoiceId, deletedAt: null },
       });
@@ -202,6 +202,21 @@ export class SalesPaymentService {
       }
 
       this.assertPendingStatus(existing.status);
+
+      if (dto.paymentAmount != null) {
+        const paymentAmount = new Prisma.Decimal(dto.paymentAmount);
+        if (paymentAmount.gt(invoice.balanceAmount)) {
+          throw new ApplicationException(
+            ErrorCode.BAD_REQUEST,
+            'Payment amount exceeds sales invoice balance',
+            HttpStatus.BAD_REQUEST,
+            {
+              paymentAmount: paymentAmount.toString(),
+              balanceAmount: invoice.balanceAmount.toString(),
+            },
+          );
+        }
+      }
 
       const updateResult = await tx.salesPayment.updateMany({
         where: { id, salesInvoiceId, version: dto.version, deletedAt: null },
@@ -315,10 +330,20 @@ export class SalesPaymentService {
         payment.paymentDate,
       );
 
+      if (!invoice.customerId) {
+        throw new ApplicationException(
+          ErrorCode.BAD_REQUEST,
+          'Sales payment requires a customer on the invoice',
+          HttpStatus.BAD_REQUEST,
+          { salesInvoiceId: salesInvoiceId.toString() },
+        );
+      }
+
       const amount = new Prisma.Decimal(payment.paymentAmount);
       const lines = await buildSalesPaymentLedgerLines(tx, {
         amount,
         paymentMethod: payment.paymentMethod,
+        customerId: invoice.customerId,
         narration: payment.remarks ?? undefined,
       });
 

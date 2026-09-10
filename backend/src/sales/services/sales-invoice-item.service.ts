@@ -29,6 +29,7 @@ import {
   computeLineAmounts,
   getNextLineNumber,
   optimisticUpdate,
+  rollupSalesInvoiceTotals,
   throwConflict,
   throwNotFound,
 } from '../utils/sales.util';
@@ -180,6 +181,7 @@ export class SalesInvoiceItemService {
         },
       });
 
+      await rollupSalesInvoiceTotals(tx, salesInvoiceId);
       await this.emitParentChange(tx, parent);
       return toSalesInvoiceItemResponse(item);
     });
@@ -244,6 +246,7 @@ export class SalesInvoiceItemService {
       const item = await tx.salesInvoiceItem.findFirstOrThrow({
         where: { id },
       });
+      await rollupSalesInvoiceTotals(tx, salesInvoiceId);
       await this.emitParentChange(tx, parent);
       return toSalesInvoiceItemResponse(item);
     });
@@ -268,6 +271,7 @@ export class SalesInvoiceItemService {
         `Sales invoice item version conflict or not found: ${id}`,
       );
 
+      await rollupSalesInvoiceTotals(tx, salesInvoiceId);
       await this.emitParentChange(tx, parent);
       return { id: id.toString(), deleted: true };
     });

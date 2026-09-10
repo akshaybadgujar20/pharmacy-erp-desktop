@@ -32,11 +32,12 @@ import { UpdateReceiptDto } from '../dto/update-receipt.dto';
 import { toReceiptResponse } from '../mappers/receipt.mapper';
 import {
   adjustCustomerOutstanding,
+  assertSalesInvoiceReceiptAmount,
   assertTransactionDateInOpenYear,
   buildReceiptLedgerLines,
-  computeSalesInvoicePaymentStatus,
   isSalesInvoiceReference,
   optimisticUpdate,
+  recomputeSalesInvoiceSettlement,
   throwNotFound,
 } from '../utils/finance.util';
 
@@ -283,31 +284,13 @@ export class ReceiptService {
           );
         }
 
-        const invoice = await tx.salesInvoice.findFirst({
-          where: { id: receipt.referenceId, deletedAt: null },
-        });
-
-        if (!invoice) {
-          throwNotFound(
-            ErrorCode.SALES_INVOICE_NOT_FOUND,
-            `Sales invoice not found: ${receipt.referenceId}`,
-            { id: receipt.referenceId.toString() },
+        const { customerId: invoiceCustomerId } =
+          await assertSalesInvoiceReceiptAmount(
+            tx,
+            receipt.referenceId,
+            amount,
           );
-        }
-
-        if (amount.gt(invoice.balanceAmount)) {
-          throw new ApplicationException(
-            ErrorCode.BAD_REQUEST,
-            'Receipt amount exceeds sales invoice balance',
-            HttpStatus.BAD_REQUEST,
-            {
-              receiptAmount: amount.toString(),
-              balanceAmount: invoice.balanceAmount.toString(),
-            },
-          );
-        }
-
-        customerId = invoice.customerId ?? undefined;
+        customerId = invoiceCustomerId ?? undefined;
       } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
         customerId = receipt.referenceId ?? undefined;
       }
@@ -344,27 +327,7 @@ export class ReceiptService {
         isSalesInvoiceReference(receipt.referenceType) &&
         receipt.referenceId
       ) {
-        const invoice = await tx.salesInvoice.findFirstOrThrow({
-          where: { id: receipt.referenceId },
-        });
-
-        const paidAmount = new Prisma.Decimal(invoice.paidAmount).add(amount);
-        const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(
-          paidAmount,
-        );
-
-        await tx.salesInvoice.update({
-          where: { id: invoice.id },
-          data: {
-            paidAmount,
-            balanceAmount,
-            paymentStatus: computeSalesInvoicePaymentStatus(
-              new Prisma.Decimal(invoice.netAmount),
-              paidAmount,
-            ),
-            updatedAt: BigInt(Date.now()),
-          },
-        });
+        await recomputeSalesInvoiceSettlement(tx, receipt.referenceId);
       }
 
       if (customerId) {
@@ -435,25 +398,6 @@ export class ReceiptService {
           const invoice = await tx.salesInvoice.findFirstOrThrow({
             where: { id: receipt.referenceId },
           });
-
-          const paidAmount = new Prisma.Decimal(invoice.paidAmount).sub(amount);
-          const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(
-            paidAmount,
-          );
-
-          await tx.salesInvoice.update({
-            where: { id: invoice.id },
-            data: {
-              paidAmount,
-              balanceAmount,
-              paymentStatus: computeSalesInvoicePaymentStatus(
-                new Prisma.Decimal(invoice.netAmount),
-                paidAmount,
-              ),
-              updatedAt: BigInt(Date.now()),
-            },
-          });
-
           customerId = invoice.customerId ?? undefined;
         } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
           customerId = receipt.referenceId ?? undefined;
@@ -471,6 +415,14 @@ export class ReceiptService {
       });
 
       optimisticUpdate(updateResult, id, `Receipt version conflict: ${id}`);
+
+      if (
+        receipt.status === ReceiptStatus.COMPLETED &&
+        isSalesInvoiceReference(receipt.referenceType) &&
+        receipt.referenceId
+      ) {
+        await recomputeSalesInvoiceSettlement(tx, receipt.referenceId);
+      }
 
       if (customerId && receipt.status === ReceiptStatus.COMPLETED) {
         await adjustCustomerOutstanding(tx, customerId, amount);

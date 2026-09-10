@@ -8,6 +8,7 @@ import { SettingsService } from '../../settings/settings.service';
 import {
   SalesInvoiceStatus,
   SalesReturnDisposition,
+  SalesReturnStatus,
 } from '../constants/sales.constants';
 
 export function serializeBigInt(
@@ -113,9 +114,10 @@ export async function assertCustomerActive(
 export async function assertPrescriptionExists(
   tx: TxClient,
   prescriptionId: bigint,
+  branchId: bigint,
 ): Promise<{ id: bigint }> {
   const prescription = await tx.prescription.findFirst({
-    where: { id: prescriptionId, deletedAt: null },
+    where: { id: prescriptionId, branchId, deletedAt: null },
     select: { id: true },
   });
 
@@ -401,10 +403,102 @@ export function assertBatchNotExpired(
   }
 }
 
+export async function rollupSalesInvoiceTotals(
+  tx: TxClient,
+  salesInvoiceId: bigint,
+): Promise<void> {
+  const invoice = await tx.salesInvoice.findFirst({
+    where: { id: salesInvoiceId, deletedAt: null },
+    select: { roundOffAmount: true },
+  });
+
+  if (!invoice) {
+    throwNotFound(
+      ErrorCode.SALES_INVOICE_NOT_FOUND,
+      `Sales invoice not found: ${salesInvoiceId}`,
+      { id: salesInvoiceId.toString() },
+    );
+  }
+
+  const items = await tx.salesInvoiceItem.findMany({
+    where: { salesInvoiceId, deletedAt: null },
+  });
+
+  let grossAmount = new Prisma.Decimal(0);
+  let discountAmount = new Prisma.Decimal(0);
+  let taxAmount = new Prisma.Decimal(0);
+
+  for (const item of items) {
+    const lineGross = new Prisma.Decimal(item.soldQuantity).mul(item.unitPrice);
+    grossAmount = grossAmount.add(lineGross);
+    discountAmount = discountAmount.add(item.discountAmount);
+    taxAmount = taxAmount.add(item.taxAmount);
+  }
+
+  const netAmount = grossAmount
+    .sub(discountAmount)
+    .add(taxAmount)
+    .add(invoice.roundOffAmount);
+
+  await tx.salesInvoice.update({
+    where: { id: salesInvoiceId },
+    data: {
+      grossAmount,
+      discountAmount,
+      taxAmount,
+      netAmount,
+      balanceAmount: netAmount,
+      updatedAt: BigInt(Date.now()),
+    },
+  });
+}
+
+export async function computeNetSoldQuantitiesByItem(
+  tx: TxClient,
+  invoiceId: bigint,
+): Promise<Map<string, Prisma.Decimal>> {
+  const items = await tx.salesInvoiceItem.findMany({
+    where: { salesInvoiceId: invoiceId, deletedAt: null },
+    select: { id: true, soldQuantity: true },
+  });
+
+  const returnItems = await tx.salesReturnItem.findMany({
+    where: {
+      deletedAt: null,
+      salesReturn: {
+        salesInvoiceId: invoiceId,
+        status: SalesReturnStatus.COMPLETED,
+        deletedAt: null,
+      },
+    },
+    select: { salesInvoiceItemId: true, returnQuantity: true },
+  });
+
+  const returnedByItem = new Map<string, Prisma.Decimal>();
+  for (const row of returnItems) {
+    const key = row.salesInvoiceItemId.toString();
+    const current = returnedByItem.get(key) ?? new Prisma.Decimal(0);
+    returnedByItem.set(key, current.add(row.returnQuantity));
+  }
+
+  const result = new Map<string, Prisma.Decimal>();
+  for (const item of items) {
+    const returned =
+      returnedByItem.get(item.id.toString()) ?? new Prisma.Decimal(0);
+    result.set(
+      item.id.toString(),
+      new Prisma.Decimal(item.soldQuantity).sub(returned),
+    );
+  }
+
+  return result;
+}
+
 export async function assertReturnQuantityWithinSold(
   tx: TxClient,
   salesInvoiceItemId: bigint,
   returnQuantity: Prisma.Decimal,
+  excludeReturnId?: bigint,
 ): Promise<void> {
   const invoiceItem = await tx.salesInvoiceItem.findFirst({
     where: { id: salesInvoiceItemId, deletedAt: null },
@@ -424,8 +518,9 @@ export async function assertReturnQuantityWithinSold(
       salesInvoiceItemId,
       deletedAt: null,
       salesReturn: {
-        status: { in: ['COMPLETED', 'APPROVED'] },
+        status: { in: [SalesReturnStatus.COMPLETED, SalesReturnStatus.DRAFT] },
         deletedAt: null,
+        ...(excludeReturnId != null ? { id: { not: excludeReturnId } } : {}),
       },
     },
     _sum: { returnQuantity: true },
@@ -451,6 +546,42 @@ export async function assertReturnQuantityWithinSold(
   }
 }
 
+export async function assertReturnItemMatchesInvoiceLine(
+  tx: TxClient,
+  salesInvoiceItemId: bigint,
+  medicineId: bigint,
+  batchId: bigint,
+): Promise<void> {
+  const invoiceItem = await tx.salesInvoiceItem.findFirst({
+    where: { id: salesInvoiceItemId, deletedAt: null },
+    select: { medicineId: true, batchId: true },
+  });
+
+  if (!invoiceItem) {
+    throwNotFound(
+      ErrorCode.SALES_INVOICE_ITEM_NOT_FOUND,
+      `Sales invoice item not found: ${salesInvoiceItemId}`,
+      { id: salesInvoiceItemId.toString() },
+    );
+  }
+
+  if (
+    invoiceItem.medicineId !== medicineId ||
+    invoiceItem.batchId !== batchId
+  ) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'Return item medicine and batch must match the sales invoice line',
+      HttpStatus.BAD_REQUEST,
+      {
+        salesInvoiceItemId: salesInvoiceItemId.toString(),
+        medicineId: medicineId.toString(),
+        batchId: batchId.toString(),
+      },
+    );
+  }
+}
+
 export function assertRestockDisposition(disposition: string): void {
   if (disposition !== SalesReturnDisposition.RESTOCK) {
     throw new ApplicationException(
@@ -465,7 +596,7 @@ export function assertRestockDisposition(disposition: string): void {
 export async function readSalesSettings(settingsService: SettingsService) {
   const [enforceMrpCap, allowExpiredSale, allowExpiredCustomerReturn] =
     await Promise.all([
-      settingsService.getBoolean(SettingKey.SALES_ENFORCE_MRP_CAP, false),
+      settingsService.getBoolean(SettingKey.SALES_ENFORCE_MRP_CAP, true),
       settingsService.getBoolean(SettingKey.SALES_ALLOW_EXPIRED_SALE, false),
       settingsService.getBoolean(
         SettingKey.SALES_ALLOW_EXPIRED_CUSTOMER_RETURN,
@@ -483,8 +614,7 @@ export async function readSalesSettings(settingsService: SettingsService) {
 export function assertInvoicePosted(status: string): void {
   if (
     status !== SalesInvoiceStatus.POSTED &&
-    status !== SalesInvoiceStatus.PARTIALLY_RETURNED &&
-    status !== SalesInvoiceStatus.RETURNED
+    status !== SalesInvoiceStatus.PARTIALLY_RETURNED
   ) {
     throw new ApplicationException(
       ErrorCode.INVOICE_NOT_POSTED,

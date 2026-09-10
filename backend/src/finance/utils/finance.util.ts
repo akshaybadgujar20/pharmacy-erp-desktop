@@ -9,6 +9,7 @@ import {
   CASH_PAYMENT_METHODS,
   FinanceReferenceType,
   PaymentType,
+  ReceiptStatus,
   SystemLedgerCode,
 } from '../constants/finance.constants';
 
@@ -376,10 +377,79 @@ export function computeSalesInvoicePaymentStatus(
   if (paidAmount.lte(0)) {
     return 'UNPAID';
   }
+  if (netAmount.gt(0) && paidAmount.gt(netAmount)) {
+    return 'REFUNDED';
+  }
   if (paidAmount.gte(netAmount)) {
     return 'PAID';
   }
   return 'PARTIALLY_PAID';
+}
+
+export async function computeSalesInvoiceEffectiveNet(
+  tx: TxClient,
+  invoiceId: bigint,
+): Promise<Prisma.Decimal> {
+  const invoice = await tx.salesInvoice.findFirst({
+    where: { id: invoiceId, deletedAt: null },
+    select: { netAmount: true },
+  });
+
+  if (!invoice) {
+    throwNotFound(
+      ErrorCode.SALES_INVOICE_NOT_FOUND,
+      `Sales invoice not found: ${invoiceId}`,
+      { id: invoiceId.toString() },
+    );
+  }
+
+  const returns = await tx.salesReturn.findMany({
+    where: {
+      salesInvoiceId: invoiceId,
+      status: 'COMPLETED',
+      deletedAt: null,
+    },
+    select: { netAmount: true },
+  });
+
+  let returnTotal = new Prisma.Decimal(0);
+  for (const row of returns) {
+    returnTotal = returnTotal.add(row.netAmount);
+  }
+
+  return new Prisma.Decimal(invoice.netAmount).sub(returnTotal);
+}
+
+export async function assertSalesInvoiceReceiptAmount(
+  tx: TxClient,
+  invoiceId: bigint,
+  receiptAmount: Prisma.Decimal,
+): Promise<{ customerId: bigint | null }> {
+  const invoice = await tx.salesInvoice.findFirst({
+    where: { id: invoiceId, deletedAt: null },
+  });
+
+  if (!invoice) {
+    throwNotFound(
+      ErrorCode.SALES_INVOICE_NOT_FOUND,
+      `Sales invoice not found: ${invoiceId}`,
+      { id: invoiceId.toString() },
+    );
+  }
+
+  if (receiptAmount.gt(invoice.balanceAmount)) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'Receipt amount exceeds sales invoice balance',
+      HttpStatus.BAD_REQUEST,
+      {
+        receiptAmount: receiptAmount.toString(),
+        balanceAmount: invoice.balanceAmount.toString(),
+      },
+    );
+  }
+
+  return { customerId: invoice.customerId };
 }
 
 export async function assertLedgerExists(
@@ -507,6 +577,7 @@ export async function buildSalesInvoiceLedgerLines(
   input: {
     netAmount: Prisma.Decimal;
     taxAmount: Prisma.Decimal;
+    customerId?: bigint | null;
     narration?: string;
   },
 ): Promise<JournalLineInput[]> {
@@ -514,16 +585,15 @@ export async function buildSalesInvoiceLedgerLines(
   const taxAmount = new Prisma.Decimal(input.taxAmount);
   const salesAmount = netAmount.sub(taxAmount);
 
-  const receivable = await resolveSystemLedger(
-    tx,
-    SystemLedgerCode.CUSTOMER_RECEIVABLE,
-  );
+  const debitLedger = input.customerId
+    ? await resolveSystemLedger(tx, SystemLedgerCode.CUSTOMER_RECEIVABLE)
+    : await resolveSystemLedger(tx, SystemLedgerCode.CASH);
   const sales = await resolveSystemLedger(tx, SystemLedgerCode.SALES);
   const gstOutput = await resolveSystemLedger(tx, SystemLedgerCode.GST_OUTPUT);
 
   const lines: JournalLineInput[] = [
     {
-      ledgerId: receivable.id,
+      ledgerId: debitLedger.id,
       debitAmount: netAmount,
       creditAmount: new Prisma.Decimal(0),
       narration: input.narration,
@@ -556,9 +626,18 @@ export async function buildSalesPaymentLedgerLines(
   input: {
     amount: Prisma.Decimal;
     paymentMethod: string;
+    customerId?: bigint | null;
     narration?: string;
   },
 ): Promise<JournalLineInput[]> {
+  if (!input.customerId) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'Sales payment requires a customer on the invoice',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
   const amount = new Prisma.Decimal(input.amount);
   const cashOrBankLedgerId = await resolveSalesCashOrBankLedger(
     tx,
@@ -590,6 +669,7 @@ export async function buildSalesReturnLedgerLines(
   input: {
     netAmount: Prisma.Decimal;
     taxAmount: Prisma.Decimal;
+    customerId?: bigint | null;
     narration?: string;
   },
 ): Promise<JournalLineInput[]> {
@@ -597,16 +677,15 @@ export async function buildSalesReturnLedgerLines(
   const taxAmount = new Prisma.Decimal(input.taxAmount);
   const salesAmount = netAmount.sub(taxAmount);
 
-  const receivable = await resolveSystemLedger(
-    tx,
-    SystemLedgerCode.CUSTOMER_RECEIVABLE,
-  );
+  const creditLedger = input.customerId
+    ? await resolveSystemLedger(tx, SystemLedgerCode.CUSTOMER_RECEIVABLE)
+    : await resolveSystemLedger(tx, SystemLedgerCode.CASH);
   const sales = await resolveSystemLedger(tx, SystemLedgerCode.SALES);
   const gstOutput = await resolveSystemLedger(tx, SystemLedgerCode.GST_OUTPUT);
 
   const lines: JournalLineInput[] = [
     {
-      ledgerId: receivable.id,
+      ledgerId: creditLedger.id,
       debitAmount: new Prisma.Decimal(0),
       creditAmount: netAmount,
       narration: input.narration,
@@ -650,29 +729,43 @@ export async function recomputeSalesInvoiceSettlement(
     );
   }
 
-  const payments = await tx.salesPayment.findMany({
-    where: {
-      salesInvoiceId: invoiceId,
-      status: 'COMPLETED',
-      deletedAt: null,
-    },
-    select: { paymentAmount: true },
-  });
+  const [payments, receipts] = await Promise.all([
+    tx.salesPayment.findMany({
+      where: {
+        salesInvoiceId: invoiceId,
+        status: 'COMPLETED',
+        deletedAt: null,
+      },
+      select: { paymentAmount: true },
+    }),
+    tx.receipt.findMany({
+      where: {
+        referenceType: FinanceReferenceType.SALES_INVOICE,
+        referenceId: invoiceId,
+        status: ReceiptStatus.COMPLETED,
+        deletedAt: null,
+      },
+      select: { amount: true },
+    }),
+  ]);
 
   let paidAmount = new Prisma.Decimal(0);
   for (const payment of payments) {
     paidAmount = paidAmount.add(payment.paymentAmount);
   }
+  for (const receipt of receipts) {
+    paidAmount = paidAmount.add(receipt.amount);
+  }
 
-  const netAmount = new Prisma.Decimal(invoice.netAmount);
-  const balanceAmount = netAmount.sub(paidAmount);
+  const effectiveNet = await computeSalesInvoiceEffectiveNet(tx, invoiceId);
+  const balanceAmount = effectiveNet.sub(paidAmount);
 
   await tx.salesInvoice.update({
     where: { id: invoiceId },
     data: {
       paidAmount,
       balanceAmount,
-      paymentStatus: computeSalesInvoicePaymentStatus(netAmount, paidAmount),
+      paymentStatus: computeSalesInvoicePaymentStatus(effectiveNet, paidAmount),
       updatedAt: BigInt(Date.now()),
     },
   });

@@ -13,8 +13,10 @@ import {
 } from '../../common/response/paginated-result';
 import { VoucherType } from '../../finance/constants/finance.constants';
 import {
+  adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
   buildSalesReturnLedgerLines,
+  recomputeSalesInvoiceSettlement,
 } from '../../finance/utils/finance.util';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
 import {
@@ -384,9 +386,15 @@ export class SalesReturnService {
         salesReturn.returnDate,
       );
 
+      const invoiceForLedger = await tx.salesInvoice.findFirstOrThrow({
+        where: { id: salesReturn.salesInvoiceId },
+        select: { customerId: true },
+      });
+
       const ledgerLines = await buildSalesReturnLedgerLines(tx, {
         netAmount,
         taxAmount,
+        customerId: invoiceForLedger.customerId,
         narration: `Sales return ${salesReturn.salesReturnNumber}`,
       });
 
@@ -423,6 +431,19 @@ export class SalesReturnService {
         `Sales return version conflict or not found: ${id}`,
       );
 
+      const invoice = await tx.salesInvoice.findFirstOrThrow({
+        where: { id: salesReturn.salesInvoiceId },
+      });
+
+      if (invoice.customerId) {
+        await adjustCustomerOutstanding(
+          tx,
+          invoice.customerId,
+          netAmount.neg(),
+        );
+      }
+
+      await recomputeSalesInvoiceSettlement(tx, salesReturn.salesInvoiceId);
       await this.updateInvoiceReturnStatus(tx, salesReturn.salesInvoiceId);
 
       const updated = await tx.salesReturn.findFirstOrThrow({ where: { id } });
@@ -441,6 +462,7 @@ export class SalesReturnService {
       const scope = getTenantScope(this.requestContext);
       const salesReturn = await tx.salesReturn.findFirst({
         where: withBranchScope(scope, { id, deletedAt: null }),
+        include: { items: { where: { deletedAt: null } } },
       });
 
       if (!salesReturn) {
@@ -451,13 +473,67 @@ export class SalesReturnService {
         );
       }
 
-      if (salesReturn.status !== SalesReturnStatus.DRAFT) {
+      if (
+        salesReturn.status !== SalesReturnStatus.DRAFT &&
+        salesReturn.status !== SalesReturnStatus.COMPLETED
+      ) {
         throw new ApplicationException(
           ErrorCode.INVALID_DOCUMENT_STATUS,
-          'Only draft sales returns can be cancelled',
+          'Only draft or completed sales returns can be cancelled',
           HttpStatus.CONFLICT,
           { status: salesReturn.status },
         );
+      }
+
+      if (salesReturn.status === SalesReturnStatus.COMPLETED) {
+        const branch = await assertBranchExists(tx, salesReturn.branchId);
+        const userId = this.requestContext.tryGet()?.userId;
+        const netAmount = new Prisma.Decimal(salesReturn.netAmount);
+
+        await this.ledgerPosting.reverseVoucher(tx, {
+          companyId: branch.companyId,
+          voucherType: VoucherType.SALES,
+          voucherId: salesReturn.id,
+          reversalVoucherType: VoucherType.SALES,
+          reversalVoucherId: salesReturn.id,
+          reversalVoucherNumber: `${salesReturn.salesReturnNumber}-REV`,
+          transactionDate: BigInt(Date.now()),
+          createdBy: userId,
+          narration: dto.remarks,
+        });
+
+        for (const item of salesReturn.items) {
+          if (item.disposition !== SalesReturnDisposition.RESTOCK) {
+            continue;
+          }
+
+          await this.inventoryLedger.applyMovement(tx, {
+            branchId: salesReturn.branchId,
+            branchCode: branch.branchCode,
+            companyId: branch.companyId,
+            medicineId: item.medicineId,
+            batchId: item.batchId,
+            direction: 'OUT',
+            quantity: item.returnQuantity,
+            unitCost: item.unitPrice,
+            movementType: StockMovementType.SALES_RETURN,
+            referenceTable: 'sales_returns',
+            referenceId: salesReturn.id,
+            createdBy: userId,
+            remarks: dto.remarks ?? 'Sales return cancellation reversal',
+          });
+        }
+
+        const invoice = await tx.salesInvoice.findFirstOrThrow({
+          where: { id: salesReturn.salesInvoiceId },
+        });
+
+        if (invoice.customerId) {
+          await adjustCustomerOutstanding(tx, invoice.customerId, netAmount);
+        }
+
+        await recomputeSalesInvoiceSettlement(tx, salesReturn.salesInvoiceId);
+        await this.updateInvoiceReturnStatus(tx, salesReturn.salesInvoiceId);
       }
 
       const updateResult = await tx.salesReturn.updateMany({
@@ -530,7 +606,7 @@ export class SalesReturnService {
       }
     }
 
-    let nextStatus = invoice.status;
+    let nextStatus: string = SalesInvoiceStatus.POSTED;
     if (fullyReturned && anyReturned) {
       nextStatus = SalesInvoiceStatus.RETURNED;
     } else if (anyReturned) {

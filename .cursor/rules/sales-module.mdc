@@ -32,10 +32,18 @@ Header/item edits and deletes only in **DRAFT**.
 
 ## Workflow ledger (summary)
 
-- Invoice post → `SALES_INVOICE` OUT per line + `LedgerPostingService` (DR CUST001, CR SALE001/GSTOUT001) + customer outstanding
-- Invoice cancel (posted) → ledger reversal + `SALES_INVOICE` IN per line + outstanding reversal
-- Payment complete → `buildSalesPaymentLedgerLines` + `recomputeSalesInvoiceSettlement` + outstanding reduction
-- Return approve → `SALES_RETURN` IN (RESTOCK) + proportional ledger reversal + invoice return status rollup
+- Invoice post → `SALES_INVOICE` OUT per line + `LedgerPostingService` (DR CUST001 or CASH001 for OTC, CR SALE001/GSTOUT001) + customer outstanding when `customerId` set
+- Invoice cancel (POSTED / PARTIALLY_RETURNED) → reverse sale voucher + completed return vouchers + net stock IN + outstanding cleared by current `balanceAmount`
+- Payment complete → `buildSalesPaymentLedgerLines` (customer invoices only) + `recomputeSalesInvoiceSettlement` + outstanding reduction
+- Finance Receipt (SALES_INVOICE reference) → same settlement via `recomputeSalesInvoiceSettlement` (sums SalesPayment + Receipt)
+- Return approve → `SALES_RETURN` IN (RESTOCK) + ledger reversal (CR CUST001 or CASH001) + `recomputeSalesInvoiceSettlement` + invoice return status rollup
+- Return cancel (COMPLETED) → reverse return voucher + stock OUT + settlement + status rollup
+
+## Settlement
+
+- `recomputeSalesInvoiceSettlement` in `finance.util.ts` is the single source of truth for `paidAmount`, `balanceAmount`, `paymentStatus`.
+- `effectiveNet = netAmount - sum(completed return netAmount)`; `paidAmount` includes completed `SalesPayment` and Finance `Receipt` rows.
+- `RETURNED` invoices reject new payments/returns (`assertInvoicePosted` allows POSTED and PARTIALLY_RETURNED only).
 
 ## Layer checklist
 

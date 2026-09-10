@@ -38,6 +38,7 @@ import {
   SalesInvoicePaymentStatus,
   SalesInvoiceStatus,
   SalesPaymentMode,
+  SalesReturnStatus,
 } from '../constants/sales.constants';
 import { CreateSalesInvoiceDto } from '../dto/create-sales-invoice.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
@@ -50,6 +51,8 @@ import {
   assertDraftStatus,
   assertPrescriptionExists,
   computeLineAmounts,
+  computeNetSoldQuantitiesByItem,
+  getNextLineNumber,
   optimisticUpdate,
   readSalesSettings,
   resolvePriceListItem,
@@ -141,7 +144,7 @@ export class SalesInvoiceService {
       }
 
       if (dto.prescriptionId) {
-        await assertPrescriptionExists(tx, dto.prescriptionId);
+        await assertPrescriptionExists(tx, dto.prescriptionId, dto.branchId);
       }
 
       const invoiceUuid = randomUUID();
@@ -205,7 +208,11 @@ export class SalesInvoiceService {
       }
 
       if (dto.prescriptionId) {
-        await assertPrescriptionExists(tx, dto.prescriptionId);
+        await assertPrescriptionExists(
+          tx,
+          dto.prescriptionId,
+          existing.branchId,
+        );
       }
 
       const updateResult = await tx.salesInvoice.updateMany({
@@ -331,14 +338,14 @@ export class SalesInvoiceService {
       const branch = await assertBranchExists(tx, invoice.branchId);
       const salesSettings = await readSalesSettings(this.settingsService);
       const userId = this.requestContext.tryGet()?.userId;
-      const usedBatchIds = new Set<string>();
+      const usedBatchIdsByMedicine = new Map<string, Set<string>>();
 
       await this.reallocateItemsForPost(
         tx,
         invoice,
         branch.id,
         salesSettings.allowExpiredSale,
-        usedBatchIds,
+        usedBatchIdsByMedicine,
       );
 
       const refreshedItems = await tx.salesInvoiceItem.findMany({
@@ -359,8 +366,9 @@ export class SalesInvoiceService {
         );
 
         let unitPrice = pricing.sellingPrice;
-        if (salesSettings.enforceMrpCap && unitPrice.gt(pricing.mrp)) {
-          unitPrice = pricing.mrp;
+        const batchMrp = new Prisma.Decimal(item.mrp);
+        if (salesSettings.enforceMrpCap && unitPrice.gt(batchMrp)) {
+          unitPrice = batchMrp;
         }
 
         const lineAmounts = computeLineAmounts(
@@ -428,6 +436,7 @@ export class SalesInvoiceService {
       const ledgerLines = await buildSalesInvoiceLedgerLines(tx, {
         netAmount,
         taxAmount,
+        customerId: invoice.customerId,
         narration: `Sales invoice ${documentNumber}`,
       });
 
@@ -507,47 +516,11 @@ export class SalesInvoiceService {
         );
       }
 
-      if (invoice.status === SalesInvoiceStatus.POSTED) {
-        const branch = await assertBranchExists(tx, invoice.branchId);
-        const userId = this.requestContext.tryGet()?.userId;
-
-        await this.ledgerPosting.reverseVoucher(tx, {
-          companyId: branch.companyId,
-          voucherType: VoucherType.SALES,
-          voucherId: invoice.id,
-          reversalVoucherType: VoucherType.SALES,
-          reversalVoucherId: invoice.id,
-          reversalVoucherNumber: `${invoice.invoiceNumber}-REV`,
-          transactionDate: BigInt(Date.now()),
-          createdBy: userId,
-          narration: dto.remarks,
-        });
-
-        for (const item of invoice.items) {
-          await this.inventoryLedger.applyMovement(tx, {
-            branchId: invoice.branchId,
-            branchCode: branch.branchCode,
-            companyId: branch.companyId,
-            medicineId: item.medicineId,
-            batchId: item.batchId,
-            direction: 'IN',
-            quantity: item.soldQuantity,
-            unitCost: item.purchaseRate ?? item.unitPrice,
-            movementType: StockMovementType.SALES_INVOICE,
-            referenceTable: 'sales_invoices',
-            referenceId: invoice.id,
-            createdBy: userId,
-            remarks: dto.remarks ?? 'Sales invoice cancellation reversal',
-          });
-        }
-
-        if (invoice.customerId) {
-          await adjustCustomerOutstanding(
-            tx,
-            invoice.customerId,
-            new Prisma.Decimal(invoice.netAmount).neg(),
-          );
-        }
+      if (
+        invoice.status === SalesInvoiceStatus.POSTED ||
+        invoice.status === SalesInvoiceStatus.PARTIALLY_RETURNED
+      ) {
+        await this.reversePostedSalesInvoiceEffects(tx, invoice, dto.remarks);
       }
 
       const updateResult = await tx.salesInvoice.updateMany({
@@ -576,12 +549,103 @@ export class SalesInvoiceService {
     });
   }
 
+  private async reversePostedSalesInvoiceEffects(
+    tx: Prisma.TransactionClient,
+    invoice: {
+      id: bigint;
+      branchId: bigint;
+      invoiceNumber: string;
+      customerId: bigint | null;
+      balanceAmount: Prisma.Decimal;
+      items: Array<{
+        id: bigint;
+        medicineId: bigint;
+        batchId: bigint;
+        soldQuantity: Prisma.Decimal;
+        purchaseRate: Prisma.Decimal | null;
+        unitPrice: Prisma.Decimal;
+      }>;
+    },
+    remarks?: string,
+  ): Promise<void> {
+    const branch = await assertBranchExists(tx, invoice.branchId);
+    const userId = this.requestContext.tryGet()?.userId;
+    const netSoldByItem = await computeNetSoldQuantitiesByItem(tx, invoice.id);
+
+    await this.ledgerPosting.reverseVoucher(tx, {
+      companyId: branch.companyId,
+      voucherType: VoucherType.SALES,
+      voucherId: invoice.id,
+      reversalVoucherType: VoucherType.SALES,
+      reversalVoucherId: invoice.id,
+      reversalVoucherNumber: `${invoice.invoiceNumber}-REV`,
+      transactionDate: BigInt(Date.now()),
+      createdBy: userId,
+      narration: remarks,
+    });
+
+    const completedReturns = await tx.salesReturn.findMany({
+      where: {
+        salesInvoiceId: invoice.id,
+        status: SalesReturnStatus.COMPLETED,
+        deletedAt: null,
+      },
+      select: { id: true, salesReturnNumber: true },
+    });
+
+    for (const salesReturn of completedReturns) {
+      await this.ledgerPosting.reverseVoucher(tx, {
+        companyId: branch.companyId,
+        voucherType: VoucherType.SALES,
+        voucherId: salesReturn.id,
+        reversalVoucherType: VoucherType.SALES,
+        reversalVoucherId: salesReturn.id,
+        reversalVoucherNumber: `${salesReturn.salesReturnNumber}-REV`,
+        transactionDate: BigInt(Date.now()),
+        createdBy: userId,
+        narration: remarks,
+      });
+    }
+
+    for (const item of invoice.items) {
+      const netSold =
+        netSoldByItem.get(item.id.toString()) ?? new Prisma.Decimal(0);
+      if (netSold.lte(0)) {
+        continue;
+      }
+
+      await this.inventoryLedger.applyMovement(tx, {
+        branchId: invoice.branchId,
+        branchCode: branch.branchCode,
+        companyId: branch.companyId,
+        medicineId: item.medicineId,
+        batchId: item.batchId,
+        direction: 'IN',
+        quantity: netSold,
+        unitCost: item.purchaseRate ?? item.unitPrice,
+        movementType: StockMovementType.SALES_INVOICE,
+        referenceTable: 'sales_invoices',
+        referenceId: invoice.id,
+        createdBy: userId,
+        remarks: remarks ?? 'Sales invoice cancellation reversal',
+      });
+    }
+
+    if (invoice.customerId) {
+      await adjustCustomerOutstanding(
+        tx,
+        invoice.customerId,
+        new Prisma.Decimal(invoice.balanceAmount).neg(),
+      );
+    }
+  }
+
   private async reallocateItemsForPost(
     tx: Prisma.TransactionClient,
     invoice: { id: bigint; branchId: bigint; invoiceDate: bigint },
     branchId: bigint,
     allowExpired: boolean,
-    usedBatchIds: Set<string>,
+    usedBatchIdsByMedicine: Map<string, Set<string>>,
   ): Promise<void> {
     const items = await tx.salesInvoiceItem.findMany({
       where: { salesInvoiceId: invoice.id, deletedAt: null },
@@ -589,6 +653,10 @@ export class SalesInvoiceService {
     });
 
     for (const item of items) {
+      const medicineKey = item.medicineId.toString();
+      const usedForMedicine =
+        usedBatchIdsByMedicine.get(medicineKey) ?? new Set<string>();
+
       const allocations = await allocateFefoBatches(
         tx,
         branchId,
@@ -598,7 +666,7 @@ export class SalesInvoiceService {
       );
 
       const filtered = allocations.filter(
-        (row) => !usedBatchIds.has(row.batchId.toString()),
+        (row) => !usedForMedicine.has(row.batchId.toString()),
       );
 
       if (filtered.length === 0 && allocations.length > 0) {
@@ -622,10 +690,11 @@ export class SalesInvoiceService {
           updatedAt: BigInt(Date.now()),
         },
       });
-      usedBatchIds.add(primary.batchId.toString());
+      usedForMedicine.add(primary.batchId.toString());
+      usedBatchIdsByMedicine.set(medicineKey, usedForMedicine);
 
       for (const extra of extras) {
-        if (usedBatchIds.has(extra.batchId.toString())) {
+        if (usedForMedicine.has(extra.batchId.toString())) {
           continue;
         }
 
@@ -637,7 +706,12 @@ export class SalesInvoiceService {
             medicineId: item.medicineId,
             batchId: extra.batchId,
             unitId: item.unitId,
-            lineNumber: item.lineNumber,
+            lineNumber: await getNextLineNumber(
+              tx,
+              'salesInvoiceItem',
+              'salesInvoiceId',
+              invoice.id,
+            ),
             soldQuantity: extra.quantity,
             mrp: extra.mrp,
             unitPrice: 0,
@@ -651,7 +725,8 @@ export class SalesInvoiceService {
             updatedAt: now,
           },
         });
-        usedBatchIds.add(extra.batchId.toString());
+        usedForMedicine.add(extra.batchId.toString());
+        usedBatchIdsByMedicine.set(medicineKey, usedForMedicine);
       }
     }
   }
