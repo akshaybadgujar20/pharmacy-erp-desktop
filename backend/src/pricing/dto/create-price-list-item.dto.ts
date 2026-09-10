@@ -7,6 +7,7 @@ import {
   Min,
 } from 'class-validator';
 import {
+  ClearableOptionalBigIntField,
   MandatoryBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
@@ -77,16 +78,16 @@ export class UpdatePriceListItemDto {
   discountPercent?: string;
 
   @IsOptional()
-  @OptionalBigIntField()
-  taxId?: bigint;
+  @ClearableOptionalBigIntField()
+  taxId?: bigint | null;
 
   @IsOptional()
   @OptionalBigIntField()
   effectiveFrom?: bigint;
 
   @IsOptional()
-  @OptionalBigIntField()
-  effectiveTo?: bigint;
+  @ClearableOptionalBigIntField()
+  effectiveTo?: bigint | null;
 
   @IsOptional()
   @IsBoolean()

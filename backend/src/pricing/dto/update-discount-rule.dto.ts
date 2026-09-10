@@ -6,7 +6,10 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
+import {
+  ClearableOptionalBigIntField,
+  OptionalBigIntField,
+} from '../../common/dto/bigint.decorator';
 
 export class UpdateDiscountRuleDto {
   @IsInt()
@@ -38,20 +41,20 @@ export class UpdateDiscountRuleDto {
   appliesTo?: string;
 
   @IsOptional()
-  @OptionalBigIntField()
-  medicineId?: bigint;
+  @ClearableOptionalBigIntField()
+  medicineId?: bigint | null;
 
   @IsOptional()
-  @OptionalBigIntField()
-  categoryId?: bigint;
+  @ClearableOptionalBigIntField()
+  categoryId?: bigint | null;
 
   @IsOptional()
-  @OptionalBigIntField()
-  customerId?: bigint;
+  @ClearableOptionalBigIntField()
+  customerId?: bigint | null;
 
   @IsOptional()
-  @OptionalBigIntField()
-  priceListId?: bigint;
+  @ClearableOptionalBigIntField()
+  priceListId?: bigint | null;
 
   @IsOptional()
   @IsString()
@@ -71,8 +74,8 @@ export class UpdateDiscountRuleDto {
   effectiveFrom?: bigint;
 
   @IsOptional()
-  @OptionalBigIntField()
-  effectiveTo?: bigint;
+  @ClearableOptionalBigIntField()
+  effectiveTo?: bigint | null;
 
   @IsOptional()
   @IsBoolean()

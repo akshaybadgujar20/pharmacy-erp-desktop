@@ -326,6 +326,13 @@ export class PrescriptionItemService {
             version: { increment: 1 },
           },
         });
+        await this.auditService.log(tx, {
+          entityType: OutboxEntityType.PRESCRIPTION_ITEM,
+          entityId: row.id,
+          entityUuid: row.uuid,
+          action: AuditAction.DELETE,
+          module: AuditModule.PRESCRIPTION,
+        });
         await this.outboxService.enqueue(tx, {
           entityType: OutboxEntityType.PRESCRIPTION_ITEM,
           entityUuid: row.uuid,

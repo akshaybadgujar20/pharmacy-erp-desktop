@@ -62,18 +62,22 @@ export class PriceListService {
 
     const where: Prisma.PriceListWhereInput = {
       deletedAt: null,
-      ...buildPriceListBranchFilter(scope.branchId),
       ...(query.priceListType ? { priceListType: query.priceListType } : {}),
       ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
       ...(query.isDefault !== undefined ? { isDefault: query.isDefault } : {}),
-      ...(search
-        ? {
-            OR: [
-              { priceListCode: { contains: search } },
-              { priceListName: { contains: search } },
-            ],
-          }
-        : {}),
+      AND: [
+        buildPriceListBranchFilter(scope.branchId),
+        ...(search
+          ? [
+              {
+                OR: [
+                  { priceListCode: { contains: search } },
+                  { priceListName: { contains: search } },
+                ],
+              },
+            ]
+          : []),
+      ],
     };
 
     const [total, rows] = await Promise.all([

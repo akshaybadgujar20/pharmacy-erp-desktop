@@ -65,7 +65,8 @@ describe('AuditService', () => {
               correlationId: string;
               ipAddress: string;
               sessionId: string;
-              actionTimestamp: Date;
+              actionTimestamp: bigint;
+              createdAt: bigint;
             };
           },
         ]
@@ -84,7 +85,8 @@ describe('AuditService', () => {
     expect(createArgs.data.correlationId).toBe('corr-123');
     expect(createArgs.data.ipAddress).toBe('127.0.0.1');
     expect(createArgs.data.sessionId).toBe('session-1');
-    expect(createArgs.data.actionTimestamp).toBeInstanceOf(Date);
+    expect(createArgs.data.actionTimestamp).toEqual(expect.any(BigInt));
+    expect(createArgs.data.createdAt).toEqual(expect.any(BigInt));
   });
 
   it('rejects empty entityType', async () => {

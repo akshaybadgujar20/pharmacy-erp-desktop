@@ -1,10 +1,11 @@
 import { randomUUID } from 'crypto';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Prescription, Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
 import { auditAndLogChanges } from '../../audit/utils/audit.util';
+import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
   buildPagination,
@@ -337,6 +338,21 @@ export class PrescriptionService {
 
       guard(existing.status);
 
+      if (targetStatus === PrescriptionStatus.ACTIVE) {
+        const itemCount = await tx.prescriptionItem.count({
+          where: { prescriptionId: id, deletedAt: null },
+        });
+
+        if (itemCount === 0) {
+          throw new ApplicationException(
+            ErrorCode.DOCUMENT_HAS_NO_ITEMS,
+            'Prescription must have at least one item',
+            HttpStatus.BAD_REQUEST,
+            { id: id.toString() },
+          );
+        }
+      }
+
       const updateResult = await tx.prescription.updateMany({
         where: { id, version: dto.version, deletedAt: null },
         data: {
@@ -356,7 +372,29 @@ export class PrescriptionService {
       const prescription = await tx.prescription.findFirstOrThrow({
         where: { id },
       });
-      await this.emitChange(tx, prescription, action, OutboxOperation.UPDATE);
+      await auditAndLogChanges(
+        tx,
+        this.auditService,
+        {
+          entityType: OutboxEntityType.PRESCRIPTION,
+          entityId: prescription.id,
+          entityUuid: prescription.uuid,
+          action,
+          module: AuditModule.PRESCRIPTION,
+        },
+        existing as unknown as Record<string, unknown>,
+        prescription as unknown as Record<string, unknown>,
+        PRESCRIPTION_AUDIT_FIELDS,
+      );
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.PRESCRIPTION,
+        entityUuid: prescription.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          uuid: prescription.uuid,
+          prescriptionNumber: prescription.prescriptionNumber,
+        },
+      });
       return toPrescriptionResponse(prescription);
     });
   }

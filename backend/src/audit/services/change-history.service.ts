@@ -5,6 +5,11 @@ import {
   buildPagination,
   PaginatedResult,
 } from '../../common/response/paginated-result';
+import {
+  getTenantScope,
+  withBranchScope,
+} from '../../persistence/context/tenant-scope.util';
+import { RequestContextService } from '../../persistence/context/request-context.service';
 import { PrismaService } from '../../prisma.service';
 import { ChangeHistoryListQueryDto } from '../dto/change-history-list-query.dto';
 import { toChangeHistoryResponse } from '../mappers/change-history.mapper';
@@ -12,9 +17,13 @@ import { throwNotFound } from '../utils/audit-query.util';
 
 @Injectable()
 export class ChangeHistoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly requestContext: RequestContextService,
+  ) {}
 
   async list(query: ChangeHistoryListQueryDto) {
+    const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
 
@@ -24,6 +33,7 @@ export class ChangeHistoryService {
       ...(query.entityId ? { entityId: query.entityId } : {}),
       ...(query.entityUuid ? { entityUuid: query.entityUuid } : {}),
       ...(query.fieldName ? { fieldName: query.fieldName } : {}),
+      auditLog: withBranchScope(scope, {}),
     };
 
     const [total, rows] = await Promise.all([
@@ -43,8 +53,10 @@ export class ChangeHistoryService {
   }
 
   async getById(id: bigint) {
+    const scope = getTenantScope(this.requestContext);
     const changeHistory = await this.prisma.client.changeHistory.findFirst({
-      where: { id },
+      where: { id, auditLog: withBranchScope(scope, {}) },
+      include: { auditLog: true },
     });
 
     if (!changeHistory) {

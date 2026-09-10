@@ -28,8 +28,10 @@ import {
   assertMedicineExists,
   assertPriceListExists,
   optimisticUpdate,
+  resolveDiscountRuleAppliesTo,
   throwConflict,
   throwNotFound,
+  type ResolvedDiscountRuleFks,
 } from '../utils/pricing.util';
 
 const DISCOUNT_RULE_AUDIT_FIELDS = [
@@ -117,7 +119,13 @@ export class DiscountRuleService {
 
     return this.unitOfWork.run(async (tx) => {
       await this.assertRuleCodeUnique(tx, dto.ruleCode);
-      await this.validateForeignKeys(tx, dto, scope.branchId);
+      const resolved = resolveDiscountRuleAppliesTo(dto.appliesTo, {
+        medicineId: dto.medicineId ?? null,
+        categoryId: dto.categoryId ?? null,
+        customerId: dto.customerId ?? null,
+        priceListId: dto.priceListId ?? null,
+      });
+      await this.validateForeignKeys(tx, resolved, scope.branchId);
 
       const now = BigInt(Date.now());
       const rule = await tx.discountRule.create({
@@ -128,10 +136,10 @@ export class DiscountRuleService {
           discountType: dto.discountType,
           discountValue: dto.discountValue,
           appliesTo: dto.appliesTo,
-          medicineId: dto.medicineId ?? null,
-          categoryId: dto.categoryId ?? null,
-          customerId: dto.customerId ?? null,
-          priceListId: dto.priceListId ?? null,
+          medicineId: resolved.medicineId,
+          categoryId: resolved.categoryId,
+          customerId: resolved.customerId,
+          priceListId: resolved.priceListId,
           minimumQuantity: dto.minimumQuantity ?? null,
           minimumAmount: dto.minimumAmount ?? null,
           priority: dto.priority,
@@ -174,7 +182,20 @@ export class DiscountRuleService {
         await this.assertRuleCodeUnique(tx, dto.ruleCode, id);
       }
 
-      await this.validateForeignKeys(tx, dto, scope.branchId);
+      const appliesTo = dto.appliesTo ?? existing.appliesTo;
+      const resolved = resolveDiscountRuleAppliesTo(appliesTo, {
+        medicineId:
+          dto.medicineId !== undefined ? dto.medicineId : existing.medicineId,
+        categoryId:
+          dto.categoryId !== undefined ? dto.categoryId : existing.categoryId,
+        customerId:
+          dto.customerId !== undefined ? dto.customerId : existing.customerId,
+        priceListId:
+          dto.priceListId !== undefined
+            ? dto.priceListId
+            : existing.priceListId,
+      });
+      await this.validateForeignKeys(tx, resolved, scope.branchId);
 
       const updateResult = await tx.discountRule.updateMany({
         where: { id, version: dto.version, deletedAt: null },
@@ -183,16 +204,18 @@ export class DiscountRuleService {
           ruleName: dto.ruleName,
           discountType: dto.discountType,
           discountValue: dto.discountValue,
-          appliesTo: dto.appliesTo,
-          medicineId: dto.medicineId,
-          categoryId: dto.categoryId,
-          customerId: dto.customerId,
-          priceListId: dto.priceListId,
+          appliesTo,
+          medicineId: resolved.medicineId,
+          categoryId: resolved.categoryId,
+          customerId: resolved.customerId,
+          priceListId: resolved.priceListId,
           minimumQuantity: dto.minimumQuantity,
           minimumAmount: dto.minimumAmount,
           priority: dto.priority,
           effectiveFrom: dto.effectiveFrom,
-          effectiveTo: dto.effectiveTo,
+          ...(dto.effectiveTo !== undefined
+            ? { effectiveTo: dto.effectiveTo }
+            : {}),
           isActive: dto.isActive,
           remarks: dto.remarks,
           updatedAt: BigInt(Date.now()),
@@ -271,20 +294,20 @@ export class DiscountRuleService {
 
   private async validateForeignKeys(
     tx: TxClient,
-    dto: CreateDiscountRuleDto | UpdateDiscountRuleDto,
+    resolved: ResolvedDiscountRuleFks,
     branchId: bigint,
   ): Promise<void> {
-    if (dto.medicineId) {
-      await assertMedicineExists(tx, dto.medicineId);
+    if (resolved.medicineId) {
+      await assertMedicineExists(tx, resolved.medicineId);
     }
-    if (dto.categoryId) {
-      await assertCategoryExists(tx, dto.categoryId);
+    if (resolved.categoryId) {
+      await assertCategoryExists(tx, resolved.categoryId);
     }
-    if (dto.customerId) {
-      await assertCustomerExists(tx, dto.customerId);
+    if (resolved.customerId) {
+      await assertCustomerExists(tx, resolved.customerId);
     }
-    if (dto.priceListId) {
-      await assertPriceListExists(tx, dto.priceListId, branchId, false);
+    if (resolved.priceListId) {
+      await assertPriceListExists(tx, resolved.priceListId, branchId, false);
     }
   }
 

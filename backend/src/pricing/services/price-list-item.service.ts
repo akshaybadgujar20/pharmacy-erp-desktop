@@ -28,6 +28,8 @@ import {
   assertMedicineExists,
   assertPriceListExists,
   assertTaxExists,
+  hardDeleteAllPriceListItems,
+  hardDeletePriceListItemSlot,
   optimisticUpdate,
   throwConflict,
   throwNotFound,
@@ -86,6 +88,8 @@ export class PriceListItemService {
       if (dto.taxId) {
         await assertTaxExists(tx, dto.taxId);
       }
+
+      await hardDeletePriceListItemSlot(tx, priceListId, dto.medicineId);
 
       const existing = await tx.priceListItem.findFirst({
         where: { priceListId, medicineId: dto.medicineId, deletedAt: null },
@@ -154,6 +158,7 @@ export class PriceListItemService {
       if (dto.medicineId) {
         await assertMedicineExists(tx, dto.medicineId);
         if (dto.medicineId !== existing.medicineId) {
+          await hardDeletePriceListItemSlot(tx, priceListId, dto.medicineId);
           const duplicate = await tx.priceListItem.findFirst({
             where: {
               priceListId,
@@ -184,9 +189,11 @@ export class PriceListItemService {
           mrp: dto.mrp,
           minimumSellingPrice: dto.minimumSellingPrice,
           discountPercent: dto.discountPercent,
-          taxId: dto.taxId,
+          ...(dto.taxId !== undefined ? { taxId: dto.taxId } : {}),
           effectiveFrom: dto.effectiveFrom,
-          effectiveTo: dto.effectiveTo,
+          ...(dto.effectiveTo !== undefined
+            ? { effectiveTo: dto.effectiveTo }
+            : {}),
           isActive: dto.isActive,
           remarks: dto.remarks,
           updatedAt: BigInt(Date.now()),
@@ -277,18 +284,15 @@ export class PriceListItemService {
         }
       }
 
-      const existingRows = await tx.priceListItem.findMany({
-        where: { priceListId, deletedAt: null },
-      });
+      const existingRows = await hardDeleteAllPriceListItems(tx, priceListId);
 
       for (const row of existingRows) {
-        await tx.priceListItem.update({
-          where: { id: row.id },
-          data: {
-            deletedAt: BigInt(Date.now()),
-            updatedAt: BigInt(Date.now()),
-            version: { increment: 1 },
-          },
+        await this.auditService.log(tx, {
+          entityType: OutboxEntityType.PRICE_LIST_ITEM,
+          entityId: row.id,
+          entityUuid: row.uuid,
+          action: AuditAction.DELETE,
+          module: AuditModule.PRICING,
         });
         await this.outboxService.enqueue(tx, {
           entityType: OutboxEntityType.PRICE_LIST_ITEM,

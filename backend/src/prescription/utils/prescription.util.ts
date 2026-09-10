@@ -62,7 +62,7 @@ export function throwConflict(
 export function assertPrescriptionDraft(status: string): void {
   if (status !== PrescriptionStatus.DRAFT) {
     throw new ApplicationException(
-      ErrorCode.INVALID_DOCUMENT_STATUS,
+      ErrorCode.PRESCRIPTION_NOT_DRAFT,
       'Prescription must be in DRAFT status for this operation',
       HttpStatus.CONFLICT,
       { status },
@@ -222,7 +222,7 @@ export async function assertPrescriptionNumberUnique(
 
   if (existing) {
     throwConflict(
-      ErrorCode.PRESCRIPTION_CONFLICT,
+      ErrorCode.PRESCRIPTION_NUMBER_ALREADY_EXISTS,
       `Prescription number already exists: ${prescriptionNumber}`,
       { prescriptionNumber },
     );

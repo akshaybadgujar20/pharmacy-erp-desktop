@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
+import { AppliesTo } from '../constants/pricing.constants';
 
 export function serializeEpochMs(
   value: bigint | null | undefined,
@@ -59,6 +60,142 @@ export function buildPriceListBranchFilter(
   return {
     OR: [{ branchId }, { branchId: null }],
   };
+}
+
+export interface DiscountRuleAppliesToInput {
+  appliesTo: string;
+  medicineId?: bigint | null;
+  categoryId?: bigint | null;
+  customerId?: bigint | null;
+  priceListId?: bigint | null;
+}
+
+export interface ResolvedDiscountRuleFks {
+  medicineId: bigint | null;
+  categoryId: bigint | null;
+  customerId: bigint | null;
+  priceListId: bigint | null;
+}
+
+export function resolveDiscountRuleAppliesTo(
+  appliesTo: string,
+  fks: {
+    medicineId?: bigint | null;
+    categoryId?: bigint | null;
+    customerId?: bigint | null;
+    priceListId?: bigint | null;
+  },
+): ResolvedDiscountRuleFks {
+  switch (appliesTo) {
+    case AppliesTo.MEDICINE: {
+      if (fks.medicineId == null) {
+        throw new ApplicationException(
+          ErrorCode.VALIDATION_ERROR,
+          'medicineId is required when appliesTo is MEDICINE',
+          HttpStatus.BAD_REQUEST,
+          { field: 'medicineId', appliesTo },
+        );
+      }
+      return {
+        medicineId: fks.medicineId,
+        categoryId: null,
+        customerId: null,
+        priceListId: null,
+      };
+    }
+    case AppliesTo.CATEGORY: {
+      if (fks.categoryId == null) {
+        throw new ApplicationException(
+          ErrorCode.VALIDATION_ERROR,
+          'categoryId is required when appliesTo is CATEGORY',
+          HttpStatus.BAD_REQUEST,
+          { field: 'categoryId', appliesTo },
+        );
+      }
+      return {
+        medicineId: null,
+        categoryId: fks.categoryId,
+        customerId: null,
+        priceListId: null,
+      };
+    }
+    case AppliesTo.CUSTOMER: {
+      if (fks.customerId == null) {
+        throw new ApplicationException(
+          ErrorCode.VALIDATION_ERROR,
+          'customerId is required when appliesTo is CUSTOMER',
+          HttpStatus.BAD_REQUEST,
+          { field: 'customerId', appliesTo },
+        );
+      }
+      return {
+        medicineId: null,
+        categoryId: null,
+        customerId: fks.customerId,
+        priceListId: null,
+      };
+    }
+    case AppliesTo.PRICE_LIST: {
+      if (fks.priceListId == null) {
+        throw new ApplicationException(
+          ErrorCode.VALIDATION_ERROR,
+          'priceListId is required when appliesTo is PRICE_LIST',
+          HttpStatus.BAD_REQUEST,
+          { field: 'priceListId', appliesTo },
+        );
+      }
+      return {
+        medicineId: null,
+        categoryId: null,
+        customerId: null,
+        priceListId: fks.priceListId,
+      };
+    }
+    case AppliesTo.GLOBAL:
+      return {
+        medicineId: null,
+        categoryId: null,
+        customerId: null,
+        priceListId: null,
+      };
+    default:
+      throw new ApplicationException(
+        ErrorCode.VALIDATION_ERROR,
+        `Invalid appliesTo value: ${appliesTo}`,
+        HttpStatus.BAD_REQUEST,
+        { field: 'appliesTo', value: appliesTo },
+      );
+  }
+}
+
+export async function hardDeletePriceListItemSlot(
+  tx: TxClient,
+  priceListId: bigint,
+  medicineId: bigint,
+): Promise<void> {
+  const ghost = await tx.priceListItem.findFirst({
+    where: { priceListId, medicineId },
+  });
+
+  if (ghost) {
+    await tx.priceListItem.delete({ where: { id: ghost.id } });
+  }
+}
+
+export async function hardDeleteAllPriceListItems(
+  tx: TxClient,
+  priceListId: bigint,
+): Promise<Array<{ id: bigint; uuid: string }>> {
+  const rows = await tx.priceListItem.findMany({
+    where: { priceListId },
+    select: { id: true, uuid: true },
+  });
+
+  for (const row of rows) {
+    await tx.priceListItem.delete({ where: { id: row.id } });
+  }
+
+  return rows;
 }
 
 export async function clearOtherDefaults(
@@ -186,7 +323,7 @@ export async function assertPriceListNotInUse(
 
   if (total > 0) {
     throwConflict(
-      ErrorCode.CONFLICT,
+      ErrorCode.PRICE_LIST_IN_USE,
       `Price list is referenced by items or discount rules: ${priceListId}`,
       { id: priceListId.toString(), referenceCount: total.toString() },
     );
