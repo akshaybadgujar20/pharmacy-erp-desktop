@@ -31,7 +31,11 @@ This document preserves **why** the backend is designed the way it is: questions
 
 | ID | Decision | Module(s) | Status | Confidence | Source |
 |----|----------|-------------|--------|------------|--------|
-| — | *No ADRs recorded yet — recovery in progress* | — | — | — | — |
+| [ADR-001](./adrs/ADR-001-sqlite-postgres-single-schema.md) | SQLite + PostgreSQL from one Prisma schema | Infrastructure | Active | Explicit | Doc 01 |
+| [ADR-002](./adrs/ADR-002-string-status-not-enums.md) | String status fields, not Prisma enums | All modules | Active | Explicit | Doc 01 |
+| [ADR-003](./adrs/ADR-003-multi-branch-stock-per-batch.md) | Stock per (branchId, batchId) | Inventory | Active | Explicit | Doc 01 |
+| [ADR-004](./adrs/ADR-004-sync-entity-uuid-identity.md) | Outbox uses entityUuid + deviceId | Sync, persistence | Active | Explicit | Doc 01 |
+| [ADR-005](./adrs/ADR-005-branch-scoped-document-numbers.md) | Document numbers unique per branch | Sequence, workflows | Active | Explicit | Doc 01 |
 
 Full records: [`adrs/`](./adrs/)
 
