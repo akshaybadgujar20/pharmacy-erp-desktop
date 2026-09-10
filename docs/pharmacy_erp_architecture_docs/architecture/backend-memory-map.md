@@ -177,23 +177,23 @@ flowchart TB
 | 01 | `plans/pharmacy_erp_db_review_cfc2c0b5.plan.md` | c763869 | Done |
 | 02 | `plans/persistence_foundation_patterns_3af5df7a.plan.md` | a4ca852 | Done |
 | 03 | `database/persistence-patterns.md` | 0ef3bfc | Done |
-| 04 | `plans/early-foundations` + `early-foundations.md` | (batch) | Done |
-| 05 | `plans/winston-logging-audit` + `logging-and-audit.md` | (batch) | Done |
-| 06 | `plans/party-management-crud-api` | (batch) | Done |
-| 07 | `data-and-sync.md` | (batch) | Done |
-| 08 | `application-architecture.md` | (batch) | Done |
-| 09 | `extending-the-backend.md` | (batch) | Done |
-| 10 | reporting plan + `reporting.md` | (batch) | Done |
-| 12 | Purchase transcript 8fc361a6 | (batch) | Done |
-| 13 | Finance 8fc361a6 + 4ff29b60 | (batch) | Done |
-| 14 | Sales 8fc361a6 + d76cce43 | (batch) | Done |
-| 15 | Security 8fc361a6 | (batch) | Done |
-| 16 | Medicine 8fc361a6 | (batch) | Done |
-| 17 | PPA 8fc361a6 | (batch) | Done |
-| 18 | SCM 8fc361a6 | (batch) | Done |
-| 25 | Developer guide chat 5187dae3 | (batch) | Done |
-| 26 | Coding principles c05f1943 | (batch) | Done |
-| 28 | Final audit | (pending) | In progress |
+| 04 | `plans/early-foundations` + `early-foundations.md` | 480c7b2 | Done |
+| 05 | `plans/winston-logging-audit` + `logging-and-audit.md` | 529c9cc | Done |
+| 06 | `plans/party-management-crud-api` | fb5b0f0 | Done |
+| 07 | `data-and-sync.md` | bb1f3ce | Done |
+| 08 | `application-architecture.md` | 7496a6e | Done |
+| 09 | `extending-the-backend.md` | 5e11a2d | Done |
+| 10 | reporting plan + `reporting.md` | f57180a | Done |
+| 12 | Purchase transcript 8fc361a6 | c1f9887 | Done |
+| 13 | Finance 8fc361a6 + 4ff29b60 | e9c5dba | Done |
+| 14 | Sales 8fc361a6 + d76cce43 | b165861 | Done |
+| 15 | Security 8fc361a6 | 9a3d875 | Done |
+| 16 | Medicine 8fc361a6 | a45ce21 | Done |
+| 17 | PPA 8fc361a6 | 7ba1f98 | Done |
+| 18 | SCM 8fc361a6 | 387ad03 | Done |
+| 25 | Developer guide chat 5187dae3 | f1a0d24 | Done |
+| 26 | Coding principles c05f1943 | 36c271d | Done |
+| 28 | Final audit | bb94cfb | Done |
 
 ---
 
@@ -244,13 +244,29 @@ Doc 01–10, 12–18, 25–26 processed. Doc 11 (inventory transcript-only) cove
 
 ### Git commits
 
-| Doc # | Message |
-|-------|---------|
-| Scaffold | `docs(memory): scaffold architectural decision memory structure` |
-| 01 | `docs(memory): recover architectural decisions from document 01` |
-| 02 | `docs(memory): recover architectural decisions from document 02` |
-| 03 | `docs(memory): recover architectural decisions from document 03` |
-| 04–28 | `docs(memory): recover architectural decisions from documents 04-26 batch` (pending) |
+| Doc # | SHA | Message |
+|-------|-----|---------|
+| — | 4d6aeb4 | `docs(memory): scaffold architectural decision memory structure` |
+| 01 | c763869 | `docs(memory): recover architectural decisions from document 01` |
+| 02 | a4ca852 | `docs(memory): recover architectural decisions from document 02` |
+| 03 | 0ef3bfc | `docs(memory): recover architectural decisions from document 03` |
+| 04 | 480c7b2 | `docs(memory): recover architectural decisions from document 04` |
+| 05 | 529c9cc | ADR-016/017 (commit message says doc 06) |
+| 06 | fb5b0f0 | `docs(memory): recover architectural decisions from document 06 party template` |
+| 07 | bb1f3ce | document 07 |
+| 08 | 7496a6e | document 08 |
+| 09 | 5e11a2d | document 09 |
+| 10 | f57180a | document 10 |
+| 12 | c1f9887 | document 12 |
+| 13 | e9c5dba | document 13 |
+| 14 | b165861 | document 14 |
+| 15 | 9a3d875 | document 15 |
+| 16 | a45ce21 | document 16 |
+| 17 | 7ba1f98 | document 17 |
+| 18 | 387ad03 | document 18 |
+| 25 | f1a0d24 | document 25 |
+| 26 | 36c271d | document 26 |
+| 28 | bb94cfb | `docs(memory): final audit — memory map index, developer guide links, recovery report` |
 
 ---
 
