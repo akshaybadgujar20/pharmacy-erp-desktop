@@ -1,4 +1,10 @@
-import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsIn,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+} from 'class-validator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import { OutboxSyncStatus } from '../../persistence/outbox/outbox-operation.constants';
 
@@ -18,4 +24,12 @@ export class OutboxListQueryDto extends PaginationQueryDto {
   @IsString()
   @MaxLength(100)
   deviceId?: string;
+
+  @IsOptional()
+  @Matches(/^\d+$/)
+  dateFrom?: string;
+
+  @IsOptional()
+  @Matches(/^\d+$/)
+  dateTo?: string;
 }

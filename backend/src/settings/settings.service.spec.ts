@@ -135,7 +135,10 @@ describe('SettingsService', () => {
     });
 
     await expect(
-      service.updateSetting('locked.key', 'new-value'),
+      service.updateSetting('locked.key', {
+        version: 1,
+        settingValue: 'new-value',
+      }),
     ).rejects.toMatchObject({
       code: ErrorCode.APP_SETTING_NOT_EDITABLE,
       statusCode: HttpStatus.FORBIDDEN,
@@ -153,10 +156,35 @@ describe('SettingsService', () => {
     });
 
     await expect(
-      service.updateSetting('fefo.enabled', 'maybe'),
+      service.updateSetting('fefo.enabled', {
+        version: 1,
+        settingValue: 'maybe',
+      }),
     ).rejects.toMatchObject({
       code: ErrorCode.VALIDATION_ERROR,
       statusCode: HttpStatus.BAD_REQUEST,
+    });
+  });
+
+  it('rejects update when setting version conflicts', async () => {
+    prisma.appSetting.findFirst.mockResolvedValue({
+      id: 14n,
+      uuid: 'setting-uuid',
+      settingValue: 'true',
+      dataType: SettingDataType.BOOLEAN,
+      isEditable: true,
+      version: 2,
+    });
+    prisma.appSetting.updateMany.mockResolvedValue({ count: 0 });
+
+    await expect(
+      service.updateSetting('fefo.enabled', {
+        version: 1,
+        settingValue: 'false',
+      }),
+    ).rejects.toMatchObject({
+      code: ErrorCode.ENTITY_VERSION_CONFLICT,
+      statusCode: HttpStatus.CONFLICT,
     });
   });
 });

@@ -45,7 +45,7 @@ const SEQUENCE_GENERATOR_AUDIT_FIELDS = [
 ];
 
 @Injectable()
-export class SequenceGeneratorService {
+export class SequenceGeneratorConfigService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly unitOfWork: UnitOfWorkService,
@@ -279,6 +279,14 @@ export class SequenceGeneratorService {
         throwNotFound(
           ErrorCode.SEQUENCE_GENERATOR_NOT_FOUND,
           `Sequence generator not found: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      if (existing.isActive) {
+        throwConflict(
+          ErrorCode.SEQUENCE_GENERATOR_CONFLICT,
+          `Deactivate sequence generator before delete: ${id}`,
           { id: id.toString() },
         );
       }

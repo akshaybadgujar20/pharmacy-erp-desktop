@@ -46,6 +46,23 @@ export function throwConflict(
   throw new ApplicationException(code, message, HttpStatus.CONFLICT, details);
 }
 
+export function buildEpochDateRangeFilter(
+  dateFrom?: string,
+  dateTo?: string,
+): { gte?: bigint; lte?: bigint } | undefined {
+  const from = dateFrom ? BigInt(dateFrom) : undefined;
+  const to = dateTo ? BigInt(dateTo) : undefined;
+
+  if (from == null && to == null) {
+    return undefined;
+  }
+
+  return {
+    ...(from != null ? { gte: from } : {}),
+    ...(to != null ? { lte: to } : {}),
+  };
+}
+
 export function assertOutboxRetryAllowed(syncStatus: string): void {
   if (
     syncStatus !== OutboxSyncStatus.FAILED &&

@@ -22,7 +22,7 @@ Permissions use `CONFIGURATION:RESOURCE:ACTION`. Delete endpoints require `Delet
 
 | Resource | Base path | Scoping |
 |----------|-----------|---------|
-| Company | `/companies` | Org-global |
+| Company | `/companies` | JWT `companyId` only (tenant-scoped) |
 | Branch | `/branches` | JWT `companyId` |
 | FinancialYear | `/financial-years` | JWT `companyId`; optional branch filter |
 | SequenceGenerator | `/sequence-generators` | Company + optional branch |
@@ -39,11 +39,13 @@ Permissions use `CONFIGURATION:RESOURCE:ACTION`. Delete endpoints require `Delet
 
 ## 3. Business rules
 
-- **Company `isDefault`:** clears other company defaults when set true
-- **Branch `isHeadOffice`:** clears other head offices for same company
-- **FinancialYear `isCurrent`:** clears other current FY for same company+branch scope
+- **Company `isDefault`:** clears other company defaults when set true; default company cannot be deleted
+- **Branch `isHeadOffice`:** clears other head offices for same company; head office branch cannot be deleted
+- **FinancialYear `isCurrent`:** clears other current FY for same company+branch scope (branch-scoped exclusivity; company-wide `branchId: null` is separate)
 - **FinancialYear close:** OPEN → CLOSED; blocks further update/delete
-- **SequenceGenerator:** admin config only — `SequenceGeneratorService.next()` is internal
+- **FinancialYear list:** optional `branchId` query filter
+- **SequenceGenerator:** admin CRUD via `SequenceGeneratorConfigService`; document allocation stays internal via persistence `SequenceGeneratorService.next()`; DELETE blocked when `isActive=true`
+- **Company uniqueness:** `companyCode`, `companyName`, `gstNumber`, `drugLicenseNumber`
 - **Printer/Barcode `isDefault`:** clears siblings for same scope key
 - **DELETE guards:** strict FK checks before soft-delete
 

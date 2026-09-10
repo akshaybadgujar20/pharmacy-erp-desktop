@@ -261,6 +261,14 @@ export class BranchService {
         });
       }
 
+      if (existing.isHeadOffice) {
+        throwConflict(
+          ErrorCode.BRANCH_IN_USE,
+          `Cannot delete the head office branch: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
       await assertBranchNotInUse(tx, id);
 
       const updateResult = await tx.branch.updateMany({

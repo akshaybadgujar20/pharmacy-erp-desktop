@@ -18,7 +18,7 @@ Org structure and device/runtime config (except AppSetting CRUD in SettingsModul
 4. **Default flags** — `isDefault` / `isHeadOffice` / `isCurrent` clear siblings in same scope.
 5. **UPDATE** — `auditAndLogChanges` for field-level `ChangeHistory`.
 6. **FinancialYear** — `POST :id/close` when OPEN; block update/delete on CLOSED/ARCHIVED.
-7. **SequenceGenerator** — admin CRUD only; document allocation stays internal via `SequenceGeneratorService.next()`.
+7. **SequenceGenerator** — admin CRUD via `SequenceGeneratorConfigService`; document allocation stays internal via persistence `SequenceGeneratorService.next()`; deactivate before delete.
 
 ## Layer checklist
 

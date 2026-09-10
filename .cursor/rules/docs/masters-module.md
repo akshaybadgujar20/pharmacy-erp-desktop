@@ -38,7 +38,7 @@ All org-global — no branch scoping.
   - Country: states or `PartyAddress.countryId`
   - State: cities or `PartyAddress.stateId`
   - City: areas or `PartyAddress.cityId`
-  - Area: no party-address FK in current schema (guard when column added)
+  - Area: no `PartyAddress.areaId` FK — schema uses free-text `area` field only; strict delete guard deferred until schema adds `areaId`
 - **UPDATE:** `auditAndLogChanges` for ChangeHistory
 
 ---

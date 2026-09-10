@@ -11,7 +11,7 @@ Implementation-grounded reference for `backend/src/sync/`.
 | **Purpose** | Outbox admin (read/retry), SyncLog read, SyncConflict read/resolve |
 | **Module** | [`sync.module.ts`](../../../backend/src/sync/sync.module.ts) |
 | **Controllers** | 3 |
-| **Services** | 3 |
+| **Services** | 3 (`OutboxAdminService`, `SyncLogService`, `SyncConflictService`) |
 | **Outbox write** | Existing [`OutboxService.enqueue`](../../../backend/src/persistence/outbox/outbox.service.ts) in business modules |
 
 ---
@@ -20,9 +20,9 @@ Implementation-grounded reference for `backend/src/sync/`.
 
 | Resource | Base path | Notes |
 |----------|-----------|-------|
-| Outbox | `/outbox` | List, get, retry |
-| SyncLog | `/sync-logs` | Read-only |
-| SyncConflict | `/sync-conflicts` | List, get, resolve |
+| Outbox | `/outbox` | List (`dateFrom`/`dateTo`, `syncStatus`, `entityType`, `deviceId`), get, retry |
+| SyncLog | `/sync-logs` | Read-only (`dateFrom`/`dateTo`, `status`, `syncType`, `syncDirection`, `deviceId`) |
+| SyncConflict | `/sync-conflicts` | List (`syncLogId`, `resolutionStatus`, `entityType`, `deviceId`), get, resolve |
 
 ### Workflow routes
 
@@ -37,8 +37,8 @@ Legacy: `SYNC_RUN` (`SYNC:SYNC:EXECUTE`) — future worker stub, not implemented
 
 ## 3. Business rules
 
-- **Outbox retry:** only `FAILED` or `PROCESSING` → `PENDING`; version-checked
-- **Conflict resolve (v1):** metadata only — sets `MANUAL_RESOLVED`; does not apply payloads to business tables
+- **Outbox retry:** only `FAILED` or `PROCESSING` → `PENDING`; version-checked; audited via `OutboxAdminService`
+- **Conflict resolve (v1):** metadata only — sets `MANUAL_RESOLVED`; audited under `AuditModule.SYNCHRONIZATION`; does not apply payloads to business tables
 - **Sync admin mutations:** audit only; no outbox enqueue
 - **SyncLog:** immutable session history; no HTTP create/update/delete
 

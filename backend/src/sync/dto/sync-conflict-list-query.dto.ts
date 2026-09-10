@@ -1,4 +1,4 @@
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsOptional, IsString, Matches, MaxLength } from 'class-validator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 
 export class SyncConflictListQueryDto extends PaginationQueryDto {
@@ -16,4 +16,8 @@ export class SyncConflictListQueryDto extends PaginationQueryDto {
   @IsString()
   @MaxLength(100)
   deviceId?: string;
+
+  @IsOptional()
+  @Matches(/^\d+$/)
+  syncLogId?: string;
 }

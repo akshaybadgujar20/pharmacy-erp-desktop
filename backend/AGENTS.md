@@ -139,6 +139,8 @@ Scoped rules in `.cursor/rules/` (repo root):
 
 Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/rules/docs/) (API catalog, file map, workflows). Currently: [inventory-module.md](../.cursor/rules/docs/inventory-module.md), [purchase-module.md](../.cursor/rules/docs/purchase-module.md), [finance-module.md](../.cursor/rules/docs/finance-module.md), [party-module.md](../.cursor/rules/docs/party-module.md), [medicine-module.md](../.cursor/rules/docs/medicine-module.md), [sales-module.md](../.cursor/rules/docs/sales-module.md), [security-module.md](../.cursor/rules/docs/security-module.md), [pricing-module.md](../.cursor/rules/docs/pricing-module.md), [prescription-module.md](../.cursor/rules/docs/prescription-module.md), [audit-module.md](../.cursor/rules/docs/audit-module.md), [configuration-module.md](../.cursor/rules/docs/configuration-module.md), [sync-module.md](../.cursor/rules/docs/sync-module.md), [masters-module.md](../.cursor/rules/docs/masters-module.md).
 
+**Settings API note:** `PUT /settings/:key` requires `version` and `settingValue` in the body (optimistic locking). AppSetting create validates `branchId` belongs to JWT company.
+
 ## Architecture docs
 
 - [Backend developer guide](../docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md) — onboarding, module wiring, non-trivial files, appendices (glossary, auth chain, troubleshooting), find-by-concern

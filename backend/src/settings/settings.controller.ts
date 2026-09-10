@@ -40,7 +40,7 @@ export class SettingsController {
   @Put(':key')
   @RequirePermissions('CONFIGURATION:APP_SETTING:UPDATE')
   update(@Param('key') key: string, @Body() dto: UpdateSettingDto) {
-    return this.settingsService.updateSetting(key, dto.settingValue);
+    return this.settingsService.updateSetting(key, dto);
   }
 
   @Delete(':key')

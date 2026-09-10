@@ -10,6 +10,8 @@ import {
   buildPagination,
   PaginatedResult,
 } from '../../common/response/paginated-result';
+import { getTenantScope } from '../../persistence/context/tenant-scope.util';
+import { RequestContextService } from '../../persistence/context/request-context.service';
 import { OutboxEntityType } from '../../persistence/outbox/entity-type.constants';
 import { OutboxOperation } from '../../persistence/outbox/outbox-operation.constants';
 import { OutboxService } from '../../persistence/outbox/outbox.service';
@@ -56,14 +58,17 @@ export class CompanyService {
     private readonly unitOfWork: UnitOfWorkService,
     private readonly auditService: AuditService,
     private readonly outboxService: OutboxService,
+    private readonly requestContext: RequestContextService,
   ) {}
 
   async list(query: CompanyListQueryDto) {
+    const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
     const search = query.search?.trim();
 
     const where: Prisma.CompanyWhereInput = {
+      id: scope.companyId,
       deletedAt: null,
       ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
       ...(query.isDefault !== undefined ? { isDefault: query.isDefault } : {}),
@@ -95,8 +100,14 @@ export class CompanyService {
   }
 
   async getById(id: bigint) {
+    const scope = getTenantScope(this.requestContext);
+    if (id !== scope.companyId) {
+      throwNotFound(ErrorCode.COMPANY_NOT_FOUND, `Company not found: ${id}`, {
+        id: id.toString(),
+      });
+    }
     const company = await this.prisma.client.company.findFirst({
-      where: { id, deletedAt: null },
+      where: { id: scope.companyId, deletedAt: null },
     });
 
     if (!company) {
@@ -154,9 +165,16 @@ export class CompanyService {
   }
 
   async update(id: bigint, dto: UpdateCompanyDto) {
+    const scope = getTenantScope(this.requestContext);
+    if (id !== scope.companyId) {
+      throwNotFound(ErrorCode.COMPANY_NOT_FOUND, `Company not found: ${id}`, {
+        id: id.toString(),
+      });
+    }
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.company.findFirst({
-        where: { id, deletedAt: null },
+        where: { id: scope.companyId, deletedAt: null },
       });
 
       if (!existing) {
@@ -172,7 +190,7 @@ export class CompanyService {
       }
 
       const updateResult = await tx.company.updateMany({
-        where: { id, version: dto.version, deletedAt: null },
+        where: { id: scope.companyId, version: dto.version, deletedAt: null },
         data: {
           companyCode: dto.companyCode,
           companyName: dto.companyName,
@@ -203,7 +221,9 @@ export class CompanyService {
         `Company version conflict or not found: ${id}`,
       );
 
-      const company = await tx.company.findFirstOrThrow({ where: { id } });
+      const company = await tx.company.findFirstOrThrow({
+        where: { id: scope.companyId },
+      });
       await auditAndLogChanges(
         tx,
         this.auditService,
@@ -229,9 +249,16 @@ export class CompanyService {
   }
 
   async delete(id: bigint, version: number) {
+    const scope = getTenantScope(this.requestContext);
+    if (id !== scope.companyId) {
+      throwNotFound(ErrorCode.COMPANY_NOT_FOUND, `Company not found: ${id}`, {
+        id: id.toString(),
+      });
+    }
+
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.company.findFirst({
-        where: { id, deletedAt: null },
+        where: { id: scope.companyId, deletedAt: null },
       });
 
       if (!existing) {
@@ -240,10 +267,18 @@ export class CompanyService {
         });
       }
 
-      await assertCompanyNotInUse(tx, id);
+      if (existing.isDefault) {
+        throwConflict(
+          ErrorCode.COMPANY_IN_USE,
+          `Cannot delete the default company: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      await assertCompanyNotInUse(tx, scope.companyId);
 
       const updateResult = await tx.company.updateMany({
-        where: { id, version, deletedAt: null },
+        where: { id: scope.companyId, version, deletedAt: null },
         data: {
           deletedAt: BigInt(Date.now()),
           updatedAt: BigInt(Date.now()),
@@ -324,6 +359,25 @@ export class CompanyService {
           ErrorCode.COMPANY_CONFLICT,
           `GST number already exists: ${dto.gstNumber}`,
           { gstNumber: dto.gstNumber },
+        );
+      }
+    }
+
+    if (dto.drugLicenseNumber) {
+      const existing = await tx.company.findFirst({
+        where: {
+          drugLicenseNumber: dto.drugLicenseNumber,
+          deletedAt: null,
+          ...(excludeId ? { NOT: { id: excludeId } } : {}),
+        },
+        select: { id: true },
+      });
+
+      if (existing) {
+        throwConflict(
+          ErrorCode.COMPANY_CONFLICT,
+          `Drug license number already exists: ${dto.drugLicenseNumber}`,
+          { drugLicenseNumber: dto.drugLicenseNumber },
         );
       }
     }

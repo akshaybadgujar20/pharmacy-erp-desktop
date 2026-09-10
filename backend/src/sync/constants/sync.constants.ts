@@ -19,3 +19,4 @@ export type SyncConflictResolutionStrategy =
   (typeof SyncConflictResolutionStrategy)[keyof typeof SyncConflictResolutionStrategy];
 
 export const OutboxAuditEntityType = 'Outbox' as const;
+export const SyncConflictAuditEntityType = 'SyncConflict' as const;

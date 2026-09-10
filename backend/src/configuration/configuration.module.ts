@@ -13,7 +13,7 @@ import { BranchService } from './services/branch.service';
 import { CompanyService } from './services/company.service';
 import { FinancialYearService } from './services/financial-year.service';
 import { PrinterConfigurationService } from './services/printer-configuration.service';
-import { SequenceGeneratorService } from './services/sequence-generator.service';
+import { SequenceGeneratorConfigService } from './services/sequence-generator-config.service';
 
 @Module({
   imports: [PrismaModule, PersistenceModule, AuditModule],
@@ -29,7 +29,7 @@ import { SequenceGeneratorService } from './services/sequence-generator.service'
     CompanyService,
     BranchService,
     FinancialYearService,
-    SequenceGeneratorService,
+    SequenceGeneratorConfigService,
     PrinterConfigurationService,
     BarcodeConfigurationService,
   ],

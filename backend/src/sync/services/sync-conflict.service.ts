@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { AuditAction } from '../../audit/audit-action.constants';
+import { AuditModule } from '../../audit/audit-module.constants';
+import { AuditService } from '../../audit/audit.service';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
   buildPagination,
@@ -7,7 +10,10 @@ import {
 } from '../../common/response/paginated-result';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
-import { SyncConflictResolutionStatus } from '../constants/sync.constants';
+import {
+  SyncConflictAuditEntityType,
+  SyncConflictResolutionStatus,
+} from '../constants/sync.constants';
 import { ResolveSyncConflictDto } from '../dto/resolve-sync-conflict.dto';
 import { SyncConflictListQueryDto } from '../dto/sync-conflict-list-query.dto';
 import { toSyncConflictResponse } from '../mappers/sync-conflict.mapper';
@@ -22,17 +28,20 @@ export class SyncConflictService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly unitOfWork: UnitOfWorkService,
+    private readonly auditService: AuditService,
   ) {}
 
   async list(query: SyncConflictListQueryDto) {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
+    const syncLogId = query.syncLogId ? BigInt(query.syncLogId) : undefined;
 
     const where: Prisma.SyncConflictWhereInput = {
       ...(query.resolutionStatus
         ? { resolutionStatus: query.resolutionStatus }
         : {}),
       ...(query.entityType ? { entityType: query.entityType } : {}),
+      ...(syncLogId != null ? { syncLogId } : {}),
       ...(query.deviceId ? { syncLog: { deviceId: query.deviceId } } : {}),
     };
 
@@ -113,6 +122,16 @@ export class SyncConflictService {
       const conflict = await tx.syncConflict.findFirstOrThrow({
         where: { id },
       });
+
+      await this.auditService.log(tx, {
+        entityType: SyncConflictAuditEntityType,
+        entityId: conflict.id,
+        entityUuid: conflict.uuid,
+        action: AuditAction.UPDATE,
+        module: AuditModule.SYNCHRONIZATION,
+        description: `Sync conflict resolved by ${username} (${dto.resolutionStrategy}) for ${conflict.entityType}:${conflict.entityUuid}`,
+      });
+
       return toSyncConflictResponse(conflict);
     });
   }

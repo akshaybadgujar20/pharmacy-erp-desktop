@@ -66,6 +66,9 @@ export class FinancialYearService {
     const where: Prisma.FinancialYearWhereInput = {
       companyId: scope.companyId,
       deletedAt: null,
+      ...(query.branchId !== undefined
+        ? { branchId: query.branchId ?? null }
+        : {}),
       ...(query.status ? { status: query.status } : {}),
       ...(query.isCurrent !== undefined ? { isCurrent: query.isCurrent } : {}),
       ...(search

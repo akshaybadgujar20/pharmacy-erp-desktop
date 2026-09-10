@@ -8,7 +8,7 @@ import {
 import { PrismaService } from '../../prisma.service';
 import { SyncLogListQueryDto } from '../dto/sync-log-list-query.dto';
 import { toSyncLogResponse } from '../mappers/sync-log.mapper';
-import { throwNotFound } from '../utils/sync.util';
+import { buildEpochDateRangeFilter, throwNotFound } from '../utils/sync.util';
 
 @Injectable()
 export class SyncLogService {
@@ -17,12 +17,17 @@ export class SyncLogService {
   async list(query: SyncLogListQueryDto) {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
+    const startedAtRange = buildEpochDateRangeFilter(
+      query.dateFrom,
+      query.dateTo,
+    );
 
     const where: Prisma.SyncLogWhereInput = {
       ...(query.status ? { status: query.status } : {}),
       ...(query.syncType ? { syncType: query.syncType } : {}),
       ...(query.syncDirection ? { syncDirection: query.syncDirection } : {}),
       ...(query.deviceId ? { deviceId: query.deviceId } : {}),
+      ...(startedAtRange ? { startedAt: startedAtRange } : {}),
     };
 
     const [total, rows] = await Promise.all([

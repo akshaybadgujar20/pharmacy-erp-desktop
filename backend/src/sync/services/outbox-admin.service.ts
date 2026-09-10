@@ -17,12 +17,13 @@ import { RetryOutboxDto } from '../dto/retry-outbox.dto';
 import { toOutboxResponse } from '../mappers/outbox.mapper';
 import {
   assertOutboxRetryAllowed,
+  buildEpochDateRangeFilter,
   optimisticUpdate,
   throwNotFound,
 } from '../utils/sync.util';
 
 @Injectable()
-export class OutboxService {
+export class OutboxAdminService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly unitOfWork: UnitOfWorkService,
@@ -32,11 +33,16 @@ export class OutboxService {
   async list(query: OutboxListQueryDto) {
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
+    const createdAtRange = buildEpochDateRangeFilter(
+      query.dateFrom,
+      query.dateTo,
+    );
 
     const where: Prisma.OutboxWhereInput = {
       ...(query.syncStatus ? { syncStatus: query.syncStatus } : {}),
       ...(query.entityType ? { entityType: query.entityType } : {}),
       ...(query.deviceId ? { deviceId: query.deviceId } : {}),
+      ...(createdAtRange ? { createdAt: createdAtRange } : {}),
     };
 
     const [total, rows] = await Promise.all([

@@ -15,7 +15,9 @@ import { OutboxService } from '../persistence/outbox/outbox.service';
 import type { TxClient } from '../persistence/prisma/prisma-tx.type';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
+import { assertBranchInCompany } from '../configuration/utils/configuration.util';
 import { CreateSettingDto } from './dto/create-setting.dto';
+import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingDataType } from './setting-keys.constants';
 import { AppSettingResponse, toAppSettingResponse } from './settings.mapper';
 
@@ -83,6 +85,10 @@ export class SettingsService {
     }
 
     return this.unitOfWork.run(async (tx) => {
+      if (branchId != null) {
+        await assertBranchInCompany(tx, companyId, branchId);
+      }
+
       await this.assertSettingKeyUnique(
         tx,
         companyId,
@@ -190,7 +196,7 @@ export class SettingsService {
 
   async updateSetting(
     key: string,
-    settingValue: string,
+    dto: UpdateSettingDto,
   ): Promise<AppSettingResponse> {
     const { companyId, branchId } = getTenantScope(this.requestContext);
 
@@ -207,17 +213,17 @@ export class SettingsService {
       }
 
       this.assertEditable(row, key);
-      this.validateSettingValue(row.dataType, settingValue, key);
+      this.validateSettingValue(row.dataType, dto.settingValue, key);
 
       const updateResult = await tx.appSetting.updateMany({
         where: {
           id: row.id,
-          version: row.version,
+          version: dto.version,
           deletedAt: null,
           isActive: true,
         },
         data: {
-          settingValue,
+          settingValue: dto.settingValue,
           updatedAt: BigInt(Date.now()),
           version: { increment: 1 },
         },
