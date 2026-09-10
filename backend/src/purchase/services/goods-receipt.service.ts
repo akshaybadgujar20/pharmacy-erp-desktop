@@ -24,7 +24,6 @@ import { DocumentType } from '../../persistence/sequence/document-type.constants
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
-import { SettingKey } from '../../settings/setting-keys.constants';
 import { SettingsService } from '../../settings/settings.service';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
 import { GoodsReceiptStatus } from '../constants/purchase.constants';
@@ -36,6 +35,8 @@ import {
   assertBranchExists,
   assertDraftStatus,
   assertEmployeeExists,
+  assertGrnPurchaseOrderLink,
+  assertGrnQuantityWithinPoPending,
   assertSupplierActive,
   buildPurchaseDocumentListFilters,
   grnStockQuantity,
@@ -44,7 +45,6 @@ import {
   resolveOrCreateBatch,
   rollupPurchaseOrderStatus,
   throwNotFound,
-  validateGrnPurchaseOrderLink,
 } from '../utils/purchase.util';
 
 @Injectable()
@@ -114,20 +114,6 @@ export class GoodsReceiptService {
   }
 
   async create(dto: CreateGoodsReceiptDto) {
-    if (!dto.purchaseOrderId) {
-      const allowed = await this.settingsService.getBoolean(
-        SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
-        false,
-      );
-      if (!allowed) {
-        throw new ApplicationException(
-          ErrorCode.GRN_PO_REQUIRED,
-          'Purchase order is required for goods receipt',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-    }
-
     return this.unitOfWork.run(async (tx) => {
       const scope = getTenantScope(this.requestContext);
       const branch = await assertBranchExists(tx, dto.branchId);
@@ -144,11 +130,12 @@ export class GoodsReceiptService {
       await assertSupplierActive(tx, dto.supplierId);
       await assertEmployeeExists(tx, dto.receivedByEmployeeId);
 
-      await validateGrnPurchaseOrderLink(
+      await assertGrnPurchaseOrderLink(
         tx,
         scope,
         dto.supplierId,
         dto.purchaseOrderId,
+        this.settingsService,
       );
 
       const { documentNumber } = await this.sequences.next(tx, {
@@ -237,50 +224,13 @@ export class GoodsReceiptService {
           ? dto.purchaseOrderId
           : existing.purchaseOrderId;
 
-      if (
-        dto.purchaseOrderId !== undefined &&
-        dto.purchaseOrderId !== existing.purchaseOrderId
-      ) {
-        if (!nextPurchaseOrderId) {
-          const allowed = await this.settingsService.getBoolean(
-            SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
-            false,
-          );
-          if (!allowed) {
-            throw new ApplicationException(
-              ErrorCode.GRN_PO_REQUIRED,
-              'Purchase order is required for goods receipt',
-              HttpStatus.BAD_REQUEST,
-            );
-          }
-        } else {
-          await validateGrnPurchaseOrderLink(
-            tx,
-            scope,
-            nextSupplierId,
-            nextPurchaseOrderId,
-          );
-        }
-      } else if (nextPurchaseOrderId) {
-        await validateGrnPurchaseOrderLink(
-          tx,
-          scope,
-          nextSupplierId,
-          nextPurchaseOrderId,
-        );
-      } else if (!nextPurchaseOrderId) {
-        const allowed = await this.settingsService.getBoolean(
-          SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
-          false,
-        );
-        if (!allowed) {
-          throw new ApplicationException(
-            ErrorCode.GRN_PO_REQUIRED,
-            'Purchase order is required for goods receipt',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-      }
+      await assertGrnPurchaseOrderLink(
+        tx,
+        scope,
+        nextSupplierId,
+        nextPurchaseOrderId,
+        this.settingsService,
+      );
 
       const updateResult = await tx.goodsReceipt.updateMany({
         where: { id, version: dto.version, deletedAt: null },
@@ -409,6 +359,15 @@ export class GoodsReceiptService {
         const stockQty = grnStockQuantity(item);
         if (stockQty.lte(0)) {
           continue;
+        }
+
+        if (item.purchaseOrderItemId) {
+          await assertGrnQuantityWithinPoPending(
+            tx,
+            item.purchaseOrderItemId,
+            stockQty,
+            item.id,
+          );
         }
 
         hasAccepted = true;

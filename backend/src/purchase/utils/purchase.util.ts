@@ -6,10 +6,13 @@ import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 import { withBranchScope } from '../../persistence/context/tenant-scope.util';
 import {
+  GOODS_RECEIPT_STOCK_POSTED_STATUSES,
   GoodsReceiptStatus,
+  PURCHASE_ORDER_EDITABLE_STATUSES,
   PURCHASE_ORDER_RECEIVABLE_STATUSES,
   PurchaseOrderStatus,
 } from '../constants/purchase.constants';
+import { SettingKey } from '../../settings/setting-keys.constants';
 
 export function serializeBigInt(
   value: bigint | null | undefined,
@@ -72,12 +75,9 @@ export function assertDraftStatus(
 }
 
 export function assertPoEditableStatus(status: string): void {
-  const editableStatuses: string[] = [
-    PurchaseOrderStatus.DRAFT,
-    PurchaseOrderStatus.PENDING_APPROVAL,
-  ];
-
-  if (!editableStatuses.includes(status)) {
+  if (
+    !(PURCHASE_ORDER_EDITABLE_STATUSES as readonly string[]).includes(status)
+  ) {
     throw new ApplicationException(
       ErrorCode.INVALID_DOCUMENT_STATUS,
       'Purchase order can only be modified while in DRAFT or PENDING_APPROVAL status',
@@ -479,9 +479,8 @@ export function grnStockQuantity(item: {
 }
 
 export function isGrnStockPosted(status: string): boolean {
-  return (
-    status === GoodsReceiptStatus.ACCEPTED ||
-    status === GoodsReceiptStatus.PARTIALLY_ACCEPTED
+  return (GOODS_RECEIPT_STOCK_POSTED_STATUSES as readonly string[]).includes(
+    status,
   );
 }
 
@@ -584,6 +583,35 @@ export function buildPurchaseDocumentListFilters(
   }
 
   return filters;
+}
+
+type GrnSettingsReader = {
+  getBoolean(key: string, defaultValue: boolean): Promise<boolean>;
+};
+
+export async function assertGrnPurchaseOrderLink(
+  tx: TxClient,
+  scope: { companyId: bigint; branchId: bigint },
+  supplierId: bigint,
+  purchaseOrderId: bigint | null | undefined,
+  settings: GrnSettingsReader,
+): Promise<void> {
+  if (!purchaseOrderId) {
+    const allowed = await settings.getBoolean(
+      SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
+      false,
+    );
+    if (!allowed) {
+      throw new ApplicationException(
+        ErrorCode.GRN_PO_REQUIRED,
+        'Purchase order is required for goods receipt',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return;
+  }
+
+  await validateGrnPurchaseOrderLink(tx, scope, supplierId, purchaseOrderId);
 }
 
 export async function validateGrnPurchaseOrderLink(
@@ -703,7 +731,7 @@ export async function assertGrnQuantityWithinPoPending(
 
   if (additionalQty.gt(pending)) {
     throw new ApplicationException(
-      ErrorCode.RETURN_QUANTITY_EXCEEDED,
+      ErrorCode.GRN_OVER_RECEIPT,
       'Received quantity exceeds pending purchase order quantity',
       HttpStatus.CONFLICT,
       {

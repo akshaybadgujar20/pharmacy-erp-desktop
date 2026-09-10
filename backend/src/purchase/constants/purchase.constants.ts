@@ -57,6 +57,11 @@ export const PurchaseReturnType = {
   EXCESS_STOCK: 'EXCESS_STOCK',
 } as const;
 
+export const PURCHASE_ORDER_EDITABLE_STATUSES = [
+  PurchaseOrderStatus.DRAFT,
+  PurchaseOrderStatus.PENDING_APPROVAL,
+] as const;
+
 export const PURCHASE_ORDER_RECEIVABLE_STATUSES = [
   PurchaseOrderStatus.APPROVED,
   PurchaseOrderStatus.SENT_TO_SUPPLIER,

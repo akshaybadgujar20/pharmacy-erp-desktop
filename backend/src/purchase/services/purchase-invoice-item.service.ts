@@ -25,6 +25,7 @@ import { CreatePurchaseInvoiceItemDto } from '../dto/create-purchase-invoice-ite
 import { UpdatePurchaseInvoiceItemDto } from '../dto/update-purchase-invoice-item.dto';
 import { toPurchaseInvoiceItemResponse } from '../mappers/purchase-invoice-item.mapper';
 import {
+  assertBatchBelongsToMedicine,
   assertDraftStatus,
   assertMedicineExists,
   computeLineAmounts,
@@ -121,20 +122,7 @@ export class PurchaseInvoiceItemService {
         PurchaseInvoiceStatus.DRAFT,
       );
       await assertMedicineExists(tx, dto.medicineId);
-
-      const batch = await tx.batch.findFirst({
-        where: { id: dto.batchId, deletedAt: null },
-      });
-
-      if (!batch) {
-        throwNotFound(
-          ErrorCode.BATCH_NOT_FOUND,
-          `Batch not found: ${dto.batchId}`,
-          {
-            batchId: dto.batchId.toString(),
-          },
-        );
-      }
+      await assertBatchBelongsToMedicine(tx, dto.batchId, dto.medicineId);
 
       const lineAmounts = computeLineAmounts(
         dto.invoiceQuantity,
