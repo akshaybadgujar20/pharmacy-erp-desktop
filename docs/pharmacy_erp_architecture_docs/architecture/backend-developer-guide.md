@@ -83,6 +83,7 @@ This is the **primary onboarding and wiring guide** for the NestJS backend: how 
 | 5 | [Part 4 — retail sale](#41-retail-otc-sale) | One cross-module flow |
 | 6 | [Part 3](#part-3--module-capsules) capsule for your task | Domain-specific wiring |
 | 7 | [testing.md](./testing.md) | Unit, persistence, and e2e commands |
+| — | [backend-memory-map.md](./backend-memory-map.md) | Understand **why** — architectural decisions, ADRs, rejected alternatives |
 
 ```mermaid
 flowchart LR
@@ -1302,6 +1303,14 @@ npx ts-node scripts/generate-route-index.ts
 - New persistence side-effect (sequence type, ledger movement type, outbox entity type)
 - Scoping or permission namespace change
 
+### When to add an architectural decision record
+
+If you make a non-trivial design choice (alternatives discussed, cross-module impact, or hard to rediscover later), add an ADR:
+
+1. Copy [`templates/adr-template.md`](./templates/adr-template.md) → `adrs/ADR-NNN-slug.md`
+2. Add a row to the index in [`backend-memory-map.md`](./backend-memory-map.md)
+3. Optionally add a **Key decisions** bullet in the relevant Part 3 module capsule (link only — detail stays in the ADR)
+
 ### Verification checklist
 
 1. Regenerate route index: `npx ts-node scripts/generate-route-index.ts`
@@ -1314,6 +1323,7 @@ npx ts-node scripts/generate-route-index.ts
 | Doc | Role |
 |-----|------|
 | **This file** | Backend developer guide: onboarding, wiring, non-trivial files, E2E flows, appendices |
+| [`backend-memory-map.md`](./backend-memory-map.md) | Architectural decision history — why, not how |
 | `.cursor/rules/docs/*-module.md` | Per-module API catalog and file map for agents |
 | `database/tables/*` | Table design and business rules |
 | `workflows/*` | Narrative business process docs |

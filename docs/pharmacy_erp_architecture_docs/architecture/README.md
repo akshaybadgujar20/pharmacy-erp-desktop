@@ -16,13 +16,15 @@ Topic-based architecture docs for the Pharmacy ERP. Start here instead of the le
 | [Logging and audit](./logging-and-audit.md) | **Implemented** — Winston logging, `AuditService`, correlation IDs |
 | [Reporting](./reporting.md) | **Implemented** — report registry, API usage, party reports, CSV/Excel/PDF export, extension guide |
 | [Backend developer guide](./backend-developer-guide.md) | **Implemented** — onboarding, module wiring, non-trivial files, appendices, E2E flows, find-by-concern |
+| [Backend memory map](./backend-memory-map.md) | **Active** — architectural decision history (why), ADR index, rejected alternatives |
 | [Extending the backend](./extending-the-backend.md) | **Implemented** — step-by-step guide for adding new feature modules (DTOs, service, controller, persistence, audit/outbox, tests) |
 | [Testing](./testing.md) | **Implemented** — Jest commands: unit, persistence, e2e, feature/file filters, Angular |
 | [Engineering standards](./engineering-standards.md) | Coding, testing, CI/CD, performance, release checklist |
 
 ## Templates & ADRs
 
-- [ADR index](./adrs/README.md)
+- [Backend memory map (ADR index)](./backend-memory-map.md)
+- [ADR files](./adrs/README.md)
 - [ADR template](./templates/adr-template.md)
 - [Module template](./templates/module-template.md)
 
