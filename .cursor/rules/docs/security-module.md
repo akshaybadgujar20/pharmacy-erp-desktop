@@ -13,7 +13,7 @@ Implementation-grounded reference for `backend/src/security/`. Auth endpoints re
 | **Controllers** | 7 (4 top-level + 3 nested junction) |
 | **Services** | 7 |
 | **Exports** | `UserService` |
-| **Auth split** | `auth/` — login, logout, refresh, me, change-password |
+| **Auth split** | `auth/` — login, logout, refresh, me, change-password, change-required-password |
 
 ---
 
@@ -57,7 +57,7 @@ Permissions use `SECURITY:RESOURCE:ACTION` format. Delete endpoints require `Del
 | POST | `/users/:id/reset-password` | `SECURITY:USER:RESET_PASSWORD` |
 | POST | `/users/:id/unlock` | `SECURITY:USER:UNLOCK` |
 
-Create body: `employeeId`, `username`, `password`, `isActive?`, `mustChangePassword?`. Update: `isActive`, `mustChangePassword` only (not `employeeId`).
+Create body: `employeeId`, `username`, `password`, `isActive?`, `mustChangePassword?` (defaults `false`). Update: `isActive`, `mustChangePassword` only (not `employeeId`). Reset-password body: `newPassword`, optional `mustChangePassword` (defaults `false`).
 
 ### User branches — `/users/:userId/branches`
 
@@ -119,12 +119,13 @@ Create body: `employeeId`, `username`, `password`, `isActive?`, `mustChangePassw
 | GET | `/user-sessions/:id` | `SECURITY:USER_SESSION:READ` |
 | POST | `/user-sessions/:id/force-logout` | `SECURITY:USER_SESSION:FORCE_LOGOUT` |
 
-List supports optional `userId`, `isActive` filters via `UserSessionListQueryDto`.
+List supports optional `userId`, `branchId`, `isActive`, `loginFrom`, `loginTo` filters via `UserSessionListQueryDto`.
 
 ### Auth — `/auth` (not in security module)
 
 | Method | Path | Auth |
 |--------|------|------|
+| POST | `/auth/change-required-password` | Public; username + current + new password when `mustChangePassword=true` |
 | POST | `/auth/change-password` | JWT required; verifies current password, invalidates sessions |
 
 ---
@@ -148,7 +149,7 @@ List supports optional `userId`, `isActive` filters via `UserSessionListQueryDto
 | Service | Responsibility |
 |---------|----------------|
 | `user.service.ts` | User CRUD, reset-password, unlock; session invalidation on deactivate/delete/reset |
-| `user-branch.service.ts` | Nested branch assignment CRUD |
+| `user-branch.service.ts` | Nested branch assignment CRUD; session invalidation on deactivate/delete |
 | `user-role.service.ts` | Nested role assignment CRUD + replace |
 | `role.service.ts` | Role CRUD; delete blocked when assigned to users |
 | `role-permission.service.ts` | Nested permission grant CRUD + replace |

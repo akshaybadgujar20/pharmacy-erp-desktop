@@ -126,7 +126,7 @@ Scoped rules in `.cursor/rules/` (repo root):
 | `finance-module.mdc` | `backend/src/finance/**` — see [module memory doc](../.cursor/rules/docs/finance-module.md) |
 | `party-module.mdc` | `backend/src/party/**` — see [module memory doc](../.cursor/rules/docs/party-module.md) |
 | `medicine-module.mdc` | `backend/src/medicine/**` — see [module memory doc](../.cursor/rules/docs/medicine-module.md) |
-| `security-module.mdc` | `backend/src/security/**` — see [module memory doc](../.cursor/rules/docs/security-module.md) |
+| `security-module.mdc` | `backend/src/security/**` — see [module memory doc](../.cursor/rules/docs/security-module.md); auth password flows in `backend/src/auth/` (`change-password`, `change-required-password`) |
 | `sales-module.mdc` | `backend/src/sales/**` — see [module memory doc](../.cursor/rules/docs/sales-module.md) |
 | `pricing-module.mdc` | `backend/src/pricing/**` — see [module memory doc](../.cursor/rules/docs/pricing-module.md) |
 | `prescription-module.mdc` | `backend/src/prescription/**` — see [module memory doc](../.cursor/rules/docs/prescription-module.md) |

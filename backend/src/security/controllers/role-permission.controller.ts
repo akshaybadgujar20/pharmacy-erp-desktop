@@ -31,6 +31,15 @@ export class RolePermissionController {
     return this.rolePermissionService.list(roleId, query);
   }
 
+  @Put('replace')
+  @RequirePermissions('SECURITY:ROLE_PERMISSION:REPLACE')
+  replace(
+    @Param('roleId', ParseBigIntPipe) roleId: bigint,
+    @Body() dto: ReplaceRolePermissionsDto,
+  ) {
+    return this.rolePermissionService.replace(roleId, dto);
+  }
+
   @Get(':id')
   @RequirePermissions('SECURITY:ROLE_PERMISSION:READ')
   getById(
@@ -67,14 +76,5 @@ export class RolePermissionController {
     @Query() query: DeleteEntityQueryDto,
   ) {
     return this.rolePermissionService.delete(roleId, id, query.version);
-  }
-
-  @Put('replace')
-  @RequirePermissions('SECURITY:ROLE_PERMISSION:REPLACE')
-  replace(
-    @Param('roleId', ParseBigIntPipe) roleId: bigint,
-    @Body() dto: ReplaceRolePermissionsDto,
-  ) {
-    return this.rolePermissionService.replace(roleId, dto);
   }
 }

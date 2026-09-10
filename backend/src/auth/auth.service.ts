@@ -7,10 +7,14 @@ import { AuditModule } from '../audit/audit-module.constants';
 import { AuditService } from '../audit/audit.service';
 import { ApplicationException } from '../common/exceptions/application.exception';
 import { ErrorCode } from '../common/exceptions/error-code';
+import { OutboxEntityType } from '../persistence/outbox/entity-type.constants';
+import { OutboxOperation } from '../persistence/outbox/outbox-operation.constants';
+import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AUTH_CONSTANTS } from './constants/auth.constants';
 import type { ChangePasswordDto } from './dto/change-password.dto';
+import type { ChangeRequiredPasswordDto } from './dto/change-required-password.dto';
 import type { LoginDto } from './dto/login.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -46,6 +50,7 @@ export class AuthService {
     private readonly passwordService: PasswordService,
     private readonly unitOfWork: UnitOfWorkService,
     private readonly auditService: AuditService,
+    private readonly outboxService: OutboxService,
   ) {}
 
   async login(dto: LoginDto, req: Request): Promise<AuthTokenResponse> {
@@ -351,6 +356,91 @@ export class AuthService {
     };
   }
 
+  async changeRequiredPassword(dto: ChangeRequiredPasswordDto) {
+    const user = await this.prisma.client.user.findFirst({
+      where: {
+        username: dto.username,
+        deletedAt: null,
+      },
+    });
+
+    if (!user || !user.isActive) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or password',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (!user.mustChangePassword) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'Password change is not required for this account',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const currentValid = await this.passwordService.verify(
+      dto.currentPassword,
+      user.passwordHash,
+    );
+
+    if (!currentValid) {
+      throw new ApplicationException(
+        ErrorCode.INVALID_CURRENT_PASSWORD,
+        'Current password is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (dto.currentPassword === dto.newPassword) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'New password must be different from the current password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const passwordHash = await this.passwordService.hash(dto.newPassword);
+    const now = BigInt(Date.now());
+
+    return this.unitOfWork.run(async (tx) => {
+      const updatedUser = await tx.user.update({
+        where: { id: user.id },
+        data: {
+          passwordHash,
+          passwordChangedAt: now,
+          mustChangePassword: false,
+          failedLoginAttempts: 0,
+          lockedUntil: null,
+          updatedAt: now,
+          version: { increment: 1 },
+        },
+      });
+
+      await invalidateUserSessions(tx, user.id, LogoutReason.PASSWORD_CHANGED);
+
+      await this.auditService.log(tx, {
+        entityType: OutboxEntityType.USER,
+        entityId: updatedUser.id,
+        entityUuid: updatedUser.uuid,
+        action: AuditAction.UPDATE,
+        module: AuditModule.SECURITY,
+        description: `Required password changed for ${updatedUser.username}`,
+        userId: user.id,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.USER,
+        entityUuid: updatedUser.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: { uuid: updatedUser.uuid, username: updatedUser.username },
+      });
+
+      return { message: 'Password changed successfully' };
+    });
+  }
+
   async changePassword(userId: bigint, dto: ChangePasswordDto) {
     const user = await this.prisma.client.user.findFirst({
       where: { id: userId, deletedAt: null },
@@ -398,13 +488,20 @@ export class AuthService {
       await invalidateUserSessions(tx, userId, LogoutReason.PASSWORD_CHANGED);
 
       await this.auditService.log(tx, {
-        entityType: 'User',
+        entityType: OutboxEntityType.USER,
         entityId: updatedUser.id,
         entityUuid: updatedUser.uuid,
         action: AuditAction.UPDATE,
         module: AuditModule.SECURITY,
         description: `Password changed for ${updatedUser.username}`,
         userId,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.USER,
+        entityUuid: updatedUser.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: { uuid: updatedUser.uuid, username: updatedUser.username },
       });
 
       return { message: 'Password changed successfully' };

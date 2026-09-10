@@ -255,7 +255,7 @@ export class RolePermissionService {
 
   async replace(roleId: bigint, dto: ReplaceRolePermissionsDto) {
     return this.unitOfWork.run(async (tx) => {
-      await assertRoleExists(tx, roleId);
+      const role = await assertRoleExists(tx, roleId);
 
       const targetPermissionIds = new Set(dto.permissionIds);
       for (const permissionId of targetPermissionIds) {
@@ -313,6 +313,18 @@ export class RolePermissionService {
         action: AuditAction.UPDATE,
         module: AuditModule.SECURITY,
         description: `Replaced permissions for role ${roleId}`,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.ROLE_PERMISSION,
+        entityUuid: role.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          roleId: roleId.toString(),
+          permissionIds: [...targetPermissionIds].map((permissionId) =>
+            permissionId.toString(),
+          ),
+        },
       });
 
       return results.map(toRolePermissionResponse);

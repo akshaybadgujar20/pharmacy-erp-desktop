@@ -253,7 +253,7 @@ export class UserRoleService {
 
   async replace(userId: bigint, dto: ReplaceUserRolesDto) {
     return this.unitOfWork.run(async (tx) => {
-      await assertUserExists(tx, userId);
+      const user = await assertUserExists(tx, userId);
 
       const targetRoleIds = new Set(dto.roleIds);
       for (const roleId of targetRoleIds) {
@@ -324,6 +324,16 @@ export class UserRoleService {
         action: AuditAction.UPDATE,
         module: AuditModule.SECURITY,
         description: `Replaced roles for user ${userId}`,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.USER_ROLE,
+        entityUuid: user.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          userId: userId.toString(),
+          roleIds: [...targetRoleIds].map((roleId) => roleId.toString()),
+        },
       });
 
       return results.map(toUserRoleResponse);

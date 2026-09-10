@@ -24,7 +24,7 @@ export async function invalidateSessionsForRole(
   reason: string,
 ): Promise<void> {
   const userRoles = await tx.userRole.findMany({
-    where: { roleId, isActive: true, deletedAt: null },
+    where: { roleId, deletedAt: null },
     select: { userId: true },
   });
 

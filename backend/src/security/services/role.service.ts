@@ -194,7 +194,7 @@ export class RoleService {
       }
 
       const inUse = await tx.userRole.findFirst({
-        where: { roleId: id, deletedAt: null },
+        where: { roleId: id, isActive: true, deletedAt: null },
       });
 
       if (inUse) {

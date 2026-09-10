@@ -15,10 +15,13 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { LogoutReason } from '../constants/security.constants';
 import { CreateUserBranchDto } from '../dto/create-user-branch.dto';
 import { UpdateUserBranchDto } from '../dto/update-user-branch.dto';
 import { toUserBranchResponse } from '../mappers/user-branch.mapper';
+import { invalidateUserSessions } from '../utils/session.util';
 import {
+  assertBranchExists,
   assertUserExists,
   optimisticUpdate,
   throwConflict,
@@ -69,6 +72,7 @@ export class UserBranchService {
   async create(userId: bigint, dto: CreateUserBranchDto) {
     return this.unitOfWork.run(async (tx) => {
       await assertUserExists(tx, userId);
+      await assertBranchExists(tx, dto.branchId);
 
       const existingActive = await tx.userBranch.findFirst({
         where: {
@@ -171,6 +175,10 @@ export class UserBranchService {
         `User branch version conflict or not found: ${id}`,
       );
 
+      if (dto.isActive === false && existing.isActive) {
+        await invalidateUserSessions(tx, userId, LogoutReason.FORCE_LOGOUT);
+      }
+
       const userBranch = await tx.userBranch.findFirstOrThrow({
         where: { id },
       });
@@ -222,6 +230,8 @@ export class UserBranchService {
         id,
         `User branch version conflict or not found: ${id}`,
       );
+
+      await invalidateUserSessions(tx, userId, LogoutReason.FORCE_LOGOUT);
 
       await this.auditService.log(tx, {
         entityType: OutboxEntityType.USER_BRANCH,

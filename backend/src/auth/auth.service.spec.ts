@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import type { Request } from 'express';
 import { AuditService } from '../audit/audit.service';
 import { ErrorCode } from '../common/exceptions/error-code';
+import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AuthService } from './auth.service';
@@ -33,6 +34,7 @@ describe('AuthService', () => {
   let jwtService: { sign: jest.Mock };
   let unitOfWork: { run: jest.Mock };
   let auditService: { log: jest.Mock };
+  let outboxService: { enqueue: jest.Mock };
 
   const mockRequest = {
     ip: '127.0.0.1',
@@ -77,6 +79,10 @@ describe('AuthService', () => {
       log: jest.fn(),
     };
 
+    outboxService = {
+      enqueue: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -85,6 +91,7 @@ describe('AuthService', () => {
         { provide: JwtService, useValue: jwtService },
         { provide: UnitOfWorkService, useValue: unitOfWork },
         { provide: AuditService, useValue: auditService },
+        { provide: OutboxService, useValue: outboxService },
       ],
     }).compile();
 

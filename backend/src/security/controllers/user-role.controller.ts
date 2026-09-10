@@ -31,6 +31,15 @@ export class UserRoleController {
     return this.userRoleService.list(userId, query);
   }
 
+  @Put('replace')
+  @RequirePermissions('SECURITY:USER_ROLE:REPLACE')
+  replace(
+    @Param('userId', ParseBigIntPipe) userId: bigint,
+    @Body() dto: ReplaceUserRolesDto,
+  ) {
+    return this.userRoleService.replace(userId, dto);
+  }
+
   @Get(':id')
   @RequirePermissions('SECURITY:USER_ROLE:READ')
   getById(
@@ -67,14 +76,5 @@ export class UserRoleController {
     @Query() query: DeleteEntityQueryDto,
   ) {
     return this.userRoleService.delete(userId, id, query.version);
-  }
-
-  @Put('replace')
-  @RequirePermissions('SECURITY:USER_ROLE:REPLACE')
-  replace(
-    @Param('userId', ParseBigIntPipe) userId: bigint,
-    @Body() dto: ReplaceUserRolesDto,
-  ) {
-    return this.userRoleService.replace(userId, dto);
   }
 }

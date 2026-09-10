@@ -8,7 +8,7 @@ alwaysApply: false
 
 **Read the full memory model first:** [`.cursor/rules/docs/security-module.md`](docs/security-module.md)
 
-User & Security admin APIs live in `backend/src/security/`. Auth login/logout/refresh/me/change-password stay in `backend/src/auth/`.
+User & Security admin APIs live in `backend/src/security/`. Auth login/logout/refresh/me/change-password/change-required-password stay in `backend/src/auth/`.
 
 ## Golden rules
 

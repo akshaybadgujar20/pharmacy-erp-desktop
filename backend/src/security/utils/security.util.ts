@@ -160,3 +160,21 @@ export async function assertEmployeeAvailableForUser(
     );
   }
 }
+
+export async function assertBranchExists(
+  tx: TxClient,
+  branchId: bigint,
+): Promise<{ id: bigint }> {
+  const branch = await tx.branch.findFirst({
+    where: { id: branchId, deletedAt: null },
+    select: { id: true },
+  });
+
+  if (!branch) {
+    throwNotFound(ErrorCode.BRANCH_NOT_FOUND, `Branch not found: ${branchId}`, {
+      branchId: branchId.toString(),
+    });
+  }
+
+  return branch;
+}

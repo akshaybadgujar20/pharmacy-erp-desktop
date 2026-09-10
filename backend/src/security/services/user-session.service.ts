@@ -32,10 +32,22 @@ export class UserSessionService {
     const pageSize = query.pageSize ?? 20;
     const search = query.search?.trim();
 
+    const loginFrom = query.loginFrom ? BigInt(query.loginFrom) : undefined;
+    const loginTo = query.loginTo ? BigInt(query.loginTo) : undefined;
+
     const where: Prisma.UserSessionWhereInput = {
       deletedAt: null,
       ...(query.userId ? { userId: query.userId } : {}),
+      ...(query.branchId ? { branchId: query.branchId } : {}),
       ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
+      ...(loginFrom || loginTo
+        ? {
+            loginTime: {
+              ...(loginFrom ? { gte: loginFrom } : {}),
+              ...(loginTo ? { lte: loginTo } : {}),
+            },
+          }
+        : {}),
       ...(search
         ? {
             OR: [

@@ -5,6 +5,7 @@ import { Req } from '@nestjs/common';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ChangeRequiredPasswordDto } from './dto/change-required-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
@@ -36,6 +37,12 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: AuthenticatedUser) {
     return this.authService.getProfile(user);
+  }
+
+  @Public()
+  @Post('change-required-password')
+  changeRequiredPassword(@Body() dto: ChangeRequiredPasswordDto) {
+    return this.authService.changeRequiredPassword(dto);
   }
 
   @Post('change-password')
