@@ -15,6 +15,7 @@ Topic-based architecture docs for the Pharmacy ERP. Start here instead of the le
 | [Security](./security.md) | Electron hardening, JWT auth summary |
 | [Logging and audit](./logging-and-audit.md) | **Implemented** — Winston logging, `AuditService`, correlation IDs |
 | [Reporting](./reporting.md) | **Implemented** — report registry, API usage, party reports, CSV/Excel/PDF export, extension guide |
+| [Backend developer guide](./backend-developer-guide.md) | **Implemented** — onboarding, module wiring, non-trivial files, appendices, E2E flows, find-by-concern |
 | [Extending the backend](./extending-the-backend.md) | **Implemented** — step-by-step guide for adding new feature modules (DTOs, service, controller, persistence, audit/outbox, tests) |
 | [Testing](./testing.md) | **Implemented** — Jest commands: unit, persistence, e2e, feature/file filters, Angular |
 | [Engineering standards](./engineering-standards.md) | Coding, testing, CI/CD, performance, release checklist |

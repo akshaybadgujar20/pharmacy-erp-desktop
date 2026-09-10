@@ -13,6 +13,7 @@ This document describes the shared persistence foundation used by the NestJS bac
 | `SequenceGeneratorService` | `src/persistence/sequence/` | Branch-scoped document numbers |
 | `OutboxService` | `src/persistence/outbox/` | Transactional outbox enqueue |
 | `InventoryLedgerService` | `src/persistence/inventory/` | Stock + movement ledger |
+| `LedgerPostingService` | `src/persistence/ledger/` | Double-entry voucher posting and reversal |
 
 ## Request context
 
@@ -22,6 +23,19 @@ Every business transaction should run inside `RequestContextService.run()` so do
 - `deviceId` (required for outbox ordering)
 
 Outbox `sequenceNo` is allocated per `deviceId` inside the same DB transaction as the business write.
+
+### Tenant scope helpers
+
+`src/persistence/context/tenant-scope.util.ts` provides consistent Prisma `where` scoping:
+
+| Function | Purpose |
+|----------|---------|
+| `getTenantScope(requestContext)` | Returns `{ companyId, branchId }` from JWT-enriched context |
+| `withBranchScope(scope, where)` | Merges `branchId` into a Prisma `where` clause |
+| `withCompanyScope(scope, where)` | Merges `companyId` into a Prisma `where` clause |
+| `isUserContextPopulated(ctx)` | True when `userId` is set (post-auth) |
+
+Branch-scoped modules (purchase, sales, inventory stock ops, prescription, finance payments) use these helpers on list/get and inside `unitOfWork.run()` writes. Org-global modules (party, medicine, masters, security) omit branch filters.
 
 ## Unit of work
 
@@ -47,6 +61,19 @@ Use `UnitOfWorkService.run()` instead of calling `prisma.$transaction()` directl
 - Upserts `Stock` for `(branchId, batchId)`
 - Guards negative stock on `OUT` (`STOCK_INSUFFICIENT`)
 - Inserts immutable `StockMovement` with `balanceAfter`
+
+**Consumers:** `goods-receipt` (accept), `purchase-return` (approve), `sales-invoice` (post), `sales-return` (approve), `stock-adjustment` (approve), `stock-transfer` (dispatch/receive), `stock-take` (reconcile).
+
+## Ledger posting
+
+`LedgerPostingService` (`src/persistence/ledger/ledger-posting.service.ts`) posts balanced double-entry vouchers:
+
+- `postVoucher(tx, PostVoucherInput)` — validates debits = credits, ledger active status, open financial year
+- `reverseVoucher(tx, ReverseVoucherInput)` — creates reversal entries for cancel flows
+
+**Consumers:** `purchase-invoice` (post/cancel), `sales-invoice`, `sales-payment`, `sales-return`, `payment`, `receipt`.
+
+Ledger balance is never stored on `Ledger` — derived from immutable `LedgerEntry` rows.
 
 ## Outbox
 
@@ -77,6 +104,7 @@ See `test/persistence/` for examples (`runWithTestContext`, `deviceId: test-devi
 
 ## Related docs
 
+- [Backend developer guide](../architecture/backend-developer-guide.md) — module index and persistence adoption matrix
 - [prisma_sqlite_jpa_postgres_alignment.md](./prisma_sqlite_jpa_postgres_alignment.md)
 - [database_overview.md](./database_overview.md)
 - Outbox table: [synchronization/synchronization.md](./tables/synchronization/synchronization.md#outbox)

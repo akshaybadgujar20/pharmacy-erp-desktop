@@ -141,6 +141,7 @@ Implementation-grounded agent references in [`.cursor/rules/docs/`](../.cursor/r
 
 ## Architecture docs
 
+- [Backend developer guide](../docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md) — onboarding, module wiring, non-trivial files, appendices (glossary, auth chain, troubleshooting), find-by-concern
 - [Early foundations](../docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) — auth, env vars, settings, Angular/Electron layer
 - [Extending the backend](../docs/pharmacy_erp_architecture_docs/architecture/extending-the-backend.md) — step-by-step guide for adding new feature modules
 - [Testing](../docs/pharmacy_erp_architecture_docs/architecture/testing.md) — unit, persistence, e2e, feature/file commands

@@ -6,8 +6,9 @@ This document explains how the backend is structured and gives a step-by-step re
 
 Related docs:
 
+- [Backend developer guide](./backend-developer-guide.md) — onboarding, module index, cross-module relationships, E2E flows, API route index
 - [Application architecture](./application-architecture.md) — Angular / Electron / NestJS layers
-- [Persistence patterns](../database/persistence-patterns.md) — UnitOfWork, Outbox, Sequence, InventoryLedger
+- [Persistence patterns](../database/persistence-patterns.md) — UnitOfWork, Outbox, Sequence, InventoryLedger, LedgerPosting, tenant scope
 - [Reporting](./reporting.md) — read-only report registry and export
 - [Logging and audit](./logging-and-audit.md) — Winston logging and `AuditService`
 - [Testing](./testing.md) — unit, persistence, e2e commands
