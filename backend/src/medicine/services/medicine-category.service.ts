@@ -187,7 +187,9 @@ export class MedicineCategoryService {
       const updateResult = await tx.medicineCategory.updateMany({
         where: { id, version: dto.version, deletedAt: null },
         data: {
-          parentCategoryId: dto.parentCategoryId,
+          ...(dto.parentCategoryId !== undefined
+            ? { parentCategoryId: dto.parentCategoryId }
+            : {}),
           categoryCode: dto.categoryCode,
           categoryName: dto.categoryName,
           description: dto.description,

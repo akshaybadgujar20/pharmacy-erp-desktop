@@ -1,17 +1,15 @@
 import { Type } from 'class-transformer';
-import { Transform } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
   IsBoolean,
   IsInt,
   IsOptional,
-  IsString,
   Min,
-  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { NullableStringField } from '../../common/dto/nullable-fields.decorator';
 
 export class ReplaceMedicineSaltItemDto {
   @MandatoryBigIntField()
@@ -21,10 +19,7 @@ export class ReplaceMedicineSaltItemDto {
   @Min(1)
   sequenceNo!: number;
 
-  @IsOptional()
-  @ValidateIf((_, value) => value !== null)
-  @IsString()
-  @Transform(({ value }: { value: unknown }) => (value === null ? null : value))
+  @NullableStringField()
   percentage?: string | null;
 }
 

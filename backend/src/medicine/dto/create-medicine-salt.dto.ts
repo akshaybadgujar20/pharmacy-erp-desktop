@@ -1,9 +1,9 @@
-import { Transform } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Min, ValidateIf } from 'class-validator';
+import { IsInt, IsOptional, Min } from 'class-validator';
 import {
   MandatoryBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
+import { NullableStringField } from '../../common/dto/nullable-fields.decorator';
 
 export class CreateMedicineSaltDto {
   @MandatoryBigIntField()
@@ -13,10 +13,7 @@ export class CreateMedicineSaltDto {
   @Min(1)
   sequenceNo!: number;
 
-  @IsOptional()
-  @ValidateIf((_, value) => value !== null)
-  @IsString()
-  @Transform(({ value }: { value: unknown }) => (value === null ? null : value))
+  @NullableStringField()
   percentage?: string | null;
 }
 
@@ -33,9 +30,6 @@ export class UpdateMedicineSaltDto {
   @Min(1)
   sequenceNo?: number;
 
-  @IsOptional()
-  @ValidateIf((_, value) => value !== null)
-  @IsString()
-  @Transform(({ value }: { value: unknown }) => (value === null ? null : value))
+  @NullableStringField()
   percentage?: string | null;
 }

@@ -16,16 +16,17 @@ Org-global medicine master data. Mirrors party/security CRUD patterns.
 2. **All mutations** — audit + outbox in the same transaction (`AuditModule.MEDICINE`).
 3. **Org-global** — no branch scoping on list/get.
 4. **Manufacturer** mirrors Supplier: `partyId` in create body, one per party, immutable `partyId`.
-5. **MedicineSalt** nested under `/medicines/:medicineId/salts`; hard delete junction rows; `PUT .../replace` bulk replace.
-6. **Medicine** `medicineCode` immutable after create; `medicineName` unique per `manufacturerId`.
-7. **Category** flat CRUD with `assertNoCategoryCycle` on parent changes.
-8. **System rows** (`isSystemSchedule`, `isSystemUnit`): full CRUD; delete blocked only by FK refs.
+5. **MedicineSalt** nested under `/medicines/:medicineId/salts`; hard delete junction rows; `PUT .../replace` bulk replace; mutations require active medicine; empty replace requires `confirmClear: true`; `percentage` clearable via `{ "percentage": null }`.
+6. **Medicine** `medicineCode` immutable after create; `medicineName` unique per `manufacturerId`; optional `barcode` unique when provided; `scheduleId` clearable via `{ "scheduleId": null }` (`NullableBigIntField`); GET list/get accepts `MASTER:MEDICINE:READ` **or** legacy `MASTER:MEDICINE:UPDATE` (`@RequireAnyPermission`).
+7. **Category** flat CRUD with `assertNoCategoryCycle` on parent changes; `parentCategoryId` clearable via `{ "parentCategoryId": null }`; max depth `CATEGORY_HIERARCHY_MAX_DEPTH` (100).
+8. **UOM** `unitType` values: `COUNT`, `PACKAGING`, `VOLUME`, `WEIGHT` (run `db:seed:fresh` to migrate legacy `PACK` rows).
+9. **System rows** (`isSystemSchedule`, `isSystemUnit`): full CRUD; delete blocked only by FK refs.
 
 ## Delete guards
 
 | Entity | Block when |
 |--------|------------|
-| Medicine | batches, stock movements, purchase/sales line items, price list items |
+| Medicine | batches, stock movements, purchase/sales line items, price list items, prescriptions, discount rules |
 | Manufacturer | medicines reference |
 | Category | child categories or medicines |
 | Generic | salt compositions |
@@ -37,13 +38,13 @@ Org-global medicine master data. Mirrors party/security CRUD patterns.
 
 - **DTOs:** update requires `version`; nested MedicineSalt create has no `medicineId` in body.
 - **Mappers:** one-way `to{Entity}Response()`; IDs as strings; decimals as strings.
-- **Permissions:** `MASTER:RESOURCE:ACTION` on every endpoint.
+- **Permissions:** `MASTER:RESOURCE:ACTION` on every endpoint; legacy `MASTER_MEDICINE` (`bbbb...06`) grants `MASTER:MEDICINE:UPDATE` only — sufficient for medicine GET via `@RequireAnyPermission`; assign `MASTER:MEDICINE:READ` for read-only roles.
 - **Constants:** [`medicine.constants.ts`](../backend/src/medicine/constants/medicine.constants.ts).
 - **Utils:** [`medicine.util.ts`](../backend/src/medicine/utils/medicine.util.ts).
 
 ## Not implemented
 
-Unit/persistence/e2e tests, Angular clients, category tree endpoint, medicine code auto-sequence.
+Unit/persistence/e2e tests, Angular clients, category tree endpoint, medicine code auto-sequence, cross-module `assertMedicineExists` consolidation.
 
 ## Architecture reference
 

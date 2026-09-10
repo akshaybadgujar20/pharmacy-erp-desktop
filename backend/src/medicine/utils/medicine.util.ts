@@ -5,6 +5,8 @@ import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 import { CATEGORY_HIERARCHY_MAX_DEPTH } from '../constants/medicine.constants';
 
+type MedicineLookupClient = Pick<TxClient, 'medicine'>;
+
 export function serializeBigInt(
   value: bigint | null | undefined,
 ): string | null {
@@ -217,11 +219,11 @@ export async function assertSaltCompositionExists(
 }
 
 export async function assertMedicineExists(
-  tx: TxClient,
+  client: MedicineLookupClient,
   medicineId: bigint,
   requireActive = true,
 ): Promise<{ id: bigint; uuid: string }> {
-  const medicine = await tx.medicine.findFirst({
+  const medicine = await client.medicine.findFirst({
     where: {
       id: medicineId,
       deletedAt: null,

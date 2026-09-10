@@ -6,5 +6,4 @@ export const LogoutReason = {
   PASSWORD_CHANGED: 'PASSWORD_CHANGED',
 } as const;
 
-export type LogoutReason =
-  (typeof LogoutReason)[keyof typeof LogoutReason];
+export type LogoutReason = (typeof LogoutReason)[keyof typeof LogoutReason];

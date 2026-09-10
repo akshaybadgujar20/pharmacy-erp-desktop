@@ -41,7 +41,7 @@ export class MedicineSaltService {
   ) {}
 
   async list(medicineId: bigint, query: PaginationQueryDto) {
-    await this.ensureMedicineExists(medicineId);
+    await assertMedicineExists(this.prisma.client, medicineId, false);
 
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -325,21 +325,6 @@ export class MedicineSaltService {
 
       return results.map(toMedicineSaltResponse);
     });
-  }
-
-  private async ensureMedicineExists(medicineId: bigint) {
-    const medicine = await this.prisma.client.medicine.findFirst({
-      where: { id: medicineId, deletedAt: null },
-      select: { id: true },
-    });
-
-    if (!medicine) {
-      throwNotFound(
-        ErrorCode.MEDICINE_NOT_FOUND,
-        `Medicine not found: ${medicineId}`,
-        { id: medicineId.toString() },
-      );
-    }
   }
 
   private async findActive(medicineId: bigint, id: bigint) {
