@@ -41,7 +41,7 @@ export class GoodsReceiptItemController {
   }
 
   @Post()
-  @RequirePermissions('PURCHASE:GOODS_RECEIPT:UPDATE')
+  @RequirePermissions('PURCHASE:GOODS_RECEIPT:CREATE')
   create(
     @Param('goodsReceiptId', ParseBigIntPipe) goodsReceiptId: bigint,
     @Body() dto: CreateGoodsReceiptItemDto,
@@ -60,7 +60,7 @@ export class GoodsReceiptItemController {
   }
 
   @Delete(':id')
-  @RequirePermissions('PURCHASE:GOODS_RECEIPT:UPDATE')
+  @RequirePermissions('PURCHASE:GOODS_RECEIPT:DELETE')
   delete(
     @Param('goodsReceiptId', ParseBigIntPipe) goodsReceiptId: bigint,
     @Param('id', ParseBigIntPipe) id: bigint,

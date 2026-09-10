@@ -82,8 +82,8 @@ Total routes: 382
 | GET | `/goods-receipts` | purchase | PURCHASE:GOODS_RECEIPT:READ | GoodsReceiptController |
 | POST | `/goods-receipts` | purchase | PURCHASE:GOODS_RECEIPT:CREATE | GoodsReceiptController |
 | GET | `/goods-receipts/:goodsReceiptId/items` | purchase | PURCHASE:GOODS_RECEIPT:READ | GoodsReceiptItemController |
-| POST | `/goods-receipts/:goodsReceiptId/items` | purchase | PURCHASE:GOODS_RECEIPT:UPDATE | GoodsReceiptItemController |
-| DELETE | `/goods-receipts/:goodsReceiptId/items/:id` | purchase | PURCHASE:GOODS_RECEIPT:UPDATE | GoodsReceiptItemController |
+| POST | `/goods-receipts/:goodsReceiptId/items` | purchase | PURCHASE:GOODS_RECEIPT:CREATE | GoodsReceiptItemController |
+| DELETE | `/goods-receipts/:goodsReceiptId/items/:id` | purchase | PURCHASE:GOODS_RECEIPT:DELETE | GoodsReceiptItemController |
 | GET | `/goods-receipts/:goodsReceiptId/items/:id` | purchase | PURCHASE:GOODS_RECEIPT:READ | GoodsReceiptItemController |
 | PATCH | `/goods-receipts/:goodsReceiptId/items/:id` | purchase | PURCHASE:GOODS_RECEIPT:UPDATE | GoodsReceiptItemController |
 | DELETE | `/goods-receipts/:id` | purchase | PURCHASE:GOODS_RECEIPT:DELETE | GoodsReceiptController |
@@ -92,7 +92,7 @@ Total routes: 382
 | POST | `/goods-receipts/:id/accept` | purchase | PURCHASE:GOODS_RECEIPT:ACCEPT | GoodsReceiptController |
 | POST | `/goods-receipts/:id/cancel` | purchase | PURCHASE:GOODS_RECEIPT:CANCEL | GoodsReceiptController |
 | POST | `/goods-receipts/:id/reject` | purchase | PURCHASE:GOODS_RECEIPT:REJECT | GoodsReceiptController |
-| POST | `/goods-receipts/:id/submit-inspection` | purchase | PURCHASE:GOODS_RECEIPT:SUBMIT | GoodsReceiptController |
+| POST | `/goods-receipts/:id/submit-inspection` | purchase | PURCHASE:GOODS_RECEIPT:SUBMIT_INSPECTION | GoodsReceiptController |
 | GET | `/ledger-entries` | finance | FINANCE:LEDGER_ENTRY:READ | LedgerEntryController |
 | GET | `/ledger-entries/:id` | finance | FINANCE:LEDGER_ENTRY:READ | LedgerEntryController |
 | GET | `/ledgers` | finance | FINANCE:LEDGER:READ | LedgerController |
@@ -204,8 +204,8 @@ Total routes: 382
 | POST | `/purchase-invoices/:id/cancel` | purchase | PURCHASE:PURCHASE_INVOICE:CANCEL | PurchaseInvoiceController |
 | POST | `/purchase-invoices/:id/post` | purchase | PURCHASE:PURCHASE_INVOICE:POST | PurchaseInvoiceController |
 | GET | `/purchase-invoices/:purchaseInvoiceId/items` | purchase | PURCHASE:PURCHASE_INVOICE:READ | PurchaseInvoiceItemController |
-| POST | `/purchase-invoices/:purchaseInvoiceId/items` | purchase | PURCHASE:PURCHASE_INVOICE:UPDATE | PurchaseInvoiceItemController |
-| DELETE | `/purchase-invoices/:purchaseInvoiceId/items/:id` | purchase | PURCHASE:PURCHASE_INVOICE:UPDATE | PurchaseInvoiceItemController |
+| POST | `/purchase-invoices/:purchaseInvoiceId/items` | purchase | PURCHASE:PURCHASE_INVOICE:CREATE | PurchaseInvoiceItemController |
+| DELETE | `/purchase-invoices/:purchaseInvoiceId/items/:id` | purchase | PURCHASE:PURCHASE_INVOICE:DELETE | PurchaseInvoiceItemController |
 | GET | `/purchase-invoices/:purchaseInvoiceId/items/:id` | purchase | PURCHASE:PURCHASE_INVOICE:READ | PurchaseInvoiceItemController |
 | PATCH | `/purchase-invoices/:purchaseInvoiceId/items/:id` | purchase | PURCHASE:PURCHASE_INVOICE:UPDATE | PurchaseInvoiceItemController |
 | GET | `/purchase-orders` | purchase | PURCHASE:PURCHASE_ORDER:READ | PurchaseOrderController |
@@ -220,8 +220,8 @@ Total routes: 382
 | POST | `/purchase-orders/:id/send` | purchase | PURCHASE:PURCHASE_ORDER:SEND | PurchaseOrderController |
 | POST | `/purchase-orders/:id/submit` | purchase | PURCHASE:PURCHASE_ORDER:SUBMIT | PurchaseOrderController |
 | GET | `/purchase-orders/:purchaseOrderId/items` | purchase | PURCHASE:PURCHASE_ORDER:READ | PurchaseOrderItemController |
-| POST | `/purchase-orders/:purchaseOrderId/items` | purchase | PURCHASE:PURCHASE_ORDER:UPDATE | PurchaseOrderItemController |
-| DELETE | `/purchase-orders/:purchaseOrderId/items/:id` | purchase | PURCHASE:PURCHASE_ORDER:UPDATE | PurchaseOrderItemController |
+| POST | `/purchase-orders/:purchaseOrderId/items` | purchase | PURCHASE:PURCHASE_ORDER:CREATE | PurchaseOrderItemController |
+| DELETE | `/purchase-orders/:purchaseOrderId/items/:id` | purchase | PURCHASE:PURCHASE_ORDER:DELETE | PurchaseOrderItemController |
 | GET | `/purchase-orders/:purchaseOrderId/items/:id` | purchase | PURCHASE:PURCHASE_ORDER:READ | PurchaseOrderItemController |
 | PATCH | `/purchase-orders/:purchaseOrderId/items/:id` | purchase | PURCHASE:PURCHASE_ORDER:UPDATE | PurchaseOrderItemController |
 | GET | `/purchase-returns` | purchase | PURCHASE:PURCHASE_RETURN:READ | PurchaseReturnController |
@@ -234,8 +234,8 @@ Total routes: 382
 | POST | `/purchase-returns/:id/reject` | purchase | PURCHASE:PURCHASE_RETURN:REJECT | PurchaseReturnController |
 | POST | `/purchase-returns/:id/submit` | purchase | PURCHASE:PURCHASE_RETURN:SUBMIT | PurchaseReturnController |
 | GET | `/purchase-returns/:purchaseReturnId/items` | purchase | PURCHASE:PURCHASE_RETURN:READ | PurchaseReturnItemController |
-| POST | `/purchase-returns/:purchaseReturnId/items` | purchase | PURCHASE:PURCHASE_RETURN:UPDATE | PurchaseReturnItemController |
-| DELETE | `/purchase-returns/:purchaseReturnId/items/:id` | purchase | PURCHASE:PURCHASE_RETURN:UPDATE | PurchaseReturnItemController |
+| POST | `/purchase-returns/:purchaseReturnId/items` | purchase | PURCHASE:PURCHASE_RETURN:CREATE | PurchaseReturnItemController |
+| DELETE | `/purchase-returns/:purchaseReturnId/items/:id` | purchase | PURCHASE:PURCHASE_RETURN:DELETE | PurchaseReturnItemController |
 | GET | `/purchase-returns/:purchaseReturnId/items/:id` | purchase | PURCHASE:PURCHASE_RETURN:READ | PurchaseReturnItemController |
 | PATCH | `/purchase-returns/:purchaseReturnId/items/:id` | purchase | PURCHASE:PURCHASE_RETURN:UPDATE | PurchaseReturnItemController |
 | GET | `/receipts` | finance | FINANCE:RECEIPT:READ | ReceiptController |

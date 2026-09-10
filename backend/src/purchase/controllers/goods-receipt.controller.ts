@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
 import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { GoodsReceiptListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreateGoodsReceiptDto } from '../dto/create-goods-receipt.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
@@ -23,7 +23,7 @@ export class GoodsReceiptController {
 
   @Get()
   @RequirePermissions('PURCHASE:GOODS_RECEIPT:READ')
-  list(@Query() query: PaginationQueryDto) {
+  list(@Query() query: GoodsReceiptListQueryDto) {
     return this.goodsReceiptService.list(query);
   }
 
@@ -58,7 +58,7 @@ export class GoodsReceiptController {
   }
 
   @Post(':id/submit-inspection')
-  @RequirePermissions('PURCHASE:GOODS_RECEIPT:SUBMIT')
+  @RequirePermissions('PURCHASE:GOODS_RECEIPT:SUBMIT_INSPECTION')
   submitInspection(
     @Param('id', ParseBigIntPipe) id: bigint,
     @Body() dto: PurchaseWorkflowDto,

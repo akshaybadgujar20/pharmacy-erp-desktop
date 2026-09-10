@@ -30,6 +30,7 @@ import {
   computeLineAmounts,
   getNextLineNumber,
   optimisticUpdate,
+  rollupPurchaseInvoiceTotals,
   throwNotFound,
 } from '../utils/purchase.util';
 
@@ -174,6 +175,7 @@ export class PurchaseInvoiceItemService {
         },
       });
 
+      await rollupPurchaseInvoiceTotals(tx, purchaseInvoiceId);
       await this.emitParentChange(tx, parent);
       return toPurchaseInvoiceItemResponse(item);
     });
@@ -245,6 +247,7 @@ export class PurchaseInvoiceItemService {
       const item = await tx.purchaseInvoiceItem.findFirstOrThrow({
         where: { id },
       });
+      await rollupPurchaseInvoiceTotals(tx, purchaseInvoiceId);
       await this.emitParentChange(tx, parent);
 
       return toPurchaseInvoiceItemResponse(item);
@@ -274,6 +277,7 @@ export class PurchaseInvoiceItemService {
         `Purchase invoice item version conflict or not found: ${id}`,
       );
 
+      await rollupPurchaseInvoiceTotals(tx, purchaseInvoiceId);
       await this.emitParentChange(tx, parent);
       return { id: id.toString(), deleted: true };
     });

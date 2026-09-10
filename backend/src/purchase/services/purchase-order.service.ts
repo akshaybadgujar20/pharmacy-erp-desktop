@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { PurchaseDocumentListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
@@ -30,8 +30,10 @@ import { UpdatePurchaseOrderDto } from '../dto/update-purchase-order.dto';
 import { toPurchaseOrderResponse } from '../mappers/purchase-order.mapper';
 import {
   assertBranchExists,
-  assertDraftStatus,
+  assertPoEditableStatus,
+  assertPurchaseOrderHasNoReceipts,
   assertSupplierActive,
+  buildPurchaseDocumentListFilters,
   optimisticUpdate,
   throwNotFound,
 } from '../utils/purchase.util';
@@ -47,7 +49,7 @@ export class PurchaseOrderService {
     private readonly sequences: SequenceGeneratorService,
   ) {}
 
-  async list(query: PaginationQueryDto) {
+  async list(query: PurchaseDocumentListQueryDto) {
     const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -55,6 +57,7 @@ export class PurchaseOrderService {
 
     const where: Prisma.PurchaseOrderWhereInput = withBranchScope(scope, {
       deletedAt: null,
+      ...buildPurchaseDocumentListFilters(query, 'orderDate'),
       ...(search
         ? {
             OR: [
@@ -178,7 +181,7 @@ export class PurchaseOrderService {
         );
       }
 
-      assertDraftStatus(existing.status, 'Purchase order');
+      assertPoEditableStatus(existing.status);
 
       if (dto.supplierId) {
         await assertSupplierActive(tx, dto.supplierId);
@@ -238,7 +241,7 @@ export class PurchaseOrderService {
         );
       }
 
-      assertDraftStatus(existing.status, 'Purchase order');
+      assertPoEditableStatus(existing.status);
 
       const updateResult = await tx.purchaseOrder.updateMany({
         where: { id, version, deletedAt: null },
@@ -320,15 +323,74 @@ export class PurchaseOrderService {
   }
 
   async cancel(id: bigint, dto: PurchaseWorkflowDto) {
-    return this.transition(id, dto, {
-      from: [
+    return this.unitOfWork.run(async (tx) => {
+      const scope = getTenantScope(this.requestContext);
+      const order = await tx.purchaseOrder.findFirst({
+        where: withBranchScope(scope, { id, deletedAt: null }),
+      });
+
+      if (!order) {
+        throwNotFound(
+          ErrorCode.PURCHASE_ORDER_NOT_FOUND,
+          `Purchase order not found: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      const cancellable: string[] = [
         PurchaseOrderStatus.DRAFT,
         PurchaseOrderStatus.PENDING_APPROVAL,
         PurchaseOrderStatus.APPROVED,
         PurchaseOrderStatus.SENT_TO_SUPPLIER,
-      ],
-      to: PurchaseOrderStatus.CANCELLED,
-      action: AuditAction.UPDATE,
+      ];
+
+      if (!cancellable.includes(order.status)) {
+        throw new ApplicationException(
+          ErrorCode.INVALID_DOCUMENT_STATUS,
+          `Purchase order cannot be cancelled from status ${order.status}`,
+          HttpStatus.CONFLICT,
+          { status: order.status },
+        );
+      }
+
+      await assertPurchaseOrderHasNoReceipts(tx, id);
+
+      const updateResult = await tx.purchaseOrder.updateMany({
+        where: { id, version: dto.version, deletedAt: null },
+        data: {
+          status: PurchaseOrderStatus.CANCELLED,
+          remarks: dto.remarks ?? order.remarks,
+          updatedAt: BigInt(Date.now()),
+          version: { increment: 1 },
+        },
+      });
+
+      optimisticUpdate(
+        updateResult,
+        id,
+        `Purchase order version conflict or not found: ${id}`,
+      );
+
+      const updated = await tx.purchaseOrder.findFirstOrThrow({
+        where: { id },
+      });
+
+      await this.auditService.log(tx, {
+        entityType: OutboxEntityType.PURCHASE_ORDER,
+        entityId: updated.id,
+        entityUuid: updated.uuid,
+        action: AuditAction.UPDATE,
+        module: AuditModule.PURCHASE,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.PURCHASE_ORDER,
+        entityUuid: updated.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: { uuid: updated.uuid, status: updated.status },
+      });
+
+      return toPurchaseOrderResponse(updated);
     });
   }
 

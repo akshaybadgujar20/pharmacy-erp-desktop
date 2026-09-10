@@ -41,7 +41,7 @@ export class PurchaseReturnItemController {
   }
 
   @Post()
-  @RequirePermissions('PURCHASE:PURCHASE_RETURN:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_RETURN:CREATE')
   create(
     @Param('purchaseReturnId', ParseBigIntPipe) purchaseReturnId: bigint,
     @Body() dto: CreatePurchaseReturnItemDto,
@@ -60,7 +60,7 @@ export class PurchaseReturnItemController {
   }
 
   @Delete(':id')
-  @RequirePermissions('PURCHASE:PURCHASE_RETURN:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_RETURN:DELETE')
   delete(
     @Param('purchaseReturnId', ParseBigIntPipe) purchaseReturnId: bigint,
     @Param('id', ParseBigIntPipe) id: bigint,

@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { PurchaseDocumentListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
@@ -41,6 +41,7 @@ import {
   assertBranchExists,
   assertDraftStatus,
   assertSupplierActive,
+  buildPurchaseDocumentListFilters,
   optimisticUpdate,
   throwNotFound,
 } from '../utils/purchase.util';
@@ -57,7 +58,7 @@ export class PurchaseInvoiceService {
     private readonly ledgerPosting: LedgerPostingService,
   ) {}
 
-  async list(query: PaginationQueryDto) {
+  async list(query: PurchaseDocumentListQueryDto) {
     const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -65,6 +66,7 @@ export class PurchaseInvoiceService {
 
     const where: Prisma.PurchaseInvoiceWhereInput = withBranchScope(scope, {
       deletedAt: null,
+      ...buildPurchaseDocumentListFilters(query, 'invoiceDate'),
       ...(search
         ? {
             OR: [

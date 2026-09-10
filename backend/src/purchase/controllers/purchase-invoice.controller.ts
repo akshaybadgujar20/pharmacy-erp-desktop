@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
 import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { PurchaseDocumentListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreatePurchaseInvoiceDto } from '../dto/create-purchase-invoice.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
@@ -25,7 +25,7 @@ export class PurchaseInvoiceController {
 
   @Get()
   @RequirePermissions('PURCHASE:PURCHASE_INVOICE:READ')
-  list(@Query() query: PaginationQueryDto) {
+  list(@Query() query: PurchaseDocumentListQueryDto) {
     return this.purchaseInvoiceService.list(query);
   }
 

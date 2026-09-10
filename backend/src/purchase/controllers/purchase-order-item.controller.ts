@@ -41,7 +41,7 @@ export class PurchaseOrderItemController {
   }
 
   @Post()
-  @RequirePermissions('PURCHASE:PURCHASE_ORDER:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_ORDER:CREATE')
   create(
     @Param('purchaseOrderId', ParseBigIntPipe) purchaseOrderId: bigint,
     @Body() dto: CreatePurchaseOrderItemDto,
@@ -60,7 +60,7 @@ export class PurchaseOrderItemController {
   }
 
   @Delete(':id')
-  @RequirePermissions('PURCHASE:PURCHASE_ORDER:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_ORDER:DELETE')
   delete(
     @Param('purchaseOrderId', ParseBigIntPipe) purchaseOrderId: bigint,
     @Param('id', ParseBigIntPipe) id: bigint,

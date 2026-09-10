@@ -23,10 +23,10 @@ Match the inventory module CRUD template ([`backend/src/inventory/`](../backend/
 
 | Document | Flow | Workflow routes |
 |----------|------|-----------------|
-| PurchaseOrder | DRAFT → PENDING_APPROVAL → APPROVED → SENT → PARTIALLY_RECEIVED → COMPLETED / FORCE_CLOSED / CANCELLED | `submit`, `approve`, `reject`, `send`, `force-close`, `cancel` |
+| PurchaseOrder | DRAFT → PENDING_APPROVAL → APPROVED → SENT_TO_SUPPLIER → PARTIALLY_RECEIVED → COMPLETED / FORCE_CLOSED / CANCELLED | `submit`, `approve`, `reject`, `send`, `force-close`, `cancel` |
 | GoodsReceipt | DRAFT → UNDER_INSPECTION → ACCEPTED / PARTIALLY_ACCEPTED / REJECTED | `submit-inspection`, `accept`, `reject`, `cancel` |
 | PurchaseInvoice | DRAFT → POSTED → CANCELLED | `post`, `cancel` |
-| PurchaseReturn | DRAFT → PENDING_APPROVAL → DISPATCHED_TO_SUPPLIER | `submit`, `approve`, `reject`, `cancel` |
+| PurchaseReturn | DRAFT → PENDING_APPROVAL → DISPATCHED_TO_SUPPLIER / CANCELLED | `submit`, `approve`, `reject`, `cancel` |
 
 Header/item edits and deletes only in **DRAFT** (PO also editable in PENDING_APPROVAL until rejected).
 
@@ -44,11 +44,16 @@ Header/item edits and deletes only in **DRAFT** (PO also editable in PENDING_APP
 - GRN accept → `PURCHASE_GRN` IN per accepted line; creates/resolves `Batch`
 - GRN cancel (posted) → `PURCHASE_GRN` OUT reversal per accepted line
 - Return approve → `PURCHASE_RETURN` OUT per line
+- Return cancel (from `DISPATCHED_TO_SUPPLIER`) → `PURCHASE_RETURN` IN reversal per line
 - Invoice post → `LedgerPostingService` AP voucher + supplier outstanding (no stock)
+
+## List filters
+
+Header `GET` list endpoints accept pagination plus optional `status`, `supplierId`, `fromDate`, `toDate` (`PurchaseDocumentListQueryDto`). GRN lists also accept `purchaseOrderId` (`GoodsReceiptListQueryDto`).
 
 ## Not implemented
 
-Unit/persistence/e2e tests, Angular clients, three-way match strictness, over-receipt tolerance settings.
+Unit/persistence/e2e tests, Angular clients, three-way match strictness.
 
 ## Architecture reference
 

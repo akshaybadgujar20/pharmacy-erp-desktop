@@ -48,6 +48,17 @@ flowchart TB
 
 Permissions use `PURCHASE:RESOURCE:ACTION`. Delete endpoints require `DeleteEntityQueryDto` (`version` query param).
 
+### List query filters
+
+Header list endpoints (`GET /purchase-orders`, `/goods-receipts`, `/purchase-invoices`, `/purchase-returns`) extend pagination with:
+
+| Query param | Applies to |
+|-------------|------------|
+| `status` | All four |
+| `supplierId` | All four |
+| `fromDate`, `toDate` | All four (document date field per type) |
+| `purchaseOrderId` | GRN only |
+
 ### Purchase Order — header
 
 | Method | Path | Permission |
@@ -66,7 +77,7 @@ Permissions use `PURCHASE:RESOURCE:ACTION`. Delete endpoints require `DeleteEnti
 
 ### Purchase Order — items (`/purchase-orders/:purchaseOrderId/items`)
 
-Standard nested CRUD; permissions use `PURCHASE_ORDER` resource (`READ`/`CREATE`/`UPDATE`/`DELETE`).
+Nested CRUD at `/purchase-orders/:purchaseOrderId/items`: `POST` → `CREATE`, `PATCH` → `UPDATE`, `DELETE` → `DELETE`, `GET` → `READ`. Same pattern for GRN, invoice, and return item controllers.
 
 ### Goods Receipt — header
 

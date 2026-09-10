@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { GoodsReceiptListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
@@ -36,14 +36,15 @@ import {
   assertBranchExists,
   assertDraftStatus,
   assertEmployeeExists,
-  assertPurchaseOrderReceivable,
   assertSupplierActive,
+  buildPurchaseDocumentListFilters,
   grnStockQuantity,
   isGrnStockPosted,
   optimisticUpdate,
   resolveOrCreateBatch,
   rollupPurchaseOrderStatus,
   throwNotFound,
+  validateGrnPurchaseOrderLink,
 } from '../utils/purchase.util';
 
 @Injectable()
@@ -59,7 +60,7 @@ export class GoodsReceiptService {
     private readonly settingsService: SettingsService,
   ) {}
 
-  async list(query: PaginationQueryDto) {
+  async list(query: GoodsReceiptListQueryDto) {
     const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -67,6 +68,7 @@ export class GoodsReceiptService {
 
     const where: Prisma.GoodsReceiptWhereInput = withBranchScope(scope, {
       deletedAt: null,
+      ...buildPurchaseDocumentListFilters(query, 'receiptDate'),
       ...(search
         ? {
             OR: [
@@ -142,32 +144,12 @@ export class GoodsReceiptService {
       await assertSupplierActive(tx, dto.supplierId);
       await assertEmployeeExists(tx, dto.receivedByEmployeeId);
 
-      if (dto.purchaseOrderId) {
-        const purchaseOrder = await tx.purchaseOrder.findFirst({
-          where: withBranchScope(scope, {
-            id: dto.purchaseOrderId,
-            deletedAt: null,
-          }),
-        });
-
-        if (!purchaseOrder) {
-          throwNotFound(
-            ErrorCode.PURCHASE_ORDER_NOT_FOUND,
-            `Purchase order not found: ${dto.purchaseOrderId}`,
-            { purchaseOrderId: dto.purchaseOrderId.toString() },
-          );
-        }
-
-        assertPurchaseOrderReceivable(purchaseOrder.status);
-
-        if (purchaseOrder.supplierId !== dto.supplierId) {
-          throw new ApplicationException(
-            ErrorCode.BAD_REQUEST,
-            'Goods receipt supplier must match purchase order supplier',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-      }
+      await validateGrnPurchaseOrderLink(
+        tx,
+        scope,
+        dto.supplierId,
+        dto.purchaseOrderId,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -247,6 +229,57 @@ export class GoodsReceiptService {
       }
       if (dto.receivedByEmployeeId) {
         await assertEmployeeExists(tx, dto.receivedByEmployeeId);
+      }
+
+      const nextSupplierId = dto.supplierId ?? existing.supplierId;
+      const nextPurchaseOrderId =
+        dto.purchaseOrderId !== undefined
+          ? dto.purchaseOrderId
+          : existing.purchaseOrderId;
+
+      if (
+        dto.purchaseOrderId !== undefined &&
+        dto.purchaseOrderId !== existing.purchaseOrderId
+      ) {
+        if (!nextPurchaseOrderId) {
+          const allowed = await this.settingsService.getBoolean(
+            SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
+            false,
+          );
+          if (!allowed) {
+            throw new ApplicationException(
+              ErrorCode.GRN_PO_REQUIRED,
+              'Purchase order is required for goods receipt',
+              HttpStatus.BAD_REQUEST,
+            );
+          }
+        } else {
+          await validateGrnPurchaseOrderLink(
+            tx,
+            scope,
+            nextSupplierId,
+            nextPurchaseOrderId,
+          );
+        }
+      } else if (nextPurchaseOrderId) {
+        await validateGrnPurchaseOrderLink(
+          tx,
+          scope,
+          nextSupplierId,
+          nextPurchaseOrderId,
+        );
+      } else if (!nextPurchaseOrderId) {
+        const allowed = await this.settingsService.getBoolean(
+          SettingKey.PURCHASE_ALLOW_GRN_WITHOUT_PO,
+          false,
+        );
+        if (!allowed) {
+          throw new ApplicationException(
+            ErrorCode.GRN_PO_REQUIRED,
+            'Purchase order is required for goods receipt',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
       }
 
       const updateResult = await tx.goodsReceipt.updateMany({

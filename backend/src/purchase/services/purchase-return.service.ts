@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { PurchaseDocumentListQueryDto } from '../dto/purchase-document-list-query.dto';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import {
@@ -33,7 +33,9 @@ import { toPurchaseReturnResponse } from '../mappers/purchase-return.mapper';
 import {
   assertBranchExists,
   assertDraftStatus,
+  assertReturnQuantityAvailable,
   assertSupplierActive,
+  buildPurchaseDocumentListFilters,
   optimisticUpdate,
   throwNotFound,
 } from '../utils/purchase.util';
@@ -50,7 +52,7 @@ export class PurchaseReturnService {
     private readonly inventoryLedger: InventoryLedgerService,
   ) {}
 
-  async list(query: PaginationQueryDto) {
+  async list(query: PurchaseDocumentListQueryDto) {
     const scope = getTenantScope(this.requestContext);
     const page = query.page ?? 1;
     const pageSize = query.pageSize ?? 20;
@@ -58,6 +60,7 @@ export class PurchaseReturnService {
 
     const where: Prisma.PurchaseReturnWhereInput = withBranchScope(scope, {
       deletedAt: null,
+      ...buildPurchaseDocumentListFilters(query, 'returnDate'),
       ...(search
         ? {
             OR: [
@@ -312,6 +315,13 @@ export class PurchaseReturnService {
       let taxAmount = new Prisma.Decimal(0);
 
       for (const item of purchaseReturn.items) {
+        await assertReturnQuantityAvailable(
+          tx,
+          purchaseReturn.branchId,
+          item.batchId,
+          item.returnQuantity,
+        );
+
         await this.inventoryLedger.applyMovement(tx, {
           branchId: purchaseReturn.branchId,
           branchCode: branch.branchCode,
@@ -382,9 +392,87 @@ export class PurchaseReturnService {
   }
 
   async cancel(id: bigint, dto: PurchaseWorkflowDto) {
-    return this.transition(id, dto, {
-      from: [PurchaseReturnStatus.DRAFT, PurchaseReturnStatus.PENDING_APPROVAL],
-      to: PurchaseReturnStatus.CANCELLED,
+    return this.unitOfWork.run(async (tx) => {
+      const scope = getTenantScope(this.requestContext);
+      const purchaseReturn = await tx.purchaseReturn.findFirst({
+        where: withBranchScope(scope, { id, deletedAt: null }),
+        include: { items: { where: { deletedAt: null } } },
+      });
+
+      if (!purchaseReturn) {
+        throwNotFound(
+          ErrorCode.PURCHASE_RETURN_NOT_FOUND,
+          `Purchase return not found: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      const cancellable: string[] = [
+        PurchaseReturnStatus.DRAFT,
+        PurchaseReturnStatus.PENDING_APPROVAL,
+        PurchaseReturnStatus.DISPATCHED_TO_SUPPLIER,
+      ];
+
+      if (!cancellable.includes(purchaseReturn.status)) {
+        throw new ApplicationException(
+          ErrorCode.INVALID_DOCUMENT_STATUS,
+          `Purchase return cannot be cancelled from status ${purchaseReturn.status}`,
+          HttpStatus.CONFLICT,
+          { status: purchaseReturn.status },
+        );
+      }
+
+      if (
+        purchaseReturn.status === PurchaseReturnStatus.DISPATCHED_TO_SUPPLIER
+      ) {
+        const branch = await assertBranchExists(tx, purchaseReturn.branchId);
+        const userId = this.requestContext.tryGet()?.userId;
+
+        for (const item of purchaseReturn.items) {
+          await this.inventoryLedger.applyMovement(tx, {
+            branchId: purchaseReturn.branchId,
+            branchCode: branch.branchCode,
+            companyId: branch.companyId,
+            medicineId: item.medicineId,
+            batchId: item.batchId,
+            direction: 'IN',
+            quantity: item.returnQuantity,
+            unitCost: item.unitPrice,
+            movementType: StockMovementType.PURCHASE_RETURN,
+            referenceTable: 'purchase_returns',
+            referenceId: purchaseReturn.id,
+            createdBy: userId,
+            remarks: dto.remarks ?? 'Purchase return cancellation reversal',
+          });
+        }
+      }
+
+      const updateResult = await tx.purchaseReturn.updateMany({
+        where: { id, version: dto.version, deletedAt: null },
+        data: {
+          status: PurchaseReturnStatus.CANCELLED,
+          updatedAt: BigInt(Date.now()),
+          version: { increment: 1 },
+        },
+      });
+
+      optimisticUpdate(
+        updateResult,
+        id,
+        `Purchase return version conflict or not found: ${id}`,
+      );
+
+      const updated = await tx.purchaseReturn.findFirstOrThrow({
+        where: { id },
+      });
+      await this.emitChange(
+        tx,
+        updated,
+        AuditAction.UPDATE,
+        OutboxOperation.UPDATE,
+      );
+
+      return toPurchaseReturnResponse(updated);
     });
   }
 

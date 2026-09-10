@@ -26,6 +26,7 @@ import { UpdateGoodsReceiptItemDto } from '../dto/update-goods-receipt-item.dto'
 import { toGoodsReceiptItemResponse } from '../mappers/goods-receipt-item.mapper';
 import {
   assertDraftStatus,
+  assertGrnQuantityWithinPoPending,
   assertMedicineExists,
   computeLineAmounts,
   getNextLineNumber,
@@ -121,6 +122,14 @@ export class GoodsReceiptItemService {
       );
       await assertMedicineExists(tx, dto.medicineId);
 
+      if (dto.purchaseOrderItemId) {
+        await assertGrnQuantityWithinPoPending(
+          tx,
+          dto.purchaseOrderItemId,
+          dto.acceptedQuantity,
+        );
+      }
+
       const lineAmounts = computeLineAmounts(
         dto.acceptedQuantity,
         dto.purchaseRate,
@@ -199,6 +208,18 @@ export class GoodsReceiptItemService {
 
       const acceptedQuantity =
         dto.acceptedQuantity ?? existing.acceptedQuantity;
+      const purchaseOrderItemId =
+        dto.purchaseOrderItemId ?? existing.purchaseOrderItemId;
+
+      if (purchaseOrderItemId) {
+        await assertGrnQuantityWithinPoPending(
+          tx,
+          purchaseOrderItemId,
+          acceptedQuantity,
+          id,
+        );
+      }
+
       const purchaseRate = dto.purchaseRate ?? existing.purchaseRate;
       const lineAmounts = computeLineAmounts(
         acceptedQuantity,

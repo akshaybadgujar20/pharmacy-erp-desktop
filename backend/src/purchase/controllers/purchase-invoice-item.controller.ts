@@ -41,7 +41,7 @@ export class PurchaseInvoiceItemController {
   }
 
   @Post()
-  @RequirePermissions('PURCHASE:PURCHASE_INVOICE:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_INVOICE:CREATE')
   create(
     @Param('purchaseInvoiceId', ParseBigIntPipe) purchaseInvoiceId: bigint,
     @Body() dto: CreatePurchaseInvoiceItemDto,
@@ -60,7 +60,7 @@ export class PurchaseInvoiceItemController {
   }
 
   @Delete(':id')
-  @RequirePermissions('PURCHASE:PURCHASE_INVOICE:UPDATE')
+  @RequirePermissions('PURCHASE:PURCHASE_INVOICE:DELETE')
   delete(
     @Param('purchaseInvoiceId', ParseBigIntPipe) purchaseInvoiceId: bigint,
     @Param('id', ParseBigIntPipe) id: bigint,

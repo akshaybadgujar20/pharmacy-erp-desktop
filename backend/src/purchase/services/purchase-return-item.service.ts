@@ -1,10 +1,9 @@
 import { randomUUID } from 'crypto';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { AuditAction } from '../../audit/audit-action.constants';
 import { AuditModule } from '../../audit/audit-module.constants';
 import { AuditService } from '../../audit/audit.service';
-import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import {
@@ -26,11 +25,14 @@ import { CreatePurchaseReturnItemDto } from '../dto/create-purchase-return-item.
 import { UpdatePurchaseReturnItemDto } from '../dto/update-purchase-return-item.dto';
 import { toPurchaseReturnItemResponse } from '../mappers/purchase-return-item.mapper';
 import {
+  assertBatchBelongsToMedicine,
   assertDraftStatus,
   assertMedicineExists,
+  assertReturnQuantityAvailable,
   computeLineAmounts,
   getNextLineNumber,
   optimisticUpdate,
+  rollupPurchaseReturnTotals,
   throwConflict,
   throwNotFound,
 } from '../utils/purchase.util';
@@ -122,6 +124,7 @@ export class PurchaseReturnItemService {
         PurchaseReturnStatus.DRAFT,
       );
       await assertMedicineExists(tx, dto.medicineId);
+      await assertBatchBelongsToMedicine(tx, dto.batchId, dto.medicineId);
 
       const duplicate = await tx.purchaseReturnItem.findFirst({
         where: {
@@ -141,31 +144,12 @@ export class PurchaseReturnItemService {
       }
 
       const scope = getTenantScope(this.requestContext);
-      const stock = await tx.stock.findFirst({
-        where: {
-          branchId: scope.branchId,
-          batchId: dto.batchId,
-          deletedAt: null,
-        },
-      });
-
-      const returnQty = new Prisma.Decimal(dto.returnQuantity);
-      const available = new Prisma.Decimal(stock?.availableQuantity ?? 0);
-      const reserved = new Prisma.Decimal(stock?.reservedQuantity ?? 0);
-      const sellable = available.sub(reserved);
-
-      if (returnQty.gt(sellable)) {
-        throw new ApplicationException(
-          ErrorCode.RETURN_QUANTITY_EXCEEDED,
-          'Return quantity exceeds available stock',
-          HttpStatus.CONFLICT,
-          {
-            batchId: dto.batchId.toString(),
-            requested: returnQty.toString(),
-            available: sellable.toString(),
-          },
-        );
-      }
+      await assertReturnQuantityAvailable(
+        tx,
+        scope.branchId,
+        dto.batchId,
+        dto.returnQuantity,
+      );
 
       const lineAmounts = computeLineAmounts(
         dto.returnQuantity,
@@ -204,6 +188,7 @@ export class PurchaseReturnItemService {
         },
       });
 
+      await rollupPurchaseReturnTotals(tx, purchaseReturnId);
       await this.emitParentChange(tx, parent);
       return toPurchaseReturnItemResponse(item);
     });
@@ -237,34 +222,18 @@ export class PurchaseReturnItemService {
       const returnQuantity = dto.returnQuantity ?? existing.returnQuantity;
       const unitPrice = dto.unitPrice ?? existing.unitPrice;
       const batchId = dto.batchId ?? existing.batchId;
+      if (dto.batchId) {
+        await assertBatchBelongsToMedicine(tx, batchId, existing.medicineId);
+      }
 
       if (dto.returnQuantity || dto.batchId) {
         const scope = getTenantScope(this.requestContext);
-        const stock = await tx.stock.findFirst({
-          where: {
-            branchId: scope.branchId,
-            batchId,
-            deletedAt: null,
-          },
-        });
-
-        const returnQty = new Prisma.Decimal(returnQuantity);
-        const available = new Prisma.Decimal(stock?.availableQuantity ?? 0);
-        const reserved = new Prisma.Decimal(stock?.reservedQuantity ?? 0);
-        const sellable = available.sub(reserved);
-
-        if (returnQty.gt(sellable)) {
-          throw new ApplicationException(
-            ErrorCode.RETURN_QUANTITY_EXCEEDED,
-            'Return quantity exceeds available stock',
-            HttpStatus.CONFLICT,
-            {
-              batchId: batchId.toString(),
-              requested: returnQty.toString(),
-              available: sellable.toString(),
-            },
-          );
-        }
+        await assertReturnQuantityAvailable(
+          tx,
+          scope.branchId,
+          batchId,
+          returnQuantity,
+        );
       }
 
       const lineAmounts = computeLineAmounts(
@@ -304,6 +273,7 @@ export class PurchaseReturnItemService {
       const item = await tx.purchaseReturnItem.findFirstOrThrow({
         where: { id },
       });
+      await rollupPurchaseReturnTotals(tx, purchaseReturnId);
       await this.emitParentChange(tx, parent);
 
       return toPurchaseReturnItemResponse(item);
@@ -333,6 +303,7 @@ export class PurchaseReturnItemService {
         `Purchase return item version conflict or not found: ${id}`,
       );
 
+      await rollupPurchaseReturnTotals(tx, purchaseReturnId);
       await this.emitParentChange(tx, parent);
       return { id: id.toString(), deleted: true };
     });

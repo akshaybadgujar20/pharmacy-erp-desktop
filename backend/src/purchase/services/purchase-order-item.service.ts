@@ -24,8 +24,8 @@ import { CreatePurchaseOrderItemDto } from '../dto/create-purchase-order-item.dt
 import { UpdatePurchaseOrderItemDto } from '../dto/update-purchase-order-item.dto';
 import { toPurchaseOrderItemResponse } from '../mappers/purchase-order-item.mapper';
 import {
-  assertDraftStatus,
   assertMedicineExists,
+  assertPoEditableStatus,
   computeLineAmounts,
   getNextLineNumber,
   optimisticUpdate,
@@ -116,7 +116,7 @@ export class PurchaseOrderItemService {
   async create(purchaseOrderId: bigint, dto: CreatePurchaseOrderItemDto) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseOrderId);
-      assertDraftStatus(parent.status, 'Purchase order');
+      assertPoEditableStatus(parent.status);
       await assertMedicineExists(tx, dto.medicineId);
 
       const duplicate = await tx.purchaseOrderItem.findFirst({
@@ -183,7 +183,7 @@ export class PurchaseOrderItemService {
   ) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseOrderId);
-      assertDraftStatus(parent.status, 'Purchase order');
+      assertPoEditableStatus(parent.status);
 
       const existing = await tx.purchaseOrderItem.findFirst({
         where: { id, purchaseOrderId, deletedAt: null },
@@ -245,7 +245,7 @@ export class PurchaseOrderItemService {
   async delete(purchaseOrderId: bigint, id: bigint, version: number) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseOrderId);
-      assertDraftStatus(parent.status, 'Purchase order');
+      assertPoEditableStatus(parent.status);
 
       const updateResult = await tx.purchaseOrderItem.updateMany({
         where: { id, purchaseOrderId, version, deletedAt: null },

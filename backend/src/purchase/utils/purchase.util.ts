@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ApplicationException } from '../../common/exceptions/application.exception';
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
+import { withBranchScope } from '../../persistence/context/tenant-scope.util';
 import {
   GoodsReceiptStatus,
   PURCHASE_ORDER_RECEIVABLE_STATUSES,
@@ -66,6 +67,83 @@ export function assertDraftStatus(
       `${entityLabel} can only be modified while in ${draftStatus} status`,
       HttpStatus.CONFLICT,
       { status },
+    );
+  }
+}
+
+export function assertPoEditableStatus(status: string): void {
+  const editableStatuses: string[] = [
+    PurchaseOrderStatus.DRAFT,
+    PurchaseOrderStatus.PENDING_APPROVAL,
+  ];
+
+  if (!editableStatuses.includes(status)) {
+    throw new ApplicationException(
+      ErrorCode.INVALID_DOCUMENT_STATUS,
+      'Purchase order can only be modified while in DRAFT or PENDING_APPROVAL status',
+      HttpStatus.CONFLICT,
+      { status },
+    );
+  }
+}
+
+export async function assertBatchBelongsToMedicine(
+  tx: TxClient,
+  batchId: bigint,
+  medicineId: bigint,
+): Promise<void> {
+  const batch = await tx.batch.findFirst({
+    where: { id: batchId, deletedAt: null },
+    select: { medicineId: true },
+  });
+
+  if (!batch) {
+    throw new ApplicationException(
+      ErrorCode.BATCH_NOT_FOUND,
+      `Batch not found: ${batchId}`,
+      HttpStatus.NOT_FOUND,
+      { batchId: batchId.toString() },
+    );
+  }
+
+  if (batch.medicineId !== medicineId) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'medicineId does not match batch',
+      HttpStatus.BAD_REQUEST,
+      {
+        medicineId: medicineId.toString(),
+        batchMedicineId: batch.medicineId.toString(),
+      },
+    );
+  }
+}
+
+export async function assertReturnQuantityAvailable(
+  tx: TxClient,
+  branchId: bigint,
+  batchId: bigint,
+  quantity: Prisma.Decimal | number | string,
+): Promise<void> {
+  const returnQty = new Prisma.Decimal(quantity);
+  const stock = await tx.stock.findFirst({
+    where: { branchId, batchId, deletedAt: null },
+  });
+
+  const available = new Prisma.Decimal(stock?.availableQuantity ?? 0);
+  const reserved = new Prisma.Decimal(stock?.reservedQuantity ?? 0);
+  const sellable = available.sub(reserved);
+
+  if (returnQty.gt(sellable)) {
+    throw new ApplicationException(
+      ErrorCode.RETURN_QUANTITY_EXCEEDED,
+      'Return quantity exceeds available stock',
+      HttpStatus.CONFLICT,
+      {
+        batchId: batchId.toString(),
+        requested: returnQty.toString(),
+        available: sellable.toString(),
+      },
     );
   }
 }
@@ -286,10 +364,13 @@ export async function rollupPurchaseOrderStatus(
     return;
   }
 
-  if (
-    purchaseOrder.status !== PurchaseOrderStatus.SENT_TO_SUPPLIER &&
-    purchaseOrder.status !== PurchaseOrderStatus.PARTIALLY_RECEIVED
-  ) {
+  const rollupStatuses: string[] = [
+    PurchaseOrderStatus.APPROVED,
+    PurchaseOrderStatus.SENT_TO_SUPPLIER,
+    PurchaseOrderStatus.PARTIALLY_RECEIVED,
+  ];
+
+  if (!rollupStatuses.includes(purchaseOrder.status)) {
     return;
   }
 
@@ -402,4 +483,234 @@ export function isGrnStockPosted(status: string): boolean {
     status === GoodsReceiptStatus.ACCEPTED ||
     status === GoodsReceiptStatus.PARTIALLY_ACCEPTED
   );
+}
+
+export async function rollupPurchaseInvoiceTotals(
+  tx: TxClient,
+  purchaseInvoiceId: bigint,
+): Promise<void> {
+  const items = await tx.purchaseInvoiceItem.findMany({
+    where: { purchaseInvoiceId, deletedAt: null },
+  });
+
+  let grossAmount = new Prisma.Decimal(0);
+  let discountAmount = new Prisma.Decimal(0);
+  let taxAmount = new Prisma.Decimal(0);
+
+  for (const item of items) {
+    const lineGross = new Prisma.Decimal(item.invoiceQuantity).mul(
+      item.unitPrice,
+    );
+    grossAmount = grossAmount.add(lineGross);
+    discountAmount = discountAmount.add(item.discountAmount);
+    taxAmount = taxAmount.add(item.taxAmount);
+  }
+
+  const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
+
+  await tx.purchaseInvoice.update({
+    where: { id: purchaseInvoiceId },
+    data: {
+      grossAmount,
+      discountAmount,
+      taxAmount,
+      netAmount,
+      balanceAmount: netAmount,
+      updatedAt: BigInt(Date.now()),
+    },
+  });
+}
+
+export async function rollupPurchaseReturnTotals(
+  tx: TxClient,
+  purchaseReturnId: bigint,
+): Promise<void> {
+  const items = await tx.purchaseReturnItem.findMany({
+    where: { purchaseReturnId, deletedAt: null },
+  });
+
+  let grossAmount = new Prisma.Decimal(0);
+  let discountAmount = new Prisma.Decimal(0);
+  let taxAmount = new Prisma.Decimal(0);
+
+  for (const item of items) {
+    grossAmount = grossAmount.add(
+      new Prisma.Decimal(item.returnQuantity).mul(item.unitPrice),
+    );
+    discountAmount = discountAmount.add(item.discountAmount);
+    taxAmount = taxAmount.add(item.taxAmount);
+  }
+
+  const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
+
+  await tx.purchaseReturn.update({
+    where: { id: purchaseReturnId },
+    data: {
+      grossAmount,
+      discountAmount,
+      taxAmount,
+      netAmount,
+      updatedAt: BigInt(Date.now()),
+    },
+  });
+}
+
+export function buildPurchaseDocumentListFilters(
+  query: {
+    status?: string;
+    supplierId?: bigint;
+    fromDate?: bigint;
+    toDate?: bigint;
+    purchaseOrderId?: bigint;
+  },
+  dateField: 'orderDate' | 'receiptDate' | 'invoiceDate' | 'returnDate',
+): Record<string, unknown> {
+  const filters: Record<string, unknown> = {};
+
+  if (query.status) {
+    filters.status = query.status;
+  }
+  if (query.supplierId) {
+    filters.supplierId = query.supplierId;
+  }
+  if (query.purchaseOrderId) {
+    filters.purchaseOrderId = query.purchaseOrderId;
+  }
+  if (query.fromDate || query.toDate) {
+    filters[dateField] = {
+      ...(query.fromDate ? { gte: query.fromDate } : {}),
+      ...(query.toDate ? { lte: query.toDate } : {}),
+    };
+  }
+
+  return filters;
+}
+
+export async function validateGrnPurchaseOrderLink(
+  tx: TxClient,
+  scope: { companyId: bigint; branchId: bigint },
+  supplierId: bigint,
+  purchaseOrderId?: bigint | null,
+): Promise<void> {
+  if (!purchaseOrderId) {
+    return;
+  }
+
+  const purchaseOrder = await tx.purchaseOrder.findFirst({
+    where: withBranchScope(scope, {
+      id: purchaseOrderId,
+      deletedAt: null,
+    }),
+  });
+
+  if (!purchaseOrder) {
+    throwNotFound(
+      ErrorCode.PURCHASE_ORDER_NOT_FOUND,
+      `Purchase order not found: ${purchaseOrderId}`,
+      { purchaseOrderId: purchaseOrderId.toString() },
+    );
+  }
+
+  assertPurchaseOrderReceivable(purchaseOrder.status);
+
+  if (purchaseOrder.supplierId !== supplierId) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'Goods receipt supplier must match purchase order supplier',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+}
+
+export async function assertPurchaseOrderHasNoReceipts(
+  tx: TxClient,
+  purchaseOrderId: bigint,
+): Promise<void> {
+  const items = await tx.purchaseOrderItem.findMany({
+    where: { purchaseOrderId, deletedAt: null },
+    select: { receivedQuantity: true },
+  });
+
+  const hasReceivedQty = items.some((item) =>
+    new Prisma.Decimal(item.receivedQuantity).gt(0),
+  );
+
+  if (hasReceivedQty) {
+    throwConflict(
+      'Purchase order cannot be cancelled after goods have been received',
+      { purchaseOrderId: purchaseOrderId.toString() },
+    );
+  }
+
+  const postedGrn = await tx.goodsReceipt.findFirst({
+    where: {
+      purchaseOrderId,
+      deletedAt: null,
+      status: {
+        in: [
+          GoodsReceiptStatus.ACCEPTED,
+          GoodsReceiptStatus.PARTIALLY_ACCEPTED,
+          GoodsReceiptStatus.UNDER_INSPECTION,
+        ],
+      },
+    },
+    select: { id: true },
+  });
+
+  if (postedGrn) {
+    throwConflict(
+      'Purchase order cannot be cancelled while goods receipts exist',
+      { purchaseOrderId: purchaseOrderId.toString() },
+    );
+  }
+}
+
+export async function assertGrnQuantityWithinPoPending(
+  tx: TxClient,
+  purchaseOrderItemId: bigint,
+  quantity: Prisma.Decimal | number | string,
+  excludeGoodsReceiptItemId?: bigint,
+): Promise<void> {
+  const poItem = await tx.purchaseOrderItem.findFirst({
+    where: { id: purchaseOrderItemId, deletedAt: null },
+  });
+
+  if (!poItem) {
+    throw new ApplicationException(
+      ErrorCode.PURCHASE_ORDER_ITEM_NOT_FOUND,
+      `Purchase order item not found: ${purchaseOrderItemId}`,
+      HttpStatus.NOT_FOUND,
+      { purchaseOrderItemId: purchaseOrderItemId.toString() },
+    );
+  }
+
+  const ordered = new Prisma.Decimal(poItem.orderedQuantity);
+  const received = new Prisma.Decimal(poItem.receivedQuantity);
+  const cancelled = new Prisma.Decimal(poItem.cancelledQuantity);
+  const pending = ordered.sub(received).sub(cancelled);
+
+  let additionalQty = new Prisma.Decimal(quantity);
+
+  if (excludeGoodsReceiptItemId) {
+    const existingItem = await tx.goodsReceiptItem.findFirst({
+      where: { id: excludeGoodsReceiptItemId, deletedAt: null },
+    });
+
+    if (existingItem) {
+      additionalQty = additionalQty.sub(grnStockQuantity(existingItem));
+    }
+  }
+
+  if (additionalQty.gt(pending)) {
+    throw new ApplicationException(
+      ErrorCode.RETURN_QUANTITY_EXCEEDED,
+      'Received quantity exceeds pending purchase order quantity',
+      HttpStatus.CONFLICT,
+      {
+        purchaseOrderItemId: purchaseOrderItemId.toString(),
+        pending: pending.toString(),
+        requested: additionalQty.toString(),
+      },
+    );
+  }
 }
