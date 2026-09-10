@@ -5,6 +5,7 @@ import { ApplicationException } from '../../common/exceptions/application.except
 import { ErrorCode } from '../../common/exceptions/error-code';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 import { assertTransactionDateInOpenYear as assertTransactionDateInOpenYearImpl } from '../../persistence/ledger/ledger-posting.util';
+import type { JournalLineInput } from '../../persistence/ledger/ledger-posting.types';
 import {
   SalesPaymentStatus,
   SalesReturnStatus,
@@ -15,6 +16,7 @@ import {
   FinanceReferenceType,
   PaymentType,
   ReceiptStatus,
+  ReceiptType,
   SALES_BANK_PAYMENT_METHODS,
   SALES_CASH_PAYMENT_METHODS,
   SystemLedgerCode,
@@ -173,11 +175,28 @@ export async function adjustCustomerOutstanding(
   );
 }
 
-export interface JournalLineInput {
-  ledgerId: bigint;
-  debitAmount: Prisma.Decimal;
-  creditAmount: Prisma.Decimal;
-  narration?: string;
+const ZERO_AMOUNT = new Prisma.Decimal(0);
+
+function twoLineEntry(
+  debitLedgerId: bigint,
+  creditLedgerId: bigint,
+  amount: Prisma.Decimal,
+  narration?: string,
+): JournalLineInput[] {
+  return [
+    {
+      ledgerId: debitLedgerId,
+      debitAmount: amount,
+      creditAmount: ZERO_AMOUNT,
+      narration,
+    },
+    {
+      ledgerId: creditLedgerId,
+      debitAmount: ZERO_AMOUNT,
+      creditAmount: amount,
+      narration,
+    },
+  ];
 }
 
 async function resolveCashOrBankLedger(
@@ -225,38 +244,22 @@ export async function buildPaymentLedgerLines(
       tx,
       SystemLedgerCode.SUPPLIER_PAYABLE,
     );
-    return [
-      {
-        ledgerId: payable.id,
-        debitAmount: amount,
-        creditAmount: new Prisma.Decimal(0),
-        narration: input.narration,
-      },
-      {
-        ledgerId: cashOrBankLedgerId,
-        debitAmount: new Prisma.Decimal(0),
-        creditAmount: amount,
-        narration: input.narration,
-      },
-    ];
+    return twoLineEntry(
+      payable.id,
+      cashOrBankLedgerId,
+      amount,
+      input.narration,
+    );
   }
 
   if (input.paymentType === PaymentType.EXPENSE) {
     const expense = await resolveSystemLedger(tx, SystemLedgerCode.PURCHASE);
-    return [
-      {
-        ledgerId: expense.id,
-        debitAmount: amount,
-        creditAmount: new Prisma.Decimal(0),
-        narration: input.narration,
-      },
-      {
-        ledgerId: cashOrBankLedgerId,
-        debitAmount: new Prisma.Decimal(0),
-        creditAmount: amount,
-        narration: input.narration,
-      },
-    ];
+    return twoLineEntry(
+      expense.id,
+      cashOrBankLedgerId,
+      amount,
+      input.narration,
+    );
   }
 
   if (input.paymentType === PaymentType.CUSTOMER_REFUND) {
@@ -264,20 +267,12 @@ export async function buildPaymentLedgerLines(
       tx,
       SystemLedgerCode.CUSTOMER_RECEIVABLE,
     );
-    return [
-      {
-        ledgerId: receivable.id,
-        debitAmount: amount,
-        creditAmount: new Prisma.Decimal(0),
-        narration: input.narration,
-      },
-      {
-        ledgerId: cashOrBankLedgerId,
-        debitAmount: new Prisma.Decimal(0),
-        creditAmount: amount,
-        narration: input.narration,
-      },
-    ];
+    return twoLineEntry(
+      receivable.id,
+      cashOrBankLedgerId,
+      amount,
+      input.narration,
+    );
   }
 
   if (input.paymentType === PaymentType.PURCHASE_REFUND) {
@@ -285,20 +280,12 @@ export async function buildPaymentLedgerLines(
       tx,
       SystemLedgerCode.SUPPLIER_PAYABLE,
     );
-    return [
-      {
-        ledgerId: cashOrBankLedgerId,
-        debitAmount: amount,
-        creditAmount: new Prisma.Decimal(0),
-        narration: input.narration,
-      },
-      {
-        ledgerId: payable.id,
-        debitAmount: new Prisma.Decimal(0),
-        creditAmount: amount,
-        narration: input.narration,
-      },
-    ];
+    return twoLineEntry(
+      cashOrBankLedgerId,
+      payable.id,
+      amount,
+      input.narration,
+    );
   }
 
   throw new ApplicationException(
@@ -309,10 +296,10 @@ export async function buildPaymentLedgerLines(
   );
 }
 
-export async function applyPurchaseInvoicePaymentAllocation(
+export async function adjustPurchaseInvoicePaymentAllocation(
   tx: TxClient,
   invoiceId: bigint,
-  amount: Prisma.Decimal,
+  signedDelta: Prisma.Decimal,
 ): Promise<{ supplierId: bigint }> {
   const invoice = await tx.purchaseInvoice.findFirst({
     where: { id: invoiceId, deletedAt: null },
@@ -326,50 +313,7 @@ export async function applyPurchaseInvoicePaymentAllocation(
     );
   }
 
-  const paidAmount = new Prisma.Decimal(invoice.paidAmount).add(amount);
-  const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(paidAmount);
-
-  const updateResult = await tx.purchaseInvoice.updateMany({
-    where: { id: invoiceId, version: invoice.version, deletedAt: null },
-    data: {
-      paidAmount,
-      balanceAmount,
-      paymentStatus: computePurchaseInvoicePaymentStatus(
-        new Prisma.Decimal(invoice.netAmount),
-        paidAmount,
-      ),
-      updatedAt: BigInt(Date.now()),
-      version: { increment: 1 },
-    },
-  });
-
-  optimisticUpdate(
-    updateResult,
-    invoiceId,
-    `Purchase invoice allocation version conflict: ${invoiceId}`,
-  );
-
-  return { supplierId: invoice.supplierId };
-}
-
-export async function reversePurchaseInvoicePaymentAllocation(
-  tx: TxClient,
-  invoiceId: bigint,
-  amount: Prisma.Decimal,
-): Promise<{ supplierId: bigint }> {
-  const invoice = await tx.purchaseInvoice.findFirst({
-    where: { id: invoiceId, deletedAt: null },
-  });
-
-  if (!invoice) {
-    throwNotFound(
-      ErrorCode.PURCHASE_INVOICE_NOT_FOUND,
-      `Purchase invoice not found: ${invoiceId}`,
-      { id: invoiceId.toString() },
-    );
-  }
-
-  const paidAmount = new Prisma.Decimal(invoice.paidAmount).sub(amount);
+  const paidAmount = new Prisma.Decimal(invoice.paidAmount).add(signedDelta);
   const balanceAmount = new Prisma.Decimal(invoice.netAmount).sub(paidAmount);
 
   const updateResult = await tx.purchaseInvoice.updateMany({
@@ -413,20 +357,12 @@ export async function buildReceiptLedgerLines(
     SystemLedgerCode.CUSTOMER_RECEIVABLE,
   );
 
-  return [
-    {
-      ledgerId: cashOrBankLedgerId,
-      debitAmount: amount,
-      creditAmount: new Prisma.Decimal(0),
-      narration: input.narration,
-    },
-    {
-      ledgerId: receivable.id,
-      debitAmount: new Prisma.Decimal(0),
-      creditAmount: amount,
-      narration: input.narration,
-    },
-  ];
+  return twoLineEntry(
+    cashOrBankLedgerId,
+    receivable.id,
+    amount,
+    input.narration,
+  );
 }
 
 export async function buildPurchaseInvoiceLedgerLines(
@@ -573,6 +509,53 @@ export function isPurchaseInvoiceReference(
 
 export function isSalesInvoiceReference(referenceType: string | null): boolean {
   return referenceType === FinanceReferenceType.SALES_INVOICE;
+}
+
+export async function resolveReceiptCustomerId(
+  tx: TxClient,
+  receipt: {
+    referenceType: string | null;
+    referenceId: bigint | null;
+    receiptType: string;
+  },
+  options?: { validateSalesInvoiceAmount?: Prisma.Decimal },
+): Promise<bigint | undefined> {
+  if (isSalesInvoiceReference(receipt.referenceType)) {
+    if (!receipt.referenceId) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'Sales invoice reference is required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (options?.validateSalesInvoiceAmount !== undefined) {
+      const { customerId } = await assertSalesInvoiceReceiptAmount(
+        tx,
+        receipt.referenceId,
+        options.validateSalesInvoiceAmount,
+      );
+      return customerId ?? undefined;
+    }
+
+    const invoice = await tx.salesInvoice.findFirstOrThrow({
+      where: { id: receipt.referenceId },
+    });
+    return invoice.customerId ?? undefined;
+  }
+
+  if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
+    return receipt.referenceId ?? undefined;
+  }
+
+  if (
+    receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT &&
+    receipt.referenceId
+  ) {
+    return receipt.referenceId;
+  }
+
+  return undefined;
 }
 
 async function resolveSalesCashOrBankLedger(

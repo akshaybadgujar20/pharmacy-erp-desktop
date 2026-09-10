@@ -117,6 +117,8 @@ Document numbers: `DocumentType.PAYMENT` / `RECEIPT` via `SequenceGeneratorServi
 
 Shared persistence: `backend/src/persistence/ledger/ledger-posting.service.ts`.
 
+Canonical types: `JournalLineInput` and `NormalBalance` live in `persistence/ledger/` (`ledger-posting.types.ts`, `ledger-posting.constants.ts`); finance re-exports `NormalBalance` via `finance.constants.ts`. Receipt customer resolution: `resolveReceiptCustomerId` in `finance.util.ts`. PI payment allocation: `adjustPurchaseInvoicePaymentAllocation(tx, invoiceId, signedDelta)`.
+
 ---
 
 ## 6. Not implemented

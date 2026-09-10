@@ -21,7 +21,6 @@ import { SequenceGeneratorService } from '../../persistence/sequence/sequence-ge
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import {
-  FinanceReferenceType,
   ReceiptStatus,
   ReceiptType,
   VoucherType,
@@ -33,12 +32,12 @@ import { UpdateReceiptDto } from '../dto/update-receipt.dto';
 import { toReceiptResponse } from '../mappers/receipt.mapper';
 import {
   adjustCustomerOutstanding,
-  assertSalesInvoiceReceiptAmount,
   assertTransactionDateInOpenYear,
   buildReceiptLedgerLines,
   isSalesInvoiceReference,
   optimisticUpdate,
   recomputeSalesInvoiceSettlement,
+  resolveReceiptCustomerId,
   throwNotFound,
 } from '../utils/finance.util';
 
@@ -274,32 +273,9 @@ export class ReceiptService {
       );
 
       const amount = new Prisma.Decimal(receipt.amount);
-      let customerId: bigint | undefined;
-
-      if (isSalesInvoiceReference(receipt.referenceType)) {
-        if (!receipt.referenceId) {
-          throw new ApplicationException(
-            ErrorCode.BAD_REQUEST,
-            'Sales invoice reference is required',
-            HttpStatus.BAD_REQUEST,
-          );
-        }
-
-        const { customerId: invoiceCustomerId } =
-          await assertSalesInvoiceReceiptAmount(
-            tx,
-            receipt.referenceId,
-            amount,
-          );
-        customerId = invoiceCustomerId ?? undefined;
-      } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
-        customerId = receipt.referenceId ?? undefined;
-      } else if (
-        receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT &&
-        receipt.referenceId
-      ) {
-        customerId = receipt.referenceId;
-      }
+      const customerId = await resolveReceiptCustomerId(tx, receipt, {
+        validateSalesInvoiceAmount: amount,
+      });
 
       if (receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT && !customerId) {
         throw new ApplicationException(
@@ -406,22 +382,7 @@ export class ReceiptService {
           narration: dto.remarks,
         });
 
-        if (
-          isSalesInvoiceReference(receipt.referenceType) &&
-          receipt.referenceId
-        ) {
-          const invoice = await tx.salesInvoice.findFirstOrThrow({
-            where: { id: receipt.referenceId },
-          });
-          customerId = invoice.customerId ?? undefined;
-        } else if (receipt.referenceType === FinanceReferenceType.CUSTOMER) {
-          customerId = receipt.referenceId ?? undefined;
-        } else if (
-          receipt.receiptType === ReceiptType.CUSTOMER_PAYMENT &&
-          receipt.referenceId
-        ) {
-          customerId = receipt.referenceId;
-        }
+        customerId = await resolveReceiptCustomerId(tx, receipt);
       }
 
       const updateResult = await tx.receipt.updateMany({

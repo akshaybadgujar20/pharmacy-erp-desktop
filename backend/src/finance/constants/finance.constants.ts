@@ -53,10 +53,7 @@ export const LedgerType = {
   EQUITY: 'EQUITY',
 } as const;
 
-export const NormalBalance = {
-  DEBIT: 'DEBIT',
-  CREDIT: 'CREDIT',
-} as const;
+export { NormalBalance } from '../../persistence/ledger/ledger-posting.constants';
 
 export const FinanceReferenceType = {
   PURCHASE_INVOICE: 'PURCHASE_INVOICE',

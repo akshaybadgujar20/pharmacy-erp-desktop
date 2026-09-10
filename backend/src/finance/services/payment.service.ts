@@ -28,14 +28,13 @@ import { PaymentListQueryDto } from '../dto/payment-list-query.dto';
 import { UpdatePaymentDto } from '../dto/update-payment.dto';
 import { toPaymentResponse } from '../mappers/payment.mapper';
 import {
+  adjustPurchaseInvoicePaymentAllocation,
   adjustSupplierOutstanding,
-  applyPurchaseInvoicePaymentAllocation,
   assertPaymentTypeSupportsLedger,
   assertTransactionDateInOpenYear,
   buildPaymentLedgerLines,
   isPurchaseInvoiceReference,
   optimisticUpdate,
-  reversePurchaseInvoicePaymentAllocation,
   throwNotFound,
 } from '../utils/finance.util';
 
@@ -351,7 +350,7 @@ export class PaymentService {
         isPurchaseInvoiceReference(payment.referenceType) &&
         payment.referenceId
       ) {
-        const allocation = await applyPurchaseInvoicePaymentAllocation(
+        const allocation = await adjustPurchaseInvoicePaymentAllocation(
           tx,
           payment.referenceId,
           amount,
@@ -425,10 +424,10 @@ export class PaymentService {
           isPurchaseInvoiceReference(payment.referenceType) &&
           payment.referenceId
         ) {
-          const allocation = await reversePurchaseInvoicePaymentAllocation(
+          const allocation = await adjustPurchaseInvoicePaymentAllocation(
             tx,
             payment.referenceId,
-            amount,
+            amount.neg(),
           );
           supplierId = allocation.supplierId;
         }
