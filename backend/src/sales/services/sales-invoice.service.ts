@@ -15,8 +15,8 @@ import { VoucherType } from '../../finance/constants/finance.constants';
 import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
+  buildSalesInvoiceLedgerLines,
 } from '../../finance/utils/finance.util';
-import { buildSalesInvoiceLedgerLines } from '../utils/sales.util';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
 import {
   getTenantScope,
@@ -51,7 +51,6 @@ import {
   assertDraftStatus,
   assertPrescriptionExists,
   computeLineAmounts,
-  computeNetSoldQuantitiesByItem,
   getNextLineNumber,
   optimisticUpdate,
   readSalesSettings,
@@ -516,10 +515,37 @@ export class SalesInvoiceService {
         );
       }
 
-      if (
-        invoice.status === SalesInvoiceStatus.POSTED ||
-        invoice.status === SalesInvoiceStatus.PARTIALLY_RETURNED
-      ) {
+      if (invoice.status === SalesInvoiceStatus.POSTED) {
+        if (new Prisma.Decimal(invoice.paidAmount).gt(0)) {
+          throw new ApplicationException(
+            ErrorCode.SALES_INVOICE_HAS_PAYMENTS,
+            'Cancel sales payments and receipts against this invoice before cancelling',
+            HttpStatus.CONFLICT,
+            {
+              paidAmount: invoice.paidAmount.toString(),
+              salesInvoiceId: id.toString(),
+            },
+          );
+        }
+
+        const completedReturn = await tx.salesReturn.findFirst({
+          where: {
+            salesInvoiceId: id,
+            status: SalesReturnStatus.COMPLETED,
+            deletedAt: null,
+          },
+          select: { id: true },
+        });
+
+        if (completedReturn) {
+          throw new ApplicationException(
+            ErrorCode.SALES_INVOICE_HAS_RETURNS,
+            'Cancel completed sales returns before cancelling the invoice',
+            HttpStatus.CONFLICT,
+            { salesInvoiceId: id.toString() },
+          );
+        }
+
         await this.reversePostedSalesInvoiceEffects(tx, invoice, dto.remarks);
       }
 
@@ -527,6 +553,9 @@ export class SalesInvoiceService {
         where: { id, version: dto.version, deletedAt: null },
         data: {
           status: SalesInvoiceStatus.CANCELLED,
+          paidAmount: 0,
+          balanceAmount: 0,
+          paymentStatus: SalesInvoicePaymentStatus.UNPAID,
           updatedAt: BigInt(Date.now()),
           version: { increment: 1 },
         },
@@ -556,9 +585,8 @@ export class SalesInvoiceService {
       branchId: bigint;
       invoiceNumber: string;
       customerId: bigint | null;
-      balanceAmount: Prisma.Decimal;
+      netAmount: Prisma.Decimal;
       items: Array<{
-        id: bigint;
         medicineId: bigint;
         batchId: bigint;
         soldQuantity: Prisma.Decimal;
@@ -570,7 +598,6 @@ export class SalesInvoiceService {
   ): Promise<void> {
     const branch = await assertBranchExists(tx, invoice.branchId);
     const userId = this.requestContext.tryGet()?.userId;
-    const netSoldByItem = await computeNetSoldQuantitiesByItem(tx, invoice.id);
 
     await this.ledgerPosting.reverseVoucher(tx, {
       companyId: branch.companyId,
@@ -585,37 +612,7 @@ export class SalesInvoiceService {
       narration: remarks,
     });
 
-    const completedReturns = await tx.salesReturn.findMany({
-      where: {
-        salesInvoiceId: invoice.id,
-        status: SalesReturnStatus.COMPLETED,
-        deletedAt: null,
-      },
-      select: { id: true, salesReturnNumber: true },
-    });
-
-    for (const salesReturn of completedReturns) {
-      await this.ledgerPosting.reverseVoucher(tx, {
-        companyId: branch.companyId,
-        originalVoucherType: VoucherType.SALES,
-        originalVoucherId: salesReturn.id,
-        originalVoucherNumber: salesReturn.salesReturnNumber,
-        reversalVoucherType: VoucherType.SALES,
-        reversalVoucherId: salesReturn.id,
-        reversalVoucherNumber: `${salesReturn.salesReturnNumber}-REV`,
-        transactionDate: BigInt(Date.now()),
-        createdBy: userId,
-        narration: remarks,
-      });
-    }
-
     for (const item of invoice.items) {
-      const netSold =
-        netSoldByItem.get(item.id.toString()) ?? new Prisma.Decimal(0);
-      if (netSold.lte(0)) {
-        continue;
-      }
-
       await this.inventoryLedger.applyMovement(tx, {
         branchId: invoice.branchId,
         branchCode: branch.branchCode,
@@ -623,7 +620,7 @@ export class SalesInvoiceService {
         medicineId: item.medicineId,
         batchId: item.batchId,
         direction: 'IN',
-        quantity: netSold,
+        quantity: item.soldQuantity,
         unitCost: item.purchaseRate ?? item.unitPrice,
         movementType: StockMovementType.SALES_INVOICE,
         referenceTable: 'sales_invoices',
@@ -637,7 +634,7 @@ export class SalesInvoiceService {
       await adjustCustomerOutstanding(
         tx,
         invoice.customerId,
-        new Prisma.Decimal(invoice.balanceAmount).neg(),
+        new Prisma.Decimal(invoice.netAmount).neg(),
       );
     }
   }

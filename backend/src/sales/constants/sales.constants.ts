@@ -85,5 +85,4 @@ export const SalesRefundMode = {
 export const SALES_INVOICE_CANCELLABLE_STATUSES = [
   SalesInvoiceStatus.DRAFT,
   SalesInvoiceStatus.POSTED,
-  SalesInvoiceStatus.PARTIALLY_RETURNED,
 ] as const;

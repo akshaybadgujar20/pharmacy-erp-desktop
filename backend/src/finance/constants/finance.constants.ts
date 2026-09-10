@@ -88,3 +88,19 @@ export const BANK_PAYMENT_METHODS = [
   PaymentMethod.CHEQUE,
   PaymentMethod.BANK_TRANSFER,
 ] as const;
+
+/** Sales nested payment methods (extends finance methods for ledger resolution). */
+export const SALES_CASH_PAYMENT_METHODS = [
+  PaymentMethod.CASH,
+  PaymentMethod.UPI,
+  PaymentMethod.CARD,
+  'CREDIT_CARD',
+  'DEBIT_CARD',
+  'STORE_CREDIT',
+] as const;
+
+export const SALES_BANK_PAYMENT_METHODS = [
+  PaymentMethod.CHEQUE,
+  PaymentMethod.BANK_TRANSFER,
+  'NET_BANKING',
+] as const;

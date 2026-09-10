@@ -21,10 +21,6 @@ import { SequenceGeneratorService } from '../../persistence/sequence/sequence-ge
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import {
-  assertSalesInvoiceReceiptAmount,
-  recomputeSalesInvoiceSettlement,
-} from '../../sales/utils/sales.util';
-import {
   FinanceReferenceType,
   ReceiptStatus,
   ReceiptType,
@@ -37,10 +33,12 @@ import { UpdateReceiptDto } from '../dto/update-receipt.dto';
 import { toReceiptResponse } from '../mappers/receipt.mapper';
 import {
   adjustCustomerOutstanding,
+  assertSalesInvoiceReceiptAmount,
   assertTransactionDateInOpenYear,
   buildReceiptLedgerLines,
   isSalesInvoiceReference,
   optimisticUpdate,
+  recomputeSalesInvoiceSettlement,
   throwNotFound,
 } from '../utils/finance.util';
 

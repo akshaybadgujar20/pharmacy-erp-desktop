@@ -14,7 +14,7 @@ Implementation-grounded reference for `backend/src/sales/`.
 | **Services** | 5 |
 | **Exports** | None |
 | **Inventory alignment** | Invoice post OUT; cancel/return approve IN via `InventoryLedgerService` |
-| **Finance alignment** | Invoice post/payment/return via `LedgerPostingService` + `finance.util` helpers; settlement via `recomputeSalesInvoiceSettlement` |
+| **Finance alignment** | Invoice post/payment/return via `LedgerPostingService`; ledger builders + `recomputeSalesInvoiceSettlement` in `finance.util.ts` (same pattern as purchase) |
 
 ---
 
@@ -122,6 +122,12 @@ Two collection paths share one settlement helper:
 OTC invoices without `customerId` debit/credit **CASH001** on post/return (not CUST001). Draft item CRUD rolls up header totals via `rollupSalesInvoiceTotals`.
 
 `RETURNED` invoices cannot accept new payments or returns.
+
+### Invoice cancel rules (purchase-parity)
+
+- Only **DRAFT** and **POSTED** invoices are cancellable at header level.
+- **POSTED** cancel is rejected when `paidAmount > 0` (`SALES_INVOICE_HAS_PAYMENTS`) or any **COMPLETED** return exists (`SALES_INVOICE_HAS_RETURNS`). Cancel payments/receipts and returns first.
+- Successful POSTED cancel reverses the sale voucher, restocks full sold quantities, zeros settlement fields, and reverses customer outstanding by `netAmount`.
 
 ---
 

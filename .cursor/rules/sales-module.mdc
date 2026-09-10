@@ -33,8 +33,8 @@ Header/item edits and deletes only in **DRAFT**.
 ## Workflow ledger (summary)
 
 - Invoice post → `SALES_INVOICE` OUT per line + `LedgerPostingService` (DR CUST001 or CASH001 for OTC, CR SALE001/GSTOUT001) + customer outstanding when `customerId` set
-- Invoice cancel (POSTED / PARTIALLY_RETURNED) → reverse sale voucher + completed return vouchers + net stock IN + outstanding cleared by current `balanceAmount`
-- Payment complete → `buildSalesPaymentLedgerLines` (customer invoices only) + `recomputeSalesInvoiceSettlement` + outstanding reduction
+- Invoice cancel (POSTED only, no payments/returns) → reverse sale voucher + full stock IN + outstanding reversal; blocked when `paidAmount > 0` or completed returns exist (purchase-parity)
+- Payment complete → `buildSalesPaymentLedgerLines` in `finance.util.ts` (customer invoices only) + `recomputeSalesInvoiceSettlement` + outstanding reduction
 - Finance Receipt (SALES_INVOICE reference) → same settlement via `recomputeSalesInvoiceSettlement` (sums SalesPayment + Receipt)
 - Return approve → `SALES_RETURN` IN (RESTOCK) + ledger reversal (CR CUST001 or CASH001) + `recomputeSalesInvoiceSettlement` + invoice return status rollup
 - Return cancel (COMPLETED) → reverse return voucher + stock OUT + settlement + status rollup
@@ -52,7 +52,7 @@ Header/item edits and deletes only in **DRAFT**.
 - **Services:** optimistic lock via `updateMany` + `optimisticUpdate()`.
 - **Permissions:** `SALES:RESOURCE:ACTION` on every endpoint.
 - **Constants:** [`sales.constants.ts`](../backend/src/sales/constants/sales.constants.ts).
-- **Utils:** [`sales.util.ts`](../backend/src/sales/utils/sales.util.ts) — FEFO, price resolution, asserts.
+- **Utils:** [`sales.util.ts`](../backend/src/sales/utils/sales.util.ts) — FEFO, price resolution, asserts, rollups. Sales ledger/settlement helpers live in [`finance.util.ts`](../backend/src/finance/utils/finance.util.ts) (aligned with purchase).
 
 ## Not implemented
 

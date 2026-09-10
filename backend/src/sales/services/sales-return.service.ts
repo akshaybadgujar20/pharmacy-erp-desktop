@@ -15,11 +15,9 @@ import { VoucherType } from '../../finance/constants/finance.constants';
 import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
-} from '../../finance/utils/finance.util';
-import {
   buildSalesReturnLedgerLines,
   recomputeSalesInvoiceSettlement,
-} from '../utils/sales.util';
+} from '../../finance/utils/finance.util';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
 import {
   getTenantScope,
