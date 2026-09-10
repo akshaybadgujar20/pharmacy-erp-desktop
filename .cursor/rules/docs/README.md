@@ -10,7 +10,16 @@ Agent-facing memory models for implemented backend feature modules. These docs a
 | `docs/pharmacy_erp_architecture_docs/` | Long-form domain and database design — table specs, business rules, cross-module flows |
 | [backend-developer-guide.md](../../../docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md) | **Hub** — onboarding, module index, relationships, E2E flows, appendices |
 
-Read architecture docs for *why* and table design. Read the [backend developer guide](../../../docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md) for *cross-module* views and onboarding. Read memory docs here for *what is implemented* and *where to edit*.
+Read architecture docs for *why* and table design. Read the [backend developer guide](../../../docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md) for *cross-module* views and onboarding. Read memory docs here for *what is implemented* and *where to edit*. Read [01-coding-principles.mdc](../01-coding-principles.mdc) for *how to write* simple, human-readable code.
+
+## Always-applied rules
+
+| Rule | Purpose |
+|------|---------|
+| [00-project-context.mdc](../00-project-context.mdc) | Layout, commands, change policy |
+| [01-coding-principles.mdc](../01-coding-principles.mdc) | Simplicity and human-readability (all backend and frontend code) |
+
+Module memory docs below describe **what exists**; coding principles govern **how to write** new code.
 
 ## Current entries
 

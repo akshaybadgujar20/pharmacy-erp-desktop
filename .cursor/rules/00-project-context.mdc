@@ -5,9 +5,9 @@ alwaysApply: true
 
 ## Scope
 
-This repo is **pharmacy-erp-desktop**. Backend rules apply to `backend/` (NestJS + Prisma + TypeScript). Architecture docs live under `docs/pharmacy_erp_architecture_docs/`.
+This repo is **pharmacy-erp-desktop**. Cursor rules apply to **backend** (`backend/`, NestJS + Prisma + TypeScript) and **frontend** (`src/app/`, Angular). Architecture docs live under `docs/pharmacy_erp_architecture_docs/`.
 
-**Standard:** Follow the scoped `.mdc` rules in `.cursor/rules/` for all backend work unless the user overrides a specific rule in the task.
+**Standard:** Follow [01-coding-principles.mdc](01-coding-principles.mdc) for all generated or modified code. Follow scoped `.mdc` rules in `.cursor/rules/` for backend and frontend work unless the user overrides a specific rule in the task.
 
 ---
 
@@ -15,14 +15,15 @@ This repo is **pharmacy-erp-desktop**. Backend rules apply to `backend/` (NestJS
 
 | Layer | Technology |
 |-------|------------|
-| Runtime | Node.js |
-| Framework | NestJS 11 |
+| Backend runtime | Node.js |
+| Backend framework | NestJS 11 |
+| Frontend | Angular 19 (`src/app/`) |
 | Language | TypeScript 5.7 |
 | ORM | Prisma 7 (`@prisma/adapter-better-sqlite3`) |
 | Database | SQLite (`db/pharmacy.sqlite`) |
 | Validation | class-validator + class-transformer |
-| Testing | Jest 30 |
-| Lint / format | ESLint 9 (`typescript-eslint` type-checked) + Prettier |
+| Testing | Jest 30 (backend + Angular unit) |
+| Lint / format | ESLint 9 (`typescript-eslint` type-checked) + Prettier (backend) |
 
 ---
 
@@ -110,6 +111,8 @@ If a pre-existing defect is found, **document it** and **do not fix** unless the
 
 ## Architecture references
 
+- Coding principles (always applied): [01-coding-principles.mdc](01-coding-principles.mdc)
+- Angular conventions: [angular-rules.mdc](angular-rules.mdc)
 - Early foundations (auth, env, settings, Angular/Electron): `docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md`
 - Persistence patterns: `docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md`
 - Database overview: `docs/pharmacy_erp_architecture_docs/database/database_overview.md`

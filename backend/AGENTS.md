@@ -117,6 +117,8 @@ Scoped rules in `.cursor/rules/` (repo root):
 | Rule file | Scope |
 |-----------|-------|
 | `00-project-context.mdc` | Always applied — layout, commands, change policy |
+| `01-coding-principles.mdc` | Always applied — simplicity, readability, no unapproved patterns |
+| `angular-rules.mdc` | `src/**/*.ts` — Angular frontend conventions |
 | `typescript-rules.mdc` | `backend/**/*.ts` — formatting, naming, types |
 | `nestjs-rules.mdc` | `backend/src/**/*.ts` — modules, DI, DTOs, errors |
 | `prisma-persistence-rules.mdc` | `backend/src/persistence/**`, `backend/seed/**` |
@@ -134,6 +136,8 @@ Scoped rules in `.cursor/rules/` (repo root):
 | `configuration-module.mdc` | `backend/src/configuration/**` — see [module memory doc](../.cursor/rules/docs/configuration-module.md) |
 | `sync-module.mdc` | `backend/src/sync/**` — see [module memory doc](../.cursor/rules/docs/sync-module.md) |
 | `masters-module.mdc` | `backend/src/masters/**` — see [module memory doc](../.cursor/rules/docs/masters-module.md) |
+
+`01-coding-principles.mdc` applies to backend work as well (simplicity and readability for all generated or modified code).
 
 ## Module memory docs
 

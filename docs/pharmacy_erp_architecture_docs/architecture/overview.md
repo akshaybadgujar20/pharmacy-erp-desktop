@@ -104,7 +104,7 @@ Very similar to Spring Boot. Provides:
 
 ### Simplicity
 
-Simple code lasts longer. Avoid unnecessary abstraction.
+Simple code lasts longer. Avoid unnecessary abstraction. Agent-enforced version: [`.cursor/rules/01-coding-principles.mdc`](../../../.cursor/rules/01-coding-principles.mdc).
 
 ### Modularity
 

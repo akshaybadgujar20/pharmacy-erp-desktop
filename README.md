@@ -74,6 +74,14 @@ cd backend && npm run test:e2e
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
+### Cursor rules
+
+Agents and contributors should follow project Cursor rules in `.cursor/rules/`:
+
+- [01-coding-principles.mdc](.cursor/rules/01-coding-principles.mdc) — simplicity and human-readability (always applied, backend + frontend)
+- [backend/AGENTS.md](backend/AGENTS.md) — backend rule index and module memory doc links
+- [angular-rules.mdc](.cursor/rules/angular-rules.mdc) — Angular conventions (`src/**/*.ts`)
+
 
 ## Run SQLLite DB Migrations
 

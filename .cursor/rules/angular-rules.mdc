@@ -1,0 +1,108 @@
+---
+description: Angular conventions for the Pharmacy ERP frontend — simplicity + established patterns
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+Follow [01-coding-principles.mdc](01-coding-principles.mdc) first for all frontend code.
+
+---
+
+## Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Angular 19 |
+| Components | Standalone (`standalone: true`) |
+| Styles | SCSS |
+| Testing | Jest (`src/**/*.spec.ts`, run from repo root) |
+| i18n | `@ngx-translate/core`, `public/i18n/en.json` |
+| Prefix | `app` |
+
+---
+
+## Project layout
+
+```
+src/app/
+  core/       # ApiService, AuthService, interceptors, guards, models
+  features/   # Feature screens (e.g. auth/login)
+  shared/     # Shared UI components
+  components/ # App-level components (e.g. dashboard, grid)
+```
+
+Full platform context: [early-foundations.md](docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) (Angular client layer section).
+
+---
+
+## HTTP and API responses
+
+- Use [ApiService](src/app/core/services/api.service.ts) for all backend HTTP — it unwraps `{ success, data }` and throws `ApiClientError` on failure.
+- Do **not** hand-parse the response envelope in components or feature services.
+- Use **error codes** from `ApiClientError` for behavior — not human-readable message strings.
+
+```typescript
+// Prefer — delegate to ApiService
+const response = await firstValueFrom(this.api.post<AuthTokenResponse>('/auth/login', body));
+
+// Avoid — manual envelope handling in a component
+this.http.post<ApiResponse<T>>(url, body).pipe(map(r => r.data));
+```
+
+---
+
+## Components
+
+- **Standalone** components with explicit `imports` array.
+- Use `inject()` for DI — match existing files ([login.component.ts](src/app/features/auth/login/login.component.ts)).
+- Keep components **thin**: template + form wiring + call a service; no business logic duplication.
+- Use `ChangeDetectionStrategy` as existing components do (typically `OnPush` or `Eager` — match the file you edit).
+
+---
+
+## Services and state
+
+- Put HTTP and session logic in `core/services/` — not in components.
+- Follow existing signal usage in [AuthService](src/app/core/services/auth.service.ts): `signal`, `computed`, `asReadonly()`.
+- Do **not** introduce NgRx, Akita, or other state libraries — not in this project.
+- Do **not** add wrapper services around `ApiService` unless the user approves.
+
+---
+
+## i18n
+
+- User-facing strings in templates via `TranslatePipe` or translate service.
+- Add keys to `public/i18n/en.json` — no hardcoded UI copy in new features.
+
+---
+
+## Routing and guards
+
+- Routes in [app.routes.ts](src/app/app.routes.ts).
+- Use existing `authGuard` and `permissionGuard` — do not invent parallel auth checks in components.
+
+---
+
+## Forbidden (simplicity)
+
+- Generic/reusable component libraries for one-off screens
+- Abstract base component classes used by a single feature
+- Indirection layers (facades, mediators) without a current requirement
+- Highly generic pipes/directives when inline template logic is clearer
+
+---
+
+## Tests
+
+- Co-locate `*.spec.ts` next to source.
+- Mock `ApiService`, `AuthService`, `Router` — no real HTTP in unit tests.
+- Run from repo root: `npm test`, `npm test -- --testPathPatterns=auth.service.spec`
+
+See [testing.md](docs/pharmacy_erp_architecture_docs/architecture/testing.md) for full command reference.
+
+---
+
+## Architecture reference
+
+- [early-foundations.md](docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md) — Angular core services, interceptors, Electron IPC
+- [01-coding-principles.mdc](01-coding-principles.mdc) — simplicity and readability (always applied)

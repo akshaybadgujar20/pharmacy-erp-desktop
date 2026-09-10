@@ -1,0 +1,70 @@
+---
+description: Simplicity and human-readability — applies to all code Cursor generates or modifies
+alwaysApply: true
+---
+
+## Core principle
+
+All code generated or modified by Cursor must be as **simple and human-understandable** as possible.
+
+A developer should be able to read the code and understand **why it works** without needing AI to explain it.
+
+---
+
+## Prefer simplicity over sophistication
+
+- Write the **simplest implementation that correctly solves the problem**.
+- Avoid unnecessary abstractions, indirection, wrappers, utilities, or layers.
+- Do not add complexity to make code more "architecturally correct" if a straightforward approach works.
+
+---
+
+## No new patterns without confirmation
+
+- Do **not** introduce a design pattern, architectural pattern, framework pattern, or abstraction unless it is **already established in this project** or **explicitly approved** by the user.
+- Established project patterns (e.g. NestJS module layout, `UnitOfWorkService`, party CRUD template, Angular `ApiService` envelope handling) must be followed — this rule is about **not adding new complexity on top of them**.
+- If a pattern could help but is not established, **explain it and ask for confirmation** before introducing it.
+
+---
+
+## Human readability first
+
+- Prefer straightforward control flow and obvious implementations.
+- Avoid clever, overly generic, highly abstract, or unnecessarily compact code.
+- Prefer **explicit code** over clever abstractions when both are reasonable.
+- Prefer a **small amount of duplication** over an abstraction that makes the code harder to understand.
+- When duplication and extraction conflict, follow existing file conventions; do not extract one-off helpers used in a single place.
+
+---
+
+## Do not over-engineer
+
+- Do not optimize for theoretical future requirements.
+- Do not add extensibility, configurability, generic frameworks, or reusable layers unless there is a **current** requirement.
+- Solve the actual problem with the **minimum reasonable complexity**.
+
+---
+
+## When multiple approaches are valid
+
+- Prefer the approach that is easiest for a human developer to read, debug, maintain, and modify.
+- Prefer explicit code over clever abstractions when both are reasonable.
+- Prefer a small amount of duplication over introducing an abstraction that makes the code harder to understand.
+
+---
+
+## Scope
+
+- Applies to **NestJS/TypeScript backend** and **Angular/frontend** code.
+- Applies to **new code** and **modifications/refactors** performed by Cursor.
+- Respect existing project conventions; do not introduce new complexity unless justified and approved when required above.
+
+---
+
+## Precedence
+
+When this rule appears to conflict with other guidance:
+
+- **Mandatory project patterns win** — e.g. `UnitOfWorkService`, outbox/audit in the same transaction, party CRUD template, `ApiService` + response envelope, NestJS module layout. Simplicity applies to *optional* layers on top, not replacing these.
+- **`typescript-rules.mdc` still applies** for formatting, naming, and extracting repeated string literals to `*.constants.ts` / `ErrorCode`. Do **not** extract one-off helpers used in a single place.
+- **`00-project-context.mdc` change policy** (minimal diff, additive-only) still applies for scope of edits.

@@ -233,6 +233,8 @@ Table spec: [AppSetting](../database/tables/configuration/configuration.md#appse
 
 Code: `src/app/core/`
 
+When editing frontend code, follow [01-coding-principles.mdc](../../../.cursor/rules/01-coding-principles.mdc) and [angular-rules.mdc](../../../.cursor/rules/angular-rules.mdc).
+
 | Piece | Role |
 |-------|------|
 | `ApiService` | HTTP to `http://localhost:3000`, unwraps `{ success, data }` envelope |
@@ -341,6 +343,8 @@ E2e auth tests reset user password hashes to `admin123` in `beforeEach`.
 | Tenant scope | `backend/src/persistence/context/tenant-scope.util.ts` |
 | Angular core | `src/app/core/` |
 | Electron | `electron/main.js`, `electron/preload.js` |
+| Cursor coding principles | `.cursor/rules/01-coding-principles.mdc` |
+| Cursor Angular rules | `.cursor/rules/angular-rules.mdc` |
 | Cursor persistence rules | `.cursor/rules/prisma-persistence-rules.mdc` (branch scoping section) |
 
 ## Related docs
