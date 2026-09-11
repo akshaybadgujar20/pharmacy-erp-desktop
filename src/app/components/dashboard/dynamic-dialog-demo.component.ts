@@ -9,8 +9,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
   template: `
     <p class="demo-dialog-message">Select an option to return to the caller.</p>
     <div class="demo-dialog-actions">
-      <button type="button" pButton severity="secondary" label="Cancel" (click)="close()"></button>
-      <button type="button" pButton label="Select" (click)="close('selected')"></button>
+      <p-button type="button" severity="secondary" label="Cancel" (onClick)="close()" />
+      <p-button type="button" label="Select" (onClick)="close('selected')" />
     </div>
   `,
   styles: `

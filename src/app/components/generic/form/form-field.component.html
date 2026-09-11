@@ -39,7 +39,7 @@
       ></textarea>
     }
     @case ('number') {
-      <p-inputNumber
+      <p-inputnumber
         [inputId]="inputId()"
         [formControl]="control()"
         [placeholder]="field().placeholder ?? ''"
@@ -49,7 +49,7 @@
       />
     }
     @case ('currency') {
-      <p-inputNumber
+      <p-inputnumber
         [inputId]="inputId()"
         [formControl]="control()"
         mode="currency"

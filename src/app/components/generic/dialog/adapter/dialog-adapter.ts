@@ -30,7 +30,7 @@ export interface PrimeDrawerBindings {
   closeOnEscape: boolean;
   blockScroll: boolean;
   fullScreen: boolean;
-  position: DrawerConfig['position'];
+  position: NonNullable<DrawerConfig['position']>;
   style?: Record<string, string>;
   styleClass?: string;
 }

@@ -17,12 +17,12 @@
   <section class="panel bottom">
     <div class="dialog-demo">
       <div class="dialog-demo__actions">
-        <button type="button" pButton label="Confirm" (click)="onConfirmDemo()"></button>
-        <button type="button" pButton severity="danger" label="Confirm Delete" (click)="onConfirmDeleteDemo()"></button>
-        <button type="button" pButton severity="secondary" label="Confirm Popup" (click)="onConfirmPopupDemo($event)"></button>
-        <button type="button" pButton severity="secondary" label="Open Dialog" (click)="dialogVisible.set(true)"></button>
-        <button type="button" pButton severity="secondary" label="Open Drawer" (click)="drawerVisible.set(true)"></button>
-        <button type="button" pButton severity="secondary" label="Dynamic Dialog" (click)="onOpenDynamicDemo()"></button>
+        <p-button type="button" label="Confirm" (onClick)="onConfirmDemo()" />
+        <p-button type="button" severity="danger" label="Confirm Delete" (onClick)="onConfirmDeleteDemo()" />
+        <p-button type="button" severity="secondary" label="Confirm Popup" (onClick)="onConfirmPopupDemo($event)" />
+        <p-button type="button" severity="secondary" label="Open Dialog" (onClick)="dialogVisible.set(true)" />
+        <p-button type="button" severity="secondary" label="Open Drawer" (onClick)="drawerVisible.set(true)" />
+        <p-button type="button" severity="secondary" label="Dynamic Dialog" (onClick)="onOpenDynamicDemo()" />
       </div>
       @if (dialogResult()) {
         <p class="dialog-demo__result">{{ dialogResult() }}</p>

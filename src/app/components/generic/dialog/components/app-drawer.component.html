@@ -29,9 +29,8 @@
     <ng-template pTemplate="footer">
       <div class="app-drawer__footer">
         @for (button of mergedConfig().footer!.buttons; track button.id) {
-          <button
+          <p-button
             type="button"
-            pButton
             [label]="button.label"
             [icon]="button.icon"
             [severity]="button.severity"
@@ -40,8 +39,8 @@
             [link]="button.variant === 'link'"
             [size]="button.size"
             [disabled]="button.disabled"
-            (click)="onFooterClick(button.id)"
-          ></button>
+            (onClick)="onFooterClick(button.id)"
+          />
         }
       </div>
     </ng-template>

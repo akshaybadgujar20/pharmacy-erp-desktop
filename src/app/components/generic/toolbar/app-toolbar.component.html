@@ -72,8 +72,6 @@
       <button
         pButton
         type="button"
-        [label]="getShortcutLabel(item.shortcutId) ? undefined : item.label"
-        [icon]="item.icon"
         [severity]="item.severity"
         [variant]="item.variant"
         [size]="item.size"
@@ -83,6 +81,9 @@
         [attr.aria-label]="getAriaLabel(item)"
         (click)="onButtonClick(item)"
       >
+        @if (item.icon) {
+          <i [class]="item.icon" aria-hidden="true"></i>
+        }
         @if (getShortcutLabel(item.shortcutId)) {
           <span class="app-toolbar__label-wrap">
             @if (item.label) {
@@ -90,6 +91,8 @@
             }
             <kbd class="app-toolbar__shortcut">{{ getShortcutLabel(item.shortcutId) }}</kbd>
           </span>
+        } @else if (item.label) {
+          <span>{{ item.label }}</span>
         }
       </button>
       <span class="app-toolbar__badge">{{ item.badge }}</span>
@@ -98,7 +101,6 @@
     <button
       pButton
       type="button"
-      [icon]="item.icon"
       [severity]="item.severity"
       [variant]="item.variant"
       [size]="item.size"
@@ -108,6 +110,9 @@
       [attr.aria-label]="getAriaLabel(item)"
       (click)="onButtonClick(item)"
     >
+      @if (item.icon) {
+        <i [class]="item.icon" aria-hidden="true"></i>
+      }
       <span class="app-toolbar__label-wrap">
         @if (item.label) {
           <span>{{ item.label }}</span>
@@ -119,8 +124,6 @@
     <button
       pButton
       type="button"
-      [label]="item.iconOnly ? undefined : item.label"
-      [icon]="item.icon"
       [severity]="item.severity"
       [variant]="item.variant"
       [size]="item.size"
@@ -132,6 +135,12 @@
       [attr.title]="item.iconOnly ? getAriaLabel(item) : null"
       (click)="onButtonClick(item)"
     >
+      @if (item.icon) {
+        <i [class]="item.icon" aria-hidden="true"></i>
+      }
+      @if (!item.iconOnly && item.label) {
+        <span>{{ item.label }}</span>
+      }
       @if (item.iconOnly && getShortcutLabel(item.shortcutId)) {
         <kbd class="app-toolbar__shortcut app-toolbar__shortcut--icon-only">{{
           getShortcutLabel(item.shortcutId)

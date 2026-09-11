@@ -21,6 +21,8 @@ Page-specific configs live next to feature components (e.g. `customer-form-dialo
 <app-dialog-shell />
 ```
 
+Dynamic dialogs do not need a static `<p-dynamicdialog />` in the shell. `DialogService` creates them imperatively when you call `AppDialogService.openDynamic()`.
+
 ## Imperative API
 
 Inject `AppDialogService` for confirm flows and dynamic dialogs:

@@ -9,7 +9,7 @@ describe('toast-defaults', () => {
   it('applies default host configuration', () => {
     const merged = mergeToastHostConfig();
     expect(merged.position).toBe('top-right');
-    expect(merged.mode).toBe('stack');
+    expect(merged.mode).toBe('stacked');
     expect(merged.stackVisibleLimit).toBe(3);
     expect(merged.key).toBe('app');
   });

@@ -15,33 +15,30 @@
       </div>
       <div class="app-grid-toolbar-right">
         @if (mergedConfig().toolbar?.refresh) {
-          <button
-            pButton
+          <p-button
             type="button"
             icon="pi pi-refresh"
             label="Refresh"
             severity="secondary"
-            (click)="emitToolbarAction('refresh')"
-          ></button>
+            (onClick)="emitToolbarAction('refresh')"
+          />
         }
         @if (mergedConfig().toolbar?.export || mergedConfig().export?.enabled) {
-          <button
-            pButton
+          <p-button
             type="button"
             icon="pi pi-download"
             label="Export"
             severity="secondary"
-            (click)="exportCsv()"
-          ></button>
+            (onClick)="exportCsv()"
+          />
         }
         @for (toolbarAction of visibleToolbarActions(); track toolbarAction.id) {
-          <button
-            pButton
+          <p-button
             type="button"
             [icon]="toolbarAction.icon"
             [label]="toolbarAction.label"
-            (click)="emitToolbarAction(toolbarAction.id)"
-          ></button>
+            (onClick)="emitToolbarAction(toolbarAction.id)"
+          />
         }
       </div>
     </div>
@@ -81,25 +78,23 @@
         </select>
       </div>
       <div class="app-grid-pagination">
-        <button
-          pButton
+        <p-button
           type="button"
           icon="pi pi-angle-left"
           severity="secondary"
-          text
+          [text]="true"
           [disabled]="currentPage() <= 1"
-          (click)="goToPage(currentPage() - 1)"
-        ></button>
+          (onClick)="goToPage(currentPage() - 1)"
+        />
         <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
-        <button
-          pButton
+        <p-button
           type="button"
           icon="pi pi-angle-right"
           severity="secondary"
-          text
+          [text]="true"
           [disabled]="currentPage() >= totalPages()"
-          (click)="goToPage(currentPage() + 1)"
-        ></button>
+          (onClick)="goToPage(currentPage() + 1)"
+        />
       </div>
     </div>
   }

@@ -17,17 +17,16 @@ export interface GridActionsRendererContext<T> {
   template: `
     <div class="app-grid-actions">
       @for (action of visibleActions(); track action.id) {
-        <button
-          pButton
+        <p-button
           type="button"
           [icon]="action.icon"
-          [title]="action.label"
+          [attr.title]="action.label"
           [disabled]="isDisabled(action)"
           severity="secondary"
-          text
+          [text]="true"
           size="small"
-          (click)="trigger(action.id)"
-        ></button>
+          (onClick)="trigger(action.id)"
+        />
       }
     </div>
   `,

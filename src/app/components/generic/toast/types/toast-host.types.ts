@@ -7,7 +7,7 @@ export type ToastPosition =
   | 'bottom-right'
   | 'center';
 
-export type ToastMode = 'stack' | 'expanded';
+export type ToastMode = 'stacked' | 'expanded';
 
 export interface ToastHostConfig {
   position?: ToastPosition;

@@ -25,7 +25,7 @@ describe('AppToastHostComponent', () => {
     expect(component.mergedConfig()).toEqual(
       expect.objectContaining({
         position: 'top-right',
-        mode: 'stack',
+        mode: 'stacked',
         stackVisibleLimit: 3,
         key: 'app',
       }),
