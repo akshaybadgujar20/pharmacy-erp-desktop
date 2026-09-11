@@ -9,6 +9,7 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { registerLocaleData } from '@angular/common';
 import localeEnIn from '@angular/common/locales/en-IN';
+import { MessageService } from 'primeng/api';
 import {providePrimeNG} from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
@@ -38,5 +39,6 @@ export const appConfig: ApplicationConfig = {
       }),
     }),
     { provide: LOCALE_ID, useValue: 'en-IN' },
+    MessageService,
   ]
 };

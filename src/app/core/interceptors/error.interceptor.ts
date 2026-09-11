@@ -2,12 +2,14 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { NotificationService } from '../../components/generic/toast/notification.service';
 import { ApiClientError } from '../models/api-response.types';
 import { AuthService } from '../services/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+  const notificationService = inject(NotificationService);
 
   return next(req).pipe(
     catchError((error: unknown) => {
@@ -31,18 +33,18 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             authService.clearSession();
             router.navigate(['/login']);
           } else {
-            //TODO: add error handler
+            notificationService.showApiError(clientError);
           }
 
           return throwError(() => clientError);
         }
 
-        //TODO: add error handler
+        notificationService.showApiError(error);
         return throwError(() => error);
       }
 
       if (error instanceof ApiClientError) {
-        //TODO: add error handler
+        notificationService.showApiError(error);
       }
 
       return throwError(() => error);
