@@ -9,6 +9,36 @@
     "search": "शोध",
     "notifications": "सूचना"
   },
+  "nav": {
+    "groups": {
+      "main": "मुख्य",
+      "sales": "विक्री",
+      "purchase": "खरेदी",
+      "inventory": "इन्व्हेंटरी",
+      "parties": "पक्ष",
+      "medicines": "औषधे",
+      "masters": "मास्टर्स",
+      "pricing": "किंमत",
+      "finance": "वित्त",
+      "prescriptions": "प्रिस्क्रिप्शन",
+      "reports": "अहवाल",
+      "admin": "प्रशासन"
+    },
+    "dashboard": "डॅशबोर्ड",
+    "sales": { "title": "विक्री", "invoices": "विक्री पावत्या", "returns": "विक्री परतावे" },
+    "purchase": { "title": "खरेदी", "orders": "खरेदी ऑर्डर", "invoices": "खरेदी पावत्या", "returns": "खरेदी परतावे", "goodsReceipts": "माल प्राप्ती" },
+    "inventory": { "title": "इन्व्हेंटरी", "batches": "बॅच", "stocks": "स्टॉक", "movements": "स्टॉक हालचाल", "adjustments": "स्टॉक समायोजन", "transfers": "स्टॉक हस्तांतरण", "stockTakes": "स्टॉक तपासणी" },
+    "party": { "title": "पक्ष", "parties": "पक्ष", "customers": "ग्राहक", "suppliers": "पुरवठादार", "doctors": "डॉक्टर", "employees": "कर्मचारी" },
+    "medicine": { "title": "औषधे", "medicines": "औषधे", "categories": "श्रेणी", "generics": "जेनेरिक", "schedules": "शेड्यूल", "manufacturers": "उत्पादक", "saltCompositions": "साल्ट रचना", "units": "मापन एकक" },
+    "masters": { "title": "संदर्भ डेटा", "countries": "देश", "states": "राज्ये", "cities": "शहरे", "areas": "क्षेत्र" },
+    "pricing": { "title": "किंमत", "discountRules": "सवलत नियम", "priceLists": "किंमत यादी", "taxes": "कर" },
+    "finance": { "title": "वित्त", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते" },
+    "prescriptions": { "list": "प्रिस्क्रिप्शन" },
+    "reports": { "title": "अहवाल" },
+    "security": { "title": "सुरक्षा", "users": "वापरकर्ते", "roles": "भूमिका", "permissions": "परवानग्या", "sessions": "सत्र" },
+    "configuration": { "title": "कॉन्फिगरेशन", "companies": "कंपन्या", "branches": "शाखा", "financialYears": "आर्थिक वर्ष", "sequenceGenerators": "अनुक्रम जनरेटर", "barcodeConfigs": "बारकोड", "printerConfigs": "प्रिंटर" },
+    "settings": { "title": "सेटिंग्ज" }
+  },
   "common": {
     "save": "जतन करा",
     "cancel": "रद्द करा",

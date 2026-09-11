@@ -77,9 +77,18 @@ export class ApiService {
       .pipe(map((response) => unwrapApiResponse(response)));
   }
 
-  delete<T>(path: string): Observable<T> {
+  patch<T>(path: string, body?: unknown): Observable<T> {
     return this.http
-      .delete<ApiResponse<T>>(`${this.baseUrl}${path}`)
+      .patch<ApiResponse<T>>(`${this.baseUrl}${path}`, body ?? {})
+      .pipe(map((response) => unwrapApiResponse(response)));
+  }
+
+  delete<T>(path: string, params?: Record<string, string>): Observable<T> {
+    const httpParams = params
+      ? new HttpParams({ fromObject: params })
+      : undefined;
+    return this.http
+      .delete<ApiResponse<T>>(`${this.baseUrl}${path}`, { params: httpParams })
       .pipe(map((response) => unwrapApiResponse(response)));
   }
 

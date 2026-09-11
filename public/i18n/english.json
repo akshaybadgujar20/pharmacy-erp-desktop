@@ -9,6 +9,106 @@
     "search": "Search",
     "notifications": "Notifications"
   },
+  "nav": {
+    "groups": {
+      "main": "Main",
+      "sales": "Sales",
+      "purchase": "Purchase",
+      "inventory": "Inventory",
+      "parties": "Parties",
+      "medicines": "Medicines",
+      "masters": "Masters",
+      "pricing": "Pricing",
+      "finance": "Finance",
+      "prescriptions": "Prescriptions",
+      "reports": "Reports",
+      "admin": "Administration"
+    },
+    "dashboard": "Dashboard",
+    "sales": {
+      "title": "Sales",
+      "invoices": "Sales Invoices",
+      "returns": "Sales Returns"
+    },
+    "purchase": {
+      "title": "Purchase",
+      "orders": "Purchase Orders",
+      "invoices": "Purchase Invoices",
+      "returns": "Purchase Returns",
+      "goodsReceipts": "Goods Receipts"
+    },
+    "inventory": {
+      "title": "Inventory",
+      "batches": "Batches",
+      "stocks": "Stock",
+      "movements": "Stock Movements",
+      "adjustments": "Stock Adjustments",
+      "transfers": "Stock Transfers",
+      "stockTakes": "Stock Takes"
+    },
+    "party": {
+      "title": "Parties",
+      "parties": "Parties",
+      "customers": "Customers",
+      "suppliers": "Suppliers",
+      "doctors": "Doctors",
+      "employees": "Employees"
+    },
+    "medicine": {
+      "title": "Medicines",
+      "medicines": "Medicines",
+      "categories": "Categories",
+      "generics": "Generics",
+      "schedules": "Schedules",
+      "manufacturers": "Manufacturers",
+      "saltCompositions": "Salt Compositions",
+      "units": "Units of Measure"
+    },
+    "masters": {
+      "title": "Reference Data",
+      "countries": "Countries",
+      "states": "States",
+      "cities": "Cities",
+      "areas": "Areas"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "discountRules": "Discount Rules",
+      "priceLists": "Price Lists",
+      "taxes": "Taxes"
+    },
+    "finance": {
+      "title": "Finance",
+      "ledgers": "Ledgers",
+      "payments": "Payments",
+      "receipts": "Receipts"
+    },
+    "prescriptions": {
+      "list": "Prescriptions"
+    },
+    "reports": {
+      "title": "Reports"
+    },
+    "security": {
+      "title": "Security",
+      "users": "Users",
+      "roles": "Roles",
+      "permissions": "Permissions",
+      "sessions": "User Sessions"
+    },
+    "configuration": {
+      "title": "Configuration",
+      "companies": "Companies",
+      "branches": "Branches",
+      "financialYears": "Financial Years",
+      "sequenceGenerators": "Sequence Generators",
+      "barcodeConfigs": "Barcode Configurations",
+      "printerConfigs": "Printer Configurations"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
