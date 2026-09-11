@@ -90,4 +90,14 @@ describe('AuthService', () => {
     expect(tokenStorage.clear).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
+
+  it('checks permissions and roles from current user', async () => {
+    apiService.post.mockReturnValue(of(tokenResponse));
+    await authService.login({ username: 'admin', password: 'admin123' });
+
+    expect(authService.hasPermission('SALES:SALES_INVOICE:READ')).toBe(true);
+    expect(authService.hasPermission('PARTY:CUSTOMER:DELETE')).toBe(false);
+    expect(authService.hasRole('ADMIN')).toBe(true);
+    expect(authService.hasAnyRole(['CASHIER', 'ADMIN'])).toBe(true);
+  });
 });

@@ -1,0 +1,68 @@
+.app-toolbar {
+  display: flex;
+  width: 100%;
+}
+
+.app-toolbar--horizontal {
+  flex-direction: row;
+}
+
+.app-toolbar--vertical {
+  flex-direction: column;
+}
+
+.app-toolbar--align-start {
+  justify-content: flex-start;
+}
+
+.app-toolbar--align-center {
+  justify-content: center;
+}
+
+.app-toolbar--align-end {
+  justify-content: flex-end;
+}
+
+.app-toolbar--align-between {
+  justify-content: space-between;
+}
+
+.app-toolbar--wrap {
+  flex-wrap: wrap;
+}
+
+.app-toolbar__spacer {
+  flex: 1 1 auto;
+}
+
+.app-toolbar__separator {
+  align-self: stretch;
+  background: var(--p-content-border-color, #d1d5db);
+}
+
+.app-toolbar__separator--horizontal {
+  width: 1px;
+  min-height: 1.5rem;
+  margin: 0 0.25rem;
+}
+
+.app-toolbar__separator--vertical {
+  height: 1px;
+  width: 100%;
+  margin: 0.25rem 0;
+}
+
+.app-toolbar__button-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.app-toolbar__badge {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1;
+  background: var(--p-primary-color, #3b82f6);
+  color: #fff;
+}

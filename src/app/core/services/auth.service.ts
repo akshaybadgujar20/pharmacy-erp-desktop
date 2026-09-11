@@ -91,6 +91,15 @@ export class AuthService {
     return user?.permissions.includes(permission) ?? false;
   }
 
+  hasRole(role: string): boolean {
+    const user = this.currentUserSignal();
+    return user?.roles.includes(role) ?? false;
+  }
+
+  hasAnyRole(roles: string[]): boolean {
+    return roles.some((role) => this.hasRole(role));
+  }
+
   private async persistSession(response: AuthTokenResponse): Promise<void> {
     await this.tokenStorage.setAccessToken(response.accessToken);
     await this.tokenStorage.setRefreshToken(response.refreshToken);

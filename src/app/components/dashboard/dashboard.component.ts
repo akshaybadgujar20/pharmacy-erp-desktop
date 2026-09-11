@@ -5,7 +5,9 @@ import {
   registerables
 } from 'chart.js';
 import { AppGridComponent } from '../generic/grid';
+import { AppToolbarComponent } from '../generic/toolbar';
 import { GridConfig } from '../generic/grid/types/grid.types';
+import { ToolbarConfig } from '../generic/toolbar/types/toolbar.types';
 
 Chart.register(...registerables);
 
@@ -19,6 +21,7 @@ interface DemoRow {
   selector: 'app-dashboard',
   imports: [
     AppGridComponent,
+    AppToolbarComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -26,6 +29,33 @@ interface DemoRow {
   standalone: true
 })
 export class DashboardComponent implements AfterViewInit {
+
+  readonly toolbarConfig: ToolbarConfig = {
+    id: 'dashboard-toolbar',
+    layout: { direction: 'horizontal', align: 'between' },
+    items: [
+      { type: 'button', id: 'refresh', label: 'Refresh', icon: 'pi pi-refresh', variant: 'outlined' },
+      { type: 'spacer' },
+      {
+        type: 'splitButton',
+        id: 'export',
+        label: 'Export',
+        icon: 'pi pi-download',
+        menuItems: [
+          { id: 'export-csv', label: 'CSV', icon: 'pi pi-file' },
+          { id: 'export-excel', label: 'Excel', icon: 'pi pi-file-excel' },
+        ],
+      },
+      {
+        type: 'buttonGroup',
+        id: 'demo-group',
+        items: [
+          { type: 'button', id: 'edit', label: 'Edit', icon: 'pi pi-pencil', variant: 'outlined' },
+          { type: 'button', id: 'delete', label: 'Delete', icon: 'pi pi-trash', severity: 'danger', confirmation: true },
+        ],
+      },
+    ],
+  };
 
   readonly gridConfig: GridConfig<DemoRow> = {
     id: 'dashboard-demo-grid',

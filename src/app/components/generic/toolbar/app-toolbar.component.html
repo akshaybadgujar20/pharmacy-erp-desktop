@@ -1,0 +1,126 @@
+<div
+  class="app-toolbar"
+  [class.app-toolbar--horizontal]="layout().direction === 'horizontal'"
+  [class.app-toolbar--vertical]="layout().direction === 'vertical'"
+  [class.app-toolbar--align-start]="layout().align === 'start'"
+  [class.app-toolbar--align-center]="layout().align === 'center'"
+  [class.app-toolbar--align-end]="layout().align === 'end'"
+  [class.app-toolbar--align-between]="layout().align === 'between'"
+  [class.app-toolbar--wrap]="layout().wrap"
+  [style.gap]="layout().gap"
+>
+  @for (item of visibleItems(); track trackItem($index, item)) {
+    @switch (item.type) {
+      @case ('spacer') {
+        <span class="app-toolbar__spacer" [attr.aria-hidden]="true"></span>
+      }
+      @case ('separator') {
+        <span
+          class="app-toolbar__separator"
+          [class.app-toolbar__separator--horizontal]="layout().direction === 'horizontal'"
+          [class.app-toolbar__separator--vertical]="layout().direction === 'vertical'"
+          [attr.aria-hidden]="true"
+        ></span>
+      }
+      @case ('buttonGroup') {
+        <p-buttongroup>
+          @for (groupItem of item.items; track groupItem.id) {
+            @if (groupItem.type === 'button') {
+              <ng-container
+                *ngTemplateOutlet="buttonTemplate; context: { $implicit: groupItem }"
+              />
+            }
+            @if (groupItem.type === 'splitButton') {
+              <ng-container
+                *ngTemplateOutlet="splitButtonTemplate; context: { $implicit: groupItem }"
+              />
+            }
+          }
+        </p-buttongroup>
+      }
+      @case ('button') {
+        <ng-container *ngTemplateOutlet="buttonTemplate; context: { $implicit: item }" />
+      }
+      @case ('splitButton') {
+        <ng-container *ngTemplateOutlet="splitButtonTemplate; context: { $implicit: item }" />
+      }
+    }
+  }
+</div>
+
+<ng-template #buttonTemplate let-item>
+  @if (isLoading(item.id)) {
+    <button
+      pButton
+      type="button"
+      [severity]="item.severity"
+      [variant]="item.variant"
+      [size]="item.size"
+      [raised]="item.raised"
+      [rounded]="item.rounded"
+      [iconOnly]="item.iconOnly"
+      [disabled]="true"
+      [attr.aria-label]="item.ariaLabel ?? item.label"
+    >
+      <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+      @if (!item.iconOnly && item.label) {
+        <span>{{ item.label }}</span>
+      }
+    </button>
+  } @else if (item.badge !== undefined && !item.iconOnly) {
+    <span class="app-toolbar__button-wrap">
+      <button
+        pButton
+        type="button"
+        [label]="item.label"
+        [icon]="item.icon"
+        [severity]="item.severity"
+        [variant]="item.variant"
+        [size]="item.size"
+        [raised]="item.raised"
+        [rounded]="item.rounded"
+        [disabled]="isDisabled(item)"
+        [attr.aria-label]="item.ariaLabel ?? item.label"
+        (click)="onButtonClick(item)"
+      ></button>
+      <span class="app-toolbar__badge">{{ item.badge }}</span>
+    </span>
+  } @else {
+    <button
+      pButton
+      type="button"
+      [label]="item.iconOnly ? undefined : item.label"
+      [icon]="item.icon"
+      [severity]="item.severity"
+      [variant]="item.variant"
+      [size]="item.size"
+      [raised]="item.raised"
+      [rounded]="item.rounded"
+      [iconOnly]="item.iconOnly"
+      [disabled]="isDisabled(item)"
+      [attr.aria-label]="item.ariaLabel ?? item.label"
+      (click)="onButtonClick(item)"
+    ></button>
+  }
+</ng-template>
+
+<ng-template #splitButtonTemplate let-item>
+  <p-splitbutton
+    [label]="item.label"
+    [icon]="item.icon"
+    [severity]="item.severity"
+    [size]="item.size"
+    [raised]="item.raised"
+    [rounded]="item.rounded"
+    [text]="item.variant === 'text'"
+    [outlined]="item.variant === 'outlined'"
+    [dropdownIcon]="item.dropdownIcon ?? 'pi pi-chevron-down'"
+    [disabled]="isDisabled(item) || item.buttonDisabled"
+    [buttonDisabled]="item.buttonDisabled || isLoading(item.id)"
+    [menuButtonDisabled]="item.menuButtonDisabled"
+    [model]="getMenuModel(item)"
+    (onClick)="onSplitButtonClick(item)"
+  />
+</ng-template>
+
+<p-confirmDialog />
