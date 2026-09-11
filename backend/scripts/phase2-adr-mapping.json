@@ -1193,9 +1193,9 @@
       "id": 183,
       "title": "Finance simplification refactor scope unresolved",
       "modules": "finance",
-      "status": "Needs Confirmation",
-      "confidence": "Needs Confirmation",
-      "source": "Doc 13 — transcript 4ff29b60 Simplification scope AskQuestion",
+      "status": "Deferred",
+      "confidence": "Explicit",
+      "source": "Doc 13 — transcript 4ff29b60; closed Phase 2 closeout",
       "draft_id": null
     },
     {
@@ -1809,6 +1809,93 @@
       "confidence": "Strongly inferred",
       "source": "Doc 20 — audit-module.md known gaps",
       "draft_id": null
+    },
+    {
+      "id": 252,
+      "title": "Settings list dedupes branch override over company row",
+      "modules": "settings",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — settings-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 253,
+      "title": "Outbox retry only from FAILED or PROCESSING to PENDING",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — sync-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 254,
+      "title": "Sync admin mutations audit only, no outbox enqueue",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — sync-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 255,
+      "title": "SyncLog immutable session history, read-only HTTP",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — sync-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 256,
+      "title": "Financial year close not enforced on all transaction modules",
+      "modules": "configuration",
+      "status": "Deferred",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — configuration-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 257,
+      "title": "MFA and password complexity policy out of scope v1",
+      "modules": "security",
+      "status": "Deferred",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — security-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 258,
+      "title": "Stock-take variance fields server-computed on item write",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — inventory-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 259,
+      "title": "Stock transfer dispatch accepts DRAFT without approval step",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — inventory-module.md",
+      "draft_id": null
+    },
+    {
+      "id": 260,
+      "title": "auditAndLogChanges helper for UPDATE ChangeHistory",
+      "modules": "audit, pricing, prescription, settings",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Module pass — audit-module.md",
+      "draft_id": null
     }
-  ]
+  ],
+  "module_pass": {
+    "completed": "2026-09-11",
+    "files_reviewed": 14,
+    "net_new_adrs": "ADR-252–260",
+    "notes": "Full pass on .cursor/rules/docs/*-module.md; deduped against ADR-001–251"
+  }
 }

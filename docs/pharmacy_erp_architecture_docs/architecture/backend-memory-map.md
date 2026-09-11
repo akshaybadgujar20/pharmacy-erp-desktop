@@ -205,6 +205,15 @@ This document preserves **why** the backend is designed the way it is: questions
 | [ADR-249](./adrs/ADR-249-finance-sales-receipt-allocation-deferred.md) | Finance Receipt allocation to sales invoice deferred | finance, sales | Active | Strongly inferred | Doc 20 — finance-module.md not implemented section |
 | [ADR-250](./adrs/ADR-250-party-nested-contacts-addresses-pattern.md) | Party nested contacts and addresses via child routes | party | Active | Strongly inferred | Doc 20 — party-module.md API catalog |
 | [ADR-251](./adrs/ADR-251-audit-party-contact-exception-deferred.md) | PartyContact ChangeHistory scope deferred | audit, party | Active | Strongly inferred | Doc 20 — audit-module.md known gaps |
+| [ADR-252](./adrs/ADR-252-settings-list-branch-override-dedupe.md) | Settings list dedupes branch override over company row | settings | Active | Strongly inferred | Module pass — settings-module.md |
+| [ADR-253](./adrs/ADR-253-sync-outbox-retry-failed-processing-only.md) | Outbox retry only from FAILED or PROCESSING to PENDING | sync | Active | Strongly inferred | Module pass — sync-module.md |
+| [ADR-254](./adrs/ADR-254-sync-admin-mutations-audit-only-no-outbox.md) | Sync admin mutations audit only, no outbox enqueue | sync | Active | Strongly inferred | Module pass — sync-module.md |
+| [ADR-255](./adrs/ADR-255-synclog-immutable-read-only.md) | SyncLog immutable session history, read-only HTTP | sync | Active | Strongly inferred | Module pass — sync-module.md |
+| [ADR-256](./adrs/ADR-256-financial-year-close-not-enforced-all-modules.md) | Financial year close not enforced on all transaction modules | configuration | Deferred | Strongly inferred | Module pass — configuration-module.md |
+| [ADR-257](./adrs/ADR-257-security-mfa-password-policy-out-of-scope-v1.md) | MFA and password complexity policy out of scope v1 | security | Deferred | Strongly inferred | Module pass — security-module.md |
+| [ADR-258](./adrs/ADR-258-stock-take-variance-server-computed.md) | Stock-take variance fields server-computed on item write | inventory | Active | Strongly inferred | Module pass — inventory-module.md |
+| [ADR-259](./adrs/ADR-259-stock-transfer-dispatch-from-draft-without-approval.md) | Stock transfer dispatch accepts DRAFT without approval step | inventory | Active | Strongly inferred | Module pass — inventory-module.md |
+| [ADR-260](./adrs/ADR-260-audit-and-log-changes-helper-for-update.md) | auditAndLogChanges helper for UPDATE ChangeHistory | audit, pricing, prescription, settings | Active | Strongly inferred | Module pass — audit-module.md |
 
 Full catalog: [`adrs/README.md`](./adrs/README.md)
 
@@ -216,8 +225,8 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 |-------|---------|-------|
 | Database & schema | ADR-001, ADR-002, ADR-009 | Dual DB, strings not enums, BIGINT extension |
 | Persistence write path | ADR-006, ADR-007, ADR-010, ADR-024 | UoW, outbox-in-tx, context, golden rules |
-| Stock & inventory | ADR-003, ADR-008, ADR-135, ADR-136, ADR-161–171 | Branch stock, ledger-only mutations, workflows |
-| Sync & offline-first | ADR-004, ADR-021, ADR-022, ADR-138, ADR-139–143, ADR-231 | entityUuid, local SQLite, admin APIs, worker deferred |
+| Stock & inventory | ADR-003, ADR-008, ADR-135, ADR-136, ADR-161–171, ADR-258–259 | Branch stock, ledger-only mutations, workflows |
+| Sync & offline-first | ADR-004, ADR-021, ADR-022, ADR-138, ADR-139–143, ADR-231, ADR-253–255 | entityUuid, local SQLite, admin APIs, worker deferred |
 | Auth & tenant | ADR-012, ADR-013, ADR-018, ADR-019 | JWT, context, tokens, bcrypt |
 | Finance posting | ADR-011, ADR-055, ADR-056, ADR-065 | Shared ledger service, hooks, reversals |
 | Module boundaries | ADR-015, ADR-080, ADR-137 | Party template, auth/security split, FK not imports |
@@ -232,20 +241,20 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 |--------|----------|---------|----------------------------|
 | Infrastructure / persistence | 001–011, 021, 139–152 | Doc 01–03, 07–09 | — |
 | Auth | 012, 013, 018, 019, 080 | Doc 04, 15 | — |
-| Audit | 016, 017, 101, 220–221, 251 | Doc 05, 17, 20 | party-contact ChangeHistory deferred (ADR-251) |
-| Security | 080, 086, 191–199 | Doc 15 | — |
+| Audit | 016, 017, 101, 220–221, 251, 260 | Doc 05, 17, 20, module pass | party-contact ChangeHistory deferred (ADR-251) |
+| Security | 080, 086, 191–199, 257 | Doc 15, module pass | MFA/password policy deferred (ADR-257) |
 | Masters | 114, 127 | Doc 18 | areaId schema gap documented |
 | Party | 015, 020 | Doc 06 | — |
 | Medicine | 089, 200–210 | Doc 16 | — |
-| Configuration | 114, 130, 225–240 | Doc 18 | FY close not enforced on all modules |
-| Settings | 014, 130 | Doc 04, 18 | — |
+| Configuration | 114, 130, 225–240, 256 | Doc 18, module pass | FY close enforcement deferred (ADR-256) |
+| Settings | 014, 130, 252 | Doc 04, 18, module pass | — |
 | Pricing | 101, 212–215, 222 | Doc 17 | — |
 | Prescription | 101, 216–219 | Doc 17 | Auto-expire by date not implemented; dispense hook out of scope (ADR-219) |
-| Inventory | 003, 008, 135, 136, 161–171 | Doc 01–02, 11, 12, 14 | Reserved qty buckets deferred |
+| Inventory | 003, 008, 135, 136, 161–171, 258–259 | Doc 01–02, 11, 12, 14, module pass | Reserved qty buckets deferred |
 | Purchase | 047–053, 135, 172–173, 244 | Doc 12, 20 | — |
 | Sales | 068–072, 076, 136, 184–190, 246–248 | Doc 14, 20 | Loyalty, non-RESTOCK dispositions |
 | Finance | 011, 055–056, 064–065, 174–183, 245, 249 | Doc 13, 20 | Simplification deferred (ADR-183) |
-| Sync | 004, 022, 114, 138, 139–143, 231 | Doc 01, 07, 18 | Cloud worker not built |
+| Sync | 004, 022, 114, 138, 139–143, 231, 253–255 | Doc 01, 07, 18, module pass | Cloud worker not built |
 | Reporting | 025–026, 153–160 | Doc 10 | Only party reports registered |
 | Documentation | 133–134, 241–243 | Doc 25–27 | — |
 
@@ -367,8 +376,8 @@ Phase 2 files subagent draft ADR-027–132 (and additional transcript decisions)
 
 - **Phase 1:** Docs 01–10, 12–18, 25–26
 - **Phase 2:** Docs 07–18 gaps, Doc 11 inventory transcript, Docs 20–24 module memory docs, Doc 27 plans, Doc 28 final audit
-- **Module pass (closeout):** All 14 `.cursor/rules/docs/*-module.md` files reviewed (see commit 2 for net-new ADRs)
-- **Total:** **166 ADRs** (53 Phase 1 + 113 Phase 2)
+- **Module pass (closeout):** All 14 `.cursor/rules/docs/*-module.md` files reviewed; 9 net-new ADRs filed (ADR-252–260)
+- **Total:** **175 ADRs** (53 Phase 1 + 113 Phase 2 + 9 module closeout)
 
 ### Decision counts
 
@@ -380,7 +389,7 @@ Phase 2 files subagent draft ADR-027–132 (and additional transcript decisions)
 | Superseded | 0 |
 | Refined | 1 (ADR-050 → ADR-056) |
 | Needs confirmation | 0 |
-| Deferred | 1 (ADR-183 finance simplification) |
+| Deferred | 3 (ADR-183 finance simplification; ADR-256 FY enforcement; ADR-257 MFA/password policy) |
 
 ### Foundational architecture decisions (top 10)
 
@@ -412,7 +421,7 @@ Phase 2 files subagent draft ADR-027–132 (and additional transcript decisions)
 
 ### Remaining deferred features (not decision gaps)
 
-- Prescription auto-expire by date, cloud sync worker, party-contact ChangeHistory (ADR-251), areaId schema, loyalty, non-RESTOCK returns, reserved qty buckets, tests deferred per module (ADR-173, 180, 190, 198, 211, 225)
+- Prescription auto-expire by date, cloud sync worker, party-contact ChangeHistory (ADR-251), areaId schema, loyalty, non-RESTOCK returns, reserved qty buckets, tests deferred per module (ADR-173, 180, 190, 198, 211, 225), FY close cross-module enforcement (ADR-256), MFA/password policy (ADR-257)
 
 ### Git commits
 
@@ -423,7 +432,7 @@ See [Processing log](#processing-log) for full Phase 1 + Phase 2 SHA history. Fu
 - [x] ADR-183 Deferred; Needs confirmation count = 0
 - [x] Stale "Missing / uncertain" bullets removed
 - [x] Phase 2 git SHAs in processing log
-- [x] All 14 module.md files reviewed (net-new ADRs in follow-up commit)
+- [x] All 14 module.md files reviewed; 9 net-new ADRs filed (ADR-252–260)
 - [x] Recovery status: **COMPLETE**
 - [x] No open decision-recovery todos remain
 

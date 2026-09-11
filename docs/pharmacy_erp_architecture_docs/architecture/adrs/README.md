@@ -67,6 +67,7 @@ After any architectural choice with alternatives, cross-module impact, or hard-t
 | ADR-225–240 | SCM detail (Doc 18) |
 | ADR-241–243 | Doc governance + cursor rules (Doc 27) |
 | ADR-244–251 | Module memory doc extractions (Doc 20–24) |
+| ADR-252–260 | Module memory doc closeout pass (settings, sync, configuration, security, inventory, audit) |
 
 Draft ID cross-reference: [`backend/scripts/phase2-adr-mapping.json`](../../../../backend/scripts/phase2-adr-mapping.json)
 
