@@ -1,0 +1,131 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (userId()) {
+      <p-tab value="roles">Roles</p-tab>
+      <p-tab value="branches">Branches</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="employeeId">Employee ID</label>
+          <input pInputText id="employeeId" formControlName="employeeId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="username">Username</label>
+          <input pInputText id="username" formControlName="username" [readonly]="!isNew()" />
+        </div>
+        @if (isNew()) {
+          <div class="detail-form__field">
+            <label for="password">Password</label>
+            <input pInputText id="password" type="password" formControlName="password" />
+          </div>
+        }
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="userIsActive" />
+          <label for="userIsActive">Active</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox
+            formControlName="mustChangePassword"
+            [binary]="true"
+            inputId="userMustChangePassword"
+          />
+          <label for="userMustChangePassword">Must Change Password</label>
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew()) {
+            <button
+              pButton
+              type="button"
+              severity="secondary"
+              [disabled]="resettingPassword()"
+              (click)="openResetPasswordDialog()"
+            >
+              Reset Password
+            </button>
+            <button
+              pButton
+              type="button"
+              severity="secondary"
+              [disabled]="unlocking()"
+              (click)="unlockUser()"
+            >
+              Unlock
+            </button>
+            <button
+              pButton
+              type="button"
+              severity="danger"
+              [disabled]="deleting()"
+              (click)="deleteRecord()"
+            >
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (userId()) {
+      <p-tabpanel value="roles">
+        <app-user-roles-tab [userId]="userId()!" />
+      </p-tabpanel>
+      <p-tabpanel value="branches">
+        <app-user-branches-tab [userId]="userId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>
+
+<p-dialog
+  [visible]="resetDialogVisible()"
+  [modal]="true"
+  header="Reset Password"
+  [style]="{ width: '28rem' }"
+  (onHide)="closeResetPasswordDialog()"
+>
+  <form class="detail-form" [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword()">
+    <div class="detail-form__field">
+      <label for="newPassword">New Password</label>
+      <input pInputText id="newPassword" type="password" formControlName="newPassword" />
+    </div>
+    <div class="detail-form__field">
+      <p-checkbox
+        formControlName="mustChangePassword"
+        [binary]="true"
+        inputId="resetMustChangePassword"
+      />
+      <label for="resetMustChangePassword">Must Change Password</label>
+    </div>
+    <div class="detail-form__actions">
+      <button
+        pButton
+        type="submit"
+        severity="primary"
+        [disabled]="resettingPassword() || resetPasswordForm.invalid"
+      >
+        Reset
+      </button>
+      <button
+        pButton
+        type="button"
+        severity="secondary"
+        variant="outlined"
+        (click)="closeResetPasswordDialog()"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

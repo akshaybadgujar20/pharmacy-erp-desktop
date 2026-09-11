@@ -1,0 +1,63 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (ledgerId()) {
+      <p-tab value="entries">Entries</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="ledgerCode">Ledger Code</label>
+          <input pInputText id="ledgerCode" formControlName="ledgerCode" />
+        </div>
+        <div class="detail-form__field">
+          <label for="ledgerName">Ledger Name</label>
+          <input pInputText id="ledgerName" formControlName="ledgerName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="ledgerType">Ledger Type</label>
+          <input pInputText id="ledgerType" formControlName="ledgerType" />
+        </div>
+        <div class="detail-form__field">
+          <label for="normalBalance">Normal Balance</label>
+          <input pInputText id="normalBalance" formControlName="normalBalance" />
+        </div>
+        <div class="detail-form__field">
+          <label for="parentLedgerId">Parent Ledger ID</label>
+          <input pInputText id="parentLedgerId" formControlName="parentLedgerId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="description">Description</label>
+          <input pInputText id="description" formControlName="description" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="ledgerIsActive" />
+          <label for="ledgerIsActive">Active</label>
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew() && !isSystem()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (ledgerId()) {
+      <p-tabpanel value="entries">
+        <app-ledger-entries-tab [ledgerId]="ledgerId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

@@ -1,0 +1,81 @@
+@if (setting(); as currentSetting) {
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="settingKey">Key</label>
+      <input pInputText id="settingKey" [value]="currentSetting.settingKey" readonly />
+    </div>
+    <div class="detail-form__field">
+      <label for="settingName">Name</label>
+      <input pInputText id="settingName" [value]="currentSetting.settingName" readonly />
+    </div>
+    <div class="detail-form__field">
+      <label for="category">Category</label>
+      <input pInputText id="category" [value]="currentSetting.category" readonly />
+    </div>
+    <div class="detail-form__field">
+      <label for="dataType">Data Type</label>
+      <input pInputText id="dataType" [value]="currentSetting.dataType" readonly />
+    </div>
+    @if (currentSetting.description) {
+      <div class="detail-form__field">
+        <label for="description">Description</label>
+        <input pInputText id="description" [value]="currentSetting.description" readonly />
+      </div>
+    }
+    @if (currentSetting.defaultValue) {
+      <div class="detail-form__field">
+        <label for="defaultValue">Default Value</label>
+        <input pInputText id="defaultValue" [value]="currentSetting.defaultValue" readonly />
+      </div>
+    }
+    <div class="detail-form__field">
+      @if (dataType() === 'BOOLEAN') {
+        <p-checkbox
+          formControlName="booleanValue"
+          [binary]="true"
+          inputId="booleanValue"
+          [disabled]="!isEditable()"
+        />
+        <label for="booleanValue">Value</label>
+      } @else {
+        <label for="settingValue">Value</label>
+        @if (dataType() === 'JSON') {
+          <textarea
+            id="settingValue"
+            class="detail-form__textarea"
+            formControlName="settingValue"
+            rows="6"
+            [readOnly]="!isEditable()"
+          ></textarea>
+        } @else {
+          <input
+            pInputText
+            id="settingValue"
+            formControlName="settingValue"
+            [type]="dataType() === 'INTEGER' || dataType() === 'DECIMAL' || dataType() === 'NUMBER' ? 'number' : 'text'"
+            [readOnly]="!isEditable()"
+          />
+        }
+      }
+    </div>
+    <div class="detail-form__actions">
+      <button
+        pButton
+        type="submit"
+        severity="primary"
+        [disabled]="saving() || !isEditable() || form.invalid"
+      >
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+        Back
+      </button>
+    </div>
+    @if (!isEditable()) {
+      <p class="detail-form__hint">This setting is read-only.</p>
+    }
+    @if (errorMessage()) {
+      <p class="detail-form__error">{{ errorMessage() }}</p>
+    }
+  </form>
+}

@@ -1,0 +1,13 @@
+<div class="page-layout">
+  <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+    (rowDoubleClick)="onRowDoubleClick($event)"
+  />
+</div>

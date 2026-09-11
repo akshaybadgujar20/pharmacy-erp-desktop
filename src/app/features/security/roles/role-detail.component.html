@@ -1,0 +1,63 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (roleId()) {
+      <p-tab value="permissions">Permissions</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="roleCode">Role Code</label>
+          <input pInputText id="roleCode" formControlName="roleCode" />
+        </div>
+        <div class="detail-form__field">
+          <label for="roleName">Role Name</label>
+          <input pInputText id="roleName" formControlName="roleName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="description">Description</label>
+          <input pInputText id="description" formControlName="description" />
+        </div>
+        @if (!isNew()) {
+          <div class="detail-form__field">
+            <label>System Role</label>
+            <span>{{ isSystemRole() ? 'Yes' : 'No' }}</span>
+          </div>
+        }
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="roleIsActive" />
+          <label for="roleIsActive">Active</label>
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew()) {
+            <button
+              pButton
+              type="button"
+              severity="danger"
+              [disabled]="deleting()"
+              (click)="deleteRecord()"
+            >
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (roleId()) {
+      <p-tabpanel value="permissions">
+        <app-role-permissions-tab [roleId]="roleId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

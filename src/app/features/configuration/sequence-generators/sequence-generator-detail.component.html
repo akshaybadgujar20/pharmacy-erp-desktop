@@ -1,0 +1,58 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="branchId">Branch ID</label>
+    <input pInputText id="branchId" formControlName="branchId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="documentType">Document Type</label>
+    <input pInputText id="documentType" formControlName="documentType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="prefix">Prefix</label>
+    <input pInputText id="prefix" formControlName="prefix" />
+  </div>
+  <div class="detail-form__field">
+    <label for="suffix">Suffix</label>
+    <input pInputText id="suffix" formControlName="suffix" />
+  </div>
+  <div class="detail-form__field">
+    <label for="currentNumber">Current Number</label>
+    <input pInputText id="currentNumber" formControlName="currentNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="incrementBy">Increment By</label>
+    <input pInputText id="incrementBy" type="number" formControlName="incrementBy" />
+  </div>
+  <div class="detail-form__field">
+    <label for="paddingLength">Padding Length</label>
+    <input pInputText id="paddingLength" type="number" formControlName="paddingLength" />
+  </div>
+  <div class="detail-form__field">
+    <label for="resetPolicy">Reset Policy</label>
+    <input pInputText id="resetPolicy" formControlName="resetPolicy" />
+  </div>
+  <div class="detail-form__field">
+    <label for="format">Format</label>
+    <input pInputText id="format" formControlName="format" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

@@ -1,0 +1,78 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (stockTakeId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">Status: {{ status() }}</p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="stockTakeDate">Stock Take Date</label>
+          <input pInputText id="stockTakeDate" formControlName="stockTakeDate" [readonly]="!canEditHeader()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="countType">Count Type</label>
+          <input pInputText id="countType" formControlName="countType" [readonly]="!canEditHeader()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="countedByEmployeeId">Counted By Employee ID</label>
+          <input pInputText id="countedByEmployeeId" formControlName="countedByEmployeeId" [readonly]="!canEditHeader()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" [readonly]="!canEditHeader()" />
+        </div>
+        <div class="detail-form__actions">
+          @if (canEditHeader()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && canStart()) {
+            <button pButton type="button" severity="success" [disabled]="starting()" (click)="start()">
+              Start
+            </button>
+          }
+          @if (!isNew() && canComplete()) {
+            <button pButton type="button" severity="success" [disabled]="completing()" (click)="complete()">
+              Complete
+            </button>
+          }
+          @if (!isNew() && canReconcile()) {
+            <button pButton type="button" severity="success" [disabled]="reconciling()" (click)="reconcile()">
+              Reconcile
+            </button>
+          }
+          @if (!isNew() && isDraft()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (stockTakeId()) {
+      <p-tabpanel value="items">
+        <app-stock-take-items-tab
+          [stockTakeId]="stockTakeId()!"
+          [parentStatus]="status()"
+        />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

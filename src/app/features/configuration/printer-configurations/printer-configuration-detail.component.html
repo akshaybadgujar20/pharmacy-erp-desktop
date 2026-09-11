@@ -1,0 +1,62 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="branchId">Branch ID</label>
+    <input pInputText id="branchId" formControlName="branchId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="printerName">Printer Name</label>
+    <input pInputText id="printerName" formControlName="printerName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="printerType">Printer Type</label>
+    <input pInputText id="printerType" formControlName="printerType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="documentType">Document Type</label>
+    <input pInputText id="documentType" formControlName="documentType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="printerPath">Printer Path</label>
+    <input pInputText id="printerPath" formControlName="printerPath" />
+  </div>
+  <div class="detail-form__field">
+    <label for="paperSize">Paper Size</label>
+    <input pInputText id="paperSize" formControlName="paperSize" />
+  </div>
+  <div class="detail-form__field">
+    <label for="copies">Copies</label>
+    <input pInputText id="copies" type="number" formControlName="copies" />
+  </div>
+  <div class="detail-form__field">
+    <label for="printOrientation">Print Orientation</label>
+    <input pInputText id="printOrientation" formControlName="printOrientation" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isDefault" [binary]="true" inputId="isDefault" />
+    <label for="isDefault">Default</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__field">
+    <label for="remarks">Remarks</label>
+    <input pInputText id="remarks" formControlName="remarks" />
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

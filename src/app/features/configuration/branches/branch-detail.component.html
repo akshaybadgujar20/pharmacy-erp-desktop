@@ -1,0 +1,86 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="branchCode">Branch Code</label>
+    <input pInputText id="branchCode" formControlName="branchCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="branchName">Branch Name</label>
+    <input pInputText id="branchName" formControlName="branchName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="displayName">Display Name</label>
+    <input pInputText id="displayName" formControlName="displayName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="gstNumber">GST Number</label>
+    <input pInputText id="gstNumber" formControlName="gstNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="drugLicenseNumber">Drug License Number</label>
+    <input pInputText id="drugLicenseNumber" formControlName="drugLicenseNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="email">Email</label>
+    <input pInputText id="email" formControlName="email" />
+  </div>
+  <div class="detail-form__field">
+    <label for="phoneNumber">Phone Number</label>
+    <input pInputText id="phoneNumber" formControlName="phoneNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="addressLine1">Address Line 1</label>
+    <input pInputText id="addressLine1" formControlName="addressLine1" />
+  </div>
+  <div class="detail-form__field">
+    <label for="addressLine2">Address Line 2</label>
+    <input pInputText id="addressLine2" formControlName="addressLine2" />
+  </div>
+  <div class="detail-form__field">
+    <label for="city">City</label>
+    <input pInputText id="city" formControlName="city" />
+  </div>
+  <div class="detail-form__field">
+    <label for="state">State</label>
+    <input pInputText id="state" formControlName="state" />
+  </div>
+  <div class="detail-form__field">
+    <label for="country">Country</label>
+    <input pInputText id="country" formControlName="country" />
+  </div>
+  <div class="detail-form__field">
+    <label for="pinCode">PIN Code</label>
+    <input pInputText id="pinCode" formControlName="pinCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="managerName">Manager Name</label>
+    <input pInputText id="managerName" formControlName="managerName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="openingDate">Opening Date</label>
+    <input pInputText id="openingDate" formControlName="openingDate" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isHeadOffice" [binary]="true" inputId="isHeadOffice" />
+    <label for="isHeadOffice">Head Office</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

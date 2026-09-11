@@ -1,0 +1,90 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="companyCode">Company Code</label>
+    <input pInputText id="companyCode" formControlName="companyCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="companyName">Company Name</label>
+    <input pInputText id="companyName" formControlName="companyName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="displayName">Display Name</label>
+    <input pInputText id="displayName" formControlName="displayName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="gstNumber">GST Number</label>
+    <input pInputText id="gstNumber" formControlName="gstNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="panNumber">PAN Number</label>
+    <input pInputText id="panNumber" formControlName="panNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="drugLicenseNumber">Drug License Number</label>
+    <input pInputText id="drugLicenseNumber" formControlName="drugLicenseNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="email">Email</label>
+    <input pInputText id="email" formControlName="email" />
+  </div>
+  <div class="detail-form__field">
+    <label for="phoneNumber">Phone Number</label>
+    <input pInputText id="phoneNumber" formControlName="phoneNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="website">Website</label>
+    <input pInputText id="website" formControlName="website" />
+  </div>
+  <div class="detail-form__field">
+    <label for="logoPath">Logo Path</label>
+    <input pInputText id="logoPath" formControlName="logoPath" />
+  </div>
+  <div class="detail-form__field">
+    <label for="addressLine1">Address Line 1</label>
+    <input pInputText id="addressLine1" formControlName="addressLine1" />
+  </div>
+  <div class="detail-form__field">
+    <label for="addressLine2">Address Line 2</label>
+    <input pInputText id="addressLine2" formControlName="addressLine2" />
+  </div>
+  <div class="detail-form__field">
+    <label for="city">City</label>
+    <input pInputText id="city" formControlName="city" />
+  </div>
+  <div class="detail-form__field">
+    <label for="state">State</label>
+    <input pInputText id="state" formControlName="state" />
+  </div>
+  <div class="detail-form__field">
+    <label for="country">Country</label>
+    <input pInputText id="country" formControlName="country" />
+  </div>
+  <div class="detail-form__field">
+    <label for="pinCode">PIN Code</label>
+    <input pInputText id="pinCode" formControlName="pinCode" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isDefault" [binary]="true" inputId="isDefault" />
+    <label for="isDefault">Default</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

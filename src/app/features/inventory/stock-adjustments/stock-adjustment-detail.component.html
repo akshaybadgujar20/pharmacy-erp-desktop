@@ -1,0 +1,66 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (adjustmentId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">Status: {{ status() }}</p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="adjustmentType">Adjustment Type</label>
+          <input pInputText id="adjustmentType" formControlName="adjustmentType" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="adjustmentDate">Adjustment Date</label>
+          <input pInputText id="adjustmentDate" formControlName="adjustmentDate" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="reason">Reason</label>
+          <input pInputText id="reason" formControlName="reason" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="adjustmentIsActive" [disabled]="!isDraft()" />
+          <label for="adjustmentIsActive">Active</label>
+        </div>
+        <div class="detail-form__actions">
+          @if (isDraft()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && isDraft()) {
+            <button pButton type="button" severity="success" [disabled]="approving()" (click)="approve()">
+              Approve
+            </button>
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (adjustmentId()) {
+      <p-tabpanel value="items">
+        <app-stock-adjustment-items-tab
+          [adjustmentId]="adjustmentId()!"
+          [editable]="isDraft()"
+        />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

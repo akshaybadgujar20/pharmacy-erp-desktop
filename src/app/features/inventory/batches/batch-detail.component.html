@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="medicineId">Medicine ID</label>
+    <input pInputText id="medicineId" formControlName="medicineId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="batchNumber">Batch Number</label>
+    <input pInputText id="batchNumber" formControlName="batchNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="manufacturingDate">Manufacturing Date</label>
+    <input pInputText id="manufacturingDate" formControlName="manufacturingDate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="expiryDate">Expiry Date</label>
+    <input pInputText id="expiryDate" formControlName="expiryDate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="purchaseRate">Purchase Rate</label>
+    <input pInputText id="purchaseRate" type="number" formControlName="purchaseRate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="mrp">MRP</label>
+    <input pInputText id="mrp" type="number" formControlName="mrp" />
+  </div>
+  <div class="detail-form__field">
+    <label for="barcode">Barcode</label>
+    <input pInputText id="barcode" formControlName="barcode" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="batchIsActive" />
+    <label for="batchIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

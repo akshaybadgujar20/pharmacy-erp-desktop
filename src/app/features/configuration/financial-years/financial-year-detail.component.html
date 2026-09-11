@@ -1,0 +1,57 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="financialYearCode">Financial Year Code</label>
+    <input pInputText id="financialYearCode" formControlName="financialYearCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="financialYearName">Financial Year Name</label>
+    <input pInputText id="financialYearName" formControlName="financialYearName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="startDate">Start Date</label>
+    <input pInputText id="startDate" formControlName="startDate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="endDate">End Date</label>
+    <input pInputText id="endDate" formControlName="endDate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="branchId">Branch ID</label>
+    <input pInputText id="branchId" formControlName="branchId" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isCurrent" [binary]="true" inputId="isCurrent" />
+    <label for="isCurrent">Current</label>
+  </div>
+  <div class="detail-form__field">
+    <label for="remarks">Remarks</label>
+    <input pInputText id="remarks" formControlName="remarks" />
+  </div>
+  @if (!isNew() && status()) {
+    <div class="detail-form__field">
+      <label>Status</label>
+      <span>{{ status() }}</span>
+    </div>
+  }
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew() && status() === 'OPEN') {
+      <button pButton type="button" severity="warn" [disabled]="closing()" (click)="closeRecord()">
+        Close
+      </button>
+    }
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

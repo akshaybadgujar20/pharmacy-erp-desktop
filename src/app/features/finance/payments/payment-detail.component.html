@@ -1,0 +1,80 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  @if (!isNew()) {
+    <div class="detail-form__field">
+      <label for="paymentNumber">Payment Number</label>
+      <input pInputText id="paymentNumber" [value]="paymentNumber()" readonly />
+    </div>
+    <div class="detail-form__field">
+      <label for="status">Status</label>
+      <input pInputText id="status" [value]="status()" readonly />
+    </div>
+  }
+  <div class="detail-form__field">
+    <label for="paymentType">Payment Type</label>
+    <input pInputText id="paymentType" formControlName="paymentType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="paymentDate">Payment Date</label>
+    <input pInputText id="paymentDate" formControlName="paymentDate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="amount">Amount</label>
+    <input pInputText id="amount" type="number" formControlName="amount" />
+  </div>
+  <div class="detail-form__field">
+    <label for="paymentMethod">Payment Method</label>
+    <input pInputText id="paymentMethod" formControlName="paymentMethod" />
+  </div>
+  <div class="detail-form__field">
+    <label for="transactionReference">Transaction Reference</label>
+    <input pInputText id="transactionReference" formControlName="transactionReference" />
+  </div>
+  <div class="detail-form__field">
+    <label for="referenceType">Reference Type</label>
+    <input pInputText id="referenceType" formControlName="referenceType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="referenceId">Reference ID</label>
+    <input pInputText id="referenceId" formControlName="referenceId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="remarks">Remarks</label>
+    <input pInputText id="remarks" formControlName="remarks" />
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew() && status() === 'PENDING') {
+      <button
+        pButton
+        type="button"
+        severity="success"
+        [disabled]="workflowInProgress()"
+        (click)="completePayment()"
+      >
+        Complete
+      </button>
+      <button
+        pButton
+        type="button"
+        severity="warn"
+        [disabled]="workflowInProgress()"
+        (click)="cancelPayment()"
+      >
+        Cancel
+      </button>
+    }
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

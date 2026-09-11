@@ -1,0 +1,41 @@
+<div class="nested-tab">
+  <div class="nested-tab__actions">
+    <button pButton type="button" severity="primary" (click)="openCreate()">New Branch</button>
+  </div>
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit User Branch' : 'New User Branch'"
+  [style]="{ width: '28rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="branchId">Branch ID</label>
+      <input pInputText id="branchId" formControlName="branchId" [readonly]="!!editingId()" />
+    </div>
+    <div class="detail-form__field">
+      <p-checkbox formControlName="isActive" [binary]="true" inputId="userBranchIsActive" />
+      <label for="userBranchIsActive">Active</label>
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>
