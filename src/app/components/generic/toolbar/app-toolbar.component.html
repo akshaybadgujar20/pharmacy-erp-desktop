@@ -60,7 +60,7 @@
       [rounded]="item.rounded"
       [iconOnly]="item.iconOnly"
       [disabled]="true"
-      [attr.aria-label]="item.ariaLabel ?? item.label"
+      [attr.aria-label]="getAriaLabel(item)"
     >
       <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
       @if (!item.iconOnly && item.label) {
@@ -72,7 +72,7 @@
       <button
         pButton
         type="button"
-        [label]="item.label"
+        [label]="getShortcutLabel(item.shortcutId) ? undefined : item.label"
         [icon]="item.icon"
         [severity]="item.severity"
         [variant]="item.variant"
@@ -80,11 +80,41 @@
         [raised]="item.raised"
         [rounded]="item.rounded"
         [disabled]="isDisabled(item)"
-        [attr.aria-label]="item.ariaLabel ?? item.label"
+        [attr.aria-label]="getAriaLabel(item)"
         (click)="onButtonClick(item)"
-      ></button>
+      >
+        @if (getShortcutLabel(item.shortcutId)) {
+          <span class="app-toolbar__label-wrap">
+            @if (item.label) {
+              <span>{{ item.label }}</span>
+            }
+            <kbd class="app-toolbar__shortcut">{{ getShortcutLabel(item.shortcutId) }}</kbd>
+          </span>
+        }
+      </button>
       <span class="app-toolbar__badge">{{ item.badge }}</span>
     </span>
+  } @else if (getShortcutLabel(item.shortcutId) && !item.iconOnly) {
+    <button
+      pButton
+      type="button"
+      [icon]="item.icon"
+      [severity]="item.severity"
+      [variant]="item.variant"
+      [size]="item.size"
+      [raised]="item.raised"
+      [rounded]="item.rounded"
+      [disabled]="isDisabled(item)"
+      [attr.aria-label]="getAriaLabel(item)"
+      (click)="onButtonClick(item)"
+    >
+      <span class="app-toolbar__label-wrap">
+        @if (item.label) {
+          <span>{{ item.label }}</span>
+        }
+        <kbd class="app-toolbar__shortcut">{{ getShortcutLabel(item.shortcutId) }}</kbd>
+      </span>
+    </button>
   } @else {
     <button
       pButton
@@ -98,9 +128,16 @@
       [rounded]="item.rounded"
       [iconOnly]="item.iconOnly"
       [disabled]="isDisabled(item)"
-      [attr.aria-label]="item.ariaLabel ?? item.label"
+      [attr.aria-label]="getAriaLabel(item)"
+      [attr.title]="item.iconOnly ? getAriaLabel(item) : null"
       (click)="onButtonClick(item)"
-    ></button>
+    >
+      @if (item.iconOnly && getShortcutLabel(item.shortcutId)) {
+        <kbd class="app-toolbar__shortcut app-toolbar__shortcut--icon-only">{{
+          getShortcutLabel(item.shortcutId)
+        }}</kbd>
+      }
+    </button>
   }
 </ng-template>
 

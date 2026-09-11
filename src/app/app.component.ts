@@ -10,6 +10,8 @@ import { Plus } from '@primeicons/angular/plus';
 import { ChevronDown } from '@primeicons/angular/chevron-down';
 import { EllipsisV } from '@primeicons/angular/ellipsis-v';
 import { Sidebar } from '@primeicons/angular/sidebar';
+import { KeyboardShortcutService } from './core/keyboard';
+import { KeyboardShortcutsDialogComponent } from './shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
 
 interface NavItem {
   icon: string;
@@ -39,7 +41,8 @@ interface NavGroup {
     ChevronDown,
     EllipsisV,
     Sidebar,
-    PIcon
+    PIcon,
+    KeyboardShortcutsDialogComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.scss'
@@ -83,6 +86,7 @@ export class AppComponent {
   checked: boolean = false;
 
   private translate = inject(TranslateService);
+  readonly shortcutService = inject(KeyboardShortcutService);
 
   constructor() {
     this.translate.use('english');

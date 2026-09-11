@@ -103,6 +103,22 @@ Parent handles all business logic. No handlers in config.
 
 Sets disabled + spinner for matching action id.
 
+## Keyboard shortcuts
+
+Set `shortcutId` to link a button to a global shortcut from `KeyboardShortcutService`:
+
+```ts
+{
+  type: 'button',
+  id: 'save',
+  label: 'Save',
+  icon: 'pi pi-save',
+  shortcutId: 'global.save',
+}
+```
+
+The toolbar renders a `<kbd>` chip with the resolved shortcut label (e.g. `Ctrl+S`). Register the handler in the parent component — see [`core/keyboard/README.md`](../../core/keyboard/README.md).
+
 ## Rules
 
 - Config defines presentation and generic toolbar behavior only.

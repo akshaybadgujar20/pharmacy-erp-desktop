@@ -15,7 +15,7 @@
   </section>
 
   <section class="panel bottom">
-    <app-toolbar [config]="toolbarConfig" />
+    <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
     <app-grid
       [config]="gridConfig"
       [data]="rowData"

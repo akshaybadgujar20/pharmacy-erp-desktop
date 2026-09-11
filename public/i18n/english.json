@@ -13,5 +13,37 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete"
+  },
+  "keyboard": {
+    "helpTitle": "Keyboard Shortcuts",
+    "helpHint": "Press ? or F1 anytime to open this dialog",
+    "openShortcuts": "Keyboard shortcuts",
+    "change": "Change",
+    "reset": "Reset",
+    "resetAll": "Reset all to defaults",
+    "captureHint": "Press the new key combination...",
+    "cancelCapture": "Cancel",
+    "conflict": "This key is already assigned to {{action}}",
+    "columnAction": "Action",
+    "columnShortcut": "Shortcut",
+    "columnActions": "Actions",
+    "search": "Search",
+    "new": "New",
+    "save": "Save",
+    "print": "Print",
+    "delete": "Delete",
+    "refresh": "Refresh",
+    "lookup": "Lookup",
+    "history": "History",
+    "cancel": "Cancel / Close",
+    "newSale": "New sale",
+    "payment": "Payment",
+    "categories": {
+      "global": "Global",
+      "sales": "Sales",
+      "purchase": "Purchase",
+      "inventory": "Inventory",
+      "masters": "Masters"
+    }
   }
 }

@@ -1,0 +1,67 @@
+.shortcut-group {
+  margin-bottom: 1.25rem;
+}
+
+.shortcut-group__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--p-text-muted-color, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.shortcut-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.shortcut-table th,
+.shortcut-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--p-content-border-color, #e5e7eb);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.shortcut-table__actions-col {
+  width: 11rem;
+}
+
+.shortcut-table__actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.shortcut-table__row--capturing {
+  background: var(--p-highlight-background, #f3f4f6);
+}
+
+.shortcut-key {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--p-content-border-color, #d1d5db);
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  background: var(--p-content-background, #fff);
+}
+
+.shortcut-capture {
+  font-style: italic;
+  color: var(--p-primary-color, #3b82f6);
+}
+
+.shortcut-conflict {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--p-red-500, #ef4444);
+}
+
+.shortcut-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--p-text-muted-color, #6b7280);
+}

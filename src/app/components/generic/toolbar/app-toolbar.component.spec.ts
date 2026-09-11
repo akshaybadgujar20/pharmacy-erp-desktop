@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { KeyboardShortcutService } from '../../../core/keyboard';
 import { AppToolbarComponent } from './app-toolbar.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToolbarConfig } from './types/toolbar.types';
@@ -10,7 +11,13 @@ describe('AppToolbarComponent', () => {
   const config: ToolbarConfig = {
     id: 'demo-toolbar',
     items: [
-      { type: 'button', id: 'refresh', label: 'Refresh', icon: 'pi pi-refresh' },
+      {
+        type: 'button',
+        id: 'refresh',
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        shortcutId: 'global.refresh',
+      },
       {
         type: 'button',
         id: 'create',
@@ -33,6 +40,20 @@ describe('AppToolbarComponent', () => {
   };
 
   beforeEach(async () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+
     await TestBed.configureTestingModule({
       imports: [AppToolbarComponent],
       providers: [{ provide: AuthService, useValue: authServiceMock }],
@@ -83,6 +104,22 @@ describe('AppToolbarComponent', () => {
       menuItems: [],
     });
     expect(emitted).toEqual([{ action: 'export', source: 'splitButton', externalUrl: undefined }]);
+  });
+
+  it('renders shortcut chip when shortcutId is set', () => {
+    fixture.detectChanges();
+    const shortcut = fixture.nativeElement.querySelector('.app-toolbar__shortcut');
+    expect(shortcut?.textContent?.trim()).toBe('F5');
+  });
+
+  it('includes shortcut in aria-label', () => {
+    const label = component.getAriaLabel({
+      type: 'button',
+      id: 'refresh',
+      label: 'Refresh',
+      shortcutId: 'global.refresh',
+    });
+    expect(label).toBe('Refresh (F5)');
   });
 
   it('builds menu model for split button', () => {

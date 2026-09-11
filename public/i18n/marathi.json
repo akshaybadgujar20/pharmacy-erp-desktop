@@ -13,5 +13,37 @@
     "save": "जतन करा",
     "cancel": "रद्द करा",
     "delete": "हटवा"
+  },
+  "keyboard": {
+    "helpTitle": "कीबोर्ड शॉर्टकट",
+    "helpHint": "हा डायलॉग उघडण्यासाठी कधीही ? किंवा F1 दाबा",
+    "openShortcuts": "कीबोर्ड शॉर्टकट",
+    "change": "बदला",
+    "reset": "रीसेट",
+    "resetAll": "सर्व डीफॉल्टवर रीसेट करा",
+    "captureHint": "नवीन की संयोजन दाबा...",
+    "cancelCapture": "रद्द करा",
+    "conflict": "ही की आधीच {{action}} साठी नियुक्त आहे",
+    "columnAction": "क्रिया",
+    "columnShortcut": "शॉर्टकट",
+    "columnActions": "क्रिया",
+    "search": "शोध",
+    "new": "नवीन",
+    "save": "जतन करा",
+    "print": "प्रिंट",
+    "delete": "हटवा",
+    "refresh": "रिफ्रेश",
+    "lookup": "लुकअप",
+    "history": "इतिहास",
+    "cancel": "रद्द / बंद",
+    "newSale": "नवीन विक्री",
+    "payment": "पेमेंट",
+    "categories": {
+      "global": "जागतिक",
+      "sales": "विक्री",
+      "purchase": "खरेदी",
+      "inventory": "इन्व्हेंटरी",
+      "masters": "मास्टर्स"
+    }
   }
 }

@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { KeyboardShortcutService } from '../../../core/keyboard';
 import { AuthService } from '../../../core/services/auth.service';
 import { mergeToolbarConfig } from './adapter/toolbar-defaults';
 import { toPrimeMenuItems } from './adapter/toolbar-menu.adapter';
@@ -45,6 +46,7 @@ import { ToolbarConfig } from './types/toolbar.types';
 export class AppToolbarComponent {
   private readonly authService = inject(AuthService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly shortcutService = inject(KeyboardShortcutService);
 
   config = input.required<ToolbarConfig>();
   loading = input<Record<string, boolean>>({});
@@ -54,9 +56,26 @@ export class AppToolbarComponent {
   readonly mergedConfig = computed(() => mergeToolbarConfig(this.config()));
   readonly layout = computed(() => this.mergedConfig().layout ?? {});
   readonly visibleItems = computed(() => {
+    this.shortcutService.bindingsChanged();
     const access = createAccessContext(this.authService);
     return filterToolbarItems(this.mergedConfig().items, access);
   });
+
+  getShortcutLabel(shortcutId?: string): string | undefined {
+    if (!shortcutId) {
+      return undefined;
+    }
+    return this.shortcutService.getLabel(shortcutId);
+  }
+
+  getAriaLabel(item: ToolbarActionItemConfig): string | undefined {
+    const base = item.ariaLabel ?? item.label;
+    const shortcut = this.getShortcutLabel(item.shortcutId);
+    if (!base) {
+      return shortcut ? `(${shortcut})` : undefined;
+    }
+    return shortcut ? `${base} (${shortcut})` : base;
+  }
 
   trackItem(index: number, item: ToolbarItemConfig): string {
     if (item.type === 'separator' || item.type === 'spacer') {

@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { KeyboardShortcutService } from '../../core/keyboard';
+import { ToolbarActionEvent } from '../generic/toolbar/types/toolbar-events.types';
 import {
   Chart,
   ChartConfiguration,
@@ -28,13 +39,21 @@ interface DemoRow {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly shortcuts = inject(KeyboardShortcutService);
 
   readonly toolbarConfig: ToolbarConfig = {
     id: 'dashboard-toolbar',
     layout: { direction: 'horizontal', align: 'between' },
     items: [
-      { type: 'button', id: 'refresh', label: 'Refresh', icon: 'pi pi-refresh', variant: 'outlined' },
+      {
+        type: 'button',
+        id: 'refresh',
+        label: 'Refresh',
+        icon: 'pi pi-refresh',
+        variant: 'outlined',
+        shortcutId: 'global.refresh',
+      },
       { type: 'spacer' },
       {
         type: 'splitButton',
@@ -86,6 +105,25 @@ export class DashboardComponent implements AfterViewInit {
   chartCanvas3!: ElementRef<HTMLCanvasElement>;
 
   chart!: Chart;
+
+  ngOnInit(): void {
+    this.shortcuts.registerHandler('global.refresh', () => this.onRefresh());
+  }
+
+  ngOnDestroy(): void {
+    this.shortcuts.unregisterHandler('global.refresh');
+  }
+
+  onToolbarAction(event: ToolbarActionEvent): void {
+    if (event.action === 'refresh') {
+      this.onRefresh();
+    }
+  }
+
+  onRefresh(): void {
+    // Demo refresh handler — replace with real data reload when wired to API.
+    console.info('Dashboard refresh triggered');
+  }
 
   ngAfterViewInit(): void {
     const config: ChartConfiguration<'bar'> = {

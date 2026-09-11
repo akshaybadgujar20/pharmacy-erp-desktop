@@ -1,0 +1,86 @@
+<p-dialog
+  [visible]="shortcutService.dialogVisible()"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '42rem', maxWidth: '95vw' }"
+  [header]="'keyboard.helpTitle' | translate"
+  (onHide)="onDialogHide()"
+>
+  @for (group of shortcutService.listByCategory(); track group.category) {
+    <section class="shortcut-group">
+      <h3 class="shortcut-group__title">{{ categoryLabel(group.category) | translate }}</h3>
+      <table class="shortcut-table">
+        <thead>
+          <tr>
+            <th>{{ 'keyboard.columnAction' | translate }}</th>
+            <th>{{ 'keyboard.columnShortcut' | translate }}</th>
+            <th class="shortcut-table__actions-col">{{ 'keyboard.columnActions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (shortcut of group.shortcuts; track shortcut.id) {
+            <tr [class.shortcut-table__row--capturing]="isCapturing(shortcut.id)">
+              <td>{{ shortcut.description | translate }}</td>
+              <td>
+                @if (isCapturing(shortcut.id)) {
+                  <span class="shortcut-capture">{{ 'keyboard.captureHint' | translate }}</span>
+                } @else {
+                  <kbd class="shortcut-key">{{ shortcut.label }}</kbd>
+                }
+                @if (conflictId() && isCapturing(shortcut.id)) {
+                  <p class="shortcut-conflict">
+                    {{ 'keyboard.conflict' | translate: { action: (conflictDescription() | translate) } }}
+                  </p>
+                }
+              </td>
+              <td class="shortcut-table__actions">
+                @if (isCapturing(shortcut.id)) {
+                  <button
+                    pButton
+                    type="button"
+                    size="small"
+                    severity="secondary"
+                    (click)="cancelCapture()"
+                  >
+                    {{ 'keyboard.cancelCapture' | translate }}
+                  </button>
+                } @else {
+                  <button
+                    pButton
+                    type="button"
+                    size="small"
+                    severity="secondary"
+                    (click)="startCapture(shortcut)"
+                  >
+                    {{ 'keyboard.change' | translate }}
+                  </button>
+                  @if (shortcut.isOverridden) {
+                    <button
+                      pButton
+                      type="button"
+                      size="small"
+                      severity="secondary"
+                      text
+                      (click)="resetShortcut(shortcut.id)"
+                    >
+                      {{ 'keyboard.reset' | translate }}
+                    </button>
+                  }
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+
+  <ng-template pTemplate="footer">
+    <p class="shortcut-hint">{{ 'keyboard.helpHint' | translate }}</p>
+    <button pButton type="button" severity="secondary" (click)="resetAll()">
+      {{ 'keyboard.resetAll' | translate }}
+    </button>
+  </ng-template>
+</p-dialog>

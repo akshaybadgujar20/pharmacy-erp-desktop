@@ -66,3 +66,26 @@
   background: var(--p-primary-color, #3b82f6);
   color: #fff;
 }
+
+.app-toolbar__label-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.app-toolbar__shortcut {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--p-content-border-color, #d1d5db);
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  font-weight: 600;
+  background: var(--p-content-background, #fff);
+  color: var(--p-text-muted-color, #6b7280);
+}
+
+.app-toolbar__shortcut--icon-only {
+  margin-left: 0.15rem;
+}

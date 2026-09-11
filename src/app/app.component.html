@@ -77,6 +77,20 @@
         <button pButton pSidebarTrigger target="preview" severity="secondary" text size="small">
           <svg data-p-icon="sidebar"></svg>
         </button>
+        <div class="ml-auto flex items-center gap-2">
+          <button
+            pButton
+            type="button"
+            severity="secondary"
+            text
+            size="small"
+            iconOnly
+            [attr.aria-label]="'keyboard.openShortcuts' | translate"
+            (click)="shortcutService.openDialog()"
+          >
+            <i class="pi pi-keyboard" aria-hidden="true"></i>
+          </button>
+        </div>
       </header>
       <div class="flex-1 p-4 flex flex-col gap-4">
         <div class="rounded-lg bg-surface-100 dark:bg-surface-800 h-48"></div>
@@ -85,3 +99,5 @@
     </p-sidebar-main>
   </p-sidebar-layout>
 </div>
+
+<app-keyboard-shortcuts-dialog />
