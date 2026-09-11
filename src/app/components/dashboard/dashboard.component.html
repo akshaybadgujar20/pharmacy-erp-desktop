@@ -45,6 +45,17 @@
       <p>Drawer content for filters or detail panels.</p>
     </app-drawer>
 
+    <div class="form-demo">
+      <h3>Form Demo</h3>
+      <app-form
+        [config]="customerFormConfig"
+        [value]="customerFormValue"
+        (submit)="onCustomerFormSubmit($event)"
+        (cancel)="onCustomerFormCancel()"
+        (valueChange)="onCustomerFormValueChange($event)"
+      />
+    </div>
+
     <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
     <app-grid
       [config]="gridConfig"

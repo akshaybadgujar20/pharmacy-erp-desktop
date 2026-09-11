@@ -1,0 +1,110 @@
+<div
+  class="app-form__field"
+  [class.app-form__field--inline]="field().type === 'checkbox' || field().type === 'switch'"
+  [class.app-form__field--error]="showError()"
+  [style.width]="field().width"
+>
+  @if (field().type !== 'checkbox' && field().type !== 'switch') {
+    <label class="app-form__label" [for]="inputId()">{{ field().label }}</label>
+  }
+
+  @switch (field().type) {
+    @case ('text') {
+      <input
+        pInputText
+        [id]="inputId()"
+        [formControl]="control()"
+        [placeholder]="field().placeholder ?? ''"
+        [readonly]="field().readonly ?? false"
+      />
+    }
+    @case ('password') {
+      <input
+        pInputText
+        type="password"
+        [id]="inputId()"
+        [formControl]="control()"
+        [placeholder]="field().placeholder ?? ''"
+        [readonly]="field().readonly ?? false"
+      />
+    }
+    @case ('textarea') {
+      <textarea
+        pTextarea
+        [id]="inputId()"
+        [formControl]="control()"
+        [placeholder]="field().placeholder ?? ''"
+        [readonly]="field().readonly ?? false"
+        rows="3"
+      ></textarea>
+    }
+    @case ('number') {
+      <p-inputNumber
+        [inputId]="inputId()"
+        [formControl]="control()"
+        [placeholder]="field().placeholder ?? ''"
+        [min]="field().min"
+        [max]="field().max"
+        [readonly]="field().readonly ?? false"
+      />
+    }
+    @case ('currency') {
+      <p-inputNumber
+        [inputId]="inputId()"
+        [formControl]="control()"
+        mode="currency"
+        [currency]="field().currency ?? 'INR'"
+        [locale]="field().locale ?? 'en-IN'"
+        [min]="field().min"
+        [max]="field().max"
+        [readonly]="field().readonly ?? false"
+      />
+    }
+    @case ('select') {
+      <p-select
+        [inputId]="inputId()"
+        [formControl]="control()"
+        [options]="field().options ?? []"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="field().placeholder ?? 'Select'"
+        [readonly]="field().readonly ?? false"
+      />
+    }
+    @case ('checkbox') {
+      <p-checkbox
+        [formControl]="control()"
+        [binary]="true"
+        [inputId]="inputId()"
+        [readonly]="field().readonly ?? false"
+      />
+      <label class="app-form__label app-form__label--inline" [for]="inputId()">
+        {{ field().label }}
+      </label>
+    }
+    @case ('switch') {
+      <p-toggleswitch
+        [formControl]="control()"
+        [inputId]="inputId()"
+        [readonly]="field().readonly ?? false"
+      />
+      <label class="app-form__label app-form__label--inline" [for]="inputId()">
+        {{ field().label }}
+      </label>
+    }
+    @case ('date') {
+      <p-datepicker
+        [inputId]="inputId()"
+        [formControl]="control()"
+        [placeholder]="field().placeholder ?? ''"
+        [readonlyInput]="field().readonly ?? false"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+      />
+    }
+  }
+
+  @if (showError()) {
+    <span class="app-form__error" role="alert">{{ errorMessage() }}</span>
+  }
+</div>

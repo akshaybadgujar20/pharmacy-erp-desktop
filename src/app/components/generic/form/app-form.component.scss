@@ -1,0 +1,27 @@
+.app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.app-form__fields {
+  display: grid;
+}
+
+.app-form__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.app-form__actions--end {
+  justify-content: flex-end;
+}
+
+.app-form__actions--center {
+  justify-content: center;
+}
+
+.app-form--compact .app-form__fields {
+  gap: 0.5rem;
+}

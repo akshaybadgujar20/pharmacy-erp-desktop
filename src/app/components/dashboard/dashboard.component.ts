@@ -18,8 +18,11 @@ import {
   ChartConfiguration,
   registerables
 } from 'chart.js';
+import { AppFormComponent } from '../generic/form';
 import { AppGridComponent } from '../generic/grid';
 import { AppToolbarComponent } from '../generic/toolbar';
+import { FormConfig } from '../generic/form/types/form.types';
+import { FormSubmitEvent } from '../generic/form/types/form-events.types';
 import {
   AppDialogComponent,
   AppDialogService,
@@ -39,9 +42,17 @@ interface DemoRow {
   city: string;
 }
 
+interface DemoCustomerForm {
+  customerCode: string;
+  customerType: string;
+  creditLimit: number | null;
+  isActive: boolean;
+}
+
 @Component({
   selector: 'app-dashboard',
   imports: [
+    AppFormComponent,
     AppGridComponent,
     AppToolbarComponent,
     AppDialogComponent,
@@ -128,6 +139,51 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     toolbar: { enabled: true, search: true, refresh: true },
   };
 
+  readonly customerFormConfig: FormConfig<DemoCustomerForm> = {
+    id: 'dashboard-customer-form',
+    layout: { columns: 2 },
+    actions: { submit: true, cancel: true, align: 'end' },
+    fields: [
+      {
+        name: 'customerCode',
+        label: 'Customer Code',
+        type: 'text',
+        required: true,
+        placeholder: 'CUST-001',
+      },
+      {
+        name: 'customerType',
+        label: 'Customer Type',
+        type: 'select',
+        required: true,
+        defaultValue: 'RETAIL',
+        options: [
+          { label: 'Retail', value: 'RETAIL' },
+          { label: 'Credit', value: 'CREDIT' },
+        ],
+      },
+      {
+        name: 'creditLimit',
+        label: 'Credit Limit',
+        type: 'currency',
+        visible: (value) => value.customerType === 'CREDIT',
+      },
+      {
+        name: 'isActive',
+        label: 'Active',
+        type: 'checkbox',
+        defaultValue: true,
+      },
+    ],
+  };
+
+  readonly customerFormValue: DemoCustomerForm = {
+    customerCode: 'CUST-DEMO',
+    customerType: 'RETAIL',
+    creditLimit: null,
+    isActive: true,
+  };
+
   readonly rowData: DemoRow[] = [
     { id: '1', name: 'John', city: 'London' },
     { id: '2', name: 'Jane', city: 'Manchester' },
@@ -161,6 +217,20 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRefresh(): void {
     console.info('Dashboard refresh triggered');
+  }
+
+  onCustomerFormSubmit(event: FormSubmitEvent<DemoCustomerForm>): void {
+    console.info('Dashboard form submit', event.value);
+    this.dialogResult.set(`Form saved: ${event.value.customerCode}`);
+  }
+
+  onCustomerFormCancel(): void {
+    console.info('Dashboard form cancel');
+    this.dialogResult.set('Form cancelled');
+  }
+
+  onCustomerFormValueChange(value: DemoCustomerForm): void {
+    console.info('Dashboard form value change', value);
   }
 
   onConfirmDemo(): void {

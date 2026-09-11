@@ -32,8 +32,14 @@
   overflow: auto;
 }
 
-.dialog-demo {
+.dialog-demo,
+.form-demo {
   margin-bottom: 1rem;
+}
+
+.form-demo h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
 }
 
 .dialog-demo__actions {

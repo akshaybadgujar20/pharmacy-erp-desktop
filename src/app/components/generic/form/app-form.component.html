@@ -1,0 +1,54 @@
+<form
+  class="app-form"
+  [class.app-form--compact]="appearance().compact"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
+  <div
+    class="app-form__fields"
+    [style.gridTemplateColumns]="'repeat(' + (layout().columns ?? 1) + ', 1fr)'"
+    [style.gap]="layout().gap ?? '1rem'"
+  >
+    @for (field of visibleFields(); track $index) {
+      <app-form-field
+        [field]="field"
+        [control]="getControl(field.name)"
+        [formId]="formId()"
+        [showErrors]="appearance().showErrors ?? 'touched'"
+        [submitted]="submitted()"
+        [ngStyle]="getFieldStyle(field)"
+      />
+    }
+  </div>
+
+  @if (actions().submit || actions().cancel) {
+    <div
+      class="app-form__actions"
+      [class.app-form__actions--end]="actions().align === 'end'"
+      [class.app-form__actions--center]="actions().align === 'center'"
+    >
+      @if (actions().cancel) {
+        <button
+          pButton
+          type="button"
+          severity="secondary"
+          variant="outlined"
+          (click)="onCancel()"
+        >
+          {{ actions().cancelLabel ?? 'Cancel' }}
+        </button>
+      }
+      @if (actions().submit) {
+        <button
+          pButton
+          type="submit"
+          severity="primary"
+          [loading]="loading()"
+          [disabled]="loading() || disabled()"
+        >
+          {{ actions().submitLabel ?? 'Save' }}
+        </button>
+      }
+    </div>
+  }
+</form>

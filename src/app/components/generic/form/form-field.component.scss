@@ -1,0 +1,29 @@
+.app-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.app-form__field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-form__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.app-form__label--inline {
+  margin: 0;
+}
+
+.app-form__error {
+  color: var(--p-red-500, #ef4444);
+  font-size: 0.8rem;
+}
+
+.app-form__field--error :is(input, textarea, .p-inputtext) {
+  border-color: var(--p-red-500, #ef4444);
+}
