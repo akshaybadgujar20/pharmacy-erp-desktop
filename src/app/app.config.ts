@@ -1,17 +1,18 @@
-import {ApplicationConfig, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
-import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
-import {provideRouter} from '@angular/router';
-import {routes} from './app.routes';
+import { registerLocaleData } from '@angular/common';
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import localeEnIn from '@angular/common/locales/en-IN';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { registerLocaleData } from '@angular/common';
-import localeEnIn from '@angular/common/locales/en-IN';
-import { MessageService } from 'primeng/api';
-import {providePrimeNG} from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
+import { routes } from './app.routes';
 
 registerLocaleData(localeEnIn);
 
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
         options: {
-          darkModeSelector: false, // or '.dark' if you add dark mode later
+          darkModeSelector: false,
         },
       },
     }),
@@ -40,5 +41,7 @@ export const appConfig: ApplicationConfig = {
     }),
     { provide: LOCALE_ID, useValue: 'en-IN' },
     MessageService,
-  ]
+    ConfirmationService,
+    DialogService,
+  ],
 };

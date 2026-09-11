@@ -7,13 +7,15 @@ import {
   input,
   output,
 } from '@angular/core';
-import { ConfirmationService, MenuItem } from 'primeng/api';
+import { take } from 'rxjs';
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { AuthService } from '../../../core/services/auth.service';
+import { resolveConfirmConfig } from '../dialog/adapter/dialog-defaults';
+import { AppDialogService } from '../dialog/services/app-dialog.service';
 import { mergeToolbarConfig } from './adapter/toolbar-defaults';
 import { toPrimeMenuItems } from './adapter/toolbar-menu.adapter';
 import {
@@ -36,16 +38,14 @@ import { ToolbarConfig } from './types/toolbar.types';
     ButtonModule,
     ButtonGroupModule,
     SplitButtonModule,
-    ConfirmDialogModule,
   ],
-  providers: [ConfirmationService],
   templateUrl: './app-toolbar.component.html',
   styleUrl: './app-toolbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppToolbarComponent {
   private readonly authService = inject(AuthService);
-  private readonly confirmationService = inject(ConfirmationService);
+  private readonly appDialogService = inject(AppDialogService);
   private readonly shortcutService = inject(KeyboardShortcutService);
 
   config = input.required<ToolbarConfig>();
@@ -135,22 +135,15 @@ export class AppToolbarComponent {
       this.emitAction(event);
       return;
     }
-    const config =
-      typeof confirmation === 'boolean'
-        ? {
-            message: `Are you sure you want to ${label?.toLowerCase() ?? 'continue'}?`,
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-          }
-        : confirmation;
-    this.confirmationService.confirm({
-      message: config.message ?? 'Are you sure?',
-      header: config.header ?? 'Confirm',
-      icon: config.icon ?? 'pi pi-exclamation-triangle',
-      acceptLabel: config.acceptLabel ?? 'Yes',
-      rejectLabel: config.rejectLabel ?? 'No',
-      accept: () => this.emitAction(event),
-    });
+    const config = resolveConfirmConfig(confirmation, label);
+    this.appDialogService
+      .confirm(config)
+      .pipe(take(1))
+      .subscribe((accepted) => {
+        if (accepted) {
+          this.emitAction(event);
+        }
+      });
   }
 
   private emitAction(event: ToolbarActionEvent): void {

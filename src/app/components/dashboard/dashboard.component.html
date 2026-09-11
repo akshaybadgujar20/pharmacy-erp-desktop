@@ -15,6 +15,36 @@
   </section>
 
   <section class="panel bottom">
+    <div class="dialog-demo">
+      <div class="dialog-demo__actions">
+        <button type="button" pButton label="Confirm" (click)="onConfirmDemo()"></button>
+        <button type="button" pButton severity="danger" label="Confirm Delete" (click)="onConfirmDeleteDemo()"></button>
+        <button type="button" pButton severity="secondary" label="Confirm Popup" (click)="onConfirmPopupDemo($event)"></button>
+        <button type="button" pButton severity="secondary" label="Open Dialog" (click)="dialogVisible.set(true)"></button>
+        <button type="button" pButton severity="secondary" label="Open Drawer" (click)="drawerVisible.set(true)"></button>
+        <button type="button" pButton severity="secondary" label="Dynamic Dialog" (click)="onOpenDynamicDemo()"></button>
+      </div>
+      @if (dialogResult()) {
+        <p class="dialog-demo__result">{{ dialogResult() }}</p>
+      }
+    </div>
+
+    <app-dialog
+      [config]="dialogConfig"
+      [(visible)]="dialogVisible"
+      (footerAction)="onDialogFooter($event.buttonId)"
+    >
+      <p>Config-driven dialog body. Footer buttons come from dialog config.</p>
+    </app-dialog>
+
+    <app-drawer
+      [config]="drawerConfig"
+      [(visible)]="drawerVisible"
+      (footerAction)="onDrawerFooter($event.buttonId)"
+    >
+      <p>Drawer content for filters or detail panels.</p>
+    </app-drawer>
+
     <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
     <app-grid
       [config]="gridConfig"

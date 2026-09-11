@@ -31,3 +31,19 @@
   box-sizing: border-box;
   overflow: auto;
 }
+
+.dialog-demo {
+  margin-bottom: 1rem;
+}
+
+.dialog-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dialog-demo__result {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  color: var(--p-text-muted-color, #64748b);
+}

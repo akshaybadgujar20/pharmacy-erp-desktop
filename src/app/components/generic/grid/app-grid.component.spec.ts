@@ -1,7 +1,9 @@
 import { Component, input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { AppGridComponent } from './app-grid.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { AppDialogService } from '../dialog/services/app-dialog.service';
 import { GridConfig } from './types/grid.types';
 
 @Component({
@@ -47,10 +49,20 @@ describe('AppGridComponent', () => {
     hasPermission: jest.fn(() => true),
   };
 
+  const appDialogServiceMock = {
+    confirm: jest.fn(() => of(true)),
+    confirmPopup: jest.fn(() => of(true)),
+    confirmDelete: jest.fn(() => of(true)),
+    openDynamic: jest.fn(),
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppGridComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: AppDialogService, useValue: appDialogServiceMock },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(AppGridComponent, {

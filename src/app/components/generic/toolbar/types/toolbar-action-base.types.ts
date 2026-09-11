@@ -1,10 +1,6 @@
-export interface ToolbarConfirmConfig {
-  message?: string;
-  header?: string;
-  icon?: string;
-  acceptLabel?: string;
-  rejectLabel?: string;
-}
+import { ConfirmDialogConfig } from '../../dialog/types/confirm-dialog.types';
+
+export type ToolbarConfirmConfig = ConfirmDialogConfig;
 
 export interface ToolbarActionBase {
   id: string;

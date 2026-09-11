@@ -21,11 +21,12 @@ import {
   RowDoubleClickedEvent,
   SortChangedEvent,
 } from 'ag-grid-community';
+import { take } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../../core/services/auth.service';
+import { resolveConfirmConfig } from '../dialog/adapter/dialog-defaults';
+import { AppDialogService } from '../dialog/services/app-dialog.service';
 import {
   buildGridOptions,
   normalizeFilterModel,
@@ -57,18 +58,16 @@ import { GridToolbarAction } from './types/grid-toolbar.types';
   imports: [
     AgGridAngular,
     ButtonModule,
-    ConfirmDialogModule,
     InputTextModule,
     FormsModule,
   ],
-  providers: [ConfirmationService],
   templateUrl: './app-grid.component.html',
   styleUrl: './app-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppGridComponent<T = unknown> implements OnDestroy {
   private readonly authService = inject(AuthService);
-  private readonly confirmationService = inject(ConfirmationService);
+  private readonly appDialogService = inject(AppDialogService);
 
   config = input.required<GridConfig<T>>();
   data = input<T[]>([]);
@@ -359,12 +358,15 @@ export class AppGridComponent<T = unknown> implements OnDestroy {
       return;
     }
     if (actionConfig.confirmation) {
-      this.confirmationService.confirm({
-        message: `Are you sure you want to ${actionConfig.label.toLowerCase()}?`,
-        header: 'Confirm',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => this.action.emit({ action: actionId, row }),
-      });
+      const config = resolveConfirmConfig(true, actionConfig.label);
+      this.appDialogService
+        .confirm(config)
+        .pipe(take(1))
+        .subscribe((accepted) => {
+          if (accepted) {
+            this.action.emit({ action: actionId, row });
+          }
+        });
       return;
     }
     this.action.emit({ action: actionId, row });

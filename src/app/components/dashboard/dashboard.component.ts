@@ -6,8 +6,11 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { take } from 'rxjs';
 import { KeyboardShortcutService } from '../../core/keyboard';
 import { ToolbarActionEvent } from '../generic/toolbar/types/toolbar-events.types';
 import {
@@ -17,8 +20,16 @@ import {
 } from 'chart.js';
 import { AppGridComponent } from '../generic/grid';
 import { AppToolbarComponent } from '../generic/toolbar';
+import {
+  AppDialogComponent,
+  AppDialogService,
+  AppDrawerComponent,
+  DialogConfig,
+  DrawerConfig,
+} from '../generic/dialog';
 import { GridConfig } from '../generic/grid/types/grid.types';
 import { ToolbarConfig } from '../generic/toolbar/types/toolbar.types';
+import { DynamicDialogDemoComponent } from './dynamic-dialog-demo.component';
 
 Chart.register(...registerables);
 
@@ -33,6 +44,9 @@ interface DemoRow {
   imports: [
     AppGridComponent,
     AppToolbarComponent,
+    AppDialogComponent,
+    AppDrawerComponent,
+    ButtonModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -41,6 +55,31 @@ interface DemoRow {
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly appDialogService = inject(AppDialogService);
+
+  readonly dialogVisible = signal(false);
+  readonly drawerVisible = signal(false);
+  readonly dialogResult = signal<string>('');
+
+  readonly dialogConfig: DialogConfig = {
+    header: 'Demo Dialog',
+    width: '28rem',
+    footer: {
+      buttons: [
+        { id: 'cancel', label: 'Cancel', severity: 'secondary', variant: 'outlined' },
+        { id: 'save', label: 'Save' },
+      ],
+    },
+  };
+
+  readonly drawerConfig: DrawerConfig = {
+    header: 'Demo Drawer',
+    position: 'right',
+    styleClass: 'w-96',
+    footer: {
+      buttons: [{ id: 'close', label: 'Close', severity: 'secondary' }],
+    },
+  };
 
   readonly toolbarConfig: ToolbarConfig = {
     id: 'dashboard-toolbar',
@@ -121,8 +160,57 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRefresh(): void {
-    // Demo refresh handler — replace with real data reload when wired to API.
     console.info('Dashboard refresh triggered');
+  }
+
+  onConfirmDemo(): void {
+    this.appDialogService
+      .confirm({ message: 'Save dashboard changes?', preset: 'info' })
+      .pipe(take(1))
+      .subscribe((accepted) => {
+        this.dialogResult.set(accepted ? 'Confirmed save' : 'Cancelled save');
+      });
+  }
+
+  onConfirmDeleteDemo(): void {
+    this.appDialogService
+      .confirmDelete('Delete this demo record?')
+      .pipe(take(1))
+      .subscribe((accepted) => {
+        this.dialogResult.set(accepted ? 'Confirmed delete' : 'Cancelled delete');
+      });
+  }
+
+  onConfirmPopupDemo(event: Event): void {
+    this.appDialogService
+      .confirmPopup({ message: 'Proceed with popup confirm?' }, event.currentTarget as EventTarget)
+      .pipe(take(1))
+      .subscribe((accepted) => {
+        this.dialogResult.set(accepted ? 'Popup confirmed' : 'Popup cancelled');
+      });
+  }
+
+  onOpenDynamicDemo(): void {
+    const ref = this.appDialogService.openDynamic(DynamicDialogDemoComponent, {
+      header: 'Dynamic Dialog Demo',
+      width: '24rem',
+    });
+    ref.onClose.pipe(take(1)).subscribe((value) => {
+      this.dialogResult.set(value ? `Dynamic: ${value}` : 'Dynamic: closed');
+    });
+  }
+
+  onDialogFooter(buttonId: string): void {
+    if (buttonId === 'save') {
+      this.dialogResult.set('Dialog save clicked');
+    }
+    this.dialogVisible.set(false);
+  }
+
+  onDrawerFooter(buttonId: string): void {
+    if (buttonId === 'close') {
+      this.drawerVisible.set(false);
+    }
   }
 
   ngAfterViewInit(): void {

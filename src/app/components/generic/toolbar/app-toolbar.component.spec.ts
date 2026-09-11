@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { AppToolbarComponent } from './app-toolbar.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { AppDialogService } from '../dialog/services/app-dialog.service';
 import { ToolbarConfig } from './types/toolbar.types';
 
 describe('AppToolbarComponent', () => {
@@ -39,6 +41,13 @@ describe('AppToolbarComponent', () => {
     hasAnyRole: jest.fn(() => false),
   };
 
+  const appDialogServiceMock = {
+    confirm: jest.fn(() => of(true)),
+    confirmPopup: jest.fn(() => of(true)),
+    confirmDelete: jest.fn(() => of(true)),
+    openDynamic: jest.fn(),
+  };
+
   beforeEach(async () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -56,7 +65,10 @@ describe('AppToolbarComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AppToolbarComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: AppDialogService, useValue: appDialogServiceMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppToolbarComponent);
