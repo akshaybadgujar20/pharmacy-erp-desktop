@@ -328,7 +328,7 @@ flowchart TB
 | 18 | SCM gaps (phase 2) | 795cf7b | Done |
 | 20–24 | module memory docs (phase 2) | f19aa75 | Done |
 | 27 | remaining plans (phase 2) | 7b5d68e | Done |
-| 28 | Phase 2 final audit | TBD | Done |
+| 28 | Phase 2 final audit | 2e8668d | Done |
 
 ---
 
