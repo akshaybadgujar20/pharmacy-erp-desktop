@@ -1,15 +1,5 @@
 [
   {
-    "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd01",
-    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb01"
-  },
-  {
-    "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd02",
-    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02"
-  },
-  {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd03",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
     "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb03"
@@ -25,14 +15,9 @@
     "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb05"
   },
   {
-    "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd06",
-    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb06"
-  },
-  {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd07",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc02",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb01"
+    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb78"
   },
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd08",
@@ -42,12 +27,12 @@
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd09",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc03",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb01"
+    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb78"
   },
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd10",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc03",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02"
+    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb77"
   },
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd11",
@@ -58,11 +43,6 @@
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd12",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
     "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb08"
-  },
-  {
-    "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd13",
-    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb09"
   },
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd14",
@@ -178,11 +158,6 @@
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd36",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
     "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb32"
-  },
-  {
-    "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd37",
-    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
-    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb03"
   },
   {
     "uuid": "dddddddd-dddd-4ddd-8ddd-dddddddddd38",
