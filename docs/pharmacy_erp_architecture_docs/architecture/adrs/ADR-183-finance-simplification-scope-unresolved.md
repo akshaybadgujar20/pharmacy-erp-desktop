@@ -1,7 +1,7 @@
 # ADR-183: Finance simplification refactor scope unresolved
 
-**Status:** Needs Confirmation  
-**Confidence:** Needs Confirmation  
+**Status:** Deferred  
+**Confidence:** Explicit  
 **Modules:** finance
 
 ---
@@ -22,17 +22,20 @@ How broad should the simplification pass be?
 
 ## Decision Selected
 
-No locked-in user answer recorded.
+**Not pursued** — finance bug-fix pass completed; optional simplification refactor will not be done in v1.
 
 ## Rationale
 
-Bug-fix plan completed; simplification was optional. AskQuestion in transcript 4ff29b60 has no persisted selection.
+User close-out decision (2026-09-11): bug-fix plan was sufficient; no simplification scope will be locked in or implemented.
 
 ## Rejected Alternatives
 
-
+All three AskQuestion options — none selected; work deferred indefinitely.
 
 ## Historical Source
 
 - Doc 13 — transcript 4ff29b60 Simplification scope AskQuestion
 
+## Evolution / Notes
+
+Originally filed as Needs Confirmation during Phase 2 recovery. Closed as Deferred during Phase 2 closeout.

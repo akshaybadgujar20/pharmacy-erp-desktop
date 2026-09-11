@@ -1,7 +1,8 @@
 # Backend Memory Map — Architectural Decision History
 
 **Status:** Active  
-**Last updated:** 2026-09-11 (Phase 2 complete)
+**Last updated:** 2026-09-11  
+**Recovery status:** COMPLETE (Phase 1 + Phase 2 closeout)  
 **Companion doc:** [Backend Developer Guide](./backend-developer-guide.md) — onboarding, wiring, module capsules, E2E flows
 
 This document preserves **why** the backend is designed the way it is: questions asked, options considered, choices made, trade-offs, and evolution over time. It does **not** replace the developer guide for day-to-day implementation reference.
@@ -135,7 +136,7 @@ This document preserves **why** the backend is designed the way it is: questions
 | [ADR-180](./adrs/ADR-180-finance-tests-deferred-v1.md) | Finance module tests deferred in v1 | finance | Active | Explicit | Doc 13 — subagent draft ADR-063 |
 | [ADR-181](./adrs/ADR-181-finance-reject-unsupported-payment-type.md) | Reject unsupported PaymentType at complete | finance | Active | Explicit | Doc 13 — subagent draft ADR-066 |
 | [ADR-182](./adrs/ADR-182-finance-running-balance-best-effort.md) | Ledger running balance left best-effort in bug-fix pass | finance | Active | Explicit | Doc 13 — subagent draft ADR-067 |
-| [ADR-183](./adrs/ADR-183-finance-simplification-scope-unresolved.md) | Finance simplification refactor scope unresolved | finance | Needs Confirmation | Needs Confirmation | Doc 13 — transcript 4ff29b60 Simplification scope AskQuestion |
+| [ADR-183](./adrs/ADR-183-finance-simplification-scope-unresolved.md) | Finance simplification refactor scope unresolved | finance | Deferred | Explicit | Doc 13 — transcript 4ff29b60; closed Phase 2 closeout |
 | [ADR-184](./adrs/ADR-184-sales-payment-nested-separate-from-receipt.md) | SalesPayment nested API; Finance Receipt stays separate | sales, finance | Active | Explicit | Doc 14 — subagent draft ADR-070 |
 | [ADR-185](./adrs/ADR-185-sales-pricelist-auto-resolve-at-post.md) | Auto-resolve selling price from PriceList at post | sales, pricing | Active | Explicit | Doc 14 — subagent draft ADR-071 |
 | [ADR-186](./adrs/ADR-186-sales-prescription-fk-only-v1.md) | Prescription FK validation only in sales v1 | sales, prescription | Active | Explicit | Doc 14 — subagent draft ADR-073 |
@@ -215,12 +216,13 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 |-------|---------|-------|
 | Database & schema | ADR-001, ADR-002, ADR-009 | Dual DB, strings not enums, BIGINT extension |
 | Persistence write path | ADR-006, ADR-007, ADR-010, ADR-024 | UoW, outbox-in-tx, context, golden rules |
-| Stock & inventory | ADR-003, ADR-008, ADR-135, ADR-136 | Branch stock, ledger-only mutations, boundaries |
-| Sync & offline-first | ADR-004, ADR-021, ADR-022, ADR-138 | entityUuid, local SQLite, worker deferred |
+| Stock & inventory | ADR-003, ADR-008, ADR-135, ADR-136, ADR-161–171 | Branch stock, ledger-only mutations, workflows |
+| Sync & offline-first | ADR-004, ADR-021, ADR-022, ADR-138, ADR-139–143, ADR-231 | entityUuid, local SQLite, admin APIs, worker deferred |
 | Auth & tenant | ADR-012, ADR-013, ADR-018, ADR-019 | JWT, context, tokens, bcrypt |
 | Finance posting | ADR-011, ADR-055, ADR-056, ADR-065 | Shared ledger service, hooks, reversals |
 | Module boundaries | ADR-015, ADR-080, ADR-137 | Party template, auth/security split, FK not imports |
-| Documentation | ADR-133, ADR-134 | Developer guide vs decision map |
+| Reporting | ADR-025–026, ADR-153–160 | Registry pattern, export formats |
+| Documentation | ADR-133, ADR-134, ADR-241–243 | Developer guide vs decision map, cursor rules |
 
 ---
 
@@ -242,7 +244,7 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 | Inventory | 003, 008, 135, 136, 161–171 | Doc 01–02, 11, 12, 14 | Reserved qty buckets deferred |
 | Purchase | 047–053, 135, 172–173, 244 | Doc 12, 20 | — |
 | Sales | 068–072, 076, 136, 184–190, 246–248 | Doc 14, 20 | Loyalty, non-RESTOCK dispositions |
-| Finance | 011, 055–056, 064–065, 174–183, 245, 249 | Doc 13, 20 | Simplification scope Needs Confirmation (ADR-183) |
+| Finance | 011, 055–056, 064–065, 174–183, 245, 249 | Doc 13, 20 | Simplification deferred (ADR-183) |
 | Sync | 004, 022, 114, 138, 139–143, 231 | Doc 01, 07, 18 | Cloud worker not built |
 | Reporting | 025–026, 153–160 | Doc 10 | Only party reports registered |
 | Documentation | 133–134, 241–243 | Doc 25–27 | — |
@@ -265,6 +267,18 @@ flowchart TB
   ADR050[ADR-050 PI audit only] --> ADR056[ADR-056 Finance AP hooks]
   ADR064[ADR-064 Block PI cancel] --> ADR076[ADR-076 Block sales cancel]
   ADR004[ADR-004 entityUuid] --> ADR022[ADR-022 Worker deferred]
+```
+
+### Phase 2 subgraph
+
+```mermaid
+flowchart TB
+  ADR008[ADR-008 InventoryLedger] --> ADR167[ADR-167 Inventory workflows]
+  ADR015[ADR-015 Party template] --> ADR166[ADR-166 Child routes]
+  ADR076[ADR-076 Block sales cancel] --> ADR188[ADR-188 Posted cancel evolution]
+  ADR101[ADR-101 PPA bundle] --> ADR212[ADR-212 PriceList branch scope]
+  ADR114[ADR-114 SCM bundle] --> ADR228[ADR-228 FY close API]
+  ADR138[ADR-138 Conflict metadata] --> ADR231[ADR-231 Sync admin APIs]
 ```
 
 ---
@@ -351,18 +365,22 @@ Phase 2 files subagent draft ADR-027–132 (and additional transcript decisions)
 
 ### Documents processed
 
-Doc 01–10, 12–18, 25–26 processed. Doc 11 (inventory transcript-only) covered via ADR-008/135/136 and developer guide. Doc 27 (remaining plans) partially covered via ADR-134 and architecture README links.
+- **Phase 1:** Docs 01–10, 12–18, 25–26
+- **Phase 2:** Docs 07–18 gaps, Doc 11 inventory transcript, Docs 20–24 module memory docs, Doc 27 plans, Doc 28 final audit
+- **Module pass (closeout):** All 14 `.cursor/rules/docs/*-module.md` files reviewed (see commit 2 for net-new ADRs)
+- **Total:** **166 ADRs** (53 Phase 1 + 113 Phase 2)
 
 ### Decision counts
 
 | Category | Count |
 |----------|-------|
-| Explicit | 120+ |
-| Strongly inferred | 25+ |
+| Explicit | 125+ |
+| Strongly inferred | 30+ |
 | Weakly inferred | 0 |
 | Superseded | 0 |
 | Refined | 1 (ADR-050 → ADR-056) |
-| Needs confirmation | 1 (ADR-183 finance simplification scope) |
+| Needs confirmation | 0 |
+| Deferred | 1 (ADR-183 finance simplification) |
 
 ### Foundational architecture decisions (top 10)
 
@@ -386,37 +404,28 @@ Doc 01–10, 12–18, 25–26 processed. Doc 11 (inventory transcript-only) cove
 - ADR-064/076 — Cancel policies aligned purchase/sales + finance
 - ADR-101 — Pricing/prescription/audit single delivery
 
-### Missing / uncertain (needs confirmation)
+### Resolved in Phase 2
 
-- Medicine module: ~10 additional explicit AskQuestion decisions in transcript 8fc361a6 (permissions matrix detail, category API, salt schema) — not individually filed; recover from transcript if needed
-- ADR-110 evolution: prescription dispensing updated on sales post in implementation — may supersede "out of scope" planning note; verify against `sales-invoice.service.ts`
-- Finance simplification scope AskQuestion in 4ff29b60 — no locked-in user answer recorded
+- Medicine granular AskQuestions — filed as ADR-200–210 (Doc 16 phase 2)
+- ADR-110 / ADR-219 — sales dispense hook **out of scope** confirmed; implementation matches plan (FK validation only)
+- Finance simplification — ADR-183 **Deferred / Not pursued** (user close-out 2026-09-11)
+
+### Remaining deferred features (not decision gaps)
+
+- Prescription auto-expire by date, cloud sync worker, party-contact ChangeHistory (ADR-251), areaId schema, loyalty, non-RESTOCK returns, reserved qty buckets, tests deferred per module (ADR-173, 180, 190, 198, 211, 225)
 
 ### Git commits
 
-| Doc # | SHA | Message |
-|-------|-----|---------|
-| — | 4d6aeb4 | `docs(memory): scaffold architectural decision memory structure` |
-| 01 | c763869 | `docs(memory): recover architectural decisions from document 01` |
-| 02 | a4ca852 | `docs(memory): recover architectural decisions from document 02` |
-| 03 | 0ef3bfc | `docs(memory): recover architectural decisions from document 03` |
-| 04 | 480c7b2 | `docs(memory): recover architectural decisions from document 04` |
-| 05 | 529c9cc | ADR-016/017 (commit message says doc 06) |
-| 06 | fb5b0f0 | `docs(memory): recover architectural decisions from document 06 party template` |
-| 07 | bb1f3ce | document 07 |
-| 08 | 7496a6e | document 08 |
-| 09 | 5e11a2d | document 09 |
-| 10 | f57180a | document 10 |
-| 12 | c1f9887 | document 12 |
-| 13 | e9c5dba | document 13 |
-| 14 | b165861 | document 14 |
-| 15 | 9a3d875 | document 15 |
-| 16 | a45ce21 | document 16 |
-| 17 | 7ba1f98 | document 17 |
-| 18 | 387ad03 | document 18 |
-| 25 | f1a0d24 | document 25 |
-| 26 | 36c271d | document 26 |
-| 28 | bb94cfb | `docs(memory): final audit — memory map index, developer guide links, recovery report` |
+See [Processing log](#processing-log) for full Phase 1 + Phase 2 SHA history. Full 91 draft mappings in [`phase2-adr-mapping.json`](../../../backend/scripts/phase2-adr-mapping.json).
+
+### Closeout checklist
+
+- [x] ADR-183 Deferred; Needs confirmation count = 0
+- [x] Stale "Missing / uncertain" bullets removed
+- [x] Phase 2 git SHAs in processing log
+- [x] All 14 module.md files reviewed (net-new ADRs in follow-up commit)
+- [x] Recovery status: **COMPLETE**
+- [x] No open decision-recovery todos remain
 
 ---
 

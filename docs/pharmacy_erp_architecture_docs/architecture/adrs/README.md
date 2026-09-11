@@ -2,6 +2,8 @@
 
 Full decision records recovered from historical chats, plans, and architecture docs.
 
+**Recovery status:** COMPLETE (Phase 1 + Phase 2 closeout, 2026-09-11)
+
 ## Index
 
 The canonical navigable index lives in [Backend Memory Map](../backend-memory-map.md#architectural-decision-index).
@@ -57,7 +59,7 @@ After any architectural choice with alternatives, cross-module impact, or hard-t
 | ADR-153–160 | Reporting detail (Doc 10) |
 | ADR-161–171 | Inventory workflows + memory doc (Doc 11) |
 | ADR-172–173 | Purchase gaps (Doc 12) |
-| ADR-174–183 | Finance gaps + simplification unresolved (Doc 13) |
+| ADR-174–183 | Finance gaps; ADR-183 simplification **Deferred** (Doc 13) |
 | ADR-184–190 | Sales gaps (Doc 14) |
 | ADR-191–199 | Security + auth password flows (Doc 15) |
 | ADR-200–210 | Medicine granular decisions (Doc 16) |
