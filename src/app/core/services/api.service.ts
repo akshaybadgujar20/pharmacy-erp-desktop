@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import {
   ApiClientError,
   ApiResponse,
+  Pagination,
 } from '../models/api-response.types';
 
 export function unwrapApiResponse<T>(response: ApiResponse<T>): T {
@@ -30,6 +31,38 @@ export class ApiService {
     return this.http
       .get<ApiResponse<T>>(`${this.baseUrl}${path}`, { params: httpParams })
       .pipe(map((response) => unwrapApiResponse(response)));
+  }
+
+  getPaginated<T>(
+    path: string,
+    params?: Record<string, string>,
+  ): Observable<{ data: T[]; pagination: Pagination }> {
+    const httpParams = params
+      ? new HttpParams({ fromObject: params })
+      : undefined;
+    return this.http
+      .get<ApiResponse<T[]>>(`${this.baseUrl}${path}`, { params: httpParams })
+      .pipe(
+        map((response) => {
+          if (!response.success) {
+            throw new ApiClientError(
+              response.error.code,
+              response.error.message,
+              response.error.details,
+            );
+          }
+          if (!response.pagination) {
+            throw new ApiClientError(
+              'PAGINATION_MISSING',
+              'Paginated response is missing pagination metadata',
+            );
+          }
+          return {
+            data: response.data,
+            pagination: response.pagination,
+          };
+        }),
+      );
   }
 
   post<T>(path: string, body?: unknown): Observable<T> {

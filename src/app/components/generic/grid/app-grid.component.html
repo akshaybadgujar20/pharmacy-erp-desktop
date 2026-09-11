@@ -1,0 +1,108 @@
+<div class="app-grid-container">
+  @if (mergedConfig().toolbar?.enabled) {
+    <div class="app-grid-toolbar">
+      <div class="app-grid-toolbar-left">
+        @if (mergedConfig().toolbar?.search && mergedConfig().filtering?.globalSearch) {
+          <input
+            pInputText
+            type="text"
+            class="app-grid-search"
+            [placeholder]="'Search...'"
+            [value]="globalSearch()"
+            (input)="onGlobalSearchInput($event)"
+          />
+        }
+      </div>
+      <div class="app-grid-toolbar-right">
+        @if (mergedConfig().toolbar?.refresh) {
+          <button
+            pButton
+            type="button"
+            icon="pi pi-refresh"
+            label="Refresh"
+            severity="secondary"
+            (click)="emitToolbarAction('refresh')"
+          ></button>
+        }
+        @if (mergedConfig().toolbar?.export || mergedConfig().export?.enabled) {
+          <button
+            pButton
+            type="button"
+            icon="pi pi-download"
+            label="Export"
+            severity="secondary"
+            (click)="exportCsv()"
+          ></button>
+        }
+        @for (toolbarAction of visibleToolbarActions(); track toolbarAction.id) {
+          <button
+            pButton
+            type="button"
+            [icon]="toolbarAction.icon"
+            [label]="toolbarAction.label"
+            (click)="emitToolbarAction(toolbarAction.id)"
+          ></button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="app-grid-body" [style.height.px]="gridHeight()">
+    <ag-grid-angular
+      class="ag-theme-quartz"
+      [rowData]="data()"
+      [columnDefs]="columnDefs()"
+      [gridOptions]="gridOptions()"
+      [loading]="loading()"
+      (gridReady)="onGridReady($event)"
+      (selectionChanged)="onSelectionChanged()"
+      (filterChanged)="onFilterChanged($event)"
+      (sortChanged)="onSortChanged($event)"
+      (rowClicked)="onRowClicked($event)"
+      (rowDoubleClicked)="onRowDoubleClicked($event)"
+      (paginationChanged)="onPaginationChanged()"
+      (columnMoved)="onColumnStateChanged()"
+      (columnResized)="onColumnStateChanged()"
+      (columnVisible)="onColumnStateChanged()"
+    />
+  </div>
+
+  @if (isServerSidePagination()) {
+    <div class="app-grid-footer">
+      <div class="app-grid-footer-info">
+        {{ serverPaginationInfo() }}
+      </div>
+      <div class="app-grid-page-size">
+        <label for="pageSize">Rows per page</label>
+        <select id="pageSize" [value]="currentPageSize()" (change)="onPageSizeChange($event)">
+          @for (size of pageSizeOptions(); track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+        </select>
+      </div>
+      <div class="app-grid-pagination">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-angle-left"
+          severity="secondary"
+          text
+          [disabled]="currentPage() <= 1"
+          (click)="goToPage(currentPage() - 1)"
+        ></button>
+        <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-angle-right"
+          severity="secondary"
+          text
+          [disabled]="currentPage() >= totalPages()"
+          (click)="goToPage(currentPage() + 1)"
+        ></button>
+      </div>
+    </div>
+  }
+</div>
+
+<p-confirmDialog />

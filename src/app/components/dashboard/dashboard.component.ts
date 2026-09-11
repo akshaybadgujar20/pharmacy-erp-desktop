@@ -1,41 +1,49 @@
-import {AfterViewInit, Component, ElementRef, inject, ViewChild, ChangeDetectionStrategy} from '@angular/core';
-import {ColDef} from 'ag-grid-community';
-import {AgGridAngular} from 'ag-grid-angular';
-
+import { AfterViewInit, Component, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import {
   Chart,
   ChartConfiguration,
   registerables
 } from 'chart.js';
+import { AppGridComponent } from '../generic/grid';
+import { GridConfig } from '../generic/grid/types/grid.types';
 
 Chart.register(...registerables);
+
+interface DemoRow {
+  id: string;
+  name: string;
+  city: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    AgGridAngular,
+    AppGridComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class DashboardComponent implements AfterViewInit {
 
-  showSuccess() {
-    //TODO: add error handler
-  }
+  readonly gridConfig: GridConfig<DemoRow> = {
+    id: 'dashboard-demo-grid',
+    columns: [
+      { field: 'id', headerName: 'ID', width: 80 },
+      { field: 'name', headerName: 'Name', sortable: true, filterable: true },
+      { field: 'city', headerName: 'City', sortable: true, filterable: true },
+    ],
+    row: { getId: (row) => row.id },
+    pagination: { enabled: true, pageSize: 10 },
+    filtering: { enabled: true, globalSearch: true },
+    toolbar: { enabled: true, search: true, refresh: true },
+  };
 
-  columnDefs: ColDef[] = [
-    { field: 'id' },
-    { field: 'name' },
-    { field: 'city' }
-  ];
-
-  rowData = [
-    { id: 1, name: 'John', city: 'London' },
-    { id: 2, name: 'Jane', city: 'Manchester' },
-    { id: 3, name: 'Alex', city: 'Birmingham' }
+  readonly rowData: DemoRow[] = [
+    { id: '1', name: 'John', city: 'London' },
+    { id: '2', name: 'Jane', city: 'Manchester' },
+    { id: '3', name: 'Alex', city: 'Birmingham' }
   ];
 
   @ViewChild('salesChart1')
@@ -50,7 +58,6 @@ export class DashboardComponent implements AfterViewInit {
   chart!: Chart;
 
   ngAfterViewInit(): void {
-
     const config: ChartConfiguration<'bar'> = {
       type: 'bar',
       data: {
