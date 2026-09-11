@@ -19,6 +19,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
+      {
+        path: 'party',
+        loadChildren: () =>
+          import('./features/party/party.routes').then((m) => m.partyRoutes),
+      },
     ],
   },
 ];

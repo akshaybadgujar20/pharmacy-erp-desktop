@@ -1,0 +1,54 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="partyId">Party ID</label>
+    <input pInputText id="partyId" formControlName="partyId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="doctorCode">Doctor Code</label>
+    <input pInputText id="doctorCode" formControlName="doctorCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="registrationNumber">Registration Number</label>
+    <input pInputText id="registrationNumber" formControlName="registrationNumber" />
+  </div>
+  <div class="detail-form__field">
+    <label for="qualification">Qualification</label>
+    <input pInputText id="qualification" formControlName="qualification" />
+  </div>
+  <div class="detail-form__field">
+    <label for="specialization">Specialization</label>
+    <input pInputText id="specialization" formControlName="specialization" />
+  </div>
+  <div class="detail-form__field">
+    <label for="hospitalName">Hospital Name</label>
+    <input pInputText id="hospitalName" formControlName="hospitalName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="consultationFee">Consultation Fee</label>
+    <input pInputText id="consultationFee" type="number" formControlName="consultationFee" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isVisitingDoctor" [binary]="true" inputId="isVisitingDoctor" />
+    <label for="isVisitingDoctor">Visiting Doctor</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

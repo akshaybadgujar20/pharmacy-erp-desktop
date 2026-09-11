@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="partyId">Party ID</label>
+    <input pInputText id="partyId" formControlName="partyId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="employeeCode">Employee Code</label>
+    <input pInputText id="employeeCode" formControlName="employeeCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="designation">Designation</label>
+    <input pInputText id="designation" formControlName="designation" />
+  </div>
+  <div class="detail-form__field">
+    <label for="department">Department</label>
+    <input pInputText id="department" formControlName="department" />
+  </div>
+  <div class="detail-form__field">
+    <label for="salary">Salary</label>
+    <input pInputText id="salary" type="number" formControlName="salary" />
+  </div>
+  <div class="detail-form__field">
+    <label for="licenseNumber">License Number</label>
+    <input pInputText id="licenseNumber" formControlName="licenseNumber" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isPharmacist" [binary]="true" inputId="isPharmacist" />
+    <label for="isPharmacist">Pharmacist</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="partyId">Party ID</label>
+    <input pInputText id="partyId" formControlName="partyId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="customerCode">Customer Code</label>
+    <input pInputText id="customerCode" formControlName="customerCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="customerType">Customer Type</label>
+    <input pInputText id="customerType" formControlName="customerType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="creditLimit">Credit Limit</label>
+    <input pInputText id="creditLimit" type="number" formControlName="creditLimit" />
+  </div>
+  <div class="detail-form__field">
+    <label for="outstandingAmount">Outstanding Amount</label>
+    <input pInputText id="outstandingAmount" type="number" formControlName="outstandingAmount" />
+  </div>
+  <div class="detail-form__field">
+    <label for="paymentTermsDays">Payment Terms (days)</label>
+    <input pInputText id="paymentTermsDays" type="number" formControlName="paymentTermsDays" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isTaxExempt" [binary]="true" inputId="isTaxExempt" />
+    <label for="isTaxExempt">Tax Exempt</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

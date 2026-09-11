@@ -1,0 +1,57 @@
+<div class="nested-tab">
+  <div class="nested-tab__actions">
+    <button pButton type="button" severity="primary" (click)="openCreate()">New Address</button>
+  </div>
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit Address' : 'New Address'"
+  [style]="{ width: '32rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="addressType">Address Type</label>
+      <input pInputText id="addressType" formControlName="addressType" />
+    </div>
+    <div class="detail-form__field">
+      <label for="addressLine1">Address Line 1</label>
+      <input pInputText id="addressLine1" formControlName="addressLine1" />
+    </div>
+    <div class="detail-form__field">
+      <label for="addressLine2">Address Line 2</label>
+      <input pInputText id="addressLine2" formControlName="addressLine2" />
+    </div>
+    <div class="detail-form__field">
+      <label for="postalCode">Postal Code</label>
+      <input pInputText id="postalCode" formControlName="postalCode" />
+    </div>
+    <div class="detail-form__field">
+      <p-checkbox formControlName="isDefault" [binary]="true" inputId="addressIsDefault" />
+      <label for="addressIsDefault">Default</label>
+    </div>
+    <div class="detail-form__field">
+      <p-checkbox formControlName="isActive" [binary]="true" inputId="addressIsActive" />
+      <label for="addressIsActive">Active</label>
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

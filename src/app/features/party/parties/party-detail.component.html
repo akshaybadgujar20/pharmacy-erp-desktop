@@ -1,0 +1,71 @@
+<p-tabs [value]="activeTab()">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (partyId()) {
+      <p-tab value="roles">Roles</p-tab>
+      <p-tab value="addresses">Addresses</p-tab>
+      <p-tab value="contacts">Contacts</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="partyType">Party Type</label>
+          <input pInputText id="partyType" formControlName="partyType" />
+        </div>
+        <div class="detail-form__field">
+          <label for="displayName">Display Name</label>
+          <input pInputText id="displayName" formControlName="displayName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="firstName">First Name</label>
+          <input pInputText id="firstName" formControlName="firstName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="middleName">Middle Name</label>
+          <input pInputText id="middleName" formControlName="middleName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="lastName">Last Name</label>
+          <input pInputText id="lastName" formControlName="lastName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="organizationName">Organization Name</label>
+          <input pInputText id="organizationName" formControlName="organizationName" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="partyIsActive" />
+          <label for="partyIsActive">Active</label>
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (partyId()) {
+      <p-tabpanel value="roles">
+        <app-party-roles-tab [partyId]="partyId()!" />
+      </p-tabpanel>
+      <p-tabpanel value="addresses">
+        <app-party-addresses-tab [partyId]="partyId()!" />
+      </p-tabpanel>
+      <p-tabpanel value="contacts">
+        <app-party-contacts-tab [partyId]="partyId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>
