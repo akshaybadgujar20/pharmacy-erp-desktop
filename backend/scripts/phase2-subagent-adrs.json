@@ -1,0 +1,2751 @@
+[
+  {
+    "id": 21,
+    "slug": "offline-first-local-source-of-truth",
+    "title": "Local database is source of truth during daily operation",
+    "modules": [
+      "sync",
+      "persistence"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Users must work seamlessly offline without knowing connectivity state.",
+    "question": "Where is the authoritative data during daily pharmacy operations?",
+    "options": [
+      "Local SQLite is source of truth; cloud syncs later",
+      "Cloud is source of truth; local is cache",
+      "Hybrid with user-visible sync state"
+    ],
+    "decision": "Local database is the source of truth during daily operation.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Cloud is source of truth; local is cache",
+      "Hybrid with user-visible sync state"
+    ],
+    "source_doc": "07"
+  },
+  {
+    "id": 22,
+    "slug": "delta-sync-only",
+    "title": "Delta sync — send only changed records",
+    "modules": [
+      "sync"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Full-database upload is slow, expensive, and risky on reconnect.",
+    "question": "What synchronization payload strategy should be used?",
+    "options": [
+      "Delta sync (changed records only)",
+      "Full database upload",
+      "Snapshot + diff hybrid"
+    ],
+    "decision": "Send only changed records; never upload the whole database.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Full database upload",
+      "Snapshot + diff hybrid"
+    ],
+    "source_doc": "07"
+  },
+  {
+    "id": 23,
+    "slug": "outbox-background-sync-triggers",
+    "title": "Outbox pattern with background sync triggers",
+    "modules": [
+      "sync",
+      "persistence"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Mutations must replicate reliably after crashes and intermittent connectivity.",
+    "question": "How should local changes be queued and processed for cloud sync?",
+    "options": [
+      "Outbox table + background worker",
+      "Direct API call per mutation",
+      "Manual export/import only"
+    ],
+    "decision": "Record every change in Outbox; background worker processes on app start, periodic interval, manual sync, and network reconnect.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Direct API call per mutation",
+      "Manual export/import only"
+    ],
+    "source_doc": "07"
+  },
+  {
+    "id": 24,
+    "slug": "request-idempotency-uuid",
+    "title": "Per-transaction UUID for idempotent sync requests",
+    "modules": [
+      "sync"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Duplicate delivery after retries must not double-apply changes.",
+    "question": "How should the server detect and ignore duplicate sync requests?",
+    "options": [
+      "Unique UUID per transaction",
+      "Timestamp-only deduplication",
+      "No idempotency in v1"
+    ],
+    "decision": "Every transaction gets a unique UUID; server safely ignores duplicates.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Timestamp-only deduplication",
+      "No idempotency in v1"
+    ],
+    "source_doc": "07"
+  },
+  {
+    "id": 25,
+    "slug": "entity-specific-conflict-resolution",
+    "title": "Entity-specific conflict resolution rules",
+    "modules": [
+      "sync",
+      "inventory",
+      "party",
+      "medicine"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Different entities have different correctness requirements when two writers conflict.",
+    "question": "What conflict resolution strategy should apply globally?",
+    "options": [
+      "One global rule (e.g. last-write-wins)",
+      "Entity-specific rules",
+      "Server always wins"
+    ],
+    "decision": "Entity-specific rules: inventory transaction-based (never overwrite stock), customer details may use last-write-wins, medicine master prefers server authority; use versions/timestamps for detection.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "One global rule (e.g. last-write-wins)",
+      "Server always wins for all entities"
+    ],
+    "source_doc": "07"
+  },
+  {
+    "id": 26,
+    "slug": "angular-feature-modules-no-component-logic",
+    "title": "Angular feature modules; no business logic in components",
+    "modules": [
+      "frontend"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "UI layer must stay thin and testable.",
+    "question": "How should the Angular client be structured?",
+    "options": [
+      "Feature modules; Components → Services → Backend",
+      "Business logic in components",
+      "Monolithic single module"
+    ],
+    "decision": "Use feature modules (sales, purchase, inventory, etc.); components call services only — never place business logic inside components.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Business logic in components",
+      "Monolithic single module"
+    ],
+    "source_doc": "08"
+  },
+  {
+    "id": 27,
+    "slug": "electron-context-isolation-preload",
+    "title": "Electron context isolation with preload contextBridge",
+    "modules": [
+      "electron",
+      "frontend"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Renderer must not expose Node.js directly.",
+    "question": "How should Electron expose OS capabilities to Angular?",
+    "options": [
+      "Context isolation + preload script + contextBridge",
+      "Direct Node in renderer",
+      "Remote module"
+    ],
+    "decision": "Renderer runs Angular only; main process handles printing/FS/windows/updates; use context isolation and preload script with contextBridge for required APIs.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Direct Node in renderer",
+      "Remote module"
+    ],
+    "source_doc": "08"
+  },
+  {
+    "id": 28,
+    "slug": "nestjs-thin-controller-rich-service",
+    "title": "NestJS thin controllers, rich services, validated DTOs",
+    "modules": [
+      "backend"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "HTTP layer and domain logic must stay separated.",
+    "question": "Where should business rules live in the NestJS backend?",
+    "options": [
+      "Controllers thin; services rich; DTOs validated",
+      "Controllers call Prisma directly",
+      "Fat controllers"
+    ],
+    "decision": "Controller → DTO → Validation → Service → Prisma → SQLite; controllers thin, services rich, business rules in services.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Controllers call Prisma directly",
+      "Fat controllers"
+    ],
+    "source_doc": "08"
+  },
+  {
+    "id": 29,
+    "slug": "rest-json-envelope-binary-exports",
+    "title": "REST with JSON envelope; binary streams for exports",
+    "modules": [
+      "backend",
+      "frontend"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "API responses need a consistent shape except for file downloads.",
+    "question": "What response format should APIs use?",
+    "options": [
+      "JSON envelope for data; binary for exports",
+      "Raw JSON without envelope",
+      "GraphQL"
+    ],
+    "decision": "REST consistently; wrap JSON in `{ success, data }` / `{ success, error }`; report exports (`format=csv|xlsx|pdf`) return binary streams without JSON envelope.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Raw JSON without envelope",
+      "GraphQL"
+    ],
+    "source_doc": "08"
+  },
+  {
+    "id": 30,
+    "slug": "feature-module-anatomy-template",
+    "title": "Standard feature module folder anatomy",
+    "modules": [
+      "backend"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "New domain modules must follow one repeatable shape.",
+    "question": "What folder layout should every backend feature module use?",
+    "options": [
+      "party-style anatomy (module/controller/service/dto/mappers/constants/utils)",
+      "Ad-hoc per module",
+      "Single file per feature"
+    ],
+    "decision": "Follow party reference layout: module, thin controller, service, dto/, mappers/, optional constants/ and utils/.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Ad-hoc per module",
+      "Single file per feature"
+    ],
+    "source_doc": "09"
+  },
+  {
+    "id": 31,
+    "slug": "reads-prisma-writes-unit-of-work",
+    "title": "Reads via PrismaService; writes via UnitOfWorkService",
+    "modules": [
+      "persistence",
+      "all modules"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Multi-row writes need atomicity; reads should stay simple.",
+    "question": "When should Prisma be called directly vs through a transaction wrapper?",
+    "options": [
+      "Reads direct; writes via unitOfWork.run",
+      "All DB access through UoW",
+      "All DB access direct"
+    ],
+    "decision": "List/get use `prisma.client`; every create/update/delete runs inside `unitOfWork.run(tx => …)`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "All DB access through UoW",
+      "All DB access direct"
+    ],
+    "source_doc": "09"
+  },
+  {
+    "id": 32,
+    "slug": "mutation-audit-outbox-same-transaction",
+    "title": "Audit and outbox in same transaction as mutation",
+    "modules": [
+      "persistence",
+      "audit",
+      "sync"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Audit/outbox rows must not commit without the business change.",
+    "question": "When should audit and outbox be written?",
+    "options": [
+      "Inside the same transaction as the mutation",
+      "After transaction commits",
+      "Audit only, no outbox"
+    ],
+    "decision": "Every mutation calls `auditService.log(tx, …)` and `outboxService.enqueue(tx, …)` inside the same `tx`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "After transaction commits",
+      "Audit only, no outbox"
+    ],
+    "source_doc": "09"
+  },
+  {
+    "id": 33,
+    "slug": "reports-via-registry-not-controller",
+    "title": "Read-only reports register into ReportRegistryService",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Each domain should not build its own report HTTP surface.",
+    "question": "How should a new read-only report be exposed?",
+    "options": [
+      "Register ReportDefinition provider",
+      "New domain report controller",
+      "Inline SQL in existing controllers"
+    ],
+    "decision": "Do not build a new controller; register a `ReportDefinition` provider into `ReportRegistryService`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "New domain report controller",
+      "Inline SQL in existing controllers"
+    ],
+    "source_doc": "09"
+  },
+  {
+    "id": 34,
+    "slug": "additive-only-backend-extensions",
+    "title": "Additive-only change policy for backend extensions",
+    "modules": [
+      "all modules"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Feature work must not destabilize unrelated modules.",
+    "question": "How should new features be added to the backend?",
+    "options": [
+      "Additive-only guarded logic",
+      "Refactor unrelated code while adding features",
+      "Fix pre-existing bugs opportunistically"
+    ],
+    "decision": "Add new files and guarded logic; do not refactor or fix unrelated code without explicit approval.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Refactor unrelated code while adding features",
+      "Fix pre-existing bugs opportunistically"
+    ],
+    "source_doc": "09"
+  },
+  {
+    "id": 35,
+    "slug": "central-report-registry-inverted-dependency",
+    "title": "Central reporting core with domain provider registration",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Sales/inventory/purchase/finance reports must plug in without circular imports.",
+    "question": "How should domain modules contribute reports?",
+    "options": [
+      "Domain providers self-register at startup into global registry",
+      "Reporting core imports all domain modules",
+      "Per-domain report controllers"
+    ],
+    "decision": "Central `reporting` module owns execution/export; domain modules register `ReportDefinition`s at startup via `OnModuleInit` providers (inverted dependency).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Reporting core imports all domain modules",
+      "Per-domain report controllers"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 36,
+    "slug": "reports-read-only-no-uow-outbox",
+    "title": "Reports are read-only — no UnitOfWork, Outbox, or Audit",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Report runs must not create side effects or sync events.",
+    "question": "Which persistence services may report providers use?",
+    "options": [
+      "PrismaService read-only only",
+      "Full mutation stack with audit/outbox",
+      "UnitOfWork without outbox"
+    ],
+    "decision": "Use `PrismaService.client` directly — no `UnitOfWorkService`, `OutboxService`, or `AuditService` on report runs.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Full mutation stack with audit/outbox",
+      "UnitOfWork without outbox"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 37,
+    "slug": "two-layer-report-permissions",
+    "title": "Coarse REPORT_VIEW plus per-report permission",
+    "modules": [
+      "reporting",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Users need route-level and report-level access control.",
+    "question": "How should report permissions be structured?",
+    "options": [
+      "Route gate + per-report permission",
+      "Single REPORT_VIEW for all",
+      "Per-controller guards only"
+    ],
+    "decision": "`REPORT_VIEW` on routes; each `ReportDefinition.permission` checked before `run()`; catalog filtered via `listForUser()`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Single REPORT_VIEW for all",
+      "Per-controller guards only"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 38,
+    "slug": "report-export-formats-csv-xlsx-pdf",
+    "title": "Report exports: JSON, CSV, Excel, PDF",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Users need preview and downloadable exports.",
+    "question": "Which export formats should v1 support?",
+    "options": [
+      "json|csv|xlsx|pdf",
+      "JSON only",
+      "JSON + CSV only"
+    ],
+    "decision": "Support `format=json|csv|xlsx|pdf` (default json); exporters return buffer with Content-Type and Content-Disposition.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "JSON only",
+      "JSON + CSV only"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 39,
+    "slug": "report-file-export-bypass-interceptor",
+    "title": "File exports bypass ResponseInterceptor via @Res",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Binary exports cannot use the JSON success envelope.",
+    "question": "How should CSV/XLSX/PDF responses be returned?",
+    "options": [
+      "@Res passthrough false to stream binary",
+      "Modify ResponseInterceptor for binary",
+      "Base64 in JSON envelope"
+    ],
+    "decision": "Use `@Res({ passthrough: false })` to stream exporter buffer with proper headers, bypassing `ResponseInterceptor` without modifying it.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Modify ResponseInterceptor for binary",
+      "Base64 in JSON envelope"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 40,
+    "slug": "namespaced-report-ids",
+    "title": "Namespaced report IDs (domain.report-name)",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Report IDs must be unique and discoverable across domains.",
+    "question": "How should report IDs be named?",
+    "options": [
+      "Namespaced dot IDs e.g. party.customer-list",
+      "Flat numeric IDs",
+      "URL path per module"
+    ],
+    "decision": "Use namespaced ids like `party.customer-list`; unique across registry.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Flat numeric IDs",
+      "URL path per module"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 41,
+    "slug": "party-reports-provider-first",
+    "title": "Party reports provider ships first under reporting/providers",
+    "modules": [
+      "reporting",
+      "party"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Need a reference provider before other write modules exist.",
+    "question": "Where should the first report provider live?",
+    "options": [
+      "Under reporting/providers/party for first cut",
+      "Under party/ module immediately",
+      "Defer all providers"
+    ],
+    "decision": "`PartyReportsProvider` under `reporting/providers/party/` registers customer-list, supplier-list, customer-outstanding.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Under party/ module immediately",
+      "Defer all providers"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 42,
+    "slug": "report-export-libraries-exceljs-pdfmake",
+    "title": "Export libraries: exceljs and pdfmake",
+    "modules": [
+      "reporting"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Need Excel and PDF generation without native build deps.",
+    "question": "Which libraries should power XLSX and PDF export?",
+    "options": [
+      "exceljs + pdfmake",
+      "xlsx + puppeteer",
+      "Server-side only CSV"
+    ],
+    "decision": "Use `exceljs` for xlsx and `pdfmake` for tabular PDFs (Roboto fonts from package).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "xlsx + puppeteer",
+      "Server-side only CSV"
+    ],
+    "source_doc": "10"
+  },
+  {
+    "id": 43,
+    "slug": "inventory-nested-item-controllers",
+    "title": "Inventory documents use nested item controllers",
+    "modules": [
+      "inventory"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Adjustment/transfer/stock-take are header+line documents edited incrementally.",
+    "question": "Do inventory documents need separate item-level APIs?",
+    "options": [
+      "Nested item controllers under parent routes",
+      "Items only via header create/update body",
+      "Single combined controller"
+    ],
+    "decision": "Use separate nested item controllers (e.g. `/stock-adjustments/:id/items`) matching party nested-resource pattern.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Items only via header create/update body",
+      "Single combined controller"
+    ],
+    "source_doc": "11"
+  },
+  {
+    "id": 44,
+    "slug": "inventory-header-create-without-items",
+    "title": "Inventory headers created without embedded items[]",
+    "modules": [
+      "inventory"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Lines are added while document is still editable.",
+    "question": "Should create DTOs include line items?",
+    "options": [
+      "Header create without items; add lines via item API",
+      "Embedded items[] on create",
+      "Bulk import only"
+    ],
+    "decision": "Create DTOs for adjustment/transfer/stock-take have no `items[]`; items managed incrementally while parent is DRAFT (stock-take also IN_PROGRESS).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Embedded items[] on create",
+      "Bulk import only"
+    ],
+    "source_doc": "11"
+  },
+  {
+    "id": 45,
+    "slug": "stock-movement-read-only-http",
+    "title": "StockMovement HTTP API is read-only",
+    "modules": [
+      "inventory",
+      "persistence"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Movement ledger must be immutable.",
+    "question": "Should StockMovement have create/update/delete endpoints?",
+    "options": [
+      "Read-only HTTP; writes only via InventoryLedgerService",
+      "Full CRUD on movements",
+      "Append via dedicated POST"
+    ],
+    "decision": "StockMovement is immutable — read-only list/get HTTP; movements created only by `InventoryLedgerService.applyMovement`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Full CRUD on movements",
+      "Append via dedicated POST"
+    ],
+    "source_doc": "11"
+  },
+  {
+    "id": 46,
+    "slug": "batch-org-global-stock-branch-scoped",
+    "title": "Batch org-global; Stock and documents branch-scoped",
+    "modules": [
+      "inventory"
+    ],
+    "confidence": "Strongly inferred",
+    "status": "Active",
+    "problem": "Same lot can exist at multiple branches with independent quantities.",
+    "question": "How should Batch vs Stock API scoping work?",
+    "options": [
+      "Batch org-global; Stock branch-scoped",
+      "Everything branch-scoped",
+      "Everything org-global"
+    ],
+    "decision": "Batch list/get has no branch filter; Stock, adjustments, transfers, stock-takes filter by `RequestContext` branch.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Everything branch-scoped",
+      "Everything org-global"
+    ],
+    "source_doc": "11"
+  },
+  {
+    "id": 47,
+    "slug": "purchase-v1-all-four-document-types",
+    "title": "Purchase v1 delivers all four document types",
+    "modules": [
+      "purchase"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Procurement lifecycle spans PO, GRN, invoice, and return.",
+    "question": "What should we implement in the first backend delivery?",
+    "options": [
+      "All 4 document types together",
+      "Phase 1: PO + GRN only",
+      "Phase 1: PO + GRN + Invoice",
+      "Phase 1: PO only"
+    ],
+    "decision": "All 4 document types in one delivery (PO + GRN + Invoice + Return).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Phase 1: PO + GRN only",
+      "Phase 1: PO + GRN + Invoice",
+      "Phase 1: PO only"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 48,
+    "slug": "purchase-prisma-schema-source-of-truth",
+    "title": "Purchase status machines follow existing Prisma schema",
+    "modules": [
+      "purchase"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "purchase.md, purchasing.md, and Prisma disagree on statuses.",
+    "question": "Which source should the implementation follow?",
+    "options": [
+      "Existing Prisma schema + seed",
+      "purchasing.md domain doc",
+      "purchase.md table spec",
+      "MVP simplified workflows on Prisma columns"
+    ],
+    "decision": "Existing Prisma models in `backend/prisma/purchase/` are source of truth.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "purchasing.md domain doc",
+      "purchase.md table spec",
+      "MVP simplified workflows on Prisma columns"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 49,
+    "slug": "purchase-grn-full-inspection-workflow",
+    "title": "GRN full inspection workflow before stock IN",
+    "modules": [
+      "purchase",
+      "inventory"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Goods receipt quality inspection affects whether stock is accepted.",
+    "question": "Goods Receipt posting workflow — how much complexity in v1?",
+    "options": [
+      "Full inspection flow",
+      "Simplified DRAFT → POST/ACCEPT",
+      "Minimal DRAFT → ACCEPTED + CANCEL only"
+    ],
+    "decision": "`DRAFT` → `UNDER_INSPECTION` → `ACCEPTED` / `PARTIALLY_ACCEPTED` / `REJECTED`; stock only on ACCEPTED.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Simplified DRAFT → POST/ACCEPT",
+      "Minimal DRAFT → ACCEPTED + CANCEL only"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 50,
+    "slug": "purchase-invoice-post-status-audit-outbox-only",
+    "title": "Purchase invoice POST: status + audit + outbox only (no stock)",
+    "modules": [
+      "purchase"
+    ],
+    "confidence": "Explicit",
+    "status": "Refined",
+    "problem": "Stock updates on GRN; invoice is financial document.",
+    "question": "What should invoice POST do in v1?",
+    "options": [
+      "Status + audit/outbox only",
+      "Stub ledger hook",
+      "Skip invoice API"
+    ],
+    "decision": "Invoice POST changes status + audit + outbox only — no stock movement.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Stub ledger hook only at purchase planning time",
+      "Skip invoice API"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 51,
+    "slug": "purchase-full-permission-matrix",
+    "title": "Purchase full INVENTORY-style permission matrix",
+    "modules": [
+      "purchase",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Only PURCHASE_CREATE existed in seed.",
+    "question": "What permission seeding should purchase v1 add?",
+    "options": [
+      "Full matrix per resource + workflow actions",
+      "CRUD + separate workflow permissions",
+      "Minimal — reuse PURCHASE_CREATE"
+    ],
+    "decision": "Full matrix like inventory (READ/CREATE/UPDATE/DELETE + workflow actions per PO, GRN, INVOICE, RETURN).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "CRUD + separate workflow permissions only",
+      "Minimal — reuse PURCHASE_CREATE"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 52,
+    "slug": "purchase-grn-without-po-setting-gated",
+    "title": "GRN without PO gated by ALLOW_GRN_WITHOUT_PO setting",
+    "modules": [
+      "purchase",
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Ad-hoc receipts may or may not require a PO link.",
+    "question": "Should v1 allow Goods Receipt without a linked Purchase Order?",
+    "options": [
+      "Yes — gated by app setting",
+      "Yes — always allowed",
+      "No — purchaseOrderId required"
+    ],
+    "decision": "Allow GRN without PO when `ALLOW_GRN_WITHOUT_PO` app setting is enabled.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Yes — always allowed",
+      "No — purchaseOrderId required"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 53,
+    "slug": "purchase-grn-cancel-stock-reversal",
+    "title": "Posted GRN cancel reverses stock with OUT movements",
+    "modules": [
+      "purchase",
+      "inventory"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Cancelled receipts must undo inventory impact.",
+    "question": "GRN cancellation / reversal in v1?",
+    "options": [
+      "CANCEL with reversing OUT movements",
+      "Cancel DRAFT only",
+      "No cancel endpoint"
+    ],
+    "decision": "Implement CANCEL on posted GRN with reversing OUT movements via InventoryLedgerService.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Cancel DRAFT only",
+      "No cancel endpoint"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 54,
+    "slug": "purchase-tests-deferred-v1",
+    "title": "Purchase module tests deferred in v1",
+    "modules": [
+      "purchase"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "First delivery prioritizes APIs over test suite.",
+    "question": "What test coverage in first delivery?",
+    "options": [
+      "Unit only",
+      "Unit + persistence",
+      "Unit + persistence + e2e",
+      "No tests in first pass"
+    ],
+    "decision": "No tests in first pass.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Unit only",
+      "Unit + persistence",
+      "Unit + persistence + e2e"
+    ],
+    "source_doc": "12"
+  },
+  {
+    "id": 55,
+    "slug": "finance-v1-all-four-tables",
+    "title": "Finance v1: Ledger, LedgerEntry, Payment, Receipt",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "financial.md defines four core tables.",
+    "question": "What should the first backend delivery include?",
+    "options": [
+      "All 4 financial.md tables",
+      "All 4 + Expense table",
+      "Payment + Receipt + LedgerPosting first",
+      "Ledger COA + Payment + Receipt only"
+    ],
+    "decision": "All 4 `financial.md` tables: Ledger, LedgerEntry, Payment, Receipt.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "All 4 + Expense table",
+      "Payment + Receipt + LedgerPosting first",
+      "Ledger COA + Payment + Receipt only"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 56,
+    "slug": "finance-full-cross-module-hooks",
+    "title": "Finance full cross-module hooks in v1",
+    "modules": [
+      "finance",
+      "purchase",
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Payments must affect purchase invoices and customer receipts.",
+    "question": "How much cross-module integration in v1?",
+    "options": [
+      "Standalone finance APIs",
+      "Supplier payment allocation only",
+      "Full hooks incl. purchase invoice AP",
+      "Full hooks + customer receipt stub"
+    ],
+    "decision": "Full hooks: purchase invoice AP on post + supplier payment allocation + customer receipt (sales invoice stub).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Standalone finance APIs",
+      "Supplier payment allocation only"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 57,
+    "slug": "finance-full-ledger-posting-service",
+    "title": "Full LedgerPostingService with balance validation and reversal",
+    "modules": [
+      "finance",
+      "persistence"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Payment/Receipt COMPLETE needs shared double-entry logic.",
+    "question": "LedgerPostingService — required for v1?",
+    "options": [
+      "Full shared service",
+      "Minimal post/reverse",
+      "Inline ledger writes in services only"
+    ],
+    "decision": "Full shared `LedgerPostingService` (balance validation, reversal helper, optional running balance).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Minimal post/reverse only",
+      "Inline ledger writes in services only"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 58,
+    "slug": "finance-ledger-entry-readonly-api",
+    "title": "LedgerEntry HTTP API read-only",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Journal is immutable; entries created by posting flows.",
+    "question": "LedgerEntry HTTP API in v1?",
+    "options": [
+      "Read-only list/get/filter",
+      "Read-only + manual journal create",
+      "No HTTP endpoints"
+    ],
+    "decision": "Read-only list/get/filter by ledgerId, voucherType, date range.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read-only + manual journal create",
+      "No HTTP endpoints"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 59,
+    "slug": "finance-ledger-coa-full-crud",
+    "title": "Ledger COA full CRUD with hierarchy guards",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Chart of accounts must be admin-manageable.",
+    "question": "Ledger (COA) API in v1?",
+    "options": [
+      "Full CRUD with parent hierarchy",
+      "Read + update only",
+      "Read-only seed-managed"
+    ],
+    "decision": "Full CRUD with parent hierarchy; block delete on system ledgers and circular parent.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read + update only",
+      "Read-only seed-managed"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 60,
+    "slug": "finance-strict-financial-year-validation",
+    "title": "Strict financial year validation on posts",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Transactions must land in an open FY.",
+    "question": "Enforce open FinancialYear on payment/receipt post?",
+    "options": [
+      "Yes strict reject",
+      "Validate with warning only",
+      "Defer validation"
+    ],
+    "decision": "Strict — reject posts outside current open financial year date range.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Validate with warning only",
+      "Defer validation"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 61,
+    "slug": "finance-global-payment-receipt-numbers",
+    "title": "Payment/Receipt numbers globally unique per Prisma schema",
+    "modules": [
+      "finance",
+      "sequence"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Prisma has globally unique paymentNumber/receiptNumber.",
+    "question": "Payment/Receipt document numbers — follow Prisma or branch-scope?",
+    "options": [
+      "Prisma global unique via sequence",
+      "Branch-scoped numbers (migration)"
+    ],
+    "decision": "Prisma as-is: org-global unique numbers; use branch sequence row format like `PAY-{BR}-{SEQ}` to avoid collisions.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Branch-scoped numbers (requires migration)"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 62,
+    "slug": "finance-expense-table-out-of-scope",
+    "title": "Expense Prisma model out of scope; use Payment EXPENSE type",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Expense model exists but not in financial.md table list.",
+    "question": "Include Expense table in v1?",
+    "options": [
+      "All 4 only",
+      "All 4 + Expense"
+    ],
+    "decision": "Expense table out of scope; use `paymentType=EXPENSE` via Payment.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "All 4 + Expense table"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 63,
+    "slug": "finance-tests-deferred-v1",
+    "title": "Finance module tests deferred in v1",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Match purchase v1 delivery pace.",
+    "question": "Test coverage for first delivery?",
+    "options": [
+      "Deferred",
+      "Unit posting only",
+      "Unit + persistence"
+    ],
+    "decision": "Deferred (no tests in v1).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Unit posting only",
+      "Unit + persistence"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 64,
+    "slug": "finance-pi-cancel-block-when-paid",
+    "title": "Block purchase invoice cancel when paidAmount > 0",
+    "modules": [
+      "finance",
+      "purchase"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Cancelling invoices with payments creates accounting inconsistency.",
+    "question": "When posted purchase invoice has payments, how should cancel behave?",
+    "options": [
+      "Block cancel until payments cancelled",
+      "Auto-cancel/unwind payments on invoice cancel"
+    ],
+    "decision": "Block cancel when `paidAmount > 0`; user must cancel finance payments first.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Auto-cancel/unwind completed finance payments as part of invoice cancel"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 65,
+    "slug": "finance-reversal-voucher-number-scoped",
+    "title": "Ledger reversals scoped by voucherNumber with -REV suffix",
+    "modules": [
+      "finance",
+      "persistence"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Reusing same voucherType+voucherId caused double-reversal bugs.",
+    "question": "How to fix reversal without Prisma migration?",
+    "options": [
+      "Scope by voucherNumber; post -REV number",
+      "Add reversal flag column",
+      "Separate reversal table"
+    ],
+    "decision": "No Prisma migration — scope originals by exact `voucherNumber`; post reversals under distinct `-REV` voucher number.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Add reversal flag column",
+      "Separate reversal table"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 66,
+    "slug": "finance-reject-unsupported-payment-type",
+    "title": "Reject unsupported PaymentType at complete",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Silent fallback to Supplier Payable masked misconfiguration.",
+    "question": "How to handle unsupported PaymentType at complete?",
+    "options": [
+      "Reject with explicit error",
+      "Silent fallback to Supplier Payable"
+    ],
+    "decision": "Reject with explicit error (no silent fallback).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Silent fallback to Supplier Payable"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 67,
+    "slug": "finance-running-balance-best-effort",
+    "title": "Ledger running balance left best-effort in bug-fix pass",
+    "modules": [
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Running balance correctness vs delivery scope.",
+    "question": "Fix running balance locking in bug-fix pass?",
+    "options": [
+      "Leave best-effort document only",
+      "Add locking work"
+    ],
+    "decision": "Leave running balance as best-effort (document only); no locking work in bug-fix pass.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Add locking work in bug-fix pass"
+    ],
+    "source_doc": "13"
+  },
+  {
+    "id": 68,
+    "slug": "sales-v1-all-five-tables",
+    "title": "Sales v1 includes all five sales tables",
+    "modules": [
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Sales domain includes invoices, payments, and returns.",
+    "question": "Which sales documents should v1 include?",
+    "options": [
+      "All 5 tables",
+      "Invoice + payment only",
+      "Invoice only"
+    ],
+    "decision": "All 5: SalesInvoice, SalesInvoiceItem, SalesPayment, SalesReturn, SalesReturnItem.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Invoice + payment only",
+      "Invoice only"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 69,
+    "slug": "sales-full-finance-ledger-hooks",
+    "title": "Sales full finance ledger integration",
+    "modules": [
+      "sales",
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Sales must mirror purchase+finance ledger patterns.",
+    "question": "Finance / ledger integration on sales workflows?",
+    "options": [
+      "Full hooks",
+      "Invoice post + cancel ledger only",
+      "No ledger in v1"
+    ],
+    "decision": "Full hooks: invoice post AR/revenue/GST, payment ledger, return reversal, posted cancel reversal.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Invoice post + cancel ledger only",
+      "No ledger in v1"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 70,
+    "slug": "sales-payment-nested-separate-from-receipt",
+    "title": "SalesPayment nested API; Finance Receipt stays separate",
+    "modules": [
+      "sales",
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Two paths can record customer collections.",
+    "question": "How should customer payments be recorded in v1?",
+    "options": [
+      "SalesPayment nested; Receipt separate",
+      "Finance Receipt only",
+      "Both auto-linked"
+    ],
+    "decision": "`SalesPayment` nested under invoice; Finance `Receipt` with SALES_INVOICE allocation stays separate.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Finance Receipt only",
+      "Both auto-linked on complete"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 71,
+    "slug": "sales-pricelist-auto-resolve-at-post",
+    "title": "Auto-resolve selling price from PriceList at post",
+    "modules": [
+      "sales",
+      "pricing"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Prices are branch-scoped via PriceList.",
+    "question": "Selling price resolution at invoice post?",
+    "options": [
+      "Auto-resolve from PriceList at post",
+      "Manual unitPrice on draft only",
+      "Hybrid default with override"
+    ],
+    "decision": "Auto-resolve from branch PriceList/PriceListItem at post; snapshot MRP/tax on lines.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Manual unitPrice on draft only",
+      "Hybrid default with override"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 72,
+    "slug": "sales-fefo-batch-at-post",
+    "title": "FEFO batch allocation at sales invoice post",
+    "modules": [
+      "sales",
+      "inventory"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Batch selection affects expiry compliance.",
+    "question": "Batch selection for invoice lines?",
+    "options": [
+      "FEFO at post",
+      "User must pick batch on each line",
+      "FEFO default with override"
+    ],
+    "decision": "FEFO at post; draft may store suggested batch; post re-allocates and validates.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "User must pick batch on each line",
+      "FEFO default with override"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 73,
+    "slug": "sales-prescription-fk-only-v1",
+    "title": "Prescription FK validation only in sales v1",
+    "modules": [
+      "sales",
+      "prescription"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Schedule H rules add complexity.",
+    "question": "Prescription / Schedule H handling?",
+    "options": [
+      "FK validation only",
+      "Schedule H strict",
+      "Ignore prescriptionId"
+    ],
+    "decision": "Optional `prescriptionId` FK validation (exists + branch match); no Schedule H rules in v1.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Schedule H strict enforcement",
+      "Ignore prescriptionId in v1"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 74,
+    "slug": "sales-return-restock-only-v1",
+    "title": "Sales returns RESTOCK disposition only in v1",
+    "modules": [
+      "sales",
+      "inventory"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Return dispositions include damaged/quarantine paths.",
+    "question": "Sales return stock disposition on approve?",
+    "options": [
+      "RESTOCK only",
+      "Full disposition routing",
+      "RESTOCK IN; others record-only"
+    ],
+    "decision": "RESTOCK only — approved returns create IN StockMovement; ignore DAMAGED/DISCARD routing.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Full disposition routing",
+      "RESTOCK IN; others record-only"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 75,
+    "slug": "sales-posted-cancel-with-reversal-v1",
+    "title": "Posted sales invoice cancel with stock and ledger reversal (initial v1)",
+    "modules": [
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Superseded",
+    "problem": "Exception workflow for posted invoices.",
+    "question": "Cancel posted sales invoice?",
+    "options": [
+      "Implement cancel with reversals",
+      "Returns only — no posted cancel",
+      "Cancel stock only no ledger"
+    ],
+    "decision": "Implement `cancel` on posted invoice with stock reversal + ledger reversal.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Returns only — no posted cancel",
+      "Cancel stock only no ledger"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 76,
+    "slug": "sales-cancel-block-collections-or-returns",
+    "title": "Block sales invoice cancel when paid or completed returns exist",
+    "modules": [
+      "sales",
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Cancel with completed payments/returns caused ledger inconsistency.",
+    "question": "Which simplification for posted sales invoice cancel?",
+    "options": [
+      "Block when paidAmount > 0 or COMPLETED return",
+      "Block payments only",
+      "Keep current cancel behavior"
+    ],
+    "decision": "Match purchase: block cancel when `paidAmount > 0` or any COMPLETED return exists.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Block only when paidAmount > 0",
+      "Keep current cancel with auto-reversal"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 77,
+    "slug": "sales-full-permission-matrix",
+    "title": "Sales full permission matrix",
+    "modules": [
+      "sales",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Need granular access like purchase/finance.",
+    "question": "Permission matrix for sales endpoints?",
+    "options": [
+      "Full matrix per resource",
+      "Domain minimal CREATE+READ",
+      "Resource split only"
+    ],
+    "decision": "Full matrix + admin role assignment (READ/CREATE/UPDATE/DELETE + POST/CANCEL/APPROVE per resource).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Domain minimal CREATE+READ",
+      "Resource split without workflow permissions"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 78,
+    "slug": "sales-tests-deferred-v1",
+    "title": "Sales module tests deferred in v1",
+    "modules": [
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Match purchase/finance v1 pace.",
+    "question": "Tests in v1?",
+    "options": [
+      "Deferred",
+      "Unit only",
+      "Unit + persistence"
+    ],
+    "decision": "Deferred.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Unit only",
+      "Unit + persistence"
+    ],
+    "source_doc": "14"
+  },
+  {
+    "id": 79,
+    "slug": "security-all-six-tables-plus-userbranch",
+    "title": "Security admin: all six doc tables plus UserBranch",
+    "modules": [
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "RBAC admin beyond auth login.",
+    "question": "Which tables/APIs should v1 include?",
+    "options": [
+      "All 6 + UserBranch admin",
+      "6 tables only no UserBranch",
+      "RBAC only",
+      "User + RBAC hybrid"
+    ],
+    "decision": "All 6 doc tables + UserBranch admin (User, Role, Permission, RolePermission, UserRole, UserSession, UserBranch).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "6 tables only; UserBranch seed-only",
+      "RBAC only",
+      "User + RBAC without Permission CRUD"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 80,
+    "slug": "auth-security-module-split",
+    "title": "Auth module for authentication; Security module for RBAC admin",
+    "modules": [
+      "auth",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Login vs admin concerns must not be mixed.",
+    "question": "Where should user/role admin live vs login?",
+    "options": [
+      "New security/ module; auth/ keeps tokens",
+      "Everything in auth/",
+      "Security in settings/"
+    ],
+    "decision": "New `backend/src/security/` for admin; `backend/src/auth/` keeps login/logout/refresh/me.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Everything in auth/",
+      "Security in settings/"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 81,
+    "slug": "security-full-password-flows",
+    "title": "Admin reset, self change-password, and unlock flows",
+    "modules": [
+      "auth",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Password management spans self-service and admin.",
+    "question": "Which password flows in v1?",
+    "options": [
+      "Admin reset + self change + unlock",
+      "Admin reset only",
+      "Defer password admin"
+    ],
+    "decision": "Admin reset + unlock in security; self change-password in auth.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Admin reset only",
+      "Defer password admin"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 82,
+    "slug": "security-permission-full-crud",
+    "title": "Permission full CRUD including system permissions",
+    "modules": [
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Permission catalog must be admin-manageable.",
+    "question": "Permission CRUD scope?",
+    "options": [
+      "Full CRUD incl. isSystemPermission",
+      "Read-only Permission list",
+      "Create custom only"
+    ],
+    "decision": "Full CRUD on Permission rows including `isSystemPermission`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read-only Permission list",
+      "Create custom permissions only"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 83,
+    "slug": "security-junction-nested-bulk-replace",
+    "title": "Junction APIs nested with bulk replace",
+    "modules": [
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Role-permission and user-role assignments need bulk updates.",
+    "question": "Junction API shape?",
+    "options": [
+      "Nested + add/remove + bulk replace",
+      "Nested CRUD only",
+      "Flat junction endpoints"
+    ],
+    "decision": "Nested under parent + add/remove + bulk **replace** (UserRole, RolePermission pattern).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Nested CRUD only",
+      "Flat junction endpoints"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 84,
+    "slug": "security-session-force-logout",
+    "title": "UserSession read and admin force-logout",
+    "modules": [
+      "security",
+      "auth"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Admins must revoke active sessions.",
+    "question": "UserSession API scope?",
+    "options": [
+      "Read list/get + force-logout",
+      "Auth /me only",
+      "No session admin"
+    ],
+    "decision": "Read list/get + admin `force-logout` endpoint.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Auth /me only",
+      "No session admin HTTP"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 85,
+    "slug": "security-employee-fk-validation-only",
+    "title": "Employee link FK validation only",
+    "modules": [
+      "security",
+      "party"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "User may link to employee party record.",
+    "question": "Employee integration depth?",
+    "options": [
+      "FK validation only",
+      "Auto-create employee",
+      "Employee CRUD in security"
+    ],
+    "decision": "FK validation only — employee exists, no duplicate user per employee.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Auto-create employee",
+      "Employee CRUD in security"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 86,
+    "slug": "security-session-invalidation-on-sensitive-change",
+    "title": "Invalidate sessions on deactivate, password reset, role changes",
+    "modules": [
+      "security",
+      "auth"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Stale sessions after privilege changes are a security risk.",
+    "question": "When to force-logout all user sessions?",
+    "options": [
+      "Deactivate, password reset, role/permission changes",
+      "Manual force-logout only",
+      "Never auto-invalidate"
+    ],
+    "decision": "Force-logout all active sessions on user deactivate, password reset, and role/permission assignment changes.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Manual force-logout only",
+      "Never auto-invalidate"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 87,
+    "slug": "security-full-permission-matrix-seed",
+    "title": "Full SECURITY:RESOURCE:ACTION permission matrix",
+    "modules": [
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Admin APIs need granular guards.",
+    "question": "Permission seed model?",
+    "options": [
+      "Full SECURITY matrix",
+      "Coarse SECURITY:MANAGE",
+      "Reuse auth permissions only"
+    ],
+    "decision": "Full `SECURITY:RESOURCE:ACTION` matrix + admin role seed assignment.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Coarse SECURITY:MANAGE",
+      "Reuse auth permissions only"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 88,
+    "slug": "security-tests-deferred-v1",
+    "title": "Security module tests deferred in v1",
+    "modules": [
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Match other module v1 deliveries.",
+    "question": "Tests in v1?",
+    "options": [
+      "Deferred",
+      "Unit only",
+      "Full suite"
+    ],
+    "decision": "Deferred.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Unit only",
+      "Full suite"
+    ],
+    "source_doc": "15"
+  },
+  {
+    "id": 89,
+    "slug": "medicine-backend-only-v1",
+    "title": "Medicine master backend-only v1",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Need APIs before Angular admin UI.",
+    "question": "Implementation scope?",
+    "options": [
+      "Backend only",
+      "Backend + tests",
+      "Full stack"
+    ],
+    "decision": "Backend only — APIs, permissions seed, cursor rules, AGENTS.md (no Angular UI, tests deferred).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Backend + tests",
+      "Full stack with Angular"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 90,
+    "slug": "medicine-full-master-permission-matrix",
+    "title": "Full MASTER:RESOURCE:ACTION permission matrix",
+    "modules": [
+      "medicine",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Eight medicine master resources need granular access.",
+    "question": "Permission model for all 8 resources?",
+    "options": [
+      "Full matrix per resource",
+      "Coarse MASTER:MEDICINE:UPDATE",
+      "Granular Medicine+Salt only"
+    ],
+    "decision": "Full `MASTER:RESOURCE:ACTION` matrix + `REPLACE` for `MEDICINE_SALT`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Coarse MASTER:MEDICINE:UPDATE for all writes",
+      "Granular Medicine+Salt only"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 91,
+    "slug": "medicine-manufacturer-party-fk-only",
+    "title": "Manufacturer requires existing Party (FK validation only)",
+    "modules": [
+      "medicine",
+      "party"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Manufacturer links to party master.",
+    "question": "Manufacturer ↔ Party integration?",
+    "options": [
+      "FK validation only",
+      "Inline party create",
+      "Manufacturer in party module"
+    ],
+    "decision": "Create Party first, then Manufacturer with `partyId` (mirror Supplier pattern).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Inline party create on manufacturer",
+      "Manufacturer CRUD in party module"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 92,
+    "slug": "medicine-salt-nested-crud-replace",
+    "title": "MedicineSalt nested CRUD + PUT replace",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Medicine composition is a junction collection.",
+    "question": "MedicineSalt API under /medicines/:id/salts?",
+    "options": [
+      "Nested CRUD + replace",
+      "Nested CRUD only",
+      "Inline on Medicine body only"
+    ],
+    "decision": "Nested under `/medicines/:medicineId/salts` — CRUD + `PUT .../replace`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Nested CRUD only",
+      "Inline on Medicine create/update only"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 93,
+    "slug": "medicine-system-rows-fk-delete-guard",
+    "title": "System schedule/UOM rows: full CRUD; block delete on FK refs only",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "System rows vs custom rows delete policy differs.",
+    "question": "System schedules/UOMs delete policy?",
+    "options": [
+      "Block when isSystem flag",
+      "Full CRUD block FK only",
+      "Deactivate only"
+    ],
+    "decision": "Full CRUD — block delete only when FK references exist; `isSystemSchedule`/`isSystemUnit` not special-cased.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Block delete when isSystem flag true",
+      "Deactivate only never HTTP delete"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 94,
+    "slug": "medicine-strict-delete-guards",
+    "title": "Strict soft-delete guards on medicine masters",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Deleting referenced masters corrupts downstream data.",
+    "question": "Soft-delete guards when downstream references exist?",
+    "options": [
+      "Strict all resources",
+      "Medicine only",
+      "Always allow soft-delete"
+    ],
+    "decision": "Strict — block soft-delete when downstream refs exist (medicines, batches, children, junctions, etc.).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Medicine delete guard only",
+      "Always allow soft-delete"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 95,
+    "slug": "medicine-code-client-provided",
+    "title": "Client provides unique medicineCode",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Medicine identity code assignment.",
+    "question": "Medicine code on create?",
+    "options": [
+      "Client provides",
+      "Server auto-sequence",
+      "Optional auto when omitted"
+    ],
+    "decision": "Client provides `medicineCode` (validated unique).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Server auto-sequence",
+      "Optional auto when omitted"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 96,
+    "slug": "medicine-name-unique-per-manufacturer",
+    "title": "medicineName unique within manufacturerId",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Name collisions within a manufacturer's catalog.",
+    "question": "Medicine name uniqueness rule?",
+    "options": [
+      "Unique per manufacturerId",
+      "Globally unique name",
+      "Code unique only"
+    ],
+    "decision": "`medicineName` unique within `manufacturerId`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Globally unique medicineName",
+      "medicineCode unique only"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 97,
+    "slug": "medicine-category-flat-crud-no-tree",
+    "title": "MedicineCategory flat CRUD with circular-parent guard",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Category hierarchy without dedicated tree API.",
+    "question": "MedicineCategory hierarchy API?",
+    "options": [
+      "Flat CRUD + parentCategoryId",
+      "Flat CRUD + tree endpoint",
+      "Tree read-only"
+    ],
+    "decision": "Flat CRUD with `parentCategoryId` + circular-parent validation; no tree endpoint.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Flat CRUD + GET /tree",
+      "Tree read-only client-built only without validation"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 98,
+    "slug": "medicine-salt-schema-as-is-hard-delete",
+    "title": "MedicineSalt schema unchanged; hard-delete junction rows",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Prisma gap: no deletedAt on MedicineSalt.",
+    "question": "Handle MedicineSalt schema gap how?",
+    "options": [
+      "As-is hard-delete; auto-set medicineGenericId",
+      "Add soft-delete migration",
+      "Drop medicineGenericId"
+    ],
+    "decision": "No schema change — hard-delete junction rows; auto-set `medicineGenericId` from `SaltComposition.genericId` on create.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Add Prisma soft-delete migration",
+      "Drop medicineGenericId field"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 99,
+    "slug": "medicine-fix-all-reviewed-issues",
+    "title": "Medicine fix plan covers all reviewed issues",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Post-implementation review found bugs across priority levels.",
+    "question": "Which issues should the fix plan include?",
+    "options": [
+      "High + medium only",
+      "All reviewed issues",
+      "Bugs only skip seed cleanup"
+    ],
+    "decision": "Fix all reviewed issues (high, medium, and low).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "High + medium only",
+      "Bugs only skip seed cleanup"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 100,
+    "slug": "medicine-unittype-pack-seed-json-only",
+    "title": "UnitType PACK→PACKAGING in constants and seed JSON only",
+    "modules": [
+      "medicine"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "UnitType enum misaligned with domain doc.",
+    "question": "How to handle PACK → PACKAGING alignment?",
+    "options": [
+      "Seed JSON + constants only",
+      "Seed JSON + idempotent loader migration",
+      "Accept both values"
+    ],
+    "decision": "Update constants + seed JSON only (no load-masters migration; existing DBs update on `db:seed:fresh`).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Seed JSON + idempotent loader migration",
+      "Accept both PACK and PACKAGING"
+    ],
+    "source_doc": "16"
+  },
+  {
+    "id": 101,
+    "slug": "pricing-prescription-audit-single-delivery",
+    "title": "Pricing, Prescription, and Audit delivered together",
+    "modules": [
+      "pricing",
+      "prescription",
+      "audit"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Three related doc domains share permission and audit patterns.",
+    "question": "Delivery scope for these three doc domains?",
+    "options": [
+      "One plan all three",
+      "Phased separate plans",
+      "Pricing + Prescription only"
+    ],
+    "decision": "One plan — implement all three backend modules together.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Phased separate plans",
+      "Pricing + Prescription only defer Audit"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 102,
+    "slug": "ppa-backend-only-tests-deferred",
+    "title": "Pricing/Prescription/Audit backend-only; tests deferred",
+    "modules": [
+      "pricing",
+      "prescription",
+      "audit"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Match Medicine/Security delivery pattern.",
+    "question": "Implementation scope?",
+    "options": [
+      "Backend only",
+      "Backend + tests"
+    ],
+    "decision": "Backend only — APIs, permissions seed, cursor rules, AGENTS.md (no Angular UI, tests deferred).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Backend + unit/integration tests"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 103,
+    "slug": "pricelist-branch-scoped-with-org-wide",
+    "title": "PriceList branch-scoped list includes org-wide lists",
+    "modules": [
+      "pricing"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Some price lists apply org-wide (null branchId).",
+    "question": "PriceList branch scope for list API?",
+    "options": [
+      "Branch-scoped + org-wide null branchId",
+      "Strict branch only",
+      "Org-wide only"
+    ],
+    "decision": "Default JWT branchId + include org-wide lists (`branchId` null); optional `branchId` query override for admin.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Strict branch only",
+      "Org-wide only"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 104,
+    "slug": "pricelist-default-enforce-on-set",
+    "title": "Enforce single default PriceList per branch scope on set",
+    "modules": [
+      "pricing"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Multiple defaults cause ambiguous pricing.",
+    "question": "Default price list behavior?",
+    "options": [
+      "Clear other defaults when isDefault=true",
+      "Allow multiple defaults",
+      "Default via seed only"
+    ],
+    "decision": "When `isDefault=true`, clear other defaults for same branch (including null branch scope) in create/update.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Allow multiple defaults",
+      "Default via seed only"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 105,
+    "slug": "pricelist-item-nested-crud-replace",
+    "title": "PriceListItem nested CRUD + PUT replace",
+    "modules": [
+      "pricing"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Price lines are a collection under a list.",
+    "question": "PriceListItem API shape?",
+    "options": [
+      "Nested CRUD + replace",
+      "Nested CRUD only",
+      "Flat /price-list-items"
+    ],
+    "decision": "Nested `/price-lists/:priceListId/items` + `PUT .../replace`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Nested CRUD only",
+      "Flat top-level items endpoint"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 106,
+    "slug": "tax-discount-full-crud-fk-delete-guard",
+    "title": "Tax and DiscountRule full CRUD; block delete on FK refs",
+    "modules": [
+      "pricing"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Rate changes vs referential integrity.",
+    "question": "Tax/DiscountRule edit policy when used?",
+    "options": [
+      "Full CRUD block delete on FK",
+      "Strict block update when referenced",
+      "Soft-delete only"
+    ],
+    "decision": "Full CRUD — block delete only when FK references exist.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Strict block update/delete when referenced",
+      "Soft-deactivate only"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 107,
+    "slug": "prescription-workflow-routes",
+    "title": "Prescription lifecycle via workflow POST routes",
+    "modules": [
+      "prescription"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Prescription status transitions are workflow actions.",
+    "question": "Prescription lifecycle API shape?",
+    "options": [
+      "Workflow POST routes",
+      "PATCH status only",
+      "CRUD minimal no guards"
+    ],
+    "decision": "`POST activate`, `POST cancel`, `POST expire`; item CRUD only in `DRAFT`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Status transitions via PATCH only",
+      "CRUD without transition guards"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 108,
+    "slug": "prescription-number-client-provided",
+    "title": "Client provides unique prescriptionNumber",
+    "modules": [
+      "prescription"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Prescription document identity.",
+    "question": "Prescription number on create?",
+    "options": [
+      "Client provided",
+      "Server auto-sequence",
+      "Optional auto when omitted"
+    ],
+    "decision": "Client provides `prescriptionNumber` (unique).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Server auto-sequence",
+      "Optional auto when omitted"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 109,
+    "slug": "prescription-item-readonly-dispensed-fields",
+    "title": "PrescriptionItem dispensed fields read-only via API",
+    "modules": [
+      "prescription",
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Dispensing progress updated by sales later.",
+    "question": "PrescriptionItem API + dispensing fields?",
+    "options": [
+      "CRUD+replace; dispensed fields read-only",
+      "Editable dispensed fields",
+      "Items inline on header only"
+    ],
+    "decision": "Nested CRUD + replace; `dispensedQuantity`/`remainingQuantity`/item `status` read-only via API.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "API can patch dispensed fields",
+      "Items managed only via header body"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 110,
+    "slug": "sales-dispense-hook-out-of-scope",
+    "title": "Sales dispensing hook out of scope for prescription v1",
+    "modules": [
+      "prescription",
+      "sales"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Invoice post could update prescription progress.",
+    "question": "Sales invoice post → update prescription dispensing?",
+    "options": [
+      "Out of scope",
+      "In scope on SalesInvoice post"
+    ],
+    "decision": "Out of scope — prescription CRUD only; sales keeps FK validation only.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "In scope — update dispensedQuantity on SalesInvoice post"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 111,
+    "slug": "audit-read-apis-plus-changehistory-on-update",
+    "title": "Audit read APIs plus ChangeHistory on UPDATE",
+    "modules": [
+      "audit",
+      "pricing",
+      "prescription"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "ChangeHistory never written today.",
+    "question": "Audit module scope?",
+    "options": [
+      "Read-only APIs",
+      "Read APIs + ChangeHistory on UPDATE",
+      "Skip audit module"
+    ],
+    "decision": "Read APIs for AuditLog/ChangeHistory + extend AuditService to write ChangeHistory on UPDATE (pricing/prescription v1).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read-only APIs no ChangeHistory writes",
+      "Skip audit module defer"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 112,
+    "slug": "audit-default-branch-filter",
+    "title": "Audit lists default-filter by JWT branchId",
+    "modules": [
+      "audit"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Audit data is branch-sensitive.",
+    "question": "AuditLog / ChangeHistory list filtering?",
+    "options": [
+      "Default JWT branchId + optional filters",
+      "Org-wide read no default branch",
+      "Entity-scoped trail primary"
+    ],
+    "decision": "Default filter by JWT `branchId`; optional entityType/entityUuid/userId/date range/correlationId.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Org-wide read for authorized users",
+      "Entity-scoped trail as primary API only"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 113,
+    "slug": "ppa-full-permission-matrices",
+    "title": "Full PRICING + PRESCRIPTION + AUDIT permission matrices",
+    "modules": [
+      "pricing",
+      "prescription",
+      "audit",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Each resource needs granular guards.",
+    "question": "Permission seed model?",
+    "options": [
+      "Full three matrices",
+      "Pricing+Prescription full; Audit read-only",
+      "Coarse MANAGE per area"
+    ],
+    "decision": "Full `PRICING` + `PRESCRIPTION` + `AUDIT` resource matrices.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Pricing+Prescription full; Audit READ only",
+      "Coarse PRICING:MANAGE + PRESCRIPTION:MANAGE"
+    ],
+    "source_doc": "17"
+  },
+  {
+    "id": 114,
+    "slug": "scm-three-modules-single-delivery",
+    "title": "Configuration, Sync, and Masters delivered together",
+    "modules": [
+      "configuration",
+      "sync",
+      "masters",
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Org config, sync admin, and geo lookups share patterns.",
+    "question": "Delivery scope for these three doc domains?",
+    "options": [
+      "One plan all three",
+      "Phased separate",
+      "Configuration + Masters only"
+    ],
+    "decision": "One combined implementation for Configuration + Sync + Masters lookup modules.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Phased — Configuration first",
+      "Configuration + Masters only defer Sync"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 115,
+    "slug": "scm-backend-only-tests-deferred",
+    "title": "SCM modules backend-only; tests deferred",
+    "modules": [
+      "configuration",
+      "sync",
+      "masters",
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Match prior module delivery pattern.",
+    "question": "Implementation scope?",
+    "options": [
+      "Backend only",
+      "Backend + tests"
+    ],
+    "decision": "Backend only — APIs, permissions seed, cursor rules, AGENTS.md (no Angular UI, tests deferred).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Backend + unit/integration tests"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 116,
+    "slug": "extend-settings-module-appsetting-crud",
+    "title": "Extend SettingsModule with AppSetting create/get/delete",
+    "modules": [
+      "settings",
+      "configuration"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Settings today is list+update only.",
+    "question": "Relationship with existing SettingsModule?",
+    "options": [
+      "Extend SettingsModule with full AppSetting CRUD",
+      "New config module for all incl. AppSetting",
+      "Keep Settings list/update only"
+    ],
+    "decision": "Extend existing SettingsModule — add create/get/delete; keep `GET /settings` + `PUT /settings/:key`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "New configuration/ module for ALL incl. AppSetting",
+      "Keep Settings unchanged seed-only"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 117,
+    "slug": "configuration-module-org-tables",
+    "title": "New configuration/ module for Company, Branch, FY, sequences, printer, barcode",
+    "modules": [
+      "configuration"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Org and device config tables need admin APIs.",
+    "question": "Where do non-AppSetting config tables live?",
+    "options": [
+      "New configuration/ module",
+      "All in SettingsModule",
+      "Seed only"
+    ],
+    "decision": "New `configuration/` module for Company, Branch, FinancialYear, SequenceGenerator, PrinterConfiguration, BarcodeConfiguration.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "All config tables in SettingsModule",
+      "Seed only no HTTP"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 118,
+    "slug": "financial-year-crud-plus-close",
+    "title": "FinancialYear full CRUD plus POST close workflow",
+    "modules": [
+      "configuration",
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "FY must be closable by admin.",
+    "question": "FinancialYear admin API?",
+    "options": [
+      "CRUD + POST close",
+      "CRUD status via update only",
+      "Read + update seeded rows"
+    ],
+    "decision": "Full CRUD + `POST /financial-years/:id/close` (OPEN → CLOSED).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "CRUD without separate close endpoint",
+      "Read + update seeded rows only"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 119,
+    "slug": "sequence-generator-admin-crud-internal-next",
+    "title": "SequenceGenerator admin CRUD; allocation stays internal",
+    "modules": [
+      "configuration",
+      "sequence"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Admins configure sequences; runtime allocates numbers.",
+    "question": "SequenceGenerator HTTP API?",
+    "options": [
+      "Admin CRUD; next() internal",
+      "Read-only seed",
+      "CRUD + reset counter workflow"
+    ],
+    "decision": "Admin CRUD for sequence config; `SequenceGeneratorService.next()` stays internal.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read-only seed-managed",
+      "Admin CRUD + POST reset-counter"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 120,
+    "slug": "company-branch-full-crud-default-guards",
+    "title": "Company and Branch full CRUD with default/head-office guards",
+    "modules": [
+      "configuration"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Org structure must enforce single default company and head office.",
+    "question": "Company / Branch admin?",
+    "options": [
+      "Full CRUD with default guards",
+      "Branch CRUD; Company read-only",
+      "Read-only org seed"
+    ],
+    "decision": "Full CRUD for Company and Branch with `isDefault` / `isHeadOffice` single-flag enforcement.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Branch CRUD; Company read-only singleton",
+      "Read-only org via seed only"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 121,
+    "slug": "sync-read-retry-resolve-no-worker",
+    "title": "Sync admin: outbox read+retry, conflict resolve; no cloud worker",
+    "modules": [
+      "sync"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Outbox write exists; admin needs visibility and retry.",
+    "question": "Synchronization module HTTP scope?",
+    "options": [
+      "Read + retry + resolve; no worker",
+      "Read-only sync tables",
+      "Read + local /sync/run stub"
+    ],
+    "decision": "Outbox read + `POST :id/retry`; SyncLog read-only; SyncConflict read + `POST :id/resolve` — no cloud worker.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Read-only Outbox/SyncLog/SyncConflict",
+      "Read APIs + POST /sync/run local stub"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 122,
+    "slug": "geo-masters-flat-crud",
+    "title": "Geographic masters as flat CRUD per entity",
+    "modules": [
+      "masters"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Country→State→City→Area hierarchy needs admin APIs.",
+    "question": "Geographic masters API shape?",
+    "options": [
+      "Flat CRUD per entity with parent FK",
+      "Nested routes only",
+      "Read-only lookup"
+    ],
+    "decision": "Flat CRUD per entity (`/countries`, `/states`, `/cities`, `/areas`) with parent FK + circular guards.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Nested routes only",
+      "Read-only seeded lookup"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 123,
+    "slug": "scm-strict-soft-delete-guards",
+    "title": "Strict soft-delete reference checks for config and masters",
+    "modules": [
+      "configuration",
+      "masters"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Deleting referenced geo/org rows breaks FK integrity.",
+    "question": "Soft-delete guards?",
+    "options": [
+      "Strict reference checks",
+      "Geo soft-delete freely",
+      "Always allow soft-delete"
+    ],
+    "decision": "Strict — block soft-delete when referenced (PartyAddress, Branch, transactions, child geo rows, etc.).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Strict for Company/Branch/FY; geo soft-delete freely",
+      "Always allow soft-delete"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 124,
+    "slug": "scm-changehistory-on-update-v1",
+    "title": "ChangeHistory on UPDATE for configuration and masters v1",
+    "modules": [
+      "configuration",
+      "masters",
+      "audit"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Field-level audit for config changes.",
+    "question": "ChangeHistory integration for configuration and masters?",
+    "options": [
+      "ChangeHistory on UPDATE",
+      "AuditLog only",
+      "ChangeHistory on all mutations"
+    ],
+    "decision": "Emit ChangeHistory on UPDATE for configuration + masters modules (v1).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "AuditLog only no ChangeHistory",
+      "ChangeHistory on all CREATE/UPDATE/DELETE"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 125,
+    "slug": "scm-full-permission-matrix-extend-settings-sync",
+    "title": "Full CONFIGURATION + SYNC + LOOKUP matrix; keep SETTINGS_* and SYNC_RUN",
+    "modules": [
+      "configuration",
+      "sync",
+      "masters",
+      "security"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Existing SETTINGS_READ/UPDATE and SYNC_RUN must remain.",
+    "question": "Permission seed model?",
+    "options": [
+      "Full resource matrices",
+      "Extend SETTINGS/SYNC_RUN + matrix for new resources",
+      "Coarse MANAGE per area"
+    ],
+    "decision": "Full CONFIGURATION + SYNC + LOOKUP resource matrices; keep existing `SETTINGS_READ/UPDATE` + `SYNC_RUN`.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Extend SETTINGS/SYNC_RUN only without full matrix",
+      "Coarse CONFIGURATION:MANAGE + SYNC:ADMIN"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 126,
+    "slug": "scm-fix-all-review-items",
+    "title": "SCM fix plan includes all review items",
+    "modules": [
+      "configuration",
+      "sync",
+      "masters",
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Post-implementation review found high through low issues.",
+    "question": "Which issues should the fix plan include?",
+    "options": [
+      "All review items",
+      "High + medium only"
+    ],
+    "decision": "Fix all issues from the review (high + medium + low/maintainability).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "High + medium only — defer renames and company scoping"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 127,
+    "slug": "scm-area-delete-guard-skip-schema-gap",
+    "title": "Skip Area delete guard — PartyAddress has no areaId",
+    "modules": [
+      "masters"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Schema lacks areaId on PartyAddress.",
+    "question": "Area delete guard handling?",
+    "options": [
+      "Skip — document gap",
+      "Weak city-level guard",
+      "Plan schema add areaId"
+    ],
+    "decision": "Skip Area delete guard — document schema gap (`PartyAddress` has no `areaId`).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Weak guard via cityId match",
+      "Document only; plan follow-up schema change"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 128,
+    "slug": "scm-company-tenant-scoped-api",
+    "title": "Company API tenant-scoped to JWT companyId",
+    "modules": [
+      "configuration"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Company list was org-global inconsistent with Branch pattern.",
+    "question": "Company API tenant scoping?",
+    "options": [
+      "Scope to JWT companyId",
+      "Keep org-global admin"
+    ],
+    "decision": "Scope Company list/get/update/delete to JWT `companyId` (match Branch/FY pattern).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Keep Company org-global single-tenant admin"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 129,
+    "slug": "scm-sequence-delete-block-when-active",
+    "title": "Block SequenceGenerator DELETE when isActive=true",
+    "modules": [
+      "configuration",
+      "sequence"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Hard delete of active sequences is dangerous.",
+    "question": "SequenceGenerator hard delete risk?",
+    "options": [
+      "Block when isActive=true",
+      "Keep hard delete as-is",
+      "Remove DELETE endpoint"
+    ],
+    "decision": "Block hard-delete when `isActive=true` — admin must deactivate first.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Keep hard delete document danger only",
+      "Remove DELETE — isActive=false only"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 130,
+    "slug": "settings-put-required-version",
+    "title": "Settings PUT requires version in body (breaking change)",
+    "modules": [
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Concurrent settings updates need optimistic locking.",
+    "question": "Settings PUT optimistic locking?",
+    "options": [
+      "Required version in body",
+      "Optional version",
+      "No version"
+    ],
+    "decision": "Add **required** `version` in `PUT /settings/:key` body (breaking API change).",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Optional version — enforce when provided",
+      "No version field"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 131,
+    "slug": "fy-iscurrent-branch-scoped-intentional",
+    "title": "FinancialYear isCurrent remains branch-scoped",
+    "modules": [
+      "configuration",
+      "finance"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Review questioned isCurrent exclusivity across branches.",
+    "question": "FinancialYear isCurrent exclusivity?",
+    "options": [
+      "Keep branch-scoped isCurrent",
+      "Enforce company-wide exclusive isCurrent"
+    ],
+    "decision": "Keep branch-scoped `isCurrent` behavior — document as intentional.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "Setting isCurrent clears ALL current FYs for company"
+    ],
+    "source_doc": "18"
+  },
+  {
+    "id": 132,
+    "slug": "scm-simplification-p1-p2-p3",
+    "title": "SCM simplification covers P1+P2+P3 cleanup",
+    "modules": [
+      "configuration",
+      "sync",
+      "masters",
+      "settings"
+    ],
+    "confidence": "Explicit",
+    "status": "Active",
+    "problem": "Optional post-fix structural cleanup.",
+    "question": "How much should simplification plan cover?",
+    "options": [
+      "P1 only",
+      "P1 + P2",
+      "Everything including P3"
+    ],
+    "decision": "P1 + P2 + P3 — lint fix, branch-scope util move, validateBranchId dedupe, settings mapper ISO dates, early-foundations API table, settings agent docs, optimisticUpdate in settings.service.",
+    "rationale": "not recorded",
+    "rejected_alternatives": [
+      "P1 only — minimal highest value",
+      "P1 + P2 without P3 optimisticUpdate"
+    ],
+    "source_doc": "18"
+  }
+]

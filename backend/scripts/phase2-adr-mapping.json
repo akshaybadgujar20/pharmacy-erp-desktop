@@ -1,0 +1,1814 @@
+{
+  "mapping": [
+    {
+      "filed_id": 139,
+      "draft_id": 21,
+      "slug": "offline-first-local-source-of-truth",
+      "title": "Local database is source of truth during daily operation",
+      "filename": "ADR-139-offline-first-local-source-of-truth.md"
+    },
+    {
+      "filed_id": 140,
+      "draft_id": 22,
+      "slug": "delta-sync-only",
+      "title": "Delta sync — send only changed records",
+      "filename": "ADR-140-delta-sync-only.md"
+    },
+    {
+      "filed_id": 141,
+      "draft_id": 23,
+      "slug": "outbox-background-sync-triggers",
+      "title": "Outbox pattern with background sync triggers",
+      "filename": "ADR-141-outbox-background-sync-triggers.md"
+    },
+    {
+      "filed_id": 142,
+      "draft_id": 24,
+      "slug": "request-idempotency-uuid",
+      "title": "Per-transaction UUID for idempotent sync requests",
+      "filename": "ADR-142-request-idempotency-uuid.md"
+    },
+    {
+      "filed_id": 143,
+      "draft_id": 25,
+      "slug": "entity-specific-conflict-resolution",
+      "title": "Entity-specific conflict resolution rules",
+      "filename": "ADR-143-entity-specific-conflict-resolution.md"
+    },
+    {
+      "filed_id": 144,
+      "draft_id": 26,
+      "slug": "angular-feature-modules-no-component-logic",
+      "title": "Angular feature modules; no business logic in components",
+      "filename": "ADR-144-angular-feature-modules-no-component-logic.md"
+    },
+    {
+      "filed_id": 145,
+      "draft_id": 27,
+      "slug": "electron-context-isolation-preload",
+      "title": "Electron context isolation with preload contextBridge",
+      "filename": "ADR-145-electron-context-isolation-preload.md"
+    },
+    {
+      "filed_id": 146,
+      "draft_id": 28,
+      "slug": "nestjs-thin-controller-rich-service",
+      "title": "NestJS thin controllers, rich services, validated DTOs",
+      "filename": "ADR-146-nestjs-thin-controller-rich-service.md"
+    },
+    {
+      "filed_id": 147,
+      "draft_id": 29,
+      "slug": "rest-json-envelope-binary-exports",
+      "title": "REST with JSON envelope; binary streams for exports",
+      "filename": "ADR-147-rest-json-envelope-binary-exports.md"
+    },
+    {
+      "filed_id": 148,
+      "draft_id": 30,
+      "slug": "feature-module-anatomy-template",
+      "title": "Standard feature module folder anatomy",
+      "filename": "ADR-148-feature-module-anatomy-template.md"
+    },
+    {
+      "filed_id": 149,
+      "draft_id": 31,
+      "slug": "reads-prisma-writes-unit-of-work",
+      "title": "Reads via PrismaService; writes via UnitOfWorkService",
+      "filename": "ADR-149-reads-prisma-writes-unit-of-work.md"
+    },
+    {
+      "filed_id": 150,
+      "draft_id": 32,
+      "slug": "mutation-audit-outbox-same-transaction",
+      "title": "Audit and outbox in same transaction as mutation",
+      "filename": "ADR-150-mutation-audit-outbox-same-transaction.md"
+    },
+    {
+      "filed_id": 151,
+      "draft_id": 33,
+      "slug": "reports-via-registry-not-controller",
+      "title": "Read-only reports register into ReportRegistryService",
+      "filename": "ADR-151-reports-via-registry-not-controller.md"
+    },
+    {
+      "filed_id": 152,
+      "draft_id": 34,
+      "slug": "additive-only-backend-extensions",
+      "title": "Additive-only change policy for backend extensions",
+      "filename": "ADR-152-additive-only-backend-extensions.md"
+    },
+    {
+      "filed_id": 153,
+      "draft_id": 35,
+      "slug": "central-report-registry-inverted-dependency",
+      "title": "Central reporting core with domain provider registration",
+      "filename": "ADR-153-central-report-registry-inverted-dependency.md"
+    },
+    {
+      "filed_id": 154,
+      "draft_id": 36,
+      "slug": "reports-read-only-no-uow-outbox",
+      "title": "Reports are read-only — no UnitOfWork, Outbox, or Audit",
+      "filename": "ADR-154-reports-read-only-no-uow-outbox.md"
+    },
+    {
+      "filed_id": 155,
+      "draft_id": 37,
+      "slug": "two-layer-report-permissions",
+      "title": "Coarse REPORT_VIEW plus per-report permission",
+      "filename": "ADR-155-two-layer-report-permissions.md"
+    },
+    {
+      "filed_id": 156,
+      "draft_id": 38,
+      "slug": "report-export-formats-csv-xlsx-pdf",
+      "title": "Report exports: JSON, CSV, Excel, PDF",
+      "filename": "ADR-156-report-export-formats-csv-xlsx-pdf.md"
+    },
+    {
+      "filed_id": 157,
+      "draft_id": 39,
+      "slug": "report-file-export-bypass-interceptor",
+      "title": "File exports bypass ResponseInterceptor via @Res",
+      "filename": "ADR-157-report-file-export-bypass-interceptor.md"
+    },
+    {
+      "filed_id": 158,
+      "draft_id": 40,
+      "slug": "namespaced-report-ids",
+      "title": "Namespaced report IDs (domain.report-name)",
+      "filename": "ADR-158-namespaced-report-ids.md"
+    },
+    {
+      "filed_id": 159,
+      "draft_id": 41,
+      "slug": "party-reports-provider-first",
+      "title": "Party reports provider ships first under reporting/providers",
+      "filename": "ADR-159-party-reports-provider-first.md"
+    },
+    {
+      "filed_id": 160,
+      "draft_id": 42,
+      "slug": "report-export-libraries-exceljs-pdfmake",
+      "title": "Export libraries: exceljs and pdfmake",
+      "filename": "ADR-160-report-export-libraries-exceljs-pdfmake.md"
+    },
+    {
+      "filed_id": 161,
+      "draft_id": 43,
+      "slug": "inventory-nested-item-controllers",
+      "title": "Inventory documents use nested item controllers",
+      "filename": "ADR-161-inventory-nested-item-controllers.md"
+    },
+    {
+      "filed_id": 162,
+      "draft_id": 44,
+      "slug": "inventory-header-create-without-items",
+      "title": "Inventory headers created without embedded items[]",
+      "filename": "ADR-162-inventory-header-create-without-items.md"
+    },
+    {
+      "filed_id": 163,
+      "draft_id": 45,
+      "slug": "stock-movement-read-only-http",
+      "title": "StockMovement HTTP API is read-only",
+      "filename": "ADR-163-stock-movement-read-only-http.md"
+    },
+    {
+      "filed_id": 164,
+      "draft_id": 46,
+      "slug": "batch-org-global-stock-branch-scoped",
+      "title": "Batch org-global; Stock and documents branch-scoped",
+      "filename": "ADR-164-batch-org-global-stock-branch-scoped.md"
+    },
+    {
+      "filed_id": 165,
+      "draft_id": null,
+      "slug": "inventory-stock-read-only-dtos",
+      "title": "Stock and StockMovement read-only at API layer",
+      "filename": "ADR-165-inventory-stock-read-only-dtos.md"
+    },
+    {
+      "filed_id": 166,
+      "draft_id": null,
+      "slug": "inventory-separate-child-routes-for-items",
+      "title": "Inventory document items via separate child routes",
+      "filename": "ADR-166-inventory-separate-child-routes-for-items.md"
+    },
+    {
+      "filed_id": 167,
+      "draft_id": null,
+      "slug": "inventory-crud-plus-workflow-endpoints",
+      "title": "Inventory CRUD plus workflow endpoints in v1",
+      "filename": "ADR-167-inventory-crud-plus-workflow-endpoints.md"
+    },
+    {
+      "filed_id": 168,
+      "draft_id": null,
+      "slug": "inventory-batch-org-global-stock-branch-scoped",
+      "title": "Batch org-global; Stock and documents branch-scoped",
+      "filename": "ADR-168-inventory-batch-org-global-stock-branch-scoped.md"
+    },
+    {
+      "filed_id": 169,
+      "draft_id": null,
+      "slug": "inventory-stock-movement-immutable-read-only-http",
+      "title": "StockMovement HTTP API is read-only",
+      "filename": "ADR-169-inventory-stock-movement-immutable-read-only-http.md"
+    },
+    {
+      "filed_id": 170,
+      "draft_id": null,
+      "slug": "inventory-stock-take-reconcile-creates-adjustment",
+      "title": "Stock-take reconcile creates adjustment and ledger postings",
+      "filename": "ADR-170-inventory-stock-take-reconcile-creates-adjustment.md"
+    },
+    {
+      "filed_id": 171,
+      "draft_id": null,
+      "slug": "inventory-module-memory-doc-mdc-pattern",
+      "title": "Module memory doc plus scoped mdc rule for agent discovery",
+      "filename": "ADR-171-inventory-module-memory-doc-mdc-pattern.md"
+    },
+    {
+      "filed_id": 172,
+      "draft_id": 51,
+      "slug": "purchase-full-permission-matrix",
+      "title": "Purchase full INVENTORY-style permission matrix",
+      "filename": "ADR-172-purchase-full-permission-matrix.md"
+    },
+    {
+      "filed_id": 173,
+      "draft_id": 54,
+      "slug": "purchase-tests-deferred-v1",
+      "title": "Purchase module tests deferred in v1",
+      "filename": "ADR-173-purchase-tests-deferred-v1.md"
+    },
+    {
+      "filed_id": 174,
+      "draft_id": 57,
+      "slug": "finance-full-ledger-posting-service",
+      "title": "Full LedgerPostingService with balance validation and reversal",
+      "filename": "ADR-174-finance-full-ledger-posting-service.md"
+    },
+    {
+      "filed_id": 175,
+      "draft_id": 58,
+      "slug": "finance-ledger-entry-readonly-api",
+      "title": "LedgerEntry HTTP API read-only",
+      "filename": "ADR-175-finance-ledger-entry-readonly-api.md"
+    },
+    {
+      "filed_id": 176,
+      "draft_id": 59,
+      "slug": "finance-ledger-coa-full-crud",
+      "title": "Ledger COA full CRUD with hierarchy guards",
+      "filename": "ADR-176-finance-ledger-coa-full-crud.md"
+    },
+    {
+      "filed_id": 177,
+      "draft_id": 60,
+      "slug": "finance-strict-financial-year-validation",
+      "title": "Strict financial year validation on posts",
+      "filename": "ADR-177-finance-strict-financial-year-validation.md"
+    },
+    {
+      "filed_id": 178,
+      "draft_id": 61,
+      "slug": "finance-global-payment-receipt-numbers",
+      "title": "Payment/Receipt numbers globally unique per Prisma schema",
+      "filename": "ADR-178-finance-global-payment-receipt-numbers.md"
+    },
+    {
+      "filed_id": 179,
+      "draft_id": 62,
+      "slug": "finance-expense-table-out-of-scope",
+      "title": "Expense Prisma model out of scope; use Payment EXPENSE type",
+      "filename": "ADR-179-finance-expense-table-out-of-scope.md"
+    },
+    {
+      "filed_id": 180,
+      "draft_id": 63,
+      "slug": "finance-tests-deferred-v1",
+      "title": "Finance module tests deferred in v1",
+      "filename": "ADR-180-finance-tests-deferred-v1.md"
+    },
+    {
+      "filed_id": 181,
+      "draft_id": 66,
+      "slug": "finance-reject-unsupported-payment-type",
+      "title": "Reject unsupported PaymentType at complete",
+      "filename": "ADR-181-finance-reject-unsupported-payment-type.md"
+    },
+    {
+      "filed_id": 182,
+      "draft_id": 67,
+      "slug": "finance-running-balance-best-effort",
+      "title": "Ledger running balance left best-effort in bug-fix pass",
+      "filename": "ADR-182-finance-running-balance-best-effort.md"
+    },
+    {
+      "filed_id": 183,
+      "draft_id": null,
+      "slug": "finance-simplification-scope-unresolved",
+      "title": "Finance simplification refactor scope unresolved",
+      "filename": "ADR-183-finance-simplification-scope-unresolved.md"
+    },
+    {
+      "filed_id": 184,
+      "draft_id": 70,
+      "slug": "sales-payment-nested-separate-from-receipt",
+      "title": "SalesPayment nested API; Finance Receipt stays separate",
+      "filename": "ADR-184-sales-payment-nested-separate-from-receipt.md"
+    },
+    {
+      "filed_id": 185,
+      "draft_id": 71,
+      "slug": "sales-pricelist-auto-resolve-at-post",
+      "title": "Auto-resolve selling price from PriceList at post",
+      "filename": "ADR-185-sales-pricelist-auto-resolve-at-post.md"
+    },
+    {
+      "filed_id": 186,
+      "draft_id": 73,
+      "slug": "sales-prescription-fk-only-v1",
+      "title": "Prescription FK validation only in sales v1",
+      "filename": "ADR-186-sales-prescription-fk-only-v1.md"
+    },
+    {
+      "filed_id": 187,
+      "draft_id": 74,
+      "slug": "sales-return-restock-only-v1",
+      "title": "Sales returns RESTOCK disposition only in v1",
+      "filename": "ADR-187-sales-return-restock-only-v1.md"
+    },
+    {
+      "filed_id": 188,
+      "draft_id": 75,
+      "slug": "sales-posted-cancel-with-reversal-v1",
+      "title": "Posted sales invoice cancel with stock and ledger reversal (initial v1)",
+      "filename": "ADR-188-sales-posted-cancel-with-reversal-v1.md"
+    },
+    {
+      "filed_id": 189,
+      "draft_id": 77,
+      "slug": "sales-full-permission-matrix",
+      "title": "Sales full permission matrix",
+      "filename": "ADR-189-sales-full-permission-matrix.md"
+    },
+    {
+      "filed_id": 190,
+      "draft_id": 78,
+      "slug": "sales-tests-deferred-v1",
+      "title": "Sales module tests deferred in v1",
+      "filename": "ADR-190-sales-tests-deferred-v1.md"
+    },
+    {
+      "filed_id": 191,
+      "draft_id": 79,
+      "slug": "security-all-six-tables-plus-userbranch",
+      "title": "Security admin: all six doc tables plus UserBranch",
+      "filename": "ADR-191-security-all-six-tables-plus-userbranch.md"
+    },
+    {
+      "filed_id": 192,
+      "draft_id": 81,
+      "slug": "security-full-password-flows",
+      "title": "Admin reset, self change-password, and unlock flows",
+      "filename": "ADR-192-security-full-password-flows.md"
+    },
+    {
+      "filed_id": 193,
+      "draft_id": 82,
+      "slug": "security-permission-full-crud",
+      "title": "Permission full CRUD including system permissions",
+      "filename": "ADR-193-security-permission-full-crud.md"
+    },
+    {
+      "filed_id": 194,
+      "draft_id": 83,
+      "slug": "security-junction-nested-bulk-replace",
+      "title": "Junction APIs nested with bulk replace",
+      "filename": "ADR-194-security-junction-nested-bulk-replace.md"
+    },
+    {
+      "filed_id": 195,
+      "draft_id": 84,
+      "slug": "security-session-force-logout",
+      "title": "UserSession read and admin force-logout",
+      "filename": "ADR-195-security-session-force-logout.md"
+    },
+    {
+      "filed_id": 196,
+      "draft_id": 85,
+      "slug": "security-employee-fk-validation-only",
+      "title": "Employee link FK validation only",
+      "filename": "ADR-196-security-employee-fk-validation-only.md"
+    },
+    {
+      "filed_id": 197,
+      "draft_id": 87,
+      "slug": "security-full-permission-matrix-seed",
+      "title": "Full SECURITY:RESOURCE:ACTION permission matrix",
+      "filename": "ADR-197-security-full-permission-matrix-seed.md"
+    },
+    {
+      "filed_id": 198,
+      "draft_id": 88,
+      "slug": "security-tests-deferred-v1",
+      "title": "Security module tests deferred in v1",
+      "filename": "ADR-198-security-tests-deferred-v1.md"
+    },
+    {
+      "filed_id": 199,
+      "draft_id": null,
+      "slug": "auth-change-required-password-public-endpoint",
+      "title": "Public change-required-password endpoint for mustChangePassword users",
+      "filename": "ADR-199-auth-change-required-password-public-endpoint.md"
+    },
+    {
+      "filed_id": 200,
+      "draft_id": 90,
+      "slug": "medicine-full-master-permission-matrix",
+      "title": "Full MASTER:RESOURCE:ACTION permission matrix",
+      "filename": "ADR-200-medicine-full-master-permission-matrix.md"
+    },
+    {
+      "filed_id": 201,
+      "draft_id": 91,
+      "slug": "medicine-manufacturer-party-fk-only",
+      "title": "Manufacturer requires existing Party (FK validation only)",
+      "filename": "ADR-201-medicine-manufacturer-party-fk-only.md"
+    },
+    {
+      "filed_id": 202,
+      "draft_id": 92,
+      "slug": "medicine-salt-nested-crud-replace",
+      "title": "MedicineSalt nested CRUD + PUT replace",
+      "filename": "ADR-202-medicine-salt-nested-crud-replace.md"
+    },
+    {
+      "filed_id": 203,
+      "draft_id": 93,
+      "slug": "medicine-system-rows-fk-delete-guard",
+      "title": "System schedule/UOM rows: full CRUD; block delete on FK refs only",
+      "filename": "ADR-203-medicine-system-rows-fk-delete-guard.md"
+    },
+    {
+      "filed_id": 204,
+      "draft_id": 94,
+      "slug": "medicine-strict-delete-guards",
+      "title": "Strict soft-delete guards on medicine masters",
+      "filename": "ADR-204-medicine-strict-delete-guards.md"
+    },
+    {
+      "filed_id": 205,
+      "draft_id": 95,
+      "slug": "medicine-code-client-provided",
+      "title": "Client provides unique medicineCode",
+      "filename": "ADR-205-medicine-code-client-provided.md"
+    },
+    {
+      "filed_id": 206,
+      "draft_id": 96,
+      "slug": "medicine-name-unique-per-manufacturer",
+      "title": "medicineName unique within manufacturerId",
+      "filename": "ADR-206-medicine-name-unique-per-manufacturer.md"
+    },
+    {
+      "filed_id": 207,
+      "draft_id": 97,
+      "slug": "medicine-category-flat-crud-no-tree",
+      "title": "MedicineCategory flat CRUD with circular-parent guard",
+      "filename": "ADR-207-medicine-category-flat-crud-no-tree.md"
+    },
+    {
+      "filed_id": 208,
+      "draft_id": 98,
+      "slug": "medicine-salt-schema-as-is-hard-delete",
+      "title": "MedicineSalt schema unchanged; hard-delete junction rows",
+      "filename": "ADR-208-medicine-salt-schema-as-is-hard-delete.md"
+    },
+    {
+      "filed_id": 209,
+      "draft_id": 99,
+      "slug": "medicine-fix-all-reviewed-issues",
+      "title": "Medicine fix plan covers all reviewed issues",
+      "filename": "ADR-209-medicine-fix-all-reviewed-issues.md"
+    },
+    {
+      "filed_id": 210,
+      "draft_id": 100,
+      "slug": "medicine-unittype-pack-seed-json-only",
+      "title": "UnitType PACK→PACKAGING in constants and seed JSON only",
+      "filename": "ADR-210-medicine-unittype-pack-seed-json-only.md"
+    },
+    {
+      "filed_id": 211,
+      "draft_id": 102,
+      "slug": "ppa-backend-only-tests-deferred",
+      "title": "Pricing/Prescription/Audit backend-only; tests deferred",
+      "filename": "ADR-211-ppa-backend-only-tests-deferred.md"
+    },
+    {
+      "filed_id": 212,
+      "draft_id": 103,
+      "slug": "pricelist-branch-scoped-with-org-wide",
+      "title": "PriceList branch-scoped list includes org-wide lists",
+      "filename": "ADR-212-pricelist-branch-scoped-with-org-wide.md"
+    },
+    {
+      "filed_id": 213,
+      "draft_id": 104,
+      "slug": "pricelist-default-enforce-on-set",
+      "title": "Enforce single default PriceList per branch scope on set",
+      "filename": "ADR-213-pricelist-default-enforce-on-set.md"
+    },
+    {
+      "filed_id": 214,
+      "draft_id": 105,
+      "slug": "pricelist-item-nested-crud-replace",
+      "title": "PriceListItem nested CRUD + PUT replace",
+      "filename": "ADR-214-pricelist-item-nested-crud-replace.md"
+    },
+    {
+      "filed_id": 215,
+      "draft_id": 106,
+      "slug": "tax-discount-full-crud-fk-delete-guard",
+      "title": "Tax and DiscountRule full CRUD; block delete on FK refs",
+      "filename": "ADR-215-tax-discount-full-crud-fk-delete-guard.md"
+    },
+    {
+      "filed_id": 216,
+      "draft_id": 107,
+      "slug": "prescription-workflow-routes",
+      "title": "Prescription lifecycle via workflow POST routes",
+      "filename": "ADR-216-prescription-workflow-routes.md"
+    },
+    {
+      "filed_id": 217,
+      "draft_id": 108,
+      "slug": "prescription-number-client-provided",
+      "title": "Client provides unique prescriptionNumber",
+      "filename": "ADR-217-prescription-number-client-provided.md"
+    },
+    {
+      "filed_id": 218,
+      "draft_id": 109,
+      "slug": "prescription-item-readonly-dispensed-fields",
+      "title": "PrescriptionItem dispensed fields read-only via API",
+      "filename": "ADR-218-prescription-item-readonly-dispensed-fields.md"
+    },
+    {
+      "filed_id": 219,
+      "draft_id": 110,
+      "slug": "sales-dispense-hook-out-of-scope",
+      "title": "Sales dispensing hook out of scope for prescription v1",
+      "filename": "ADR-219-sales-dispense-hook-out-of-scope.md"
+    },
+    {
+      "filed_id": 220,
+      "draft_id": 111,
+      "slug": "audit-read-apis-plus-changehistory-on-update",
+      "title": "Audit read APIs plus ChangeHistory on UPDATE",
+      "filename": "ADR-220-audit-read-apis-plus-changehistory-on-update.md"
+    },
+    {
+      "filed_id": 221,
+      "draft_id": 112,
+      "slug": "audit-default-branch-filter",
+      "title": "Audit lists default-filter by JWT branchId",
+      "filename": "ADR-221-audit-default-branch-filter.md"
+    },
+    {
+      "filed_id": 222,
+      "draft_id": 113,
+      "slug": "ppa-full-permission-matrices",
+      "title": "Full PRICING + PRESCRIPTION + AUDIT permission matrices",
+      "filename": "ADR-222-ppa-full-permission-matrices.md"
+    },
+    {
+      "filed_id": 223,
+      "draft_id": null,
+      "slug": "ppa-fix-critical-medium-scope",
+      "title": "PPA fix plan covers critical and medium review items",
+      "filename": "ADR-223-ppa-fix-critical-medium-scope.md"
+    },
+    {
+      "filed_id": 224,
+      "draft_id": null,
+      "slug": "ppa-simplification-standard-scope",
+      "title": "PPA simplification standard scope recommended",
+      "filename": "ADR-224-ppa-simplification-standard-scope.md"
+    },
+    {
+      "filed_id": 225,
+      "draft_id": 115,
+      "slug": "scm-backend-only-tests-deferred",
+      "title": "SCM modules backend-only; tests deferred",
+      "filename": "ADR-225-scm-backend-only-tests-deferred.md"
+    },
+    {
+      "filed_id": 226,
+      "draft_id": 116,
+      "slug": "extend-settings-module-appsetting-crud",
+      "title": "Extend SettingsModule with AppSetting create/get/delete",
+      "filename": "ADR-226-extend-settings-module-appsetting-crud.md"
+    },
+    {
+      "filed_id": 227,
+      "draft_id": 117,
+      "slug": "configuration-module-org-tables",
+      "title": "New configuration/ module for Company, Branch, FY, sequences, printer, barcode",
+      "filename": "ADR-227-configuration-module-org-tables.md"
+    },
+    {
+      "filed_id": 228,
+      "draft_id": 118,
+      "slug": "financial-year-crud-plus-close",
+      "title": "FinancialYear full CRUD plus POST close workflow",
+      "filename": "ADR-228-financial-year-crud-plus-close.md"
+    },
+    {
+      "filed_id": 229,
+      "draft_id": 119,
+      "slug": "sequence-generator-admin-crud-internal-next",
+      "title": "SequenceGenerator admin CRUD; allocation stays internal",
+      "filename": "ADR-229-sequence-generator-admin-crud-internal-next.md"
+    },
+    {
+      "filed_id": 230,
+      "draft_id": 120,
+      "slug": "company-branch-full-crud-default-guards",
+      "title": "Company and Branch full CRUD with default/head-office guards",
+      "filename": "ADR-230-company-branch-full-crud-default-guards.md"
+    },
+    {
+      "filed_id": 231,
+      "draft_id": 121,
+      "slug": "sync-read-retry-resolve-no-worker",
+      "title": "Sync admin: outbox read+retry, conflict resolve; no cloud worker",
+      "filename": "ADR-231-sync-read-retry-resolve-no-worker.md"
+    },
+    {
+      "filed_id": 232,
+      "draft_id": 122,
+      "slug": "geo-masters-flat-crud",
+      "title": "Geographic masters as flat CRUD per entity",
+      "filename": "ADR-232-geo-masters-flat-crud.md"
+    },
+    {
+      "filed_id": 233,
+      "draft_id": 123,
+      "slug": "scm-strict-soft-delete-guards",
+      "title": "Strict soft-delete reference checks for config and masters",
+      "filename": "ADR-233-scm-strict-soft-delete-guards.md"
+    },
+    {
+      "filed_id": 234,
+      "draft_id": 124,
+      "slug": "scm-changehistory-on-update-v1",
+      "title": "ChangeHistory on UPDATE for configuration and masters v1",
+      "filename": "ADR-234-scm-changehistory-on-update-v1.md"
+    },
+    {
+      "filed_id": 235,
+      "draft_id": 125,
+      "slug": "scm-full-permission-matrix-extend-settings-sync",
+      "title": "Full CONFIGURATION + SYNC + LOOKUP matrix; keep SETTINGS_* and SYNC_RUN",
+      "filename": "ADR-235-scm-full-permission-matrix-extend-settings-sync.md"
+    },
+    {
+      "filed_id": 236,
+      "draft_id": 126,
+      "slug": "scm-fix-all-review-items",
+      "title": "SCM fix plan includes all review items",
+      "filename": "ADR-236-scm-fix-all-review-items.md"
+    },
+    {
+      "filed_id": 237,
+      "draft_id": 128,
+      "slug": "scm-company-tenant-scoped-api",
+      "title": "Company API tenant-scoped to JWT companyId",
+      "filename": "ADR-237-scm-company-tenant-scoped-api.md"
+    },
+    {
+      "filed_id": 238,
+      "draft_id": 129,
+      "slug": "scm-sequence-delete-block-when-active",
+      "title": "Block SequenceGenerator DELETE when isActive=true",
+      "filename": "ADR-238-scm-sequence-delete-block-when-active.md"
+    },
+    {
+      "filed_id": 239,
+      "draft_id": 131,
+      "slug": "fy-iscurrent-branch-scoped-intentional",
+      "title": "FinancialYear isCurrent remains branch-scoped",
+      "filename": "ADR-239-fy-iscurrent-branch-scoped-intentional.md"
+    },
+    {
+      "filed_id": 240,
+      "draft_id": 132,
+      "slug": "scm-simplification-p1-p2-p3",
+      "title": "SCM simplification covers P1+P2+P3 cleanup",
+      "filename": "ADR-240-scm-simplification-p1-p2-p3.md"
+    },
+    {
+      "filed_id": 241,
+      "draft_id": null,
+      "slug": "architecture-docs-consolidation-structure",
+      "title": "Architecture docs consolidated under pharmacy_erp_architecture_docs",
+      "filename": "ADR-241-architecture-docs-consolidation-structure.md"
+    },
+    {
+      "filed_id": 242,
+      "draft_id": null,
+      "slug": "backend-scoped-mdc-module-rules",
+      "title": "Per-module mdc cursor rules point to memory docs",
+      "filename": "ADR-242-backend-scoped-mdc-module-rules.md"
+    },
+    {
+      "filed_id": 243,
+      "draft_id": null,
+      "slug": "common-module-shared-utilities",
+      "title": "Shared cross-module utilities in common/ not feature modules",
+      "filename": "ADR-243-common-module-shared-utilities.md"
+    },
+    {
+      "filed_id": 244,
+      "draft_id": null,
+      "slug": "purchase-po-invoice-no-stock-mutation",
+      "title": "Purchase Order and Invoice do not change stock",
+      "filename": "ADR-244-purchase-po-invoice-no-stock-mutation.md"
+    },
+    {
+      "filed_id": 245,
+      "draft_id": null,
+      "slug": "finance-ledger-balance-derived-not-stored",
+      "title": "Ledger balance derived from entries, never stored",
+      "filename": "ADR-245-finance-ledger-balance-derived-not-stored.md"
+    },
+    {
+      "filed_id": 246,
+      "draft_id": null,
+      "slug": "sales-dual-settlement-salespayment-and-receipt",
+      "title": "Sales settlement via nested SalesPayment and Finance Receipt",
+      "filename": "ADR-246-sales-dual-settlement-salespayment-and-receipt.md"
+    },
+    {
+      "filed_id": 247,
+      "draft_id": null,
+      "slug": "sales-otc-cash-ledger-not-customer",
+      "title": "OTC sales without customerId post to CASH001 not CUST001",
+      "filename": "ADR-247-sales-otc-cash-ledger-not-customer.md"
+    },
+    {
+      "filed_id": 248,
+      "draft_id": null,
+      "slug": "sales-settings-mrp-and-expired-batch-gates",
+      "title": "Sales post gated by MRP cap and expired-batch settings",
+      "filename": "ADR-248-sales-settings-mrp-and-expired-batch-gates.md"
+    },
+    {
+      "filed_id": 249,
+      "draft_id": null,
+      "slug": "finance-sales-receipt-allocation-deferred",
+      "title": "Finance Receipt allocation to sales invoice deferred",
+      "filename": "ADR-249-finance-sales-receipt-allocation-deferred.md"
+    },
+    {
+      "filed_id": 250,
+      "draft_id": null,
+      "slug": "party-nested-contacts-addresses-pattern",
+      "title": "Party nested contacts and addresses via child routes",
+      "filename": "ADR-250-party-nested-contacts-addresses-pattern.md"
+    },
+    {
+      "filed_id": 251,
+      "draft_id": null,
+      "slug": "audit-party-contact-exception-deferred",
+      "title": "PartyContact ChangeHistory scope deferred",
+      "filename": "ADR-251-audit-party-contact-exception-deferred.md"
+    }
+  ],
+  "indexRows": [
+    {
+      "id": 139,
+      "title": "Local database is source of truth during daily operation",
+      "modules": "sync, persistence",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 07 — subagent draft ADR-021",
+      "draft_id": 21
+    },
+    {
+      "id": 140,
+      "title": "Delta sync — send only changed records",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 07 — subagent draft ADR-022",
+      "draft_id": 22
+    },
+    {
+      "id": 141,
+      "title": "Outbox pattern with background sync triggers",
+      "modules": "sync, persistence",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 07 — subagent draft ADR-023",
+      "draft_id": 23
+    },
+    {
+      "id": 142,
+      "title": "Per-transaction UUID for idempotent sync requests",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 07 — subagent draft ADR-024",
+      "draft_id": 24
+    },
+    {
+      "id": 143,
+      "title": "Entity-specific conflict resolution rules",
+      "modules": "sync, inventory, party, medicine",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 07 — subagent draft ADR-025",
+      "draft_id": 25
+    },
+    {
+      "id": 144,
+      "title": "Angular feature modules; no business logic in components",
+      "modules": "frontend",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 08 — subagent draft ADR-026",
+      "draft_id": 26
+    },
+    {
+      "id": 145,
+      "title": "Electron context isolation with preload contextBridge",
+      "modules": "electron, frontend",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 08 — subagent draft ADR-027",
+      "draft_id": 27
+    },
+    {
+      "id": 146,
+      "title": "NestJS thin controllers, rich services, validated DTOs",
+      "modules": "backend",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 08 — subagent draft ADR-028",
+      "draft_id": 28
+    },
+    {
+      "id": 147,
+      "title": "REST with JSON envelope; binary streams for exports",
+      "modules": "backend, frontend",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 08 — subagent draft ADR-029",
+      "draft_id": 29
+    },
+    {
+      "id": 148,
+      "title": "Standard feature module folder anatomy",
+      "modules": "backend",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 09 — subagent draft ADR-030",
+      "draft_id": 30
+    },
+    {
+      "id": 149,
+      "title": "Reads via PrismaService; writes via UnitOfWorkService",
+      "modules": "persistence, all modules",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 09 — subagent draft ADR-031",
+      "draft_id": 31
+    },
+    {
+      "id": 150,
+      "title": "Audit and outbox in same transaction as mutation",
+      "modules": "persistence, audit, sync",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 09 — subagent draft ADR-032",
+      "draft_id": 32
+    },
+    {
+      "id": 151,
+      "title": "Read-only reports register into ReportRegistryService",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 09 — subagent draft ADR-033",
+      "draft_id": 33
+    },
+    {
+      "id": 152,
+      "title": "Additive-only change policy for backend extensions",
+      "modules": "all modules",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 09 — subagent draft ADR-034",
+      "draft_id": 34
+    },
+    {
+      "id": 153,
+      "title": "Central reporting core with domain provider registration",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-035",
+      "draft_id": 35
+    },
+    {
+      "id": 154,
+      "title": "Reports are read-only — no UnitOfWork, Outbox, or Audit",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-036",
+      "draft_id": 36
+    },
+    {
+      "id": 155,
+      "title": "Coarse REPORT_VIEW plus per-report permission",
+      "modules": "reporting, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-037",
+      "draft_id": 37
+    },
+    {
+      "id": 156,
+      "title": "Report exports: JSON, CSV, Excel, PDF",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-038",
+      "draft_id": 38
+    },
+    {
+      "id": 157,
+      "title": "File exports bypass ResponseInterceptor via @Res",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-039",
+      "draft_id": 39
+    },
+    {
+      "id": 158,
+      "title": "Namespaced report IDs (domain.report-name)",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-040",
+      "draft_id": 40
+    },
+    {
+      "id": 159,
+      "title": "Party reports provider ships first under reporting/providers",
+      "modules": "reporting, party",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-041",
+      "draft_id": 41
+    },
+    {
+      "id": 160,
+      "title": "Export libraries: exceljs and pdfmake",
+      "modules": "reporting",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 10 — subagent draft ADR-042",
+      "draft_id": 42
+    },
+    {
+      "id": 161,
+      "title": "Inventory documents use nested item controllers",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — subagent draft ADR-043",
+      "draft_id": 43
+    },
+    {
+      "id": 162,
+      "title": "Inventory headers created without embedded items[]",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — subagent draft ADR-044",
+      "draft_id": 44
+    },
+    {
+      "id": 163,
+      "title": "StockMovement HTTP API is read-only",
+      "modules": "inventory, persistence",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — subagent draft ADR-045",
+      "draft_id": 45
+    },
+    {
+      "id": 164,
+      "title": "Batch org-global; Stock and documents branch-scoped",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — subagent draft ADR-046",
+      "draft_id": 46
+    },
+    {
+      "id": 165,
+      "title": "Stock and StockMovement read-only at API layer",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 11 — transcript 052a3bc9 Inventory DTO scope AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 166,
+      "title": "Inventory document items via separate child routes",
+      "modules": "inventory, party",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 11 — transcript 052a3bc9 nested_items AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 167,
+      "title": "Inventory CRUD plus workflow endpoints in v1",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 11 — transcript 052a3bc9 workflow_scope AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 168,
+      "title": "Batch org-global; Stock and documents branch-scoped",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — inventory-module.md golden rules",
+      "draft_id": null
+    },
+    {
+      "id": 169,
+      "title": "StockMovement HTTP API is read-only",
+      "modules": "inventory, persistence",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — inventory-module.md golden rules",
+      "draft_id": null
+    },
+    {
+      "id": 170,
+      "title": "Stock-take reconcile creates adjustment and ledger postings",
+      "modules": "inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 11 — inventory-module.md workflow section",
+      "draft_id": null
+    },
+    {
+      "id": 171,
+      "title": "Module memory doc plus scoped mdc rule for agent discovery",
+      "modules": "inventory, documentation",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 11 — transcript 052a3bc9 wiring AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 172,
+      "title": "Purchase full INVENTORY-style permission matrix",
+      "modules": "purchase, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 12 — subagent draft ADR-051",
+      "draft_id": 51
+    },
+    {
+      "id": 173,
+      "title": "Purchase module tests deferred in v1",
+      "modules": "purchase",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 12 — subagent draft ADR-054",
+      "draft_id": 54
+    },
+    {
+      "id": 174,
+      "title": "Full LedgerPostingService with balance validation and reversal",
+      "modules": "finance, persistence",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-057",
+      "draft_id": 57
+    },
+    {
+      "id": 175,
+      "title": "LedgerEntry HTTP API read-only",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-058",
+      "draft_id": 58
+    },
+    {
+      "id": 176,
+      "title": "Ledger COA full CRUD with hierarchy guards",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-059",
+      "draft_id": 59
+    },
+    {
+      "id": 177,
+      "title": "Strict financial year validation on posts",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-060",
+      "draft_id": 60
+    },
+    {
+      "id": 178,
+      "title": "Payment/Receipt numbers globally unique per Prisma schema",
+      "modules": "finance, sequence",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-061",
+      "draft_id": 61
+    },
+    {
+      "id": 179,
+      "title": "Expense Prisma model out of scope; use Payment EXPENSE type",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-062",
+      "draft_id": 62
+    },
+    {
+      "id": 180,
+      "title": "Finance module tests deferred in v1",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-063",
+      "draft_id": 63
+    },
+    {
+      "id": 181,
+      "title": "Reject unsupported PaymentType at complete",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-066",
+      "draft_id": 66
+    },
+    {
+      "id": 182,
+      "title": "Ledger running balance left best-effort in bug-fix pass",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 13 — subagent draft ADR-067",
+      "draft_id": 67
+    },
+    {
+      "id": 183,
+      "title": "Finance simplification refactor scope unresolved",
+      "modules": "finance",
+      "status": "Needs Confirmation",
+      "confidence": "Needs Confirmation",
+      "source": "Doc 13 — transcript 4ff29b60 Simplification scope AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 184,
+      "title": "SalesPayment nested API; Finance Receipt stays separate",
+      "modules": "sales, finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-070",
+      "draft_id": 70
+    },
+    {
+      "id": 185,
+      "title": "Auto-resolve selling price from PriceList at post",
+      "modules": "sales, pricing",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-071",
+      "draft_id": 71
+    },
+    {
+      "id": 186,
+      "title": "Prescription FK validation only in sales v1",
+      "modules": "sales, prescription",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-073",
+      "draft_id": 73
+    },
+    {
+      "id": 187,
+      "title": "Sales returns RESTOCK disposition only in v1",
+      "modules": "sales, inventory",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-074",
+      "draft_id": 74
+    },
+    {
+      "id": 188,
+      "title": "Posted sales invoice cancel with stock and ledger reversal (initial v1)",
+      "modules": "sales",
+      "status": "Superseded",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-075",
+      "draft_id": 75
+    },
+    {
+      "id": 189,
+      "title": "Sales full permission matrix",
+      "modules": "sales, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-077",
+      "draft_id": 77
+    },
+    {
+      "id": 190,
+      "title": "Sales module tests deferred in v1",
+      "modules": "sales",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 14 — subagent draft ADR-078",
+      "draft_id": 78
+    },
+    {
+      "id": 191,
+      "title": "Security admin: all six doc tables plus UserBranch",
+      "modules": "security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-079",
+      "draft_id": 79
+    },
+    {
+      "id": 192,
+      "title": "Admin reset, self change-password, and unlock flows",
+      "modules": "auth, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-081",
+      "draft_id": 81
+    },
+    {
+      "id": 193,
+      "title": "Permission full CRUD including system permissions",
+      "modules": "security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-082",
+      "draft_id": 82
+    },
+    {
+      "id": 194,
+      "title": "Junction APIs nested with bulk replace",
+      "modules": "security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-083",
+      "draft_id": 83
+    },
+    {
+      "id": 195,
+      "title": "UserSession read and admin force-logout",
+      "modules": "security, auth",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-084",
+      "draft_id": 84
+    },
+    {
+      "id": 196,
+      "title": "Employee link FK validation only",
+      "modules": "security, party",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-085",
+      "draft_id": 85
+    },
+    {
+      "id": 197,
+      "title": "Full SECURITY:RESOURCE:ACTION permission matrix",
+      "modules": "security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-087",
+      "draft_id": 87
+    },
+    {
+      "id": 198,
+      "title": "Security module tests deferred in v1",
+      "modules": "security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 15 — subagent draft ADR-088",
+      "draft_id": 88
+    },
+    {
+      "id": 199,
+      "title": "Public change-required-password endpoint for mustChangePassword users",
+      "modules": "auth, security",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 15 — transcript 66997528 mustChangePassword AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 200,
+      "title": "Full MASTER:RESOURCE:ACTION permission matrix",
+      "modules": "medicine, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-090",
+      "draft_id": 90
+    },
+    {
+      "id": 201,
+      "title": "Manufacturer requires existing Party (FK validation only)",
+      "modules": "medicine, party",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-091",
+      "draft_id": 91
+    },
+    {
+      "id": 202,
+      "title": "MedicineSalt nested CRUD + PUT replace",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-092",
+      "draft_id": 92
+    },
+    {
+      "id": 203,
+      "title": "System schedule/UOM rows: full CRUD; block delete on FK refs only",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-093",
+      "draft_id": 93
+    },
+    {
+      "id": 204,
+      "title": "Strict soft-delete guards on medicine masters",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-094",
+      "draft_id": 94
+    },
+    {
+      "id": 205,
+      "title": "Client provides unique medicineCode",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-095",
+      "draft_id": 95
+    },
+    {
+      "id": 206,
+      "title": "medicineName unique within manufacturerId",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-096",
+      "draft_id": 96
+    },
+    {
+      "id": 207,
+      "title": "MedicineCategory flat CRUD with circular-parent guard",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-097",
+      "draft_id": 97
+    },
+    {
+      "id": 208,
+      "title": "MedicineSalt schema unchanged; hard-delete junction rows",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-098",
+      "draft_id": 98
+    },
+    {
+      "id": 209,
+      "title": "Medicine fix plan covers all reviewed issues",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-099",
+      "draft_id": 99
+    },
+    {
+      "id": 210,
+      "title": "UnitType PACK→PACKAGING in constants and seed JSON only",
+      "modules": "medicine",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 16 — subagent draft ADR-100",
+      "draft_id": 100
+    },
+    {
+      "id": 211,
+      "title": "Pricing/Prescription/Audit backend-only; tests deferred",
+      "modules": "pricing, prescription, audit",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-102",
+      "draft_id": 102
+    },
+    {
+      "id": 212,
+      "title": "PriceList branch-scoped list includes org-wide lists",
+      "modules": "pricing",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-103",
+      "draft_id": 103
+    },
+    {
+      "id": 213,
+      "title": "Enforce single default PriceList per branch scope on set",
+      "modules": "pricing",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-104",
+      "draft_id": 104
+    },
+    {
+      "id": 214,
+      "title": "PriceListItem nested CRUD + PUT replace",
+      "modules": "pricing",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-105",
+      "draft_id": 105
+    },
+    {
+      "id": 215,
+      "title": "Tax and DiscountRule full CRUD; block delete on FK refs",
+      "modules": "pricing",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-106",
+      "draft_id": 106
+    },
+    {
+      "id": 216,
+      "title": "Prescription lifecycle via workflow POST routes",
+      "modules": "prescription",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-107",
+      "draft_id": 107
+    },
+    {
+      "id": 217,
+      "title": "Client provides unique prescriptionNumber",
+      "modules": "prescription",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-108",
+      "draft_id": 108
+    },
+    {
+      "id": 218,
+      "title": "PrescriptionItem dispensed fields read-only via API",
+      "modules": "prescription, sales",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-109",
+      "draft_id": 109
+    },
+    {
+      "id": 219,
+      "title": "Sales dispensing hook out of scope for prescription v1",
+      "modules": "prescription, sales",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-110",
+      "draft_id": 110
+    },
+    {
+      "id": 220,
+      "title": "Audit read APIs plus ChangeHistory on UPDATE",
+      "modules": "audit, pricing, prescription",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-111",
+      "draft_id": 111
+    },
+    {
+      "id": 221,
+      "title": "Audit lists default-filter by JWT branchId",
+      "modules": "audit",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-112",
+      "draft_id": 112
+    },
+    {
+      "id": 222,
+      "title": "Full PRICING + PRESCRIPTION + AUDIT permission matrices",
+      "modules": "pricing, prescription, audit, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — subagent draft ADR-113",
+      "draft_id": 113
+    },
+    {
+      "id": 223,
+      "title": "PPA fix plan covers critical and medium review items",
+      "modules": "pricing, prescription, audit",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — transcript 2a8995c1 Fix scope preferences AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 224,
+      "title": "PPA simplification standard scope recommended",
+      "modules": "pricing, prescription",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 17 — transcript 2a8995c1 simplification AskQuestion",
+      "draft_id": null
+    },
+    {
+      "id": 225,
+      "title": "SCM modules backend-only; tests deferred",
+      "modules": "configuration, sync, masters, settings",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-115",
+      "draft_id": 115
+    },
+    {
+      "id": 226,
+      "title": "Extend SettingsModule with AppSetting create/get/delete",
+      "modules": "settings, configuration",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-116",
+      "draft_id": 116
+    },
+    {
+      "id": 227,
+      "title": "New configuration/ module for Company, Branch, FY, sequences, printer, barcode",
+      "modules": "configuration",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-117",
+      "draft_id": 117
+    },
+    {
+      "id": 228,
+      "title": "FinancialYear full CRUD plus POST close workflow",
+      "modules": "configuration, finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-118",
+      "draft_id": 118
+    },
+    {
+      "id": 229,
+      "title": "SequenceGenerator admin CRUD; allocation stays internal",
+      "modules": "configuration, sequence",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-119",
+      "draft_id": 119
+    },
+    {
+      "id": 230,
+      "title": "Company and Branch full CRUD with default/head-office guards",
+      "modules": "configuration",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-120",
+      "draft_id": 120
+    },
+    {
+      "id": 231,
+      "title": "Sync admin: outbox read+retry, conflict resolve; no cloud worker",
+      "modules": "sync",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-121",
+      "draft_id": 121
+    },
+    {
+      "id": 232,
+      "title": "Geographic masters as flat CRUD per entity",
+      "modules": "masters",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-122",
+      "draft_id": 122
+    },
+    {
+      "id": 233,
+      "title": "Strict soft-delete reference checks for config and masters",
+      "modules": "configuration, masters",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-123",
+      "draft_id": 123
+    },
+    {
+      "id": 234,
+      "title": "ChangeHistory on UPDATE for configuration and masters v1",
+      "modules": "configuration, masters, audit",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-124",
+      "draft_id": 124
+    },
+    {
+      "id": 235,
+      "title": "Full CONFIGURATION + SYNC + LOOKUP matrix; keep SETTINGS_* and SYNC_RUN",
+      "modules": "configuration, sync, masters, security",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-125",
+      "draft_id": 125
+    },
+    {
+      "id": 236,
+      "title": "SCM fix plan includes all review items",
+      "modules": "configuration, sync, masters, settings",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-126",
+      "draft_id": 126
+    },
+    {
+      "id": 237,
+      "title": "Company API tenant-scoped to JWT companyId",
+      "modules": "configuration",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-128",
+      "draft_id": 128
+    },
+    {
+      "id": 238,
+      "title": "Block SequenceGenerator DELETE when isActive=true",
+      "modules": "configuration, sequence",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-129",
+      "draft_id": 129
+    },
+    {
+      "id": 239,
+      "title": "FinancialYear isCurrent remains branch-scoped",
+      "modules": "configuration, finance",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-131",
+      "draft_id": 131
+    },
+    {
+      "id": 240,
+      "title": "SCM simplification covers P1+P2+P3 cleanup",
+      "modules": "configuration, sync, masters, settings",
+      "status": "Active",
+      "confidence": "Explicit",
+      "source": "Doc 18 — subagent draft ADR-132",
+      "draft_id": 132
+    },
+    {
+      "id": 241,
+      "title": "Architecture docs consolidated under pharmacy_erp_architecture_docs",
+      "modules": "documentation",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 27 — consolidate_architecture_docs_01308cef.plan.md",
+      "draft_id": null
+    },
+    {
+      "id": 242,
+      "title": "Per-module mdc cursor rules point to memory docs",
+      "modules": "documentation, cursor rules",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 27 — backend-cursor-rules_666edcea.plan.md",
+      "draft_id": null
+    },
+    {
+      "id": 243,
+      "title": "Shared cross-module utilities in common/ not feature modules",
+      "modules": "infrastructure",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 27 — common_module_improvements_f20c8e7d.plan.md",
+      "draft_id": null
+    },
+    {
+      "id": 244,
+      "title": "Purchase Order and Invoice do not change stock",
+      "modules": "purchase, inventory",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — purchase-module.md golden rules",
+      "draft_id": null
+    },
+    {
+      "id": 245,
+      "title": "Ledger balance derived from entries, never stored",
+      "modules": "finance",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — finance-module.md golden rules",
+      "draft_id": null
+    },
+    {
+      "id": 246,
+      "title": "Sales settlement via nested SalesPayment and Finance Receipt",
+      "modules": "sales, finance",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — sales-module.md settlement section",
+      "draft_id": null
+    },
+    {
+      "id": 247,
+      "title": "OTC sales without customerId post to CASH001 not CUST001",
+      "modules": "sales, finance",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — sales-module.md settlement section",
+      "draft_id": null
+    },
+    {
+      "id": 248,
+      "title": "Sales post gated by MRP cap and expired-batch settings",
+      "modules": "sales, settings",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — sales-module.md settings section",
+      "draft_id": null
+    },
+    {
+      "id": 249,
+      "title": "Finance Receipt allocation to sales invoice deferred",
+      "modules": "finance, sales",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — finance-module.md not implemented section",
+      "draft_id": null
+    },
+    {
+      "id": 250,
+      "title": "Party nested contacts and addresses via child routes",
+      "modules": "party",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — party-module.md API catalog",
+      "draft_id": null
+    },
+    {
+      "id": 251,
+      "title": "PartyContact ChangeHistory scope deferred",
+      "modules": "audit, party",
+      "status": "Active",
+      "confidence": "Strongly inferred",
+      "source": "Doc 20 — audit-module.md known gaps",
+      "draft_id": null
+    }
+  ]
+}

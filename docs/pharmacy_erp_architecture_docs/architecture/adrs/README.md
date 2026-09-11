@@ -24,7 +24,9 @@ After any architectural choice with alternatives, cross-module impact, or hard-t
 | **Strongly inferred** | Clear from plan lock-in or implementation |
 | **Weakly inferred** | Indications only — use Needs Confirmation |
 
-## Records (recovered 2026-09-10)
+## Records
+
+### Phase 1 (recovered 2026-09-10)
 
 | Range | Theme |
 |-------|-------|
@@ -44,5 +46,26 @@ After any architectural choice with alternatives, cross-module impact, or hard-t
 | ADR-114, 127, 130, 138 | SCM (Doc 18) |
 | ADR-133–134 | Documentation governance (Doc 25–26) |
 | ADR-137 | Cross-module coupling (Doc 09) |
+
+### Phase 2 (recovered 2026-09-11)
+
+| Range | Theme |
+|-------|-------|
+| ADR-139–143 | Sync architecture detail (Doc 07) |
+| ADR-144–147 | Application architecture (Doc 08) |
+| ADR-148–152 | Extending backend (Doc 09) |
+| ADR-153–160 | Reporting detail (Doc 10) |
+| ADR-161–171 | Inventory workflows + memory doc (Doc 11) |
+| ADR-172–173 | Purchase gaps (Doc 12) |
+| ADR-174–183 | Finance gaps + simplification unresolved (Doc 13) |
+| ADR-184–190 | Sales gaps (Doc 14) |
+| ADR-191–199 | Security + auth password flows (Doc 15) |
+| ADR-200–210 | Medicine granular decisions (Doc 16) |
+| ADR-211–224 | Pricing/Prescription/Audit detail (Doc 17) |
+| ADR-225–240 | SCM detail (Doc 18) |
+| ADR-241–243 | Doc governance + cursor rules (Doc 27) |
+| ADR-244–251 | Module memory doc extractions (Doc 20–24) |
+
+Draft ID cross-reference: [`backend/scripts/phase2-adr-mapping.json`](../../../../backend/scripts/phase2-adr-mapping.json)
 
 See memory map for full table with status and confidence per ADR.

@@ -710,6 +710,8 @@ flowchart TB
 
 **Not implemented:** Category tree endpoint, medicine code auto-sequence, unit/e2e tests.
 
+**Key decisions:** [ADR-089](./adrs/ADR-089-medicine-backend-only-v1.md), [ADR-200](./adrs/ADR-200-medicine-full-master-permission-matrix.md)–[ADR-210](./adrs/ADR-210-medicine-unittype-pack-seed-json-only.md) — see [memory map](./backend-memory-map.md).
+
 **Pointers:** [medicine-module.md](../../../.cursor/rules/docs/medicine-module.md), [medicine_master.md](../database/tables/medicine_master/medicine_master.md)
 
 ---
@@ -804,6 +806,8 @@ flowchart TB
 
 **Logical dependencies:** **Consumer:** `sales.util.ts` → `resolvePriceListItem` at invoice **post** (no Nest import of `PricingModule`). Tax rows referenced by price list items and invoice lines — delete blocked.
 
+**Key decisions:** [ADR-101](./adrs/ADR-101-pricing-prescription-audit-single-delivery.md), [ADR-212](./adrs/ADR-212-pricelist-branch-scoped-with-org-wide.md)–[ADR-215](./adrs/ADR-215-tax-discount-full-crud-fk-delete-guard.md).
+
 **Pointers:** [pricing-module.md](../../../.cursor/rules/docs/pricing-module.md), [pricing.md](../database/tables/pricing/pricing.md)
 
 ---
@@ -834,7 +838,9 @@ flowchart TB
 | [`utils/prescription.util.ts`](../../../backend/src/prescription/utils/prescription.util.ts) | `assertPrescriptionDraft`; status transition guards | Prescription + item services |
 | [`constants/prescription.constants.ts`](../../../backend/src/prescription/constants/prescription.constants.ts) | `PrescriptionStatus`, `PrescriptionItemStatus` | Workflow + DTOs |
 
-**Logical dependencies:** **Consumer:** `sales-invoice.service.ts` validates `prescriptionId` and updates dispensed qty on **post** (FK only, no Nest import). Doctor FK → party.
+**Key decisions:** [ADR-216](./adrs/ADR-216-prescription-workflow-routes.md), [ADR-219](./adrs/ADR-219-sales-dispense-hook-out-of-scope.md) — dispense hook out of scope; sales FK validation only.
+
+**Logical dependencies:** **Consumer:** `sales-invoice.service.ts` validates `prescriptionId` on create/update/post (FK only, no dispensed qty updates; no Nest import). Doctor FK → party.
 
 **Pointers:** [prescription-module.md](../../../.cursor/rules/docs/prescription-module.md), [prescription.md](../database/tables/prescription/prescription.md)
 
@@ -877,6 +883,8 @@ flowchart TB
 **Logical dependencies:** **Called by** purchase (GRN accept, return approve) and sales (invoice post, return approve) via `InventoryLedgerService`. `/stocks` and `/stock-movements` are read-only.
 
 **Not implemented:** Reserved/in-transit quantity buckets, inventory reporting providers, E2E tests.
+
+**Key decisions:** [ADR-008](./adrs/ADR-008-inventory-ledger-only-stock-path.md), [ADR-161](./adrs/ADR-161-inventory-nested-item-controllers.md)–[ADR-171](./adrs/ADR-171-inventory-module-memory-doc-mdc-pattern.md) — see [memory map](./backend-memory-map.md).
 
 **Pointers:** [inventory-module.md](../../../.cursor/rules/docs/inventory-module.md), [inventory-flow.md](../workflows/inventory-flow.md), [inventory.md](../database/tables/inventory/inventory.md)
 
@@ -1118,7 +1126,7 @@ flowchart TB
 
 **Split:** User/role/permission admin → `security/`. Token lifecycle → `auth/`.
 
-**Key decisions:** [ADR-012](./adrs/ADR-012-jwt-global-auth-guards.md), [ADR-080](./adrs/ADR-080-auth-security-module-split.md), [ADR-086](./adrs/ADR-086-session-invalidation-on-security-changes.md).
+**Key decisions:** [ADR-012](./adrs/ADR-012-jwt-global-auth-guards.md), [ADR-080](./adrs/ADR-080-auth-security-module-split.md), [ADR-086](./adrs/ADR-086-session-invalidation-on-security-changes.md), [ADR-191](./adrs/ADR-191-security-all-six-tables-plus-userbranch.md)–[ADR-199](./adrs/ADR-199-auth-change-required-password-public-endpoint.md).
 
 **Pointers:** [early-foundations.md](./early-foundations.md), [security.md](./security.md)
 
