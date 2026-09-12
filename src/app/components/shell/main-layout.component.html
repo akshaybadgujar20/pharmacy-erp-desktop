@@ -78,30 +78,30 @@
         </button>
         <div class="ml-auto flex items-center gap-2">
           <app-language-selector />
+
           <button
             pButton
             type="button"
             severity="secondary"
             text
             size="small"
-            iconOnly
             [attr.aria-label]="'keyboard.openShortcuts' | translate"
             (click)="shortcutService.openDialog()"
           >
-            <i class="pi pi-keyboard" aria-hidden="true"></i>
+            <svg pIcon="key"></svg>
           </button>
+
           <button
             pButton
             type="button"
             severity="secondary"
             text
             size="small"
-            iconOnly
             [disabled]="loggingOut"
             [attr.aria-label]="'auth.logout' | translate"
             (click)="logout()"
           >
-            <i class="pi pi-sign-out" aria-hidden="true"></i>
+            <svg pIcon="sign-out"></svg>
           </button>
         </div>
       </header>
