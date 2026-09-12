@@ -1,4 +1,7 @@
 <div class="login-page">
+  <div class="login-language">
+    <app-language-selector />
+  </div>
   <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
     <h1>{{ 'auth.loginTitle' | translate }}</h1>
     <p class="subtitle">{{ 'auth.loginSubtitle' | translate }}</p>

@@ -109,6 +109,23 @@
       "title": "Settings"
     }
   },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Pharmacy ERP",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "demoHint": "Demo: admin / admin",
+    "loginFailed": "Login failed",
+    "logout": "Log out",
+    "defaultUser": "User"
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "marathi": "Marathi"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

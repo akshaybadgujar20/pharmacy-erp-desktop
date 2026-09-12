@@ -16,6 +16,7 @@ import { PIcon } from '@primeicons/angular/p-icon';
 import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
 import { KeyboardShortcutService } from '../../core/keyboard';
+import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
 import { ERP_NAV_GROUPS } from './nav.config';
 import { filterNavGroups } from './nav.utils';
@@ -34,6 +35,7 @@ import { filterNavGroups } from './nav.utils';
     TranslatePipe,
     Sidebar,
     KeyboardShortcutsDialogComponent,
+    LanguageSelectorComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
@@ -50,6 +52,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   readonly navGroups = computed(() => filterNavGroups(ERP_NAV_GROUPS, this.authService));
   readonly currentUser = this.authService.currentUser;
+  loggingOut = false;
 
   ngOnInit(): void {
     if (typeof window === 'undefined') {
@@ -72,5 +75,18 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   userInitials(): string {
     const username = this.currentUser()?.username ?? '?';
     return username.slice(0, 2).toUpperCase();
+  }
+
+  async logout(): Promise<void> {
+    if (this.loggingOut) {
+      return;
+    }
+
+    this.loggingOut = true;
+    try {
+      await this.authService.logout();
+    } finally {
+      this.loggingOut = false;
+    }
   }
 }

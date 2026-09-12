@@ -39,6 +39,23 @@
     "configuration": { "title": "कॉन्फिगरेशन", "companies": "कंपन्या", "branches": "शाखा", "financialYears": "आर्थिक वर्ष", "sequenceGenerators": "अनुक्रम जनरेटर", "barcodeConfigs": "बारकोड", "printerConfigs": "प्रिंटर" },
     "settings": { "title": "सेटिंग्ज" }
   },
+  "auth": {
+    "loginTitle": "साइन इन",
+    "loginSubtitle": "फार्मसी ERP",
+    "username": "वापरकर्तानाव",
+    "password": "पासवर्ड",
+    "signIn": "साइन इन",
+    "signingIn": "साइन इन होत आहे…",
+    "demoHint": "डेमो: admin / admin",
+    "loginFailed": "लॉगिन अयशस्वी",
+    "logout": "लॉग आउट",
+    "defaultUser": "वापरकर्ता"
+  },
+  "language": {
+    "label": "भाषा",
+    "english": "इंग्रजी",
+    "marathi": "मराठी"
+  },
   "common": {
     "save": "जतन करा",
     "cancel": "रद्द करा",

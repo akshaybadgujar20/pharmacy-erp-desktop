@@ -1,0 +1,9 @@
+<p-select
+  [options]="displayOptions()"
+  optionLabel="label"
+  optionValue="value"
+  [ngModel]="selectedLanguage()"
+  (ngModelChange)="onLanguageChange($event)"
+  [attr.aria-label]="'language.label' | translate"
+  class="language-selector"
+/>
