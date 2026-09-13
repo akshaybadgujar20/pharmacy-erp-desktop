@@ -1,5 +1,5 @@
-<div class="border border-surface-200 dark:border-surface-700 rounded-lg overflow-hidden">
-  <p-sidebar-layout class="min-h-192! relative!">
+<div class="border border-surface-200 dark:border-surface-700 rounded-lg overflow-hidden h-screen">
+  <p-sidebar-layout class="h-[100dvh] relative!">
     @if (backdrop) {
       <p-sidebar-backdrop class="absolute!" />
     }
@@ -33,14 +33,14 @@
           <p-sidebar-content>
             @for (group of navGroups; track group.label) {
               <p-sidebar-group>
-                <p-sidebar-group-label>{{ group.label }}</p-sidebar-group-label>
+                <p-sidebar-group-label>{{ group.label | translate}}</p-sidebar-group-label>
                 <p-sidebar-group-content>
                   <p-sidebar-menu>
                     @for (item of group.items; track item.label) {
                       <p-sidebar-menu-item [collapsible]="!!item.subItems" [defaultOpen]="hasActiveSub(item)">
                         <button pSidebarMenuButton [isActive]="!!item.isActive">
                           <svg [pIcon]="item.icon"></svg>
-                          <span>{{ item.label }}</span>
+                          <span>{{ item.label | translate}}</span>
                           @if (item.subItems) {
                             <svg data-p-icon="chevron-down" class="ml-auto"></svg>
                           }
@@ -53,7 +53,8 @@
                             @for (sub of item.subItems; track sub.label) {
                               <p-sidebar-menu-sub-item>
                                 <button pSidebarMenuSubButton [isActive]="!!sub.isActive">
-                                  <span>{{ sub.label }}</span>
+                                  <span>{{ sub.label | translate }}</span>
+                                  <span>{{ sub.label | translate }}</span>
                                 </button>
                               </p-sidebar-menu-sub-item>
                             }
@@ -83,21 +84,22 @@
       </p-sidebar-aside>
     </p-sidebar>
     @if (side === 'left') {
-      <p-sidebar-main>
-        <header class="flex h-12 items-center gap-2 border-b border-surface-200 dark:border-surface-700 px-4">
+      <p-sidebar-main class="flex flex-col min-h-0 min-w-0">
+        <header class="flex h-12 shrink-0 items-center gap-2 border-b border-surface-200 dark:border-surface-700 px-4">
           <button pButton type="button" severity="secondary" text size="small" pSidebarTrigger target="variants-demo"  >
             <svg data-p-icon="sidebar"></svg>
           </button>
+          <div class="ml-auto flex items-center gap-2">
+            <app-language-selector />
 
-          <app-language-selector />
+            <button pButton type="button" severity="secondary" text size="small" [attr.aria-label]="'keyboard.openShortcuts' | translate" (click)="shortcutService.openDialog()" pTooltip="{{ 'auth.shortcut' | translate }}" tooltipPosition="left">
+              <svg pIcon="key"></svg>
+            </button>
 
-          <button pButton type="button" severity="secondary" text size="small" [attr.aria-label]="'keyboard.openShortcuts' | translate" (click)="shortcutService.openDialog()">
-            <svg pIcon="key"></svg>
-          </button>
-
-          <button pButton type="button" severity="secondary" text size="small" [disabled]="loggingOut" [attr.aria-label]="'auth.logout' | translate" (click)="logout()">
-            <svg pIcon="sign-out"></svg>
-          </button>
+            <button pButton type="button" severity="secondary" text size="small" [disabled]="loggingOut" [attr.aria-label]="'auth.logout' | translate" (click)="logout()"  pTooltip="{{ 'auth.logout' | translate }}" tooltipPosition="left">
+              <svg pIcon="sign-out"></svg>
+            </button>
+          </div>
         </header>
         <div class="flex-1 p-4 flex flex-col gap-4">
           <router-outlet/>

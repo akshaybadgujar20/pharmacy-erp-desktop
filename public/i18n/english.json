@@ -119,7 +119,11 @@
     "demoHint": "Demo: admin / admin",
     "loginFailed": "Login failed",
     "logout": "Log out",
+    "shortcut": "Keyboard Shortcut",
     "defaultUser": "User"
+  },
+  "nav": {
+    "home": "Home"
   },
   "language": {
     "label": "Language",

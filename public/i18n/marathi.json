@@ -51,6 +51,9 @@
     "logout": "लॉग आउट",
     "defaultUser": "वापरकर्ता"
   },
+  "nav": {
+    "home": "भाषा"
+  },
   "language": {
     "label": "भाषा",
     "english": "इंग्रजी",

@@ -20,6 +20,7 @@ import { LanguageSelectorComponent } from '../../shared/components/language-sele
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
 import { ERP_NAV_GROUPS } from './nav.config';
 import { filterNavGroups } from './nav.utils';
+import {Tooltip} from 'primeng/tooltip';
 
 interface NavItem {
   icon: string;
@@ -38,8 +39,6 @@ interface NavGroup {
   standalone: true,
   imports: [
     RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
     AvatarModule,
     SidebarModule,
     ButtonModule,
@@ -48,6 +47,7 @@ interface NavGroup {
     Sidebar,
     KeyboardShortcutsDialogComponent,
     LanguageSelectorComponent,
+    Tooltip,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
@@ -93,7 +93,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     {
       label: 'Navigation',
       items: [
-        { icon: 'home', label: 'Home', isActive: true },
+        { icon: 'home', label: 'nav.home', isActive: true },
         { icon: 'inbox', label: 'Inbox', badge: '12' },
         { icon: 'search', label: 'Search' },
         { icon: 'bell', label: 'Notifications', badge: '3' }
