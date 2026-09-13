@@ -11,7 +11,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import {SidebarModule, SidebarVariant} from 'primeng/sidebar';
+import {SidebarCollapsible, SidebarModule, SidebarSide, SidebarVariant} from 'primeng/sidebar';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
@@ -20,6 +20,18 @@ import { LanguageSelectorComponent } from '../../shared/components/language-sele
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
 import { ERP_NAV_GROUPS } from './nav.config';
 import { filterNavGroups } from './nav.utils';
+
+interface NavItem {
+  icon: string;
+  label: string;
+  isActive?: boolean;
+  badge?: string;
+  subItems?: { label: string; isActive?: boolean }[];
+}
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
 
 @Component({
   selector: 'app-main-layout',
@@ -44,16 +56,71 @@ import { filterNavGroups } from './nav.utils';
 export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   readonly shortcutService = inject(KeyboardShortcutService);
+
   variant: SidebarVariant = 'floating';
+  collapsible: SidebarCollapsible = 'icon';
+  side: SidebarSide = 'left';
+  overlay: boolean = false;
+  openOnHover: boolean = false;
+  backdrop: boolean = false;
+
+  variantOptions = [
+    { label: 'Sidebar', value: 'sidebar' },
+    { label: 'Floating', value: 'floating' },
+    { label: 'Inset', value: 'inset' }
+  ];
+  collapsibleOptions = [
+    { label: 'Icon', value: 'icon' },
+    { label: 'Offcanvas', value: 'offcanvas' },
+    { label: 'None', value: 'none' }
+  ];
+  sideOptions = [
+    { label: 'Left', value: 'left' },
+    { label: 'Right', value: 'right' }
+  ];
+
 
   isMobile = signal(false);
   open = signal(true);
   private mql?: MediaQueryList;
   private mqlListener?: (e: MediaQueryListEvent) => void;
 
-  readonly navGroups = computed(() => filterNavGroups(ERP_NAV_GROUPS, this.authService));
+  // readonly navGroups = computed(() => filterNavGroups(ERP_NAV_GROUPS, this.authService));
   readonly currentUser = this.authService.currentUser;
   loggingOut = false;
+
+  navGroups: NavGroup[] = [
+    {
+      label: 'Navigation',
+      items: [
+        { icon: 'home', label: 'Home', isActive: true },
+        { icon: 'inbox', label: 'Inbox', badge: '12' },
+        { icon: 'search', label: 'Search' },
+        { icon: 'bell', label: 'Notifications', badge: '3' }
+      ]
+    },
+    {
+      label: 'Projects',
+      items: [
+        { icon: 'chart-bar', label: 'Analytics', subItems: [{ label: 'Overview', isActive: true }, { label: 'Reports' }, { label: 'Real-time' }] },
+        { icon: 'users', label: 'Team' },
+        { icon: 'calendar', label: 'Calendar' },
+        { icon: 'folder', label: 'Documents', subItems: [{ label: 'Shared' }, { label: 'Private' }, { label: 'Archived' }] }
+      ]
+    },
+    {
+      label: 'Billing',
+      items: [
+        { icon: 'credit-card', label: 'Payments' },
+        { icon: 'shopping-cart', label: 'Orders' },
+        { icon: 'star', label: 'Subscriptions' }
+      ]
+    }
+  ];
+
+  hasActiveSub(item: NavItem): boolean {
+    return !!item.subItems?.some((s) => s.isActive);
+  }
 
   ngOnInit(): void {
     if (typeof window === 'undefined') {
