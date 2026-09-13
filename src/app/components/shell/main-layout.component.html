@@ -31,7 +31,7 @@
             </p-sidebar-menu>
           </p-sidebar-header>
           <p-sidebar-content>
-            @for (group of navGroups; track group.label) {
+            @for (group of navGroups(); track group.label) {
               <p-sidebar-group>
                 <p-sidebar-group-label>{{ group.label | translate}}</p-sidebar-group-label>
                 <p-sidebar-group-content>
@@ -42,7 +42,7 @@
                           <svg [pIcon]="item.icon"></svg>
                           <span>{{ item.label | translate}}</span>
                           @if (item.subItems) {
-                            <svg data-p-icon="chevron-down" class="ml-auto"></svg>
+                            <svg pIcon="chevron-down" class="ml-auto"></svg>
                           }
                         </button>
                         @if (item.badge) {
@@ -53,7 +53,6 @@
                             @for (sub of item.subItems; track sub.label) {
                               <p-sidebar-menu-sub-item>
                                 <button pSidebarMenuSubButton [isActive]="!!sub.isActive">
-                                  <span>{{ sub.label | translate }}</span>
                                   <span>{{ sub.label | translate }}</span>
                                 </button>
                               </p-sidebar-menu-sub-item>
