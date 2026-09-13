@@ -11,7 +11,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { SidebarModule } from 'primeng/sidebar';
+import {SidebarModule, SidebarVariant} from 'primeng/sidebar';
 import { PIcon } from '@primeicons/angular/p-icon';
 import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
@@ -44,6 +44,7 @@ import { filterNavGroups } from './nav.utils';
 export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   readonly shortcutService = inject(KeyboardShortcutService);
+  variant: SidebarVariant = 'floating';
 
   isMobile = signal(false);
   open = signal(true);

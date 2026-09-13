@@ -3,7 +3,7 @@
     @if (isMobile() && open()) {
       <p-sidebar-backdrop class="absolute!" />
     }
-    <p-sidebar id="preview" [collapsible]="isMobile() ? 'offcanvas' : 'icon'" [overlay]="isMobile()" [(open)]="open">
+    <p-sidebar [variant]="variant" id="preview" [collapsible]="isMobile() ? 'offcanvas' : 'icon'" [overlay]="isMobile()" [(open)]="open">
       <p-sidebar-spacer />
       <p-sidebar-aside>
         <p-sidebar-panel>
