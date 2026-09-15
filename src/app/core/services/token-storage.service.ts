@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 const ACCESS_TOKEN_KEY = 'pharmacy_erp_access_token';
 const REFRESH_TOKEN_KEY = 'pharmacy_erp_refresh_token';
@@ -32,6 +33,11 @@ export class TokenStorageService {
     if (window.electronAPI?.secureStore) {
       return window.electronAPI.secureStore.get(key);
     }
+
+    if (!environment.production) {
+      return sessionStorage.getItem(key);
+    }
+
     return this.memoryStore.get(key) ?? null;
   }
 
@@ -40,6 +46,12 @@ export class TokenStorageService {
       await window.electronAPI.secureStore.set(key, value);
       return;
     }
+
+    if (!environment.production) {
+      sessionStorage.setItem(key, value);
+      return;
+    }
+
     this.memoryStore.set(key, value);
   }
 
@@ -48,6 +60,12 @@ export class TokenStorageService {
       await window.electronAPI.secureStore.delete(key);
       return;
     }
+
+    if (!environment.production) {
+      sessionStorage.removeItem(key);
+      return;
+    }
+
     this.memoryStore.delete(key);
   }
 }
