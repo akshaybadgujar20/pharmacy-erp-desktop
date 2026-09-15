@@ -50,6 +50,9 @@ interface DemoCustomerForm {
 }
 
 @Component({
+  host: {
+    class: 'block h-full min-h-0'
+  },
   selector: 'app-dashboard',
   imports: [
     AppFormComponent,
