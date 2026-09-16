@@ -1,0 +1,46 @@
+<div class="page-layout">
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="runReport()">
+    <div class="detail-form__field">
+      <label for="reportId">Report ID</label>
+      <input pInputText id="reportId" [value]="reportId()" readonly />
+    </div>
+    <div class="detail-form__field">
+      <label for="fromDate">From Date</label>
+      <input pInputText id="fromDate" formControlName="fromDate" />
+    </div>
+    <div class="detail-form__field">
+      <label for="toDate">To Date</label>
+      <input pInputText id="toDate" formControlName="toDate" />
+    </div>
+    <div class="detail-form__field">
+      <label for="branchId">Branch ID</label>
+      <input pInputText id="branchId" formControlName="branchId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="search">Search</label>
+      <input pInputText id="search" formControlName="search" />
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="running()">
+        Run Report
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+        Back
+      </button>
+    </div>
+    @if (errorMessage()) {
+      <p class="detail-form__error">{{ errorMessage() }}</p>
+    }
+  </form>
+
+  @if (rows().length > 0) {
+    <app-grid
+      [config]="gridConfig()"
+      [data]="rows()"
+      [loading]="running()"
+      [totalRecords]="totalRecords()"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+</div>
+

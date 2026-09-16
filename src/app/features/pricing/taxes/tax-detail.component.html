@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="taxCode">Tax Code</label>
+    <input pInputText id="taxCode" formControlName="taxCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="taxName">Tax Name</label>
+    <input pInputText id="taxName" formControlName="taxName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="taxType">Tax Type</label>
+    <input pInputText id="taxType" formControlName="taxType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="taxRate">Tax Rate</label>
+    <input pInputText id="taxRate" formControlName="taxRate" />
+  </div>
+  <div class="detail-form__field">
+    <label for="effectiveFrom">Effective From</label>
+    <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+  </div>
+  <div class="detail-form__field">
+    <label for="effectiveTo">Effective To</label>
+    <input pInputText id="effectiveTo" formControlName="effectiveTo" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="taxIsActive" />
+    <label for="taxIsActive">Active</label>
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

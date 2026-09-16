@@ -1,0 +1,10 @@
+<div class="page-layout">
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    (filterChange)="onFilterChange($event)"
+    (rowDoubleClick)="onRowDoubleClick($event)"
+  />
+</div>
+

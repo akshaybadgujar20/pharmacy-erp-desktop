@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="stateId">State ID</label>
+    <input pInputText id="stateId" formControlName="stateId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="cityCode">City Code</label>
+    <input pInputText id="cityCode" formControlName="cityCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="cityName">City Name</label>
+    <input pInputText id="cityName" formControlName="cityName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="district">District</label>
+    <input pInputText id="district" formControlName="district" />
+  </div>
+  <div class="detail-form__field">
+    <label for="postalRegion">Postal Region</label>
+    <input pInputText id="postalRegion" formControlName="postalRegion" />
+  </div>
+  <div class="detail-form__field">
+    <label for="latitude">Latitude</label>
+    <input pInputText id="latitude" type="number" formControlName="latitude" />
+  </div>
+  <div class="detail-form__field">
+    <label for="longitude">Longitude</label>
+    <input pInputText id="longitude" type="number" formControlName="longitude" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

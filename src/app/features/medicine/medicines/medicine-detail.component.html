@@ -1,0 +1,108 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (medicineId()) {
+      <p-tab value="salts">Salts</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="medicineCode">Medicine Code</label>
+          <input
+            pInputText
+            id="medicineCode"
+            formControlName="medicineCode"
+            [readonly]="!isNew()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="medicineName">Medicine Name</label>
+          <input pInputText id="medicineName" formControlName="medicineName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="manufacturerId">Manufacturer ID</label>
+          <input pInputText id="manufacturerId" formControlName="manufacturerId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="categoryId">Category ID</label>
+          <input pInputText id="categoryId" formControlName="categoryId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="scheduleId">Schedule ID</label>
+          <input pInputText id="scheduleId" formControlName="scheduleId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="unitId">Unit ID</label>
+          <input pInputText id="unitId" formControlName="unitId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="brandName">Brand Name</label>
+          <input pInputText id="brandName" formControlName="brandName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="strength">Strength</label>
+          <input pInputText id="strength" formControlName="strength" />
+        </div>
+        <div class="detail-form__field">
+          <label for="dosageForm">Dosage Form</label>
+          <input pInputText id="dosageForm" formControlName="dosageForm" />
+        </div>
+        <div class="detail-form__field">
+          <label for="packSize">Pack Size</label>
+          <input pInputText id="packSize" formControlName="packSize" />
+        </div>
+        <div class="detail-form__field">
+          <label for="hsnCode">HSN Code</label>
+          <input pInputText id="hsnCode" formControlName="hsnCode" />
+        </div>
+        <div class="detail-form__field">
+          <label for="barcode">Barcode</label>
+          <input pInputText id="barcode" formControlName="barcode" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="requiresPrescription" [binary]="true" inputId="requiresPrescription" />
+          <label for="requiresPrescription">Requires Prescription</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="narcoticDrug" [binary]="true" inputId="narcoticDrug" />
+          <label for="narcoticDrug">Narcotic Drug</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="refrigerated" [binary]="true" inputId="refrigerated" />
+          <label for="refrigerated">Refrigerated</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="discontinued" [binary]="true" inputId="discontinued" />
+          <label for="discontinued">Discontinued</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="medicineIsActive" />
+          <label for="medicineIsActive">Active</label>
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (medicineId()) {
+      <p-tabpanel value="salts">
+        <app-medicine-salts-tab [medicineId]="medicineId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

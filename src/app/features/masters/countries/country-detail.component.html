@@ -1,0 +1,54 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="countryCode">Country Code</label>
+    <input pInputText id="countryCode" formControlName="countryCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="isoAlpha2">ISO Alpha-2</label>
+    <input pInputText id="isoAlpha2" formControlName="isoAlpha2" />
+  </div>
+  <div class="detail-form__field">
+    <label for="isoAlpha3">ISO Alpha-3</label>
+    <input pInputText id="isoAlpha3" formControlName="isoAlpha3" />
+  </div>
+  <div class="detail-form__field">
+    <label for="countryName">Country Name</label>
+    <input pInputText id="countryName" formControlName="countryName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="nationality">Nationality</label>
+    <input pInputText id="nationality" formControlName="nationality" />
+  </div>
+  <div class="detail-form__field">
+    <label for="phoneCode">Phone Code</label>
+    <input pInputText id="phoneCode" formControlName="phoneCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="currencyCode">Currency Code</label>
+    <input pInputText id="currencyCode" formControlName="currencyCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="timezone">Timezone</label>
+    <input pInputText id="timezone" formControlName="timezone" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

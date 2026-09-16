@@ -24,8 +24,8 @@
             <p-sidebar-menu>
               <p-sidebar-menu-item>
                 <button pSidebarMenuButton class="px-1!">
-                  <div class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-xs font-bold leading-none">A</div>
-                  <span class="font-semibold text-sm">Acme Inc</span>
+                  <div class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-xs font-bold leading-none">P</div>
+                  <span class="font-semibold text-sm">{{ 'app.title' | translate }}</span>
                 </button>
               </p-sidebar-menu-item>
             </p-sidebar-menu>
@@ -37,14 +37,21 @@
                 <p-sidebar-group-content>
                   <p-sidebar-menu>
                     @for (item of group.items; track item.label) {
-                      <p-sidebar-menu-item [collapsible]="!!item.subItems" [defaultOpen]="hasActiveSub(item)">
-                        <button pSidebarMenuButton [isActive]="!!item.isActive">
-                          <svg [pIcon]="item.icon"></svg>
-                          <span>{{ item.label | translate}}</span>
-                          @if (item.subItems) {
-                            <svg pIcon="chevron-down" class="ml-auto"></svg>
-                          }
-                        </button>
+                      <p-sidebar-menu-item [collapsible]="!!item.subItems" [defaultOpen]="false">
+                        @if (item.route) {
+                          <a pSidebarMenuButton [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                            <svg [pIcon]="item.icon"></svg>
+                            <span>{{ item.label | translate}}</span>
+                          </a>
+                        } @else {
+                          <button pSidebarMenuButton type="button">
+                            <svg [pIcon]="item.icon"></svg>
+                            <span>{{ item.label | translate}}</span>
+                            @if (item.subItems) {
+                              <svg pIcon="chevron-down" class="ml-auto"></svg>
+                            }
+                          </button>
+                        }
                         @if (item.badge) {
                           <p-sidebar-menu-badge>{{ item.badge }}</p-sidebar-menu-badge>
                         }
@@ -52,14 +59,12 @@
                           <p-sidebar-menu-sub>
                             @for (sub of item.subItems; track sub.label) {
                               <p-sidebar-menu-sub-item>
-                                <button pSidebarMenuSubButton [isActive]="!!sub.isActive">
+                                <a pSidebarMenuSubButton [routerLink]="sub.route!" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
                                   <span>{{ sub.label | translate }}</span>
-                                </button>
+                                </a>
                               </p-sidebar-menu-sub-item>
                             }
                           </p-sidebar-menu-sub>
-                        } @else if (!item.badge) {
-                          <button pSidebarMenuAction showOnHover><svg data-p-icon="ellipsis-v"></svg></button>
                         }
                       </p-sidebar-menu-item>
                     }
@@ -71,9 +76,9 @@
           <p-sidebar-footer>
             <p-sidebar-menu>
               <p-sidebar-menu-item>
-                <button pSidebarMenuButton class="p-1!">
-                  <p-avatar label="JD" shape="circle" class="size-6 shrink-0 text-xs" />
-                  <span>John Doe</span>
+                <button pSidebarMenuButton class="p-1!" type="button">
+                  <p-avatar [label]="userInitials()" shape="circle" class="size-6 shrink-0 text-xs" />
+                  <span>{{ currentUser()?.username ?? 'User' }}</span>
                 </button>
               </p-sidebar-menu-item>
             </p-sidebar-menu>

@@ -1,0 +1,82 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="ruleCode">Rule Code</label>
+    <input pInputText id="ruleCode" formControlName="ruleCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="ruleName">Rule Name</label>
+    <input pInputText id="ruleName" formControlName="ruleName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="discountType">Discount Type</label>
+    <input pInputText id="discountType" formControlName="discountType" />
+  </div>
+  <div class="detail-form__field">
+    <label for="discountValue">Discount Value</label>
+    <input pInputText id="discountValue" formControlName="discountValue" />
+  </div>
+  <div class="detail-form__field">
+    <label for="appliesTo">Applies To</label>
+    <input pInputText id="appliesTo" formControlName="appliesTo" />
+  </div>
+  <div class="detail-form__field">
+    <label for="medicineId">Medicine ID</label>
+    <input pInputText id="medicineId" formControlName="medicineId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="categoryId">Category ID</label>
+    <input pInputText id="categoryId" formControlName="categoryId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="customerId">Customer ID</label>
+    <input pInputText id="customerId" formControlName="customerId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="priceListId">Price List ID</label>
+    <input pInputText id="priceListId" formControlName="priceListId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="minimumQuantity">Minimum Quantity</label>
+    <input pInputText id="minimumQuantity" formControlName="minimumQuantity" />
+  </div>
+  <div class="detail-form__field">
+    <label for="minimumAmount">Minimum Amount</label>
+    <input pInputText id="minimumAmount" formControlName="minimumAmount" />
+  </div>
+  <div class="detail-form__field">
+    <label for="priority">Priority</label>
+    <input pInputText id="priority" type="number" formControlName="priority" />
+  </div>
+  <div class="detail-form__field">
+    <label for="effectiveFrom">Effective From</label>
+    <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+  </div>
+  <div class="detail-form__field">
+    <label for="effectiveTo">Effective To</label>
+    <input pInputText id="effectiveTo" formControlName="effectiveTo" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="discountRuleIsActive" />
+    <label for="discountRuleIsActive">Active</label>
+  </div>
+  <div class="detail-form__field">
+    <label for="remarks">Remarks</label>
+    <input pInputText id="remarks" formControlName="remarks" />
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

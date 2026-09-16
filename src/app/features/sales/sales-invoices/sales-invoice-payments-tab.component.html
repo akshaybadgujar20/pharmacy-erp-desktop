@@ -1,0 +1,79 @@
+<div class="nested-tab">
+  @if (editable()) {
+    <div class="nested-tab__actions">
+      <button pButton type="button" severity="primary" (click)="openCreate()">New Payment</button>
+    </div>
+  }
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit Payment' : 'New Payment'"
+  [style]="{ width: '32rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="paymentDate">Payment Date</label>
+      <input pInputText id="paymentDate" formControlName="paymentDate" />
+    </div>
+    <div class="detail-form__field">
+      <label for="paymentMethod">Payment Method</label>
+      <input pInputText id="paymentMethod" formControlName="paymentMethod" />
+    </div>
+    <div class="detail-form__field">
+      <label for="paymentAmount">Payment Amount</label>
+      <input pInputText id="paymentAmount" type="number" formControlName="paymentAmount" />
+    </div>
+    <div class="detail-form__field">
+      <label for="tenderedAmount">Tendered Amount</label>
+      <input pInputText id="tenderedAmount" type="number" formControlName="tenderedAmount" />
+    </div>
+    <div class="detail-form__field">
+      <label for="transactionReference">Transaction Reference</label>
+      <input pInputText id="transactionReference" formControlName="transactionReference" />
+    </div>
+    <div class="detail-form__field">
+      <label for="paymentRemarks">Remarks</label>
+      <input pInputText id="paymentRemarks" formControlName="remarks" />
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      @if (editingId() && editingStatus() === 'PENDING') {
+        <button
+          pButton
+          type="button"
+          severity="success"
+          [disabled]="workflowInProgress()"
+          (click)="completePayment()"
+        >
+          Complete
+        </button>
+        <button
+          pButton
+          type="button"
+          severity="warn"
+          [disabled]="workflowInProgress()"
+          (click)="cancelPayment()"
+        >
+          Cancel Payment
+        </button>
+      }
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Close
+      </button>
+    </div>
+  </form>
+</p-dialog>

@@ -82,7 +82,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       return;
     }
     if (event.action === 'edit') {
-      this.router.navigate(['/users', event.row.id]);
+      this.router.navigate(['/security/users', event.row.id]);
     }
     if (event.action === 'delete') {
       this.userService.delete(event.row.id, event.row.version).subscribe({
@@ -92,7 +92,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onRowDoubleClick(event: GridRowClickEvent<User>): void {
-    this.router.navigate(['/users', event.row.id]);
+    this.router.navigate(['/security/users', event.row.id]);
   }
 
   private onNew(): void {

@@ -1,0 +1,42 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="genericCode">Generic Code</label>
+    <input pInputText id="genericCode" formControlName="genericCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="genericName">Generic Name</label>
+    <input pInputText id="genericName" formControlName="genericName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="therapeuticClass">Therapeutic Class</label>
+    <input pInputText id="therapeuticClass" formControlName="therapeuticClass" />
+  </div>
+  <div class="detail-form__field">
+    <label for="pharmacologicalClass">Pharmacological Class</label>
+    <input pInputText id="pharmacologicalClass" formControlName="pharmacologicalClass" />
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="genericIsActive" />
+    <label for="genericIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

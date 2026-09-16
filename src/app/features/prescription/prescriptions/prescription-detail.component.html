@@ -1,0 +1,111 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (prescriptionId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        @if (!isNew()) {
+          <div class="detail-form__field">
+            <label for="status">Status</label>
+            <input pInputText id="status" [value]="status()" readonly />
+          </div>
+        }
+        <div class="detail-form__field">
+          <label for="prescriptionNumber">Prescription Number</label>
+          <input pInputText id="prescriptionNumber" formControlName="prescriptionNumber" />
+        </div>
+        <div class="detail-form__field">
+          <label for="customerId">Customer ID</label>
+          <input pInputText id="customerId" formControlName="customerId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="doctorId">Doctor ID</label>
+          <input pInputText id="doctorId" formControlName="doctorId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="prescriptionDate">Prescription Date</label>
+          <input pInputText id="prescriptionDate" formControlName="prescriptionDate" />
+        </div>
+        <div class="detail-form__field">
+          <label for="validUntil">Valid Until</label>
+          <input pInputText id="validUntil" formControlName="validUntil" />
+        </div>
+        <div class="detail-form__field">
+          <label for="diagnosis">Diagnosis</label>
+          <input pInputText id="diagnosis" formControlName="diagnosis" />
+        </div>
+        <div class="detail-form__field">
+          <label for="symptoms">Symptoms</label>
+          <input pInputText id="symptoms" formControlName="symptoms" />
+        </div>
+        <div class="detail-form__field">
+          <label for="visitNumber">Visit Number</label>
+          <input pInputText id="visitNumber" formControlName="visitNumber" />
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" />
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew() && status() === 'DRAFT') {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowInProgress()"
+              (click)="activatePrescription()"
+            >
+              Activate
+            </button>
+          }
+          @if (!isNew() && (status() === 'DRAFT' || status() === 'ACTIVE')) {
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              [disabled]="workflowInProgress()"
+              (click)="cancelPrescription()"
+            >
+              Cancel
+            </button>
+          }
+          @if (!isNew() && (status() === 'ACTIVE' || status() === 'PARTIALLY_DISPENSED')) {
+            <button
+              pButton
+              type="button"
+              severity="secondary"
+              [disabled]="workflowInProgress()"
+              (click)="expirePrescription()"
+            >
+              Expire
+            </button>
+          }
+          @if (!isNew()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (prescriptionId()) {
+      <p-tabpanel value="items">
+        <app-prescription-items-tab [prescriptionId]="prescriptionId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>
+

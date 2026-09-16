@@ -1,0 +1,74 @@
+<div class="nested-tab">
+  <div class="nested-tab__actions">
+    <button pButton type="button" severity="primary" (click)="openCreate()">New Item</button>
+  </div>
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit Item' : 'New Item'"
+  [style]="{ width: '28rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="medicineId">Medicine ID</label>
+      <input pInputText id="medicineId" formControlName="medicineId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="unitId">Unit ID</label>
+      <input pInputText id="unitId" formControlName="unitId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="lineNumber">Line Number</label>
+      <input pInputText id="lineNumber" type="number" formControlName="lineNumber" />
+    </div>
+    <div class="detail-form__field">
+      <label for="prescribedQuantity">Prescribed Quantity</label>
+      <input pInputText id="prescribedQuantity" formControlName="prescribedQuantity" />
+    </div>
+    <div class="detail-form__field">
+      <label for="dosage">Dosage</label>
+      <input pInputText id="dosage" formControlName="dosage" />
+    </div>
+    <div class="detail-form__field">
+      <label for="frequency">Frequency</label>
+      <input pInputText id="frequency" formControlName="frequency" />
+    </div>
+    <div class="detail-form__field">
+      <label for="duration">Duration</label>
+      <input pInputText id="duration" formControlName="duration" />
+    </div>
+    <div class="detail-form__field">
+      <label for="route">Route</label>
+      <input pInputText id="route" formControlName="route" />
+    </div>
+    <div class="detail-form__field">
+      <label for="instructions">Instructions</label>
+      <input pInputText id="instructions" formControlName="instructions" />
+    </div>
+    <div class="detail-form__field">
+      <label for="itemRemarks">Remarks</label>
+      <input pInputText id="itemRemarks" formControlName="remarks" />
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>
+

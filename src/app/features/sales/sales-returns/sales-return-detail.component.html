@@ -1,0 +1,95 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (returnId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">
+          Status: {{ status() }}
+          @if (salesReturnNumber()) {
+            | Number: {{ salesReturnNumber() }}
+          }
+        </p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="salesInvoiceId">Sales Invoice ID</label>
+          <input
+            pInputText
+            id="salesInvoiceId"
+            formControlName="salesInvoiceId"
+            [readonly]="!isNew()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="customerId">Customer ID</label>
+          <input pInputText id="customerId" formControlName="customerId" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="returnDate">Return Date</label>
+          <input pInputText id="returnDate" formControlName="returnDate" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="returnReason">Return Reason</label>
+          <input pInputText id="returnReason" formControlName="returnReason" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="refundMode">Refund Mode</label>
+          <input pInputText id="refundMode" formControlName="refundMode" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="creditNoteNumber">Credit Note Number</label>
+          <input
+            pInputText
+            id="creditNoteNumber"
+            formControlName="creditNoteNumber"
+            [readonly]="!isDraft()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__actions">
+          @if (isDraft()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && isDraft()) {
+            <button pButton type="button" severity="success" [disabled]="approving()" (click)="approve()">
+              Approve
+            </button>
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          @if (!isNew() && isCompleted()) {
+            <button pButton type="button" severity="warn" [disabled]="cancelling()" (click)="cancel()">
+              Cancel
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (returnId()) {
+      <p-tabpanel value="items">
+        <app-sales-return-items-tab [returnId]="returnId()!" [editable]="isDraft()" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

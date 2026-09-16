@@ -1,0 +1,54 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="scheduleCode">Schedule Code</label>
+    <input pInputText id="scheduleCode" formControlName="scheduleCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="scheduleName">Schedule Name</label>
+    <input pInputText id="scheduleName" formControlName="scheduleName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="requiresPrescription" [binary]="true" inputId="requiresPrescription" />
+    <label for="requiresPrescription">Requires Prescription</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="requiresDoctorDetails" [binary]="true" inputId="requiresDoctorDetails" />
+    <label for="requiresDoctorDetails">Requires Doctor Details</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="maintainSalesRegister" [binary]="true" inputId="maintainSalesRegister" />
+    <label for="maintainSalesRegister">Maintain Sales Register</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="controlledSubstance" [binary]="true" inputId="controlledSubstance" />
+    <label for="controlledSubstance">Controlled Substance</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isSystemSchedule" [binary]="true" inputId="isSystemSchedule" />
+    <label for="isSystemSchedule">System Schedule</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="scheduleIsActive" />
+    <label for="scheduleIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

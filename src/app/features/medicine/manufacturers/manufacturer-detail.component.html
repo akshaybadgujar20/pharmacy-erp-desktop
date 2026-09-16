@@ -1,0 +1,54 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="partyId">Party ID</label>
+    <input pInputText id="partyId" formControlName="partyId" [readonly]="!isNew()" />
+  </div>
+  <div class="detail-form__field">
+    <label for="manufacturerCode">Manufacturer Code</label>
+    <input pInputText id="manufacturerCode" formControlName="manufacturerCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="manufacturingLicenseNo">Manufacturing License No</label>
+    <input pInputText id="manufacturingLicenseNo" formControlName="manufacturingLicenseNo" />
+  </div>
+  <div class="detail-form__field">
+    <label for="gstin">GSTIN</label>
+    <input pInputText id="gstin" formControlName="gstin" />
+  </div>
+  <div class="detail-form__field">
+    <label for="website">Website</label>
+    <input pInputText id="website" formControlName="website" />
+  </div>
+  <div class="detail-form__field">
+    <label for="email">Email</label>
+    <input pInputText id="email" formControlName="email" />
+  </div>
+  <div class="detail-form__field">
+    <label for="supportPhone">Support Phone</label>
+    <input pInputText id="supportPhone" formControlName="supportPhone" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isPreferred" [binary]="true" inputId="isPreferred" />
+    <label for="isPreferred">Preferred</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="manufacturerIsActive" />
+    <label for="manufacturerIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

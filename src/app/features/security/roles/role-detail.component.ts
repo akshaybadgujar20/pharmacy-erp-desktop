@@ -61,7 +61,10 @@ export class RoleDetailComponent implements OnInit {
     }
   }
 
-  onTabChange(tab: string | number): void {
+  onTabChange(tab: string | number | undefined): void {
+    if (tab === undefined) {
+      return;
+    }
     const tabValue = String(tab);
     this.activeTab.set(tabValue);
     const id = this.roleId();
@@ -69,10 +72,10 @@ export class RoleDetailComponent implements OnInit {
       return;
     }
     if (tabValue === 'permissions') {
-      this.router.navigate(['/roles', id, 'permissions']);
+      this.router.navigate(['/security/roles', id, 'permissions']);
       return;
     }
-    this.router.navigate(['/roles', id]);
+    this.router.navigate(['/security/roles', id]);
   }
 
   save(): void {
@@ -99,7 +102,7 @@ export class RoleDetailComponent implements OnInit {
             this.roleId.set(role.id);
             this.version.set(role.version);
             this.isSystemRole.set(role.isSystemRole);
-            this.router.navigate(['/roles', role.id], { replaceUrl: true });
+            this.router.navigate(['/security/roles', role.id], { replaceUrl: true });
           },
           error: (error) => this.handleError(error),
         });
@@ -134,7 +137,7 @@ export class RoleDetailComponent implements OnInit {
     this.roleService.delete(id, this.version()).subscribe({
       next: () => {
         this.deleting.set(false);
-        this.router.navigate(['/roles']);
+        this.router.navigate(['/security/roles']);
       },
       error: (error) => {
         this.deleting.set(false);
@@ -144,7 +147,7 @@ export class RoleDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/roles']);
+    this.router.navigate(['/security/roles']);
   }
 
   private load(id: string): void {

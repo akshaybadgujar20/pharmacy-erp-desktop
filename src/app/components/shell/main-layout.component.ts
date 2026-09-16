@@ -38,6 +38,8 @@ interface NavGroup {
   selector: 'app-main-layout',
   standalone: true,
   imports: [
+    RouterLink,
+    RouterLinkActive,
     RouterOutlet,
     AvatarModule,
     SidebarModule,
@@ -88,10 +90,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   readonly navGroups = computed(() => filterNavGroups(ERP_NAV_GROUPS, this.authService));
   readonly currentUser = this.authService.currentUser;
   loggingOut = false;
-
-  hasActiveSub(item: NavItem): boolean {
-    return !!item.subItems?.some((s) => s.isActive);
-  }
 
   ngOnInit(): void {
     if (typeof window === 'undefined') {

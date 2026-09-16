@@ -1,0 +1,45 @@
+<div class="nested-tab">
+  <div class="nested-tab__actions">
+    <button pButton type="button" severity="primary" (click)="openCreate()">New Salt</button>
+  </div>
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit Salt' : 'New Salt'"
+  [style]="{ width: '28rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="saltCompositionId">Salt Composition ID</label>
+      <input pInputText id="saltCompositionId" formControlName="saltCompositionId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="sequenceNo">Sequence No</label>
+      <input pInputText id="sequenceNo" type="number" formControlName="sequenceNo" />
+    </div>
+    <div class="detail-form__field">
+      <label for="percentage">Percentage</label>
+      <input pInputText id="percentage" formControlName="percentage" />
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

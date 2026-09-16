@@ -1,0 +1,131 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (orderId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">Status: {{ status() }}</p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierId">Supplier ID</label>
+          <input pInputText id="supplierId" formControlName="supplierId" [readonly]="!isEditable()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="orderDate">Order Date</label>
+          <input pInputText id="orderDate" formControlName="orderDate" [readonly]="!isEditable()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="expectedDeliveryDate">Expected Delivery Date</label>
+          <input
+            pInputText
+            id="expectedDeliveryDate"
+            formControlName="expectedDeliveryDate"
+            [readonly]="!isEditable()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" [readonly]="!isEditable()" />
+        </div>
+        <div class="detail-form__actions">
+          @if (isEditable()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && canSubmit()) {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowRunning() === 'submit'"
+              (click)="submit()"
+            >
+              Submit
+            </button>
+          }
+          @if (!isNew() && canApprove()) {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowRunning() === 'approve'"
+              (click)="approve()"
+            >
+              Approve
+            </button>
+          }
+          @if (!isNew() && canReject()) {
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              [disabled]="workflowRunning() === 'reject'"
+              (click)="reject()"
+            >
+              Reject
+            </button>
+          }
+          @if (!isNew() && canSend()) {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowRunning() === 'send'"
+              (click)="send()"
+            >
+              Send
+            </button>
+          }
+          @if (!isNew() && canForceClose()) {
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              [disabled]="workflowRunning() === 'forceClose'"
+              (click)="forceClose()"
+            >
+              Force Close
+            </button>
+          }
+          @if (!isNew() && canCancel()) {
+            <button
+              pButton
+              type="button"
+              severity="danger"
+              [disabled]="workflowRunning() === 'cancel'"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
+          }
+          @if (!isNew() && canDelete()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (orderId()) {
+      <p-tabpanel value="items">
+        <app-purchase-order-items-tab [orderId]="orderId()!" [editable]="isEditable()" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

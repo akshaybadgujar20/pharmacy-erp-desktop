@@ -1,0 +1,155 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (goodsReceiptId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">Status: {{ status() }}</p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierId">Supplier ID</label>
+          <input pInputText id="supplierId" formControlName="supplierId" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="purchaseOrderId">Purchase Order ID</label>
+          <input pInputText id="purchaseOrderId" formControlName="purchaseOrderId" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="receiptDate">Receipt Date</label>
+          <input pInputText id="receiptDate" formControlName="receiptDate" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="receivedByEmployeeId">Received By Employee ID</label>
+          <input
+            pInputText
+            id="receivedByEmployeeId"
+            formControlName="receivedByEmployeeId"
+            [readonly]="!isDraft()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierChallanNo">Supplier Challan No</label>
+          <input pInputText id="supplierChallanNo" formControlName="supplierChallanNo" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierChallanDate">Supplier Challan Date</label>
+          <input
+            pInputText
+            id="supplierChallanDate"
+            formControlName="supplierChallanDate"
+            [readonly]="!isDraft()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierInvoiceNo">Supplier Invoice No</label>
+          <input pInputText id="supplierInvoiceNo" formControlName="supplierInvoiceNo" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="supplierInvoiceDate">Supplier Invoice Date</label>
+          <input
+            pInputText
+            id="supplierInvoiceDate"
+            formControlName="supplierInvoiceDate"
+            [readonly]="!isDraft()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="vehicleNumber">Vehicle Number</label>
+          <input pInputText id="vehicleNumber" formControlName="vehicleNumber" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox
+            formControlName="isColdChainMaintained"
+            [binary]="true"
+            inputId="isColdChainMaintained"
+            [disabled]="!isDraft()"
+          />
+          <label for="isColdChainMaintained">Cold Chain Maintained</label>
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__actions">
+          @if (isDraft()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && canSubmitInspection()) {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowRunning() === 'submitInspection'"
+              (click)="submitInspection()"
+            >
+              Submit Inspection
+            </button>
+          }
+          @if (!isNew() && canAccept()) {
+            <button
+              pButton
+              type="button"
+              severity="success"
+              [disabled]="workflowRunning() === 'accept'"
+              (click)="accept()"
+            >
+              Accept
+            </button>
+          }
+          @if (!isNew() && canReject()) {
+            <button
+              pButton
+              type="button"
+              severity="warn"
+              [disabled]="workflowRunning() === 'reject'"
+              (click)="reject()"
+            >
+              Reject
+            </button>
+          }
+          @if (!isNew() && canCancel()) {
+            <button
+              pButton
+              type="button"
+              severity="danger"
+              [disabled]="workflowRunning() === 'cancel'"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
+          }
+          @if (!isNew() && isDraft()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (goodsReceiptId()) {
+      <p-tabpanel value="items">
+        <app-goods-receipt-items-tab
+          [goodsReceiptId]="goodsReceiptId()!"
+          [editable]="isDraft()"
+        />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

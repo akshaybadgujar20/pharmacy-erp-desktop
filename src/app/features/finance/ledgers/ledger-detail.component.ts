@@ -68,7 +68,10 @@ export class LedgerDetailComponent implements OnInit {
     }
   }
 
-  onTabChange(tab: string | number): void {
+  onTabChange(tab: string | number | undefined): void {
+    if (tab === undefined) {
+      return;
+    }
     const tabValue = String(tab);
     this.activeTab.set(tabValue);
     const id = this.ledgerId();

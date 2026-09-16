@@ -1,0 +1,42 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="parentCategoryId">Parent Category ID</label>
+    <input pInputText id="parentCategoryId" formControlName="parentCategoryId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="categoryCode">Category Code</label>
+    <input pInputText id="categoryCode" formControlName="categoryCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="categoryName">Category Name</label>
+    <input pInputText id="categoryName" formControlName="categoryName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__field">
+    <label for="displayOrder">Display Order</label>
+    <input pInputText id="displayOrder" type="number" formControlName="displayOrder" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="categoryIsActive" />
+    <label for="categoryIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

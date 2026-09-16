@@ -82,7 +82,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
       return;
     }
     if (event.action === 'edit') {
-      this.router.navigate(['/roles', event.row.id]);
+      this.router.navigate(['/security/roles', event.row.id]);
     }
     if (event.action === 'delete') {
       this.roleService.delete(event.row.id, event.row.version).subscribe({
@@ -92,7 +92,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   }
 
   onRowDoubleClick(event: GridRowClickEvent<Role>): void {
-    this.router.navigate(['/roles', event.row.id]);
+    this.router.navigate(['/security/roles', event.row.id]);
   }
 
   private onNew(): void {

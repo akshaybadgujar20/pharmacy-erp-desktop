@@ -1,0 +1,101 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (invoiceId()) {
+      <p-tab value="items">Items</p-tab>
+      <p-tab value="payments">Payments</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      @if (!isNew()) {
+        <p class="detail-form__status">
+          Status: {{ status() }} | Payment: {{ paymentStatus() }}
+          @if (invoiceNumber()) {
+            | Number: {{ invoiceNumber() }}
+          }
+        </p>
+      }
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="customerId">Customer ID</label>
+          <input pInputText id="customerId" formControlName="customerId" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="prescriptionId">Prescription ID</label>
+          <input
+            pInputText
+            id="prescriptionId"
+            formControlName="prescriptionId"
+            [readonly]="!isDraft()"
+          />
+        </div>
+        <div class="detail-form__field">
+          <label for="invoiceDate">Invoice Date</label>
+          <input pInputText id="invoiceDate" formControlName="invoiceDate" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="patientName">Patient Name</label>
+          <input pInputText id="patientName" formControlName="patientName" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="doctorName">Doctor Name</label>
+          <input pInputText id="doctorName" formControlName="doctorName" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="salesType">Sales Type</label>
+          <input pInputText id="salesType" formControlName="salesType" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="paymentMode">Payment Mode</label>
+          <input pInputText id="paymentMode" formControlName="paymentMode" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" [readonly]="!isDraft()" />
+        </div>
+        <div class="detail-form__actions">
+          @if (isDraft()) {
+            <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+              Save
+            </button>
+          }
+          @if (!isNew() && isDraft()) {
+            <button pButton type="button" severity="success" [disabled]="posting()" (click)="post()">
+              Post
+            </button>
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          @if (!isNew() && status() === 'POSTED') {
+            <button pButton type="button" severity="warn" [disabled]="cancelling()" (click)="cancel()">
+              Cancel
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (invoiceId()) {
+      <p-tabpanel value="items">
+        <app-sales-invoice-items-tab [invoiceId]="invoiceId()!" [editable]="isDraft()" />
+      </p-tabpanel>
+      <p-tabpanel value="payments">
+        <app-sales-invoice-payments-tab
+          [invoiceId]="invoiceId()!"
+          [editable]="canManagePayments()"
+        />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>

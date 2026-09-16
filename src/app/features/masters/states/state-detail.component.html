@@ -1,0 +1,42 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="countryId">Country ID</label>
+    <input pInputText id="countryId" formControlName="countryId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="stateCode">State Code</label>
+    <input pInputText id="stateCode" formControlName="stateCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="stateName">State Name</label>
+    <input pInputText id="stateName" formControlName="stateName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="gstStateCode">GST State Code</label>
+    <input pInputText id="gstStateCode" formControlName="gstStateCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="isoCode">ISO Code</label>
+    <input pInputText id="isoCode" formControlName="isoCode" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

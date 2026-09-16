@@ -1,0 +1,50 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="unitCode">Unit Code</label>
+    <input pInputText id="unitCode" formControlName="unitCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="unitName">Unit Name</label>
+    <input pInputText id="unitName" formControlName="unitName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="shortName">Short Name</label>
+    <input pInputText id="shortName" formControlName="shortName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="unitType">Unit Type</label>
+    <input pInputText id="unitType" formControlName="unitType" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="decimalAllowed" [binary]="true" inputId="decimalAllowed" />
+    <label for="decimalAllowed">Decimal Allowed</label>
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isSystemUnit" [binary]="true" inputId="isSystemUnit" />
+    <label for="isSystemUnit">System Unit</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="unitIsActive" />
+    <label for="unitIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

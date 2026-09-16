@@ -1,0 +1,46 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="genericId">Generic ID</label>
+    <input pInputText id="genericId" formControlName="genericId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="unitId">Unit ID</label>
+    <input pInputText id="unitId" formControlName="unitId" />
+  </div>
+  <div class="detail-form__field">
+    <label for="compositionCode">Composition Code</label>
+    <input pInputText id="compositionCode" formControlName="compositionCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="strength">Strength</label>
+    <input pInputText id="strength" formControlName="strength" />
+  </div>
+  <div class="detail-form__field">
+    <label for="strengthUnit">Strength Unit</label>
+    <input pInputText id="strengthUnit" formControlName="strengthUnit" />
+  </div>
+  <div class="detail-form__field">
+    <label for="description">Description</label>
+    <input pInputText id="description" formControlName="description" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="saltCompositionIsActive" />
+    <label for="saltCompositionIsActive">Active</label>
+  </div>
+  <div class="detail-form__actions">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+      Save
+    </button>
+    @if (!isNew()) {
+      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+        Delete
+      </button>
+    }
+    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+      Back
+    </button>
+  </div>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

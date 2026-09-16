@@ -78,7 +78,10 @@ export class UserDetailComponent implements OnInit {
     this.form.controls.password.setValidators(Validators.required);
   }
 
-  onTabChange(tab: string | number): void {
+  onTabChange(tab: string | number | undefined): void {
+    if (tab === undefined) {
+      return;
+    }
     const tabValue = String(tab);
     this.activeTab.set(tabValue);
     const id = this.userId();
@@ -86,14 +89,14 @@ export class UserDetailComponent implements OnInit {
       return;
     }
     if (tabValue === 'roles') {
-      this.router.navigate(['/users', id, 'roles']);
+      this.router.navigate(['/security/users', id, 'roles']);
       return;
     }
     if (tabValue === 'branches') {
-      this.router.navigate(['/users', id, 'branches']);
+      this.router.navigate(['/security/users', id, 'branches']);
       return;
     }
-    this.router.navigate(['/users', id]);
+    this.router.navigate(['/security/users', id]);
   }
 
   save(): void {
@@ -121,7 +124,7 @@ export class UserDetailComponent implements OnInit {
             this.userId.set(user.id);
             this.version.set(user.version);
             this.form.controls.employeeId.disable();
-            this.router.navigate(['/users', user.id], { replaceUrl: true });
+            this.router.navigate(['/security/users', user.id], { replaceUrl: true });
           },
           error: (error) => this.handleError(error),
         });
@@ -154,7 +157,7 @@ export class UserDetailComponent implements OnInit {
     this.userService.delete(id, this.version()).subscribe({
       next: () => {
         this.deleting.set(false);
-        this.router.navigate(['/users']);
+        this.router.navigate(['/security/users']);
       },
       error: (error) => {
         this.deleting.set(false);
@@ -220,7 +223,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/security/users']);
   }
 
   private load(id: string): void {

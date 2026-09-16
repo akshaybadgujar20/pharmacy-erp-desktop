@@ -1,0 +1,59 @@
+<div class="nested-tab">
+  @if (editable()) {
+    <div class="nested-tab__actions">
+      <button pButton type="button" severity="primary" (click)="openCreate()">New Item</button>
+    </div>
+  }
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (pageChange)="onPageChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (action)="onGridAction($event)"
+  />
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [header]="editingId() ? 'Edit Item' : 'New Item'"
+  [style]="{ width: '32rem' }"
+  (onHide)="closeDialog()"
+>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="detail-form__field">
+      <label for="medicineId">Medicine ID</label>
+      <input pInputText id="medicineId" formControlName="medicineId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="batchId">Batch ID</label>
+      <input pInputText id="batchId" formControlName="batchId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="unitId">Unit ID</label>
+      <input pInputText id="unitId" formControlName="unitId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="invoiceQuantity">Invoice Quantity</label>
+      <input pInputText id="invoiceQuantity" type="number" formControlName="invoiceQuantity" />
+    </div>
+    <div class="detail-form__field">
+      <label for="unitPrice">Unit Price</label>
+      <input pInputText id="unitPrice" type="number" formControlName="unitPrice" />
+    </div>
+    <div class="detail-form__field">
+      <label for="mrp">MRP</label>
+      <input pInputText id="mrp" type="number" formControlName="mrp" />
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+        Save
+      </button>
+      <button pButton type="button" severity="secondary" variant="outlined" (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</p-dialog>

@@ -1,0 +1,71 @@
+<p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab value="overview">Overview</p-tab>
+    @if (priceListId()) {
+      <p-tab value="items">Items</p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+        <div class="detail-form__field">
+          <label for="priceListCode">Price List Code</label>
+          <input pInputText id="priceListCode" formControlName="priceListCode" />
+        </div>
+        <div class="detail-form__field">
+          <label for="priceListName">Price List Name</label>
+          <input pInputText id="priceListName" formControlName="priceListName" />
+        </div>
+        <div class="detail-form__field">
+          <label for="branchId">Branch ID</label>
+          <input pInputText id="branchId" formControlName="branchId" />
+        </div>
+        <div class="detail-form__field">
+          <label for="priceListType">Price List Type</label>
+          <input pInputText id="priceListType" formControlName="priceListType" />
+        </div>
+        <div class="detail-form__field">
+          <label for="effectiveFrom">Effective From</label>
+          <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+        </div>
+        <div class="detail-form__field">
+          <label for="effectiveTo">Effective To</label>
+          <input pInputText id="effectiveTo" formControlName="effectiveTo" />
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isDefault" [binary]="true" inputId="priceListIsDefault" />
+          <label for="priceListIsDefault">Default</label>
+        </div>
+        <div class="detail-form__field">
+          <p-checkbox formControlName="isActive" [binary]="true" inputId="priceListIsActive" />
+          <label for="priceListIsActive">Active</label>
+        </div>
+        <div class="detail-form__field">
+          <label for="remarks">Remarks</label>
+          <input pInputText id="remarks" formControlName="remarks" />
+        </div>
+        <div class="detail-form__actions">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+            Save
+          </button>
+          @if (!isNew()) {
+            <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+              Delete
+            </button>
+          }
+          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+            Back
+          </button>
+        </div>
+        @if (errorMessage()) {
+          <p class="detail-form__error">{{ errorMessage() }}</p>
+        }
+      </form>
+    </p-tabpanel>
+    @if (priceListId()) {
+      <p-tabpanel value="items">
+        <app-price-list-items-tab [priceListId]="priceListId()!" />
+      </p-tabpanel>
+    }
+  </p-tabpanels>
+</p-tabs>
