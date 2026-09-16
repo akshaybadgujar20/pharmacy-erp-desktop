@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Angular
+dist/
+**/dist/
+.angular/
+**/.angular/
+
+# Java / Spring Boot
+target/
+**/target/
+
+# Build / generated
+build/
+**/build/
+coverage/
+**/coverage/
+
+# Git
+.git/
+
+# Environment / secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+**/logs/
+
+# Runtime/generated data
+uploads/
+backups/
+temp/
+tmp/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
