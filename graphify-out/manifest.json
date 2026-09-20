@@ -24,10 +24,10 @@
     "semantic_hash": "fa439650fa28a1a7aa8c2b6d81c8cc20"
   },
   "backend/package.json": {
-    "mtime": 1788379129.4413145,
-    "seen": 1789582011.6223388,
-    "ast_hash": "8f2b51aff5746170449f8e0af821ff11",
-    "semantic_hash": "8f2b51aff5746170449f8e0af821ff11"
+    "mtime": 1789893903.006847,
+    "seen": 1789895246.2749116,
+    "ast_hash": "a0de414c4eb07b42ff4b0754ded232be",
+    "semantic_hash": ""
   },
   "backend/prisma.config.ts": {
     "mtime": 1787175752.7369008,
@@ -54,10 +54,10 @@
     "semantic_hash": "68ec463d15879f0cc4a0a035ddd37cc8"
   },
   "backend/seed/data/configuration/app-setting.json": {
-    "mtime": 1788969759.030332,
-    "seen": 1789582011.6223388,
-    "ast_hash": "5735f9dc67cdbb05c81da882b609cc84",
-    "semantic_hash": "5735f9dc67cdbb05c81da882b609cc84"
+    "mtime": 1789893903.0088258,
+    "seen": 1789895246.2759106,
+    "ast_hash": "9e8b32a96781ce7400697037205c9c90",
+    "semantic_hash": ""
   },
   "backend/seed/data/configuration/barcode-configuration.json": {
     "mtime": 1787175752.7589808,
@@ -96,10 +96,10 @@
     "semantic_hash": "b6947e4e375088ffa5ecc8e5b4457bf7"
   },
   "backend/seed/data/financial/ledger.json": {
-    "mtime": 1788969027.7013552,
-    "seen": 1789582011.6223388,
-    "ast_hash": "0c3dae66dac2e0b1a0599b4534a60ba6",
-    "semantic_hash": "0c3dae66dac2e0b1a0599b4534a60ba6"
+    "mtime": 1789893903.0088258,
+    "seen": 1789895246.2769146,
+    "ast_hash": "2f3178c2b47a594076c2fcf1f68b0910",
+    "semantic_hash": ""
   },
   "backend/seed/data/geo/area.json": {
     "mtime": 1787175752.760981,
@@ -222,16 +222,16 @@
     "semantic_hash": "806ce8dbf164f5453cfb5a03a87e031c"
   },
   "backend/seed/lib/hydrate.ts": {
-    "mtime": 1787730802.2383263,
-    "seen": 1789582011.6223388,
-    "ast_hash": "ddbc0ed65248158ad151fe8fec55ee63",
-    "semantic_hash": "ddbc0ed65248158ad151fe8fec55ee63"
+    "mtime": 1789893903.0098271,
+    "seen": 1789895246.2799127,
+    "ast_hash": "5bcdfe697ecdc810003bd30db3de3790",
+    "semantic_hash": ""
   },
   "backend/seed/lib/id-registry.ts": {
-    "mtime": 1787730802.2383263,
-    "seen": 1789582011.6223388,
-    "ast_hash": "c75a64d27b3dfd241f16c43d4e0af8bc",
-    "semantic_hash": "c75a64d27b3dfd241f16c43d4e0af8bc"
+    "mtime": 1789893903.0098271,
+    "seen": 1789895246.2799127,
+    "ast_hash": "b383219e21c04eea2928e37e33ee1967",
+    "semantic_hash": ""
   },
   "backend/seed/lib/load-json.ts": {
     "mtime": 1787175752.766994,
@@ -246,10 +246,10 @@
     "semantic_hash": "b368bb0f19b5c9db0341aeda364d8237"
   },
   "backend/seed/lib/prisma-client.ts": {
-    "mtime": 1787175752.766994,
-    "seen": 1789582011.6223388,
-    "ast_hash": "09232e92627d42898aa028a0ea78ade0",
-    "semantic_hash": "09232e92627d42898aa028a0ea78ade0"
+    "mtime": 1789893903.0098271,
+    "seen": 1789895246.2809117,
+    "ast_hash": "01b35d3a3793aeb7909df004f788d85c",
+    "semantic_hash": ""
   },
   "backend/seed/lib/seed-context.ts": {
     "mtime": 1787789734.660219,
@@ -258,16 +258,16 @@
     "semantic_hash": "44dadd8d31aa4a5c49396f688054a1f8"
   },
   "backend/seed/lib/wipe.ts": {
-    "mtime": 1787747289.7660692,
-    "seen": 1789582011.6223388,
-    "ast_hash": "733c3ff73bb25aa2067f76ed22764caf",
-    "semantic_hash": "733c3ff73bb25aa2067f76ed22764caf"
+    "mtime": 1789893903.0108278,
+    "seen": 1789895246.2809117,
+    "ast_hash": "21efe9ca931ea1636b1a4501670ac358",
+    "semantic_hash": ""
   },
   "backend/seed/seed.ts": {
-    "mtime": 1787730802.2412665,
-    "seen": 1789582011.6223388,
-    "ast_hash": "4644c59acd166990aa07c9d5881a8a80",
-    "semantic_hash": "4644c59acd166990aa07c9d5881a8a80"
+    "mtime": 1789893903.0108278,
+    "seen": 1789895246.2809117,
+    "ast_hash": "98647ff74a23361cc72c1a9291965815",
+    "semantic_hash": ""
   },
   "backend/src/app.controller.spec.ts": {
     "mtime": 1787175752.768281,
@@ -564,10 +564,10 @@
     "semantic_hash": "2d56bee5c4cb719d11acbc68ad9f6913"
   },
   "backend/src/common/exceptions/error-code.ts": {
-    "mtime": 1789055710.7076607,
-    "seen": 1789582011.6223388,
-    "ast_hash": "bce9298b0185067039d2eb33597adf4d",
-    "semantic_hash": "bce9298b0185067039d2eb33597adf4d"
+    "mtime": 1789893903.0118258,
+    "seen": 1789895246.290001,
+    "ast_hash": "cf9bf4adf281eafc30e675379e61d678",
+    "semantic_hash": ""
   },
   "backend/src/common/exceptions/global-exception.filter.spec.ts": {
     "mtime": 1787730802.2500603,
@@ -684,10 +684,10 @@
     "semantic_hash": "f009014fcd8ebde897ffd0765c134212"
   },
   "backend/src/configuration/configuration.module.ts": {
-    "mtime": 1789051745.6338086,
-    "seen": 1789582011.6223388,
-    "ast_hash": "40827e64b4e679a83452dfccf85273fd",
-    "semantic_hash": "40827e64b4e679a83452dfccf85273fd"
+    "mtime": 1789893903.0118258,
+    "seen": 1789895246.2930949,
+    "ast_hash": "79a7292e3f3ad51b4f30ae5e94e9409a",
+    "semantic_hash": ""
   },
   "backend/src/configuration/constants/configuration.constants.ts": {
     "mtime": 1788973573.2304606,
@@ -714,10 +714,10 @@
     "semantic_hash": "f55e5425b3b22d12b04a648ca30d8bc0"
   },
   "backend/src/configuration/controllers/financial-year.controller.ts": {
-    "mtime": 1788973737.3609157,
-    "seen": 1789582011.6223388,
-    "ast_hash": "bdf336b638ed6a75a498b1f8aa8cf5ed",
-    "semantic_hash": "bdf336b638ed6a75a498b1f8aa8cf5ed"
+    "mtime": 1789893903.0118258,
+    "seen": 1789895246.2940955,
+    "ast_hash": "be2732eebe9f70fe0c5b9aa1e3fc49ee",
+    "semantic_hash": ""
   },
   "backend/src/configuration/controllers/printer-configuration.controller.ts": {
     "mtime": 1788973740.9278889,
@@ -894,10 +894,10 @@
     "semantic_hash": "ee9fb1a60f9b2a7ea9472771d32761e1"
   },
   "backend/src/configuration/services/financial-year.service.ts": {
-    "mtime": 1789055014.5213697,
-    "seen": 1789582011.6223388,
-    "ast_hash": "3a8852eb20dad0f749d759dcafdc5c29",
-    "semantic_hash": "3a8852eb20dad0f749d759dcafdc5c29"
+    "mtime": 1789893903.0128255,
+    "seen": 1789895246.2990928,
+    "ast_hash": "d7e64be640b51c038d230cfb25647618",
+    "semantic_hash": ""
   },
   "backend/src/configuration/services/printer-configuration.service.ts": {
     "mtime": 1789055167.9640296,
@@ -918,10 +918,10 @@
     "semantic_hash": "0a4c062f9e1d8cd6ac002764639fd224"
   },
   "backend/src/finance/constants/finance.constants.ts": {
-    "mtime": 1789055990.4902658,
-    "seen": 1789582011.6223388,
-    "ast_hash": "d710c4d639f8186f72c6a83963acbbe9",
-    "semantic_hash": "d710c4d639f8186f72c6a83963acbbe9"
+    "mtime": 1789893903.0128255,
+    "seen": 1789895246.3000937,
+    "ast_hash": "39f27980818505a359a2ea2dfb94c5b5",
+    "semantic_hash": ""
   },
   "backend/src/finance/controllers/ledger-entry.controller.ts": {
     "mtime": 1788968820.6147628,
@@ -1014,10 +1014,10 @@
     "semantic_hash": "50e3ee8524d33b2b508aa0505b038b1f"
   },
   "backend/src/finance/finance.module.ts": {
-    "mtime": 1788968829.3469224,
-    "seen": 1789582011.6223388,
-    "ast_hash": "e56f64504eb1bfb3bd5f8f502d71d934",
-    "semantic_hash": "e56f64504eb1bfb3bd5f8f502d71d934"
+    "mtime": 1789893903.0138261,
+    "seen": 1789895246.3020937,
+    "ast_hash": "808f7b828a050eeb544f3958b281c155",
+    "semantic_hash": ""
   },
   "backend/src/finance/mappers/ledger-entry.mapper.ts": {
     "mtime": 1788968877.2257402,
@@ -1068,10 +1068,10 @@
     "semantic_hash": "26b5857629a7abdcadaa0ceb5d1ffcb9"
   },
   "backend/src/finance/utils/finance.util.ts": {
-    "mtime": 1789056023.311713,
-    "seen": 1789582011.6223388,
-    "ast_hash": "1d84ff9ac129532ec420cc38185171a2",
-    "semantic_hash": "1d84ff9ac129532ec420cc38185171a2"
+    "mtime": 1789893903.0152092,
+    "seen": 1789895246.304203,
+    "ast_hash": "d749ae8228d7d4f7e9fc07e81dfee862",
+    "semantic_hash": ""
   },
   "backend/src/inventory/constants/inventory.constants.ts": {
     "mtime": 1788380400.0689936,
@@ -1122,10 +1122,10 @@
     "semantic_hash": "983c8ce815297c5e154b20e0d1652026"
   },
   "backend/src/inventory/controllers/stock-transfer.controller.ts": {
-    "mtime": 1788427194.0161746,
-    "seen": 1789582011.6223388,
-    "ast_hash": "66f0f74e4e2189c72a52e083be17c55b",
-    "semantic_hash": "66f0f74e4e2189c72a52e083be17c55b"
+    "mtime": 1789893903.0152092,
+    "seen": 1789895246.3052037,
+    "ast_hash": "6dbbaaab200ad45424ebab1e44c5eb59",
+    "semantic_hash": ""
   },
   "backend/src/inventory/controllers/stock.controller.ts": {
     "mtime": 1788427194.0161746,
@@ -1338,10 +1338,10 @@
     "semantic_hash": "60dd3805af14da01bf7875ddb1639439"
   },
   "backend/src/inventory/services/stock-adjustment.service.ts": {
-    "mtime": 1789055311.6716475,
-    "seen": 1789582011.6223388,
-    "ast_hash": "52801b900da8ad4d7477bb0b9cf3baf4",
-    "semantic_hash": "52801b900da8ad4d7477bb0b9cf3baf4"
+    "mtime": 1789893903.0162156,
+    "seen": 1789895246.312202,
+    "ast_hash": "952223e5378ddafcfc84d9bb6725245d",
+    "semantic_hash": ""
   },
   "backend/src/inventory/services/stock-movement.service.ts": {
     "mtime": 1788427194.0161746,
@@ -1356,10 +1356,10 @@
     "semantic_hash": "3845fbc7418e67dfbfbbf03d3dc41fb4"
   },
   "backend/src/inventory/services/stock-take.service.ts": {
-    "mtime": 1789055311.9603553,
-    "seen": 1789582011.6223388,
-    "ast_hash": "d0f6465e1ec0c6aed72c9f9d6392a662",
-    "semantic_hash": "d0f6465e1ec0c6aed72c9f9d6392a662"
+    "mtime": 1789893903.0162156,
+    "seen": 1789895246.312202,
+    "ast_hash": "bc1c4d3c0a61c76aa5a8c7cfe7bd8cc5",
+    "semantic_hash": ""
   },
   "backend/src/inventory/services/stock-transfer-item.service.ts": {
     "mtime": 1788427194.0161746,
@@ -1368,10 +1368,10 @@
     "semantic_hash": "c5f9a5d6db3256924dd62400060a01c7"
   },
   "backend/src/inventory/services/stock-transfer.service.ts": {
-    "mtime": 1789055312.4077287,
-    "seen": 1789582011.6223388,
-    "ast_hash": "651756022ce9b95e8e706ef8454440de",
-    "semantic_hash": "651756022ce9b95e8e706ef8454440de"
+    "mtime": 1789893903.0172148,
+    "seen": 1789895246.312202,
+    "ast_hash": "46e224e4d365a6a14be30ada2cf6a88a",
+    "semantic_hash": ""
   },
   "backend/src/inventory/services/stock.service.ts": {
     "mtime": 1788427194.0161746,
@@ -2148,10 +2148,10 @@
     "semantic_hash": "d9d99967c221496b20fd9985f7ea203f"
   },
   "backend/src/persistence/ledger/ledger-posting.util.ts": {
-    "mtime": 1789053698.2980657,
-    "seen": 1789582011.6223388,
-    "ast_hash": "633d7961a6d175e878788cbad3947087",
-    "semantic_hash": "633d7961a6d175e878788cbad3947087"
+    "mtime": 1789893903.0288546,
+    "seen": 1789895246.3363407,
+    "ast_hash": "3dec5232f396263842bc0610cb57cf5a",
+    "semantic_hash": ""
   },
   "backend/src/persistence/outbox/entity-type.constants.ts": {
     "mtime": 1788973402.3398921,
@@ -2183,17 +2183,11 @@
     "ast_hash": "5f6cffbeff0b31ef03ff7a6bcd3673a2",
     "semantic_hash": "5f6cffbeff0b31ef03ff7a6bcd3673a2"
   },
-  "backend/src/persistence/prisma/bigint-id-sequence.ts": {
-    "mtime": 1787175752.7747953,
-    "seen": 1789582011.6223388,
-    "ast_hash": "bc93494735d57f9b2755e91eb012fe33",
-    "semantic_hash": "bc93494735d57f9b2755e91eb012fe33"
-  },
   "backend/src/persistence/prisma/prisma-client.factory.ts": {
-    "mtime": 1787730802.2887907,
-    "seen": 1789582011.6223388,
-    "ast_hash": "dd4dd4a5016d34a21b0a2d10ff4d838d",
-    "semantic_hash": "dd4dd4a5016d34a21b0a2d10ff4d838d"
+    "mtime": 1789893903.0308545,
+    "seen": 1789895246.337346,
+    "ast_hash": "be2e22b89a5f9ed9fc33c2957022b7f7",
+    "semantic_hash": ""
   },
   "backend/src/persistence/prisma/prisma-error.mapper.ts": {
     "mtime": 1787730802.2887907,
@@ -2206,12 +2200,6 @@
     "seen": 1789582011.6223388,
     "ast_hash": "a235a91940509ea45ea622c9b83e9265",
     "semantic_hash": "a235a91940509ea45ea622c9b83e9265"
-  },
-  "backend/src/persistence/prisma/sync-prisma-id-sequence.ts": {
-    "mtime": 1787730802.2907429,
-    "seen": 1789582011.6223388,
-    "ast_hash": "b98cee385d8f766a27c80b25af195bfb",
-    "semantic_hash": "b98cee385d8f766a27c80b25af195bfb"
   },
   "backend/src/persistence/sequence/document-number.formatter.ts": {
     "mtime": 1787730802.2927008,
@@ -2520,10 +2508,10 @@
     "semantic_hash": "c9b30644be1892d32dafa9aa10fa4102"
   },
   "backend/src/prisma.service.ts": {
-    "mtime": 1787730802.2995343,
-    "seen": 1789582011.6223388,
-    "ast_hash": "bb7864fa7c0c97f71191a34e04d4a7fc",
-    "semantic_hash": "bb7864fa7c0c97f71191a34e04d4a7fc"
+    "mtime": 1789893903.0308545,
+    "seen": 1789895246.346513,
+    "ast_hash": "3ed944543a3499c40d6f56c88bda8ba8",
+    "semantic_hash": ""
   },
   "backend/src/purchase/constants/purchase.constants.ts": {
     "mtime": 1789054536.7619927,
@@ -2748,10 +2736,10 @@
     "semantic_hash": "bf744992149e6ecef9359ac62cd2dcce"
   },
   "backend/src/purchase/services/goods-receipt.service.ts": {
-    "mtime": 1789055308.4872751,
-    "seen": 1789582011.6223388,
-    "ast_hash": "40863fe6f2ab86cad70a297c483c7793",
-    "semantic_hash": "40863fe6f2ab86cad70a297c483c7793"
+    "mtime": 1789893903.0308545,
+    "seen": 1789895246.3536572,
+    "ast_hash": "6689de3a2fcc2e74c3e669e38acd319c",
+    "semantic_hash": ""
   },
   "backend/src/purchase/services/purchase-invoice-item.service.ts": {
     "mtime": 1789054571.6082716,
@@ -2784,10 +2772,10 @@
     "semantic_hash": "4e85f5a3665167852f2890812a0c605c"
   },
   "backend/src/purchase/services/purchase-return.service.ts": {
-    "mtime": 1789055307.8042395,
-    "seen": 1789582011.6223388,
-    "ast_hash": "678903507a4f5c60ad030bd1cc39846d",
-    "semantic_hash": "678903507a4f5c60ad030bd1cc39846d"
+    "mtime": 1789893903.031854,
+    "seen": 1789895246.3546572,
+    "ast_hash": "ab82d9be72a22f50cf2566bd38e193cf",
+    "semantic_hash": ""
   },
   "backend/src/purchase/utils/purchase.util.ts": {
     "mtime": 1789055277.1626825,
@@ -3030,16 +3018,16 @@
     "semantic_hash": "98c2c04f80b6c83c36c34550cceb2c60"
   },
   "backend/src/sales/services/sales-invoice.service.ts": {
-    "mtime": 1789055718.4163742,
-    "seen": 1789582011.6223388,
-    "ast_hash": "a868b5c4e6b05de52eded1ce22823491",
-    "semantic_hash": "a868b5c4e6b05de52eded1ce22823491"
+    "mtime": 1789893903.031854,
+    "seen": 1789895246.3616571,
+    "ast_hash": "99a4df89c57e64d790a07356b9e357c3",
+    "semantic_hash": ""
   },
   "backend/src/sales/services/sales-payment.service.ts": {
-    "mtime": 1789055681.671153,
-    "seen": 1789582011.6223388,
-    "ast_hash": "a7206d6ae15f1f9ed0489dad90b88aa6",
-    "semantic_hash": "a7206d6ae15f1f9ed0489dad90b88aa6"
+    "mtime": 1789893903.031854,
+    "seen": 1789895246.3616571,
+    "ast_hash": "97150bc9e16d2fa561d9ff0a4063eb31",
+    "semantic_hash": ""
   },
   "backend/src/sales/services/sales-return-item.service.ts": {
     "mtime": 1789053245.4681306,
@@ -3048,16 +3036,16 @@
     "semantic_hash": "8785d4ef0d51c95e4f7dbcc06f9dcbfb"
   },
   "backend/src/sales/services/sales-return.service.ts": {
-    "mtime": 1789055682.3857787,
-    "seen": 1789582011.6223388,
-    "ast_hash": "0a94f022ba1f5586566ae4da65f1923f",
-    "semantic_hash": "0a94f022ba1f5586566ae4da65f1923f"
+    "mtime": 1789893903.0328536,
+    "seen": 1789895246.3616571,
+    "ast_hash": "7896d7f164d48d12259ac6638994a015",
+    "semantic_hash": ""
   },
   "backend/src/sales/utils/sales.util.ts": {
-    "mtime": 1789055764.7061608,
-    "seen": 1789582011.6223388,
-    "ast_hash": "0300290bee1c177713b4ffc8ad03909b",
-    "semantic_hash": "0300290bee1c177713b4ffc8ad03909b"
+    "mtime": 1789893903.0338533,
+    "seen": 1789895246.3616571,
+    "ast_hash": "c6e23b75c99dbfff43f36b1f4943059a",
+    "semantic_hash": ""
   },
   "backend/src/security/constants/security.constants.ts": {
     "mtime": 1789055460.3099716,
@@ -3318,10 +3306,10 @@
     "semantic_hash": "b656f95cc8c3f7b29cb86ec3fb31ea89"
   },
   "backend/src/settings/setting-keys.constants.ts": {
-    "mtime": 1788969747.1709166,
-    "seen": 1789582011.6223388,
-    "ast_hash": "2073b7404712cc7fd7b0073b08a1e6d7",
-    "semantic_hash": "2073b7404712cc7fd7b0073b08a1e6d7"
+    "mtime": 1789893903.0338533,
+    "seen": 1789895246.3698568,
+    "ast_hash": "d938a107a6f8f4d678bef34e022dcea4",
+    "semantic_hash": ""
   },
   "backend/src/settings/settings.controller.ts": {
     "mtime": 1789051682.1288238,
@@ -3516,10 +3504,10 @@
     "semantic_hash": "b84ba0ef09b8f7e647f83086ee455a46"
   },
   "backend/test/persistence/persistence-test.helpers.ts": {
-    "mtime": 1787725720.025606,
-    "seen": 1789582011.6223388,
-    "ast_hash": "b71b7b4afe7ef80f04f6c45c2bad234f",
-    "semantic_hash": "b71b7b4afe7ef80f04f6c45c2bad234f"
+    "mtime": 1789893903.0348535,
+    "seen": 1789895246.3760169,
+    "ast_hash": "2f2dbb6dabd78b647fadb3d5f98a2535",
+    "semantic_hash": ""
   },
   "backend/test/persistence/persistence-test.module.ts": {
     "mtime": 1787730802.3161564,
@@ -3636,10 +3624,10 @@
     "semantic_hash": "080d9e2f26e52ad0b663b4b7f3d43159"
   },
   "package.json": {
-    "mtime": 1789277210.4941447,
-    "seen": 1789582011.6223388,
-    "ast_hash": "d6529cf0eb738905a0e57e27fe7e1244",
-    "semantic_hash": "d6529cf0eb738905a0e57e27fe7e1244"
+    "mtime": 1789893903.113247,
+    "seen": 1789895246.379017,
+    "ast_hash": "cfc9c2daa55748486db44e72aeb09441",
+    "semantic_hash": ""
   },
   "public/i18n/english.json": {
     "mtime": 1789320743.8522844,
@@ -6814,5 +6802,3095 @@
     "seen": 1789582011.6223388,
     "ast_hash": "34a8daea8b3df09e4ee86842418ed920",
     "semantic_hash": "34a8daea8b3df09e4ee86842418ed920"
+  },
+  "backend/src/finance/controllers/closing.controller.ts": {
+    "mtime": 1789893903.0128255,
+    "seen": 1789895246.3000937,
+    "ast_hash": "688048dcc030ef7bb92281c28ed23893",
+    "semantic_hash": ""
+  },
+  "backend/src/finance/dto/pre-close-checklist-query.dto.ts": {
+    "mtime": 1789895175.294277,
+    "seen": 1789895246.3020937,
+    "ast_hash": "ea8eb5b0fad39885fd26f790d9b2ad62",
+    "semantic_hash": ""
+  },
+  "backend/src/finance/services/closing.service.spec.ts": {
+    "mtime": 1789893903.0138261,
+    "seen": 1789895246.303203,
+    "ast_hash": "925caf57e6cb9bb3615c7bdf6e384ae7",
+    "semantic_hash": ""
+  },
+  "backend/src/finance/services/closing.service.ts": {
+    "mtime": 1789893903.014827,
+    "seen": 1789895246.303203,
+    "ast_hash": "21e9a59adc2f53be64b42ed2f593273c",
+    "semantic_hash": ""
+  },
+  "backend/src/persistence/ledger/ledger-posting.util.spec.ts": {
+    "mtime": 1789893903.0279133,
+    "seen": 1789895246.3363407,
+    "ast_hash": "cb982666acb628ed59e569ae8607b6e4",
+    "semantic_hash": ""
+  },
+  "backend/src/persistence/prisma/id-sequence.constants.ts": {
+    "mtime": 1789893903.0288546,
+    "seen": 1789895246.337346,
+    "ast_hash": "c22f56ca7853b27153ddfa97192d9698",
+    "semantic_hash": ""
+  },
+  "backend/src/persistence/prisma/id-sequence.service.spec.ts": {
+    "mtime": 1789893903.0298545,
+    "seen": 1789895246.337346,
+    "ast_hash": "ff62f1da2f4a4e7b5087bf5d44f52bc5",
+    "semantic_hash": ""
+  },
+  "backend/src/persistence/prisma/id-sequence.service.ts": {
+    "mtime": 1789893903.0298545,
+    "seen": 1789895246.337346,
+    "ast_hash": "a7b3cbfdd9c4492f6dff1d74a3df96b6",
+    "semantic_hash": ""
+  },
+  "backend/src/sales/utils/sales.util.spec.ts": {
+    "mtime": 1789893903.0328536,
+    "seen": 1789895246.3616571,
+    "ast_hash": "2b56fb11dcd3ba8560dfb6d4c49293ae",
+    "semantic_hash": ""
+  },
+  "backend/test/persistence/id-sequence.integration.spec.ts": {
+    "mtime": 1789893903.0348535,
+    "seen": 1789895246.3750157,
+    "ast_hash": "5287266a912eb99b3cfbe51089a0f33c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-all-workflows.py": {
+    "mtime": 1789893903.0965133,
+    "seen": 1789895246.3780172,
+    "ast_hash": "6d5e4e126178a805eb38129c1a5e8da1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-cross-cutting-persistence-flow.py": {
+    "mtime": 1789893903.0965133,
+    "seen": 1789895246.3780172,
+    "ast_hash": "33d16c97caa81741b0027c050e9cfe11",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-inventory-movement-flow.py": {
+    "mtime": 1789893903.0975132,
+    "seen": 1789895246.3780172,
+    "ast_hash": "6975aab9609773696aa4b44bf0749ff3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-month-end-flow.py": {
+    "mtime": 1789893903.0975132,
+    "seen": 1789895246.3780172,
+    "ast_hash": "89461c43d4c423bda772044bd1daa094",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-payment-flow.py": {
+    "mtime": 1789893903.0975132,
+    "seen": 1789895246.3780172,
+    "ast_hash": "8660063db9c8750d3737d301d92a7c53",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-prescription-flow.py": {
+    "mtime": 1789893903.0975132,
+    "seen": 1789895246.3780172,
+    "ast_hash": "669eab12a540ad1f4aca05d83013faae",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-purchase-invoice-flow.py": {
+    "mtime": 1789893903.0985136,
+    "seen": 1789895246.3780172,
+    "ast_hash": "f1247d0b259d0002e22540e73158916a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-return-flow.py": {
+    "mtime": 1789893903.0985136,
+    "seen": 1789895246.3780172,
+    "ast_hash": "babdbe641af8914cb69d7c8908d182e2",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-sales-invoice-flow.py": {
+    "mtime": 1789893903.0985136,
+    "seen": 1789895246.3780172,
+    "ast_hash": "b43bf33d6018e9ba5ba6e586d78dd186",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-stock-adjustment-flow.py": {
+    "mtime": 1789893903.0985136,
+    "seen": 1789895246.3780172,
+    "ast_hash": "a973b8f117bb3b8f0b966dc5ef23eba7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-stock-take-flow.py": {
+    "mtime": 1789893903.099515,
+    "seen": 1789895246.3780172,
+    "ast_hash": "26a3dc007edf8b985307f07b49974845",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-stock-transfer-flow.py": {
+    "mtime": 1789893903.099515,
+    "seen": 1789895246.3780172,
+    "ast_hash": "6b13425add3b80bf79b0f2779c53ffc4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/generate-system-map-flow.py": {
+    "mtime": 1789893903.099515,
+    "seen": 1789895246.3780172,
+    "ast_hash": "49a86e97906dfd0c652391f07d80615a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/lib/__init__.py": {
+    "mtime": 1789893903.101518,
+    "seen": 1789895246.3780172,
+    "ast_hash": "fb460919fff8721f56a732dbe4012202",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/lib/flowchart_engine.py": {
+    "mtime": 1789893903.101518,
+    "seen": 1789895246.3780172,
+    "ast_hash": "e8a96a0db0ed18a811ef3ed082b242f3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/test_generators.py": {
+    "mtime": 1789893903.110246,
+    "seen": 1789895246.3780172,
+    "ast_hash": "fcc7a0b64a7b71af16009ce169b0581a",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/README.md": {
+    "mtime": 1789055117.0093503,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d30125991bb4d534169f22461248cf91",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/audit-module.md": {
+    "mtime": 1788972787.638008,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5089a3ab6912bd1e748637c86b7b404d",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/configuration-module.md": {
+    "mtime": 1789893902.9892414,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5eaa3865c452bda13deb4443975c9efd",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/finance-module.md": {
+    "mtime": 1789056051.9202666,
+    "seen": 1789895246.4745765,
+    "ast_hash": "734a9e67cb57db611a95dd4bef9b5239",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/inventory-module.md": {
+    "mtime": 1788427194.015178,
+    "seen": 1789895246.4745765,
+    "ast_hash": "70b1fc06af3d9b457001fa4b423220d3",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/masters-module.md": {
+    "mtime": 1789051771.6366,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7d25718c64582ff5e05b227c38c64bb9",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/medicine-module.md": {
+    "mtime": 1789053566.4313016,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5b4c5a366cd10792c7ac47d0c08133bb",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/party-module.md": {
+    "mtime": 1788427193.9555137,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9413c6684ee903b7c3297f4d3ac645d2",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/prescription-module.md": {
+    "mtime": 1788972785.036456,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4284f7029094c18b1be551d2b715d495",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/pricing-module.md": {
+    "mtime": 1788972782.4942381,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5cf3849a2df448ce5962e10d004a3135",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/purchase-module.md": {
+    "mtime": 1789053992.816887,
+    "seen": 1789895246.4745765,
+    "ast_hash": "96e229da9ba58a60e327232d2f7513c6",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/sales-module.md": {
+    "mtime": 1789055747.0412612,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2939b823af58a21a985f76b4ff2909f5",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/security-module.md": {
+    "mtime": 1789055462.6244667,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e3bcc8a27d1784c735a2225dee1a79a0",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/settings-module.md": {
+    "mtime": 1789055094.716725,
+    "seen": 1789895246.4745765,
+    "ast_hash": "70305be2ab5c3da2f600bdfac06079d3",
+    "semantic_hash": ""
+  },
+  ".cursor/rules/docs/sync-module.md": {
+    "mtime": 1789051771.2255094,
+    "seen": 1789895246.4745765,
+    "ast_hash": "839e845ec1e9fdfb2a069f82b13f8d00",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1789054092.178994,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4c1b11ab6e4a688af6e31e057c52b71f",
+    "semantic_hash": ""
+  },
+  "backend/AGENTS.md": {
+    "mtime": 1789055104.3880994,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5595b33eae9b32e079e21dea658d21de",
+    "semantic_hash": ""
+  },
+  "backend/README.md": {
+    "mtime": 1787730802.2217286,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8746fdb5fdb504db7d66ac40484db72f",
+    "semantic_hash": ""
+  },
+  "backend/seed/README.md": {
+    "mtime": 1789893903.0078266,
+    "seen": 1789895246.4745765,
+    "ast_hash": "186868a423e7f77194fad55bb8266fae",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_backend_code_review_plan.md": {
+    "mtime": 1787730802.3665595,
+    "seen": 1789895246.4745765,
+    "ast_hash": "09ac2e808e0af4a0944c737d5a238956",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_backend_reporting_implementation.md": {
+    "mtime": 1787788581.1183333,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7aeb8788fdf5520541d542509301b41a",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_backend_seed_script_issues.md": {
+    "mtime": 1787730802.3675375,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b100de6d4f2767d96db02f2b15772eab",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_documentation_merge_review.md": {
+    "mtime": 1787730802.3685133,
+    "seen": 1789895246.4745765,
+    "ast_hash": "00b94062704edb8b383b4b3346ab2159",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_end_to_end_flow_diagram_design.md": {
+    "mtime": 1789893903.0699246,
+    "seen": 1789895246.4745765,
+    "ast_hash": "91bedd90b409968aea15df34b3a30bc0",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_logging_framework_recommendation.md": {
+    "mtime": 1787725720.0554423,
+    "seen": 1789895246.4745765,
+    "ast_hash": "03f69b16b96720bc4e29aa356ea2b294",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_pharmacy_erp_architecture_review.md": {
+    "mtime": 1787248101.3622248,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b6968ffce2d39d382bc746672b740c13",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_pharmacy_erp_early_priorities.md": {
+    "mtime": 1787725720.05642,
+    "seen": 1789895246.4745765,
+    "ast_hash": "763d7c419727bb6ca906bd368758a225",
+    "semantic_hash": ""
+  },
+  "discussion/cursor_pharmacy_erp_functional_overview.md": {
+    "mtime": 1789893903.0730052,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fd62fa47a1a358f1ae1a16db23f0ed41",
+    "semantic_hash": ""
+  },
+  "discussion/my cursor/cursor_explore_inventory_dtos_mappers.md": {
+    "mtime": 1788380203.6968653,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9ccbdede2263ba743712ca9df7881435",
+    "semantic_hash": ""
+  },
+  "discussion/my cursor/cursor_explore_party_dtos_mappers.md": {
+    "mtime": 1788380176.894626,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4471d9eae3213d1730957e40009ff1f4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/README.md": {
+    "mtime": 1789893903.075984,
+    "seen": 1789895246.4745765,
+    "ast_hash": "258da5805a702d8aec48d9d4e30df2dd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/001_foundation_architecture.md": {
+    "mtime": 1787175752.8180027,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2ef9ec775f9c5fb4e303887f6f1312ac",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/002_organization_geography_configuration.md": {
+    "mtime": 1787175752.8180027,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd4310d6497f4edec4859a4faf969e78",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/003_party_management.md": {
+    "mtime": 1787175752.8180027,
+    "seen": 1789895246.4745765,
+    "ast_hash": "15284e5fa0d2d33fee065e3b1d0f3cd9",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/004_user_role_permission_security.md": {
+    "mtime": 1787175752.8193388,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b072f4526abd62061499fd5d59862681",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/005_medicine_master_management.md": {
+    "mtime": 1787175752.8199706,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5992226b6da2693135584a68c75e4240",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/006_inventory_management.md": {
+    "mtime": 1787175752.8199706,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ac5215b6063f4b474dc0742ccdf2f546",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/007_purchase_management.md": {
+    "mtime": 1787175752.8209739,
+    "seen": 1789895246.4745765,
+    "ast_hash": "de026b21b1aab8dde0287fb2c1c4c1ec",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/008_sales_billing_management.md": {
+    "mtime": 1787175752.8209739,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4702e6aba2e15f7c020fece5046ce982",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/009_financial_management_accounting.md": {
+    "mtime": 1787175752.8219793,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c6424dea76b7f197676b9a18ae72ac07",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/010_pricing_taxation_management.md": {
+    "mtime": 1787175752.8224833,
+    "seen": 1789895246.4745765,
+    "ast_hash": "82233a32c93c560afe053071c7e53519",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/011_loyalty_customer_rewards.md": {
+    "mtime": 1787175752.8224833,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c4d89c464455d529e38460907d17fea8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/012_prescription_management.md": {
+    "mtime": 1787175752.8224833,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0974443983d73f986a525da5d6c7a026",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/ado/pharmacy_erp_ado_backlog_standard.md": {
+    "mtime": 1787175752.8277194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d7ec0c7c32948429c5435e75cab3bf56",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/authentication.md": {
+    "mtime": 1787175752.8277194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/common.md": {
+    "mtime": 1787175752.8277194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/customers.md": {
+    "mtime": 1787175752.8277194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/finance.md": {
+    "mtime": 1787175752.8287194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/inventory.md": {
+    "mtime": 1787175752.8287194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/pricing.md": {
+    "mtime": 1787175752.8287194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/products.md": {
+    "mtime": 1787175752.8287194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/purchasing.md": {
+    "mtime": 1787175752.8287194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/reports.md": {
+    "mtime": 1787175752.8297195,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/sales.md": {
+    "mtime": 1787175752.8297195,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/api/suppliers.md": {
+    "mtime": 1787175752.8297195,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/README.md": {
+    "mtime": 1789056759.9344573,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3ada962bfcf53271a71a1b00f3afcc67",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-001-sqlite-postgres-single-schema.md": {
+    "mtime": 1789056799.5810673,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5a58df3509b20760cd55c207895a17c6",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-002-string-status-not-enums.md": {
+    "mtime": 1789056803.7084029,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4744572ce055f581b43125678fa5effb",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-003-multi-branch-stock-per-batch.md": {
+    "mtime": 1789056806.4301038,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e076ee827e5ed8a2bab8dba3a23d02c7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-004-sync-entity-uuid-identity.md": {
+    "mtime": 1789056809.4301074,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3fe9d29af347b50d443de88dd7b1f23c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-005-branch-scoped-document-numbers.md": {
+    "mtime": 1789056811.6140625,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3e400ace7ca2a7e50e88dcf3aef0390b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-006-unit-of-work-all-writes.md": {
+    "mtime": 1789056852.9184296,
+    "seen": 1789895246.4745765,
+    "ast_hash": "98bf71abadc9d41d6a4340ebcd9d0fbd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-007-outbox-in-same-transaction.md": {
+    "mtime": 1789056854.7876787,
+    "seen": 1789895246.4745765,
+    "ast_hash": "12223ab20cd63ba5a63a1036881ae79e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-008-inventory-ledger-only-stock-path.md": {
+    "mtime": 1789056857.810854,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e6cbf22ba2bf895aacff24c6c21b0929",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-009-bigint-id-extension-sqlite.md": {
+    "mtime": 1789893903.077011,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a2d175397130243eca1be5e3a017a226",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-010-request-context-async-local-storage.md": {
+    "mtime": 1789056862.1755795,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4049c7767a72d67e2794a08aa1d66455",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-011-ledger-posting-in-persistence.md": {
+    "mtime": 1789056913.108171,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c7b92513123ba147b3591c79776ae5ac",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-012-jwt-global-auth-guards.md": {
+    "mtime": 1789056915.696319,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8acb3f36b2b52333baa6d92aded32162",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-013-auth-driven-request-context.md": {
+    "mtime": 1789056919.0577698,
+    "seen": 1789895246.4745765,
+    "ast_hash": "62959ca1bcf60d24a0f740174edba14e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-014-settings-service-cached-reads.md": {
+    "mtime": 1789056920.967065,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c3bbad99e029ed073cfa4255bf36598b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-015-party-crud-reference-template.md": {
+    "mtime": 1789056923.986163,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7960d1343631c99c302ec151f1e7abad",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-016-winston-vs-audit-service-split.md": {
+    "mtime": 1789056926.3342578,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d83a47baf0b4eef3b3177ab4ecd17325",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-017-audit-service-in-unit-of-work-tx.md": {
+    "mtime": 1789057255.2186317,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cfee62e1fda5d942575373a44700ea19",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-018-electron-safestorage-token-storage.md": {
+    "mtime": 1789057327.0007167,
+    "seen": 1789895246.4745765,
+    "ast_hash": "99247f019a663a735fe02188e115630e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-019-bcrypt-password-hashing.md": {
+    "mtime": 1789057327.0017166,
+    "seen": 1789895246.4745765,
+    "ast_hash": "92cf64f938c3f829d56aeddfe01b2962",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-020-org-global-party-masters.md": {
+    "mtime": 1789057327.0017166,
+    "seen": 1789895246.4745765,
+    "ast_hash": "802ca336d2c60896093eed9eaf7dd7d0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-021-offline-first-local-sqlite.md": {
+    "mtime": 1789057327.0027173,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a66d71b8e046be7538ada4ba73efec05",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-022-sync-worker-deferred.md": {
+    "mtime": 1789057327.0027173,
+    "seen": 1789895246.4745765,
+    "ast_hash": "55d4483be1ef3a4de2e53a0267cafa8d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-023-http-angular-nest-electron-shell.md": {
+    "mtime": 1789057327.0027173,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5555c9337b74523fd99f3d2540cfa9e6",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-024-mutation-template-golden-rules.md": {
+    "mtime": 1789057327.0027173,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c6e889225f4e895967732305f918a113",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-025-report-registry-provider-pattern.md": {
+    "mtime": 1789057327.003716,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7951d3d98e1cd236c8fae353cbd6d3fe",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-026-reporting-read-only-no-uow.md": {
+    "mtime": 1789057327.004717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7e69c9cfffc68a564dc3745741ae8f92",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-047-purchase-all-four-document-types.md": {
+    "mtime": 1789057327.004717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8a68848600cf5b59ce2c00795488301d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-048-purchase-prisma-source-of-truth.md": {
+    "mtime": 1789057327.004717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3e3715f084d18597e24ddee31b1d2436",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-049-grn-full-inspection-workflow.md": {
+    "mtime": 1789057327.005717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3fdc55f39beab5997f517933c87e8d59",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-050-purchase-invoice-post-initially-no-ledger.md": {
+    "mtime": 1789057327.005717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dc83cf820fd72b60424222816f94662f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-052-grn-without-po-setting-gate.md": {
+    "mtime": 1789057327.005717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3ab3684bdcb641042899616da04fae62",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-053-grn-cancel-stock-reversal.md": {
+    "mtime": 1789057327.005717,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6b7e6416185e5b3e0fb62e28d660c55e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-055-finance-four-tables-v1.md": {
+    "mtime": 1789057327.0067174,
+    "seen": 1789895246.4745765,
+    "ast_hash": "57fb6701a07450a74d7d7e2af47c4085",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-056-finance-full-cross-module-hooks.md": {
+    "mtime": 1789057327.0067174,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd429103bf2bce62e8ca093531ff6bed",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-064-block-purchase-invoice-cancel-when-paid.md": {
+    "mtime": 1789057327.0067174,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1c36f5b5e2011cab3e960c7aef0cb726",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-065-voucher-reversal-by-voucher-number-rev-suffix.md": {
+    "mtime": 1789057327.0067174,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9c73894f41f708e809decf8b671b669c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-068-sales-all-five-tables-v1.md": {
+    "mtime": 1789057327.007716,
+    "seen": 1789895246.4745765,
+    "ast_hash": "820bca36a3b1b9ff5674aed214dc85d5",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-069-sales-full-finance-ledger-hooks.md": {
+    "mtime": 1789057327.007716,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d38b990fc1c2aa8749a3d2d2e063488f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-072-fefo-batch-allocation-at-post.md": {
+    "mtime": 1789057327.007716,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1e5cf97565d5bd5d9e27551f60f248f1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-076-block-sales-cancel-when-paid-or-return.md": {
+    "mtime": 1789057327.0087192,
+    "seen": 1789895246.4745765,
+    "ast_hash": "988e9eb02cfc0822b7ac1deecff186a5",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-080-auth-security-module-split.md": {
+    "mtime": 1789057327.0087192,
+    "seen": 1789895246.4745765,
+    "ast_hash": "da0b8a5d5a39e65c59083588db8f5f1c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-086-session-invalidation-on-security-changes.md": {
+    "mtime": 1789057327.0087192,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f5b97205bea3fbd7f13786681543ef57",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-089-medicine-backend-only-v1.md": {
+    "mtime": 1789057327.0087192,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3f55daeece356a2ec5d685b1e52c4826",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-101-pricing-prescription-audit-single-delivery.md": {
+    "mtime": 1789057327.0087192,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d773c144b4598f943adc591184ef5098",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-114-scm-single-delivery.md": {
+    "mtime": 1789057327.0097194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "80b6c6bb95b774a83efe8b67e3f6b5b8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-127-skip-area-delete-guard-schema-gap.md": {
+    "mtime": 1789057327.0097194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "aaa2af98d930003e09158726463fc45a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-130-settings-put-requires-version.md": {
+    "mtime": 1789057327.0097194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1fb21050500428623e833ffc6a32641d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-133-developer-guide-replaces-memory-map-wiring.md": {
+    "mtime": 1789057327.0097194,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b39a03b0c1df4f3a493ef81168dc2c19",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-134-standalone-coding-principles-mdc.md": {
+    "mtime": 1789057327.0107193,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c0a59003d81cd77ad24a8e8cd5a9fec1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-135-grn-accept-stock-inbound-boundary.md": {
+    "mtime": 1789057327.0107193,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e1e76b795065254d40294371117789cf",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-136-sales-post-stock-outbound-boundary.md": {
+    "mtime": 1789057327.0107193,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8861293dbdf59b75cc6419549b0f5f33",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-137-logical-module-coupling-via-fk-not-nest-imports.md": {
+    "mtime": 1789057327.0117157,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d0f2201a655a02e9a70614566da65682",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-138-sync-conflict-resolve-metadata-only.md": {
+    "mtime": 1789057327.0117157,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ec74e050ea5f6ff8c05598e11b0dd9da",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-139-offline-first-local-source-of-truth.md": {
+    "mtime": 1789123598.981423,
+    "seen": 1789895246.4745765,
+    "ast_hash": "36503975d570999f5c99f04cbea4f688",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-140-delta-sync-only.md": {
+    "mtime": 1789123598.981993,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bbd690a2c5c929d43a7998f4810c1c57",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-141-outbox-background-sync-triggers.md": {
+    "mtime": 1789123598.981993,
+    "seen": 1789895246.4745765,
+    "ast_hash": "29147bf2dce32e64af8da2623610fb69",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-142-request-idempotency-uuid.md": {
+    "mtime": 1789123598.9829211,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fd97f1344e9a79d748d1874377a6de9d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-143-entity-specific-conflict-resolution.md": {
+    "mtime": 1789123598.9829211,
+    "seen": 1789895246.4745765,
+    "ast_hash": "873564b3c7acfe1077356ca965cfb665",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-144-angular-feature-modules-no-component-logic.md": {
+    "mtime": 1789123599.0440342,
+    "seen": 1789895246.4745765,
+    "ast_hash": "655beeb97ed686266d68ed4601d1eb1a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-145-electron-context-isolation-preload.md": {
+    "mtime": 1789123599.0440342,
+    "seen": 1789895246.4745765,
+    "ast_hash": "99cbc0d3301acb1fd5aebc885e968e61",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-146-nestjs-thin-controller-rich-service.md": {
+    "mtime": 1789123599.0449626,
+    "seen": 1789895246.4745765,
+    "ast_hash": "22ed41e7217a79aa69eda6c48df8aaf8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-147-rest-json-envelope-binary-exports.md": {
+    "mtime": 1789123599.0449626,
+    "seen": 1789895246.4745765,
+    "ast_hash": "35ccf8482ccaf43dc6f305ccb51d6936",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-148-feature-module-anatomy-template.md": {
+    "mtime": 1789123599.1054115,
+    "seen": 1789895246.4745765,
+    "ast_hash": "52d8a38084e63b8d2b57f59029de3c8b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-149-reads-prisma-writes-unit-of-work.md": {
+    "mtime": 1789123599.1054115,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c70dd133c7d234ff3c306f31849896c1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-150-mutation-audit-outbox-same-transaction.md": {
+    "mtime": 1789123599.1061943,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d1149a9c533601692c22b577b605dd67",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-151-reports-via-registry-not-controller.md": {
+    "mtime": 1789123599.1061943,
+    "seen": 1789895246.4745765,
+    "ast_hash": "44320928bb25998b6ce6bc708f12d957",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-152-additive-only-backend-extensions.md": {
+    "mtime": 1789123599.1061943,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ea9171d6085d8c13096812face7023d0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-153-central-report-registry-inverted-dependency.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "90eec1a666b1d46a91c2d20e63e143ab",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-154-reports-read-only-no-uow-outbox.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "254fec252249783d17eca59b84638ca9",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-155-two-layer-report-permissions.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dfb0fd7955a2b3e87602bdf211067001",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-156-report-export-formats-csv-xlsx-pdf.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "53c5eebaf83d119a33b072f64e227a9e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-157-report-file-export-bypass-interceptor.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8663a25170fe4968ee344c811ced0a8b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-158-namespaced-report-ids.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "066a4bd918016c36b59005ba0b05a9ce",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-159-party-reports-provider-first.md": {
+    "mtime": 1789123599.171572,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6f5d8b5528c3a2c3d778a85189a4e83d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-160-report-export-libraries-exceljs-pdfmake.md": {
+    "mtime": 1789123599.1758795,
+    "seen": 1789895246.4745765,
+    "ast_hash": "78b89f43385e5623902ef3eaf0e645cd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-161-inventory-nested-item-controllers.md": {
+    "mtime": 1789123615.9545448,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0f0d01b2a8e3cad5f26805315bba6911",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-162-inventory-header-create-without-items.md": {
+    "mtime": 1789123615.9631958,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8445684974f9762380e08b1c0a551a1d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-163-stock-movement-read-only-http.md": {
+    "mtime": 1789123615.9631958,
+    "seen": 1789895246.4745765,
+    "ast_hash": "07af951548dc3222331dea1cf17bc387",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-164-batch-org-global-stock-branch-scoped.md": {
+    "mtime": 1789123615.9642334,
+    "seen": 1789895246.4745765,
+    "ast_hash": "401782c18021baa6e5be4d01e72075b7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-165-inventory-stock-read-only-dtos.md": {
+    "mtime": 1789123615.9642334,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bbbb09355fc350a1e407cbf0287e4f5d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-166-inventory-separate-child-routes-for-items.md": {
+    "mtime": 1789123615.9716733,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4c44fb1aa87061c77c357dd2c6b6232e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-167-inventory-crud-plus-workflow-endpoints.md": {
+    "mtime": 1789123615.980233,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d0c7ae6697bbfdb021e81eff2d228434",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-168-inventory-batch-org-global-stock-branch-scoped.md": {
+    "mtime": 1789123615.980233,
+    "seen": 1789895246.4745765,
+    "ast_hash": "25e51c144f9426a37fa395290e640968",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-169-inventory-stock-movement-immutable-read-only-http.md": {
+    "mtime": 1789123615.980233,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b74119f0e27b7f2d5b157e3b37eb88e8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-170-inventory-stock-take-reconcile-creates-adjustment.md": {
+    "mtime": 1789123615.9963744,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd6e54870fd5c1d7c6a77935c135a4bd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-171-inventory-module-memory-doc-mdc-pattern.md": {
+    "mtime": 1789123615.9973748,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7668f03cadffc7c694451144d20ab646",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-172-purchase-full-permission-matrix.md": {
+    "mtime": 1789123616.061301,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7152267a2d7f17ee6d1f1b2d077bdcdc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-173-purchase-tests-deferred-v1.md": {
+    "mtime": 1789123616.061301,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1827ad78820082cc5f603ea0664c5834",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-174-finance-full-ledger-posting-service.md": {
+    "mtime": 1789123616.1346173,
+    "seen": 1789895246.4745765,
+    "ast_hash": "df45aa00300369369ce3211fbcb8ce0e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-175-finance-ledger-entry-readonly-api.md": {
+    "mtime": 1789123616.1394446,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d8d5ef927009998df30da695685df389",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-176-finance-ledger-coa-full-crud.md": {
+    "mtime": 1789123616.140113,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c4ab0e81657f87a1342c606d1585c74f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-177-finance-strict-financial-year-validation.md": {
+    "mtime": 1789123616.140113,
+    "seen": 1789895246.4745765,
+    "ast_hash": "32c4c989d0dc7b394034be7b50d08902",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-178-finance-global-payment-receipt-numbers.md": {
+    "mtime": 1789123616.1411133,
+    "seen": 1789895246.4745765,
+    "ast_hash": "31d6905ae2cd70d54f3671e7060b8268",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-179-finance-expense-table-out-of-scope.md": {
+    "mtime": 1789123616.147399,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fc2f49cb9ae29cd307a5e196aa22b4ae",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-180-finance-tests-deferred-v1.md": {
+    "mtime": 1789123616.1562617,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a7250a0a789c8660296013485c0a1ea3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-181-finance-reject-unsupported-payment-type.md": {
+    "mtime": 1789123616.1588137,
+    "seen": 1789895246.4745765,
+    "ast_hash": "805e9615bb2736ca79bbced02180618c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-182-finance-running-balance-best-effort.md": {
+    "mtime": 1789123616.160838,
+    "seen": 1789895246.4745765,
+    "ast_hash": "61196012f157e0b859abbe945f3d0ec4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-183-finance-simplification-scope-unresolved.md": {
+    "mtime": 1789124123.0944514,
+    "seen": 1789895246.4745765,
+    "ast_hash": "11fb92535793fb2d900519b4269013cd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-184-sales-payment-nested-separate-from-receipt.md": {
+    "mtime": 1789123616.273101,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0a7724478800c74224698900e18d3ebf",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-185-sales-pricelist-auto-resolve-at-post.md": {
+    "mtime": 1789123616.2741003,
+    "seen": 1789895246.4745765,
+    "ast_hash": "79d62d1adebdbc477c35097e9d926f1c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-186-sales-prescription-fk-only-v1.md": {
+    "mtime": 1789123616.2741003,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7b711e860fb7ee582fe7ae87f16b2a89",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-187-sales-return-restock-only-v1.md": {
+    "mtime": 1789123616.2741003,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dcfd4fb57786061b9f85b230f48a7f69",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-188-sales-posted-cancel-with-reversal-v1.md": {
+    "mtime": 1789123616.284223,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e1d7dee378c681cc87f5fb915e9ef739",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-189-sales-full-permission-matrix.md": {
+    "mtime": 1789123616.285223,
+    "seen": 1789895246.4745765,
+    "ast_hash": "05c86c9f354b09ee54f4f267d366d48c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-190-sales-tests-deferred-v1.md": {
+    "mtime": 1789123616.285223,
+    "seen": 1789895246.4745765,
+    "ast_hash": "563c9c844b71c09899a3b019cd0a9572",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-191-security-all-six-tables-plus-userbranch.md": {
+    "mtime": 1789123616.3490407,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3de061a33ccaf49908fc3a849081a4e4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-192-security-full-password-flows.md": {
+    "mtime": 1789123616.3581562,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4c9e0808f78b4ed9f05a6bef91dc337a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-193-security-permission-full-crud.md": {
+    "mtime": 1789123616.366156,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6019022a871641226d30dc6d3e560244",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-194-security-junction-nested-bulk-replace.md": {
+    "mtime": 1789123616.3743072,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2c34cfde643ea1052df87f78c588470d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-195-security-session-force-logout.md": {
+    "mtime": 1789123616.3753092,
+    "seen": 1789895246.4745765,
+    "ast_hash": "944a6ae09d6be6535f3562e5a045e298",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-196-security-employee-fk-validation-only.md": {
+    "mtime": 1789123616.3753092,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cb9210fb83ba0eed2fcca37209a8a0e5",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-197-security-full-permission-matrix-seed.md": {
+    "mtime": 1789123616.3824198,
+    "seen": 1789895246.4745765,
+    "ast_hash": "98f1c48d7fadd2d19882b598e0348c69",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-198-security-tests-deferred-v1.md": {
+    "mtime": 1789123616.3917274,
+    "seen": 1789895246.4745765,
+    "ast_hash": "27355c5612c2c66993553e0ac0fd3c24",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-199-auth-change-required-password-public-endpoint.md": {
+    "mtime": 1789123616.3917274,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2cfb64b40cc013ae174d2aab26d799e7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-200-medicine-full-master-permission-matrix.md": {
+    "mtime": 1789123616.453391,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2133b6d817b187d6bda90e714d023100",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-201-medicine-manufacturer-party-fk-only.md": {
+    "mtime": 1789123616.4543939,
+    "seen": 1789895246.4745765,
+    "ast_hash": "484a64ada225b10352a0b0e7e60d3576",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-202-medicine-salt-nested-crud-replace.md": {
+    "mtime": 1789123616.4543939,
+    "seen": 1789895246.4745765,
+    "ast_hash": "419762c764529857da91ad824846a9f4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-203-medicine-system-rows-fk-delete-guard.md": {
+    "mtime": 1789123616.4543939,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e7c2edf7138f0709850d84b253ad8ed6",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-204-medicine-strict-delete-guards.md": {
+    "mtime": 1789123616.4553926,
+    "seen": 1789895246.4745765,
+    "ast_hash": "91ae771abf69bff350adb809b29da6bb",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-205-medicine-code-client-provided.md": {
+    "mtime": 1789123616.4553926,
+    "seen": 1789895246.4745765,
+    "ast_hash": "da987b8b151d82d5008084cb3577df28",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-206-medicine-name-unique-per-manufacturer.md": {
+    "mtime": 1789123616.4563923,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d8d57d42c8f77ddd42c68f4dce05fa89",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-207-medicine-category-flat-crud-no-tree.md": {
+    "mtime": 1789123616.4563923,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0a365c2cc82b65898427b504f2421b08",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-208-medicine-salt-schema-as-is-hard-delete.md": {
+    "mtime": 1789123616.4563923,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0efe7b4bb5a18bb5d0da2c2ce92197e2",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-209-medicine-fix-all-reviewed-issues.md": {
+    "mtime": 1789123616.4563923,
+    "seen": 1789895246.4745765,
+    "ast_hash": "809eed031f9aa4d1f5fce887f80c9928",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-210-medicine-unittype-pack-seed-json-only.md": {
+    "mtime": 1789123616.4573927,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9bbd69b0067ba478170bd196d5b1b4cc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-211-ppa-backend-only-tests-deferred.md": {
+    "mtime": 1789123616.5214183,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f2cb87193ff4838f841398b8a53791dc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-212-pricelist-branch-scoped-with-org-wide.md": {
+    "mtime": 1789123616.5214183,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0a631d5cda0a77bf0df7e1fbf4a9ba74",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-213-pricelist-default-enforce-on-set.md": {
+    "mtime": 1789123616.522419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d9435b59f01e81c9e69a8312cd13d8c0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-214-pricelist-item-nested-crud-replace.md": {
+    "mtime": 1789123616.522419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b8ec63257eb894fafdd05cd79f6bba78",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-215-tax-discount-full-crud-fk-delete-guard.md": {
+    "mtime": 1789123616.522419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "005f7156b745404f4eef0b6d389fff38",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-216-prescription-workflow-routes.md": {
+    "mtime": 1789123616.5234206,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6c9c2db1c4c62b9f97594676a631f8cc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-217-prescription-number-client-provided.md": {
+    "mtime": 1789123616.5234206,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cb71e59ca197eaa2d13024b4c75c108b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-218-prescription-item-readonly-dispensed-fields.md": {
+    "mtime": 1789123616.5234206,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9f6ed44fa5b0b7015a7d19c4783e7fc1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-219-sales-dispense-hook-out-of-scope.md": {
+    "mtime": 1789123640.6730814,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6c82e35a5560eff93d76f5f961cdfd60",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-220-audit-read-apis-plus-changehistory-on-update.md": {
+    "mtime": 1789123616.524418,
+    "seen": 1789895246.4745765,
+    "ast_hash": "274daf83aa38b85244ada0bfe9f3ffc7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-221-audit-default-branch-filter.md": {
+    "mtime": 1789123616.524418,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e10d9222e2a57f1bf8b6f944011957fa",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-222-ppa-full-permission-matrices.md": {
+    "mtime": 1789123616.5254185,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2663bd9054eed96f2baff9c58020d0a0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-223-ppa-fix-critical-medium-scope.md": {
+    "mtime": 1789123616.5254185,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1ad980b474d29d346dc90df2a959a88c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-224-ppa-simplification-standard-scope.md": {
+    "mtime": 1789123616.5254185,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a2f29ad006baa97fd9749e438061ffb8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-225-scm-backend-only-tests-deferred.md": {
+    "mtime": 1789123616.594466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0fcc663fbe2ec5ad5827b85404eb0d05",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-226-extend-settings-module-appsetting-crud.md": {
+    "mtime": 1789123616.594466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "aaa22ca84aab7732e588708086ba1e34",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-227-configuration-module-org-tables.md": {
+    "mtime": 1789123616.594466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "542a61eb27930f3ea8fba3b2d221dca4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-228-financial-year-crud-plus-close.md": {
+    "mtime": 1789123616.5954635,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b29843acd36190bd26c9d48ea477959d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-229-sequence-generator-admin-crud-internal-next.md": {
+    "mtime": 1789123616.5954635,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f41f89e7a4aee5e915fb1477fd26ba2f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-230-company-branch-full-crud-default-guards.md": {
+    "mtime": 1789123616.5964632,
+    "seen": 1789895246.4745765,
+    "ast_hash": "647018915d8c77e8ab7f18f65b6b4fca",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-231-sync-read-retry-resolve-no-worker.md": {
+    "mtime": 1789123616.5964632,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d92b6d075e05181d14569424cf81fdd7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-232-geo-masters-flat-crud.md": {
+    "mtime": 1789123616.5964632,
+    "seen": 1789895246.4745765,
+    "ast_hash": "64002faa95897abcb4af62547b940633",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-233-scm-strict-soft-delete-guards.md": {
+    "mtime": 1789123616.5974636,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6198a448845a05ec822cc6ab08089b8d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-234-scm-changehistory-on-update-v1.md": {
+    "mtime": 1789123616.5974636,
+    "seen": 1789895246.4745765,
+    "ast_hash": "30359e17ce142a113212e4c74e928890",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-235-scm-full-permission-matrix-extend-settings-sync.md": {
+    "mtime": 1789123616.5974636,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9ee7d0595ef2e99296e6f81e7209efd8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-236-scm-fix-all-review-items.md": {
+    "mtime": 1789123616.5985942,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f9d5adc792f1890072cee13ac70bbb04",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-237-scm-company-tenant-scoped-api.md": {
+    "mtime": 1789123616.5985942,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9da264975516dc9ed24441364069a95c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-238-scm-sequence-delete-block-when-active.md": {
+    "mtime": 1789123616.5985942,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cca8c1bf9239a495cf70d553efc7d17d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-239-fy-iscurrent-branch-scoped-intentional.md": {
+    "mtime": 1789123616.599594,
+    "seen": 1789895246.4745765,
+    "ast_hash": "43988213fa8a4d6366f970c41e3a669b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-240-scm-simplification-p1-p2-p3.md": {
+    "mtime": 1789123616.599594,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ff51aee50ffa08e60e7cc608dade7fe1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-241-architecture-docs-consolidation-structure.md": {
+    "mtime": 1789123616.6674182,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a766897bb86cccecdab497e1e07933e3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-242-backend-scoped-mdc-module-rules.md": {
+    "mtime": 1789123616.6685462,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3955daed53f0d7b52a590ea5b3cc2f3f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-243-common-module-shared-utilities.md": {
+    "mtime": 1789123616.6685462,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5e57ee1e174f89979fcf27aaf5b58fdd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-244-purchase-po-invoice-no-stock-mutation.md": {
+    "mtime": 1789123678.297882,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ece4c0db3a9ba50785775b137cc5c699",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-245-finance-ledger-balance-derived-not-stored.md": {
+    "mtime": 1789123678.297882,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5ebad51ffee7e2eb8b4feb3dff2943bc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-246-sales-dual-settlement-salespayment-and-receipt.md": {
+    "mtime": 1789123678.3048902,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3ed3fb9f702b013fa2e814f90f3970fe",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-247-sales-otc-cash-ledger-not-customer.md": {
+    "mtime": 1789123678.3048902,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3ccf7b643ed44d1821c31205c8fc24a3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-248-sales-settings-mrp-and-expired-batch-gates.md": {
+    "mtime": 1789123678.3086083,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b02a2b491007a5efe34a2b0ce1e2eb56",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-249-finance-sales-receipt-allocation-deferred.md": {
+    "mtime": 1789123678.3086083,
+    "seen": 1789895246.4745765,
+    "ast_hash": "841c20bffc657b96dd3b509d5514b081",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-250-party-nested-contacts-addresses-pattern.md": {
+    "mtime": 1789123678.3086083,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a1880f1658244271888041456d7d9255",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-251-audit-party-contact-exception-deferred.md": {
+    "mtime": 1789123678.309566,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b2a38e38736ac2ae0bcc3a755575d006",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-252-settings-list-branch-override-dedupe.md": {
+    "mtime": 1789124165.6646242,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b7919652a036d9184ca37a162df000c7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-253-sync-outbox-retry-failed-processing-only.md": {
+    "mtime": 1789124167.4206882,
+    "seen": 1789895246.4745765,
+    "ast_hash": "13da08c1796bdddebad265e767b16440",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-254-sync-admin-mutations-audit-only-no-outbox.md": {
+    "mtime": 1789124169.1305766,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1592dbe274ef15d2b36a621c5cfd0e09",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-255-synclog-immutable-read-only.md": {
+    "mtime": 1789124171.5163379,
+    "seen": 1789895246.4745765,
+    "ast_hash": "28ce2603b58628a4c3015d6fb59d9508",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-256-financial-year-close-not-enforced-all-modules.md": {
+    "mtime": 1789124172.7322526,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cb5eefab37cce630221a92daec15392c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-257-security-mfa-password-policy-out-of-scope-v1.md": {
+    "mtime": 1789124174.4397054,
+    "seen": 1789895246.4745765,
+    "ast_hash": "29cea371be1187881c7a51893594cb14",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-258-stock-take-variance-server-computed.md": {
+    "mtime": 1789124176.2827544,
+    "seen": 1789895246.4745765,
+    "ast_hash": "06111f755b45f1176ddd70cf8c33b6f0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-259-stock-transfer-dispatch-from-draft-without-approval.md": {
+    "mtime": 1789124178.200977,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d08dc381757276863d25fa317e46a9d7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-260-audit-and-log-changes-helper-for-update.md": {
+    "mtime": 1789124179.684738,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a5301e3e5afd6709019e93f4e1e54f61",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/README.md": {
+    "mtime": 1789893903.0780034,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dfa822f763909707782f492806d55f84",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/adrs/adr-review-plain-english.md": {
+    "mtime": 1789893903.0789561,
+    "seen": 1789895246.4745765,
+    "ast_hash": "95f808682c4efac0cda80e081fc657cb",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/application-architecture.md": {
+    "mtime": 1787725720.0583763,
+    "seen": 1789895246.4745765,
+    "ast_hash": "71d4af4f7da885c733874ddfe1ea76d9",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/backend-developer-guide.md": {
+    "mtime": 1789893903.0819857,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ff8b0f9b22acccaa7c36138980ebf811",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/backend-memory-map.md": {
+    "mtime": 1789893903.084049,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b2e7cc33011b01db7058da815886fd26",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/backend-route-index.md": {
+    "mtime": 1789051420.1593566,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c8e2d44a67dad4dac3de58622b29ff42",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/data-and-sync.md": {
+    "mtime": 1787725720.0583763,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e508e821bd0f094e21e55030b1871cb3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/early-foundations.md": {
+    "mtime": 1789055098.086387,
+    "seen": 1789895246.4745765,
+    "ast_hash": "69c4321be1ca6e18636b7b234f974ce8",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/engineering-standards.md": {
+    "mtime": 1787725720.0593474,
+    "seen": 1789895246.4745765,
+    "ast_hash": "15300af6c8e6b8a737c1dd0db3a46535",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/extending-the-backend.md": {
+    "mtime": 1789893903.0850494,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7189ee1e62a05ff9a002f8e76f9a4b06",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/integrations.md": {
+    "mtime": 1787725720.0593474,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ecf3176ac9c0f4b4a69a90033155989e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/logging-and-audit.md": {
+    "mtime": 1787730802.3714452,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e9fbd8431f32676cb5488d5ce4d63b93",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/overview.md": {
+    "mtime": 1789054090.8353524,
+    "seen": 1789895246.4745765,
+    "ast_hash": "47817ceed6d7ced3f4ac06688dbd22c1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/product-ux.md": {
+    "mtime": 1787725720.060325,
+    "seen": 1789895246.4745765,
+    "ast_hash": "99a5ae7f95644f3b6bee434c26f1eda7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/reporting.md": {
+    "mtime": 1787788581.1198442,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7119f74ed4ff2ac0ba00f19f1f196e3c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/security.md": {
+    "mtime": 1787725720.0613012,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dd0c1cf8bdf89cddd86a8724bb2947db",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/templates/adr-template.md": {
+    "mtime": 1789056751.4104097,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b07d19e286f038ccd74d6abfafc3d5ed",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/templates/module-template.md": {
+    "mtime": 1787175752.8387427,
+    "seen": 1789895246.4745765,
+    "ast_hash": "17a1294b44c63f49eeabb14cd5cdc6b3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/architecture/testing.md": {
+    "mtime": 1787730802.374373,
+    "seen": 1789895246.4745765,
+    "ast_hash": "26a607169f49dd103f2034d25b987ad1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/architecture-review.md": {
+    "mtime": 1789893903.0860486,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a93eeeb5490ca0848eb46474c1bb2c18",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/database_overview.md": {
+    "mtime": 1789893903.0860486,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0801cb9d4d21958e8ec77695606e1413",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/design_structure/database_tables_overview.md": {
+    "mtime": 1787175752.8427703,
+    "seen": 1789895246.4745765,
+    "ast_hash": "213ccd85ba4ea98715b03cfa4f673265",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md": {
+    "mtime": 1789893903.087043,
+    "seen": 1789895246.4745765,
+    "ast_hash": "eab30e99a8baef19ea892b0e29400c4e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/prisma_sqlite_jpa_postgres_alignment.md": {
+    "mtime": 1789893903.087043,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c9ae4dd001c6567789c8dbfe6c4664b1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/audit/audit.md": {
+    "mtime": 1787730802.3792596,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1cae7bbcedfd380aeac8bd82488f7f14",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/configuration/configuration.md": {
+    "mtime": 1789893903.0880463,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b1ad612577320b141ed124be3f6a1775",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/financial/financial.md": {
+    "mtime": 1787730802.382187,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fb0c67ac4a292869a7b6f684442b3857",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/inventory/inventory.md": {
+    "mtime": 1787730802.3831575,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6c1b8ad23de83f6124061f1dd8355f05",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/loyalty/loyalty.md": {
+    "mtime": 1787730802.3841348,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6f886d9aff220b3d6df5c99ade22bc93",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/masters/masters.md": {
+    "mtime": 1787730802.3851175,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f2f9db381fda8ce25ffa9a31155337fa",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/medicine_master/medicine_master.md": {
+    "mtime": 1787730802.3870728,
+    "seen": 1789895246.4745765,
+    "ast_hash": "73592e62c50d0d7fcb9c86dea2046019",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/party_management/party_management.md": {
+    "mtime": 1787730802.3890252,
+    "seen": 1789895246.4745765,
+    "ast_hash": "775afe3146005429d9939844411996e6",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/prescription/prescription.md": {
+    "mtime": 1787730802.3899958,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0748b956763f01456f7545975a68f56c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/pricing/pricing.md": {
+    "mtime": 1787730802.3919477,
+    "seen": 1789895246.4745765,
+    "ast_hash": "11db59816e24f02d027bc2a6c5bd3c55",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/purchase/purchase.md": {
+    "mtime": 1787730802.3948843,
+    "seen": 1789895246.4745765,
+    "ast_hash": "82c34af016efe616d4d3a52bb91ec05b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/sales/sales.md": {
+    "mtime": 1787730802.4144084,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e15f22bef8cddbbdd79920462654abde",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/synchronization/synchronization.md": {
+    "mtime": 1787730802.4163606,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fbd542f0e3722aad7b80653ea7fa07ff",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/table_catalog.md": {
+    "mtime": 1787175752.8654635,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8a69448791045dfb0b3ebe9150246a4d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/database/tables/user_and_security/user_and_security.md": {
+    "mtime": 1787730802.4173367,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fb16587003e22c11d34e270711c84b9c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/ANCHOR_FACTS.md": {
+    "mtime": 1787730802.4173367,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e6cfd73dc8945eaec63f9fbcf71dd1d4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/README.md": {
+    "mtime": 1787730802.4183207,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4b22c1fa07d2df34b2526ae06ac45b4f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/customer.md": {
+    "mtime": 1787730802.4192898,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ed6c0803e51104c824eaeba596878d89",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/finance.md": {
+    "mtime": 1787730802.4202662,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7be9ab17b7c1cd6107fef51e4335a3f4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/inventory.md": {
+    "mtime": 1787730802.4212453,
+    "seen": 1789895246.4745765,
+    "ast_hash": "19923351949990d9d3cac3959375785f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/product.md": {
+    "mtime": 1787730802.4212453,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ac58ed36efaf5b76e8fc81deeb6c6739",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/purchasing.md": {
+    "mtime": 1787730802.4222221,
+    "seen": 1789895246.4745765,
+    "ast_hash": "59a4501f1db2d74d689259e43c21e619",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/sales.md": {
+    "mtime": 1787730802.4231951,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9646dd9fcf5975be1e0f59964c9e62c4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/domain/supplier.md": {
+    "mtime": 1787730802.4231951,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c998eed8243cc12769c7e59dede5ea32",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 1 Pharmacy Business Domain.md": {
+    "mtime": 1787175752.8893814,
+    "seen": 1789895246.4745765,
+    "ast_hash": "740659e950d5b86f51a79ac3538a75f9",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 10 Reporting, Analytics & Business Intelligence.md": {
+    "mtime": 1787175752.8903816,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b2241a0ce5ae43bd8796a3c8cf37d7fa",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 11 Security, Authentication & Authorization.md": {
+    "mtime": 1787175752.8903816,
+    "seen": 1789895246.4745765,
+    "ast_hash": "af2c7e8ab89a84ce2107f13a1e504e6f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 12 Integrations, External Systems & Interoperability.md": {
+    "mtime": 1787175752.8903816,
+    "seen": 1789895246.4745765,
+    "ast_hash": "44e9fd4975b862951a350ef551b08638",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 13 Quality Assurance, Testing & Validation.md": {
+    "mtime": 1787175752.8913815,
+    "seen": 1789895246.4745765,
+    "ast_hash": "aa8141f3b344ba450308a578c3eb7021",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 14 Deployment, DevOps, Operations & Infrastructure.md": {
+    "mtime": 1787175752.8913815,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5849e6fdd874cbee7f94db98edd5f576",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 15 Product Roadmap, Future Enhancements & Innovation.md": {
+    "mtime": 1787175752.891885,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1fd93f2538ac4f8122e143ee175197d7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 2 Functional Specification.md": {
+    "mtime": 1787175752.891885,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0ca309f6d77f5055fb0a94ba341283f1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 3 Business Workflows.md": {
+    "mtime": 1787175752.891885,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c63778b19149c721a8812c8f28439df3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 4 Database Design.md": {
+    "mtime": 1787175752.89289,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b4988c77e0484820d2abf86cb48587a6",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 5 Business Rules Engine.md": {
+    "mtime": 1787175752.8933172,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0716b65acd294afb0496d74528fd2b9b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 6 User Interface (UI) & User Experience (UX) Design.md": {
+    "mtime": 1787175752.8933172,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3a4d8bedf6fd3b4ae1f2a1f069165b0c",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 7 System Architecture.md": {
+    "mtime": 1787175752.8933172,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b31292d21766928b32110c28f8d81f2f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 8 Backend Architecture & Service Design.md": {
+    "mtime": 1787175752.8933172,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1483d8c7fc8ee9ef67fbfdb01af03f0e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/exiting_product_analysis/Phase 9 Frontend Architecture & Application Design.md": {
+    "mtime": 1787175752.894322,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6847247c22d8772e844ec1d0756bd778",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/README.md": {
+    "mtime": 1789893903.0885096,
+    "seen": 1789895246.4745765,
+    "ast_hash": "29155f9729d3ed92d98f7655c75f32c7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/audit.md": {
+    "mtime": 1789893903.0885096,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7fb6a8632942dbaa2bc76c86ce687b7d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/configuration.md": {
+    "mtime": 1789893903.0885096,
+    "seen": 1789895246.4745765,
+    "ast_hash": "39736efae53cd7774adbfb19a1251460",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/error-codes.md": {
+    "mtime": 1789893903.0895147,
+    "seen": 1789895246.4745765,
+    "ast_hash": "880bc6c1d5e82fb5b8f7d19103ffb9a4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/financial.md": {
+    "mtime": 1789893903.0895147,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6eb6b9ba3f395db13acaeaeff0b9eb85",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/functional-overview.md": {
+    "mtime": 1789893903.0895147,
+    "seen": 1789895246.4745765,
+    "ast_hash": "12e5122c714e09455fd35af65bdf8153",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/glossary.md": {
+    "mtime": 1789893903.0905466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9d1ac16168c38ba894dc0ce795c3845f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/implementation-status.md": {
+    "mtime": 1789893903.0905466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0f80d2468fd9a7666f6c82ca51c52148",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/integrations-and-devices.md": {
+    "mtime": 1789893903.0915146,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5b598b5b4fe4be12c631e47e1d088e70",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/inventory.md": {
+    "mtime": 1789893903.0915146,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b1ef5fb4a2fd85d61649c7c36d551a32",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/loyalty.md": {
+    "mtime": 1789893903.0915146,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6e036ae7e40fbc18a245daa2bc4bece7",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/masters.md": {
+    "mtime": 1789893903.0915146,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e6eaa0229915c1a0ee676d4bcca331ab",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/medicine-master.md": {
+    "mtime": 1789893903.0925505,
+    "seen": 1789895246.4745765,
+    "ast_hash": "994cbcb2ac6fc1aaa1d9104b94a1752a",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/party-management.md": {
+    "mtime": 1789893903.0925505,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8baf2f8d1a18b7dea4447480d5746966",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/prescription.md": {
+    "mtime": 1789893903.0925505,
+    "seen": 1789895246.4745765,
+    "ast_hash": "487924624f78f7b7001ea0497da05ac4",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/pricing.md": {
+    "mtime": 1789893903.093514,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6ef31ea4386d83713d06cb6468dd3eef",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/purchase.md": {
+    "mtime": 1789893903.093514,
+    "seen": 1789895246.4745765,
+    "ast_hash": "21c2178def23db0f3cd3e9c508ef6d69",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/reporting.md": {
+    "mtime": 1789893903.093514,
+    "seen": 1789895246.4745765,
+    "ast_hash": "78200c79c496839b84fb41aad1c6bc6f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/roles-and-permissions.md": {
+    "mtime": 1789893903.0945134,
+    "seen": 1789895246.4745765,
+    "ast_hash": "76159b01df94f5392bd8465b6dd87951",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/sales.md": {
+    "mtime": 1789893903.0945134,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fb9069b22f08d1f5da1e05788153a0e0",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/synchronization.md": {
+    "mtime": 1789893903.0945134,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a1bb49d453d69c316ddc71c1f44db8a2",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/user-experience.md": {
+    "mtime": 1789893903.0945134,
+    "seen": 1789895246.4745765,
+    "ast_hash": "12a659c7b9b4896ee2ff5d510feb9436",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/functional/user-security.md": {
+    "mtime": 1789893903.0955129,
+    "seen": 1789895246.4745765,
+    "ast_hash": "75f5cea5bc410b66c52c806be1a8e219",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/pharmacy_erp_backend_crud_foundation.md": {
+    "mtime": 1787175752.894322,
+    "seen": 1789895246.4745765,
+    "ast_hash": "67b13b6f60fd4573b6daed7645fbd337",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/roadmap/disaster-recovery.md": {
+    "mtime": 1787725720.114033,
+    "seen": 1789895246.4745765,
+    "ast_hash": "773aade339fd715b8bd0c4681f0997d1",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/roadmap/future-roadmap.md": {
+    "mtime": 1787730802.4241734,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5b4cb76087d8090845e74ac473136712",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/roadmap/localization.md": {
+    "mtime": 1787725720.114033,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2529d7c431d31ced0cebbb941892513e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/roadmap/migration.md": {
+    "mtime": 1787730802.4261286,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a324d994633e266bf0d183d6ba4e16af",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/README.md": {
+    "mtime": 1789893903.0955129,
+    "seen": 1789895246.4745765,
+    "ast_hash": "202c306743e47f3218f24c85a7343b1d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/inventory-flow.md": {
+    "mtime": 1789893903.1005158,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f3b6fea1aaac885ba997fe610f096d89",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/month-end-closing.md": {
+    "mtime": 1789893903.101518,
+    "seen": 1789895246.4745765,
+    "ast_hash": "378ef396269b4f73dbda96d2a3745d9b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/payment-flow.md": {
+    "mtime": 1789893903.102517,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8f5d5115f45acaf2455fac0b9cc388dc",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/purchase-flow.md": {
+    "mtime": 1789893903.1045148,
+    "seen": 1789895246.4745765,
+    "ast_hash": "75f5613d01f1f57617bb9b0f96308f05",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/return-flow.md": {
+    "mtime": 1789893903.1058462,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b59481dd54a995337d6bb2db1eacf74b",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/sales-flow.md": {
+    "mtime": 1789893903.1058462,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b151f53d3ddbd3af7f508c17895e91c9",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-adjustment.md": {
+    "mtime": 1789893903.1072419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "443c3863d0ac83fd8f3ec9ffcd0d7129",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-take.md": {
+    "mtime": 1789893903.1082485,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1ef638f5b2b2932c79c5c19da05f071e",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-transfer.md": {
+    "mtime": 1789893903.109246,
+    "seen": 1789895246.4745765,
+    "ast_hash": "39c669aca467430b966c8fff33e459c2",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/workflow-gap-index.md": {
+    "mtime": 1789893903.110246,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ff47ec89747e6855086c5897f6993045",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_handbook.md": {
+    "mtime": 1787725720.123801,
+    "seen": 1789895246.4745765,
+    "ast_hash": "26c4bf749f6007f543192ecbb1f559a7",
+    "semantic_hash": ""
+  },
+  "plans/align_domain_roadmap_workflows_65d3db4a.plan.md": {
+    "mtime": 1787725720.1345541,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6e67fbdf65c9e6ca74f99e2436b89f34",
+    "semantic_hash": ""
+  },
+  "plans/backend-cursor-rules_666edcea.plan.md": {
+    "mtime": 1787175752.9013212,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1e8dc440c8f74cf50a3a86cd4a08b6eb",
+    "semantic_hash": ""
+  },
+  "plans/backend_code_review_fixes_bd9f5911.plan.md": {
+    "mtime": 1787758149.462314,
+    "seen": 1789895246.4745765,
+    "ast_hash": "866ccdf129fb71735ec9391faefb31a2",
+    "semantic_hash": ""
+  },
+  "plans/category_overview_docs_f58e20b4.plan.md": {
+    "mtime": 1787725720.1345541,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9445cf11f4b8df26c848cc13d87de811",
+    "semantic_hash": ""
+  },
+  "plans/common_module_improvements_f20c8e7d.plan.md": {
+    "mtime": 1787175752.9018247,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b16ef4095e60e5bb6298fdc66c72ca16",
+    "semantic_hash": ""
+  },
+  "plans/consolidate_architecture_docs_01308cef.plan.md": {
+    "mtime": 1787725720.1355345,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd338848d9890bab27a4d2e9e2de148e",
+    "semantic_hash": ""
+  },
+  "plans/docs_consolidation_f95cddfa.plan.md": {
+    "mtime": 1787730802.440773,
+    "seen": 1789895246.4745765,
+    "ast_hash": "462f495db5aef10d3259a72ac3b68faa",
+    "semantic_hash": ""
+  },
+  "plans/early-foundations_4083198d.plan.md": {
+    "mtime": 1788449343.703499,
+    "seen": 1789895246.4745765,
+    "ast_hash": "798be6d5f567c6768ca901ee91cf41b9",
+    "semantic_hash": ""
+  },
+  "plans/extensible_reporting_module_bed1021e.plan.md": {
+    "mtime": 1787758149.463289,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2c9758d1ca680299310bef394f6f42a3",
+    "semantic_hash": ""
+  },
+  "plans/party-management-crud-api_91499946.plan.md": {
+    "mtime": 1787758149.4642658,
+    "seen": 1789895246.4745765,
+    "ast_hash": "96e13c43743ce46314729fdfe17d1d44",
+    "semantic_hash": ""
+  },
+  "plans/persistence_foundation_patterns_3af5df7a.plan.md": {
+    "mtime": 1787175752.9018247,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b2120c14e3b20ccf7e9d38c75f1e08e5",
+    "semantic_hash": ""
+  },
+  "plans/pharmacy_erp_db_review_cfc2c0b5.plan.md": {
+    "mtime": 1787175752.902539,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bf31b6861d7b6b74eae6a39611e31d65",
+    "semantic_hash": ""
+  },
+  "plans/seed_script_fixes_1f4fb2c0.plan.md": {
+    "mtime": 1787730802.440773,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e374964b8454648594670f741816f50b",
+    "semantic_hash": ""
+  },
+  "plans/winston-logging-audit_832d31b7.plan.md": {
+    "mtime": 1787725720.1365147,
+    "seen": 1789895246.4745765,
+    "ast_hash": "86a99223a9c0a1516ed840b45ffdd51e",
+    "semantic_hash": ""
+  },
+  "src/app/app.component.html": {
+    "mtime": 1789303632.149304,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ca8227d75de4e8e15bf204e2cd477251",
+    "semantic_hash": ""
+  },
+  "src/app/components/dashboard/dashboard.component.html": {
+    "mtime": 1789492488.043125,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3b82fbad758d05d5c9d5abab1e98a75c",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/dialog/README.md": {
+    "mtime": 1789147686.3904302,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fdc74d4968ef1c91df3c9cafbca0a0d8",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/dialog/components/app-dialog.component.html": {
+    "mtime": 1789147685.5533707,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd29234950364b97d5c18e82d7f0c55a",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/dialog/components/app-drawer.component.html": {
+    "mtime": 1789147686.3904302,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9de4691a5e54277a1acaf217ee5a9b05",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/form/README.md": {
+    "mtime": 1789145529.096675,
+    "seen": 1789895246.4745765,
+    "ast_hash": "582981e9928fb2ea1c46af8804408549",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/form/app-form.component.html": {
+    "mtime": 1789145688.1485555,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2f3f872e8cbfdf591e719f4e2618541a",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/form/form-field.component.html": {
+    "mtime": 1789147686.3904302,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4f75756445aea2ab5ce6abcf85ca07f2",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/grid/README.md": {
+    "mtime": 1789138806.2149005,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e074aa0da21a09e3028be49f952eb6ed",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/grid/app-grid.component.html": {
+    "mtime": 1789147686.3591337,
+    "seen": 1789895246.4745765,
+    "ast_hash": "768b879b8069aea607fd9d895db468fc",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/toast/README.md": {
+    "mtime": 1789143897.3991392,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1e66eac48c26ff1bc31f121a3f7615d7",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/toolbar/README.md": {
+    "mtime": 1789140290.3375313,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8718fabd43da170593d219c199a04f22",
+    "semantic_hash": ""
+  },
+  "src/app/components/generic/toolbar/app-toolbar.component.html": {
+    "mtime": 1789147686.3904302,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ce16f92e932a6b17ec2aedb936e8f649",
+    "semantic_hash": ""
+  },
+  "src/app/components/shell/main-layout.component.html": {
+    "mtime": 1789566831.1263807,
+    "seen": 1789895246.4745765,
+    "ast_hash": "610951fcef463718c569a6cfe603b69d",
+    "semantic_hash": ""
+  },
+  "src/app/core/keyboard/README.md": {
+    "mtime": 1789140286.347966,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d2a28b220a8128aaf9749bb7114af9de",
+    "semantic_hash": ""
+  },
+  "src/app/features/auth/login/login.component.html": {
+    "mtime": 1789238490.2382545,
+    "seen": 1789895246.4745765,
+    "ast_hash": "43b207373844b989aba1b7c645f5292e",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/barcode-configurations/barcode-configuration-detail.component.html": {
+    "mtime": 1789142422.890302,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bfedc900e5bdcff679ca5e480b7e9d16",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/barcode-configurations/barcode-configuration-list.component.html": {
+    "mtime": 1789142393.4775636,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/branches/branch-detail.component.html": {
+    "mtime": 1789142266.8888063,
+    "seen": 1789895246.4745765,
+    "ast_hash": "af87ad898b25f71fabd5cd6c58540668",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/branches/branch-list.component.html": {
+    "mtime": 1789142236.933802,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/companies/company-detail.component.html": {
+    "mtime": 1789142209.2403235,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e1cbe31aff53976b3350964c92bf371c",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/companies/company-list.component.html": {
+    "mtime": 1789142195.9613948,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/financial-years/financial-year-detail.component.html": {
+    "mtime": 1789142326.650834,
+    "seen": 1789895246.4745765,
+    "ast_hash": "db39a5fc54556fe60bf0198eaef87c2f",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/financial-years/financial-year-list.component.html": {
+    "mtime": 1789142301.4194653,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/printer-configurations/printer-configuration-detail.component.html": {
+    "mtime": 1789142460.1917765,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8398ef1a7179e0af81dee2df70065782",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/printer-configurations/printer-configuration-list.component.html": {
+    "mtime": 1789142449.5052807,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/sequence-generators/sequence-generator-detail.component.html": {
+    "mtime": 1789142365.9377906,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d763789799d80fb38bac05d5b77f9905",
+    "semantic_hash": ""
+  },
+  "src/app/features/configuration/sequence-generators/sequence-generator-list.component.html": {
+    "mtime": 1789142355.2232945,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/ledgers/ledger-detail.component.html": {
+    "mtime": 1789142785.0665743,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1994405f7ee1e9b76503aa43004a4c89",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/ledgers/ledger-entries-tab.component.html": {
+    "mtime": 1789142775.0143936,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8e4137ff1963e1e18e9d6c555ec41f51",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/ledgers/ledger-list.component.html": {
+    "mtime": 1789142772.081425,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/payments/payment-detail.component.html": {
+    "mtime": 1789142836.3019264,
+    "seen": 1789895246.4745765,
+    "ast_hash": "104a70ec2c5eef52c9ee1b678a17acd5",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/payments/payment-list.component.html": {
+    "mtime": 1789142820.9119947,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/receipts/receipt-detail.component.html": {
+    "mtime": 1789142894.3368576,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3f49866fdb05f070ea797a396b07b176",
+    "semantic_hash": ""
+  },
+  "src/app/features/finance/receipts/receipt-list.component.html": {
+    "mtime": 1789142880.4744842,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/batches/batch-detail.component.html": {
+    "mtime": 1789142857.01852,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0ed5911b8875d6a2618e0a2a13042543",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/batches/batch-list.component.html": {
+    "mtime": 1789142852.9840362,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-adjustments/stock-adjustment-detail.component.html": {
+    "mtime": 1789142978.8370888,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4c130994202d8d3bf9b3904b842e76f8",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-adjustments/stock-adjustment-items-tab.component.html": {
+    "mtime": 1789142969.2241957,
+    "seen": 1789895246.4745765,
+    "ast_hash": "918726681502cf59d9655eaabd748aac",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-adjustments/stock-adjustment-list.component.html": {
+    "mtime": 1789142962.6908708,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-movements/stock-movement-list.component.html": {
+    "mtime": 1789142920.8263454,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e4373f458b9e352859ff9d7a0b12367b",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-takes/stock-take-detail.component.html": {
+    "mtime": 1789143153.4254005,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3e1c994959a12bd9a07cd9aeecc14ba2",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-takes/stock-take-items-tab.component.html": {
+    "mtime": 1789143139.3153682,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d2cc0448b81e1f2a659a294f88f66939",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-takes/stock-take-list.component.html": {
+    "mtime": 1789143108.2028499,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-transfers/stock-transfer-detail.component.html": {
+    "mtime": 1789143068.4459653,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9f110597f29e38cdb389bf4c1aa50cb5",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-transfers/stock-transfer-items-tab.component.html": {
+    "mtime": 1789143058.8831913,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d3c6166bfd2e2b290a2733fe9d50613f",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stock-transfers/stock-transfer-list.component.html": {
+    "mtime": 1789143023.904665,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/inventory/stocks/stock-list.component.html": {
+    "mtime": 1789142872.693781,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e4373f458b9e352859ff9d7a0b12367b",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/areas/area-detail.component.html": {
+    "mtime": 1789567017.3267689,
+    "seen": 1789895246.4745765,
+    "ast_hash": "55345ba64e53d83771ec3bba771c8c77",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/areas/area-list.component.html": {
+    "mtime": 1789567011.5319805,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/cities/city-detail.component.html": {
+    "mtime": 1789567003.666239,
+    "seen": 1789895246.4745765,
+    "ast_hash": "53ebb93b4435b23cd86c2438d941bb1b",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/cities/city-list.component.html": {
+    "mtime": 1789566998.7094767,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/countries/country-detail.component.html": {
+    "mtime": 1789566976.7741547,
+    "seen": 1789895246.4745765,
+    "ast_hash": "09263edf227844142ba09f36e39fc2c1",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/countries/country-list.component.html": {
+    "mtime": 1789566967.3708203,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/states/state-detail.component.html": {
+    "mtime": 1789566990.4255288,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8048ca2b30a41261d8bdc964d81bead4",
+    "semantic_hash": ""
+  },
+  "src/app/features/masters/states/state-list.component.html": {
+    "mtime": 1789566985.2950733,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/categories/medicine-category-detail.component.html": {
+    "mtime": 1789567149.7833169,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b6cfcfa95ecfa7683282cae463e5ec6d",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/categories/medicine-category-list.component.html": {
+    "mtime": 1789567141.2450457,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/generics/medicine-generic-detail.component.html": {
+    "mtime": 1789567171.8732285,
+    "seen": 1789895246.4745765,
+    "ast_hash": "6f3a748cb68fae983def9bfab5046b63",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/generics/medicine-generic-list.component.html": {
+    "mtime": 1789567163.164913,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/manufacturers/manufacturer-detail.component.html": {
+    "mtime": 1789567230.3427308,
+    "seen": 1789895246.4745765,
+    "ast_hash": "00bacb7a517bcea6ede72ae14953a49e",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/manufacturers/manufacturer-list.component.html": {
+    "mtime": 1789567219.400371,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/medicines/medicine-detail.component.html": {
+    "mtime": 1789567124.6994617,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8caf40ac6c4435f561921a902e581bf0",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/medicines/medicine-list.component.html": {
+    "mtime": 1789567086.909228,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/medicines/medicine-salts-tab.component.html": {
+    "mtime": 1789567105.1766963,
+    "seen": 1789895246.4745765,
+    "ast_hash": "40185de304be1a1b73bd4bf2d8acc97c",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/salt-compositions/salt-composition-detail.component.html": {
+    "mtime": 1789567260.5561347,
+    "seen": 1789895246.4745765,
+    "ast_hash": "09ac34e4cacfffda2c950e6f8495630e",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/salt-compositions/salt-composition-list.component.html": {
+    "mtime": 1789567250.0890002,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/schedules/medicine-schedule-detail.component.html": {
+    "mtime": 1789567206.2840917,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4017c89e4552b0090d25bf2736f3eb1b",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/schedules/medicine-schedule-list.component.html": {
+    "mtime": 1789567193.405583,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/units-of-measure/unit-of-measure-detail.component.html": {
+    "mtime": 1789567285.8491435,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f13100445c42f5581aa9a42e7b8306d0",
+    "semantic_hash": ""
+  },
+  "src/app/features/medicine/units-of-measure/unit-of-measure-list.component.html": {
+    "mtime": 1789567275.045976,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/customers/customer-detail.component.html": {
+    "mtime": 1789141244.3841875,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9c8e2574fb571ea0df88eb9490aa15b6",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/customers/customer-list.component.html": {
+    "mtime": 1789141229.836419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/doctors/doctor-detail.component.html": {
+    "mtime": 1789141300.432375,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8f2a970150a47e0a70720064fadc7335",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/doctors/doctor-list.component.html": {
+    "mtime": 1789141292.5454435,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/employees/employee-detail.component.html": {
+    "mtime": 1789141326.002418,
+    "seen": 1789895246.4745765,
+    "ast_hash": "dde6b448383ce78b3f652fe630442208",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/employees/employee-list.component.html": {
+    "mtime": 1789141319.3139813,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/parties/party-addresses-tab.component.html": {
+    "mtime": 1789141401.6994545,
+    "seen": 1789895246.4745765,
+    "ast_hash": "09dade1a7ce3ffd7db83174a99d37d43",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/parties/party-contacts-tab.component.html": {
+    "mtime": 1789141411.6036,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c57b4b3e283d65a6f988d384ec00a6eb",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/parties/party-detail.component.html": {
+    "mtime": 1789141434.2785492,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9113b9abfdd30e3b9dde1d54f711b682",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/parties/party-list.component.html": {
+    "mtime": 1789141354.813115,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/parties/party-roles-tab.component.html": {
+    "mtime": 1789141392.8957102,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e8e13a7a5d69f22607b75a5fa85a4803",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/suppliers/supplier-detail.component.html": {
+    "mtime": 1789141272.7228837,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3b6602f2c9b78131c247c5f104aa21c8",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/suppliers/supplier-list.component.html": {
+    "mtime": 1789141265.255676,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/prescription/prescriptions/prescription-detail.component.html": {
+    "mtime": 1789567459.204849,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8801fd235946f4e0f4d1a9ff89b4bfd4",
+    "semantic_hash": ""
+  },
+  "src/app/features/prescription/prescriptions/prescription-items-tab.component.html": {
+    "mtime": 1789567476.5976267,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ea500ab27d6b5293be6c5d82eb86f411",
+    "semantic_hash": ""
+  },
+  "src/app/features/prescription/prescriptions/prescription-list.component.html": {
+    "mtime": 1789567431.4996877,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8d8d31553dcf11180de51c0941e418b5",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/discount-rules/discount-rule-detail.component.html": {
+    "mtime": 1789567018.12472,
+    "seen": 1789895246.4745765,
+    "ast_hash": "a5c797e3b90e745ee9d7240a00d73f96",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/discount-rules/discount-rule-list.component.html": {
+    "mtime": 1789567008.0176387,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/price-lists/price-list-detail.component.html": {
+    "mtime": 1789567041.9595392,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ddc08eee2a3a382743524509d2090b7a",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/price-lists/price-list-items-tab.component.html": {
+    "mtime": 1789567048.9202328,
+    "seen": 1789895246.4745765,
+    "ast_hash": "d3b8aebc54cd4bb535f0412ac5afe5b7",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/price-lists/price-list-list.component.html": {
+    "mtime": 1789567034.224689,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/taxes/tax-detail.component.html": {
+    "mtime": 1789567062.7144568,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2112616b9a29c1772a320e5d3629059b",
+    "semantic_hash": ""
+  },
+  "src/app/features/pricing/taxes/tax-list.component.html": {
+    "mtime": 1789567058.0774238,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/goods-receipts/goods-receipt-detail.component.html": {
+    "mtime": 1789567498.0517895,
+    "seen": 1789895246.4745765,
+    "ast_hash": "05ffd507d2006ad3d299a0fb919e4135",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/goods-receipts/goods-receipt-items-tab.component.html": {
+    "mtime": 1789567505.9026952,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cdf53efb2027bca8909a6561f9dfe456",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/goods-receipts/goods-receipt-list.component.html": {
+    "mtime": 1789567488.1078806,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-invoices/purchase-invoice-detail.component.html": {
+    "mtime": 1789567436.3998492,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5d5a9798537b17ef3f0874e41ea4fe01",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-invoices/purchase-invoice-items-tab.component.html": {
+    "mtime": 1789567441.7094107,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cdbfac8032809f8168caf320d93b236d",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-invoices/purchase-invoice-list.component.html": {
+    "mtime": 1789567428.1750546,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-orders/purchase-order-detail.component.html": {
+    "mtime": 1789567405.1487384,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1785fabe663e531a3cc22a66c0058176",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-orders/purchase-order-items-tab.component.html": {
+    "mtime": 1789567409.7988226,
+    "seen": 1789895246.4745765,
+    "ast_hash": "3458836779f0b23ff1d98c0215dc8124",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-orders/purchase-order-list.component.html": {
+    "mtime": 1789567395.3052802,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-returns/purchase-return-detail.component.html": {
+    "mtime": 1789567466.5073133,
+    "seen": 1789895246.4745765,
+    "ast_hash": "9f777b7c1959dff41efbe225c290f779",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-returns/purchase-return-items-tab.component.html": {
+    "mtime": 1789567471.9949496,
+    "seen": 1789895246.4745765,
+    "ast_hash": "fea9d33b403d65c26647497cceeaac49",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-returns/purchase-return-list.component.html": {
+    "mtime": 1789567457.4593596,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/reporting/report-list.component.html": {
+    "mtime": 1789567498.4040308,
+    "seen": 1789895246.4745765,
+    "ast_hash": "66c28fe5de4b3a4b9199a746215b8103",
+    "semantic_hash": ""
+  },
+  "src/app/features/reporting/report-runner.component.html": {
+    "mtime": 1789567512.627037,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bb5f09d622d34aeb19cd6ea2773c2efb",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-detail.component.html": {
+    "mtime": 1789567431.0295665,
+    "seen": 1789895246.4745765,
+    "ast_hash": "cdd2aa2b5bd40a9418b81da75f2f1189",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-items-tab.component.html": {
+    "mtime": 1789567450.5147176,
+    "seen": 1789895246.4745765,
+    "ast_hash": "31f609864e80ae171b69ae847c9ca344",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-list.component.html": {
+    "mtime": 1789567405.1497176,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-payments-tab.component.html": {
+    "mtime": 1789567478.1033883,
+    "seen": 1789895246.4745765,
+    "ast_hash": "18f0ec3e6c3a19dfeeecedc63215264b",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-returns/sales-return-detail.component.html": {
+    "mtime": 1789567521.4466,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1aa0c5599d87e4989dc478f3c30b93c8",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-returns/sales-return-items-tab.component.html": {
+    "mtime": 1789567549.3920383,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0d614445f377910402e168175ed37354",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-returns/sales-return-list.component.html": {
+    "mtime": 1789567498.2590363,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/permissions/permission-list.component.html": {
+    "mtime": 1789142276.4675817,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e4373f458b9e352859ff9d7a0b12367b",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/roles/role-detail.component.html": {
+    "mtime": 1789142266.8888063,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b547dd0d5324b6d7fdefd4bb49809f61",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/roles/role-list.component.html": {
+    "mtime": 1789142246.0007317,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/roles/role-permissions-tab.component.html": {
+    "mtime": 1789142271.6457374,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4fea70e536a9467e503e2f9fec50cbd8",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/user-sessions/user-session-list.component.html": {
+    "mtime": 1789142302.4239967,
+    "seen": 1789895246.4745765,
+    "ast_hash": "1c56438ef5dda35a64dda683452c4151",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/users/user-branches-tab.component.html": {
+    "mtime": 1789142219.062688,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0b60a3e26af01830ba86fe8b8f370638",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/users/user-detail.component.html": {
+    "mtime": 1789142211.8383052,
+    "seen": 1789895246.4745765,
+    "ast_hash": "55c584b5e9c20e941728653db8ca235d",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/users/user-list.component.html": {
+    "mtime": 1789142203.517581,
+    "seen": 1789895246.4745765,
+    "ast_hash": "c69063f8c59fef10ecbee30da3fc9783",
+    "semantic_hash": ""
+  },
+  "src/app/features/security/users/user-roles-tab.component.html": {
+    "mtime": 1789142215.324309,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f11e0aacf65052d58a5462b301713ba8",
+    "semantic_hash": ""
+  },
+  "src/app/features/settings/setting-detail.component.html": {
+    "mtime": 1789142197.2937322,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bdec35635af72fd0696fbc19ff61aac1",
+    "semantic_hash": ""
+  },
+  "src/app/features/settings/setting-list.component.html": {
+    "mtime": 1789142170.562369,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8486609a9b6bf2a66e3f54dde22c5fa4",
+    "semantic_hash": ""
+  },
+  "src/app/shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component.html": {
+    "mtime": 1789140327.8013704,
+    "seen": 1789895246.4745765,
+    "ast_hash": "77ea30a35d31e203297a708d7c45479a",
+    "semantic_hash": ""
+  },
+  "src/app/shared/components/language-selector/language-selector.component.html": {
+    "mtime": 1789238479.968679,
+    "seen": 1789895246.4745765,
+    "ast_hash": "2e7014054f049635d1f89ef89ee64453",
+    "semantic_hash": ""
+  },
+  "src/index.html": {
+    "mtime": 1788434725.3695667,
+    "seen": 1789895246.4745765,
+    "ast_hash": "0c6101a8753cd6779661e6c688eae624",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/cross-cutting-persistence-flow.svg": {
+    "mtime": 1789893903.0965133,
+    "seen": 1789895246.4745765,
+    "ast_hash": "8a9160c718357e01164cb383c056241f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/inventory-movement-flow.svg": {
+    "mtime": 1789893903.1005158,
+    "seen": 1789895246.4745765,
+    "ast_hash": "adfe3457fe73d8955d43dad021596226",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/month-end-flow.svg": {
+    "mtime": 1789893903.102517,
+    "seen": 1789895246.4745765,
+    "ast_hash": "7f6920addea44978da0fab1b56014666",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/payment-flow.svg": {
+    "mtime": 1789893903.1035168,
+    "seen": 1789895246.4745765,
+    "ast_hash": "f81493f5a7827548f2efd3f310d6160f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/prescription-flow.svg": {
+    "mtime": 1789893903.1045148,
+    "seen": 1789895246.4745765,
+    "ast_hash": "77862345fc2e57e023c3372903be2e60",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/purchase-invoice-flow.svg": {
+    "mtime": 1789893903.1055129,
+    "seen": 1789895246.4745765,
+    "ast_hash": "b8f260ccd5d5aba15a8ac8a1fa0e325f",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/return-flow.svg": {
+    "mtime": 1789893903.1058462,
+    "seen": 1789895246.4745765,
+    "ast_hash": "ae7f2b48beef354d7b337b559430b97d",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/sales-invoice-flow.svg": {
+    "mtime": 1789893903.1072419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "e865dc87b5bc8bfd47a217430d5a3be3",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-adjustment-flow.svg": {
+    "mtime": 1789893903.1072419,
+    "seen": 1789895246.4745765,
+    "ast_hash": "5968f2705ce92223b448ded75bb27450",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-take-flow.svg": {
+    "mtime": 1789893903.1082485,
+    "seen": 1789895246.4745765,
+    "ast_hash": "bd9431709e2393b105d02cd44b8c9590",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/stock-transfer-flow.svg": {
+    "mtime": 1789893903.109246,
+    "seen": 1789895246.4745765,
+    "ast_hash": "572056829520030a6b4f9d2f97d850dd",
+    "semantic_hash": ""
+  },
+  "docs/pharmacy_erp_architecture_docs/workflows/system-map-flow.svg": {
+    "mtime": 1789893903.110246,
+    "seen": 1789895246.4745765,
+    "ast_hash": "4db25e3e66e0ed01a25719c9c0a25157",
+    "semantic_hash": ""
   }
 }
