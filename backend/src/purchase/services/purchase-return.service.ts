@@ -22,6 +22,10 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import { VoucherType } from '../../finance/constants/finance.constants';
+import { buildPurchaseReturnLedgerLines } from '../../finance/utils/finance.util';
+import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
+import { LedgerPostingService } from '../../persistence/ledger/ledger-posting.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import { StockMovementType } from '../../inventory/constants/inventory.constants';
@@ -50,6 +54,7 @@ export class PurchaseReturnService {
     private readonly requestContext: RequestContextService,
     private readonly sequences: SequenceGeneratorService,
     private readonly inventoryLedger: InventoryLedgerService,
+    private readonly ledgerPosting: LedgerPostingService,
   ) {}
 
   async list(query: PurchaseDocumentListQueryDto) {
@@ -309,6 +314,11 @@ export class PurchaseReturnService {
       }
 
       const branch = await assertBranchExists(tx, purchaseReturn.branchId);
+      await assertTransactionDateInOpenYear(
+        tx,
+        branch.companyId,
+        purchaseReturn.returnDate,
+      );
       const userId = this.requestContext.tryGet()?.userId;
       let grossAmount = new Prisma.Decimal(0);
       let discountAmount = new Prisma.Decimal(0);
@@ -346,6 +356,23 @@ export class PurchaseReturnService {
       }
 
       const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
+
+      const ledgerLines = await buildPurchaseReturnLedgerLines(tx, {
+        netAmount,
+        taxAmount,
+        narration: `Purchase return ${purchaseReturn.purchaseReturnNumber}`,
+      });
+
+      await this.ledgerPosting.postVoucher(tx, {
+        companyId: branch.companyId,
+        voucherType: VoucherType.PURCHASE,
+        voucherId: purchaseReturn.id,
+        voucherNumber: purchaseReturn.purchaseReturnNumber,
+        transactionDate: purchaseReturn.returnDate,
+        lines: ledgerLines,
+        createdBy: userId,
+      });
+
       const now = BigInt(Date.now());
 
       const updateResult = await tx.purchaseReturn.updateMany({

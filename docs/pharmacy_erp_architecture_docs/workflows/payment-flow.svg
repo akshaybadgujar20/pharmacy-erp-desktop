@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="910" height="968" viewBox="0 0 910 968">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Payment Workflow</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">L1 detail — see cross-cutting-persistence-flow for write pattern. No stock changes.</text>
+<path d="M400,660 L540,699" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M400,660 L540,745" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M280,120 L280,130" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M280,220 L150,240" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="225" y="230" font-family="Arial,sans-serif" font-size="9" fill="#333">Counter</text>
+<path d="M280,220 L370,240" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="335" y="230" font-family="Arial,sans-serif" font-size="9" fill="#333">Receipt</text>
+<path d="M280,220 L590,240" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="445" y="230" font-family="Arial,sans-serif" font-size="9" fill="#333">Supplier</text>
+<path d="M250,285 L720,285 L720,484" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="485" y="279" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M470,285 L720,285 L720,484" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="595" y="279" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M690,285 L720,285 L720,484" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="705" y="279" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M150,330 L130,318" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="150" y="324" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M370,330 L350,318" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="370" y="324" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M590,330 L570,318" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="590" y="324" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M130,370 L280,410" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M350,370 L280,410" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M570,370 L280,410" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M380,455 L720,455 L720,484" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="550" y="449" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M280,500 L280,488" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="290" y="494" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M380,533 L720,533 L720,484" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="550" y="527" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M280,578 L280,566" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="290" y="572" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M280,618 L280,634" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M280,686 L280,702" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M280,792 L280,780" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="290" y="786" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M280,792 L280,848" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="290" y="820" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M280,832 L280,848" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="280" cy="100" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="280" y="100" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="480" y="70" width="220" height="32" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="590" y="90" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">No stock change on any payment path</text>
+<polygon points="280,130 380,175 280,220 180,175" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="280" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Payment type?</text>
+<text x="280" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(counter / receipt / supplier)</text>
+<rect x="40" y="200" width="180" height="28" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="220" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Counter: SalesPayment</text>
+<polygon points="150,240 250,285 150,330 50,285" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="150" y="260" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Sales invoice</text>
+<text x="150" y="274" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">posted?</text>
+<rect x="40" y="318" width="180" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="130" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create pending</text>
+<text x="130" y="352" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">SalesPayment</text>
+<rect x="260" y="200" width="180" height="28" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="350" y="220" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Finance: Receipt</text>
+<polygon points="370,240 470,285 370,330 270,285" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="370" y="260" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Linked invoice</text>
+<text x="370" y="274" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">posted?</text>
+<rect x="260" y="318" width="180" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="350" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create pending</text>
+<text x="350" y="352" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">finance receipt</text>
+<rect x="480" y="200" width="180" height="28" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="570" y="220" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Supplier: Payment</text>
+<polygon points="590,240 690,285 590,330 490,285" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="590" y="260" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase invoice</text>
+<text x="590" y="274" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">posted?</text>
+<rect x="480" y="318" width="180" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="570" y="338" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create pending</text>
+<text x="570" y="352" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">supplier payment</text>
+<polygon points="280,410 380,455 280,500 180,455" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="280" y="430" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Amount ≤ invoice balance?</text>
+<polygon points="280,488 380,533 280,578 180,533" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="280" y="508" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accounting period open?</text>
+<rect x="170" y="566" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="280" y="586" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Complete: post ledger voucher</text>
+<rect x="160" y="634" width="240" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="280" y="654" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Recompute invoice paid/balance/status</text>
+<text x="280" y="668" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">and update party outstanding</text>
+<polygon points="280,702 380,747 280,792 180,747" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="280" y="722" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel completed payment?</text>
+<rect x="170" y="780" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="280" y="800" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Reverse voucher and restore balances</text>
+<ellipse cx="280" cy="868" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="280" y="868" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+<rect x="540" y="680" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="690" y="700" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accepted v1: Dual settlement — SalesPayment + Receipt</text>
+<rect x="540" y="726" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="690" y="746" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP: SalesPayment + Receipt both count toward paidAmount</text>
+<rect x="720" y="464" width="150" height="40" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+<text x="795" y="484" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Rejected</text>
+</svg>

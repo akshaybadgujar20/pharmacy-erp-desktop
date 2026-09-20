@@ -73,6 +73,7 @@ export const SystemLedgerCode = {
   GST_INPUT: 'GSTIN001',
   GST_OUTPUT: 'GSTOUT001',
   INVENTORY: 'INV001',
+  CUSTOMER_ADVANCE: 'CUSTADV001',
 } as const;
 
 export const CASH_PAYMENT_METHODS = [

@@ -22,6 +22,7 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import {
@@ -330,6 +331,11 @@ export class StockTakeService {
 
       if (varianceItems.length > 0) {
         const branch = await assertBranchExists(tx, stockTake.branchId);
+        await assertTransactionDateInOpenYear(
+          tx,
+          branch.companyId,
+          stockTake.stockTakeDate,
+        );
         const { documentNumber } = await this.sequences.next(tx, {
           companyId: branch.companyId,
           branchId: branch.id,

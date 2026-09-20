@@ -7,5 +7,6 @@
   {"uuid": "13131313-1313-4313-8313-131313131306", "ledgerCode": "PUR001", "ledgerName": "Purchase Account", "ledgerType": "EXPENSE", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
   {"uuid": "13131313-1313-4313-8313-131313131307", "ledgerCode": "GSTIN001", "ledgerName": "GST Input", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
   {"uuid": "13131313-1313-4313-8313-131313131308", "ledgerCode": "GSTOUT001", "ledgerName": "GST Output", "ledgerType": "LIABILITY", "normalBalance": "CREDIT", "isSystem": true, "isActive": true},
-  {"uuid": "13131313-1313-4313-8313-131313131309", "ledgerCode": "INV001", "ledgerName": "Inventory Asset", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true}
+  {"uuid": "13131313-1313-4313-8313-131313131309", "ledgerCode": "INV001", "ledgerName": "Inventory Asset", "ledgerType": "ASSET", "normalBalance": "DEBIT", "isSystem": true, "isActive": true},
+  {"uuid": "13131313-1313-4313-8313-131313131310", "ledgerCode": "CUSTADV001", "ledgerName": "Customer Advance", "ledgerType": "LIABILITY", "normalBalance": "CREDIT", "isSystem": true, "isActive": true}
 ]

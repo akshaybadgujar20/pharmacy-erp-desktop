@@ -8,6 +8,11 @@ export const SettingKey = {
   SALES_ENFORCE_MRP_CAP: 'sales.enforce_mrp_cap',
   SALES_ALLOW_EXPIRED_SALE: 'sales.allow_expired_sale',
   SALES_ALLOW_EXPIRED_CUSTOMER_RETURN: 'sales.allow_expired_customer_return',
+  SALES_APPLY_ROUND_OFF: 'sales.apply_round_off',
+  SALES_RETURN_WINDOW_DAYS: 'sales.return_window_days',
+  SALES_RETURN_REQUIRES_PHARMACIST_FOR_SCHEDULE_H:
+    'sales.return_requires_pharmacist_for_schedule_h',
+  PRESCRIPTION_MANDATORY_SCHEDULE_H: 'PRESCRIPTION_MANDATORY_SCHEDULE_H',
 } as const;
 
 export type SettingKey = (typeof SettingKey)[keyof typeof SettingKey];

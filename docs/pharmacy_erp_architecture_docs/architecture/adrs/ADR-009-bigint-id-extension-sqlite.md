@@ -16,29 +16,36 @@ How should BIGINT primary keys be assigned when inserting rows on SQLite?
 
 ## Options Considered
 
-1. Shared `$extends` hook (in-memory sequence) — same as seed client
-2. Require explicit `id` on every create
-3. Switch to autoincrement Int ids
+1. DB-backed per-row allocation via singleton `IdSequence` table + Prisma extension (selected)
+2. Buffered DB allocator (reserve id blocks in memory)
+3. In-memory counter + startup `MAX(id)` scan
+4. Require explicit `id` on every create
+5. Switch to autoincrement Int ids
 
 ## Decision Selected
 
-**Extract shared `createPrismaClient` factory** with BIGINT id extension; use in `PrismaService` and seed.
+**Shared `createPrismaClient` factory** with Prisma `$extends` hook that allocates BIGINT ids from a singleton **`IdSequence`** table (per-row DB update with optimistic `version` lock). Bootstrap on startup reconciles `currentValue` with existing business data for legacy DBs.
 
 ## Rationale
 
-Discovered during seed/integration work; keeps BigInt PK + uuid pattern from ADR-001 schema without schema change.
+- Single global id space across all tables (device-local PK performance; sync uses `uuid`)
+- DB is the source of truth — no in-memory counter drift or startup table scan on every allocation
+- Per-row allocation is simple and sufficient for desktop ERP insert volume
+- Same factory used by `PrismaService` and seed scripts
 
 ## Trade-offs
 
-- In-memory allocator per process (desktop single-writer acceptable)
-- Must sync sequence on startup from max(id) in tables
-- Cloud Postgres may use native sequences later
+- One DB round-trip per `create` (acceptable for business-app throughput)
+- Id allocation and row insert are separate steps in the extension — failed inserts can leave id gaps
+- Bootstrap still scans peak id once per process start to heal legacy DBs missing `id_sequence`
+- Cloud Postgres may use native sequences later; local SQLite uses `IdSequence`
 
 ## Affected Modules / Components
 
-- `prisma.service.ts`, `persistence/prisma/bigint-id-sequence.ts`
+- `prisma.service.ts`, `persistence/prisma/id-sequence.service.ts`, `persistence/prisma/prisma-client.factory.ts`
 - `backend/seed/lib/prisma-client.ts`
 
 ## Historical Source
 
 - [`plans/persistence_foundation_patterns_3af5df7a.plan.md`](../../../../plans/persistence_foundation_patterns_3af5df7a.plan.md) — Known SQLite prerequisite
+- Supersedes in-memory `bigint-id-sequence.ts` approach (2026)

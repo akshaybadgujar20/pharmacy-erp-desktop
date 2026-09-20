@@ -1,6 +1,8 @@
 
 # Payment Flow
 
+**Diagram:** [payment-flow.drawio](./payment-flow.drawio) · [SVG](./payment-flow.svg)
+
 ## Business Objective
 
 Record customer receipts and supplier payments, update invoice balances, and post ledger entries without breaking inventory integrity.

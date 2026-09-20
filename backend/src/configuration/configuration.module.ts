@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuditModule } from '../audit/audit.module';
+import { FinanceModule } from '../finance/finance.module';
 import { PrismaModule } from '../prisma.module';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { BarcodeConfigurationController } from './controllers/barcode-configuration.controller';
@@ -16,7 +17,7 @@ import { PrinterConfigurationService } from './services/printer-configuration.se
 import { SequenceGeneratorConfigService } from './services/sequence-generator-config.service';
 
 @Module({
-  imports: [PrismaModule, PersistenceModule, AuditModule],
+  imports: [PrismaModule, PersistenceModule, AuditModule, FinanceModule],
   controllers: [
     CompanyController,
     BranchController,

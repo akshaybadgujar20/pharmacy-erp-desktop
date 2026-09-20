@@ -18,6 +18,7 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import {
@@ -286,13 +287,10 @@ export class StockTransferService {
         );
       }
 
-      if (
-        transfer.status !== StockTransferStatus.DRAFT &&
-        transfer.status !== StockTransferStatus.PENDING_APPROVAL
-      ) {
+      if (transfer.status !== StockTransferStatus.DRAFT) {
         throw new ApplicationException(
           ErrorCode.INVALID_DOCUMENT_STATUS,
-          'Only DRAFT or PENDING_APPROVAL transfers can be dispatched',
+          'Only DRAFT transfers can be dispatched',
           HttpStatus.CONFLICT,
           { status: transfer.status },
         );
@@ -310,6 +308,11 @@ export class StockTransferService {
       const sourceBranch = await assertBranchExists(
         tx,
         transfer.sourceBranchId,
+      );
+      await assertTransactionDateInOpenYear(
+        tx,
+        sourceBranch.companyId,
+        transfer.transferDate,
       );
       const userId = this.requestContext.tryGet()?.userId;
 
@@ -335,7 +338,7 @@ export class StockTransferService {
       const updated = await tx.stockTransfer.update({
         where: { id },
         data: {
-          status: StockTransferStatus.DISPATCHED,
+          status: StockTransferStatus.IN_TRANSIT,
           remarks: dto.remarks ?? transfer.remarks,
           updatedAt: now,
           version: { increment: 1 },
@@ -388,7 +391,6 @@ export class StockTransferService {
       }
 
       if (
-        transfer.status !== StockTransferStatus.DISPATCHED &&
         transfer.status !== StockTransferStatus.IN_TRANSIT &&
         transfer.status !== StockTransferStatus.PARTIALLY_RECEIVED
       ) {
@@ -403,6 +405,11 @@ export class StockTransferService {
       const destBranch = await assertBranchExists(
         tx,
         transfer.destinationBranchId,
+      );
+      await assertTransactionDateInOpenYear(
+        tx,
+        destBranch.companyId,
+        transfer.transferDate,
       );
       const userId = this.requestContext.tryGet()?.userId;
       let partial = false;
@@ -442,6 +449,118 @@ export class StockTransferService {
             ? StockTransferStatus.PARTIALLY_RECEIVED
             : StockTransferStatus.COMPLETED,
           receivedDate: now,
+          remarks: dto.remarks ?? transfer.remarks,
+          updatedAt: now,
+          version: { increment: 1 },
+        },
+      });
+
+      await this.auditService.log(tx, {
+        entityType: OutboxEntityType.STOCK_TRANSFER,
+        entityId: updated.id,
+        entityUuid: updated.uuid,
+        action: AuditAction.UPDATE,
+        module: AuditModule.INVENTORY,
+      });
+
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.STOCK_TRANSFER,
+        entityUuid: updated.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          uuid: updated.uuid,
+          transferNumber: updated.transferNumber,
+          status: updated.status,
+        },
+      });
+
+      return toStockTransferResponse(updated);
+    });
+  }
+
+  async cancel(id: bigint, dto: DispatchStockTransferDto) {
+    return this.unitOfWork.run(async (tx) => {
+      const transfer = await tx.stockTransfer.findFirst({
+        where: { id, deletedAt: null },
+        include: {
+          items: {
+            where: { deletedAt: null },
+            include: { batch: { select: { medicineId: true } } },
+          },
+        },
+      });
+
+      if (!transfer) {
+        throwNotFound(
+          ErrorCode.STOCK_TRANSFER_NOT_FOUND,
+          `Stock transfer not found: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      if (
+        transfer.status !== StockTransferStatus.IN_TRANSIT &&
+        transfer.status !== StockTransferStatus.DRAFT
+      ) {
+        throw new ApplicationException(
+          ErrorCode.INVALID_DOCUMENT_STATUS,
+          'Only DRAFT or IN_TRANSIT transfers can be cancelled',
+          HttpStatus.CONFLICT,
+          { status: transfer.status },
+        );
+      }
+
+      const hasReceived = transfer.items.some((item) => {
+        const received = item.receivedQuantity ?? new Prisma.Decimal(0);
+        return received.gt(0);
+      });
+
+      if (hasReceived) {
+        throw new ApplicationException(
+          ErrorCode.INVALID_DOCUMENT_STATUS,
+          'Cannot cancel a transfer after items have been received',
+          HttpStatus.CONFLICT,
+          { id: id.toString() },
+        );
+      }
+
+      const userId = this.requestContext.tryGet()?.userId;
+
+      if (transfer.status === StockTransferStatus.IN_TRANSIT) {
+        const sourceBranch = await assertBranchExists(
+          tx,
+          transfer.sourceBranchId,
+        );
+        await assertTransactionDateInOpenYear(
+          tx,
+          sourceBranch.companyId,
+          transfer.transferDate,
+        );
+
+        for (const item of transfer.items) {
+          await this.inventoryLedger.applyMovement(tx, {
+            branchId: transfer.sourceBranchId,
+            branchCode: sourceBranch.branchCode,
+            companyId: sourceBranch.companyId,
+            medicineId: item.batch.medicineId,
+            batchId: item.batchId,
+            direction: 'IN',
+            quantity: item.sentQuantity,
+            unitCost: 0,
+            movementType: StockMovementType.TRANSFER_IN,
+            referenceTable: 'stock_transfers',
+            referenceId: transfer.id,
+            createdBy: userId,
+            remarks: dto.remarks ?? 'Stock transfer cancellation reversal',
+          });
+        }
+      }
+
+      const now = BigInt(Date.now());
+      const updated = await tx.stockTransfer.update({
+        where: { id },
+        data: {
+          status: StockTransferStatus.CANCELLED,
           remarks: dto.remarks ?? transfer.remarks,
           updatedAt: now,
           version: { increment: 1 },

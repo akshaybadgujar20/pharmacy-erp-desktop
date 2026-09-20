@@ -41,7 +41,7 @@ This document preserves **why** the backend is designed the way it is: questions
 | [ADR-006](./adrs/ADR-006-unit-of-work-all-writes.md) | All writes via UnitOfWorkService.run | Persistence | Active | Explicit | Doc 02 |
 | [ADR-007](./adrs/ADR-007-outbox-in-same-transaction.md) | Outbox in same transaction | Persistence, sync | Active | Explicit | Doc 02 |
 | [ADR-008](./adrs/ADR-008-inventory-ledger-only-stock-path.md) | InventoryLedgerService only stock path | Inventory | Active | Explicit | Doc 02 |
-| [ADR-009](./adrs/ADR-009-bigint-id-extension-sqlite.md) | BIGINT id Prisma extension | Prisma | Active | Explicit | Doc 02 |
+| [ADR-009](./adrs/ADR-009-bigint-id-extension-sqlite.md) | DB `IdSequence` per-row PK allocation via Prisma extension | Prisma | Active | Explicit | Doc 02 |
 | [ADR-010](./adrs/ADR-010-request-context-async-local-storage.md) | RequestContext AsyncLocalStorage | Persistence | Active | Explicit | Doc 02 |
 | [ADR-011](./adrs/ADR-011-ledger-posting-in-persistence.md) | LedgerPostingService in persistence | Finance | Active | Strongly inferred | Doc 03 |
 | [ADR-012](./adrs/ADR-012-jwt-global-auth-guards.md) | Global JWT + PermissionsGuard | Auth | Active | Explicit | Doc 04 |
@@ -223,7 +223,7 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 
 | Theme | ADR IDs | Notes |
 |-------|---------|-------|
-| Database & schema | ADR-001, ADR-002, ADR-009 | Dual DB, strings not enums, BIGINT extension |
+| Database & schema | ADR-001, ADR-002, ADR-009 | Dual DB, strings not enums, IdSequence PK allocation |
 | Persistence write path | ADR-006, ADR-007, ADR-010, ADR-024 | UoW, outbox-in-tx, context, golden rules |
 | Stock & inventory | ADR-003, ADR-008, ADR-135, ADR-136, ADR-161–171, ADR-258–259 | Branch stock, ledger-only mutations, workflows |
 | Sync & offline-first | ADR-004, ADR-021, ADR-022, ADR-138, ADR-139–143, ADR-231, ADR-253–255 | entityUuid, local SQLite, admin APIs, worker deferred |
@@ -265,7 +265,7 @@ Full catalog: [`adrs/README.md`](./adrs/README.md)
 ```mermaid
 flowchart TB
   ADR001[ADR-001 Single schema] --> ADR002[ADR-002 String statuses]
-  ADR001 --> ADR009[ADR-009 BIGINT extension]
+  ADR001 --> ADR009[ADR-009 IdSequence PK allocation]
   ADR006[ADR-006 UnitOfWork] --> ADR007[ADR-007 Outbox in tx]
   ADR006 --> ADR017[ADR-017 Audit in tx]
   ADR010[ADR-010 RequestContext] --> ADR007

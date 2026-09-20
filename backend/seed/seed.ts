@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import { bootstrapIdSequence } from '../src/persistence/prisma/id-sequence.service';
 import { clearRegistry } from './lib/id-registry';
 import { initFaker } from './lib/faker';
 import { hydrateFromDb } from './lib/hydrate';
@@ -91,6 +92,7 @@ async function main(): Promise<void> {
     console.log('Wiping existing data...');
     await wipeDatabase(prisma);
     clearRegistry();
+    await bootstrapIdSequence(prisma);
   } else {
     console.log('Hydrating id registry and context from database...');
     await hydrateFromDb(prisma, ctx);

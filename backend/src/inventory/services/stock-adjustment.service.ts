@@ -22,6 +22,7 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import { ApproveStockAdjustmentDto } from '../dto/approve-stock-adjustment.dto';
@@ -313,6 +314,11 @@ export class StockAdjustmentService {
       }
 
       const branch = await assertBranchExists(tx, adjustment.branchId);
+      await assertTransactionDateInOpenYear(
+        tx,
+        branch.companyId,
+        adjustment.adjustmentDate,
+      );
       const userId = this.requestContext.tryGet()?.userId;
 
       for (const item of adjustment.items) {

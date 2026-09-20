@@ -6,7 +6,12 @@ import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 import { SettingKey } from '../../settings/setting-keys.constants';
 import { SettingsService } from '../../settings/settings.service';
 import {
+  PrescriptionItemStatus,
+  PrescriptionStatus,
+} from '../../prescription/constants/prescription.constants';
+import {
   SalesInvoiceStatus,
+  SalesPaymentMethod,
   SalesReturnDisposition,
   SalesReturnStatus,
 } from '../constants/sales.constants';
@@ -532,21 +537,273 @@ export function assertRestockDisposition(disposition: string): void {
 }
 
 export async function readSalesSettings(settingsService: SettingsService) {
-  const [enforceMrpCap, allowExpiredSale, allowExpiredCustomerReturn] =
-    await Promise.all([
-      settingsService.getBoolean(SettingKey.SALES_ENFORCE_MRP_CAP, true),
-      settingsService.getBoolean(SettingKey.SALES_ALLOW_EXPIRED_SALE, false),
-      settingsService.getBoolean(
-        SettingKey.SALES_ALLOW_EXPIRED_CUSTOMER_RETURN,
-        false,
-      ),
-    ]);
+  const [
+    enforceMrpCap,
+    allowExpiredSale,
+    allowExpiredCustomerReturn,
+    applyRoundOff,
+    prescriptionMandatoryScheduleH,
+    returnWindowDays,
+    returnRequiresPharmacistForScheduleH,
+  ] = await Promise.all([
+    settingsService.getBoolean(SettingKey.SALES_ENFORCE_MRP_CAP, true),
+    settingsService.getBoolean(SettingKey.SALES_ALLOW_EXPIRED_SALE, false),
+    settingsService.getBoolean(
+      SettingKey.SALES_ALLOW_EXPIRED_CUSTOMER_RETURN,
+      false,
+    ),
+    settingsService.getBoolean(SettingKey.SALES_APPLY_ROUND_OFF, true),
+    settingsService.getBoolean(
+      SettingKey.PRESCRIPTION_MANDATORY_SCHEDULE_H,
+      true,
+    ),
+    settingsService
+      .getString(SettingKey.SALES_RETURN_WINDOW_DAYS, '30')
+      .then((value) => {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isFinite(parsed) ? parsed : 30;
+      }),
+    settingsService.getBoolean(
+      SettingKey.SALES_RETURN_REQUIRES_PHARMACIST_FOR_SCHEDULE_H,
+      true,
+    ),
+  ]);
 
   return {
     enforceMrpCap,
     allowExpiredSale,
     allowExpiredCustomerReturn,
+    applyRoundOff,
+    prescriptionMandatoryScheduleH,
+    returnWindowDays,
+    returnRequiresPharmacistForScheduleH,
   };
+}
+
+export function computeSalesRoundOff(subtotal: Prisma.Decimal): {
+  roundOffAmount: Prisma.Decimal;
+  netAmount: Prisma.Decimal;
+} {
+  const rounded = subtotal.toDecimalPlaces(0, Prisma.Decimal.ROUND_HALF_UP);
+  return {
+    roundOffAmount: rounded.sub(subtotal),
+    netAmount: rounded,
+  };
+}
+
+function isScheduleHCode(scheduleCode: string): boolean {
+  return scheduleCode === 'H' || scheduleCode.startsWith('H');
+}
+
+export async function assertScheduleHCompliance(
+  tx: TxClient,
+  items: Array<{ medicineId: bigint }>,
+  prescriptionId: bigint | null | undefined,
+  prescriptionMandatoryScheduleH: boolean,
+): Promise<void> {
+  if (!prescriptionMandatoryScheduleH) {
+    return;
+  }
+
+  const medicineIds = [...new Set(items.map((item) => item.medicineId))];
+  const medicines = await tx.medicine.findMany({
+    where: { id: { in: medicineIds }, deletedAt: null },
+    include: {
+      schedule: { select: { scheduleCode: true, controlledSubstance: true } },
+    },
+  });
+
+  const requiresPrescription = medicines.some(
+    (medicine) =>
+      medicine.schedule &&
+      (medicine.schedule.controlledSubstance ||
+        isScheduleHCode(medicine.schedule.scheduleCode)),
+  );
+
+  if (requiresPrescription && !prescriptionId) {
+    throw new ApplicationException(
+      ErrorCode.SCHEDULE_H_PRESCRIPTION_REQUIRED,
+      'Schedule H or controlled medicine requires a linked prescription',
+      HttpStatus.CONFLICT,
+    );
+  }
+}
+
+export async function assertPrescriptionQuantitiesForPost(
+  tx: TxClient,
+  prescriptionId: bigint,
+  items: Array<{ medicineId: bigint; soldQuantity: Prisma.Decimal }>,
+): Promise<void> {
+  const prescriptionItems = await tx.prescriptionItem.findMany({
+    where: { prescriptionId, deletedAt: null },
+    select: {
+      medicineId: true,
+      remainingQuantity: true,
+    },
+  });
+
+  const remainingByMedicine = new Map<string, Prisma.Decimal>();
+  for (const item of prescriptionItems) {
+    remainingByMedicine.set(
+      item.medicineId.toString(),
+      new Prisma.Decimal(item.remainingQuantity),
+    );
+  }
+
+  const soldByMedicine = new Map<string, Prisma.Decimal>();
+  for (const item of items) {
+    const key = item.medicineId.toString();
+    const current = soldByMedicine.get(key) ?? new Prisma.Decimal(0);
+    soldByMedicine.set(key, current.add(item.soldQuantity));
+  }
+
+  for (const [medicineId, soldQty] of soldByMedicine) {
+    const remaining = remainingByMedicine.get(medicineId);
+    if (remaining === undefined) {
+      throw new ApplicationException(
+        ErrorCode.PRESCRIPTION_QUANTITY_EXCEEDED,
+        'Medicine is not on the linked prescription',
+        HttpStatus.CONFLICT,
+        { medicineId },
+      );
+    }
+
+    if (soldQty.gt(remaining)) {
+      throw new ApplicationException(
+        ErrorCode.PRESCRIPTION_QUANTITY_EXCEEDED,
+        'Sold quantity exceeds prescription remaining quantity',
+        HttpStatus.CONFLICT,
+        {
+          medicineId,
+          soldQuantity: soldQty.toString(),
+          remaining: remaining.toString(),
+        },
+      );
+    }
+  }
+}
+
+export async function applyPrescriptionDispensing(
+  tx: TxClient,
+  prescriptionId: bigint,
+  items: Array<{ medicineId: bigint; soldQuantity: Prisma.Decimal }>,
+): Promise<void> {
+  const prescription = await tx.prescription.findFirstOrThrow({
+    where: { id: prescriptionId, deletedAt: null },
+    include: {
+      items: { where: { deletedAt: null } },
+    },
+  });
+
+  const soldByMedicine = new Map<string, Prisma.Decimal>();
+  for (const item of items) {
+    const key = item.medicineId.toString();
+    const current = soldByMedicine.get(key) ?? new Prisma.Decimal(0);
+    soldByMedicine.set(key, current.add(item.soldQuantity));
+  }
+
+  const now = BigInt(Date.now());
+  let anyPartial = false;
+  let allDispensed = true;
+
+  for (const rxItem of prescription.items) {
+    const soldQty =
+      soldByMedicine.get(rxItem.medicineId.toString()) ?? new Prisma.Decimal(0);
+    if (soldQty.lte(0)) {
+      if (new Prisma.Decimal(rxItem.remainingQuantity).gt(0)) {
+        allDispensed = false;
+      }
+      continue;
+    }
+
+    const dispensed = new Prisma.Decimal(rxItem.dispensedQuantity).add(soldQty);
+    const remaining = new Prisma.Decimal(rxItem.prescribedQuantity).sub(
+      dispensed,
+    );
+    const itemStatus = remaining.lte(0)
+      ? PrescriptionItemStatus.DISPENSED
+      : PrescriptionItemStatus.PARTIALLY_DISPENSED;
+
+    if (remaining.gt(0)) {
+      anyPartial = true;
+      allDispensed = false;
+    }
+
+    await tx.prescriptionItem.update({
+      where: { id: rxItem.id },
+      data: {
+        dispensedQuantity: dispensed,
+        remainingQuantity: remaining.lt(0) ? new Prisma.Decimal(0) : remaining,
+        status: itemStatus,
+        updatedAt: now,
+      },
+    });
+  }
+
+  const nextStatus = allDispensed
+    ? PrescriptionStatus.DISPENSED
+    : anyPartial
+      ? PrescriptionStatus.PARTIALLY_DISPENSED
+      : prescription.status;
+
+  if (nextStatus !== prescription.status) {
+    await tx.prescription.update({
+      where: { id: prescriptionId },
+      data: { status: nextStatus, updatedAt: now },
+    });
+  }
+}
+
+export async function assertSalesReturnPolicy(
+  tx: TxClient,
+  input: {
+    invoiceDate: bigint;
+    returnDate: bigint;
+    returnWindowDays: number;
+    items: Array<{ medicineId: bigint }>;
+    returnRequiresPharmacistForScheduleH: boolean;
+    approvedByEmployeeId: bigint | null | undefined;
+  },
+): Promise<void> {
+  const windowMs = BigInt(input.returnWindowDays) * 86_400_000n;
+  if (input.returnDate - input.invoiceDate > windowMs) {
+    throw new ApplicationException(
+      ErrorCode.RETURN_WINDOW_EXCEEDED,
+      `Return is outside the ${input.returnWindowDays}-day return window`,
+      HttpStatus.CONFLICT,
+      {
+        invoiceDate: input.invoiceDate.toString(),
+        returnDate: input.returnDate.toString(),
+      },
+    );
+  }
+
+  if (!input.returnRequiresPharmacistForScheduleH) {
+    return;
+  }
+
+  const medicineIds = [...new Set(input.items.map((item) => item.medicineId))];
+  const medicines = await tx.medicine.findMany({
+    where: { id: { in: medicineIds }, deletedAt: null },
+    include: {
+      schedule: { select: { scheduleCode: true, controlledSubstance: true } },
+    },
+  });
+
+  const hasScheduleH = medicines.some(
+    (medicine) =>
+      medicine.schedule &&
+      (medicine.schedule.controlledSubstance ||
+        isScheduleHCode(medicine.schedule.scheduleCode)),
+  );
+
+  if (hasScheduleH && !input.approvedByEmployeeId) {
+    throw new ApplicationException(
+      ErrorCode.RETURN_PHARMACIST_APPROVAL_REQUIRED,
+      'Schedule H return requires pharmacist approval',
+      HttpStatus.CONFLICT,
+    );
+  }
 }
 
 export function assertInvoicePosted(status: string): void {
@@ -561,4 +818,25 @@ export function assertInvoicePosted(status: string): void {
       { status },
     );
   }
+}
+
+const REFUND_MODE_TO_PAYMENT_METHOD: Record<string, string> = {
+  CASH: SalesPaymentMethod.CASH,
+  UPI: SalesPaymentMethod.UPI,
+  CARD_REVERSAL: SalesPaymentMethod.CREDIT_CARD,
+  STORE_CREDIT: SalesPaymentMethod.STORE_CREDIT,
+  BANK_TRANSFER: SalesPaymentMethod.NET_BANKING,
+};
+
+export function mapRefundModeToPaymentMethod(refundMode: string): string {
+  const mapped = REFUND_MODE_TO_PAYMENT_METHOD[refundMode];
+  if (!mapped) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      `Unsupported refund mode: ${refundMode}`,
+      HttpStatus.BAD_REQUEST,
+      { refundMode },
+    );
+  }
+  return mapped;
 }

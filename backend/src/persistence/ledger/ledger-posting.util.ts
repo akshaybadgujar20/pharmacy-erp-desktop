@@ -8,35 +8,44 @@ export async function assertTransactionDateInOpenYear(
   companyId: bigint,
   transactionDate: bigint,
 ): Promise<void> {
+  await assertFinancialYearOpenForPosting(tx, companyId, transactionDate);
+}
+
+export async function assertFinancialYearOpenForPosting(
+  tx: TxClient,
+  companyId: bigint,
+  transactionDate: bigint,
+): Promise<void> {
   const financialYear = await tx.financialYear.findFirst({
     where: {
       companyId,
-      isCurrent: true,
-      status: 'OPEN',
       deletedAt: null,
+      startDate: { lte: transactionDate },
+      endDate: { gte: transactionDate },
     },
   });
 
   if (!financialYear) {
     throw new ApplicationException(
       ErrorCode.FINANCIAL_YEAR_CLOSED,
-      'No open financial year configured for company',
+      'No financial year covers the transaction date',
       HttpStatus.CONFLICT,
-      { companyId: companyId.toString() },
+      {
+        companyId: companyId.toString(),
+        transactionDate: transactionDate.toString(),
+      },
     );
   }
 
-  if (
-    transactionDate < financialYear.startDate ||
-    transactionDate > financialYear.endDate
-  ) {
+  if (financialYear.status !== 'OPEN') {
     throw new ApplicationException(
       ErrorCode.FINANCIAL_YEAR_CLOSED,
-      'Transaction date is outside the open financial year',
+      'Financial year is closed for posting',
       HttpStatus.CONFLICT,
       {
         transactionDate: transactionDate.toString(),
         financialYearCode: financialYear.financialYearCode,
+        status: financialYear.status,
       },
     );
   }

@@ -136,7 +136,7 @@ npx prisma migrate dev --name add_prescription
 npx prisma generate
 ```
 
-> BIGINT ids are allocated by the app, not the database. The client factory (`persistence/prisma/prisma-client.factory.ts`) auto-assigns `nextBigIntId()` on `create` when `id` is omitted, and `PrismaService.onModuleInit` syncs the in-memory sequence from the DB on boot.
+> BIGINT ids are allocated from the `IdSequence` table (not SQLite AUTOINCREMENT). The client factory (`persistence/prisma/prisma-client.factory.ts`) auto-assigns the next id on `create` when `id` is omitted, and `PrismaService.onModuleInit` runs `bootstrapIdSequence()` to ensure the singleton counter row exists.
 
 ### Step 2 — Add error codes and permission codes
 

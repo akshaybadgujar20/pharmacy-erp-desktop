@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="2178" viewBox="0 0 1100 2178">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Purchase Workflow</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">L1: PO → GRN accept (stock IN) → Purchase Invoice post. See cross-cutting-persistence-flow.</text>
+<path d="M410,1066 L760,1059" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M410,1478 L760,1471" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M300,100 L300,132" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,184 L300,216" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,268 L300,300" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,390 L300,422" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="406" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M200,345 L140,345 L140,242 L190,242" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,4"/>
+<text x="132" y="294" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M400,467 L540,467 L540,1024" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="461" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,512 L300,544" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="528" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,596 L300,628" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,680 L300,712" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M400,757 L540,757 L540,1024" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="751" font-family="Arial,sans-serif" font-size="9" fill="#333">No PO and not allowed</text>
+<path d="M300,802 L300,834" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="818" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,886 L300,918" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M400,963 L540,963 L540,1024" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="957" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1008 L300,1040" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1024" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1092 L300,1124" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,1176 L300,1208" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,1298 L300,1330" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1314" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M400,1253 L540,1253 L540,1024" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1247" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M400,1375 L540,1375 L540,1024" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1369" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1420 L300,1452" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1436" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1504 L300,1536" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,1626 L300,1658" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1642" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1626 L300,1742" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1684" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1710 L300,1742" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,1832 L300,1864" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1848" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1832 L300,1948" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1890" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1916 L300,1948" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="300" cy="80" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="190" y="132" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="152" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create draft purchase order</text>
+<rect x="190" y="216" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="236" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Add order lines (medicines, quantities)</text>
+<polygon points="300,300 400,345 300,390 200,345" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="320" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Submit for approval?</text>
+<polygon points="300,422 400,467 300,512 200,467" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="442" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Approved?</text>
+<rect x="190" y="544" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="564" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Send order to supplier</text>
+<rect x="190" y="628" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="648" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create goods receipt (GRN)</text>
+<polygon points="300,712 400,757 300,802 200,757" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="732" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Linked to purchase order?</text>
+<rect x="190" y="834" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="854" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Submit for inspection</text>
+<polygon points="300,918 400,963 300,1008 200,963" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="938" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accept goods?</text>
+<rect x="190" y="1040" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1060" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accept GRN: create/match batch,</text>
+<text x="300" y="1074" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">stock IN, update PO status</text>
+<rect x="760" y="1040" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="910" y="1060" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP: GRN without PO gated by setting</text>
+<rect x="190" y="1124" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1144" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create draft purchase invoice</text>
+<polygon points="300,1208 400,1253 300,1298 200,1253" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1228" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Link to goods receipt?</text>
+<polygon points="300,1330 400,1375 300,1420 200,1375" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1350" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Ready to post invoice?</text>
+<rect x="190" y="1452" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1472" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Post invoice: supplier liability,</text>
+<text x="300" y="1486" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">ledger entry — no stock change</text>
+<rect x="760" y="1452" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="910" y="1472" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP: Invoice post does not move stock — stock moved at GRN accept only</text>
+<polygon points="300,1536 400,1581 300,1626 200,1581" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1556" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase return later?</text>
+<rect x="190" y="1658" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1678" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Approve return: stock OUT to supplier</text>
+<polygon points="300,1742 400,1787 300,1832 200,1787" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1762" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel document?</text>
+<rect x="190" y="1864" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1884" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel (reverse GRN stock if accepted)</text>
+<ellipse cx="300" cy="1968" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="1968" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+<rect x="40" y="2060" width="380" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="230" y="2080" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP-7: No automated tests for Purchase module</text>
+<rect x="440" y="2060" width="380" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="630" y="2080" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP-8: No end-to-end tests for purchase workflow</text>
+<rect x="540" y="1004" width="150" height="40" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+<text x="615" y="1024" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Rejected</text>
+</svg>

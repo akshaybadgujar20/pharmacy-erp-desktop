@@ -1,0 +1,33 @@
+<mxfile host="app.diagrams.net" agent="generate-stock-take-flow" version="22.1.0">
+  <diagram id="stock-take-flow" name="Stock Take Workflow">
+    <mxGraphModel grid="1" pageWidth="730" pageHeight="1038" math="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="3" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="235" y="60" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="4" value="Create draft stock take" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="132" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="5" value="Add count lines per batch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="216" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="6" value="Start counting?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="300" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="7" value="Status IN_PROGRESS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="422" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="8" value="Complete count?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="506" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="9" value="Status COUNTED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="628" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="10" value="Any variance?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="712" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="11" value="Reconcile: auto-adjustment +&#xa;ledger movements — RECONCILED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="834" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="12" value="End" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="235" y="918" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="13" value="Rejected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="540" y="489" width="150" height="40" as="geometry"/></mxCell>
+        <mxCell id="14" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="3" target="4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="15" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="4" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="16" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="5" target="6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="17" value="No" style="endArrow=classic;html=1;strokeColor=#666666;dashed=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="6" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="18" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="6" target="7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="19" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="7" target="8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="20" value="No" style="endArrow=classic;html=1;strokeColor=#666666;dashed=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="8" target="7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="21" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="8" target="9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="22" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="9" target="10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="23" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="10" target="11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="24" value="No" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="10" target="12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="25" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="11" target="12"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,6 +1,8 @@
 
 # Month End Closing
 
+**Diagram:** [month-end-flow.drawio](./month-end-flow.drawio) · [SVG](./month-end-flow.svg)
+
 ## Business Objective
 
 Close the accounting period for a branch or company: freeze postings, reconcile stock and ledgers, and produce month-end reports for GST and management.

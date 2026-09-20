@@ -10,6 +10,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --coverage --runInBand",
+    "test:workflows": "python docs/pharmacy_erp_architecture_docs/workflows/test_generators.py",
     "electron": "electron electron/main.js",
     "dev": "concurrently \"npm start\" \"wait-on http://localhost:4200 && npm run electron\""
   },

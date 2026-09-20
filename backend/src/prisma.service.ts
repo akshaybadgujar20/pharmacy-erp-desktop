@@ -2,7 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { createPrismaClient } from './persistence/prisma/prisma-client.factory';
-import { syncPrismaIdSequenceFromDatabase } from './persistence/prisma/sync-prisma-id-sequence';
+import { bootstrapIdSequence } from './persistence/prisma/id-sequence.service';
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
@@ -18,7 +18,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit(): Promise<void> {
     await this.client.$connect();
-    await syncPrismaIdSequenceFromDatabase(this.client);
+    await bootstrapIdSequence(this.client);
   }
 
   async onModuleDestroy(): Promise<void> {

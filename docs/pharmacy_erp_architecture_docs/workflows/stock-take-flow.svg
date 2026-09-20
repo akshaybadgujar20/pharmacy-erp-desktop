@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="730" height="1038" viewBox="0 0 730 1038">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Stock Take Workflow</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">L1 detail — see cross-cutting-persistence-flow for write pattern.</text>
+<path d="M300,100 L300,132" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,184 L300,216" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,268 L300,300" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M200,345 L140,345 L140,242 L190,242" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,4"/>
+<text x="132" y="294" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,390 L300,422" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="406" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,474 L300,506" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M200,551 L140,551 L140,448 L190,448" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,4"/>
+<text x="132" y="500" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,596 L300,628" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="612" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,680 L300,712" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,802 L300,834" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="818" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,802 L300,918" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="860" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,886 L300,918" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="300" cy="80" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="190" y="132" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="152" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create draft stock take</text>
+<rect x="190" y="216" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="236" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Add count lines per batch</text>
+<polygon points="300,300 400,345 300,390 200,345" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="320" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start counting?</text>
+<rect x="190" y="422" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="442" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Status IN_PROGRESS</text>
+<polygon points="300,506 400,551 300,596 200,551" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="526" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Complete count?</text>
+<rect x="190" y="628" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="648" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Status COUNTED</text>
+<polygon points="300,712 400,757 300,802 200,757" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="732" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Any variance?</text>
+<rect x="190" y="834" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="854" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Reconcile: auto-adjustment +</text>
+<text x="300" y="868" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">ledger movements — RECONCILED</text>
+<ellipse cx="300" cy="938" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="938" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+<rect x="540" y="489" width="150" height="40" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+<text x="615" y="509" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Rejected</text>
+</svg>

@@ -2,6 +2,7 @@ import type { PrismaClient } from '@prisma/client';
 
 /** Delete in reverse FK order (children first). */
 export const SEED_TABLES: (keyof PrismaClient)[] = [
+  'idSequence',
   'syncConflict',
   'outbox',
   'syncLog',

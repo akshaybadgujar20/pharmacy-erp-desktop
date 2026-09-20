@@ -9,6 +9,7 @@ flowchart TB
     COMPANY["Company<br/><small>Organization root</small>"]
     BRANCH["Branch<br/><small>Store • warehouse</small>"]
     FY["FinancialYear<br/><small>Open • Closed periods</small>"]
+    IDSEQ["IdSequence<br/><small>Global PK counter</small>"]
 
     subgraph SETTINGS["Runtime Configuration"]
         direction LR
@@ -32,9 +33,11 @@ flowchart TB
     class COMPANY master;
     class BRANCH,FY org;
     class APP,SEQ,PRINTER,BARCODE config;
+    class IDSEQ infra;
+    classDef infra fill:#f3f4f6,stroke:#6b7280,color:#111827,stroke-width:1.5px;
 ```
 
-**Legend:** `AppSetting` resolves branch-scoped row → company-wide row. See `SettingsService` in early foundations.
+**Legend:** `AppSetting` resolves branch-scoped row → company-wide row. See `SettingsService` in early foundations. `IdSequence` is persistence infrastructure (not FK-linked to Company); see [IdSequence](#idsequence) below.
 
 ## How the Tables Work Together
 
@@ -52,6 +55,7 @@ flowchart TB
 - [company](#company) — organization / company master.
 - [branch](#branch) — pharmacy branch or location.
 - [financial year](#financialyear) — accounting financial year.
+- [id sequence](#idsequence) — global BIGINT primary key counter.
 - [sequence generator](#sequencegenerator) — document number sequences.
 - [app setting](#appsetting) — application settings and business rules.
 - [printer configuration](#printerconfiguration) — printer mappings and templates.
@@ -433,6 +437,32 @@ Company (1)
 - Historical Financial Years should never be modified after closure.
 - Supports offline-first synchronization using UUID.
 - Compatible with both SQLite and PostgreSQL.
+
+---
+
+## IdSequence
+
+> Prisma model: `backend/prisma/configuration/id-sequence.prisma` (`IdSequence`)
+
+## Purpose
+
+The IdSequence table holds a **singleton row** (`id = 1`) that tracks the last allocated **global BIGINT primary key** across all business tables on the local SQLite database.
+
+It replaces in-memory id counters. Each `create` without an explicit `id` increments `currentValue` by 1 inside a short transaction (optimistic lock on `version`). Document numbers remain in `SequenceGenerator` — this table is for internal PK ids only.
+
+## Business Rules
+
+- Exactly one row (`id = 1`).
+- `currentValue` is the last id handed out; next id is `currentValue + 1`.
+- Bootstrap on app/seed startup reconciles `currentValue` with `MAX(id)` across business tables if the counter is behind (legacy DB migration).
+- Never synced to cloud — local device ids only; cross-device identity uses `uuid` (ADR-004).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | BIGINT | Fixed singleton: `1` |
+| current_value | BIGINT | Last allocated PK |
+| version | INT | Optimistic concurrency |
+| updated_at | BIGINT | Epoch ms |
 
 ---
 

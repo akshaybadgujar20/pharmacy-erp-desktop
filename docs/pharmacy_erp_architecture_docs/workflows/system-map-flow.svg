@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="896" viewBox="0 0 1040 896">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Pharmacy ERP System Map (L0)</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">High-level module handoffs — no step-level decisions. Open L1 flowcharts for detail.</text>
+<path d="M280,154 L320,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M520,154 L560,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,154 L800,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,154 L320,278" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M520,278 L560,278" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M520,278 L320,382" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1000,154 L560,382" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M520,382 L560,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,382 L560,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,154 L80,486" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,154 L320,486" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M520,486 L560,154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M760,278 L320,590" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M1000,154 L320,590" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="380" cy="74" rx="100" ry="24" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="380" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Pharmacy ERP — System Map</text>
+<rect x="500" y="52" width="280" height="36" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="640" y="72" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">L0 overview — drill down to L1 flowcharts per module</text>
+<rect x="80" y="130" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="180" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase Order</text>
+<text x="180" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see purchase-invoice-flow)</text>
+<rect x="320" y="130" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="420" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Goods Receipt</text>
+<text x="420" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see purchase-invoice-flow)</text>
+<rect x="560" y="130" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="660" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Inventory Ledger</text>
+<text x="660" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see inventory-movement-flow)</text>
+<rect x="800" y="130" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="900" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase Invoice</text>
+<text x="900" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see purchase-invoice-flow)</text>
+<rect x="320" y="254" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="420" y="274" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Sales Invoice</text>
+<text x="420" y="288" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see sales-invoice-flow)</text>
+<rect x="560" y="254" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="660" y="274" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Payment / Receipt</text>
+<text x="660" y="288" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see payment-flow)</text>
+<rect x="320" y="358" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="420" y="378" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Sales Return</text>
+<text x="420" y="392" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see return-flow)</text>
+<rect x="560" y="358" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="660" y="378" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase Return</text>
+<text x="660" y="392" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see return-flow)</text>
+<rect x="80" y="462" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="180" y="482" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Stock Adjustment</text>
+<text x="180" y="496" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see stock-adjustment-flow)</text>
+<rect x="320" y="462" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="420" y="482" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Stock Transfer</text>
+<text x="420" y="496" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see stock-transfer-flow)</text>
+<rect x="320" y="566" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="420" y="586" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Month-end Close</text>
+<text x="420" y="600" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(see month-end-flow)</text>
+<rect x="160" y="690" width="360" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="340" y="710" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">L2: cross-cutting-persistence-flow</text>
+<text x="340" y="724" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(UnitOfWork, Audit, Outbox)</text>
+<ellipse cx="380" cy="792" rx="100" ry="24" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="380" y="788" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End — pick an L1 diagram for step detail</text>
+</svg>

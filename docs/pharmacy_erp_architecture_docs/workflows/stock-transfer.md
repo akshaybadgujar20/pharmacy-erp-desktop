@@ -1,6 +1,8 @@
 
 # Stock Transfer
 
+**Diagram:** [stock-transfer-flow.drawio](./stock-transfer-flow.drawio) · [SVG](./stock-transfer-flow.svg)
+
 ## Business Objective
 
 Move inventory between branches while preserving org-global Batch identity and separate branch Stock balances.

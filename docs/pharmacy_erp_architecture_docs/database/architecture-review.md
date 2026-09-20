@@ -175,6 +175,8 @@ The docs in [inventory/inventory.md](./tables/inventory/inventory.md) (`Stock`) 
 
 ### PK strategy recommendation
 
+> **Update (2026):** Runtime local PK assignment now uses the `IdSequence` table ([ADR-009](../architecture/adrs/ADR-009-bigint-id-extension-sqlite.md)). Prisma schema still shows `@default(autoincrement())`; SQLite assigns ids via the Prisma extension hook.
+
 **Use hybrid identity (recommended for this ERP):**
 
 ```text
@@ -187,6 +189,8 @@ Do **not** replace all PKs with UUID — SQLite + PostgreSQL both handle BigInt 
 ---
 
 ## 6. SQLite Review
+
+> **Update (2026):** BIGINT PKs are assigned at runtime from `IdSequence`, not SQLite AUTOINCREMENT. See ADR-009.
 
 ### Provider configuration
 

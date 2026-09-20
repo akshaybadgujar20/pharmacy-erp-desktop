@@ -20,6 +20,7 @@ import { OutboxService } from '../../persistence/outbox/outbox.service';
 import type { TxClient } from '../../persistence/prisma/prisma-tx.type';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { ClosingService } from '../../finance/services/closing.service';
 import { FinancialYearStatus } from '../constants/configuration.constants';
 import { CreateFinancialYearDto } from '../dto/create-financial-year.dto';
 import { FinancialYearListQueryDto } from '../dto/financial-year-list-query.dto';
@@ -55,6 +56,7 @@ export class FinancialYearService {
     private readonly auditService: AuditService,
     private readonly outboxService: OutboxService,
     private readonly requestContext: RequestContextService,
+    private readonly closingService: ClosingService,
   ) {}
 
   async list(query: FinancialYearListQueryDto) {
@@ -282,8 +284,21 @@ export class FinancialYearService {
     });
   }
 
-  async close(id: bigint, version: number) {
+  async close(
+    id: bigint,
+    version: number,
+    options?: { force?: boolean; forceReason?: string },
+  ) {
     const scope = getTenantScope(this.requestContext);
+    const checklist = await this.closingService.getPreCloseChecklist(
+      scope.companyId,
+      undefined,
+    );
+    this.closingService.assertCanClose(
+      checklist,
+      options?.force,
+      options?.forceReason,
+    );
 
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.financialYear.findFirst({

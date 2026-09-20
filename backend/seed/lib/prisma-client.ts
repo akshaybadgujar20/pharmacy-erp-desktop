@@ -1,31 +1,11 @@
-import path from 'path';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '@prisma/client';
-import { nextId } from './id-registry';
+import { createPrismaClient } from '../../src/persistence/prisma/prisma-client.factory';
+import type { PrismaClient } from '@prisma/client';
 
 let client: PrismaClient | null = null;
 
 export function getPrisma(): PrismaClient {
   if (!client) {
-    const base = new PrismaClient({
-      adapter: new PrismaBetterSqlite3({
-        url: `file:${path.join(process.cwd(), '..', 'db', 'pharmacy.sqlite')}`,
-      }),
-    });
-
-    client = base.$extends({
-      query: {
-        $allModels: {
-          async create({ args, query }) {
-            const data = args.data as Record<string, unknown>;
-            if (data && data.id === undefined) {
-              args.data = { ...data, id: nextId() };
-            }
-            return query(args);
-          },
-        },
-      },
-    }) as unknown as PrismaClient;
+    client = createPrismaClient();
   }
   return client;
 }

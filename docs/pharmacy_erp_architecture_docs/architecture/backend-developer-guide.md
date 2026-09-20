@@ -463,7 +463,7 @@ flowchart TB
 | [`inventory/inventory-ledger.service.ts`](../../../backend/src/persistence/inventory/inventory-ledger.service.ts) | **Only** path to change `Stock` + insert `StockMovement` | GRN accept, sales post, returns, adjustments, transfers, stock-take reconcile | Purchase, sales, inventory workflow services |
 | [`ledger/ledger-posting.service.ts`](../../../backend/src/persistence/ledger/ledger-posting.service.ts) | Balanced double-entry vouchers; validates open FY via finance util | Invoice post, payment/receipt complete, sales post/payment/return | Purchase, sales, finance services |
 | [`prisma/prisma-error.mapper.ts`](../../../backend/src/persistence/prisma/prisma-error.mapper.ts) | Maps P2002/P2025/P2034 to `ApplicationException` | On transaction failure | UnitOfWork |
-| [`prisma/bigint-id-sequence.ts`](../../../backend/src/persistence/prisma/bigint-id-sequence.ts) | In-memory BIGINT PK allocator for SQLite | Prisma `create` when `id` omitted | Prisma client extension |
+| [`prisma/id-sequence.service.ts`](../../../backend/src/persistence/prisma/id-sequence.service.ts) | DB-backed global BIGINT PK allocator (`IdSequence` table) | Prisma `create` when `id` omitted | Prisma client extension |
 
 ### Common (`backend/src/common/`)
 
@@ -526,7 +526,7 @@ Controllers, generic CRUD services, DTOs, and mappers are omitted (same pattern 
 
 | File | Purpose (plain English) | Used by |
 |------|-------------------------|---------|
-| [`prisma.service.ts`](../../../backend/src/prisma.service.ts) | Connects SQLite; exposes `client`; syncs BIGINT id sequence on startup | Every module (reads) |
+| [`prisma.service.ts`](../../../backend/src/prisma.service.ts) | Connects SQLite; exposes `client`; bootstraps `IdSequence` singleton on startup (`bootstrapIdSequence`) | Every module (reads) |
 | [`persistence/persistence.module.ts`](../../../backend/src/persistence/persistence.module.ts) | DI wiring for UoW, context, sequence, outbox, ledger services | Imported by all feature modules |
 | [`app.module.ts`](../../../backend/src/app.module.ts) | Registers global filter, interceptors, guards, correlation middleware | Application bootstrap |
 
@@ -1274,6 +1274,7 @@ See [purchase-flow.md](../workflows/purchase-flow.md).
 | Add sync outbox entity type | [`entity-type.constants.ts`](../../../backend/src/persistence/outbox/entity-type.constants.ts) |
 | Add a new permission | `backend/seed/data/security/permission.json` |
 | Add a new report | [`report-definition.interface.ts`](../../../backend/src/reporting/core/report-definition.interface.ts) + new provider + register in `reporting.module.ts` |
+| Change BIGINT PK allocation (local SQLite ids) | [`id-sequence.service.ts`](../../../backend/src/persistence/prisma/id-sequence.service.ts) — see [ADR-009](./adrs/ADR-009-bigint-id-extension-sqlite.md), [persistence-patterns BIGINT section](../database/persistence-patterns.md#bigint-primary-keys) |
 | Change branch/tenant filtering | [`tenant-scope.util.ts`](../../../backend/src/persistence/context/tenant-scope.util.ts) |
 | Change audit field history on UPDATE | [`audit.util.ts`](../../../backend/src/audit/utils/audit.util.ts) |
 | Invalidate sessions after role change | [`session.util.ts`](../../../backend/src/security/utils/session.util.ts) |

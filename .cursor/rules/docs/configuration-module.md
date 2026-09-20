@@ -64,7 +64,14 @@ Permissions use `CONFIGURATION:RESOURCE:ACTION`. Delete endpoints require `Delet
 
 ---
 
-## 5. Out of scope (v1)
+## 5. Related infrastructure (not this module)
+
+- **`IdSequence`** — global BIGINT PK counter in [`id-sequence.service.ts`](../../../backend/src/persistence/prisma/id-sequence.service.ts); allocated automatically by the Prisma `create` hook. Not exposed via configuration REST API.
+- **`SequenceGenerator`** — admin CRUD is in this module; runtime document-number allocation uses persistence [`SequenceGeneratorService`](../../../backend/src/persistence/sequence/sequence-generator.service.ts).
+
+---
+
+## 6. Out of scope (v1)
 
 - Enforcing `FINANCIAL_YEAR_CLOSED` on all transaction modules
 - Angular admin UI

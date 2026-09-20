@@ -19,6 +19,39 @@ Start at [Architecture index](./architecture/README.md).
 | Testing | [testing.md](./architecture/testing.md) |
 | Engineering standards | [engineering-standards.md](./architecture/engineering-standards.md) |
 
+## Functional
+
+Start at [Functional index](./functional/README.md). End-to-end plain-English overview:
+
+- [Functional overview](./functional/functional-overview.md)
+- [Implementation status](./functional/implementation-status.md) — Backend / UI / UX maturity per module
+
+| # | Module guide |
+|---|--------------|
+| 1 | [Party Management](./functional/party-management.md) |
+| 2 | [User & Security](./functional/user-security.md) |
+| 3 | [Medicine Master](./functional/medicine-master.md) |
+| 4 | [Inventory](./functional/inventory.md) |
+| 5 | [Purchase](./functional/purchase.md) |
+| 6 | [Sales](./functional/sales.md) |
+| 7 | [Financial](./functional/financial.md) |
+| 8 | [Pricing](./functional/pricing.md) |
+| 9 | [Loyalty](./functional/loyalty.md) |
+| 10 | [Prescription](./functional/prescription.md) |
+| 11 | [Synchronization](./functional/synchronization.md) |
+| 12 | [Audit](./functional/audit.md) |
+| 13 | [Configuration](./functional/configuration.md) |
+| 14 | [Masters](./functional/masters.md) |
+
+| Cross-cutting | Document |
+|---------------|----------|
+| Reporting | [reporting.md](./functional/reporting.md) |
+| Glossary | [glossary.md](./functional/glossary.md) |
+| Roles & permissions | [roles-and-permissions.md](./functional/roles-and-permissions.md) |
+| Error codes | [error-codes.md](./functional/error-codes.md) |
+| Devices & integrations | [integrations-and-devices.md](./functional/integrations-and-devices.md) |
+| User experience | [user-experience.md](./functional/user-experience.md) |
+
 ## Domain
 
 Start at [Domain index](./domain/README.md). Bounded contexts: [customer](./domain/customer.md), [sales](./domain/sales.md), [inventory](./domain/inventory.md), [product](./domain/product.md), [purchasing](./domain/purchasing.md), [supplier](./domain/supplier.md), [finance](./domain/finance.md).

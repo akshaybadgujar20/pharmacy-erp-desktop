@@ -344,6 +344,7 @@ export class SalesPaymentService {
         amount,
         paymentMethod: payment.paymentMethod,
         customerId: invoice.customerId,
+        invoiceBalance: invoice.balanceAmount,
         narration: payment.remarks ?? undefined,
       });
 

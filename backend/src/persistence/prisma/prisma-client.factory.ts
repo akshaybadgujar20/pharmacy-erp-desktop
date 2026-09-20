@@ -1,7 +1,9 @@
 import path from 'path';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient } from '@prisma/client';
-import { nextBigIntId } from './bigint-id-sequence';
+import { allocateNextId, allocateNextIds } from './id-sequence.service';
+
+const ID_SEQUENCE_MODEL = 'IdSequence';
 
 export function getDefaultDatabaseUrl(): string {
   return path.join(process.cwd(), '..', 'db', 'pharmacy.sqlite');
@@ -18,20 +20,39 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
   return base.$extends({
     query: {
       $allModels: {
-        async create({ args, query }) {
+        async create({ model, args, query }) {
+          if (model === ID_SEQUENCE_MODEL) {
+            return query(args);
+          }
           const data = args.data as Record<string, unknown>;
           if (data && data.id === undefined) {
-            args.data = { ...data, id: nextBigIntId() } as typeof args.data;
+            const id = await allocateNextId(base);
+            args.data = { ...data, id } as typeof args.data;
           }
           return query(args);
         },
-        async createMany({ args, query }) {
-          const rows = args.data as Array<Record<string, unknown>>;
-          if (Array.isArray(rows)) {
-            args.data = rows.map((row) =>
-              row.id === undefined ? { ...row, id: nextBigIntId() } : row,
-            ) as typeof args.data;
+        async createMany({ model, args, query }) {
+          if (model === ID_SEQUENCE_MODEL) {
+            return query(args);
           }
+          const rows = args.data as Array<Record<string, unknown>>;
+          if (!Array.isArray(rows)) {
+            return query(args);
+          }
+
+          const missingIdCount = rows.filter(
+            (row) => row.id === undefined,
+          ).length;
+          if (missingIdCount === 0) {
+            return query(args);
+          }
+
+          const ids = await allocateNextIds(base, missingIdCount);
+          let idIndex = 0;
+          args.data = rows.map((row) =>
+            row.id === undefined ? { ...row, id: ids[idIndex++] } : row,
+          ) as typeof args.data;
+
           return query(args);
         },
       },

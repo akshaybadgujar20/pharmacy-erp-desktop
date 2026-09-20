@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="924" viewBox="0 0 1100 924">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Month-End Closing Workflow</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">L1 spine — labels show Implemented / Partial / GAP vs current code.</text>
+<path d="M410,746 L760,739" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M300,100 L300,132" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,184 L300,216" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,268 L300,300" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,352 L300,384" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,436 L300,468" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,520 L300,552" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,604 L300,636" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,688 L300,720" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,772 L300,804" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="300" cy="80" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="190" y="132" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="152" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">1. Pre-close checklist</text>
+<text x="300" y="166" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(GET /closing/pre-close-checklist)</text>
+<rect x="190" y="216" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="236" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">2. Stock reconciliation</text>
+<text x="300" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(StockTake optional) — Partial</text>
+<rect x="190" y="300" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="320" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">3. Ledger review / trial balance — GAP</text>
+<rect x="190" y="384" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="404" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">4. GST summary from posted invoices — GAP</text>
+<rect x="190" y="468" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="488" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">5. Mark period closed</text>
+<text x="300" y="502" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(FinancialYear.close) — Implemented</text>
+<rect x="190" y="552" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="572" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">6. Lock postings to OPEN FY for transaction date — Implemented</text>
+<rect x="190" y="636" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="656" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">7. Archive P&amp;L, stock, GST reports — GAP</text>
+<rect x="190" y="720" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">8. Audit close action — Implemented</text>
+<rect x="760" y="720" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="910" y="740" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Deferred: No reopen-period API</text>
+<ellipse cx="300" cy="824" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="824" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+</svg>

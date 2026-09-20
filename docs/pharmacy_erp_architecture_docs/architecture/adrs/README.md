@@ -8,6 +8,10 @@ Full decision records recovered from historical chats, plans, and architecture d
 
 The canonical navigable index lives in [Backend Memory Map](../backend-memory-map.md#architectural-decision-index).
 
+## Review
+
+- [Plain-English ADR review (2026-09-20)](./adr-review-plain-english.md) — statistics, flagged decisions, and recommendations
+
 ## ID convention
 
 - Format: `ADR-001`, `ADR-002`, … (three digits, zero-padded)

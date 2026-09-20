@@ -47,10 +47,14 @@ import { toSalesInvoiceResponse } from '../mappers/sales-invoice.mapper';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
   allocateFefoBatches,
+  applyPrescriptionDispensing,
   assertCustomerActive,
   assertDraftStatus,
   assertPrescriptionExists,
+  assertPrescriptionQuantitiesForPost,
+  assertScheduleHCompliance,
   computeLineAmounts,
+  computeSalesRoundOff,
   getNextLineNumber,
   optimisticUpdate,
   readSalesSettings,
@@ -417,7 +421,32 @@ export class SalesInvoiceService {
         });
       }
 
-      const netAmount = grossAmount.sub(discountAmount).add(taxAmount);
+      let netAmount = grossAmount.sub(discountAmount).add(taxAmount);
+      let roundOffAmount = new Prisma.Decimal(0);
+
+      if (salesSettings.applyRoundOff) {
+        const rounded = computeSalesRoundOff(netAmount);
+        roundOffAmount = rounded.roundOffAmount;
+        netAmount = rounded.netAmount;
+      }
+
+      await assertScheduleHCompliance(
+        tx,
+        refreshedItems,
+        invoice.prescriptionId,
+        salesSettings.prescriptionMandatoryScheduleH,
+      );
+
+      if (invoice.prescriptionId) {
+        await assertPrescriptionQuantitiesForPost(
+          tx,
+          invoice.prescriptionId,
+          refreshedItems.map((item) => ({
+            medicineId: item.medicineId,
+            soldQuantity: new Prisma.Decimal(item.soldQuantity),
+          })),
+        );
+      }
 
       await assertTransactionDateInOpenYear(
         tx,
@@ -461,6 +490,7 @@ export class SalesInvoiceService {
           grossAmount,
           discountAmount,
           taxAmount,
+          roundOffAmount,
           netAmount,
           balanceAmount: netAmount,
           paymentStatus: SalesInvoicePaymentStatus.UNPAID,
@@ -474,6 +504,17 @@ export class SalesInvoiceService {
         id,
         `Sales invoice version conflict or not found: ${id}`,
       );
+
+      if (invoice.prescriptionId) {
+        await applyPrescriptionDispensing(
+          tx,
+          invoice.prescriptionId,
+          refreshedItems.map((item) => ({
+            medicineId: item.medicineId,
+            soldQuantity: new Prisma.Decimal(item.soldQuantity),
+          })),
+        );
+      }
 
       const updated = await tx.salesInvoice.findFirstOrThrow({ where: { id } });
       await this.emitChange(

@@ -36,6 +36,8 @@ Electron Desktop
 
 Never key sync on local autoincrement `id` or Outbox `entityId` (removed).
 
+**Runtime (local SQLite):** Prisma schema shows `@default(autoincrement())`, but SQLite does not assign BIGINT ids on insert. The shared `createPrismaClient()` hook allocates from the singleton `IdSequence` table (`allocateNextId` per `create`). Cloud JPA uses native sequences / `@GeneratedValue`. Sync never uses local `id` (ADR-004).
+
 ---
 
 ## Type mapping

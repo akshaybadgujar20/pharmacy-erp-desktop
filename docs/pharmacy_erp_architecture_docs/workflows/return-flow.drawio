@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="generate-return-flow" version="22.1.0">
+  <diagram id="return-flow" name="Return Workflow">
+    <mxGraphModel grid="1" pageWidth="1020" pageHeight="846" math="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="3" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="280" y="80" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="4" value="Return type?&#xa;Sales / Purchase" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="260" y="130" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="5" value="Load posted sales invoice&#xa;and create draft return" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="40" y="230" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="6" value="Add items: qty ≤ sold,&#xa;RESTOCK disposition only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="40" y="298" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="7" value="Approve return?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="366" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="8" value="Approve: stock IN, ledger reversal,&#xa;refund payment if mode set" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="40" y="444" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="9" value="Cancel return?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="512" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="10" value="Cancel: reverse if completed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="40" y="590" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="11" value="Create draft purchase return" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="230" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="12" value="Add items with stock check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="298" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="13" value="Submit for approval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="366" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="14" value="Approve return?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="380" y="434" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="15" value="Approve: stock OUT to supplier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="512" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="16" value="Cancel return?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="380" y="580" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="17" value="Cancel: reverse stock if dispatched" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="360" y="658" width="240" height="52" as="geometry"/></mxCell>
+        <mxCell id="18" value="End" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="280" y="726" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="19" value="Accepted v1: RESTOCK only — no quarantine/expired" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b85450;dashed=1;dashPattern=8 8;fontSize=9;align=left;spacingLeft=6;" vertex="1" parent="1"><mxGeometry x="680" y="490" width="300" height="38" as="geometry"/></mxCell>
+        <mxCell id="20" value="Rejected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="620" y="403" width="150" height="40" as="geometry"/></mxCell>
+        <mxCell id="21" style="endArrow=classic;html=1;strokeColor=#666666;dashed=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="8" target="19"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="22" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="3" target="4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="23" value="Sales" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="4" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="24" value="Purchase" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="4" target="11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="25" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="5" target="6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="26" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="6" target="7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="27" value="No" style="endArrow=classic;html=1;strokeColor=#b85450;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="7" target="20"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="28" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="7" target="8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="29" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="8" target="9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="30" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="9" target="10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="31" value="No" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="9" target="18"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="32" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="10" target="18"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="33" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="11" target="12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="34" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="12" target="13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="35" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="13" target="14"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="36" value="No" style="endArrow=classic;html=1;strokeColor=#b85450;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="14" target="20"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="37" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="14" target="15"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="38" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="15" target="16"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="39" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="16" target="17"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="40" value="No" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="16" target="18"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="41" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="17" target="18"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

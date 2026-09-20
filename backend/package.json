@@ -21,7 +21,8 @@
     "db:seed": "tsx seed/seed.ts",
     "db:seed:fresh": "tsx seed/seed.ts --fresh",
     "db:reset": "prisma db push --force-reset && npm run db:seed:fresh",
-    "test:persistence": "jest --config ./test/persistence/jest-persistence.json --runInBand"
+    "test:persistence": "jest --config ./test/persistence/jest-persistence.json --runInBand",
+    "test:workflows": "python ../docs/pharmacy_erp_architecture_docs/workflows/test_generators.py"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

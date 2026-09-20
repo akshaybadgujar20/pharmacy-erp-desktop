@@ -1,0 +1,35 @@
+<mxfile host="app.diagrams.net" agent="generate-prescription-flow" version="22.1.0">
+  <diagram id="prescription-flow" name="Prescription Workflow (Minimal)">
+    <mxGraphModel grid="1" pageWidth="730" pageHeight="1122" math="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="3" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="235" y="60" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="4" value="Create draft prescription" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="132" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="5" value="Add or replace items (draft only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="216" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="6" value="Activate?&#xa;(at least one item)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="300" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="7" value="Prescription ACTIVE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="422" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="8" value="Cancel prescription?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="506" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="9" value="Status CANCELLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="628" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="10" value="Expire prescription?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1"><mxGeometry x="200" y="712" width="200" height="90" as="geometry"/></mxCell>
+        <mxCell id="11" value="Status EXPIRED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="834" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="12" value="Sales post updates dispensed qty&#xa;(see sales-invoice-flow)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1"><mxGeometry x="190" y="918" width="220" height="52" as="geometry"/></mxCell>
+        <mxCell id="13" value="End" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="235" y="1002" width="130" height="40" as="geometry"/></mxCell>
+        <mxCell id="14" value="Rejected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="540" y="531" width="150" height="40" as="geometry"/></mxCell>
+        <mxCell id="15" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="3" target="4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="16" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="4" target="5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="17" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="5" target="6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="18" value="No" style="endArrow=classic;html=1;strokeColor=#b85450;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=1;" edge="1" parent="1" source="6" target="14"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="19" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="6" target="7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="20" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="7" target="12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="21" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="12" target="8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="22" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="8" target="9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="23" value="No" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="8" target="10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="24" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="9" target="13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="25" value="Yes" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="10" target="11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="26" value="No" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="10" target="13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="27" style="endArrow=classic;html=1;strokeColor=#666666;rounded=1;" edge="1" parent="1" source="11" target="13"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

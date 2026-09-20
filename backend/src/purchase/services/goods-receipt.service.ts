@@ -22,6 +22,7 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
 import { SettingsService } from '../../settings/settings.service';
@@ -351,6 +352,11 @@ export class GoodsReceiptService {
       }
 
       const branch = await assertBranchExists(tx, receipt.branchId);
+      await assertTransactionDateInOpenYear(
+        tx,
+        branch.companyId,
+        receipt.receiptDate,
+      );
       const userId = this.requestContext.tryGet()?.userId;
       let hasAccepted = false;
       let hasRejected = false;

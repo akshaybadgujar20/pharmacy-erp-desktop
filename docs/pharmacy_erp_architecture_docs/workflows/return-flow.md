@@ -1,6 +1,8 @@
 
 # Return Flow
 
+**Diagram:** [return-flow.drawio](./return-flow.drawio) · [SVG](./return-flow.svg)
+
 ## Business Objective
 
 Handle sales and purchase returns with correct stock reversal, financial adjustment, and audit trail while preserving original transaction snapshots.

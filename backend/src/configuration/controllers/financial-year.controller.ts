@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
 import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
+import { CloseFinancialYearQueryDto } from '../../finance/dto/pre-close-checklist-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreateFinancialYearDto } from '../dto/create-financial-year.dto';
 import { FinancialYearListQueryDto } from '../dto/financial-year-list-query.dto';
@@ -51,9 +52,12 @@ export class FinancialYearController {
   @RequirePermissions('CONFIGURATION:FINANCIAL_YEAR:CLOSE')
   close(
     @Param('id', ParseBigIntPipe) id: bigint,
-    @Query() query: DeleteEntityQueryDto,
+    @Query() query: CloseFinancialYearQueryDto,
   ) {
-    return this.financialYearService.close(id, query.version);
+    return this.financialYearService.close(id, query.version, {
+      force: query.force,
+      forceReason: query.forceReason,
+    });
   }
 
   @Delete(':id')

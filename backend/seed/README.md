@@ -78,7 +78,11 @@ Resume assumes earlier phases have already completed and later phases have not y
 
 ## BIGINT IDs and document numbers
 
-SQLite BIGINT primary keys from `db push` do not auto-increment reliably. The seed client assigns ids via an in-memory counter (same pattern as the NestJS app). On append or `--only`, the counter and branch-scoped document-number sequences are re-synced from the database before new rows are inserted.
+SQLite BIGINT primary keys from `db push` do not auto-increment reliably. The seed client uses the same `createPrismaClient()` factory as the NestJS app: each `create` without an explicit `id` allocates the next PK from the singleton `IdSequence` table (per-row DB update with optimistic `version` lock).
+
+On append or `--only`, `hydrateFromDb()` calls `bootstrapIdSequence()` (ensures the singleton row exists and reconciles `currentValue` with existing business ids) and rehydrates the uuid registry plus branch-scoped document-number sequences. `id-registry.ts` is a uuid→id map for FK resolution only — it does not hold a PK counter.
+
+Document numbers (invoice, PO, GRN, etc.) remain in `SequenceGenerator`, separate from `IdSequence`.
 
 ## Schema rules enforced
 

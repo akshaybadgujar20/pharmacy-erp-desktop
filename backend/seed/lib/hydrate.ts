@@ -1,7 +1,7 @@
 import type { PrismaClient } from '@prisma/client';
-import { decimal, register, resetIdSequence } from './id-registry';
+import { bootstrapIdSequence } from '../../src/persistence/prisma/id-sequence.service';
+import { decimal, register } from './id-registry';
 import type { SeedContext } from './seed-context';
-import { SEED_TABLES } from './wipe';
 
 function maxSeqFromNumbers(
   numbers: string[],
@@ -26,27 +26,6 @@ function setSeqIfHigher(
   if (seq > (map.get(branchCode) ?? 0)) {
     map.set(branchCode, seq);
   }
-}
-
-export async function syncIdSequenceFromDb(
-  prisma: PrismaClient,
-): Promise<void> {
-  let maxId = 0n;
-  for (const model of SEED_TABLES) {
-    const delegate = prisma[model] as {
-      findFirst?: (args: {
-        orderBy: { id: 'desc' };
-        select: { id: true };
-      }) => Promise<{ id: bigint } | null>;
-    };
-    if (!delegate?.findFirst) continue;
-    const row = await delegate.findFirst({
-      orderBy: { id: 'desc' },
-      select: { id: true },
-    });
-    if (row && row.id > maxId) maxId = row.id;
-  }
-  resetIdSequence(maxId);
 }
 
 async function hydrateRegistryModel(
@@ -413,7 +392,7 @@ export async function hydrateFromDb(
   prisma: PrismaClient,
   ctx: SeedContext,
 ): Promise<void> {
-  await syncIdSequenceFromDb(prisma);
+  await bootstrapIdSequence(prisma);
   await hydrateRegistry(prisma);
   await hydrateContext(prisma, ctx);
 }

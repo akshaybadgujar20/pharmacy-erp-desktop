@@ -146,6 +146,7 @@ export async function syncSequenceBaseline(
     return;
   }
 
+  const now = BigInt(Date.now());
   await prisma.client.sequenceGenerator.create({
     data: {
       companyId,
@@ -156,6 +157,8 @@ export async function syncSequenceBaseline(
       resetPolicy: defaults.resetPolicy ?? 'NEVER',
       format: defaults.format,
       isActive: true,
+      createdAt: now,
+      updatedAt: now,
     },
   });
 }

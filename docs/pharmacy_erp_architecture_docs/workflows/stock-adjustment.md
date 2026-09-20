@@ -1,6 +1,8 @@
 
 # Stock Adjustment
 
+**Diagram:** [stock-adjustment-flow.drawio](./stock-adjustment-flow.drawio) · [SVG](./stock-adjustment-flow.svg)
+
 ## Business Objective
 
 Correct branch inventory when physical count differs from system stock.

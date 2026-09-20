@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="2826" viewBox="0 0 1100 2826">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Sales Invoice Workflow</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">L1 detail — see cross-cutting-persistence-flow for write pattern.</text>
+<path d="M410,1836 L760,1829" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M410,2332 L760,2325" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M300,100 L300,132" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,184 L300,216" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,306 L300,338" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="322" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,306 L300,460" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="383" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M400,383 L540,383 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="377" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,428 L300,460" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="444" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,550 L300,582" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="566" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,550 L300,704" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="627" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M400,627 L540,627 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="621" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,672 L300,704" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="688" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,756 L300,788" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M200,833 L140,833 L140,730 L190,730" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,4"/>
+<text x="132" y="782" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,878 L300,910" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="894" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M400,955 L540,955 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="949" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1000 L300,1032" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1016" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M400,1077 L540,1077 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1071" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1122 L300,1154" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1138" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1206 L300,1238" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M400,1283 L540,1283 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1277" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1328 L300,1360" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1344" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M400,1405 L540,1405 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1399" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1450 L300,1482" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1466" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1534 L300,1566" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M400,1611 L540,1611 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1605" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1656 L300,1688" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1672" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M400,1733 L540,1733 L540,1348" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="470" y="1727" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1778 L300,1810" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1794" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1862 L300,1894" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,1984 L300,2016" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2000" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,1984 L300,2100" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2042" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,2068 L300,2184" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,2152 L300,2184" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,2274 L300,2306" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2290" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,2274 L300,2390" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2332" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,2358 L300,2390" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,2480 L300,2512" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2496" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,2480 L300,2596" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="2538" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,2564 L300,2596" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<ellipse cx="300" cy="80" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="190" y="132" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="152" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create a new draft sales invoice</text>
+<polygon points="300,216 400,261 300,306 200,261" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="236" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Customer selected?</text>
+<polygon points="300,338 400,383 300,428 200,383" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="358" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Customer active?</text>
+<polygon points="300,460 400,505 300,550 200,505" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Prescription linked?</text>
+<polygon points="300,582 400,627 300,672 200,627" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="602" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Prescription valid?</text>
+<rect x="190" y="704" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="724" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Add or edit medicines and quantities</text>
+<polygon points="300,788 400,833 300,878 200,833" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="808" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Ready to finalise?</text>
+<polygon points="300,910 400,955 300,1000 200,955" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="930" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">At least one item?</text>
+<polygon points="300,1032 400,1077 300,1122 200,1077" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1052" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Credit sale without customer?</text>
+<rect x="190" y="1154" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1174" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Allocate stock by earliest expiry first</text>
+<polygon points="300,1238 400,1283 300,1328 200,1283" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1258" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Enough stock?</text>
+<polygon points="300,1360 400,1405 300,1450 200,1405" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1380" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Expired batch and not allowed?</text>
+<rect x="190" y="1482" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1502" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Set price from price list (cap at MRP if set)</text>
+<polygon points="300,1566 400,1611 300,1656 200,1611" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1586" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Price found?</text>
+<polygon points="300,1688 400,1733 300,1778 200,1733" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1708" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accounting period open?</text>
+<rect x="190" y="1810" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1830" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Generate invoice number, reduce stock,</text>
+<text x="300" y="1844" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">post accounts, update dues — POSTED</text>
+<rect x="760" y="1810" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="910" y="1830" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Accepted v1: Payment captured via payment-flow, not at finalise</text>
+<polygon points="300,1894 400,1939 300,1984 200,1939" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="1914" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Collect payment now?</text>
+<rect x="190" y="2016" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="2036" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Record payment and settle invoice</text>
+<rect x="190" y="2100" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="2120" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Leave as credit or unpaid</text>
+<polygon points="300,2184 400,2229 300,2274 200,2229" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="2204" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Customer returns items later?</text>
+<rect x="190" y="2306" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="2326" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Create return, approve, restock, settle</text>
+<rect x="760" y="2306" width="300" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="910" y="2326" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP-3: Only restock supported</text>
+<polygon points="300,2390 400,2435 300,2480 200,2435" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="2410" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel invoice?</text>
+<rect x="190" y="2512" width="220" height="52" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="2532" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel (reverse stock/accounts if allowed)</text>
+<ellipse cx="300" cy="2616" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="2616" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+<rect x="40" y="2708" width="380" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="230" y="2728" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP-7: No automated tests for Sales module</text>
+<rect x="440" y="2708" width="380" height="38" rx="6" fill="#fff2cc" stroke="#b85450" stroke-width="1.5" stroke-dasharray="8,8"/>
+<text x="630" y="2728" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GAP-8: No end-to-end tests for sales invoice workflow</text>
+<rect x="540" y="1328" width="150" height="40" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+<text x="615" y="1348" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Rejected</text>
+</svg>

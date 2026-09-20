@@ -1,15 +1,4 @@
 const maps = new Map<string, Map<string, bigint>>();
-let idSequence = 0n;
-
-/** SQLite BIGINT PKs from db push lack AUTOINCREMENT; assign ids on create and re-sync from DB on append. */
-export function nextId(): bigint {
-  idSequence += 1n;
-  return idSequence;
-}
-
-export function resetIdSequence(start = 0n): void {
-  idSequence = start;
-}
 
 export function register(model: string, uuid: string, id: bigint): void {
   if (!maps.has(model)) maps.set(model, new Map());
@@ -30,7 +19,6 @@ export function tryResolve(model: string, uuid: string): bigint | undefined {
 
 export function clearRegistry(): void {
   maps.clear();
-  resetIdSequence();
 }
 
 export function decimal(value: number | string): string {

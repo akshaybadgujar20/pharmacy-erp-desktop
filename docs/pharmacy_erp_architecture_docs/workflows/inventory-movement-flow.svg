@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="810" height="1310" viewBox="0 0 810 1310">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="40" y="28" font-family="Arial,sans-serif" font-size="16" font-weight="bold">Inventory Movement Workflow (L1 Hub)</text>
+<text x="40" y="44" font-family="Arial,sans-serif" font-size="10" fill="#666">Central ledger pattern — drill down to module L1 diagrams for step detail.</text>
+<path d="M400,311 L620,311 L620,655" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="510" y="305" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M400,605 L620,605 L620,655" fill="none" stroke="#b85450" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="510" y="599" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,120 L320,130" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M320,194 L300,266" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,356 L300,428" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="392" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,488 L300,560" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,650 L300,722" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="686" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,786 L300,858" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,894 L300,908" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M300,998 L300,1070" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1034" font-family="Arial,sans-serif" font-size="9" fill="#333">Yes</text>
+<path d="M300,998 L300,1190" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="310" y="1094" font-family="Arial,sans-serif" font-size="9" fill="#333">No</text>
+<path d="M300,1118 L300,1190" fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M440,162 L40,162" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M440,162 L40,218" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M440,162 L40,274" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M440,162 L40,330" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M440,162 L40,386" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<path d="M440,162 L40,442" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="6,4"/>
+<ellipse cx="300" cy="100" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="100" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Start</text>
+<rect x="200" y="130" width="240" height="64" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="320" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">What triggered the change?</text>
+<text x="320" y="164" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">GRN / Sale / Return / Adj / Transfer / Stock take</text>
+<polygon points="300,266 400,311 300,356 200,311" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="286" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">User and branch</text>
+<text x="300" y="300" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">context set?</text>
+<rect x="200" y="428" width="200" height="60" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="448" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Resolve org-global batch</text>
+<text x="300" y="462" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">and branch stock row</text>
+<polygon points="300,560 400,605 300,650 200,605" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Business rules OK?</text>
+<text x="300" y="594" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">(expiry, FEFO, qty)</text>
+<rect x="190" y="722" width="220" height="64" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="742" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">applyMovement: update Stock balance</text>
+<text x="300" y="756" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">and insert immutable StockMovement</text>
+<rect x="160" y="858" width="280" height="36" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="300" y="878" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Audit + Outbox + commit — see cross-cutting-persistence-flow</text>
+<polygon points="300,908 400,953 300,998 200,953" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+<text x="300" y="928" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Cancel posted document?</text>
+<rect x="200" y="1070" width="200" height="48" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="300" y="1090" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Reverse with opposite IN/OUT movement</text>
+<ellipse cx="300" cy="1210" rx="65" ry="20" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<text x="300" y="1210" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">End</text>
+<rect x="40" y="140" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="160" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Purchase GRN accept</text>
+<text x="130" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ purchase-invoice-flow</text>
+<rect x="40" y="196" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="216" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Sales invoice post</text>
+<text x="130" y="230" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ sales-invoice-flow</text>
+<rect x="40" y="252" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="272" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Adjustment approve</text>
+<text x="130" y="286" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ stock-adjustment-flow</text>
+<rect x="40" y="308" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="328" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Transfer dispatch/receive</text>
+<text x="130" y="342" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ stock-transfer-flow</text>
+<rect x="40" y="364" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="384" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Return approve</text>
+<text x="130" y="398" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ return-flow</text>
+<rect x="40" y="420" width="180" height="44" rx="6" fill="#f5f5f5" stroke="#666666" stroke-width="1.5"/>
+<text x="130" y="440" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Stock take reconcile</text>
+<text x="130" y="454" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">→ stock-take-flow</text>
+<rect x="620" y="635" width="150" height="40" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+<text x="695" y="655" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#333">Rejected</text>
+</svg>

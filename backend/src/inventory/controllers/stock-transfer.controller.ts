@@ -67,6 +67,15 @@ export class StockTransferController {
     return this.stockTransferService.receive(id, dto);
   }
 
+  @Post(':id/cancel')
+  @RequirePermissions('INVENTORY:STOCK_TRANSFER:UPDATE')
+  cancel(
+    @Param('id', ParseBigIntPipe) id: bigint,
+    @Body() dto: DispatchStockTransferDto,
+  ) {
+    return this.stockTransferService.cancel(id, dto);
+  }
+
   @Delete(':id')
   @RequirePermissions('INVENTORY:STOCK_TRANSFER:DELETE')
   delete(

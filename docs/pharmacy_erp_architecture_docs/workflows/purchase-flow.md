@@ -1,6 +1,8 @@
 
 # Purchase Flow
 
+**Diagram:** [purchase-invoice-flow.drawio](./purchase-invoice-flow.drawio) · [SVG](./purchase-invoice-flow.svg)
+
 ## Business Objective
 
 Procure medicines, create or match org-global Batch records, and increase branch Stock on receipt.

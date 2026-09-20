@@ -720,6 +720,7 @@ export async function buildSalesPaymentLedgerLines(
     amount: Prisma.Decimal;
     paymentMethod: string;
     customerId?: bigint | null;
+    invoiceBalance?: Prisma.Decimal;
     narration?: string;
   },
 ): Promise<JournalLineInput[]> {
@@ -727,6 +728,123 @@ export async function buildSalesPaymentLedgerLines(
     throw new ApplicationException(
       ErrorCode.BAD_REQUEST,
       'Sales payment requires a customer on the invoice',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  const amount = new Prisma.Decimal(input.amount);
+  const invoiceBalance =
+    input.invoiceBalance !== undefined
+      ? new Prisma.Decimal(input.invoiceBalance)
+      : amount;
+  const appliedAmount = Prisma.Decimal.min(amount, invoiceBalance);
+  const advanceAmount = amount.sub(appliedAmount);
+
+  const cashOrBankLedgerId = await resolveSalesCashOrBankLedger(
+    tx,
+    input.paymentMethod,
+  );
+  const receivable = await resolveSystemLedger(
+    tx,
+    SystemLedgerCode.CUSTOMER_RECEIVABLE,
+  );
+
+  const lines: JournalLineInput[] = [
+    {
+      ledgerId: cashOrBankLedgerId,
+      debitAmount: amount,
+      creditAmount: new Prisma.Decimal(0),
+      narration: input.narration,
+    },
+  ];
+
+  if (appliedAmount.gt(0)) {
+    lines.push({
+      ledgerId: receivable.id,
+      debitAmount: new Prisma.Decimal(0),
+      creditAmount: appliedAmount,
+      narration: input.narration,
+    });
+  }
+
+  if (advanceAmount.gt(0)) {
+    const advance = await resolveSystemLedger(
+      tx,
+      SystemLedgerCode.CUSTOMER_ADVANCE,
+    );
+    lines.push({
+      ledgerId: advance.id,
+      debitAmount: new Prisma.Decimal(0),
+      creditAmount: advanceAmount,
+      narration: input.narration,
+    });
+  }
+
+  return lines;
+}
+
+export async function buildPurchaseReturnLedgerLines(
+  tx: TxClient,
+  input: {
+    netAmount: Prisma.Decimal;
+    taxAmount: Prisma.Decimal;
+    narration?: string;
+  },
+): Promise<JournalLineInput[]> {
+  const netAmount = new Prisma.Decimal(input.netAmount);
+  const taxAmount = new Prisma.Decimal(input.taxAmount);
+  const purchaseAmount = netAmount.sub(taxAmount);
+
+  const purchase = await resolveSystemLedger(tx, SystemLedgerCode.PURCHASE);
+  const gstInput = await resolveSystemLedger(tx, SystemLedgerCode.GST_INPUT);
+  const payable = await resolveSystemLedger(
+    tx,
+    SystemLedgerCode.SUPPLIER_PAYABLE,
+  );
+
+  const lines: JournalLineInput[] = [
+    {
+      ledgerId: payable.id,
+      debitAmount: netAmount,
+      creditAmount: new Prisma.Decimal(0),
+      narration: input.narration,
+    },
+  ];
+
+  if (purchaseAmount.gt(0)) {
+    lines.push({
+      ledgerId: purchase.id,
+      debitAmount: new Prisma.Decimal(0),
+      creditAmount: purchaseAmount,
+      narration: input.narration,
+    });
+  }
+
+  if (taxAmount.gt(0)) {
+    lines.push({
+      ledgerId: gstInput.id,
+      debitAmount: new Prisma.Decimal(0),
+      creditAmount: taxAmount,
+      narration: input.narration,
+    });
+  }
+
+  return lines;
+}
+
+export async function buildSalesRefundLedgerLines(
+  tx: TxClient,
+  input: {
+    amount: Prisma.Decimal;
+    paymentMethod: string;
+    customerId?: bigint | null;
+    narration?: string;
+  },
+): Promise<JournalLineInput[]> {
+  if (!input.customerId) {
+    throw new ApplicationException(
+      ErrorCode.BAD_REQUEST,
+      'Sales refund requires a customer on the invoice',
       HttpStatus.BAD_REQUEST,
     );
   }
@@ -743,13 +861,13 @@ export async function buildSalesPaymentLedgerLines(
 
   return [
     {
-      ledgerId: cashOrBankLedgerId,
+      ledgerId: receivable.id,
       debitAmount: amount,
       creditAmount: new Prisma.Decimal(0),
       narration: input.narration,
     },
     {
-      ledgerId: receivable.id,
+      ledgerId: cashOrBankLedgerId,
       debitAmount: new Prisma.Decimal(0),
       creditAmount: amount,
       narration: input.narration,
@@ -826,10 +944,12 @@ export async function recomputeSalesInvoiceSettlement(
     tx.salesPayment.findMany({
       where: {
         salesInvoiceId: invoiceId,
-        status: SalesPaymentStatus.COMPLETED,
+        status: {
+          in: [SalesPaymentStatus.COMPLETED, SalesPaymentStatus.REFUNDED],
+        },
         deletedAt: null,
       },
-      select: { paymentAmount: true },
+      select: { paymentAmount: true, status: true },
     }),
     tx.receipt.findMany({
       where: {
@@ -844,7 +964,11 @@ export async function recomputeSalesInvoiceSettlement(
 
   let paidAmount = new Prisma.Decimal(0);
   for (const payment of payments) {
-    paidAmount = paidAmount.add(payment.paymentAmount);
+    if (payment.status === SalesPaymentStatus.REFUNDED) {
+      paidAmount = paidAmount.sub(payment.paymentAmount);
+    } else {
+      paidAmount = paidAmount.add(payment.paymentAmount);
+    }
   }
   for (const receipt of receipts) {
     paidAmount = paidAmount.add(receipt.amount);

@@ -15,6 +15,7 @@ import { VoucherType } from '../../finance/constants/finance.constants';
 import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
+  buildSalesRefundLedgerLines,
   buildSalesReturnLedgerLines,
   recomputeSalesInvoiceSettlement,
 } from '../../finance/utils/finance.util';
@@ -36,6 +37,7 @@ import { PrismaService } from '../../prisma.service';
 import { SettingsService } from '../../settings/settings.service';
 import {
   SalesInvoiceStatus,
+  SalesPaymentStatus,
   SalesReturnDisposition,
   SalesReturnStatus,
 } from '../constants/sales.constants';
@@ -48,6 +50,8 @@ import {
   assertCustomerActive,
   assertDraftStatus,
   assertInvoicePosted,
+  assertSalesReturnPolicy,
+  mapRefundModeToPaymentMethod,
   optimisticUpdate,
   readSalesSettings,
   throwNotFound,
@@ -324,6 +328,20 @@ export class SalesReturnService {
 
       const branch = await assertBranchExists(tx, salesReturn.branchId);
       const salesSettings = await readSalesSettings(this.settingsService);
+      const invoice = await tx.salesInvoice.findFirstOrThrow({
+        where: { id: salesReturn.salesInvoiceId },
+      });
+
+      await assertSalesReturnPolicy(tx, {
+        invoiceDate: invoice.invoiceDate,
+        returnDate: salesReturn.returnDate,
+        returnWindowDays: salesSettings.returnWindowDays,
+        items: salesReturn.items,
+        returnRequiresPharmacistForScheduleH:
+          salesSettings.returnRequiresPharmacistForScheduleH,
+        approvedByEmployeeId: salesReturn.approvedByEmployeeId,
+      });
+
       const userId = this.requestContext.tryGet()?.userId;
       let grossAmount = new Prisma.Decimal(0);
       let discountAmount = new Prisma.Decimal(0);
@@ -386,15 +404,10 @@ export class SalesReturnService {
         salesReturn.returnDate,
       );
 
-      const invoiceForLedger = await tx.salesInvoice.findFirstOrThrow({
-        where: { id: salesReturn.salesInvoiceId },
-        select: { customerId: true },
-      });
-
       const ledgerLines = await buildSalesReturnLedgerLines(tx, {
         netAmount,
         taxAmount,
-        customerId: invoiceForLedger.customerId,
+        customerId: invoice.customerId,
         narration: `Sales return ${salesReturn.salesReturnNumber}`,
       });
 
@@ -431,15 +444,22 @@ export class SalesReturnService {
         `Sales return version conflict or not found: ${id}`,
       );
 
-      const invoice = await tx.salesInvoice.findFirstOrThrow({
-        where: { id: salesReturn.salesInvoiceId },
-      });
-
       if (invoice.customerId) {
         await adjustCustomerOutstanding(
           tx,
           invoice.customerId,
           netAmount.neg(),
+        );
+      }
+
+      if (salesReturn.refundMode && netAmount.gt(0) && invoice.customerId) {
+        await this.createRefundPayment(
+          tx,
+          salesReturn,
+          invoice.customerId,
+          branch,
+          netAmount,
+          userId,
         );
       }
 
@@ -533,6 +553,14 @@ export class SalesReturnService {
           await adjustCustomerOutstanding(tx, invoice.customerId, netAmount);
         }
 
+        await this.reverseRefundPayment(
+          tx,
+          salesReturn,
+          invoice.customerId,
+          branch,
+          dto.remarks,
+        );
+
         await recomputeSalesInvoiceSettlement(tx, salesReturn.salesInvoiceId);
         await this.updateInvoiceReturnStatus(tx, salesReturn.salesInvoiceId);
       }
@@ -560,6 +588,123 @@ export class SalesReturnService {
         OutboxOperation.UPDATE,
       );
       return toSalesReturnResponse(updated);
+    });
+  }
+
+  private async reverseRefundPayment(
+    tx: Prisma.TransactionClient,
+    salesReturn: {
+      id: bigint;
+      salesReturnNumber: string;
+      salesInvoiceId: bigint;
+      refundMode: string | null;
+    },
+    customerId: bigint | null,
+    branch: { companyId: bigint },
+    remarks?: string,
+  ): Promise<void> {
+    if (!salesReturn.refundMode || !customerId) {
+      return;
+    }
+
+    const payment = await tx.salesPayment.findFirst({
+      where: {
+        salesInvoiceId: salesReturn.salesInvoiceId,
+        status: SalesPaymentStatus.REFUNDED,
+        deletedAt: null,
+        remarks: `Refund for ${salesReturn.salesReturnNumber}`,
+      },
+    });
+
+    if (!payment) {
+      return;
+    }
+
+    const userId = this.requestContext.tryGet()?.userId;
+    await this.ledgerPosting.reverseVoucher(tx, {
+      companyId: branch.companyId,
+      originalVoucherType: VoucherType.PAYMENT,
+      originalVoucherId: payment.id,
+      originalVoucherNumber: payment.paymentNumber,
+      reversalVoucherType: VoucherType.PAYMENT,
+      reversalVoucherId: payment.id,
+      reversalVoucherNumber: `${payment.paymentNumber}-REV`,
+      transactionDate: BigInt(Date.now()),
+      createdBy: userId,
+      narration:
+        remarks ?? `Reverse refund for ${salesReturn.salesReturnNumber}`,
+    });
+
+    await tx.salesPayment.update({
+      where: { id: payment.id },
+      data: {
+        status: SalesPaymentStatus.CANCELLED,
+        updatedAt: BigInt(Date.now()),
+        version: { increment: 1 },
+      },
+    });
+  }
+
+  private async createRefundPayment(
+    tx: Prisma.TransactionClient,
+    salesReturn: {
+      id: bigint;
+      salesReturnNumber: string;
+      salesInvoiceId: bigint;
+      branchId: bigint;
+      returnDate: bigint;
+      refundMode: string | null;
+    },
+    customerId: bigint,
+    branch: { companyId: bigint; id: bigint; branchCode: string },
+    netAmount: Prisma.Decimal,
+    userId: bigint | undefined,
+  ): Promise<void> {
+    if (!salesReturn.refundMode) {
+      return;
+    }
+
+    const paymentMethod = mapRefundModeToPaymentMethod(salesReturn.refundMode);
+    const { documentNumber } = await this.sequences.next(tx, {
+      companyId: branch.companyId,
+      branchId: branch.id,
+      documentType: DocumentType.SALES_PAYMENT,
+      branchCode: branch.branchCode,
+    });
+
+    const now = BigInt(Date.now());
+    const payment = await tx.salesPayment.create({
+      data: {
+        uuid: randomUUID(),
+        paymentNumber: documentNumber,
+        salesInvoiceId: salesReturn.salesInvoiceId,
+        branchId: salesReturn.branchId,
+        paymentDate: salesReturn.returnDate,
+        paymentMethod,
+        paymentAmount: netAmount,
+        status: SalesPaymentStatus.REFUNDED,
+        remarks: `Refund for ${salesReturn.salesReturnNumber}`,
+        createdBy: userId,
+        createdAt: now,
+        updatedAt: now,
+      },
+    });
+
+    const lines = await buildSalesRefundLedgerLines(tx, {
+      amount: netAmount,
+      paymentMethod,
+      customerId,
+      narration: payment.remarks ?? undefined,
+    });
+
+    await this.ledgerPosting.postVoucher(tx, {
+      companyId: branch.companyId,
+      voucherType: VoucherType.PAYMENT,
+      voucherId: payment.id,
+      voucherNumber: payment.paymentNumber,
+      transactionDate: salesReturn.returnDate,
+      lines,
+      createdBy: userId,
     });
   }
 

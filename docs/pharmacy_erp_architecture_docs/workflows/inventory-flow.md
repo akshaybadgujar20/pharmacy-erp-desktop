@@ -1,6 +1,8 @@
 
 # Inventory Flow
 
+**Diagram:** [inventory-movement-flow.drawio](./inventory-movement-flow.drawio) · [SVG](./inventory-movement-flow.svg)
+
 ## Business Objective
 
 Track inventory changes through an immutable ledger while maintaining branch-scoped stock balances.

@@ -1,6 +1,8 @@
 
 # Sales Flow
 
+**Diagram:** [sales-invoice-flow.drawio](./sales-invoice-flow.drawio) · [SVG](./sales-invoice-flow.svg)
+
 ## Business Objective
 
 Bill customers, allocate branch stock by batch (FEFO), and snapshot prices at sale time.
