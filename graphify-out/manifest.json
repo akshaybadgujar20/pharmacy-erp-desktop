@@ -312,16 +312,16 @@
     "semantic_hash": "8935626cd9d2926164d912be4eafce30"
   },
   "backend/src/audit/audit.service.spec.ts": {
-    "mtime": 1789052176.7229335,
-    "seen": 1789582011.6223388,
-    "ast_hash": "4231c991c20f2a2cebc944ab660e4eab",
-    "semantic_hash": "4231c991c20f2a2cebc944ab660e4eab"
+    "mtime": 1789905036.7892475,
+    "seen": 1789905092.2640066,
+    "ast_hash": "4474e1677dee4d40289b32884c714ff9",
+    "semantic_hash": ""
   },
   "backend/src/audit/audit.service.ts": {
-    "mtime": 1788972470.6337,
-    "seen": 1789582011.6223388,
-    "ast_hash": "1d8a6d9c5cd73451978ea76d0b43fb84",
-    "semantic_hash": "1d8a6d9c5cd73451978ea76d0b43fb84"
+    "mtime": 1789904988.3856077,
+    "seen": 1789905092.2640066,
+    "ast_hash": "0bee1ee317b34a0a066e0b533c1bd6f8",
+    "semantic_hash": ""
   },
   "backend/src/audit/controllers/audit-log.controller.ts": {
     "mtime": 1788972491.4965725,
@@ -408,10 +408,10 @@
     "semantic_hash": "ee4549ae046d5dd0fa4f7e60615970d9"
   },
   "backend/src/auth/auth.service.ts": {
-    "mtime": 1789055407.104919,
-    "seen": 1789582011.6223388,
-    "ast_hash": "70550504f4853b69d615b48f48accb6e",
-    "semantic_hash": "70550504f4853b69d615b48f48accb6e"
+    "mtime": 1789904989.5682745,
+    "seen": 1789905092.2660065,
+    "ast_hash": "fa08b7ccc61470b2255d2b0be7a6f7fb",
+    "semantic_hash": ""
   },
   "backend/src/auth/constants/auth.constants.ts": {
     "mtime": 1788382547.4511752,
@@ -612,10 +612,10 @@
     "semantic_hash": "548164aff296e56af9930538b714ee46"
   },
   "backend/src/common/logging/correlation.middleware.ts": {
-    "mtime": 1787747289.7690372,
-    "seen": 1789582011.6223388,
-    "ast_hash": "418a706b5beaac75a4da8b9bd4e56433",
-    "semantic_hash": "418a706b5beaac75a4da8b9bd4e56433"
+    "mtime": 1789904991.156528,
+    "seen": 1789905092.2722495,
+    "ast_hash": "bd53cc07b8e9dad679e20bf33fd2b9a6",
+    "semantic_hash": ""
   },
   "backend/src/common/logging/log-sanitizer.spec.ts": {
     "mtime": 1787725719.7616217,
@@ -2184,9 +2184,9 @@
     "semantic_hash": "5f6cffbeff0b31ef03ff7a6bcd3673a2"
   },
   "backend/src/persistence/prisma/prisma-client.factory.ts": {
-    "mtime": 1789898980.4751291,
-    "seen": 1789899410.829504,
-    "ast_hash": "ddaffbda11e541a4b91cdb554219aa07",
+    "mtime": 1789901393.3033469,
+    "seen": 1789901482.0545318,
+    "ast_hash": "5c5314a217d5ea2420cb21cb42e1906e",
     "semantic_hash": ""
   },
   "backend/src/persistence/prisma/prisma-error.mapper.ts": {
@@ -6846,9 +6846,9 @@
     "semantic_hash": ""
   },
   "backend/src/persistence/prisma/id-sequence.service.ts": {
-    "mtime": 1789899361.9223213,
-    "seen": 1789899410.829504,
-    "ast_hash": "41ab946cae233cc7d8599a2cd440989d",
+    "mtime": 1789901195.8081183,
+    "seen": 1789901482.0545318,
+    "ast_hash": "71c26b1a4bd715d0c6aed46708242891",
     "semantic_hash": ""
   },
   "backend/src/sales/utils/sales.util.spec.ts": {
@@ -6858,9 +6858,9 @@
     "semantic_hash": ""
   },
   "backend/test/persistence/id-sequence.integration.spec.ts": {
-    "mtime": 1789899361.9223213,
-    "seen": 1789899410.8515036,
-    "ast_hash": "f794cf2c578772329e41c268f5baaa51",
+    "mtime": 1789901298.7886288,
+    "seen": 1789901482.0951204,
+    "ast_hash": "d8c6f7d9ffae85318fe83eaae62bd6d3",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/workflows/generate-all-workflows.py": {
@@ -8478,9 +8478,9 @@
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/database/persistence-patterns.md": {
-    "mtime": 1789899315.5705214,
-    "seen": 1789899410.9756072,
-    "ast_hash": "8db9cc65dee8fbe0eb2a4ebb1d8f6fba",
+    "mtime": 1789901201.8398726,
+    "seen": 1789901482.2463102,
+    "ast_hash": "af1073801d3d0afd136499032b0d7bb3",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/database/prisma_sqlite_jpa_postgres_alignment.md": {
@@ -9945,6 +9945,12 @@
     "mtime": 1789900210.8372219,
     "seen": 1789900279.0694795,
     "ast_hash": "bb22da78868c023cdcf37d79b47095cb",
+    "semantic_hash": ""
+  },
+  "backend/src/persistence/prisma/prisma-transaction.storage.ts": {
+    "mtime": 1789901185.4670787,
+    "seen": 1789901482.0555305,
+    "ast_hash": "e32ecb2158aa2dcd732c35a81e50819d",
     "semantic_hash": ""
   }
 }

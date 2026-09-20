@@ -158,6 +158,8 @@ export class AuthService {
         module: AuditModule.SECURITY,
         description: `Login success for ${user.username}`,
         userId: user.id,
+        companyId,
+        branchId,
       });
 
       return createdSession;
@@ -297,6 +299,8 @@ export class AuthService {
         module: AuditModule.SECURITY,
         description: `Token refresh for ${user.username}`,
         userId: user.id,
+        companyId,
+        branchId,
       });
     });
 
@@ -342,6 +346,8 @@ export class AuthService {
         module: AuditModule.SECURITY,
         description: 'User logout',
         userId: session.userId,
+        companyId: session.companyId,
+        branchId: session.branchId,
       });
     });
   }
@@ -514,6 +520,8 @@ export class AuthService {
     username: string,
     reason: string,
   ): Promise<void> {
+    const tenant = await this.resolveTenantScopeForAudit(userId);
+
     await this.unitOfWork.run(async (tx) => {
       await this.auditService.log(tx, {
         entityType: 'User',
@@ -522,8 +530,22 @@ export class AuthService {
         module: AuditModule.SECURITY,
         description: `Login failed for ${username}: ${reason}`,
         userId,
+        companyId: tenant.companyId,
+        branchId: tenant.branchId,
       });
     });
+  }
+
+  private async resolveTenantScopeForAudit(userId: bigint): Promise<{
+    companyId: bigint | null;
+    branchId: bigint | null;
+  }> {
+    try {
+      const scope = await this.resolveTenantScope(userId);
+      return { companyId: scope.companyId, branchId: scope.branchId };
+    } catch {
+      return { companyId: null, branchId: null };
+    }
   }
 
   private async recordFailedLogin(userId: bigint): Promise<void> {

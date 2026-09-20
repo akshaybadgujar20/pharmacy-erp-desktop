@@ -81,7 +81,7 @@ Ledger balance is never stored on `Ledger` — derived from immutable `LedgerEnt
 
 ## BIGINT primary keys
 
-SQLite schemas omit autoincrement for some tables. `createPrismaClient()` extends Prisma `create` / `createMany` to assign BIGINT ids from the **`IdSequence`** table (one row per Prisma model name) when `id` is omitted. Each `create` runs one atomic DB increment for that model; `createMany` increments by row count in one update. `PrismaService.onModuleInit` calls `bootstrapIdSequence()` to ensure counter rows exist and each `currentValue` is at least `MAX(id)` for that table.
+SQLite schemas omit autoincrement for some tables. `createPrismaClient()` extends Prisma `create` / `createMany` to assign BIGINT ids from the **`IdSequence`** table (one row per Prisma model name) when `id` is omitted. Each `create` runs one atomic DB increment for that model; `createMany` increments by row count in one update. When `create` runs inside an open `$transaction` (for example `UnitOfWorkService.run`), IdSequence updates use that same transaction via AsyncLocalStorage so SQLite does not attempt a nested transaction. `PrismaService.onModuleInit` calls `bootstrapIdSequence()` to ensure counter rows exist and each `currentValue` is at least `MAX(id)` for that table.
 
 ## Integration tests
 

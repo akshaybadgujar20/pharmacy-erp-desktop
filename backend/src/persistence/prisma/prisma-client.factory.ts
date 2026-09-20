@@ -1,12 +1,35 @@
 import path from 'path';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { allocateNextId, allocateNextIds } from './id-sequence.service';
+import { runWithPrismaTransactionContext } from './prisma-transaction.storage';
 
 const ID_SEQUENCE_MODEL = 'IdSequence';
 
 export function getDefaultDatabaseUrl(): string {
   return path.join(process.cwd(), '..', 'db', 'pharmacy.sqlite');
+}
+
+function patchTransactionContext(client: PrismaClient): void {
+  /* Query extensions must stay on the client passed to $transaction; patch after $extends. */
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call -- Prisma $transaction overloads */
+  const boundTransaction = client.$transaction.bind(client);
+
+  client.$transaction = ((arg: unknown, options?: unknown) => {
+    if (typeof arg === 'function') {
+      const fn = arg as (tx: Prisma.TransactionClient) => Promise<unknown>;
+      return boundTransaction(
+        (tx: Prisma.TransactionClient) =>
+          runWithPrismaTransactionContext(tx, () => fn(tx)),
+        options,
+      );
+    }
+    return boundTransaction(
+      arg as Parameters<PrismaClient['$transaction']>[0],
+      options as Parameters<PrismaClient['$transaction']>[1],
+    );
+  }) as PrismaClient['$transaction'];
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call */
 }
 
 export function createPrismaClient(databasePath?: string): PrismaClient {
@@ -17,7 +40,7 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
     }),
   });
 
-  return base.$extends({
+  const client = base.$extends({
     query: {
       $allModels: {
         async create({ model, args, query }) {
@@ -58,4 +81,7 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
       },
     },
   }) as unknown as PrismaClient;
+
+  patchTransactionContext(client);
+  return client;
 }

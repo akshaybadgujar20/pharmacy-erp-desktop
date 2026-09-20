@@ -17,6 +17,8 @@ export interface AuditLogInput {
   module: AuditModule;
   description?: string;
   userId?: bigint;
+  companyId?: bigint | null;
+  branchId?: bigint | null;
 }
 
 const AUDIT_ACTION_VALUES = new Set<string>(Object.values(AuditAction));
@@ -43,8 +45,8 @@ export class AuditService {
     const auditLog = await tx.auditLog.create({
       data: {
         userId,
-        companyId: ctx?.companyId,
-        branchId: ctx?.branchId,
+        companyId: 'companyId' in input ? input.companyId : ctx?.companyId,
+        branchId: 'branchId' in input ? input.branchId : ctx?.branchId,
         entityType: input.entityType,
         entityId: input.entityId,
         entityUuid: input.entityUuid,

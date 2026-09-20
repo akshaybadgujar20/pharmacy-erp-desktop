@@ -7,6 +7,10 @@ import {
   getAllocatableModel,
   getAllocatableModels,
 } from './id-sequence-models.util';
+import { tryGetActivePrismaTransactionClient } from './prisma-transaction.storage';
+import type { TxClient } from './prisma-tx.type';
+
+type IdSequenceClient = Pick<TxClient, 'idSequence' | '$queryRawUnsafe'>;
 
 function retryBackoffMs(attempt: number): number {
   return 25 + Math.floor(Math.random() * 50) * attempt;
@@ -51,7 +55,7 @@ export async function computePeakBusinessId(
 }
 
 async function ensureSequenceRow(
-  client: Pick<PrismaClient, 'idSequence' | '$queryRawUnsafe'>,
+  client: IdSequenceClient,
   modelName: string,
 ): Promise<void> {
   const allocatable = getAllocatableModel(modelName);
@@ -116,6 +120,60 @@ export async function bootstrapIdSequence(client: PrismaClient): Promise<void> {
   }
 }
 
+async function allocateIdBlockOnClient(
+  client: IdSequenceClient,
+  modelName: string,
+  count: bigint,
+): Promise<bigint[]> {
+  let row = await client.idSequence.findUnique({
+    where: { modelName },
+  });
+
+  if (!row) {
+    await ensureSequenceRow(client, modelName);
+    row = await client.idSequence.findUnique({
+      where: { modelName },
+    });
+  }
+
+  if (!row) {
+    throw new ApplicationException(
+      ErrorCode.SEQUENCE_NOT_FOUND,
+      `IdSequence row is missing for ${modelName}; run bootstrapIdSequence first`,
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  const startId = row.currentValue + 1n;
+  const endId = row.currentValue + count;
+  const now = BigInt(Date.now());
+
+  const updated = await client.idSequence.updateMany({
+    where: { modelName, version: row.version },
+    data: {
+      currentValue: endId,
+      version: { increment: 1 },
+      updatedAt: now,
+    },
+  });
+
+  if (updated.count !== 1) {
+    throw new ApplicationException(
+      ErrorCode.SEQUENCE_CONFLICT,
+      'IdSequence row was modified concurrently',
+      HttpStatus.CONFLICT,
+      { modelName },
+      true,
+    );
+  }
+
+  const ids: bigint[] = [];
+  for (let id = startId; id <= endId; id += 1n) {
+    ids.push(id);
+  }
+  return ids;
+}
+
 async function allocateIdBlock(
   client: PrismaClient,
   modelName: string,
@@ -125,57 +183,16 @@ async function allocateIdBlock(
     return [];
   }
 
+  const activeTx = tryGetActivePrismaTransactionClient();
+
   for (let attempt = 0; attempt < ID_SEQUENCE_MAX_RETRIES; attempt++) {
     try {
-      return await client.$transaction(async (tx) => {
-        let row = await tx.idSequence.findUnique({
-          where: { modelName },
-        });
-
-        if (!row) {
-          await ensureSequenceRow(tx, modelName);
-          row = await tx.idSequence.findUnique({
-            where: { modelName },
-          });
-        }
-
-        if (!row) {
-          throw new ApplicationException(
-            ErrorCode.SEQUENCE_NOT_FOUND,
-            `IdSequence row is missing for ${modelName}; run bootstrapIdSequence first`,
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
-        }
-
-        const startId = row.currentValue + 1n;
-        const endId = row.currentValue + count;
-        const now = BigInt(Date.now());
-
-        const updated = await tx.idSequence.updateMany({
-          where: { modelName, version: row.version },
-          data: {
-            currentValue: endId,
-            version: { increment: 1 },
-            updatedAt: now,
-          },
-        });
-
-        if (updated.count !== 1) {
-          throw new ApplicationException(
-            ErrorCode.SEQUENCE_CONFLICT,
-            'IdSequence row was modified concurrently',
-            HttpStatus.CONFLICT,
-            { modelName },
-            true,
-          );
-        }
-
-        const ids: bigint[] = [];
-        for (let id = startId; id <= endId; id += 1n) {
-          ids.push(id);
-        }
-        return ids;
-      });
+      if (activeTx) {
+        return await allocateIdBlockOnClient(activeTx, modelName, count);
+      }
+      return await client.$transaction(async (tx) =>
+        allocateIdBlockOnClient(tx, modelName, count),
+      );
     } catch (error) {
       if (
         isRetryableSequenceConflict(error) &&

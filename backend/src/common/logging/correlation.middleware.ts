@@ -19,16 +19,19 @@ function parseBigIntHeader(value: string | undefined): bigint | undefined {
   return BigInt(value);
 }
 
-function parseRequiredBigInt(
+function parseBigIntFromHeaderOrEnv(
   headerValue: string | undefined,
   envKey: string,
-  defaultValue: string,
-): bigint {
-  const raw = headerValue ?? process.env[envKey] ?? defaultValue;
-  if (!/^\d+$/.test(raw)) {
-    return BigInt(defaultValue);
+): bigint | undefined {
+  const fromHeader = parseBigIntHeader(headerValue);
+  if (fromHeader !== undefined) {
+    return fromHeader;
   }
-  return BigInt(raw);
+  const envValue = process.env[envKey];
+  if (envValue && /^\d+$/.test(envValue)) {
+    return BigInt(envValue);
+  }
+  return undefined;
 }
 
 @Injectable()
@@ -61,16 +64,21 @@ export class CorrelationMiddleware implements NestMiddleware {
     };
 
     if (isDev) {
-      context.companyId = parseRequiredBigInt(
+      // Only set tenant when header/env match real DB ids (no hardcoded defaults).
+      const companyId = parseBigIntFromHeaderOrEnv(
         req.headers[COMPANY_ID_HEADER] as string | undefined,
         'COMPANY_ID',
-        '37',
       );
-      context.branchId = parseRequiredBigInt(
+      if (companyId !== undefined) {
+        context.companyId = companyId;
+      }
+      const branchId = parseBigIntFromHeaderOrEnv(
         req.headers[BRANCH_ID_HEADER] as string | undefined,
         'BRANCH_ID',
-        '38',
       );
+      if (branchId !== undefined) {
+        context.branchId = branchId;
+      }
       context.userId = parseBigIntHeader(
         req.headers[USER_ID_HEADER] as string | undefined,
       );

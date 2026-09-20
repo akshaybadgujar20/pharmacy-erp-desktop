@@ -89,6 +89,36 @@ describe('AuditService', () => {
     expect(createArgs.data.createdAt).toEqual(expect.any(BigInt));
   });
 
+  it('input companyId and branchId override request context', async () => {
+    const tx = { auditLog: { create: auditLogCreate } } as unknown as TxClient;
+
+    await requestContext.run(
+      {
+        companyId: 37n,
+        branchId: 38n,
+        deviceId: 'device-1',
+      },
+      async () => {
+        await auditService.log(tx, {
+          entityType: 'UserSession',
+          action: AuditAction.LOGIN,
+          module: AuditModuleName.SECURITY,
+          companyId: 5n,
+          branchId: 6n,
+        });
+      },
+    );
+
+    expect(auditLogCreate).toHaveBeenCalledTimes(1);
+    const createArgs = (
+      auditLogCreate.mock.calls as Array<
+        [{ data: { companyId: bigint; branchId: bigint } }]
+      >
+    )[0][0];
+    expect(createArgs.data.companyId).toBe(5n);
+    expect(createArgs.data.branchId).toBe(6n);
+  });
+
   it('rejects empty entityType', async () => {
     const tx = { auditLog: { create: auditLogCreate } } as unknown as TxClient;
 
