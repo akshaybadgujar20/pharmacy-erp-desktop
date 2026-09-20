@@ -13,7 +13,7 @@ export interface Country {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateCountryRequest {
@@ -29,7 +29,7 @@ export interface CreateCountryRequest {
 }
 
 export interface UpdateCountryRequest {
-  version: number;
+  version: string;
   countryCode?: string;
   isoAlpha2?: string;
   isoAlpha3?: string;

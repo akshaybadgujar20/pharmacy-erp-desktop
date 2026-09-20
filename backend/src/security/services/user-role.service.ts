@@ -201,7 +201,7 @@ export class UserRoleService {
     });
   }
 
-  async delete(userId: bigint, id: bigint, version: number) {
+  async delete(userId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.userRole.findFirst({
         where: { id, userId, deletedAt: null },

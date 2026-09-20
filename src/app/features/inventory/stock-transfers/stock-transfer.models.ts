@@ -13,7 +13,7 @@ export interface StockTransfer {
   approvedAt: string | null;
   remarks: string | null;
   createdBy: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockTransferRequest {
@@ -26,7 +26,7 @@ export interface CreateStockTransferRequest {
 }
 
 export interface UpdateStockTransferRequest {
-  version: number;
+  version: string;
   transferDate?: string;
   transferType?: string;
   expectedArrivalDate?: string | null;

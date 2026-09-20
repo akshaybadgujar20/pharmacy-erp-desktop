@@ -8,7 +8,7 @@ export interface PartyContact {
   isPrimary: boolean;
   isVerified: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreatePartyContactRequest {
@@ -21,7 +21,7 @@ export interface CreatePartyContactRequest {
 }
 
 export interface UpdatePartyContactRequest {
-  version: number;
+  version: string;
   contactType?: string;
   contactValue?: string;
   countryCode?: string;

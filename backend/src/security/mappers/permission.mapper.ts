@@ -15,7 +15,7 @@ export interface PermissionResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPermissionResponse(
@@ -35,6 +35,6 @@ export function toPermissionResponse(
     createdAt: permission.createdAt.toString(),
     updatedAt: permission.updatedAt.toString(),
     deletedAt: serializeBigInt(permission.deletedAt),
-    version: permission.version,
+    version: permission.version.toString(),
   };
 }

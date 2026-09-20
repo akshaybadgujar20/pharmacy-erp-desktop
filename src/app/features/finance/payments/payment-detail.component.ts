@@ -31,7 +31,7 @@ export class PaymentDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly workflowInProgress = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
   readonly status = signal('PENDING');
   readonly paymentNumber = signal('');
 

@@ -50,7 +50,7 @@ export class PurchaseOrderItemsTabComponent {
   readonly search = signal('');
   readonly dialogVisible = signal(false);
   readonly editingId = signal<string | null>(null);
-  readonly editingVersion = signal(0);
+  readonly editingVersion = signal('0');
   readonly saving = signal(false);
 
   readonly form = this.fb.nonNullable.group({
@@ -97,7 +97,7 @@ export class PurchaseOrderItemsTabComponent {
 
   openCreate(): void {
     this.editingId.set(null);
-    this.editingVersion.set(0);
+    this.editingVersion.set('0');
     this.form.reset({
       medicineId: '',
       unitId: '',

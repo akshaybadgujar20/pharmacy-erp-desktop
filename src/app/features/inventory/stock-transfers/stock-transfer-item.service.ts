@@ -49,7 +49,7 @@ export class StockTransferItemService {
     );
   }
 
-  delete(transferId: string, id: string, version: number): Observable<void> {
+  delete(transferId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/stock-transfers/${transferId}/items/${id}`, {
       version: String(version),
     });

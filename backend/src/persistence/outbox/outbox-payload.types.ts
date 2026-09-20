@@ -7,7 +7,7 @@ export interface OutboxPayloadEnvelope<T = Record<string, unknown>> {
   entityType: string;
   entityUuid: string;
   operation: string;
-  entityVersion: number;
+  entityVersion: string;
   occurredAt: string;
   data: T;
 }
@@ -18,7 +18,7 @@ export function buildOutboxPayload<T>(
   entityType: string,
   entityUuid: string,
   operation: string,
-  entityVersion: number,
+  entityVersion: bigint,
   data: T,
 ): OutboxPayloadEnvelope<T> {
   return {
@@ -26,7 +26,7 @@ export function buildOutboxPayload<T>(
     entityType,
     entityUuid,
     operation,
-    entityVersion,
+    entityVersion: entityVersion.toString(),
     occurredAt: new Date().toISOString(),
     data,
   };

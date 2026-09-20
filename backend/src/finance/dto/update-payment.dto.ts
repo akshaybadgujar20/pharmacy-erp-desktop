@@ -1,11 +1,10 @@
 import {
+  Min,
   IsIn,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   MandatoryBigIntField,
@@ -18,9 +17,8 @@ import {
 } from '../constants/finance.constants';
 
 export class UpdatePaymentDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsIn(Object.values(PaymentType))

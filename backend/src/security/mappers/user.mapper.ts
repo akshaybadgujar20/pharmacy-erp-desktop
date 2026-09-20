@@ -15,7 +15,7 @@ export interface UserResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toUserResponse(user: User): UserResponse {
@@ -33,6 +33,6 @@ export function toUserResponse(user: User): UserResponse {
     createdAt: user.createdAt.toString(),
     updatedAt: user.updatedAt.toString(),
     deletedAt: serializeBigInt(user.deletedAt),
-    version: user.version,
+    version: user.version.toString(),
   };
 }

@@ -27,7 +27,7 @@ model Receipt {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   createdByUser User? @relation("ReceiptCreatedBy", fields: [createdBy], references: [id])
 

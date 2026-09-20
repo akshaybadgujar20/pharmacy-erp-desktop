@@ -45,7 +45,7 @@ export class SalesReturnDetailComponent implements OnInit {
   readonly approving = signal(false);
   readonly cancelling = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly isCompleted = computed(() => this.status() === 'COMPLETED');

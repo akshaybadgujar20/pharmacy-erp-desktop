@@ -1,11 +1,4 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import {
   MandatoryBigIntField,
   NullableBigIntField,
@@ -53,9 +46,8 @@ export class CreatePriceListItemDto {
 }
 
 export class UpdatePriceListItemDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

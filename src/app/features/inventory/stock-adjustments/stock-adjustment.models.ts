@@ -11,7 +11,7 @@ export interface StockAdjustment {
   status: string;
   isActive: boolean;
   createdBy: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockAdjustmentRequest {
@@ -23,7 +23,7 @@ export interface CreateStockAdjustmentRequest {
 }
 
 export interface UpdateStockAdjustmentRequest {
-  version: number;
+  version: string;
   adjustmentType?: string;
   adjustmentDate?: string;
   reason?: string;

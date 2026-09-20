@@ -14,7 +14,7 @@ export interface UnitOfMeasureResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toUnitOfMeasureResponse(
@@ -34,6 +34,6 @@ export function toUnitOfMeasureResponse(
     createdAt: unit.createdAt,
     updatedAt: unit.updatedAt,
     deletedAt: unit.deletedAt,
-    version: unit.version,
+    version: unit.version.toString(),
   };
 }

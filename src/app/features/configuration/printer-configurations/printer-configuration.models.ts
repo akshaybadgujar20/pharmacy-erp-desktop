@@ -16,7 +16,7 @@ export interface PrinterConfiguration {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePrinterConfigurationRequest {
@@ -34,7 +34,7 @@ export interface CreatePrinterConfigurationRequest {
 }
 
 export interface UpdatePrinterConfigurationRequest {
-  version: number;
+  version: string;
   branchId?: string;
   printerName?: string;
   printerType?: string;

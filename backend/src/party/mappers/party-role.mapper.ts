@@ -10,7 +10,7 @@ export interface PartyRoleResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPartyRoleResponse(role: PartyRole): PartyRoleResponse {
@@ -24,6 +24,6 @@ export function toPartyRoleResponse(role: PartyRole): PartyRoleResponse {
     createdAt: role.createdAt,
     updatedAt: role.updatedAt,
     deletedAt: role.deletedAt,
-    version: role.version,
+    version: role.version.toString(),
   };
 }

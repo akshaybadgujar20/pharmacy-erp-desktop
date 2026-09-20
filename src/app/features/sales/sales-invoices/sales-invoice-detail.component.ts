@@ -48,7 +48,7 @@ export class SalesInvoiceDetailComponent implements OnInit {
   readonly posting = signal(false);
   readonly cancelling = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canManagePayments = computed(() =>

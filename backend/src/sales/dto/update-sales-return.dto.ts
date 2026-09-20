@@ -1,11 +1,5 @@
-import {
-  IsIn,
-  IsInt,
-  IsOptional,
-  IsString,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 import {
   SalesRefundMode,
@@ -13,9 +7,8 @@ import {
 } from '../constants/sales.constants';
 
 export class UpdateSalesReturnDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @OptionalBigIntField()
   customerId?: bigint;

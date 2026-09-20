@@ -40,7 +40,7 @@ export class PurchaseReturnItemService {
     );
   }
 
-  delete(returnId: string, id: string, version: number): Observable<void> {
+  delete(returnId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/purchase-returns/${returnId}/items/${id}`, {
       version: String(version),
     });

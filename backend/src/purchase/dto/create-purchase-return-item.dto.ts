@@ -1,10 +1,10 @@
 import { Type } from 'class-transformer';
 import {
+  Min,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   MandatoryBigIntField,

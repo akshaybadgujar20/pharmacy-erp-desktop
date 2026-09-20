@@ -45,7 +45,7 @@ export class StockAdjustmentDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly approving = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
 

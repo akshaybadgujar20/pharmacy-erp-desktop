@@ -18,7 +18,7 @@ export interface PrescriptionItem {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePrescriptionItemRequest {
@@ -35,7 +35,7 @@ export interface CreatePrescriptionItemRequest {
 }
 
 export interface UpdatePrescriptionItemRequest {
-  version: number;
+  version: string;
   medicineId?: string;
   unitId?: string;
   lineNumber?: number;

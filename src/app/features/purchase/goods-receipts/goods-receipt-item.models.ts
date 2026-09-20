@@ -26,7 +26,7 @@ export interface GoodsReceiptItem {
   taxAmount: number | null;
   lineAmount: number | null;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateGoodsReceiptItemRequest {
@@ -53,7 +53,7 @@ export interface CreateGoodsReceiptItemRequest {
 }
 
 export interface UpdateGoodsReceiptItemRequest {
-  version: number;
+  version: string;
   unitId?: string;
   purchaseOrderItemId?: string | null;
   batchNumber?: string;

@@ -10,7 +10,7 @@ model Outbox {
 
   payload Json
 
-  payloadVersion Int @default(1) @map("payload_version")
+  payloadVersion BigInt @default(1) @map("payload_version")
 
   deviceId    String  @map("device_id")
   branchId    BigInt? @map("branch_id")
@@ -26,7 +26,7 @@ model Outbox {
   createdAt   BigInt  @map("created_at")
   processedAt BigInt? @map("processed_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   branch Branch? @relation(fields: [branchId], references: [id])
 

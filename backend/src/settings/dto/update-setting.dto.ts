@@ -1,9 +1,9 @@
-import { IsInt, IsNotEmpty, IsString, MaxLength, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class UpdateSettingDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsString()
   @IsNotEmpty()

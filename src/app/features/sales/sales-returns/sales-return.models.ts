@@ -17,7 +17,7 @@ export interface SalesReturn {
   creditNoteNumber: string | null;
   status: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateSalesReturnRequest {
@@ -30,7 +30,7 @@ export interface CreateSalesReturnRequest {
 }
 
 export interface UpdateSalesReturnRequest {
-  version: number;
+  version: string;
   customerId?: string;
   returnDate?: string;
   returnReason?: string;
@@ -40,6 +40,6 @@ export interface UpdateSalesReturnRequest {
 }
 
 export interface SalesReturnWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

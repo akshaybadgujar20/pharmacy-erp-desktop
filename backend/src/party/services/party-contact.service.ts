@@ -242,7 +242,7 @@ export class PartyContactService {
     });
   }
 
-  async delete(partyId: bigint, id: bigint, version: number) {
+  async delete(partyId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.partyContact.findFirst({
         where: { id, partyId, deletedAt: null },

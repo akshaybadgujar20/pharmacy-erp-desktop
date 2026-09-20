@@ -224,7 +224,7 @@ export class PrescriptionService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     const scope = getTenantScope(this.requestContext);
 
     return this.unitOfWork.run(async (tx) => {

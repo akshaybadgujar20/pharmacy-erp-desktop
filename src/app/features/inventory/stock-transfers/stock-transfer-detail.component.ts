@@ -48,7 +48,7 @@ export class StockTransferDetailComponent implements OnInit {
   readonly dispatching = signal(false);
   readonly receiving = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canDispatch = computed(() => this.status() === 'DRAFT');

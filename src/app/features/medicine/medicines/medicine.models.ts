@@ -18,7 +18,7 @@ export interface Medicine {
   refrigerated: boolean;
   discontinued: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateMedicineRequest {
@@ -42,7 +42,7 @@ export interface CreateMedicineRequest {
 }
 
 export interface UpdateMedicineRequest {
-  version: number;
+  version: string;
   medicineName?: string;
   manufacturerId?: string;
   categoryId?: string;

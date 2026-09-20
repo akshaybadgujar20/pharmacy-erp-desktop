@@ -6,7 +6,7 @@ export interface MedicineSalt {
   medicineGenericId: string | null;
   sequenceNo: number;
   percentage: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateMedicineSaltRequest {
@@ -16,7 +16,7 @@ export interface CreateMedicineSaltRequest {
 }
 
 export interface UpdateMedicineSaltRequest {
-  version: number;
+  version: string;
   saltCompositionId?: string;
   sequenceNo?: number;
   percentage?: string | null;

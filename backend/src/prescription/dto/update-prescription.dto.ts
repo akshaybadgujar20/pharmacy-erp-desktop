@@ -1,10 +1,10 @@
-import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdatePrescriptionDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

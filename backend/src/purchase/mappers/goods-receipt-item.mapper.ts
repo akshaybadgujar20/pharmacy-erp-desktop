@@ -32,7 +32,7 @@ export interface GoodsReceiptItemResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toGoodsReceiptItemResponse(
@@ -69,6 +69,6 @@ export function toGoodsReceiptItemResponse(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt,
-    version: item.version,
+    version: item.version.toString(),
   };
 }

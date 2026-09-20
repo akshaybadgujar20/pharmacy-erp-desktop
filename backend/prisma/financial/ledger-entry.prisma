@@ -26,7 +26,7 @@ model LedgerEntry {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   ledger        Ledger @relation(fields: [ledgerId], references: [id])
   createdByUser User?  @relation("LedgerEntryCreatedBy", fields: [createdBy], references: [id])

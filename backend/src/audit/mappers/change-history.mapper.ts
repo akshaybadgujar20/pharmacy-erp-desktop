@@ -13,7 +13,7 @@ export interface ChangeHistoryResponse {
   dataType: string | null;
   changeType: string;
   changedAt: string;
-  version: number;
+  version: string;
 }
 
 function serializeEpochMs(value: bigint): string {
@@ -36,6 +36,6 @@ export function toChangeHistoryResponse(
     dataType: changeHistory.dataType,
     changeType: changeHistory.changeType,
     changedAt: serializeEpochMs(changeHistory.changedAt),
-    version: changeHistory.version,
+    version: changeHistory.version.toString(),
   };
 }

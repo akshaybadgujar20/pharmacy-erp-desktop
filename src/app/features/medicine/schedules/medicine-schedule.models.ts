@@ -10,7 +10,7 @@ export interface MedicineSchedule {
   controlledSubstance: boolean;
   isSystemSchedule: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateMedicineScheduleRequest {
@@ -26,7 +26,7 @@ export interface CreateMedicineScheduleRequest {
 }
 
 export interface UpdateMedicineScheduleRequest {
-  version: number;
+  version: string;
   scheduleCode?: string;
   scheduleName?: string;
   description?: string;

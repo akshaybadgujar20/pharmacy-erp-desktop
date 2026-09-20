@@ -21,7 +21,7 @@ export interface PurchaseReturnItemResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPurchaseReturnItemResponse(
@@ -47,6 +47,6 @@ export function toPurchaseReturnItemResponse(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt,
-    version: item.version,
+    version: item.version.toString(),
   };
 }

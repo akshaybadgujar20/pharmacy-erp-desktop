@@ -38,7 +38,7 @@ export class SalesReturnItemService {
     return this.api.patch<SalesReturnItem>(`/sales-returns/${returnId}/items/${id}`, body);
   }
 
-  delete(returnId: string, id: string, version: number): Observable<void> {
+  delete(returnId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/sales-returns/${returnId}/items/${id}`, {
       version: String(version),
     });

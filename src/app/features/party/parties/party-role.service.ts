@@ -35,7 +35,7 @@ export class PartyRoleService {
     return this.api.patch<PartyRole>(`/parties/${partyId}/roles/${id}`, body);
   }
 
-  delete(partyId: string, id: string, version: number): Observable<void> {
+  delete(partyId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/parties/${partyId}/roles/${id}`, {
       version: String(version),
     });

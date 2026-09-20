@@ -1,9 +1,6 @@
-import { Type } from 'class-transformer';
-import { IsInt, Min } from 'class-validator';
+import { MandatoryBigIntField } from './bigint.decorator';
 
 export class DeleteEntityQueryDto {
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 }

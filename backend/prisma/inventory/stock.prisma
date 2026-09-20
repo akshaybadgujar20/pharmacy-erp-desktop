@@ -20,7 +20,7 @@ model Stock {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   batch  Batch  @relation(fields: [batchId], references: [id])
   branch Branch @relation(fields: [branchId], references: [id])

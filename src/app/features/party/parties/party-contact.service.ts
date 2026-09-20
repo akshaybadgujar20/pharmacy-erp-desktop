@@ -44,7 +44,7 @@ export class PartyContactService {
     );
   }
 
-  delete(partyId: string, id: string, version: number): Observable<void> {
+  delete(partyId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/parties/${partyId}/contacts/${id}`, {
       version: String(version),
     });

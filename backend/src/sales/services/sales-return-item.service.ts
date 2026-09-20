@@ -278,7 +278,7 @@ export class SalesReturnItemService {
     });
   }
 
-  async delete(salesReturnId: bigint, id: bigint, version: number) {
+  async delete(salesReturnId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, salesReturnId);
       assertDraftStatus(parent.status, 'Sales return');

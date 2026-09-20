@@ -1,13 +1,12 @@
-import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 import {
   MandatoryBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
 
 export class UpdatePurchaseInvoiceDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

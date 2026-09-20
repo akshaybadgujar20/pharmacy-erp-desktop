@@ -25,7 +25,7 @@ export interface GoodsReceiptResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toGoodsReceiptResponse(
@@ -55,6 +55,6 @@ export function toGoodsReceiptResponse(
     createdAt: receipt.createdAt,
     updatedAt: receipt.updatedAt,
     deletedAt: receipt.deletedAt,
-    version: receipt.version,
+    version: receipt.version.toString(),
   };
 }

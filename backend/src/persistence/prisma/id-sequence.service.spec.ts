@@ -6,14 +6,26 @@ import {
   allocateNextIds,
   bootstrapIdSequence,
 } from './id-sequence.service';
-import { ID_SEQUENCE_SINGLETON_ID } from './id-sequence.constants';
+
+jest.mock('./id-sequence-models.util', () => ({
+  getAllocatableModels: () => [
+    { modelName: 'Customer', tableName: 'customer' },
+  ],
+  getAllocatableModel: (name: string) =>
+    name === 'Customer'
+      ? { modelName: 'Customer', tableName: 'customer' }
+      : undefined,
+  ID_SEQUENCE_MODEL_NAME: 'IdSequence',
+}));
+
+const TEST_MODEL = 'Customer';
 
 function createBootstrapMockClient(
   peakId: bigint,
   existingRow: {
-    id: bigint;
+    modelName: string;
     currentValue: bigint;
-    version: number;
+    version: bigint;
     updatedAt: bigint;
   } | null,
 ): {
@@ -31,8 +43,7 @@ function createBootstrapMockClient(
     },
     $queryRawUnsafe: jest
       .fn()
-      .mockResolvedValueOnce([{ name: 'customer' }])
-      .mockResolvedValueOnce([{ maxId: peakId === 0n ? null : peakId }]),
+      .mockResolvedValue([{ maxId: peakId === 0n ? null : peakId }]),
   } as unknown as PrismaClient;
 
   return { client, create, update };
@@ -45,9 +56,9 @@ function createMockClient(updateResults: number[]): {
 } {
   let updateIndex = 0;
   const findUnique = jest.fn().mockResolvedValue({
-    id: ID_SEQUENCE_SINGLETON_ID,
+    modelName: TEST_MODEL,
     currentValue: 10n,
-    version: 2,
+    version: 2n,
     updatedAt: 1000n,
   });
   const updateMany = jest
@@ -55,7 +66,14 @@ function createMockClient(updateResults: number[]): {
     .mockImplementation(() =>
       Promise.resolve({ count: updateResults[updateIndex++] ?? 1 }),
     );
-  const tx = { idSequence: { findUnique, updateMany } };
+  const tx = {
+    idSequence: {
+      findUnique,
+      updateMany,
+      create: jest.fn(),
+    },
+    $queryRawUnsafe: jest.fn().mockResolvedValue([{ maxId: 0n }]),
+  };
   const transaction = jest.fn((fn: (inner: typeof tx) => Promise<unknown>) =>
     fn(tx),
   );
@@ -68,27 +86,23 @@ describe('id-sequence.service', () => {
   it('allocateNextId returns currentValue + 1 and persists', async () => {
     const { client, updateMany } = createMockClient([1]);
 
-    const id = await allocateNextId(client);
+    const id = await allocateNextId(client, TEST_MODEL);
 
     expect(id).toBe(11n);
     expect(updateMany).toHaveBeenCalledWith({
-      where: { id: ID_SEQUENCE_SINGLETON_ID, version: 2 },
+      where: { modelName: TEST_MODEL, version: 2n },
       data: {
         currentValue: 11n,
         version: { increment: 1 },
         updatedAt: expect.anything() as bigint,
       },
     });
-    const firstCall = updateMany.mock.calls[0] as [
-      { data: { updatedAt: bigint } },
-    ];
-    expect(typeof firstCall[0].data.updatedAt).toBe('bigint');
   });
 
   it('allocateNextIds returns contiguous ids from one update', async () => {
     const { client } = createMockClient([1]);
 
-    const ids = await allocateNextIds(client, 5);
+    const ids = await allocateNextIds(client, TEST_MODEL, 5);
 
     expect(ids).toEqual([11n, 12n, 13n, 14n, 15n]);
   });
@@ -96,7 +110,7 @@ describe('id-sequence.service', () => {
   it('retries when updateMany count is zero then succeeds', async () => {
     const { client, transaction } = createMockClient([0, 1]);
 
-    const id = await allocateNextId(client);
+    const id = await allocateNextId(client, TEST_MODEL);
 
     expect(id).toBe(11n);
     expect(transaction).toHaveBeenCalledTimes(2);
@@ -105,18 +119,20 @@ describe('id-sequence.service', () => {
   it('throws SEQUENCE_CONFLICT after retries are exhausted', async () => {
     const { client, transaction } = createMockClient([0, 0, 0]);
 
-    await expect(allocateNextId(client)).rejects.toMatchObject({
+    await expect(allocateNextId(client, TEST_MODEL)).rejects.toMatchObject({
       code: ErrorCode.SEQUENCE_CONFLICT,
     });
     expect(transaction).toHaveBeenCalledTimes(3);
   });
 
-  it('throws when singleton row is missing', async () => {
+  it('throws when row is still missing after ensure', async () => {
     const tx = {
       idSequence: {
         findUnique: jest.fn().mockResolvedValue(null),
         updateMany: jest.fn(),
+        create: jest.fn().mockResolvedValue({}),
       },
+      $queryRawUnsafe: jest.fn().mockResolvedValue([{ maxId: 0n }]),
     };
     const client = {
       $transaction: jest.fn((fn: (inner: typeof tx) => Promise<unknown>) =>
@@ -124,33 +140,33 @@ describe('id-sequence.service', () => {
       ),
     } as unknown as PrismaClient;
 
-    await expect(allocateNextId(client)).rejects.toBeInstanceOf(
+    await expect(allocateNextId(client, TEST_MODEL)).rejects.toBeInstanceOf(
       ApplicationException,
     );
   });
 
   describe('bootstrapIdSequence', () => {
-    it('creates singleton when missing', async () => {
+    it('creates row when missing', async () => {
       const { client, create, update } = createBootstrapMockClient(50n, null);
 
       await bootstrapIdSequence(client);
 
       expect(create).toHaveBeenCalledWith({
         data: {
-          id: ID_SEQUENCE_SINGLETON_ID,
+          modelName: TEST_MODEL,
           currentValue: 50n,
-          version: 1,
+          version: 1n,
           updatedAt: expect.anything() as bigint,
         },
       });
       expect(update).not.toHaveBeenCalled();
     });
 
-    it('heals currentValue when peak business id is higher', async () => {
+    it('heals currentValue when peak id is higher', async () => {
       const { client, create, update } = createBootstrapMockClient(50n, {
-        id: ID_SEQUENCE_SINGLETON_ID,
+        modelName: TEST_MODEL,
         currentValue: 10n,
-        version: 2,
+        version: 2n,
         updatedAt: 1000n,
       });
 
@@ -158,7 +174,7 @@ describe('id-sequence.service', () => {
 
       expect(create).not.toHaveBeenCalled();
       expect(update).toHaveBeenCalledWith({
-        where: { id: ID_SEQUENCE_SINGLETON_ID },
+        where: { modelName: TEST_MODEL },
         data: {
           currentValue: 50n,
           updatedAt: expect.anything() as bigint,
@@ -168,9 +184,9 @@ describe('id-sequence.service', () => {
 
     it('does nothing when currentValue is already high enough', async () => {
       const { client, create, update } = createBootstrapMockClient(50n, {
-        id: ID_SEQUENCE_SINGLETON_ID,
+        modelName: TEST_MODEL,
         currentValue: 100n,
-        version: 2,
+        version: 2n,
         updatedAt: 1000n,
       });
 

@@ -1,18 +1,17 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import { Type } from 'class-transformer';
 import {
-  IsInt,
+  Min,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdateSalesInvoiceItemDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @OptionalBigIntField()
   batchId?: bigint;

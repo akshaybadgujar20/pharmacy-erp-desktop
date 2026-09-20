@@ -29,7 +29,7 @@ export class SettingDetailComponent implements OnInit {
 
   readonly saving = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
   readonly setting = signal<AppSetting | null>(null);
   readonly dataType = signal('STRING');
   readonly isEditable = signal(false);

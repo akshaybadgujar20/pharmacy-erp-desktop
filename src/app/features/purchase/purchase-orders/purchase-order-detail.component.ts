@@ -47,7 +47,7 @@ export class PurchaseOrderDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly workflowRunning = signal('');
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isEditable = computed(() =>
     ['DRAFT', 'PENDING_APPROVAL'].includes(this.status()),
@@ -230,7 +230,7 @@ export class PurchaseOrderDetailComponent implements OnInit {
     action: string,
     call: (
       id: string,
-      body: { version: number },
+      body: { version: string },
     ) => ReturnType<PurchaseOrderService['submit']>,
   ): void {
     const id = this.orderId();

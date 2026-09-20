@@ -25,7 +25,7 @@ It explains how the database is designed to:
 | Database | **SQLite** | **PostgreSQL** |
 | ORM | **Prisma** | **Spring Boot + JPA/Hibernate** |
 | Runtime | Electron + NestJS | Spring Boot REST API |
-| Primary key | `BigInt` assigned via `IdSequence` table (schema uses `@default(autoincrement())`; SQLite `db push` does not provide working AUTOINCREMENT for BIGINT) | `BIGINT` via JPA `@GeneratedValue` / sequences |
+| Primary key | `BigInt` assigned via per-model **`IdSequence`** rows (Prisma model name key; schema uses `@default(autoincrement())`; SQLite `db push` does not provide working AUTOINCREMENT for BIGINT) | `BIGINT` via JPA `@GeneratedValue` / sequences |
 | Sync identity | `uuid String @unique @default(uuid())` on all syncable entities | Same UUID as authoritative merge key |
 | JSON payloads | Prisma `Json` → TEXT in SQLite | JPA `@Column(columnDefinition = "jsonb")` on Outbox/SyncConflict |
 | Decimal | Prisma `Decimal` → REAL in SQLite | JPA `NUMERIC` in PostgreSQL |

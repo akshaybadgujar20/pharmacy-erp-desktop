@@ -7,7 +7,7 @@ export interface StockTransferItem {
   receivedQuantity: number | null;
   damagedQuantity: number;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockTransferItemRequest {
@@ -17,7 +17,7 @@ export interface CreateStockTransferItemRequest {
 }
 
 export interface UpdateStockTransferItemRequest {
-  version: number;
+  version: string;
   sentQuantity?: number;
   receivedQuantity?: number;
   damagedQuantity?: number;

@@ -9,7 +9,7 @@ export interface UserRole {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateUserRoleRequest {
@@ -18,6 +18,6 @@ export interface CreateUserRoleRequest {
 }
 
 export interface UpdateUserRoleRequest {
-  version: number;
+  version: string;
   isActive?: boolean;
 }

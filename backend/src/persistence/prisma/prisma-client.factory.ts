@@ -26,7 +26,7 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
           }
           const data = args.data as Record<string, unknown>;
           if (data && data.id === undefined) {
-            const id = await allocateNextId(base);
+            const id = await allocateNextId(base, model);
             args.data = { ...data, id } as typeof args.data;
           }
           return query(args);
@@ -47,7 +47,7 @@ export function createPrismaClient(databasePath?: string): PrismaClient {
             return query(args);
           }
 
-          const ids = await allocateNextIds(base, missingIdCount);
+          const ids = await allocateNextIds(base, model, missingIdCount);
           let idIndex = 0;
           args.data = rows.map((row) =>
             row.id === undefined ? { ...row, id: ids[idIndex++] } : row,

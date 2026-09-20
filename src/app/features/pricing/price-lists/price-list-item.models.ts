@@ -12,7 +12,7 @@ export interface PriceListItem {
   effectiveTo: string | null;
   isActive: boolean;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePriceListItemRequest {
@@ -29,7 +29,7 @@ export interface CreatePriceListItemRequest {
 }
 
 export interface UpdatePriceListItemRequest {
-  version: number;
+  version: string;
   medicineId?: string;
   sellingPrice?: string;
   mrp?: string;

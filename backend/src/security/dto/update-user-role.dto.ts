@@ -1,9 +1,9 @@
-import { IsBoolean, IsInt, IsOptional, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class UpdateUserRoleDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsBoolean()

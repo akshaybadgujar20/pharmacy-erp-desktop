@@ -45,7 +45,7 @@ export class StockTakeDetailComponent implements OnInit {
   readonly completing = signal(false);
   readonly reconciling = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canStart = computed(() => this.status() === 'DRAFT');

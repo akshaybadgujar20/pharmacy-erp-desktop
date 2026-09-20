@@ -7,7 +7,7 @@ export interface RolePermission {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateRolePermissionRequest {
@@ -16,6 +16,6 @@ export interface CreateRolePermissionRequest {
 }
 
 export interface UpdateRolePermissionRequest {
-  version: number;
+  version: string;
   isGranted?: boolean;
 }

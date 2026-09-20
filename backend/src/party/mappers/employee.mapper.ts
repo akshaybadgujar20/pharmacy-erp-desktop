@@ -17,7 +17,7 @@ export interface EmployeeResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toEmployeeResponse(employee: Employee): EmployeeResponse {
@@ -37,6 +37,6 @@ export function toEmployeeResponse(employee: Employee): EmployeeResponse {
     createdAt: employee.createdAt,
     updatedAt: employee.updatedAt,
     deletedAt: employee.deletedAt,
-    version: employee.version,
+    version: employee.version.toString(),
   };
 }

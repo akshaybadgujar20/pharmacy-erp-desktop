@@ -1,4 +1,4 @@
 export interface PurchaseWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

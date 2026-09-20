@@ -12,7 +12,7 @@ export interface MedicineGenericResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toMedicineGenericResponse(
@@ -30,6 +30,6 @@ export function toMedicineGenericResponse(
     createdAt: generic.createdAt,
     updatedAt: generic.updatedAt,
     deletedAt: generic.deletedAt,
-    version: generic.version,
+    version: generic.version.toString(),
   };
 }

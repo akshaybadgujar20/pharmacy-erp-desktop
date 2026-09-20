@@ -275,7 +275,7 @@ export class SettingsService {
 
   async deleteSetting(
     key: string,
-    version: number,
+    version: bigint,
   ): Promise<{ settingKey: string; deleted: true }> {
     const { companyId, branchId } = getTenantScope(this.requestContext);
 

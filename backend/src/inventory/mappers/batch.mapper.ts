@@ -17,7 +17,7 @@ export interface BatchResponse {
   deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
-  version: number;
+  version: string;
 }
 
 export function toBatchResponse(batch: Batch): BatchResponse {
@@ -37,6 +37,6 @@ export function toBatchResponse(batch: Batch): BatchResponse {
     deletedAt: batch.deletedAt,
     updatedBy: serializeBigInt(batch.updatedBy),
     deletedBy: serializeBigInt(batch.deletedBy),
-    version: batch.version,
+    version: batch.version.toString(),
   };
 }

@@ -242,7 +242,7 @@ export class PurchaseInvoiceItemService {
     });
   }
 
-  async delete(purchaseInvoiceId: bigint, id: bigint, version: number) {
+  async delete(purchaseInvoiceId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseInvoiceId);
       assertDraftStatus(

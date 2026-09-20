@@ -18,7 +18,7 @@ export interface PaymentResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPaymentResponse(payment: Payment): PaymentResponse {
@@ -39,6 +39,6 @@ export function toPaymentResponse(payment: Payment): PaymentResponse {
     createdAt: payment.createdAt,
     updatedAt: payment.updatedAt,
     deletedAt: payment.deletedAt,
-    version: payment.version,
+    version: payment.version.toString(),
   };
 }

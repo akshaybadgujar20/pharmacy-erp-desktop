@@ -7,7 +7,7 @@ export interface MedicineCategory {
   description: string | null;
   displayOrder: number;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateMedicineCategoryRequest {
@@ -20,7 +20,7 @@ export interface CreateMedicineCategoryRequest {
 }
 
 export interface UpdateMedicineCategoryRequest {
-  version: number;
+  version: string;
   parentCategoryId?: string | null;
   categoryCode?: string;
   categoryName?: string;

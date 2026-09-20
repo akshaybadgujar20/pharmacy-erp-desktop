@@ -21,7 +21,7 @@ export interface PrescriptionItemResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPrescriptionItemResponse(
@@ -47,6 +47,6 @@ export function toPrescriptionItemResponse(
     createdAt: serializeEpochMs(item.createdAt) ?? '',
     updatedAt: serializeEpochMs(item.updatedAt) ?? '',
     deletedAt: serializeEpochMs(item.deletedAt),
-    version: item.version,
+    version: item.version.toString(),
   };
 }

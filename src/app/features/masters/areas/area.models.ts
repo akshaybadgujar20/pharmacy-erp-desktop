@@ -13,7 +13,7 @@ export interface Area {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateAreaRequest {
@@ -29,7 +29,7 @@ export interface CreateAreaRequest {
 }
 
 export interface UpdateAreaRequest {
-  version: number;
+  version: string;
   cityId?: string;
   areaCode?: string;
   areaName?: string;

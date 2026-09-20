@@ -15,7 +15,7 @@ export interface PartyAddress {
   longitude: number | null;
   isDefault: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreatePartyAddressRequest {
@@ -35,7 +35,7 @@ export interface CreatePartyAddressRequest {
 }
 
 export interface UpdatePartyAddressRequest {
-  version: number;
+  version: string;
   addressType?: string;
   addressLine1?: string;
   addressLine2?: string;

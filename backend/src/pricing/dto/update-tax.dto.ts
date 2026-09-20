@@ -1,20 +1,13 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
 import {
   NullableBigIntField,
   OptionalBigIntField,
 } from '../../common/dto/bigint.decorator';
 
 export class UpdateTaxDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

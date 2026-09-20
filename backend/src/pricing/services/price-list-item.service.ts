@@ -216,7 +216,7 @@ export class PriceListItemService {
     });
   }
 
-  async delete(priceListId: bigint, id: bigint, version: number) {
+  async delete(priceListId: bigint, id: bigint, version: bigint) {
     const scope = getTenantScope(this.requestContext);
 
     return this.unitOfWork.run(async (tx) => {

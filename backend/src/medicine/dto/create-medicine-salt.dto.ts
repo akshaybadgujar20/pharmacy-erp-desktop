@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsInt, Min, IsOptional } from 'class-validator';
 import {
   MandatoryBigIntField,
   OptionalBigIntField,
@@ -18,9 +18,8 @@ export class CreateMedicineSaltDto {
 }
 
 export class UpdateMedicineSaltDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @OptionalBigIntField()
   saltCompositionId?: bigint;

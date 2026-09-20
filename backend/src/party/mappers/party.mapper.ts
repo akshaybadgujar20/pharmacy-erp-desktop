@@ -16,7 +16,7 @@ export interface PartyResponse {
   deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPartyResponse(party: Party): PartyResponse {
@@ -35,6 +35,6 @@ export function toPartyResponse(party: Party): PartyResponse {
     deletedAt: party.deletedAt,
     updatedBy: serializeBigInt(party.updatedBy),
     deletedBy: serializeBigInt(party.deletedBy),
-    version: party.version,
+    version: party.version.toString(),
   };
 }

@@ -49,7 +49,7 @@ export class PriceListItemService {
     );
   }
 
-  delete(priceListId: string, id: string, version: number): Observable<void> {
+  delete(priceListId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/price-lists/${priceListId}/items/${id}`, {
       version: String(version),
     });

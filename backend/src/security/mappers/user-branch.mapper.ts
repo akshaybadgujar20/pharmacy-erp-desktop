@@ -10,7 +10,7 @@ export interface UserBranchResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toUserBranchResponse(
@@ -25,6 +25,6 @@ export function toUserBranchResponse(
     createdAt: userBranch.createdAt.toString(),
     updatedAt: userBranch.updatedAt.toString(),
     deletedAt: serializeBigInt(userBranch.deletedAt),
-    version: userBranch.version,
+    version: userBranch.version.toString(),
   };
 }

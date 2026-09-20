@@ -10,7 +10,7 @@ export interface RolePermissionResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toRolePermissionResponse(
@@ -25,6 +25,6 @@ export function toRolePermissionResponse(
     createdAt: rolePermission.createdAt.toString(),
     updatedAt: rolePermission.updatedAt.toString(),
     deletedAt: serializeBigInt(rolePermission.deletedAt),
-    version: rolePermission.version,
+    version: rolePermission.version.toString(),
   };
 }

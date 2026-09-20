@@ -294,7 +294,7 @@ export class StockTakeItemService {
     });
   }
 
-  async delete(stockTakeId: bigint, id: bigint, version: number) {
+  async delete(stockTakeId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, stockTakeId);
       if (

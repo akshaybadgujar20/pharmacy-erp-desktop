@@ -9,7 +9,7 @@ export interface Role {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateRoleRequest {
@@ -20,7 +20,7 @@ export interface CreateRoleRequest {
 }
 
 export interface UpdateRoleRequest {
-  version: number;
+  version: string;
   roleCode?: string;
   roleName?: string;
   description?: string;

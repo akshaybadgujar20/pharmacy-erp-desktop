@@ -18,7 +18,7 @@ model Party {
   updatedBy BigInt?   @map("updated_by")
   deletedBy BigInt?   @map("deleted_by")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   partyRoles PartyRole[]
   addresses  PartyAddress[]

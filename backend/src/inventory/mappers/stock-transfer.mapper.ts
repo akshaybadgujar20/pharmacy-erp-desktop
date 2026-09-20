@@ -19,7 +19,7 @@ export interface StockTransferResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toStockTransferResponse(
@@ -43,6 +43,6 @@ export function toStockTransferResponse(
     createdAt: transfer.createdAt,
     updatedAt: transfer.updatedAt,
     deletedAt: transfer.deletedAt,
-    version: transfer.version,
+    version: transfer.version.toString(),
   };
 }

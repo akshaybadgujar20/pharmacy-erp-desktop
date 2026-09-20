@@ -280,7 +280,7 @@ export class PurchaseReturnItemService {
     });
   }
 
-  async delete(purchaseReturnId: bigint, id: bigint, version: number) {
+  async delete(purchaseReturnId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseReturnId);
       assertDraftStatus(

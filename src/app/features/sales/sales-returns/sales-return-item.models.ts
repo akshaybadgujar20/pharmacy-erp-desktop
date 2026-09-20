@@ -17,7 +17,7 @@ export interface SalesReturnItem {
   returnReason: string;
   disposition: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateSalesReturnItemRequest {
@@ -37,7 +37,7 @@ export interface CreateSalesReturnItemRequest {
 }
 
 export interface UpdateSalesReturnItemRequest {
-  version: number;
+  version: string;
   batchId?: string;
   unitId?: string;
   returnQuantity?: number;

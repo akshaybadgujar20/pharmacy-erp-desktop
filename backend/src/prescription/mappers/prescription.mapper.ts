@@ -18,7 +18,7 @@ export interface PrescriptionResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPrescriptionResponse(
@@ -41,6 +41,6 @@ export function toPrescriptionResponse(
     createdAt: serializeEpochMs(prescription.createdAt) ?? '',
     updatedAt: serializeEpochMs(prescription.updatedAt) ?? '',
     deletedAt: serializeEpochMs(prescription.deletedAt),
-    version: prescription.version,
+    version: prescription.version.toString(),
   };
 }

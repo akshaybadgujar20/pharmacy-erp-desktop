@@ -20,7 +20,7 @@ export interface SupplierResponse {
   deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
-  version: number;
+  version: string;
 }
 
 export function toSupplierResponse(supplier: Supplier): SupplierResponse {
@@ -43,6 +43,6 @@ export function toSupplierResponse(supplier: Supplier): SupplierResponse {
     deletedAt: supplier.deletedAt,
     updatedBy: serializeBigInt(supplier.updatedBy),
     deletedBy: serializeBigInt(supplier.deletedBy),
-    version: supplier.version,
+    version: supplier.version.toString(),
   };
 }

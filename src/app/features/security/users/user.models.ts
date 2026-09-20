@@ -12,7 +12,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateUserRequest {
@@ -24,7 +24,7 @@ export interface CreateUserRequest {
 }
 
 export interface UpdateUserRequest {
-  version: number;
+  version: string;
   isActive?: boolean;
   mustChangePassword?: boolean;
 }

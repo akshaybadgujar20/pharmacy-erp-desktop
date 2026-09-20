@@ -22,7 +22,7 @@ export interface Company {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateCompanyRequest {
@@ -47,7 +47,7 @@ export interface CreateCompanyRequest {
 }
 
 export interface UpdateCompanyRequest {
-  version: number;
+  version: string;
   companyCode?: string;
   companyName?: string;
   displayName?: string;

@@ -52,7 +52,7 @@ export class GoodsReceiptService {
     return this.api.post<GoodsReceipt>(`${this.basePath}/${id}/cancel`, body);
   }
 
-  delete(id: string, version: number): Observable<void> {
+  delete(id: string, version: string): Observable<void> {
     return this.api.delete<void>(`${this.basePath}/${id}`, {
       version: String(version),
     });

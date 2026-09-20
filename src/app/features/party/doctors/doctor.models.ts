@@ -10,7 +10,7 @@ export interface Doctor {
   consultationFee: number | null;
   isVisitingDoctor: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateDoctorRequest {
@@ -26,7 +26,7 @@ export interface CreateDoctorRequest {
 }
 
 export interface UpdateDoctorRequest {
-  version: number;
+  version: string;
   doctorCode?: string;
   registrationNumber?: string;
   qualification?: string;

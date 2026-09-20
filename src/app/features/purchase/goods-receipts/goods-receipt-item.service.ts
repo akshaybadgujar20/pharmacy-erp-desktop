@@ -40,7 +40,7 @@ export class GoodsReceiptItemService {
     );
   }
 
-  delete(goodsReceiptId: string, id: string, version: number): Observable<void> {
+  delete(goodsReceiptId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/goods-receipts/${goodsReceiptId}/items/${id}`, {
       version: String(version),
     });

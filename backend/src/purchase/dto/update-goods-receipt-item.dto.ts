@@ -1,12 +1,11 @@
 import { Type } from 'class-transformer';
 import {
+  Min,
   IsIn,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   MandatoryBigIntField,
@@ -15,9 +14,8 @@ import {
 import { GoodsReceiptInspectionStatus } from '../constants/purchase.constants';
 
 export class UpdateGoodsReceiptItemDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

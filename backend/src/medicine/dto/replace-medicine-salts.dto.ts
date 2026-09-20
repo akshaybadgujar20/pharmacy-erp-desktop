@@ -1,11 +1,11 @@
 import { Type } from 'class-transformer';
 import {
+  IsInt,
+  Min,
   ArrayMinSize,
   IsArray,
   IsBoolean,
-  IsInt,
   IsOptional,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';

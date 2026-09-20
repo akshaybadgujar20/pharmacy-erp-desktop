@@ -1,11 +1,10 @@
 import {
+  Min,
   IsBoolean,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
@@ -14,9 +13,8 @@ import {
 } from '../../common/dto/bigint.decorator';
 
 export class UpdateBatchDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

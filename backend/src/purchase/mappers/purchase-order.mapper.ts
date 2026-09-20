@@ -20,7 +20,7 @@ export interface PurchaseOrderResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPurchaseOrderResponse(
@@ -45,6 +45,6 @@ export function toPurchaseOrderResponse(
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
     deletedAt: order.deletedAt,
-    version: order.version,
+    version: order.version.toString(),
   };
 }

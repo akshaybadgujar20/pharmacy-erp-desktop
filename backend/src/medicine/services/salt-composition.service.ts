@@ -222,7 +222,7 @@ export class SaltCompositionService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.saltComposition.findFirst({
         where: { id, deletedAt: null },

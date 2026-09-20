@@ -17,7 +17,7 @@ export interface DiscountRule {
   effectiveTo: string | null;
   isActive: boolean;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateDiscountRuleRequest {
@@ -40,7 +40,7 @@ export interface CreateDiscountRuleRequest {
 }
 
 export interface UpdateDiscountRuleRequest {
-  version: number;
+  version: string;
   ruleCode?: string;
   ruleName?: string;
   discountType?: string;

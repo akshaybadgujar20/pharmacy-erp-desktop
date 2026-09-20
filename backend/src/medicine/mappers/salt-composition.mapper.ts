@@ -14,7 +14,7 @@ export interface SaltCompositionResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toSaltCompositionResponse(
@@ -33,6 +33,6 @@ export function toSaltCompositionResponse(
     createdAt: saltComposition.createdAt,
     updatedAt: saltComposition.updatedAt,
     deletedAt: saltComposition.deletedAt,
-    version: saltComposition.version,
+    version: saltComposition.version.toString(),
   };
 }

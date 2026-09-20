@@ -15,10 +15,10 @@ export interface AppSetting {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  version: number;
+  version: string;
 }
 
 export interface UpdateSettingRequest {
-  version: number;
+  version: string;
   settingValue: string;
 }

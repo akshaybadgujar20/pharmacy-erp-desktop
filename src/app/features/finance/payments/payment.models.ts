@@ -11,7 +11,7 @@ export interface Payment {
   referenceId: string | null;
   status: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePaymentRequest {
@@ -26,7 +26,7 @@ export interface CreatePaymentRequest {
 }
 
 export interface UpdatePaymentRequest {
-  version: number;
+  version: string;
   paymentType?: string;
   paymentDate?: string;
   amount?: number;
@@ -38,6 +38,6 @@ export interface UpdatePaymentRequest {
 }
 
 export interface FinanceWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

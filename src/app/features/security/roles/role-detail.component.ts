@@ -42,7 +42,7 @@ export class RoleDetailComponent implements OnInit {
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly form = this.fb.nonNullable.group({
     roleCode: ['', Validators.required],

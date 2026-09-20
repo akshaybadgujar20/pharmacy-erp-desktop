@@ -248,7 +248,7 @@ export class CompanyService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     const scope = getTenantScope(this.requestContext);
     if (id !== scope.companyId) {
       throwNotFound(ErrorCode.COMPANY_NOT_FOUND, `Company not found: ${id}`, {

@@ -150,7 +150,7 @@ Known mappings:
 
 ## BIGINT primary keys
 
-Some tables omit SQLite autoincrement. `createPrismaClient()` assigns BIGINT ids from the `IdSequence` table when `id` is omitted on `create`. Do not manually assign ids unless required by the specific table's pattern.
+Some tables omit SQLite autoincrement. `createPrismaClient()` assigns BIGINT ids from **`IdSequence`** (one row per Prisma model name) when `id` is omitted on `create`. Do not manually assign ids unless required by the specific table's pattern.
 
 ---
 

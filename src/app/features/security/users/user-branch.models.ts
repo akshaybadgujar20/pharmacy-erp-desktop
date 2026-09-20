@@ -7,7 +7,7 @@ export interface UserBranch {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateUserBranchRequest {
@@ -16,6 +16,6 @@ export interface CreateUserBranchRequest {
 }
 
 export interface UpdateUserBranchRequest {
-  version: number;
+  version: string;
   isActive?: boolean;
 }

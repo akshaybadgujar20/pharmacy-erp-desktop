@@ -41,7 +41,7 @@ export class SalesInvoiceItemService {
     return this.api.patch<SalesInvoiceItem>(`/sales-invoices/${invoiceId}/items/${id}`, body);
   }
 
-  delete(invoiceId: string, id: string, version: number): Observable<void> {
+  delete(invoiceId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/sales-invoices/${invoiceId}/items/${id}`, {
       version: String(version),
     });

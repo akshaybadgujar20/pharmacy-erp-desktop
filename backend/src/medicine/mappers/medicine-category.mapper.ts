@@ -13,7 +13,7 @@ export interface MedicineCategoryResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toMedicineCategoryResponse(
@@ -31,6 +31,6 @@ export function toMedicineCategoryResponse(
     createdAt: category.createdAt,
     updatedAt: category.updatedAt,
     deletedAt: category.deletedAt,
-    version: category.version,
+    version: category.version.toString(),
   };
 }

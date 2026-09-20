@@ -10,5 +10,5 @@ export interface Stock {
   inTransitQuantity: number;
   lastMovementAt: string | null;
   isActive: boolean;
-  version: number;
+  version: string;
 }

@@ -26,7 +26,7 @@ export interface MedicineResponse {
   deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
-  version: number;
+  version: string;
 }
 
 export function toMedicineResponse(medicine: Medicine): MedicineResponse {
@@ -55,6 +55,6 @@ export function toMedicineResponse(medicine: Medicine): MedicineResponse {
     deletedAt: medicine.deletedAt,
     updatedBy: serializeBigInt(medicine.updatedBy),
     deletedBy: serializeBigInt(medicine.deletedBy),
-    version: medicine.version,
+    version: medicine.version.toString(),
   };
 }

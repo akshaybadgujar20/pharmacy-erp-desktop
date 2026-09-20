@@ -14,7 +14,7 @@ export interface FinancialYear {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateFinancialYearRequest {
@@ -28,7 +28,7 @@ export interface CreateFinancialYearRequest {
 }
 
 export interface UpdateFinancialYearRequest {
-  version: number;
+  version: string;
   financialYearCode?: string;
   financialYearName?: string;
   startDate?: string;

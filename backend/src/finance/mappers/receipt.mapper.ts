@@ -18,7 +18,7 @@ export interface ReceiptResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toReceiptResponse(receipt: Receipt): ReceiptResponse {
@@ -39,6 +39,6 @@ export function toReceiptResponse(receipt: Receipt): ReceiptResponse {
     createdAt: receipt.createdAt,
     updatedAt: receipt.updatedAt,
     deletedAt: receipt.deletedAt,
-    version: receipt.version,
+    version: receipt.version.toString(),
   };
 }

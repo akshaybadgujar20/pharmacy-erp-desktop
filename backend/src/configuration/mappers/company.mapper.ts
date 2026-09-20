@@ -25,7 +25,7 @@ export interface CompanyResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toCompanyResponse(company: Company): CompanyResponse {
@@ -53,6 +53,6 @@ export function toCompanyResponse(company: Company): CompanyResponse {
     createdAt: serializeEpochMs(company.createdAt) ?? '',
     updatedAt: serializeEpochMs(company.updatedAt) ?? '',
     deletedAt: serializeEpochMs(company.deletedAt),
-    version: company.version,
+    version: company.version.toString(),
   };
 }

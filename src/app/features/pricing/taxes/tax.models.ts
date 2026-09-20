@@ -9,7 +9,7 @@ export interface Tax {
   effectiveTo: string | null;
   isActive: boolean;
   description: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateTaxRequest {
@@ -24,7 +24,7 @@ export interface CreateTaxRequest {
 }
 
 export interface UpdateTaxRequest {
-  version: number;
+  version: string;
   taxCode?: string;
   taxName?: string;
   taxType?: string;

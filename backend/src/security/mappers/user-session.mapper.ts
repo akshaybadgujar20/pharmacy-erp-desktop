@@ -21,7 +21,7 @@ export interface UserSessionResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toUserSessionResponse(
@@ -47,6 +47,6 @@ export function toUserSessionResponse(
     createdAt: session.createdAt.toString(),
     updatedAt: session.updatedAt.toString(),
     deletedAt: serializeBigInt(session.deletedAt),
-    version: session.version,
+    version: session.version.toString(),
   };
 }

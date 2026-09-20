@@ -43,7 +43,7 @@ export class PurchaseReturnDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly workflowRunning = signal('');
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canSubmit = computed(() => this.status() === 'DRAFT');
@@ -215,7 +215,7 @@ export class PurchaseReturnDetailComponent implements OnInit {
     action: string,
     call: (
       id: string,
-      body: { version: number },
+      body: { version: string },
     ) => ReturnType<PurchaseReturnService['submit']>,
   ): void {
     const id = this.returnId();

@@ -16,7 +16,7 @@ export interface SyncConflictResponse {
   resolvedAt: string | null;
   remarks: string | null;
   createdAt: string;
-  version: number;
+  version: string;
 }
 
 export function toSyncConflictResponse(
@@ -37,6 +37,6 @@ export function toSyncConflictResponse(
     resolvedAt: serializeEpochMs(conflict.resolvedAt),
     remarks: conflict.remarks,
     createdAt: serializeEpochMs(conflict.createdAt) ?? '',
-    version: conflict.version,
+    version: conflict.version.toString(),
   };
 }

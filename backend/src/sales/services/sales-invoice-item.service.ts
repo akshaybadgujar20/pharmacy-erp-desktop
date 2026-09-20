@@ -252,7 +252,7 @@ export class SalesInvoiceItemService {
     });
   }
 
-  async delete(salesInvoiceId: bigint, id: bigint, version: number) {
+  async delete(salesInvoiceId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, salesInvoiceId);
       assertDraftStatus(parent.status, 'Sales invoice');

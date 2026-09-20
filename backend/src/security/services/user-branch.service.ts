@@ -202,7 +202,7 @@ export class UserBranchService {
     });
   }
 
-  async delete(userId: bigint, id: bigint, version: number) {
+  async delete(userId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.userBranch.findFirst({
         where: { id, userId, deletedAt: null },

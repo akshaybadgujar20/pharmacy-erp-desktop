@@ -23,7 +23,7 @@ model Batch {
   updatedBy BigInt? @map("updated_by")
   deletedBy BigInt? @map("deleted_by")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   medicine      Medicine @relation(fields: [medicineId], references: [id])
   updatedByUser User?    @relation("BatchUpdatedBy", fields: [updatedBy], references: [id])

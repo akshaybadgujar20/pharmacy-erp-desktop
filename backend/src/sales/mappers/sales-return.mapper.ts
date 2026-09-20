@@ -25,7 +25,7 @@ export interface SalesReturnResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toSalesReturnResponse(
@@ -55,6 +55,6 @@ export function toSalesReturnResponse(
     createdAt: salesReturn.createdAt,
     updatedAt: salesReturn.updatedAt,
     deletedAt: salesReturn.deletedAt,
-    version: salesReturn.version,
+    version: salesReturn.version.toString(),
   };
 }

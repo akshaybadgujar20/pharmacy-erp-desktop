@@ -194,7 +194,7 @@ export class MedicineSaltService {
     });
   }
 
-  async delete(medicineId: bigint, id: bigint, version: number) {
+  async delete(medicineId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       await assertMedicineExists(tx, medicineId);
 

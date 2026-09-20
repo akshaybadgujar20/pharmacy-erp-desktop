@@ -207,7 +207,7 @@ export class MedicineScheduleService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.medicineSchedule.findFirst({
         where: { id, deletedAt: null },

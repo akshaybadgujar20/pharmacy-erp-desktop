@@ -15,7 +15,7 @@ export interface PurchaseReturnItem {
   taxAmount: number | null;
   lineAmount: number | null;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseReturnItemRequest {
@@ -33,7 +33,7 @@ export interface CreatePurchaseReturnItemRequest {
 }
 
 export interface UpdatePurchaseReturnItemRequest {
-  version: number;
+  version: string;
   batchId?: string;
   unitId?: string;
   purchaseInvoiceItemId?: string | null;

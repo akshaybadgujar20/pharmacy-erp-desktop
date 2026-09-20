@@ -44,7 +44,7 @@ export class MedicineSaltService {
     );
   }
 
-  delete(medicineId: string, id: string, version: number): Observable<void> {
+  delete(medicineId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/medicines/${medicineId}/salts/${id}`, {
       version: String(version),
     });

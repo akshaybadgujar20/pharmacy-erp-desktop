@@ -24,7 +24,7 @@ export interface SalesInvoiceItemResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toSalesInvoiceItemResponse(
@@ -53,6 +53,6 @@ export function toSalesInvoiceItemResponse(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt,
-    version: item.version,
+    version: item.version.toString(),
   };
 }

@@ -17,7 +17,7 @@ export interface BarcodeConfiguration {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateBarcodeConfigurationRequest {
@@ -36,7 +36,7 @@ export interface CreateBarcodeConfigurationRequest {
 }
 
 export interface UpdateBarcodeConfigurationRequest {
-  version: number;
+  version: string;
   branchId?: string;
   configurationName?: string;
   barcodeType?: string;

@@ -17,7 +17,7 @@ export interface StockAdjustmentResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toStockAdjustmentResponse(
@@ -39,6 +39,6 @@ export function toStockAdjustmentResponse(
     createdAt: adjustment.createdAt,
     updatedAt: adjustment.updatedAt,
     deletedAt: adjustment.deletedAt,
-    version: adjustment.version,
+    version: adjustment.version.toString(),
   };
 }

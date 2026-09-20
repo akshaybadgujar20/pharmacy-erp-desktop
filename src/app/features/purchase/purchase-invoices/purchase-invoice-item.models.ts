@@ -17,7 +17,7 @@ export interface PurchaseInvoiceItem {
   taxAmount: number | null;
   lineAmount: number | null;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseInvoiceItemRequest {
@@ -37,7 +37,7 @@ export interface CreatePurchaseInvoiceItemRequest {
 }
 
 export interface UpdatePurchaseInvoiceItemRequest {
-  version: number;
+  version: string;
   batchId?: string;
   unitId?: string;
   goodsReceiptItemId?: string | null;

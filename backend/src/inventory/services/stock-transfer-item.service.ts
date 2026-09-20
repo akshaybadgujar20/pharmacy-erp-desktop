@@ -207,7 +207,7 @@ export class StockTransferItemService {
     });
   }
 
-  async delete(transferId: bigint, id: bigint, version: number) {
+  async delete(transferId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, transferId);
       assertDraftStatus(parent.status, 'Stock transfer');

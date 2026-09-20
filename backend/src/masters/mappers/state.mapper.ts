@@ -13,7 +13,7 @@ export interface StateResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toStateResponse(state: State): StateResponse {
@@ -29,6 +29,6 @@ export function toStateResponse(state: State): StateResponse {
     createdAt: serializeEpochMs(state.createdAt) ?? '',
     updatedAt: serializeEpochMs(state.updatedAt) ?? '',
     deletedAt: serializeEpochMs(state.deletedAt),
-    version: state.version,
+    version: state.version.toString(),
   };
 }

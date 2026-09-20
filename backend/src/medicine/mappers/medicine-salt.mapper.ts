@@ -9,7 +9,7 @@ export interface MedicineSaltResponse {
   medicineGenericId: string | null;
   sequenceNo: number;
   percentage: string | null;
-  version: number;
+  version: string;
 }
 
 export function toMedicineSaltResponse(
@@ -23,6 +23,6 @@ export function toMedicineSaltResponse(
     medicineGenericId: serializeBigInt(medicineSalt.medicineGenericId),
     sequenceNo: medicineSalt.sequenceNo,
     percentage: serializeDecimal(medicineSalt.percentage),
-    version: medicineSalt.version,
+    version: medicineSalt.version.toString(),
   };
 }

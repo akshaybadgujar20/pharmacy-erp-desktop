@@ -15,7 +15,7 @@ export interface CityResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toCityResponse(city: City): CityResponse {
@@ -33,6 +33,6 @@ export function toCityResponse(city: City): CityResponse {
     createdAt: serializeEpochMs(city.createdAt) ?? '',
     updatedAt: serializeEpochMs(city.updatedAt) ?? '',
     deletedAt: serializeEpochMs(city.deletedAt),
-    version: city.version,
+    version: city.version.toString(),
   };
 }

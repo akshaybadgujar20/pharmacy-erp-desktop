@@ -1,7 +1,6 @@
-import { IsInt, Min } from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class RetryOutboxDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 }

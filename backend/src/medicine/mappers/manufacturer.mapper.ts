@@ -15,7 +15,7 @@ export interface ManufacturerResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toManufacturerResponse(
@@ -36,6 +36,6 @@ export function toManufacturerResponse(
     createdAt: manufacturer.createdAt,
     updatedAt: manufacturer.updatedAt,
     deletedAt: manufacturer.deletedAt,
-    version: manufacturer.version,
+    version: manufacturer.version.toString(),
   };
 }

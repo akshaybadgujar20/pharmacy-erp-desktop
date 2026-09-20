@@ -227,7 +227,7 @@ export class PurchaseInvoiceService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const scope = getTenantScope(this.requestContext);
       const existing = await tx.purchaseInvoice.findFirst({

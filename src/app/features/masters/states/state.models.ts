@@ -10,7 +10,7 @@ export interface State {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStateRequest {
@@ -23,7 +23,7 @@ export interface CreateStateRequest {
 }
 
 export interface UpdateStateRequest {
-  version: number;
+  version: string;
   countryId?: string;
   stateCode?: string;
   stateName?: string;

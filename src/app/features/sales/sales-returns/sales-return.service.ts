@@ -41,7 +41,7 @@ export class SalesReturnService {
     return this.api.post<SalesReturn>(`${this.basePath}/${id}/cancel`, body);
   }
 
-  delete(id: string, version: number): Observable<void> {
+  delete(id: string, version: string): Observable<void> {
     return this.api.delete<void>(`${this.basePath}/${id}`, {
       version: String(version),
     });

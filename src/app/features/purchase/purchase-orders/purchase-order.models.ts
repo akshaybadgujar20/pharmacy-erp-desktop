@@ -16,7 +16,7 @@ export interface PurchaseOrder {
   remarks: string | null;
   approvedByEmployeeId: string | null;
   approvedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseOrderRequest {
@@ -28,7 +28,7 @@ export interface CreatePurchaseOrderRequest {
 }
 
 export interface UpdatePurchaseOrderRequest {
-  version: number;
+  version: string;
   supplierId?: string;
   orderDate?: string;
   expectedDeliveryDate?: string | null;

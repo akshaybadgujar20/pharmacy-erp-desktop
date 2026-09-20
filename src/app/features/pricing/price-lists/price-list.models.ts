@@ -10,7 +10,7 @@ export interface PriceList {
   isDefault: boolean;
   isActive: boolean;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePriceListRequest {
@@ -26,7 +26,7 @@ export interface CreatePriceListRequest {
 }
 
 export interface UpdatePriceListRequest {
-  version: number;
+  version: string;
   priceListCode?: string;
   priceListName?: string;
   branchId?: string | null;

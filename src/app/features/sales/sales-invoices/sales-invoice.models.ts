@@ -20,7 +20,7 @@ export interface SalesInvoice {
   status: string;
   salesType: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateSalesInvoiceRequest {
@@ -35,7 +35,7 @@ export interface CreateSalesInvoiceRequest {
 }
 
 export interface UpdateSalesInvoiceRequest {
-  version: number;
+  version: string;
   customerId?: string;
   prescriptionId?: string;
   invoiceDate?: string;
@@ -47,6 +47,6 @@ export interface UpdateSalesInvoiceRequest {
 }
 
 export interface SalesWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

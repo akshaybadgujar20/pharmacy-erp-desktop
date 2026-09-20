@@ -218,7 +218,7 @@ export class StockAdjustmentItemService {
     });
   }
 
-  async delete(adjustmentId: bigint, id: bigint, version: number) {
+  async delete(adjustmentId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, adjustmentId);
       assertDraftStatus(parent.status, 'Stock adjustment');

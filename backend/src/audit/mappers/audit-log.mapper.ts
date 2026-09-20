@@ -18,7 +18,7 @@ export interface AuditLogResponse {
   actionTimestamp: string;
   correlationId: string | null;
   createdAt: string;
-  version: number;
+  version: string;
 }
 
 function serializeEpochMs(value: bigint): string {
@@ -48,6 +48,6 @@ export function toAuditLogResponse(auditLog: AuditLog): AuditLogResponse {
     actionTimestamp: serializeEpochMs(auditLog.actionTimestamp),
     correlationId: auditLog.correlationId,
     createdAt: serializeEpochMs(auditLog.createdAt),
-    version: auditLog.version,
+    version: auditLog.version.toString(),
   };
 }

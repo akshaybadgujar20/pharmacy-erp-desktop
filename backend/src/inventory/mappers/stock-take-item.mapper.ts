@@ -18,7 +18,7 @@ export interface StockTakeItemResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toStockTakeItemResponse(
@@ -41,6 +41,6 @@ export function toStockTakeItemResponse(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt,
-    version: item.version,
+    version: item.version.toString(),
   };
 }

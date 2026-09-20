@@ -5,7 +5,7 @@ export interface PartyRole {
   roleType: string;
   isPrimary: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreatePartyRoleRequest {
@@ -15,7 +15,7 @@ export interface CreatePartyRoleRequest {
 }
 
 export interface UpdatePartyRoleRequest {
-  version: number;
+  version: string;
   roleType?: string;
   isPrimary?: boolean;
   isActive?: boolean;

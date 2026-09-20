@@ -16,7 +16,7 @@ export interface CountryResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toCountryResponse(country: Country): CountryResponse {
@@ -35,6 +35,6 @@ export function toCountryResponse(country: Country): CountryResponse {
     createdAt: serializeEpochMs(country.createdAt) ?? '',
     updatedAt: serializeEpochMs(country.updatedAt) ?? '',
     deletedAt: serializeEpochMs(country.deletedAt),
-    version: country.version,
+    version: country.version.toString(),
   };
 }

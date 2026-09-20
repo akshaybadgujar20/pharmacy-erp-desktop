@@ -18,7 +18,7 @@ export interface LedgerEntryResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toLedgerEntryResponse(entry: LedgerEntry): LedgerEntryResponse {
@@ -39,6 +39,6 @@ export function toLedgerEntryResponse(entry: LedgerEntry): LedgerEntryResponse {
     createdAt: entry.createdAt,
     updatedAt: entry.updatedAt,
     deletedAt: entry.deletedAt,
-    version: entry.version,
+    version: entry.version.toString(),
   };
 }

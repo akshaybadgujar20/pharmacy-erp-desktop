@@ -48,7 +48,7 @@ export class UserDetailComponent implements OnInit {
   readonly resettingPassword = signal(false);
   readonly resetDialogVisible = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly form = this.fb.nonNullable.group({
     employeeId: ['', Validators.required],

@@ -51,7 +51,7 @@ export class SalesInvoicePaymentsTabComponent {
   readonly search = signal('');
   readonly dialogVisible = signal(false);
   readonly editingId = signal<string | null>(null);
-  readonly editingVersion = signal(0);
+  readonly editingVersion = signal('0');
   readonly editingStatus = signal('PENDING');
   readonly saving = signal(false);
   readonly workflowInProgress = signal(false);
@@ -102,7 +102,7 @@ export class SalesInvoicePaymentsTabComponent {
 
   openCreate(): void {
     this.editingId.set(null);
-    this.editingVersion.set(0);
+    this.editingVersion.set('0');
     this.editingStatus.set('PENDING');
     this.form.reset({
       paymentDate: new Date().toISOString(),

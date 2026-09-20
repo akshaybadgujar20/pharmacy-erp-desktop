@@ -12,5 +12,5 @@ export interface LedgerEntry {
   narration: string | null;
   isPosted: boolean;
   createdBy: string | null;
-  version: number;
+  version: string;
 }

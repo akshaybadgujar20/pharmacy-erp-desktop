@@ -4,12 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
-import { DeleteEntityQueryDto } from '../../common/dto/delete-entity-query.dto';
 import { ParseBigIntPipe } from '../../common/pipes/parse-bigint.pipe';
 import { CreateSequenceGeneratorDto } from '../dto/create-sequence-generator.dto';
 import { SequenceGeneratorListQueryDto } from '../dto/sequence-generator-list-query.dto';
@@ -53,8 +53,8 @@ export class SequenceGeneratorController {
   @RequirePermissions('CONFIGURATION:SEQUENCE_GENERATOR:DELETE')
   delete(
     @Param('id', ParseBigIntPipe) id: bigint,
-    @Query() query: DeleteEntityQueryDto,
+    @Query('version', ParseIntPipe) version: number,
   ) {
-    return this.sequenceGeneratorConfigService.delete(id, query.version);
+    return this.sequenceGeneratorConfigService.delete(id, version);
   }
 }

@@ -9,7 +9,7 @@ export interface Batch {
   mrp: number;
   barcode: string | null;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateBatchRequest {
@@ -24,7 +24,7 @@ export interface CreateBatchRequest {
 }
 
 export interface UpdateBatchRequest {
-  version: number;
+  version: string;
   medicineId?: string;
   batchNumber?: string;
   manufacturingDate?: string | null;

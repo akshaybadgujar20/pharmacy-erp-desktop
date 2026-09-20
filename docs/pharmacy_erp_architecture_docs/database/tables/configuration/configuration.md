@@ -446,22 +446,22 @@ Company (1)
 
 ## Purpose
 
-The IdSequence table holds a **singleton row** (`id = 1`) that tracks the last allocated **global BIGINT primary key** across all business tables on the local SQLite database.
+The IdSequence table holds **one row per Prisma model** that receives auto-assigned BIGINT primary keys on local SQLite. The primary key is **`model_name`** (exact Prisma model name, e.g. `Customer`, `SalesInvoice`).
 
-It replaces in-memory id counters. Each `create` without an explicit `id` increments `currentValue` by 1 inside a short transaction (optimistic lock on `version`). Document numbers remain in `SequenceGenerator` — this table is for internal PK ids only.
+It replaces in-memory id counters. Each `create` without an explicit `id` increments that model’s `current_value` inside a short transaction (optimistic lock on **`version` BigInt**). Document numbers remain in `SequenceGenerator` — this table is for internal PK ids only.
 
 ## Business Rules
 
-- Exactly one row (`id = 1`).
-- `currentValue` is the last id handed out; next id is `currentValue + 1`.
-- Bootstrap on app/seed startup reconciles `currentValue` with `MAX(id)` across business tables if the counter is behind (legacy DB migration).
+- One row per allocatable model (discovered via Prisma DMMF: scalar `id` BigInt PK, or `isId` when present; excluding `IdSequence`).
+- `current_value` is the last id handed out for that model; next id is `current_value + 1`.
+- Bootstrap on app/seed startup reconciles each row with `MAX(id)` on that model’s table if the counter is behind.
 - Never synced to cloud — local device ids only; cross-device identity uses `uuid` (ADR-004).
 
 | Column | Type | Notes |
 |--------|------|-------|
-| id | BIGINT | Fixed singleton: `1` |
-| current_value | BIGINT | Last allocated PK |
-| version | INT | Optimistic concurrency |
+| model_name | TEXT (PK) | Prisma model name |
+| current_value | BIGINT | Last allocated PK for that model |
+| version | BIGINT | Optimistic concurrency |
 | updated_at | BIGINT | Epoch ms |
 
 ---

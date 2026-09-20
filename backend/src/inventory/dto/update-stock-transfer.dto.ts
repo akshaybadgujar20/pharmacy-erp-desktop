@@ -1,11 +1,4 @@
-import {
-  IsIn,
-  IsInt,
-  IsOptional,
-  IsString,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 import {
   MandatoryBigIntField,
   OptionalBigIntField,
@@ -13,9 +6,8 @@ import {
 import { StockTransferType } from '../constants/inventory.constants';
 
 export class UpdateStockTransferDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

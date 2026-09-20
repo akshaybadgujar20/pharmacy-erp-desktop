@@ -1,9 +1,9 @@
 import {
+  Min,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';

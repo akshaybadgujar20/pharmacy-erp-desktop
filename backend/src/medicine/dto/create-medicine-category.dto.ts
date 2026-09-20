@@ -1,11 +1,12 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
-  IsBoolean,
   IsInt,
+  Min,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   NullableBigIntField,
@@ -42,9 +43,8 @@ export class CreateMedicineCategoryDto {
 }
 
 export class UpdateMedicineCategoryDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @NullableBigIntField()
   parentCategoryId?: bigint | null;

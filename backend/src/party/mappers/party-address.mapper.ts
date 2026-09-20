@@ -21,7 +21,7 @@ export interface PartyAddressResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPartyAddressResponse(
@@ -47,6 +47,6 @@ export function toPartyAddressResponse(
     createdAt: address.createdAt,
     updatedAt: address.updatedAt,
     deletedAt: address.deletedAt,
-    version: address.version,
+    version: address.version.toString(),
   };
 }

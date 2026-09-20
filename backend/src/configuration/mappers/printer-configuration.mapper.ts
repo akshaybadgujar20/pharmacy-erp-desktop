@@ -22,7 +22,7 @@ export interface PrinterConfigurationResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPrinterConfigurationResponse(
@@ -46,6 +46,6 @@ export function toPrinterConfigurationResponse(
     createdAt: serializeEpochMs(printerConfiguration.createdAt) ?? '',
     updatedAt: serializeEpochMs(printerConfiguration.updatedAt) ?? '',
     deletedAt: serializeEpochMs(printerConfiguration.deletedAt),
-    version: printerConfiguration.version,
+    version: printerConfiguration.version.toString(),
   };
 }

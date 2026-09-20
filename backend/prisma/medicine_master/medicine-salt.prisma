@@ -9,7 +9,7 @@ model MedicineSalt {
   sequenceNo Int      @map("sequence_no")
   percentage Decimal?
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   medicine          Medicine         @relation(fields: [medicineId], references: [id])
   saltComposition   SaltComposition  @relation(fields: [saltCompositionId], references: [id])

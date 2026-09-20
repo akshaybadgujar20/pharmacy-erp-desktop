@@ -272,7 +272,7 @@ export class GoodsReceiptItemService {
     });
   }
 
-  async delete(goodsReceiptId: bigint, id: bigint, version: number) {
+  async delete(goodsReceiptId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, goodsReceiptId);
       assertDraftStatus(

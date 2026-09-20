@@ -42,7 +42,7 @@ export class StockTransferService {
     return this.api.post<StockTransfer>(`${this.basePath}/${id}/receive`, body);
   }
 
-  delete(id: string, version: number): Observable<void> {
+  delete(id: string, version: string): Observable<void> {
     return this.api.delete<void>(`${this.basePath}/${id}`, {
       version: String(version),
     });

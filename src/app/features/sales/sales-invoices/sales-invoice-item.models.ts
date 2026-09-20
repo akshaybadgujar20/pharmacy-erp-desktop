@@ -18,7 +18,7 @@ export interface SalesInvoiceItem {
   lineAmount: number | null;
   taxId: string | null;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateSalesInvoiceItemRequest {
@@ -36,7 +36,7 @@ export interface CreateSalesInvoiceItemRequest {
 }
 
 export interface UpdateSalesInvoiceItemRequest {
-  version: number;
+  version: string;
   batchId?: string;
   unitId?: string;
   soldQuantity?: number;

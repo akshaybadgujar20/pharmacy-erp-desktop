@@ -1,19 +1,17 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
   IsBoolean,
   IsIn,
-  IsInt,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 import { LedgerType, NormalBalance } from '../constants/finance.constants';
 
 export class UpdateLedgerDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

@@ -32,13 +32,13 @@ export class FinancialYearService {
     return this.api.patch<FinancialYear>(`${this.basePath}/${id}`, body);
   }
 
-  close(id: string, version: number): Observable<FinancialYear> {
+  close(id: string, version: string): Observable<FinancialYear> {
     return this.api.post<FinancialYear>(
       `${this.basePath}/${id}/close?version=${version}`,
     );
   }
 
-  delete(id: string, version: number): Observable<void> {
+  delete(id: string, version: string): Observable<void> {
     return this.api.delete<void>(`${this.basePath}/${id}`, {
       version: String(version),
     });

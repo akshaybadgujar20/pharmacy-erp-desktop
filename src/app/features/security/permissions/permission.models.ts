@@ -12,5 +12,5 @@ export interface Permission {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }

@@ -12,7 +12,7 @@ export interface City {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateCityRequest {
@@ -27,7 +27,7 @@ export interface CreateCityRequest {
 }
 
 export interface UpdateCityRequest {
-  version: number;
+  version: string;
   stateId?: string;
   cityCode?: string;
   cityName?: string;

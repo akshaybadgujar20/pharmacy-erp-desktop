@@ -1,11 +1,11 @@
 import {
-  IsBoolean,
   IsInt,
+  Min,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   MandatoryBigIntField,

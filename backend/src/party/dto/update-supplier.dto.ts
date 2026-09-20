@@ -1,20 +1,20 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
+  IsInt,
+  Min,
   IsBoolean,
   IsIn,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { SupplierType } from '../constants/party.constants';
 import { Type } from 'class-transformer';
 
 export class UpdateSupplierDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

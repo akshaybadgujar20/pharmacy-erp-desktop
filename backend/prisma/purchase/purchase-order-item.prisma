@@ -30,7 +30,7 @@ model PurchaseOrderItem {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   // Relations
   purchaseOrder     PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id])

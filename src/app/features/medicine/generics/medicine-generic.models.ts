@@ -7,7 +7,7 @@ export interface MedicineGeneric {
   pharmacologicalClass: string | null;
   description: string | null;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateMedicineGenericRequest {
@@ -20,7 +20,7 @@ export interface CreateMedicineGenericRequest {
 }
 
 export interface UpdateMedicineGenericRequest {
-  version: number;
+  version: string;
   genericCode?: string;
   genericName?: string;
   therapeuticClass?: string;

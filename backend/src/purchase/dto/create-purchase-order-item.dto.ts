@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator';
+import { Min, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class CreatePurchaseOrderItemDto {

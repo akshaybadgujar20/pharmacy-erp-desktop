@@ -203,7 +203,7 @@ export class RolePermissionService {
     });
   }
 
-  async delete(roleId: bigint, id: bigint, version: number) {
+  async delete(roleId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.rolePermission.findFirst({
         where: { id, roleId, deletedAt: null },

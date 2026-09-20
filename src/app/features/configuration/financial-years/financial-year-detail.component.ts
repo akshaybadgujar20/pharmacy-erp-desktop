@@ -32,7 +32,7 @@ export class FinancialYearDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly closing = signal(false);
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
   readonly status = signal('');
 
   private entityId: string | null = null;

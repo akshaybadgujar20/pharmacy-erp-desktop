@@ -19,7 +19,7 @@ model ChangeHistory {
 
   changedAt BigInt @map("changed_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   auditLog AuditLog @relation(fields: [auditLogId], references: [id])
 

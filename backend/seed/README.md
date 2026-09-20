@@ -78,9 +78,9 @@ Resume assumes earlier phases have already completed and later phases have not y
 
 ## BIGINT IDs and document numbers
 
-SQLite BIGINT primary keys from `db push` do not auto-increment reliably. The seed client uses the same `createPrismaClient()` factory as the NestJS app: each `create` without an explicit `id` allocates the next PK from the singleton `IdSequence` table (per-row DB update with optimistic `version` lock).
+SQLite BIGINT primary keys from `db push` do not auto-increment reliably. The seed client uses the same `createPrismaClient()` factory as the NestJS app: each `create` without an explicit `id` allocates the next PK from the **`IdSequence`** row for that Prisma model (per-row DB update with optimistic **`version` BigInt** lock).
 
-On append or `--only`, `hydrateFromDb()` calls `bootstrapIdSequence()` (ensures the singleton row exists and reconciles `currentValue` with existing business ids) and rehydrates the uuid registry plus branch-scoped document-number sequences. `id-registry.ts` is a uuid→id map for FK resolution only — it does not hold a PK counter.
+On append or `--only`, `hydrateFromDb()` calls `bootstrapIdSequence()` (ensures per-model counter rows exist and reconciles each `currentValue` with `MAX(id)` on that table) and rehydrates the uuid registry plus branch-scoped document-number sequences. `id-registry.ts` is a uuid→id map for FK resolution only — it does not hold a PK counter.
 
 Document numbers (invoice, PO, GRN, etc.) remain in `SequenceGenerator`, separate from `IdSequence`.
 

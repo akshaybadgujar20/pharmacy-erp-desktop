@@ -1,10 +1,11 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
-  IsBoolean,
   IsInt,
+  Min,
+  IsBoolean,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import {
   NullableBigIntField,
@@ -12,9 +13,8 @@ import {
 } from '../../common/dto/bigint.decorator';
 
 export class UpdateDiscountRuleDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

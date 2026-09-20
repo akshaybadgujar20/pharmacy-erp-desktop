@@ -21,7 +21,7 @@ export interface GoodsReceipt {
   receivedByEmployeeId: string;
   inspectedByEmployeeId: string | null;
   inspectedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateGoodsReceiptRequest {
@@ -40,7 +40,7 @@ export interface CreateGoodsReceiptRequest {
 }
 
 export interface UpdateGoodsReceiptRequest {
-  version: number;
+  version: string;
   supplierId?: string;
   purchaseOrderId?: string | null;
   receiptDate?: string;

@@ -1,11 +1,10 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
   IsBoolean,
-  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 
 export class CreateMedicineGenericDto {
@@ -40,9 +39,8 @@ export class CreateMedicineGenericDto {
 }
 
 export class UpdateMedicineGenericDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

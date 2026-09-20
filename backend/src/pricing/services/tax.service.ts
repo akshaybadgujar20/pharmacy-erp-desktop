@@ -190,7 +190,7 @@ export class TaxService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.tax.findFirst({
         where: { id, deletedAt: null },

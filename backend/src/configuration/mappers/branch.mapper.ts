@@ -25,7 +25,7 @@ export interface BranchResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toBranchResponse(branch: Branch): BranchResponse {
@@ -53,6 +53,6 @@ export function toBranchResponse(branch: Branch): BranchResponse {
     createdAt: serializeEpochMs(branch.createdAt) ?? '',
     updatedAt: serializeEpochMs(branch.updatedAt) ?? '',
     deletedAt: serializeEpochMs(branch.deletedAt),
-    version: branch.version,
+    version: branch.version.toString(),
   };
 }

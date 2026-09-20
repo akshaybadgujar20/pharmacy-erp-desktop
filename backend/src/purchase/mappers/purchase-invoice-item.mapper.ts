@@ -23,7 +23,7 @@ export interface PurchaseInvoiceItemResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPurchaseInvoiceItemResponse(
@@ -51,6 +51,6 @@ export function toPurchaseInvoiceItemResponse(
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt,
-    version: item.version,
+    version: item.version.toString(),
   };
 }

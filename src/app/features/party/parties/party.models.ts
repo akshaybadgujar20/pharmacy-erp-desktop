@@ -8,7 +8,7 @@ export interface Party {
   lastName: string | null;
   organizationName: string | null;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreatePartyRequest {
@@ -22,7 +22,7 @@ export interface CreatePartyRequest {
 }
 
 export interface UpdatePartyRequest {
-  version: number;
+  version: string;
   partyType?: string;
   displayName?: string;
   firstName?: string;

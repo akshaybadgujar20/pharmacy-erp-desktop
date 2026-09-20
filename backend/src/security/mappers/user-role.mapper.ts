@@ -12,7 +12,7 @@ export interface UserRoleResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toUserRoleResponse(userRole: UserRole): UserRoleResponse {
@@ -27,6 +27,6 @@ export function toUserRoleResponse(userRole: UserRole): UserRoleResponse {
     createdAt: userRole.createdAt.toString(),
     updatedAt: userRole.updatedAt.toString(),
     deletedAt: serializeBigInt(userRole.deletedAt),
-    version: userRole.version,
+    version: userRole.version.toString(),
   };
 }

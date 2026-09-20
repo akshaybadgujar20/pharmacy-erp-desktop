@@ -10,7 +10,7 @@ export interface Manufacturer {
   supportPhone: string | null;
   isPreferred: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateManufacturerRequest {
@@ -26,7 +26,7 @@ export interface CreateManufacturerRequest {
 }
 
 export interface UpdateManufacturerRequest {
-  version: number;
+  version: string;
   manufacturerCode?: string;
   manufacturingLicenseNo?: string;
   gstin?: string;

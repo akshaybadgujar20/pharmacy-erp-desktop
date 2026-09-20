@@ -22,7 +22,7 @@ export interface Branch {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateBranchRequest {
@@ -46,7 +46,7 @@ export interface CreateBranchRequest {
 }
 
 export interface UpdateBranchRequest {
-  version: number;
+  version: string;
   branchCode?: string;
   branchName?: string;
   displayName?: string;

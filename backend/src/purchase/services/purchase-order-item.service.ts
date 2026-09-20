@@ -242,7 +242,7 @@ export class PurchaseOrderItemService {
     });
   }
 
-  async delete(purchaseOrderId: bigint, id: bigint, version: number) {
+  async delete(purchaseOrderId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const parent = await this.findParentTx(tx, purchaseOrderId);
       assertPoEditableStatus(parent.status);

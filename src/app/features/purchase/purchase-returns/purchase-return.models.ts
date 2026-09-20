@@ -21,7 +21,7 @@ export interface PurchaseReturn {
   remarks: string | null;
   approvedByEmployeeId: string | null;
   approvedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseReturnRequest {
@@ -35,7 +35,7 @@ export interface CreatePurchaseReturnRequest {
 }
 
 export interface UpdatePurchaseReturnRequest {
-  version: number;
+  version: string;
   supplierId?: string;
   purchaseInvoiceId?: string | null;
   returnDate?: string;

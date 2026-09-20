@@ -11,7 +11,7 @@ export interface Employee {
   licenseNumber: string | null;
   isPharmacist: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateEmployeeRequest {
@@ -26,7 +26,7 @@ export interface CreateEmployeeRequest {
 }
 
 export interface UpdateEmployeeRequest {
-  version: number;
+  version: string;
   employeeCode?: string;
   designation?: string;
   department?: string;

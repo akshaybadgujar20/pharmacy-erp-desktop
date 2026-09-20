@@ -1,9 +1,1 @@
-model IdSequence {
-  id BigInt @id
-
-  currentValue BigInt @map("current_value")
-  version      Int    @default(1)
-  updatedAt    BigInt @map("updated_at")
-
-  @@map("id_sequence")
-}
+model IdSequence {  modelName String @id @map("model_name")  version   BigInt @default(1)  updatedAt BigInt @map("updated_at")  @@map("id_sequence")}

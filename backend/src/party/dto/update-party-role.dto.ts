@@ -1,17 +1,10 @@
-import {
-  IsBoolean,
-  IsIn,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
+import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
 import { PartyRoleType } from '../constants/party.constants';
 
 export class UpdatePartyRoleDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

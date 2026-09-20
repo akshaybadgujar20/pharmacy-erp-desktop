@@ -31,7 +31,7 @@ model SalesReturnItem {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   salesReturn      SalesReturn      @relation(fields: [salesReturnId], references: [id])
   salesInvoiceItem SalesInvoiceItem @relation(fields: [salesInvoiceItemId], references: [id])

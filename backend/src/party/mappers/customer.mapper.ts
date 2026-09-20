@@ -18,7 +18,7 @@ export interface CustomerResponse {
   deletedAt: bigint | null;
   updatedBy: string | null;
   deletedBy: string | null;
-  version: number;
+  version: string;
 }
 
 export function toCustomerResponse(customer: Customer): CustomerResponse {
@@ -39,6 +39,6 @@ export function toCustomerResponse(customer: Customer): CustomerResponse {
     deletedAt: customer.deletedAt,
     updatedBy: serializeBigInt(customer.updatedBy),
     deletedBy: serializeBigInt(customer.deletedBy),
-    version: customer.version,
+    version: customer.version.toString(),
   };
 }

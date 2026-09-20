@@ -15,7 +15,7 @@ export interface TaxResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toTaxResponse(tax: Tax): TaxResponse {
@@ -33,6 +33,6 @@ export function toTaxResponse(tax: Tax): TaxResponse {
     createdAt: serializeEpochMs(tax.createdAt) ?? '',
     updatedAt: serializeEpochMs(tax.updatedAt) ?? '',
     deletedAt: serializeEpochMs(tax.deletedAt),
-    version: tax.version,
+    version: tax.version.toString(),
   };
 }

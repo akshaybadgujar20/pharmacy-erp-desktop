@@ -12,7 +12,7 @@ export interface SalesInvoicePayment {
   transactionReference: string | null;
   status: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateSalesInvoicePaymentRequest {
@@ -26,7 +26,7 @@ export interface CreateSalesInvoicePaymentRequest {
 }
 
 export interface UpdateSalesInvoicePaymentRequest {
-  version: number;
+  version: string;
   paymentDate?: string;
   paymentMethod?: string;
   paymentAmount?: number;
@@ -37,6 +37,6 @@ export interface UpdateSalesInvoicePaymentRequest {
 }
 
 export interface SalesPaymentWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

@@ -10,7 +10,7 @@ export interface Customer {
   loyaltyPoints: number;
   isTaxExempt: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateCustomerRequest {
@@ -25,7 +25,7 @@ export interface CreateCustomerRequest {
 }
 
 export interface UpdateCustomerRequest {
-  version: number;
+  version: string;
   customerCode?: string;
   customerType?: string;
   creditLimit?: number;

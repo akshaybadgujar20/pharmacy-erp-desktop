@@ -16,7 +16,7 @@ export interface DoctorResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toDoctorResponse(doctor: Doctor): DoctorResponse {
@@ -35,6 +35,6 @@ export function toDoctorResponse(doctor: Doctor): DoctorResponse {
     createdAt: doctor.createdAt,
     updatedAt: doctor.updatedAt,
     deletedAt: doctor.deletedAt,
-    version: doctor.version,
+    version: doctor.version.toString(),
   };
 }

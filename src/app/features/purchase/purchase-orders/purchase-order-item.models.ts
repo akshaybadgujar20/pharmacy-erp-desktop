@@ -16,7 +16,7 @@ export interface PurchaseOrderItem {
   taxAmount: number | null;
   lineAmount: number | null;
   isClosed: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseOrderItemRequest {
@@ -33,7 +33,7 @@ export interface CreatePurchaseOrderItemRequest {
 }
 
 export interface UpdatePurchaseOrderItemRequest {
-  version: number;
+  version: string;
   unitId?: string;
   orderedQuantity?: number;
   unitPrice?: number;

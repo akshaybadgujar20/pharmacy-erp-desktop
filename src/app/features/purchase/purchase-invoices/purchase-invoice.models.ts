@@ -20,7 +20,7 @@ export interface PurchaseInvoice {
   status: string;
   paymentStatus: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreatePurchaseInvoiceRequest {
@@ -34,7 +34,7 @@ export interface CreatePurchaseInvoiceRequest {
 }
 
 export interface UpdatePurchaseInvoiceRequest {
-  version: number;
+  version: string;
   supplierId?: string;
   supplierInvoiceNumber?: string;
   goodsReceiptId?: string | null;

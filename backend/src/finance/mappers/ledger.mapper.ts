@@ -15,7 +15,7 @@ export interface LedgerResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toLedgerResponse(ledger: Ledger): LedgerResponse {
@@ -33,6 +33,6 @@ export function toLedgerResponse(ledger: Ledger): LedgerResponse {
     createdAt: ledger.createdAt,
     updatedAt: ledger.updatedAt,
     deletedAt: ledger.deletedAt,
-    version: ledger.version,
+    version: ledger.version.toString(),
   };
 }

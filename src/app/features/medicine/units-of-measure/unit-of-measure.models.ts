@@ -13,7 +13,7 @@ export interface UnitOfMeasure {
   description: string | null;
   isSystemUnit: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateUnitOfMeasureRequest {
@@ -28,7 +28,7 @@ export interface CreateUnitOfMeasureRequest {
 }
 
 export interface UpdateUnitOfMeasureRequest {
-  version: number;
+  version: string;
   unitCode?: string;
   unitName?: string;
   shortName?: string;

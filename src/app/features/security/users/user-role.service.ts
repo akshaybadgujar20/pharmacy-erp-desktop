@@ -35,7 +35,7 @@ export class UserRoleService {
     return this.api.patch<UserRole>(`/users/${userId}/roles/${id}`, body);
   }
 
-  delete(userId: string, id: string, version: number): Observable<void> {
+  delete(userId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/users/${userId}/roles/${id}`, {
       version: String(version),
     });

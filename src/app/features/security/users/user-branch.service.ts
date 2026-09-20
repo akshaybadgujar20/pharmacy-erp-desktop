@@ -35,7 +35,7 @@ export class UserBranchService {
     return this.api.patch<UserBranch>(`/users/${userId}/branches/${id}`, body);
   }
 
-  delete(userId: string, id: string, version: number): Observable<void> {
+  delete(userId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/users/${userId}/branches/${id}`, {
       version: String(version),
     });

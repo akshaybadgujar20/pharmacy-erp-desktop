@@ -10,7 +10,7 @@ export interface StockTake {
   approvedByEmployeeId: string | null;
   approvedAt: string | null;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockTakeRequest {
@@ -22,7 +22,7 @@ export interface CreateStockTakeRequest {
 }
 
 export interface UpdateStockTakeRequest {
-  version: number;
+  version: string;
   stockTakeDate?: string;
   countType?: string;
   countedByEmployeeId?: string;

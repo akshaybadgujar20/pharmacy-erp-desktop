@@ -6,7 +6,7 @@ export interface StockAdjustmentItem {
   quantity: number;
   unitCost: number;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockAdjustmentItemRequest {
@@ -17,7 +17,7 @@ export interface CreateStockAdjustmentItemRequest {
 }
 
 export interface UpdateStockAdjustmentItemRequest {
-  version: number;
+  version: string;
   quantity?: number;
   unitCost?: number;
   remarks?: string;

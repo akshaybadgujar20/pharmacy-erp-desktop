@@ -11,7 +11,7 @@ export interface Receipt {
   referenceId: string | null;
   status: string;
   remarks: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateReceiptRequest {
@@ -26,7 +26,7 @@ export interface CreateReceiptRequest {
 }
 
 export interface UpdateReceiptRequest {
-  version: number;
+  version: string;
   receiptType?: string;
   receiptDate?: string;
   amount?: number;
@@ -38,6 +38,6 @@ export interface UpdateReceiptRequest {
 }
 
 export interface FinanceWorkflowRequest {
-  version: number;
+  version: string;
   remarks?: string;
 }

@@ -13,7 +13,7 @@ export interface PartyContactResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toPartyContactResponse(
@@ -32,6 +32,6 @@ export function toPartyContactResponse(
     createdAt: contact.createdAt,
     updatedAt: contact.updatedAt,
     deletedAt: contact.deletedAt,
-    version: contact.version,
+    version: contact.version.toString(),
   };
 }

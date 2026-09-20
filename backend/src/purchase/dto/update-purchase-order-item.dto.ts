@@ -1,11 +1,10 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsNumber, IsOptional, Min } from 'class-validator';
+import { Min, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdatePurchaseOrderItemDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @MandatoryBigIntField()

@@ -256,7 +256,7 @@ export class SalesPaymentService {
     });
   }
 
-  async delete(salesInvoiceId: bigint, id: bigint, version: number) {
+  async delete(salesInvoiceId: bigint, id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       await this.findParentTx(tx, salesInvoiceId);
       const existing = await tx.salesPayment.findFirst({

@@ -49,7 +49,7 @@ export class GoodsReceiptDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly workflowRunning = signal('');
   readonly errorMessage = signal('');
-  readonly version = signal(0);
+  readonly version = signal('0');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canSubmitInspection = computed(() => this.status() === 'DRAFT');
@@ -245,7 +245,7 @@ export class GoodsReceiptDetailComponent implements OnInit {
     action: string,
     call: (
       id: string,
-      body: { version: number },
+      body: { version: string },
     ) => ReturnType<GoodsReceiptService['submitInspection']>,
   ): void {
     const id = this.goodsReceiptId();

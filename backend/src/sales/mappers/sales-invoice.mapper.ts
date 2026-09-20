@@ -27,7 +27,7 @@ export interface SalesInvoiceResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toSalesInvoiceResponse(
@@ -59,6 +59,6 @@ export function toSalesInvoiceResponse(
     createdAt: invoice.createdAt,
     updatedAt: invoice.updatedAt,
     deletedAt: invoice.deletedAt,
-    version: invoice.version,
+    version: invoice.version.toString(),
   };
 }

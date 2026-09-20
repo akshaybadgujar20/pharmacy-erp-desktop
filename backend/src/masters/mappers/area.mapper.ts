@@ -16,7 +16,7 @@ export interface AreaResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toAreaResponse(area: Area): AreaResponse {
@@ -35,6 +35,6 @@ export function toAreaResponse(area: Area): AreaResponse {
     createdAt: serializeEpochMs(area.createdAt) ?? '',
     updatedAt: serializeEpochMs(area.updatedAt) ?? '',
     deletedAt: serializeEpochMs(area.deletedAt),
-    version: area.version,
+    version: area.version.toString(),
   };
 }

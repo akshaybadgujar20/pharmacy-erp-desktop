@@ -27,7 +27,7 @@ export interface DiscountRuleResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toDiscountRuleResponse(
@@ -55,6 +55,6 @@ export function toDiscountRuleResponse(
     createdAt: serializeEpochMs(rule.createdAt) ?? '',
     updatedAt: serializeEpochMs(rule.updatedAt) ?? '',
     deletedAt: serializeEpochMs(rule.deletedAt),
-    version: rule.version,
+    version: rule.version.toString(),
   };
 }

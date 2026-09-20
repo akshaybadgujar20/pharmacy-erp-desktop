@@ -18,7 +18,7 @@ export interface AppSettingResponse {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  version: number;
+  version: string;
 }
 
 export function toAppSettingResponse(setting: AppSetting): AppSettingResponse {
@@ -39,6 +39,6 @@ export function toAppSettingResponse(setting: AppSetting): AppSettingResponse {
     isActive: setting.isActive,
     createdAt: serializeEpochMs(setting.createdAt) ?? '',
     updatedAt: serializeEpochMs(setting.updatedAt) ?? '',
-    version: setting.version,
+    version: setting.version.toString(),
   };
 }

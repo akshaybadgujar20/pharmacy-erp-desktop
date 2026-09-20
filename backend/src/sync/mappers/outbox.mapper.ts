@@ -8,7 +8,7 @@ export interface OutboxResponse {
   entityUuid: string;
   operation: string;
   payload: unknown;
-  payloadVersion: number;
+  payloadVersion: string;
   deviceId: string;
   branchId: string | null;
   operationId: string;
@@ -18,7 +18,7 @@ export interface OutboxResponse {
   lastError: string | null;
   createdAt: string;
   processedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toOutboxResponse(outbox: Outbox): OutboxResponse {
@@ -29,7 +29,7 @@ export function toOutboxResponse(outbox: Outbox): OutboxResponse {
     entityUuid: outbox.entityUuid,
     operation: outbox.operation,
     payload: outbox.payload,
-    payloadVersion: outbox.payloadVersion,
+    payloadVersion: outbox.payloadVersion.toString(),
     deviceId: outbox.deviceId,
     branchId: serializeOptionalBigInt(outbox.branchId),
     operationId: outbox.operationId,
@@ -39,6 +39,6 @@ export function toOutboxResponse(outbox: Outbox): OutboxResponse {
     lastError: outbox.lastError,
     createdAt: serializeEpochMs(outbox.createdAt) ?? '',
     processedAt: serializeEpochMs(outbox.processedAt),
-    version: outbox.version,
+    version: outbox.version.toString(),
   };
 }

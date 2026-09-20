@@ -1,12 +1,11 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
   IsBoolean,
   IsIn,
-  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { UnitType } from '../constants/medicine.constants';
 
@@ -50,9 +49,8 @@ export class CreateUnitOfMeasureDto {
 }
 
 export class UpdateUnitOfMeasureDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @IsString()

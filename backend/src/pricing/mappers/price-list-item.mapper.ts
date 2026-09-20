@@ -22,7 +22,7 @@ export interface PriceListItemResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toPriceListItemResponse(
@@ -45,6 +45,6 @@ export function toPriceListItemResponse(
     createdAt: serializeEpochMs(item.createdAt) ?? '',
     updatedAt: serializeEpochMs(item.updatedAt) ?? '',
     deletedAt: serializeEpochMs(item.deletedAt),
-    version: item.version,
+    version: item.version.toString(),
   };
 }

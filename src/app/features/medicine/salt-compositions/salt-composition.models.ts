@@ -8,7 +8,7 @@ export interface SaltComposition {
   strengthUnit: string;
   description: string | null;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateSaltCompositionRequest {
@@ -22,7 +22,7 @@ export interface CreateSaltCompositionRequest {
 }
 
 export interface UpdateSaltCompositionRequest {
-  version: number;
+  version: string;
   genericId?: string;
   unitId?: string;
   compositionCode?: string;

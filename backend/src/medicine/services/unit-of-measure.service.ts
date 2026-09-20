@@ -202,7 +202,7 @@ export class UnitOfMeasureService {
     });
   }
 
-  async delete(id: bigint, version: number) {
+  async delete(id: bigint, version: bigint) {
     return this.unitOfWork.run(async (tx) => {
       const existing = await tx.unitOfMeasure.findFirst({
         where: { id, deletedAt: null },

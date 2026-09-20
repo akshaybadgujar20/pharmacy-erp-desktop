@@ -15,7 +15,7 @@ export interface MedicineScheduleResponse {
   createdAt: bigint;
   updatedAt: bigint;
   deletedAt: bigint | null;
-  version: number;
+  version: string;
 }
 
 export function toMedicineScheduleResponse(
@@ -36,6 +36,6 @@ export function toMedicineScheduleResponse(
     createdAt: schedule.createdAt,
     updatedAt: schedule.updatedAt,
     deletedAt: schedule.deletedAt,
-    version: schedule.version,
+    version: schedule.version.toString(),
   };
 }

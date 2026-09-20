@@ -20,7 +20,7 @@ export interface FinancialYearResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toFinancialYearResponse(
@@ -42,6 +42,6 @@ export function toFinancialYearResponse(
     createdAt: serializeEpochMs(financialYear.createdAt) ?? '',
     updatedAt: serializeEpochMs(financialYear.updatedAt) ?? '',
     deletedAt: serializeEpochMs(financialYear.deletedAt),
-    version: financialYear.version,
+    version: financialYear.version.toString(),
   };
 }

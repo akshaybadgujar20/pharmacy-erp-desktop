@@ -17,7 +17,7 @@ export interface SyncLogResponse {
   deviceId: string | null;
   appVersion: string | null;
   createdAt: string;
-  version: number;
+  version: string;
 }
 
 export function toSyncLogResponse(syncLog: SyncLog): SyncLogResponse {
@@ -37,6 +37,6 @@ export function toSyncLogResponse(syncLog: SyncLog): SyncLogResponse {
     deviceId: syncLog.deviceId,
     appVersion: syncLog.appVersion,
     createdAt: serializeEpochMs(syncLog.createdAt) ?? '',
-    version: syncLog.version,
+    version: syncLog.version.toString(),
   };
 }

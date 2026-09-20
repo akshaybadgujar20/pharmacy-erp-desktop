@@ -12,7 +12,7 @@ export interface StockTakeItem {
   remarks: string | null;
   isReconciled: boolean;
   stockAdjustmentId: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateStockTakeItemRequest {
@@ -22,7 +22,7 @@ export interface CreateStockTakeItemRequest {
 }
 
 export interface UpdateStockTakeItemRequest {
-  version: number;
+  version: string;
   physicalQuantity?: number;
   remarks?: string;
 }

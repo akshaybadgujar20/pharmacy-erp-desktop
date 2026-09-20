@@ -24,7 +24,7 @@ export interface BarcodeConfigurationResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  version: number;
+  version: string;
 }
 
 export function toBarcodeConfigurationResponse(
@@ -49,6 +49,6 @@ export function toBarcodeConfigurationResponse(
     createdAt: serializeEpochMs(barcodeConfiguration.createdAt) ?? '',
     updatedAt: serializeEpochMs(barcodeConfiguration.updatedAt) ?? '',
     deletedAt: serializeEpochMs(barcodeConfiguration.deletedAt),
-    version: barcodeConfiguration.version,
+    version: barcodeConfiguration.version.toString(),
   };
 }

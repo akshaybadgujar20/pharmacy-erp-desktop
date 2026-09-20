@@ -23,7 +23,7 @@ model SyncConflict {
 
   createdAt BigInt @map("created_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   syncLog SyncLog @relation(fields: [syncLogId], references: [id])
 

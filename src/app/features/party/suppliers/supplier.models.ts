@@ -12,7 +12,7 @@ export interface Supplier {
   paymentTermsDays: number;
   preferredSupplier: boolean;
   isActive: boolean;
-  version: number;
+  version: string;
 }
 
 export interface CreateSupplierRequest {
@@ -29,7 +29,7 @@ export interface CreateSupplierRequest {
 }
 
 export interface UpdateSupplierRequest {
-  version: number;
+  version: string;
   supplierCode?: string;
   supplierType?: string;
   gstin?: string;

@@ -1,18 +1,16 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
   IsBoolean,
-  IsInt,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdateCityDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @OptionalBigIntField()

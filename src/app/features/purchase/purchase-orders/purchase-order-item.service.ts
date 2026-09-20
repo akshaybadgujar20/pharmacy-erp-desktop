@@ -40,7 +40,7 @@ export class PurchaseOrderItemService {
     );
   }
 
-  delete(orderId: string, id: string, version: number): Observable<void> {
+  delete(orderId: string, id: string, version: string): Observable<void> {
     return this.api.delete<void>(`/purchase-orders/${orderId}/items/${id}`, {
       version: String(version),
     });

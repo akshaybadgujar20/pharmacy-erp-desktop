@@ -40,7 +40,7 @@ model SalesInvoice {
   updatedAt BigInt  @map("updated_at")
   deletedAt BigInt? @map("deleted_at")
 
-  version Int @default(1)
+  version BigInt @default(1)
 
   customer      Customer?     @relation(fields: [customerId], references: [id])
   prescription  Prescription? @relation(fields: [prescriptionId], references: [id])

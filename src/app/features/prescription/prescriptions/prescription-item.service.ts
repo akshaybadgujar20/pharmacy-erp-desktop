@@ -52,7 +52,7 @@ export class PrescriptionItemService {
   delete(
     prescriptionId: string,
     id: string,
-    version: number,
+    version: string,
   ): Observable<void> {
     return this.api.delete<void>(
       `/prescriptions/${prescriptionId}/items/${id}`,

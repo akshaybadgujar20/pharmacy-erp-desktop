@@ -9,7 +9,7 @@ export interface Ledger {
   isSystem: boolean;
   isActive: boolean;
   description: string | null;
-  version: number;
+  version: string;
 }
 
 export interface CreateLedgerRequest {
@@ -23,7 +23,7 @@ export interface CreateLedgerRequest {
 }
 
 export interface UpdateLedgerRequest {
-  version: number;
+  version: string;
   ledgerCode?: string;
   ledgerName?: string;
   ledgerType?: string;

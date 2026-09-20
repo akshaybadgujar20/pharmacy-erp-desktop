@@ -1,17 +1,17 @@
+import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
 import {
-  IsBoolean,
   IsInt,
+  Min,
+  IsBoolean,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
 } from 'class-validator';
 import { OptionalBigIntField } from '../../common/dto/bigint.decorator';
 
 export class UpdatePrinterConfigurationDto {
-  @IsInt()
-  @Min(1)
-  version!: number;
+  @MandatoryBigIntField()
+  version!: bigint;
 
   @IsOptional()
   @OptionalBigIntField()
