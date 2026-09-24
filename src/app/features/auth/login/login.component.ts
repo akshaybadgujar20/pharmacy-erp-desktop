@@ -67,7 +67,6 @@ export class LoginComponent {
       this.loadingService.show();
       await this.authService.login(this.form.getRawValue());
       await this.router.navigate(['/dashboard']);
-      await new Promise(resolve => setTimeout(resolve, 30000));
       this.loadingService.hide();
     } catch (error) {
       this.loadingService.hide();
