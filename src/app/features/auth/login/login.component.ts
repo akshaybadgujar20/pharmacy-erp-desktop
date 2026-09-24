@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { LabelModule } from 'primeng/label';
+import {LoadingService} from '../../../shared/services/loading.service';
+import {timeout} from 'rxjs';
 
 enum LoginMode {
   PASSWORD,
@@ -39,7 +41,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
-
+  private readonly loadingService = inject(LoadingService);
 
   pin:number = 0;
 
@@ -62,9 +64,13 @@ export class LoginComponent {
     this.errorMessage = '';
 
     try {
+      this.loadingService.show();
       await this.authService.login(this.form.getRawValue());
       await this.router.navigate(['/dashboard']);
+      await new Promise(resolve => setTimeout(resolve, 30000));
+      this.loadingService.hide();
     } catch (error) {
+      this.loadingService.hide();
       this.errorMessage =
         error instanceof ApiClientError
           ? error.message
@@ -72,7 +78,7 @@ export class LoginComponent {
             ? error.message
             : this.translate.instant('auth.loginFailed');
     } finally {
-      this.loading = false;
+      this.loadingService.hide();
     }
   }
 

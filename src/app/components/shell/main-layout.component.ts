@@ -21,6 +21,7 @@ import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboa
 import { ERP_NAV_GROUPS } from './nav.config';
 import { filterNavGroups } from './nav.utils';
 import {Tooltip} from 'primeng/tooltip';
+import {LoadingOverlayComponent} from '../../shared/components/loading-overlay/loading-overlay.component';
 
 interface NavItem {
   icon: string;

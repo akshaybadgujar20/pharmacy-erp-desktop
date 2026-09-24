@@ -3,12 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { AppDialogShellComponent } from './components/generic/dialog/shell/app-dialog-shell.component';
 import { AppToastHostComponent } from './components/generic/toast/app-toast-host.component';
 import { LanguageService } from './core/services/language.service';
+import {LoadingOverlayComponent} from './shared/components/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AppToastHostComponent, AppDialogShellComponent],
-  template: '<app-toast-host /><app-dialog-shell /><router-outlet />',
+  imports: [RouterOutlet, AppToastHostComponent, AppDialogShellComponent, LoadingOverlayComponent],
+  template: '<app-toast-host /><app-dialog-shell /><router-outlet /><app-loading-overlay />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
