@@ -5,11 +5,19 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiClientError } from '../../../core/models/api-response.types';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
+import { Spinner } from '@primeicons/angular/spinner';
+import { InputOtpModule } from 'primeng/inputotp';
+import { FormsModule } from '@angular/forms';
+
+enum LoginMode {
+  PASSWORD,
+  PIN,
+}
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe, LanguageSelectorComponent],
+  imports: [ReactiveFormsModule, TranslatePipe, LanguageSelectorComponent, Spinner, InputOtpModule, FormsModule],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.component.scss',
@@ -19,6 +27,11 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
+
+
+  pin:number = 0;
+
+  loginMode = LoginMode.PASSWORD;
 
   readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -50,4 +63,6 @@ export class LoginComponent {
       this.loading = false;
     }
   }
+
+  protected readonly LoginMode = LoginMode;
 }

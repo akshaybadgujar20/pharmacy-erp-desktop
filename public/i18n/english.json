@@ -114,6 +114,7 @@
     "loginSubtitle": "Pharmacy ERP",
     "username": "Username",
     "password": "Password",
+    "pin": "Pin",
     "signIn": "Sign in",
     "signingIn": "Signing in…",
     "demoHint": "Demo: admin / admin",

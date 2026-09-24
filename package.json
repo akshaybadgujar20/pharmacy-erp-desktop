@@ -36,6 +36,7 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-zoom": "^2.2.0",
     "date-fns": "^4.4.0",
+    "material-icons": "^1.13.14",
     "primeng": "^22.1.0",
     "rxjs": "~7.8.0",
     "tailwindcss-primeui": "^0.6.1",

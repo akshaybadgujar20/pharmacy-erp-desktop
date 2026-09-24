@@ -11,10 +11,19 @@
       <input type="text" formControlName="username" autocomplete="username" />
     </label>
 
-    <label>
-      {{ 'auth.password' | translate }}
-      <input type="password" formControlName="password" autocomplete="current-password" />
-    </label>
+    @if (loginMode == LoginMode.PASSWORD) {
+      <label>
+        {{ 'auth.password' | translate }}
+        <input type="password" formControlName="password" autocomplete="current-password" />
+      </label>
+    }
+
+    @if (loginMode == LoginMode.PIN) {
+      <label>
+        {{ 'auth.pin' | translate }}
+        <p-inputotp [(ngModel)]="pin" [length]="6" [integerOnly]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3" />
+      </label>
+    }
 
     @if (errorMessage) {
       <p class="error">{{ errorMessage }}</p>
@@ -23,7 +32,11 @@
     <button type="submit" [disabled]="loading || form.invalid">
       {{ loading ? ('auth.signingIn' | translate) : ('auth.signIn' | translate) }}
     </button>
-
+    <svg data-p-icon="spinner" class="animate-spin" />
+    <div class="flex justify-center items-center gap-4">
+      <span class="material-icons">dialpad</span>
+      <span class="material-icons">password</span>
+    </div>
     <p class="hint">{{ 'auth.demoHint' | translate }}</p>
   </form>
 </div>
