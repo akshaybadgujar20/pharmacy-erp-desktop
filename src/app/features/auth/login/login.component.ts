@@ -8,6 +8,9 @@ import { LanguageSelectorComponent } from '../../../shared/components/language-s
 import { Spinner } from '@primeicons/angular/spinner';
 import { InputOtpModule } from 'primeng/inputotp';
 import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { LabelModule } from 'primeng/label';
 
 enum LoginMode {
   PASSWORD,
@@ -17,7 +20,16 @@ enum LoginMode {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe, LanguageSelectorComponent, Spinner, InputOtpModule, FormsModule],
+  imports: [
+    ReactiveFormsModule,
+    TranslatePipe,
+    LanguageSelectorComponent,
+    InputOtpModule,
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    LabelModule
+  ],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.component.scss',

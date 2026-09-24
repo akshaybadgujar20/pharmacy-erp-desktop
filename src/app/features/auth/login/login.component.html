@@ -7,14 +7,20 @@
     <p class="subtitle">{{ 'auth.loginSubtitle' | translate }}</p>
 
     <label>
-      {{ 'auth.username' | translate }}
-      <input type="text" formControlName="username" autocomplete="username" />
+      <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
+        <label pLabel for="basic-inputtext">{{ 'auth.username' | translate }}</label>
+        <input pInputText id="basic-inputtext" formControlName="username" autocomplete="username" />
+        <small class="text-surface-500">Used as the display name across your workspace</small>
+      </div>
     </label>
 
     @if (loginMode == LoginMode.PASSWORD) {
       <label>
-        {{ 'auth.password' | translate }}
-        <input type="password" formControlName="password" autocomplete="current-password" />
+        <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
+          <label pLabel for="basic-inputtext">{{ 'auth.password' | translate }}</label>
+          <input pInputText id="basic-inputtext" formControlName="password" autocomplete="current-password" />
+          <small class="text-surface-500">Used as the display name across your workspace</small>
+        </div>
       </label>
     }
 
@@ -29,13 +35,19 @@
       <p class="error">{{ errorMessage }}</p>
     }
 
-    <button type="submit" [disabled]="loading || form.invalid">
+    <button pButton type="submit" [disabled]="loading || form.invalid">
       {{ loading ? ('auth.signingIn' | translate) : ('auth.signIn' | translate) }}
     </button>
-    <svg data-p-icon="spinner" class="animate-spin" />
+
+
     <div class="flex justify-center items-center gap-4">
-      <span class="material-icons">dialpad</span>
-      <span class="material-icons">password</span>
+      <button pButton><span class="material-icons">dialpad</span></button>
+      <button pButton variant="outlined"><span class="material-icons">password</span></button>
+    </div>
+
+    <div class="flex justify-center gap-2">
+      <button pButton type="button" variant="outlined">Reject</button>
+      <button pButton type="button">Accept</button>
     </div>
     <p class="hint">{{ 'auth.demoHint' | translate }}</p>
   </form>
