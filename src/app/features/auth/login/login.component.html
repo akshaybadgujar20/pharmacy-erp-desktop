@@ -3,14 +3,12 @@
     <app-language-selector />
   </div>
   <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
-    <h1>{{ 'auth.loginTitle' | translate }}</h1>
-    <p class="subtitle">{{ 'auth.loginSubtitle' | translate }}</p>
+    <h1 class="flex items-center justify-center">{{ 'auth.loginTitle' | translate }}</h1>
 
     <label>
       <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
         <label pLabel for="basic-inputtext">{{ 'auth.username' | translate }}</label>
         <input pInputText id="basic-inputtext" formControlName="username" autocomplete="username" />
-        <small class="text-surface-500">Used as the display name across your workspace</small>
       </div>
     </label>
 
@@ -19,7 +17,6 @@
         <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
           <label pLabel for="basic-inputtext">{{ 'auth.password' | translate }}</label>
           <input pInputText id="basic-inputtext" formControlName="password" autocomplete="current-password" />
-          <small class="text-surface-500">Used as the display name across your workspace</small>
         </div>
       </label>
     }
@@ -27,7 +24,7 @@
     @if (loginMode == LoginMode.PIN) {
       <label>
         {{ 'auth.pin' | translate }}
-        <p-inputotp [(ngModel)]="pin" [length]="6" [integerOnly]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3" />
+        <p-inputotp [length]="6" [integerOnly]="true" formControlName="pin" [mask]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3" />
       </label>
     }
 
@@ -41,8 +38,8 @@
 
 
     <div class="flex justify-center items-center gap-4">
-      <button pButton><span class="material-icons">dialpad</span></button>
-      <button pButton variant="outlined"><span class="material-icons">password</span></button>
+      <button pButton iconOnly [variant]="passwordVariant" (click)="togglePasswordButton()"><span class="material-icons">dialpad</span></button>
+      <button pButton iconOnly [variant]="dialpadVariant" (click)="toggleDialpadButton()"><span class="material-icons">password</span></button>
     </div>
 
     <div class="flex justify-center gap-2">

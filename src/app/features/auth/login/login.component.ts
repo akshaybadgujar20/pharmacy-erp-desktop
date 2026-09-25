@@ -42,14 +42,15 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
   private readonly loadingService = inject(LoadingService);
-
-  pin:number = 0;
+  passwordVariant: 'outlined' | 'text' | undefined = undefined;
+  dialpadVariant: 'outlined' | 'text' | undefined = 'outlined';
 
   loginMode = LoginMode.PASSWORD;
 
   readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
+    pin: ['', Validators.required],
   });
 
   loading = false;
@@ -78,6 +79,34 @@ export class LoginComponent {
             : this.translate.instant('auth.loginFailed');
     } finally {
       this.loadingService.hide();
+    }
+  }
+
+  toggleDialpadButton(): void {
+    if(this.dialpadVariant !== "outlined"){
+      this.dialpadVariant = "outlined";
+    }else {
+      this.dialpadVariant = undefined;
+      this.loginMode = LoginMode.PIN;
+    }
+    if(this.passwordVariant !== undefined){
+      this.passwordVariant = undefined;
+    }else {
+      this.passwordVariant = "outlined";
+    }
+  }
+
+  togglePasswordButton(): void {
+    if(this.passwordVariant !== undefined){
+      this.passwordVariant = undefined;
+      this.loginMode = LoginMode.PASSWORD;
+    }else {
+      this.passwordVariant = "outlined";
+    }
+    if(this.dialpadVariant !== "outlined"){
+      this.dialpadVariant = "outlined";
+    }else {
+      this.dialpadVariant = undefined;
     }
   }
 
