@@ -499,6 +499,7 @@ export async function loadUsers(
     'support1',
   ];
   const defaultPasswordHash = bcrypt.hashSync('admin123', 10);
+  const defaultPinHash = bcrypt.hashSync('123456', 10);
 
   for (let i = 0; i < usernames.length && i < ctx.employeeIds.length; i++) {
     const userUuid = `17171717-1717-4717-8717-1717171717${String(i + 1).padStart(2, '0')}`;
@@ -517,6 +518,7 @@ export async function loadUsers(
         employeeId: ctx.employeeIds[i],
         username: usernames[i],
         passwordHash: defaultPasswordHash,
+        pinHash: defaultPinHash,
         isActive: true,
         createdAt: BigInt(Date.now()),
         updatedAt: BigInt(Date.now()),

@@ -10,6 +10,9 @@ import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import type { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import { AuthService } from './auth.service';
+import { ChangePinDto } from './dto/change-pin.dto';
+import { ChangeRequiredPinDto } from './dto/change-required-pin.dto';
+import { LoginWithPinDto } from './dto/loginWithPin.dto';
 
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
@@ -20,6 +23,12 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: LoginDto, @Req() req: Request) {
     return this.authService.login(dto, req);
+  }
+
+  @Public()
+  @Post('login-with-pin')
+  loginWithPin(@Body() dto: LoginWithPinDto, @Req() req: Request) {
+    return this.authService.loginWithPin(dto, req);
   }
 
   @Public()
@@ -45,11 +54,22 @@ export class AuthController {
     return this.authService.changeRequiredPassword(dto);
   }
 
+  @Public()
+  @Post('change-required-pin')
+  changeRequiredPin(@Body() dto: ChangeRequiredPinDto) {
+    return this.authService.changeRequiredPin(dto);
+  }
+
   @Post('change-password')
   changePassword(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(user.userId, dto);
+  }
+
+  @Post('change-pin')
+  changePin(@CurrentUser() user: AuthenticatedUser, @Body() dto: ChangePinDto) {
+    return this.authService.changePin(user.userId, dto);
   }
 }

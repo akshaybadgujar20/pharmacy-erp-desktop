@@ -28,6 +28,9 @@ import {
   parseDurationMs,
   safeBigInt,
 } from './utils/auth-token.util';
+import { ChangeRequiredPinDto } from './dto/change-required-pin.dto';
+import { ChangePinDto } from './dto/change-pin.dto';
+import { LoginWithPinDto } from './dto/loginWithPin.dto';
 
 export interface AuthTokenResponse {
   accessToken: string;
@@ -191,6 +194,146 @@ export class AuthService {
     };
   }
 
+  async loginWithPin(
+    dto: LoginWithPinDto,
+    req: Request,
+  ): Promise<AuthTokenResponse> {
+    const user = await this.prisma.client.user.findFirst({
+      where: {
+        username: dto.username,
+        deletedAt: null,
+      },
+    });
+
+    if (!user || !user.isActive) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or pin',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (user.lockedUntil && user.lockedUntil > BigInt(Date.now())) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or pin',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const pinValid = await this.passwordService.verify(
+      dto.pin,
+      user.pinHash,
+    );
+
+    if (!pinValid) {
+      await this.recordFailedLoginWithPin(user.id);
+      await this.auditLoginFailure(user.id, dto.username, 'Invalid pin');
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or pin',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (user.mustChangePin) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
+        'Pin change is required before login',
+        HttpStatus.FORBIDDEN,
+        { userId: user.id.toString() },
+      );
+    }
+
+    const { companyId, branchId } = await this.resolveTenantScope(
+      user.id,
+      dto.branchId,
+    );
+    const { roles, permissions } = await this.loadRolesAndPermissions(user.id);
+
+    const sessionToken = randomUUID();
+    const refreshToken = generateRefreshToken();
+    const hashedRefreshToken = hashRefreshToken(refreshToken);
+    const now = BigInt(Date.now());
+    const expiresAt = BigInt(
+      new Date(
+        new Date().getTime() +
+          parseDurationMs(AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY),
+      ).getTime(),
+    );
+
+    const session = await this.unitOfWork.run(async (tx) => {
+      const createdSession = await tx.userSession.create({
+        data: {
+          userId: user.id,
+          companyId,
+          branchId,
+          sessionToken,
+          refreshToken: hashedRefreshToken,
+          deviceName: dto.deviceName,
+          deviceType: dto.deviceType ?? 'DESKTOP',
+          operatingSystem: dto.operatingSystem,
+          applicationVersion: dto.applicationVersion,
+          ipAddress: req.ip ?? req.socket.remoteAddress,
+          loginTime: now,
+          lastActivityAt: now,
+          expiresAt,
+          isActive: true,
+          createdAt: BigInt(Date.now()),
+          updatedAt: BigInt(Date.now()),
+        },
+      });
+
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          pinFailedLoginAttempts: 0,
+          pinLockedUntil: null,
+          lastLoginAt: now,
+        },
+      });
+
+      await this.auditService.log(tx, {
+        entityType: 'UserSession',
+        entityUuid: createdSession.uuid,
+        entityId: createdSession.id,
+        action: AuditAction.LOGIN,
+        module: AuditModule.SECURITY,
+        description: `Login success for ${user.username}`,
+        userId: user.id,
+        companyId,
+        branchId,
+      });
+
+      return createdSession;
+    });
+
+    const payload: JwtPayload = {
+      sub: user.id.toString(),
+      sessionId: session.uuid,
+      companyId: companyId.toString(),
+      branchId: branchId.toString(),
+      roles,
+      permissions,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+      refreshToken,
+      expiresIn: AUTH_CONSTANTS.ACCESS_TOKEN_EXPIRY,
+      user: {
+        id: user.id.toString(),
+        username: user.username,
+        roles,
+        permissions,
+        companyId: companyId.toString(),
+        branchId: branchId.toString(),
+      },
+    };
+  }
+
   async refresh(refreshToken: string): Promise<AuthTokenResponse> {
     const hashedToken = hashRefreshToken(refreshToken);
     const session = await this.prisma.client.userSession.findFirst({
@@ -227,7 +370,23 @@ export class AuthService {
       );
     }
 
+    if (user.pinLockedUntil && user.pinLockedUntil > BigInt(Date.now())) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'Session is no longer valid',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     if (user.passwordChangedAt && session.loginTime < user.passwordChangedAt) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'Session is no longer valid',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (user.pinChangedAt && session.loginTime < user.pinChangedAt) {
       throw new ApplicationException(
         ErrorCode.AUTH_SESSION_EXPIRED,
         'Session is no longer valid',
@@ -239,6 +398,15 @@ export class AuthService {
       throw new ApplicationException(
         ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
         'Password change is required',
+        HttpStatus.FORBIDDEN,
+        { userId: user.id.toString() },
+      );
+    }
+
+    if (user.mustChangePin) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
+        'Pin change is required',
         HttpStatus.FORBIDDEN,
         { userId: user.id.toString() },
       );
@@ -422,6 +590,65 @@ export class AuthService {
     });
   }
 
+  async changeRequiredPin(dto: ChangeRequiredPinDto) {
+    const user = await this.prisma.client.user.findFirst({
+      where: {
+        username: dto.username,
+        deletedAt: null,
+      },
+    });
+
+    if (!user || !user.isActive) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or pin',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (!user.mustChangePin) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'Pin change is not required for this account',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const currentValid = await this.passwordService.verify(
+      dto.currentPin,
+      user.pinHash,
+    );
+
+    if (!currentValid) {
+      throw new ApplicationException(
+        ErrorCode.INVALID_CURRENT_PASSWORD,
+        'Current pin is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (dto.currentPin === dto.newPin) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'New pin must be different from the current pin',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const pinHash = await this.passwordService.hash(dto.newPin);
+
+    return this.unitOfWork.run(async (tx) => {
+      await this.applyPasswordChange(
+        tx,
+        user,
+        pinHash,
+        `Required pin changed for ${user.username}`,
+      );
+
+      return { message: 'Pin changed successfully' };
+    });
+  }
+
   async changePassword(userId: bigint, dto: ChangePasswordDto) {
     const user = await this.prisma.client.user.findFirst({
       where: { id: userId, deletedAt: null },
@@ -463,6 +690,47 @@ export class AuthService {
     });
   }
 
+  async changePin(userId: bigint, dto: ChangePinDto) {
+    const user = await this.prisma.client.user.findFirst({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user) {
+      throw new ApplicationException(
+        ErrorCode.USER_NOT_FOUND,
+        `User not found: ${userId}`,
+        HttpStatus.NOT_FOUND,
+        { userId: userId.toString() },
+      );
+    }
+
+    const currentValid = await this.passwordService.verify(
+      dto.currentPin,
+      user.pinHash,
+    );
+
+    if (!currentValid) {
+      throw new ApplicationException(
+        ErrorCode.INVALID_CURRENT_PASSWORD,
+        'Current pin is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const pinHash = await this.passwordService.hash(dto.newPin);
+
+    return this.unitOfWork.run(async (tx) => {
+      await this.applyPasswordChange(
+        tx,
+        user,
+        pinHash,
+        `Pin changed for ${user.username}`,
+      );
+
+      return { message: 'Pin changed successfully' };
+    });
+  }
+
   async validateSession(
     payload: JwtPayload,
   ): Promise<AuthenticatedUser | null> {
@@ -494,11 +762,23 @@ export class AuthService {
       return null;
     }
 
+    if (user.pinLockedUntil && user.pinLockedUntil > BigInt(Date.now())) {
+      return null;
+    }
+
     if (user.passwordChangedAt && session.loginTime < user.passwordChangedAt) {
       return null;
     }
 
+    if (user.pinChangedAt && session.loginTime < user.pinChangedAt) {
+      return null;
+    }
+
     if (user.mustChangePassword) {
+      return null;
+    }
+
+    if (user.mustChangePin) {
       return null;
     }
 
@@ -556,6 +836,26 @@ export class AuthService {
 
     if (
       updated.failedLoginAttempts >= AUTH_CONSTANTS.MAX_FAILED_LOGIN_ATTEMPTS
+    ) {
+      await this.prisma.client.user.update({
+        where: { id: userId },
+        data: {
+          lockedUntil: BigInt(
+            new Date(Date.now() + AUTH_CONSTANTS.LOCKOUT_DURATION_MS).getTime(),
+          ),
+        },
+      });
+    }
+  }
+
+  private async recordFailedLoginWithPin(userId: bigint): Promise<void> {
+    const updated = await this.prisma.client.user.update({
+      where: { id: userId },
+      data: { pinFailedLoginAttempts: { increment: 1 } },
+    });
+
+    if (
+      updated.pinFailedLoginAttempts >= AUTH_CONSTANTS.MAX_FAILED_LOGIN_ATTEMPTS
     ) {
       await this.prisma.client.user.update({
         where: { id: userId },
@@ -661,6 +961,47 @@ export class AuthService {
         mustChangePassword: false,
         failedLoginAttempts: 0,
         lockedUntil: null,
+        updatedAt: now,
+        version: { increment: 1 },
+      },
+    });
+
+    await invalidateUserSessions(tx, user.id, LogoutReason.PASSWORD_CHANGED);
+
+    await this.auditService.log(tx, {
+      entityType: OutboxEntityType.USER,
+      entityId: updatedUser.id,
+      entityUuid: updatedUser.uuid,
+      action: AuditAction.UPDATE,
+      module: AuditModule.SECURITY,
+      description: auditDescription,
+      userId: user.id,
+    });
+
+    await this.outboxService.enqueue(tx, {
+      entityType: OutboxEntityType.USER,
+      entityUuid: updatedUser.uuid,
+      operation: OutboxOperation.UPDATE,
+      payload: { uuid: updatedUser.uuid, username: updatedUser.username },
+    });
+  }
+
+  private async applyPasswordPin(
+    tx: TxClient,
+    user: { id: bigint; uuid: string; username: string },
+    pinHash: string,
+    auditDescription: string,
+  ): Promise<void> {
+    const now = BigInt(Date.now());
+
+    const updatedUser = await tx.user.update({
+      where: { id: user.id },
+      data: {
+        pinHash,
+        pinChangedAt: now,
+        mustChangePassword: false,
+        pinFailedLoginAttempts: 0,
+        pinLockedUntil: null,
         updatedAt: now,
         version: { increment: 1 },
       },

@@ -85,6 +85,7 @@ export class UserService {
       await assertUsernameUnique(tx, dto.username);
 
       const passwordHash = await this.passwordService.hash(dto.password);
+      const pinHash = await this.passwordService.hash(dto.pin);
       const now = BigInt(Date.now());
 
       const softDeleted = await tx.user.findFirst({
@@ -97,6 +98,7 @@ export class UserService {
             data: {
               username: dto.username,
               passwordHash,
+              pinHash,
               isActive: dto.isActive ?? true,
               mustChangePassword: dto.mustChangePassword ?? false,
               failedLoginAttempts: 0,
@@ -112,6 +114,7 @@ export class UserService {
               employeeId: dto.employeeId,
               username: dto.username,
               passwordHash,
+              pinHash,
               isActive: dto.isActive ?? true,
               mustChangePassword: dto.mustChangePassword ?? false,
               createdAt: now,

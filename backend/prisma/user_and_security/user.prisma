@@ -5,17 +5,28 @@ model User {
 
   uuid String @unique @default(uuid())
 
-  username     String @unique
-  passwordHash String @map("password_hash")
+  username String @unique
 
+  // Password authentication
+  passwordHash      String  @map("password_hash")
   passwordChangedAt BigInt? @map("password_changed_at")
 
-  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  failedLoginAttempts Int     @default(0) @map("failed_login_attempts")
   lockedUntil         BigInt? @map("locked_until")
-  lastLoginAt         BigInt? @map("last_login_at")
 
-  isActive           Boolean @default(true) @map("is_active")
   mustChangePassword Boolean @default(false) @map("must_change_password")
+
+  // Pin authentication
+  pinHash      String  @map("pin_hash")
+  pinChangedAt BigInt? @map("pin_changed_at")
+
+  pinFailedLoginAttempts Int     @default(0) @map("pin_failed_login_attempts")
+  pinLockedUntil         BigInt? @map("pin_locked_until")
+
+  mustChangePin Boolean @default(false) @map("must_change_pin")
+
+  isActive    Boolean @default(true) @map("is_active")
+  lastLoginAt BigInt? @map("last_login_at")
 
   createdAt BigInt  @map("created_at")
   updatedAt BigInt  @map("updated_at")
@@ -52,4 +63,5 @@ model User {
   @@index([isActive])
   @@index([lastLoginAt])
   @@index([lockedUntil])
+  @@index([pinLockedUntil])
 }

@@ -3,7 +3,9 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
+  Min,
   MinLength,
 } from 'class-validator';
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
@@ -22,6 +24,12 @@ export class CreateUserDto {
   @MinLength(8)
   @MaxLength(128)
   password!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(6)
+  pin!: string;
 
   @IsOptional()
   @IsBoolean()
