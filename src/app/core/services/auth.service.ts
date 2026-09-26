@@ -4,10 +4,10 @@ import { firstValueFrom } from 'rxjs';
 import { ApiService } from './api.service';
 import { DeviceService } from './device.service';
 import { TokenStorageService } from './token-storage.service';
-import type {
+import {
   AuthTokenResponse,
   AuthUser,
-  LoginRequest,
+  LoginRequest, LoginWithPinRequest,
 } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +26,22 @@ export class AuthService {
     const deviceInfo = await this.deviceService.getDeviceInfo();
     const response = await firstValueFrom(
       this.api.post<AuthTokenResponse>('/auth/login', {
+        ...credentials,
+        deviceName: deviceInfo.deviceName,
+        deviceType: deviceInfo.deviceType,
+        operatingSystem: deviceInfo.operatingSystem,
+        applicationVersion: deviceInfo.applicationVersion,
+      }),
+    );
+
+    await this.persistSession(response);
+    return response;
+  }
+
+  async loginWithPin(credentials: LoginWithPinRequest): Promise<AuthTokenResponse> {
+    const deviceInfo = await this.deviceService.getDeviceInfo();
+    const response = await firstValueFrom(
+      this.api.post<AuthTokenResponse>('/auth/login-with-pin', {
         ...credentials,
         deviceName: deviceInfo.deviceName,
         deviceType: deviceInfo.deviceType,

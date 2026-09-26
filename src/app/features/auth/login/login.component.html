@@ -24,7 +24,12 @@
     @if (loginMode == LoginMode.PIN) {
       <label>
         {{ 'auth.pin' | translate }}
-        <p-inputotp [length]="6" [integerOnly]="true" formControlName="pin" [mask]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3" />
+        <p-inputotp [length]="6" [integerOnly]="true"  autocomplete="current-password" formControlName="pin" [mask]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3"/>
+        <!--<p-inputotp formControlName="pin" >
+          <ng-template #input let-token let-events="events">
+            <input class="custom-otp-input" (keydown)="events.keydown($event)" (input)="events.input($event)" type="text" [attr.value]="token" [maxLength]="1" />
+          </ng-template>
+        </p-inputotp>-->
       </label>
     }
 

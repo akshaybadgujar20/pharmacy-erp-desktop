@@ -1,18 +1,15 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { ApiClientError } from '../../../core/models/api-response.types';
-import { AuthService } from '../../../core/services/auth.service';
-import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
-import { Spinner } from '@primeicons/angular/spinner';
-import { InputOtpModule } from 'primeng/inputotp';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { LabelModule } from 'primeng/label';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {ApiClientError} from '../../../core/models/api-response.types';
+import {AuthService} from '../../../core/services/auth.service';
+import {LanguageSelectorComponent} from '../../../shared/components/language-selector/language-selector.component';
+import {InputOtpModule} from 'primeng/inputotp';
+import {ButtonModule} from 'primeng/button';
+import {InputTextModule} from 'primeng/inputtext';
+import {LabelModule} from 'primeng/label';
 import {LoadingService} from '../../../shared/services/loading.service';
-import {timeout} from 'rxjs';
 
 enum LoginMode {
   PASSWORD,
@@ -49,8 +46,8 @@ export class LoginComponent {
 
   readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
-    password: ['', Validators.required],
-    pin: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(128)]],
+    pin: [''],
   });
 
   loading = false;
@@ -63,10 +60,17 @@ export class LoginComponent {
 
     this.loading = true;
     this.errorMessage = '';
-
+    const formValue = this.form.getRawValue();
     try {
       this.loadingService.show();
-      await this.authService.login(this.form.getRawValue());
+      if(this.loginMode === LoginMode.PIN){
+        const { password, ...formData } = formValue;
+        await this.authService.loginWithPin(formData);
+      }else {
+        const { pin, ...formData } = formValue;
+        await this.authService.login(formData);
+      }
+
       await this.router.navigate(['/dashboard']);
       this.loadingService.hide();
     } catch (error) {
@@ -88,6 +92,7 @@ export class LoginComponent {
     }else {
       this.dialpadVariant = undefined;
       this.loginMode = LoginMode.PIN;
+      this.setFormValidation();
     }
     if(this.passwordVariant !== undefined){
       this.passwordVariant = undefined;
@@ -100,6 +105,7 @@ export class LoginComponent {
     if(this.passwordVariant !== undefined){
       this.passwordVariant = undefined;
       this.loginMode = LoginMode.PASSWORD;
+      this.setFormValidation();
     }else {
       this.passwordVariant = "outlined";
     }
@@ -108,6 +114,20 @@ export class LoginComponent {
     }else {
       this.dialpadVariant = undefined;
     }
+  }
+
+  private setFormValidation() {
+    const password = this.form.controls.password;
+    const pin = this.form.controls.pin;
+    if (this.loginMode === LoginMode.PASSWORD) {
+      password.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(128)]);
+      pin.clearValidators();
+    } else {
+      password.clearValidators();
+      pin.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]);
+    }
+    password.updateValueAndValidity();
+    pin.updateValueAndValidity();
   }
 
   protected readonly LoginMode = LoginMode;

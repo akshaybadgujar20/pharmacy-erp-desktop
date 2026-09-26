@@ -23,3 +23,13 @@ export interface LoginRequest {
   operatingSystem?: string;
   applicationVersion?: string;
 }
+
+export interface LoginWithPinRequest {
+  username: string;
+  pin: string;
+  branchId?: string;
+  deviceName?: string;
+  deviceType?: string;
+  operatingSystem?: string;
+  applicationVersion?: string;
+}
