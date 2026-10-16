@@ -85,8 +85,8 @@ describe('PartyReportsProvider', () => {
         customerCode: 'C001',
         displayName: 'Alice Customer',
         customerType: 'RETAIL',
-        creditLimit: '5000',
-        outstandingAmount: '120.5',
+        creditLimit: 5000,
+        outstandingAmount: 120.5,
         isActive: true,
       },
     ]);
@@ -118,7 +118,7 @@ describe('PartyReportsProvider', () => {
         outstandingAmount: { gt: 0 },
       },
     });
-    expect(result.totals).toEqual({ grandTotal: '75' });
-    expect(result.rows[0].outstandingAmount).toBe('75');
+    expect(result.totals).toEqual({ grandTotal: 75 });
+    expect(result.rows[0].outstandingAmount).toBe(75);
   });
 });

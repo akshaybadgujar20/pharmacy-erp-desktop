@@ -10,6 +10,19 @@ import type { ApiEnvelope } from './api-envelope.types';
 
 export type { ApiEnvelope } from './api-envelope.types';
 
+/** Prefix remarks/codes in HTTP tests; delete rows containing this in beforeAll. */
+export const TEST_MARKER = 'HTTP_TEST_MARKER';
+
+export interface SeededIds {
+  branchId: string;
+  companyId: string;
+  supplierId: string | null;
+  customerId: string | null;
+  medicineId: string | null;
+  batchId: string | null;
+  userId: string | null;
+}
+
 export async function createHttpTestApp(): Promise<INestApplication<App>> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
@@ -64,4 +77,53 @@ export async function loginAs(
     throw new Error(`Login failed for user ${credentials.username}`);
   }
   return accessToken;
+}
+
+export async function loginAsAdmin(
+  app: INestApplication<App>,
+): Promise<string> {
+  return loginAs(app, { username: 'admin', password: 'admin123' });
+}
+
+export async function getSeededIds(prisma: PrismaService): Promise<SeededIds> {
+  const [branch, supplier, customer, medicine, batch, user] = await Promise.all([
+    prisma.client.branch.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.client.supplier.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.client.customer.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.client.medicine.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.client.batch.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.client.user.findFirst({
+      where: { deletedAt: null, isActive: true },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  if (!branch) {
+    throw new Error('No active branch in test database');
+  }
+
+  return {
+    branchId: branch.id.toString(),
+    companyId: branch.companyId.toString(),
+    supplierId: supplier?.id.toString() ?? null,
+    customerId: customer?.id.toString() ?? null,
+    medicineId: medicine?.id.toString() ?? null,
+    batchId: batch?.id.toString() ?? null,
+    userId: user?.id.toString() ?? null,
+  };
 }

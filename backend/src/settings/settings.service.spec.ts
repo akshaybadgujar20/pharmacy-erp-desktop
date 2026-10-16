@@ -136,7 +136,7 @@ describe('SettingsService', () => {
 
     await expect(
       service.updateSetting('locked.key', {
-        version: 1,
+        version: 1n,
         settingValue: 'new-value',
       }),
     ).rejects.toMatchObject({
@@ -157,7 +157,7 @@ describe('SettingsService', () => {
 
     await expect(
       service.updateSetting('fefo.enabled', {
-        version: 1,
+        version: 1n,
         settingValue: 'maybe',
       }),
     ).rejects.toMatchObject({
@@ -179,7 +179,7 @@ describe('SettingsService', () => {
 
     await expect(
       service.updateSetting('fefo.enabled', {
-        version: 1,
+        version: 1n,
         settingValue: 'false',
       }),
     ).rejects.toMatchObject({

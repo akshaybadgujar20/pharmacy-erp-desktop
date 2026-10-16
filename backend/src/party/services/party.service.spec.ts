@@ -150,7 +150,7 @@ describe('PartyService', () => {
     tx.party.updateMany.mockResolvedValue({ count: 0 });
 
     await expect(
-      service.update(5n, { version: 1, displayName: 'Updated' }),
+      service.update(5n, { version: 1n, displayName: 'Updated' }),
     ).rejects.toMatchObject({
       code: ErrorCode.ENTITY_VERSION_CONFLICT,
       statusCode: HttpStatus.CONFLICT,

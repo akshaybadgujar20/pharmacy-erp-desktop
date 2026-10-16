@@ -27,15 +27,16 @@ describe('Sync run (e2e)', () => {
     await closeHttpTestApp(app);
   });
 
-  it('POST /sync/runs returns 503 when SYNC_CLOUD_URL is unset', () => {
+  it('POST /sync/runs returns 503 when SYNC_CLOUD_URL is unset', async () => {
     const previous = process.env.SYNC_CLOUD_URL;
     delete process.env.SYNC_CLOUD_URL;
-    return request(app.getHttpServer())
-      .post('/sync/runs')
-      .set('Authorization', `Bearer ${adminToken}`)
-      .expect(503)
-      .finally(() => {
-        process.env.SYNC_CLOUD_URL = previous;
-      });
+    try {
+      await request(app.getHttpServer())
+        .post('/sync/runs')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(503);
+    } finally {
+      process.env.SYNC_CLOUD_URL = previous;
+    }
   });
 });

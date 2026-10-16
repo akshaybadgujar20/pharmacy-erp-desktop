@@ -4,6 +4,13 @@ How to run unit, integration, persistence, and end-to-end tests in **pharmacy-er
 
 **Canonical reference** for agents and developers. Cursor rule: `.cursor/rules/testing-rules.mdc`.
 
+**Quick entry points (step-by-step):**
+
+| Area | Doc |
+|------|-----|
+| Backend (`backend/`) | [backend/TESTING.md](../../../backend/TESTING.md) |
+| Frontend (`src/`) | [TESTING.md](../../../TESTING.md) (repo root) |
+
 ---
 
 ## Test suites overview

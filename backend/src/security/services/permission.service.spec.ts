@@ -1,0 +1,20 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { PermissionService } from './permission.service';
+
+describe('PermissionService', () => {
+  let service: PermissionService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [PermissionService],
+    })
+      .useMocker(() => ({}))
+      .compile();
+
+    service = module.get(PermissionService);
+  });
+
+  it('is defined', () => {
+    expect(service).toBeDefined();
+  });
+});

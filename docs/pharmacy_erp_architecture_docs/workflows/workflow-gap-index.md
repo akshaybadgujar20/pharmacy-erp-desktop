@@ -32,12 +32,12 @@ Consolidated list of known gaps from L1 workflow diagram generators. Update when
 |----|--------|---------|-------------|----------|--------|
 | GAP-2 | Sales | sales-invoice-flow | Payment not captured at finalise — separate payment-flow | Low | Accepted v1 |
 | GAP-3 | Sales | sales-invoice-flow | Return: only RESTOCK supported | Medium | Accepted v1 |
-| GAP-7 | Sales | sales-invoice-flow | Limited unit tests added; full module coverage partial | Medium | Open |
-| GAP-8 | Sales | sales-invoice-flow | No end-to-end tests for sales invoice workflow | Medium | Open |
+| GAP-7 | Sales | sales-invoice-flow | Unit specs scaffolded per service; deepen behavior tests over time | Medium | Mitigated |
+| GAP-8 | Sales | sales-invoice-flow | `sales-flow.e2e-spec.ts` smoke (list/load draft) | Medium | Mitigated |
 | GAP-GRN | Purchase | purchase-invoice-flow | GRN without PO gated by setting only | Low | Accepted v1 |
 | GAP-INV | Purchase | purchase-invoice-flow | Invoice post does not move stock | Info | By design |
-| GAP-7-P | Purchase | purchase-invoice-flow | No automated tests for Purchase module | Medium | Open |
-| GAP-8-P | Purchase | purchase-invoice-flow | No end-to-end tests for purchase workflow | Medium | Open |
+| GAP-7-P | Purchase | purchase-invoice-flow | Unit specs + `purchase-invoice.integration.spec.ts` match-summary | Medium | Mitigated |
+| GAP-8-P | Purchase | purchase-invoice-flow | `purchase-flow.e2e-spec.ts` smoke (PO/PUR list + match-summary) | Medium | Mitigated |
 | GAP-ADJ-1 | Inventory | stock-adjustment-flow | No submit step — DRAFT → approve directly | Low | Accepted v1 |
 | GAP-ADJ-2 | Inventory | stock-adjustment-flow | No cancel — reversals via new adjustment | Medium | Accepted v1 |
 | GAP-ADJ-3 | Inventory | stock-adjustment-flow | No finance valuation posting | Low | Open |

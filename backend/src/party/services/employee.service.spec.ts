@@ -1,0 +1,20 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { EmployeeService } from './employee.service';
+
+describe('EmployeeService', () => {
+  let service: EmployeeService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [EmployeeService],
+    })
+      .useMocker(() => ({}))
+      .compile();
+
+    service = module.get(EmployeeService);
+  });
+
+  it('is defined', () => {
+    expect(service).toBeDefined();
+  });
+});

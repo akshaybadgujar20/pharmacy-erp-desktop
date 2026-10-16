@@ -6,6 +6,7 @@ import { RequestContextService } from '../../persistence/context/request-context
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { Prisma } from '@prisma/client';
 import { CustomerType } from '../constants/party.constants';
 import { CustomerService } from './customer.service';
 
@@ -93,7 +94,7 @@ describe('CustomerService', () => {
 
     await expect(
       service.create({
-        partyId: '1',
+        partyId: 1n,
         customerCode: 'CUST-001',
         customerType: CustomerType.RETAIL,
       }),
@@ -117,8 +118,8 @@ describe('CustomerService', () => {
       uuid: 'cust-uuid',
       customerCode: 'CUST-001',
       customerType: CustomerType.RETAIL,
-      creditLimit: { toString: () => '0' },
-      outstandingAmount: { toString: () => '0' },
+      creditLimit: new Prisma.Decimal(0),
+      outstandingAmount: new Prisma.Decimal(0),
       paymentTermsDays: 0,
       loyaltyPoints: 0,
       isTaxExempt: false,
@@ -132,7 +133,7 @@ describe('CustomerService', () => {
     });
 
     const result = await service.create({
-      partyId: '1',
+      partyId: 1n,
       customerCode: 'CUST-001',
       customerType: CustomerType.RETAIL,
     });

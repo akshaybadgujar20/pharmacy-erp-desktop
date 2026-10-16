@@ -51,14 +51,14 @@ describe('Sync run (integration)', () => {
       .post('/sync/runs')
       .set('Authorization', `Bearer ${adminToken}`)
       .set('x-device-id', pending.deviceId)
-      .expect(200);
+      .expect(201);
 
     const body = response.body as ApiEnvelope<{
-      recordsUploaded: number;
-      status: string;
+      push: { recordsUploaded: number; status: string };
+      pull: { recordsDownloaded: number; status: string };
     }>;
     expect(body.success).toBe(true);
-    expect(body.data?.recordsUploaded).toBeGreaterThanOrEqual(0);
+    expect(body.data?.push.recordsUploaded).toBeGreaterThanOrEqual(0);
 
     await mock.close();
   });

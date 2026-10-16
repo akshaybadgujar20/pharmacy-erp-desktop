@@ -1,0 +1,55 @@
+name: Backend and Angular tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Prepare test database
+        working-directory: backend
+        run: npm run db:test:prepare
+
+      - name: Lint and build backend
+        working-directory: backend
+        run: npm run lint && npm run build
+
+      - name: Backend unit tests with coverage gate
+        working-directory: backend
+        run: npm run test:cov
+
+      - name: Persistence integration tests
+        working-directory: backend
+        run: npm run test:persistence
+
+      - name: HTTP integration tests
+        working-directory: backend
+        run: npm run test:integration
+
+      - name: E2e tests
+        working-directory: backend
+        run: npm run test:e2e
+
+      - name: Angular unit tests
+        run: npm run test:ci

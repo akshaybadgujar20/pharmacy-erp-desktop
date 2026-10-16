@@ -24,7 +24,9 @@
     "db:test:prepare": "tsx scripts/prepare-test-db.ts",
     "test:persistence": "jest --config ./test/persistence/jest-persistence.json --runInBand",
     "test:integration": "jest --config ./test/integration/jest-integration.json --runInBand",
-    "test:workflows": "python ../docs/pharmacy_erp_architecture_docs/workflows/test_generators.py"
+    "test:workflows": "python ../docs/pharmacy_erp_architecture_docs/workflows/test_generators.py",
+    "test:list-untested": "tsx scripts/list-untested-services.ts",
+    "test:scaffold-specs": "tsx scripts/scaffold-service-specs.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -98,8 +100,31 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/*.module.ts",
+      "!**/main.ts",
+      "!**/*.dto.ts",
+      "!**/*.constants.ts",
+      "!**/index.ts"
     ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 0,
+        "branches": 0,
+        "functions": 0,
+        "statements": 0
+      },
+      "./src/common/": {
+        "lines": 40,
+        "branches": 25,
+        "functions": 35,
+        "statements": 40
+      }
+    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },

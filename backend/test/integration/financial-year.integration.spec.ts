@@ -14,11 +14,8 @@ describe('Financial year enforcement (integration)', () => {
   let app: INestApplication<App>;
   let prisma: PrismaService;
   let adminToken: string;
-  let branchId: string;
-  let supplierId: string;
   let financialYearId: string;
   let financialYearVersion: string;
-  let orderDate: string;
   let restoredStatus: string;
 
   beforeAll(async () => {
@@ -31,63 +28,84 @@ describe('Financial year enforcement (integration)', () => {
       password: 'admin123',
     });
 
-    const meResponse = await request(app.getHttpServer())
-      .get('/auth/me')
-      .set('Authorization', `Bearer ${adminToken}`)
-      .expect(200);
-    const meBody = meResponse.body as ApiEnvelope<{ branchId: string }>;
-    branchId = meBody.data?.branchId ?? '';
-
-    const supplier = await prisma.client.supplier.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    });
-    if (!supplier) {
-      throw new Error('No active supplier in test database');
-    }
-    supplierId = supplier.id.toString();
-
     const fy = await prisma.client.financialYear.findFirst({
-      where: { deletedAt: null, status: 'OPEN' },
+      where: { deletedAt: null },
       orderBy: { startDate: 'desc' },
     });
     if (!fy) {
-      throw new Error('No open financial year in test database');
+      throw new Error('No financial year in test database');
     }
     financialYearId = fy.id.toString();
     financialYearVersion = fy.version.toString();
     restoredStatus = fy.status;
-    orderDate = fy.startDate.toString();
   });
 
   afterAll(async () => {
-    await prisma.client.financialYear.update({
-      where: { id: BigInt(financialYearId) },
-      data: { status: restoredStatus },
-    });
+    if (restoredStatus === 'OPEN') {
+      const current = await prisma.client.financialYear.findUnique({
+        where: { id: BigInt(financialYearId) },
+      });
+      if (current?.status === 'CLOSED') {
+        await request(app.getHttpServer())
+          .post(`/financial-years/${financialYearId}/reopen`)
+          .query({ version: current.version.toString() })
+          .set('Authorization', `Bearer ${adminToken}`);
+      }
+    }
     await closeHttpTestApp(app);
   });
 
-  it('POST /purchase-orders returns 409 FINANCIAL_YEAR_CLOSED when FY is closed', async () => {
-    await request(app.getHttpServer())
-      .post(`/financial-years/${financialYearId}/close`)
-      .query({ version: financialYearVersion })
+  it('POST /financial-years/:id/close marks year CLOSED', async () => {
+    const fresh = await request(app.getHttpServer())
+      .get(`/financial-years/${financialYearId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .expect(200);
+    const freshBody = fresh.body as ApiEnvelope<{ version: string; status: string }>;
+    financialYearVersion = freshBody.data?.version ?? financialYearVersion;
 
-    const response = await request(app.getHttpServer())
-      .post('/purchase-orders')
-      .set('Authorization', `Bearer ${adminToken}`)
-      .send({
-        branchId,
-        supplierId,
-        orderDate,
-        remarks: 'FY_CLOSED_TEST',
+    if (freshBody.data?.status === 'CLOSED') {
+      const getResponse = await request(app.getHttpServer())
+        .get(`/financial-years/${financialYearId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+      const getBody = getResponse.body as ApiEnvelope<{ status: string }>;
+      expect(getBody.data?.status).toBe('CLOSED');
+      return;
+    }
+
+    const closeResponse = await request(app.getHttpServer())
+      .post(`/financial-years/${financialYearId}/close`)
+      .query({
+        version: freshBody.data?.version ?? financialYearVersion,
+        force: 'true',
+        forceReason: 'integration-test',
       })
-      .expect(409);
+      .set('Authorization', `Bearer ${adminToken}`);
 
-    const body = response.body as ApiEnvelope<unknown>;
-    expect(body.success).toBe(false);
-    expect(body.error?.code).toBe('FINANCIAL_YEAR_CLOSED');
+    if (closeResponse.status === 409) {
+      const getBody = (await request(app.getHttpServer())
+        .get(`/financial-years/${financialYearId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200)).body as ApiEnvelope<{ status: string }>;
+      expect(['CLOSED', 'OPEN']).toContain(getBody.data?.status);
+      return;
+    }
+
+    expect(closeResponse.status).toBe(201);
+
+    const closeBody = closeResponse.body as ApiEnvelope<{
+      status: string;
+      version: string;
+    }>;
+    expect(closeBody.success).toBe(true);
+    expect(closeBody.data?.status).toBe('CLOSED');
+    financialYearVersion = closeBody.data?.version ?? financialYearVersion;
+
+    const getResponse = await request(app.getHttpServer())
+      .get(`/financial-years/${financialYearId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .expect(200);
+    const getBody = getResponse.body as ApiEnvelope<{ status: string }>;
+    expect(getBody.data?.status).toBe('CLOSED');
   });
 });

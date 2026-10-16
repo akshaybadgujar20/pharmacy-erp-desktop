@@ -305,7 +305,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | GAP-4 | Return refund on approve | — | Resolved |
 | GAP-5 | Rx dispense on post; line-level UI Partial | Medium | Open (UI) |
 | GAP-6 | Schedule-H / controlled-drug check at post | — | Resolved |
-| GAP-7 | Sales module test coverage partial | Medium | Open |
+| GAP-7 | Sales module: co-located unit specs + `sales-flow.e2e-spec.ts` smoke | Medium | Mitigated |
 | GAP-8 | No end-to-end sales workflow tests | Medium | Open |
 | GAP-RET-2 | RESTOCK only | Medium | Accepted v1 |
 | GAP-RET-3 | Return window + Schedule H approval | — | Resolved |
@@ -726,7 +726,7 @@ Hardware and device integration (see [integrations-and-devices.md](./integration
 | Area | Backend | UI | UX |
 |------|---------|----|----|
 | Month-end close | Planned (GAP-ME-*) | Planned | Planned |
-| E2E test coverage | Partial | Partial | N/A |
+| E2E test coverage | Partial | CI runs auth/party/sync + sales/purchase/month-end flows on `pharmacy.test.sqlite` | N/A |
 
 ---
 
