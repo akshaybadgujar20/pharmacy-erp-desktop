@@ -24,16 +24,21 @@
 >
   <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
     <div class="detail-form__field">
-      <label for="medicineId">Medicine ID</label>
-      <input pInputText id="medicineId" formControlName="medicineId" />
+      <label for="medicineId">Medicine</label>
+      <app-medicine-lookup formControlName="medicineId" />
     </div>
     <div class="detail-form__field">
-      <label for="batchId">Batch ID</label>
-      <input pInputText id="batchId" formControlName="batchId" />
+      <label for="batchId">Batch</label>
+      <select id="batchId" formControlName="batchId">
+        <option value="">Select batch</option>
+        @for (batch of batchOptions(); track batch.id) {
+          <option [value]="batch.id">{{ batch.label }}</option>
+        }
+      </select>
     </div>
     <div class="detail-form__field">
       <label for="unitId">Unit ID</label>
-      <input pInputText id="unitId" formControlName="unitId" />
+      <input pInputText id="unitId" formControlName="unitId" readonly />
     </div>
     <div class="detail-form__field">
       <label for="soldQuantity">Sold Quantity</label>

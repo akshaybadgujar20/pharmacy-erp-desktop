@@ -34,6 +34,7 @@ import { toListParams } from '../../shared/utils/list-query.util';
 
 import { ReportRunResult } from './report.models';
 
+import { ElectronService } from '../../core/services/electron.service';
 import { ReportService } from './report.service';
 
 
@@ -61,6 +62,8 @@ export class ReportRunnerComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   private readonly router = inject(Router);
+
+  private readonly electron = inject(ElectronService);
 
 
 
@@ -180,6 +183,42 @@ export class ReportRunnerComponent implements OnInit {
 
     this.router.navigate(['/reports']);
 
+  }
+
+  exportReport(format: 'csv' | 'xlsx' | 'pdf'): void {
+    const reportId = this.reportId();
+    if (!reportId) {
+      return;
+    }
+    const value = this.form.getRawValue();
+    const params: Record<string, string> = {};
+    if (value.fromDate.trim()) {
+      params['fromDate'] = value.fromDate.trim();
+    }
+    if (value.toDate.trim()) {
+      params['toDate'] = value.toDate.trim();
+    }
+    if (value.branchId.trim()) {
+      params['branchId'] = value.branchId.trim();
+    }
+    const ext = format === 'xlsx' ? 'xlsx' : format;
+    this.reportService.exportFile(reportId, params, format).subscribe({
+      next: async (blob) => {
+        const buffer = await blob.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+        const mime =
+          format === 'pdf'
+            ? 'application/pdf'
+            : format === 'xlsx'
+              ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              : 'text/csv';
+        await this.electron.saveExport({
+          base64Data: base64,
+          defaultFileName: `${reportId}.${ext}`,
+          mimeType: mime,
+        });
+      },
+    });
   }
 
 

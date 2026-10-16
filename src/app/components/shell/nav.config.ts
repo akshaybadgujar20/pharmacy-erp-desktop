@@ -27,6 +27,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
         icon: 'shopping-cart',
         label: 'nav.sales.title',
         subItems: [
+          { icon: 'shopping-cart', label: 'nav.sales.counter', route: '/sales/invoices', permission: 'SALES:SALES_INVOICE:READ' },
           { icon: 'file', label: 'nav.sales.invoices', route: '/sales/invoices', permission: 'SALES:SALES_INVOICE:READ' },
           { icon: 'undo', label: 'nav.sales.returns', route: '/sales/returns', permission: 'SALES:SALES_RETURN:READ' },
         ],
@@ -44,6 +45,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
           { icon: 'file', label: 'nav.purchase.invoices', route: '/purchase/invoices', permission: 'PURCHASE:PURCHASE_INVOICE:READ' },
           { icon: 'undo', label: 'nav.purchase.returns', route: '/purchase/returns', permission: 'PURCHASE:PURCHASE_RETURN:READ' },
           { icon: 'box', label: 'nav.purchase.goodsReceipts', route: '/purchase/goods-receipts', permission: 'PURCHASE:GOODS_RECEIPT:READ' },
+          { icon: 'list-check', label: 'nav.purchase.grnWizard', route: '/purchase/grn-wizard', permission: 'PURCHASE:GOODS_RECEIPT:CREATE' },
         ],
       },
     ],
@@ -165,6 +167,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
           { icon: 'key', label: 'nav.security.roles', route: '/security/roles', permission: 'SECURITY:ROLE:READ' },
           { icon: 'lock', label: 'nav.security.permissions', route: '/security/permissions', permission: 'SECURITY:PERMISSION:READ' },
           { icon: 'desktop', label: 'nav.security.sessions', route: '/security/user-sessions', permission: 'SECURITY:USER_SESSION:READ' },
+          { icon: 'key', label: 'nav.security.changePassword', route: '/security/change-password' },
         ],
       },
       {

@@ -9,6 +9,11 @@
     <p-tabpanel value="overview">
       @if (!isNew()) {
         <p class="detail-form__status">Status: {{ status() }}</p>
+        @if (form.get('goodsReceiptId')?.value) {
+          <span>Match: GRN linked</span>
+        } @else {
+          <span>Match: No GRN — three-way match incomplete</span>
+        }
       }
       <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
         <div class="detail-form__field">
@@ -85,6 +90,9 @@
           <p class="detail-form__error">{{ errorMessage() }}</p>
         }
       </form>
+      @if (invoiceId()) {
+        <app-document-change-history-panel entityType="PurchaseInvoice" [entityId]="invoiceId()!" />
+      }
     </p-tabpanel>
     @if (invoiceId()) {
       <p-tabpanel value="items">

@@ -17,6 +17,7 @@ import {
   optionalEpochMs,
   toEpochMs,
 } from '../purchase-date.util';
+import { DocumentChangeHistoryPanelComponent } from '../../../shared/audit/document-change-history-panel.component';
 import { PurchaseInvoiceItemsTabComponent } from './purchase-invoice-items-tab.component';
 import { PurchaseInvoiceService } from './purchase-invoice.service';
 
@@ -28,6 +29,7 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
     InputTextModule,
     ButtonModule,
     TabsModule,
+    DocumentChangeHistoryPanelComponent,
     PurchaseInvoiceItemsTabComponent,
   ],
   templateUrl: './purchase-invoice-detail.component.html',

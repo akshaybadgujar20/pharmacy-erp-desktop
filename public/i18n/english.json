@@ -27,6 +27,7 @@
     "dashboard": "Dashboard",
     "sales": {
       "title": "Sales",
+      "counter": "Counter sales",
       "invoices": "Sales Invoices",
       "returns": "Sales Returns"
     },
@@ -35,7 +36,8 @@
       "orders": "Purchase Orders",
       "invoices": "Purchase Invoices",
       "returns": "Purchase Returns",
-      "goodsReceipts": "Goods Receipts"
+      "goodsReceipts": "Goods Receipts",
+      "grnWizard": "PO to GRN wizard"
     },
     "inventory": {
       "title": "Inventory",
@@ -94,7 +96,8 @@
       "users": "Users",
       "roles": "Roles",
       "permissions": "Permissions",
-      "sessions": "User Sessions"
+      "sessions": "User Sessions",
+      "changePassword": "Change password"
     },
     "configuration": {
       "title": "Configuration",

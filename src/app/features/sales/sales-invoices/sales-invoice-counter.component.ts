@@ -8,7 +8,11 @@ import {
   signal,
 } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { PrescriptionItemService } from '../../prescription/prescriptions/prescription-item.service';
+import { PrescriptionItem } from '../../prescription/prescriptions/prescription-item.models';
+import { SalesInvoice } from './sales-invoice.models';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -28,6 +32,7 @@ import { SalesInvoiceService } from './sales-invoice.service';
   selector: 'app-sales-invoice-counter',
   standalone: true,
   imports: [
+    RouterLink,
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
@@ -51,6 +56,9 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   private readonly shortcuts = inject(KeyboardShortcutService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly prescriptionItems = inject(PrescriptionItemService);
+  private unsubscribeBarcode?: () => void;
 
   readonly invoiceId = signal<string | null>(null);
   readonly version = signal('0');
@@ -64,6 +72,11 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   readonly redeemPoints = signal(0);
   readonly errorMessage = signal('');
   readonly activeTab = signal<'items' | 'payments'>('items');
+  readonly rxLines = signal<PrescriptionItem[]>([]);
+  readonly scheduleWarning = signal('');
+  readonly receiptPreviewVisible = signal(false);
+  readonly receiptPreviewHtml = signal<SafeHtml>('');
+  private pendingInvoice: SalesInvoice | null = null;
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canPay = computed(() =>
@@ -86,10 +99,17 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
     this.invoiceId.set(id);
     this.load(id);
     this.shortcuts.registerHandler('sales.payment', () => this.focusPayments());
+    this.shortcuts.registerHandler('global.save', () => this.saveHeader());
+    this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
+      this.router.navigate(['/medicine/medicines'], { queryParams: { search: code } });
+    });
+    this.form.get('prescriptionId')?.valueChanges.subscribe((id) => this.loadPrescriptionLines(id ?? ''));
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('sales.payment');
+    this.shortcuts.unregisterHandler('global.save');
+    this.unsubscribeBarcode?.();
   }
 
   saveHeader(): void {
@@ -130,7 +150,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
         redeemPoints: this.redeemPoints() > 0 ? this.redeemPoints() : undefined,
       })
       .subscribe({
-        next: async (invoice) => {
+        next: (invoice) => {
           this.posting.set(false);
           this.postDialogVisible.set(false);
           this.status.set(invoice.status);
@@ -139,11 +159,18 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           this.version.set(invoice.version);
           this.netAmount.set(invoice.netAmount);
           this.activeTab.set('payments');
-          await this.electron.printReceipt(buildSalesReceiptHtml(invoice));
+          this.pendingInvoice = invoice;
+          const html = buildSalesReceiptHtml(invoice);
+          this.receiptPreviewHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
+          this.receiptPreviewVisible.set(true);
         },
         error: (error) => {
           this.posting.set(false);
-          this.errorMessage.set(resolveApiErrorMessage(error));
+          const message = resolveApiErrorMessage(error);
+          this.errorMessage.set(message);
+          if (message.toLowerCase().includes('prescription')) {
+            this.scheduleWarning.set(`${message} — reactivate the prescription and retry.`);
+          }
         },
       });
   }
@@ -169,6 +196,33 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           invoiceDate: invoice.invoiceDate,
         });
         this.refreshLoyalty(invoice.customerId ?? '');
+        this.loadPrescriptionLines(invoice.prescriptionId ?? '');
+      },
+    });
+  }
+
+  async printPreview(): Promise<void> {
+    if (!this.pendingInvoice) {
+      return;
+    }
+    await this.electron.printReceipt(buildSalesReceiptHtml(this.pendingInvoice));
+    this.receiptPreviewVisible.set(false);
+  }
+
+  private loadPrescriptionLines(prescriptionId: string): void {
+    if (!prescriptionId) {
+      this.rxLines.set([]);
+      this.scheduleWarning.set('');
+      return;
+    }
+    this.prescriptionItems.list(prescriptionId, { page: '1', pageSize: '50' }).subscribe({
+      next: ({ data }) => {
+        this.rxLines.set(data);
+        this.scheduleWarning.set(
+          data.length > 0
+            ? 'Linked prescription — verify Schedule-H compliance before post.'
+            : '',
+        );
       },
     });
   }

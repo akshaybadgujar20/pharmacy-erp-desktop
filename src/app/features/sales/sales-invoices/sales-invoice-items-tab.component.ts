@@ -16,6 +16,9 @@ import {
   GridFilterChange,
   GridPageChange,
 } from '../../../components/generic/grid/types/grid-events.types';
+import { BatchService } from '../../inventory/batches/batch.service';
+import { MedicineService } from '../../medicine/medicines/medicine.service';
+import { MedicineLookupComponent } from '../../../shared/lookups/medicine-lookup.component';
 import { toListParams } from '../../../shared/utils/list-query.util';
 import { SALES_INVOICE_ITEM_GRID_CONFIG } from './sales-invoice-item-grid.config';
 import { SalesInvoiceItem } from './sales-invoice-item.models';
@@ -30,6 +33,7 @@ import { SalesInvoiceItemService } from './sales-invoice-item.service';
     ButtonModule,
     DialogModule,
     InputTextModule,
+    MedicineLookupComponent,
   ],
   templateUrl: './sales-invoice-items-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +41,8 @@ import { SalesInvoiceItemService } from './sales-invoice-item.service';
 export class SalesInvoiceItemsTabComponent {
   private readonly fb = inject(FormBuilder);
   private readonly salesInvoiceItemService = inject(SalesInvoiceItemService);
+  private readonly batchService = inject(BatchService);
+  private readonly medicineService = inject(MedicineService);
 
   readonly invoiceId = input.required<string>();
   readonly editable = input(true);
@@ -52,6 +58,7 @@ export class SalesInvoiceItemsTabComponent {
   readonly editingId = signal<string | null>(null);
   readonly editingVersion = signal('0');
   readonly saving = signal(false);
+  readonly batchOptions = signal<{ id: string; label: string }[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     medicineId: ['', Validators.required],
@@ -67,6 +74,9 @@ export class SalesInvoiceItemsTabComponent {
       if (id) {
         this.load();
       }
+    });
+    this.form.get('medicineId')?.valueChanges.subscribe((medicineId) => {
+      this.onMedicineChange(medicineId || null);
     });
   }
 
@@ -96,6 +106,32 @@ export class SalesInvoiceItemsTabComponent {
     }
   }
 
+  onMedicineChange(medicineId: string | null): void {
+    if (!medicineId) {
+      this.batchOptions.set([]);
+      return;
+    }
+    this.medicineService.getById(medicineId).subscribe({
+      next: (medicine) => this.form.patchValue({ unitId: medicine.unitId }),
+    });
+    this.batchService
+      .list({ medicineId, page: '1', pageSize: '50' })
+      .subscribe({
+        next: ({ data }) => {
+          const sorted = [...data].sort((a, b) => a.expiryDate.localeCompare(b.expiryDate));
+          this.batchOptions.set(
+            sorted.map((batch) => ({
+              id: batch.id,
+              label: `${batch.batchNumber} (exp ${batch.expiryDate})`,
+            })),
+          );
+          if (sorted[0]) {
+            this.form.patchValue({ batchId: sorted[0].id });
+          }
+        },
+      });
+  }
+
   openCreate(): void {
     this.editingId.set(null);
     this.editingVersion.set('0');
@@ -106,6 +142,7 @@ export class SalesInvoiceItemsTabComponent {
       soldQuantity: 1,
       remarks: '',
     });
+    this.batchOptions.set([]);
     this.dialogVisible.set(true);
   }
 
@@ -119,6 +156,7 @@ export class SalesInvoiceItemsTabComponent {
       soldQuantity: item.soldQuantity ?? 1,
       remarks: item.remarks ?? '',
     });
+    this.onMedicineChange(item.medicineId);
     this.dialogVisible.set(true);
   }
 

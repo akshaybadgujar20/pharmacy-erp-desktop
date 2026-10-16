@@ -3,6 +3,11 @@ import { permissionGuard } from '../../core/guards/permission.guard';
 
 export const securityRoutes: Routes = [
   {
+    path: 'change-password',
+    loadComponent: () =>
+      import('../settings/change-password.component').then((m) => m.ChangePasswordComponent),
+  },
+  {
     path: 'users',
     canActivate: [permissionGuard('SECURITY:USER:READ')],
     children: [

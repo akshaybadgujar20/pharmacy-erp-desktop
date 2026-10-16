@@ -17,6 +17,8 @@ import {
   GridRowClickEvent,
 } from '../../../components/generic/grid/types/grid-events.types';
 import { ToolbarActionEvent } from '../../../components/generic/toolbar/types/toolbar-events.types';
+import { AuthService } from '../../../core/services/auth.service';
+import { toEpochMs } from '../sales-date.util';
 import { toListParams } from '../../../shared/utils/list-query.util';
 import { SALES_INVOICE_GRID_CONFIG } from './sales-invoice-grid.config';
 import { SALES_INVOICE_TOOLBAR_CONFIG } from './sales-invoice-toolbar.config';
@@ -32,6 +34,7 @@ import { SalesInvoiceService } from './sales-invoice.service';
 })
 export class SalesInvoiceListComponent implements OnInit, OnDestroy {
   private readonly salesInvoiceService = inject(SalesInvoiceService);
+  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly shortcuts = inject(KeyboardShortcutService);
 
@@ -98,7 +101,28 @@ export class SalesInvoiceListComponent implements OnInit, OnDestroy {
   }
 
   private onNew(): void {
-    this.router.navigate(['/sales/invoices/new']);
+    const branchId = this.auth.currentUser()?.branchId;
+    if (!branchId) {
+      this.router.navigate(['/sales/invoices/new']);
+      return;
+    }
+    this.loading.set(true);
+    this.salesInvoiceService
+      .create({
+        branchId,
+        invoiceDate: toEpochMs(new Date().toISOString()),
+        salesType: 'RETAIL_OTC',
+      })
+      .subscribe({
+        next: (invoice) => {
+          this.loading.set(false);
+          this.router.navigate(['/sales/invoices', invoice.id, 'counter']);
+        },
+        error: () => {
+          this.loading.set(false);
+          this.router.navigate(['/sales/invoices/new']);
+        },
+      });
   }
 
   private load(): void {

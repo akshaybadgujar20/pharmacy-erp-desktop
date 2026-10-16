@@ -70,4 +70,7 @@
     <p class="detail-form__error">{{ errorMessage() }}</p>
   }
 </form>
+@if (customerId(); as id) {
+  <app-document-change-history-panel entityType="Customer" [entityId]="id" />
+}
 </ng-template>

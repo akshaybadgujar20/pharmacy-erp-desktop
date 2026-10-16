@@ -76,10 +76,10 @@
           <p-sidebar-footer>
             <p-sidebar-menu>
               <p-sidebar-menu-item>
-                <button pSidebarMenuButton class="p-1!" type="button">
+                <a pSidebarMenuButton class="p-1!" routerLink="/security/change-password">
                   <p-avatar [label]="userInitials()" shape="circle" class="size-6 shrink-0 text-xs" />
                   <span>{{ currentUser()?.username ?? 'User' }}</span>
-                </button>
+                </a>
               </p-sidebar-menu-item>
             </p-sidebar-menu>
           </p-sidebar-footer>

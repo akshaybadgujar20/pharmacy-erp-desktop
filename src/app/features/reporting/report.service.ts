@@ -29,6 +29,18 @@ export class ReportService {
       .pipe(map((response) => unwrapApiResponse(response)));
   }
 
+  exportFile(
+    reportId: string,
+    params: Record<string, string>,
+    format: 'csv' | 'xlsx' | 'pdf',
+  ): Observable<Blob> {
+    const httpParams = new HttpParams({ fromObject: { ...params, format } });
+    return this.http.get(`${this.baseUrl}${this.basePath}/${reportId}`, {
+      params: httpParams,
+      responseType: 'blob',
+    });
+  }
+
   run(reportId: string, params: Record<string, string>): Observable<ReportRunResult> {
     const httpParams = new HttpParams({ fromObject: params });
     return this.http

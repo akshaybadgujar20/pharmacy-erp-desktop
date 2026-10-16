@@ -13,8 +13,8 @@ export const settingsRoutes: Routes = [
       },
       {
         path: 'change-password',
-        loadComponent: () =>
-          import('./change-password.component').then((m) => m.ChangePasswordComponent),
+        redirectTo: '/security/change-password',
+        pathMatch: 'full',
       },
       {
         path: ':key',

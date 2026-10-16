@@ -13,6 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { ApiClientError } from '../../../core/models/api-response.types';
 import { TabsModule } from 'primeng/tabs';
+import { DocumentChangeHistoryPanelComponent } from '../../../shared/audit/document-change-history-panel.component';
 import { CustomerLoyaltyTabComponent } from './customer-loyalty-tab.component';
 import { CustomerService } from './customer.service';
 
@@ -26,6 +27,7 @@ import { CustomerService } from './customer.service';
     CheckboxModule,
     TabsModule,
     CustomerLoyaltyTabComponent,
+    DocumentChangeHistoryPanelComponent,
     NgTemplateOutlet,
   ],
   templateUrl: './customer-detail.component.html',

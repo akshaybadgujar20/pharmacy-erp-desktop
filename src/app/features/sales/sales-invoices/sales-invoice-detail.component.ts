@@ -13,6 +13,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
 import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { fromEpochMs, toEpochMs } from '../sales-date.util';
+import { CustomerLookupComponent } from '../../../shared/lookups/customer-lookup.component';
+import { PrescriptionLookupComponent } from '../../../shared/lookups/prescription-lookup.component';
+import { DocumentChangeHistoryPanelComponent } from '../../../shared/audit/document-change-history-panel.component';
+import { CustomerLoyaltySummaryService } from './customer-loyalty-summary.service';
 import { SalesInvoiceItemsTabComponent } from './sales-invoice-items-tab.component';
 import { SalesInvoicePaymentsTabComponent } from './sales-invoice-payments-tab.component';
 import { SalesInvoiceService } from './sales-invoice.service';
@@ -25,6 +29,9 @@ import { SalesInvoiceService } from './sales-invoice.service';
     InputTextModule,
     ButtonModule,
     TabsModule,
+    CustomerLookupComponent,
+    PrescriptionLookupComponent,
+    DocumentChangeHistoryPanelComponent,
     SalesInvoiceItemsTabComponent,
     SalesInvoicePaymentsTabComponent,
   ],
@@ -34,6 +41,7 @@ import { SalesInvoiceService } from './sales-invoice.service';
 export class SalesInvoiceDetailComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly salesInvoiceService = inject(SalesInvoiceService);
+  private readonly loyaltySummary = inject(CustomerLoyaltySummaryService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -49,6 +57,7 @@ export class SalesInvoiceDetailComponent implements OnInit {
   readonly cancelling = signal(false);
   readonly errorMessage = signal('');
   readonly version = signal('0');
+  readonly loyaltyBalance = signal<number | null>(null);
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canManagePayments = computed(() =>
@@ -257,8 +266,20 @@ export class SalesInvoiceDetailComponent implements OnInit {
           paymentMode: invoice.paymentMode ?? '',
           remarks: invoice.remarks ?? '',
         });
+        this.refreshLoyalty(invoice.customerId ?? '');
       },
       error: (error) => this.handleError(error),
+    });
+  }
+
+  private refreshLoyalty(customerId: string): void {
+    if (!customerId) {
+      this.loyaltyBalance.set(null);
+      return;
+    }
+    this.loyaltySummary.getSummary(customerId).subscribe({
+      next: (summary) => this.loyaltyBalance.set(summary.balancePoints),
+      error: () => this.loyaltyBalance.set(null),
     });
   }
 

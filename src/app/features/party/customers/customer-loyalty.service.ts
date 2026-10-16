@@ -45,4 +45,11 @@ export class CustomerLoyaltyService {
       loyaltyProgramId,
     });
   }
+
+  adjust(
+    customerId: string,
+    body: { loyaltyProgramId: string; pointsDelta: number; remarks?: string },
+  ) {
+    return this.api.post(`/customers/${customerId}/loyalty/adjustments`, body);
+  }
 }

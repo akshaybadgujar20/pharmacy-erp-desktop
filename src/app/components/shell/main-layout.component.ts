@@ -7,7 +7,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
@@ -60,6 +60,7 @@ interface NavGroup {
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly syncService = inject(SyncService);
   private readonly electron = inject(ElectronService);
   readonly shortcutService = inject(KeyboardShortcutService);
@@ -114,6 +115,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     this.refreshSyncStatus();
     this.syncPollTimer = setInterval(() => this.refreshSyncStatus(), 60_000);
     this.unsubscribeSync = this.electron.onSyncRunRequested(() => this.refreshSyncStatus());
+    this.shortcutService.registerHandler('global.lookup', () => {
+      this.router.navigate(['/medicine/medicines']);
+    });
   }
 
   ngOnDestroy(): void {
@@ -122,6 +126,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       clearInterval(this.syncPollTimer);
     }
     this.unsubscribeSync?.();
+    this.shortcutService.unregisterHandler('global.lookup');
   }
 
   private refreshSyncStatus(): void {

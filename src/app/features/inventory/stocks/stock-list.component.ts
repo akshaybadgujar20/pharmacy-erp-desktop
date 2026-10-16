@@ -16,7 +16,9 @@ import { toListParams } from '../../../shared/utils/list-query.util';
 import { STOCK_GRID_CONFIG } from './stock-grid.config';
 import { Stock } from './stock.models';
 import { STOCK_TOOLBAR_CONFIG } from './stock-toolbar.config';
+import { ElectronService } from '../../../core/services/electron.service';
 import { StockService } from './stock.service';
+import { BatchService } from '../batches/batch.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -27,7 +29,12 @@ import { StockService } from './stock.service';
 })
 export class StockListComponent implements OnInit, OnDestroy {
   private readonly stockService = inject(StockService);
+  private readonly batchService = inject(BatchService);
+  private readonly electron = inject(ElectronService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private unsubscribeBarcode?: () => void;
+
+  readonly fefoPreview = signal<string[]>([]);
 
   readonly toolbarConfig = STOCK_TOOLBAR_CONFIG;
   readonly gridConfig = STOCK_GRID_CONFIG;
@@ -41,11 +48,28 @@ export class StockListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.shortcuts.registerHandler('global.refresh', () => this.load());
+    this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
+      this.search.set(code);
+      this.page.set(1);
+      this.load();
+    });
     this.load();
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('global.refresh');
+    this.unsubscribeBarcode?.();
+  }
+
+  loadFefoForMedicine(medicineId: string): void {
+    this.batchService.list({ medicineId, page: '1', pageSize: '20' }).subscribe({
+      next: ({ data }) => {
+        const sorted = [...data].sort((a, b) => a.expiryDate.localeCompare(b.expiryDate));
+        this.fefoPreview.set(
+          sorted.map((b) => `${b.batchNumber} exp ${b.expiryDate} (batch ${b.id})`),
+        );
+      },
+    });
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

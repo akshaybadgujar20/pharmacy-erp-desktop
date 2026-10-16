@@ -221,10 +221,7 @@ export class AuthService {
       );
     }
 
-    const pinValid = await this.passwordService.verify(
-      dto.pin,
-      user.pinHash,
-    );
+    const pinValid = await this.passwordService.verify(dto.pin, user.pinHash);
 
     if (!pinValid) {
       await this.recordFailedLoginWithPin(user.id);

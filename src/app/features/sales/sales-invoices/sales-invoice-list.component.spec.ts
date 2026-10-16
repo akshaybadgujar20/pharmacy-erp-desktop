@@ -2,6 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { ToolbarActionEvent } from '../../../components/generic/toolbar/types/toolbar-events.types';
 import { SalesInvoiceListComponent } from './sales-invoice-list.component';
@@ -24,7 +25,7 @@ class AppGridStubComponent {
 describe('SalesInvoiceListComponent', () => {
   let fixture: ComponentFixture<SalesInvoiceListComponent>;
   let component: SalesInvoiceListComponent;
-  let salesInvoiceService: jest.Mocked<Pick<SalesInvoiceService, 'list' | 'delete'>>;
+  let salesInvoiceService: jest.Mocked<Pick<SalesInvoiceService, 'list' | 'delete' | 'create'>>;
   let router: jest.Mocked<Pick<Router, 'navigate'>>;
 
   beforeEach(async () => {
@@ -61,6 +62,32 @@ describe('SalesInvoiceListComponent', () => {
         }),
       ),
       delete: jest.fn().mockReturnValue(of(undefined)),
+      create: jest.fn().mockReturnValue(
+        of({
+          id: '99',
+          version: '1',
+          status: 'DRAFT',
+          paymentStatus: 'UNPAID',
+          invoiceNumber: '',
+          branchId: '1',
+          customerId: null,
+          prescriptionId: null,
+          invoiceDate: '1700000000000',
+          patientName: null,
+          doctorName: null,
+          grossAmount: null,
+          discountAmount: null,
+          taxAmount: null,
+          roundOffAmount: null,
+          netAmount: null,
+          paidAmount: null,
+          balanceAmount: null,
+          paymentMode: null,
+          salesType: 'RETAIL_OTC',
+          remarks: null,
+          uuid: 'uuid-99',
+        }),
+      ),
     };
     router = { navigate: jest.fn().mockResolvedValue(true) };
 
@@ -74,6 +101,12 @@ describe('SalesInvoiceListComponent', () => {
           useValue: {
             registerHandler: jest.fn(),
             unregisterHandler: jest.fn(),
+          },
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            currentUser: () => ({ branchId: '1' }),
           },
         },
       ],
@@ -96,6 +129,7 @@ describe('SalesInvoiceListComponent', () => {
 
   it('navigates to new invoice on create action', () => {
     component.onToolbarAction({ action: 'create', source: 'button' });
-    expect(router.navigate).toHaveBeenCalledWith(['/sales/invoices/new']);
+    expect(salesInvoiceService.create).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/sales/invoices', '99', 'counter']);
   });
 });

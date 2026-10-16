@@ -1,5 +1,16 @@
 <div class="page-layout">
   <a routerLink="/inventory/stock-adjustments/new">New stock adjustment</a>
+  <div class="flex gap-2 items-center my-2">
+    <input #medicineIdInput placeholder="Medicine ID for FEFO preview" />
+    <button type="button" (click)="loadFefoForMedicine(medicineIdInput.value)">FEFO preview</button>
+  </div>
+  @if (fefoPreview().length > 0) {
+    <ul>
+      @for (line of fefoPreview(); track line) {
+        <li>{{ line }}</li>
+      }
+    </ul>
+  }
   <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
   <app-grid
     [config]="gridConfig"

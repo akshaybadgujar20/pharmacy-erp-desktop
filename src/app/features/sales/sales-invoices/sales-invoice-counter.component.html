@@ -1,6 +1,9 @@
 <section class="counter">
   <header class="counter__header">
     <h2>Counter sale</h2>
+    @if (invoiceId()) {
+      <a [routerLink]="['/sales/invoices', invoiceId()]">Invoice details</a>
+    }
     @if (invoiceNumber()) {
       <span>{{ invoiceNumber() }}</span>
     }
@@ -28,6 +31,20 @@
     </div>
     <button pButton type="button" label="Save header" (click)="saveHeader()" [disabled]="!isDraft()"></button>
   </form>
+
+  @if (scheduleWarning()) {
+    <p class="counter__error">{{ scheduleWarning() }}</p>
+  }
+  @if (rxLines().length > 0) {
+    <section>
+      <h3>Prescription lines</h3>
+      <ul>
+        @for (line of rxLines(); track line.id) {
+          <li>Medicine {{ line.medicineId }} — qty {{ line.prescribedQuantity }}</li>
+        }
+      </ul>
+    </section>
+  }
 
   <div class="counter__tabs">
     <button pButton type="button" label="Items" (click)="activeTab.set('items')"></button>
@@ -59,4 +76,9 @@
     <button pButton type="button" label="Cancel" (click)="postDialogVisible.set(false)"></button>
     <button pButton type="button" label="Post" [loading]="posting()" (click)="confirmPost()"></button>
   </div>
+</p-dialog>
+
+<p-dialog header="Receipt preview" [visible]="receiptPreviewVisible()" (visibleChange)="receiptPreviewVisible.set($event)" [modal]="true" [style]="{ width: '24rem' }">
+  <div [innerHTML]="receiptPreviewHtml()"></div>
+  <button pButton type="button" label="Print" (click)="printPreview()"></button>
 </p-dialog>

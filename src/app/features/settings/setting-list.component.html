@@ -4,7 +4,7 @@
     @for (category of categories(); track category) {
       <button type="button" (click)="filterCategory(category)">{{ category }}</button>
     }
-    <a routerLink="/settings/change-password">Change password</a>
+    <a routerLink="/security/change-password">Change password</a>
   </div>
   <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
   <app-grid

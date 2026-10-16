@@ -7,6 +7,8 @@ export interface OutboxRow {
   syncStatus: string;
   retryCount: number;
   lastError: string | null;
+  createdAt: string;
+  version: string;
 }
 
 @Injectable({ providedIn: 'root' })

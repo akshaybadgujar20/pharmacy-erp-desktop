@@ -5,6 +5,7 @@ export interface SyncConflictRow {
   id: string;
   entityType: string;
   resolutionStatus: string;
+  version: string;
 }
 
 @Injectable({ providedIn: 'root' })

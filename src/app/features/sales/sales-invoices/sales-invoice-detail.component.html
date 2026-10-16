@@ -22,17 +22,23 @@
           <input pInputText id="branchId" formControlName="branchId" [readonly]="!isNew()" />
         </div>
         <div class="detail-form__field">
-          <label for="customerId">Customer ID</label>
-          <input pInputText id="customerId" formControlName="customerId" [readonly]="!isDraft()" />
+          <label for="customerId">Customer</label>
+          @if (isDraft()) {
+            <app-customer-lookup formControlName="customerId" />
+          } @else {
+            <input pInputText id="customerId" formControlName="customerId" readonly />
+          }
         </div>
+        @if (loyaltyBalance() != null) {
+          <p>Loyalty points: {{ loyaltyBalance() }}</p>
+        }
         <div class="detail-form__field">
-          <label for="prescriptionId">Prescription ID</label>
-          <input
-            pInputText
-            id="prescriptionId"
-            formControlName="prescriptionId"
-            [readonly]="!isDraft()"
-          />
+          <label for="prescriptionId">Prescription</label>
+          @if (isDraft()) {
+            <app-prescription-lookup formControlName="prescriptionId" />
+          } @else {
+            <input pInputText id="prescriptionId" formControlName="prescriptionId" readonly />
+          }
         </div>
         <div class="detail-form__field">
           <label for="invoiceDate">Invoice Date</label>
@@ -85,6 +91,9 @@
           <p class="detail-form__error">{{ errorMessage() }}</p>
         }
       </form>
+      @if (invoiceId()) {
+        <app-document-change-history-panel entityType="SalesInvoice" [entityId]="invoiceId()!" />
+      }
     </p-tabpanel>
     @if (invoiceId()) {
       <p-tabpanel value="items">

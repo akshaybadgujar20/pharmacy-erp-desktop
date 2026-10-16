@@ -6,6 +6,8 @@
 
 **Parent:** [Functional overview](./functional-overview.md)
 
+**Last verified:** Desktop-first UI delivery ([product-gaps-delivery.md](../architecture/product-gaps-delivery.md)); routes/nav audited against `src/app/features/` and `nav.config.ts`.
+
 ---
 
 ## Legend
@@ -39,18 +41,18 @@ Backend gap severity: **High** = compliance or financial risk; **Medium** = oper
 | [Medicine Master](#medicine-master) | Implemented | Implemented | Partial |
 | [Inventory](#inventory) | Partial | Implemented | Partial |
 | [Purchase](#purchase) | Partial | Implemented | Partial |
-| [Sales](#sales) | Partial | Implemented | Planned |
+| [Sales](#sales) | Partial | Implemented | Partial |
 | [Financial](#financial) | Partial | Implemented | Partial |
 | [Pricing](#pricing) | Implemented | Implemented | Partial |
-| [Loyalty](#loyalty) | Partial | Partial | Planned |
-| [Prescription](#prescription) | Partial | Implemented | Planned |
-| [Synchronization](#synchronization) | Partial | Partial | Planned |
-| [Audit](#audit) | Implemented | Planned | Planned |
+| [Loyalty](#loyalty) | Partial | Partial | Partial |
+| [Prescription](#prescription) | Partial | Implemented | Partial |
+| [Synchronization](#synchronization) | Partial | Partial | Partial |
+| [Audit](#audit) | Implemented | Partial | Partial |
 | [Configuration](#configuration) | Implemented | Implemented | Partial |
 | [Settings](#settings-app-settings) | Implemented | Implemented | Partial |
 | [Masters (Geographic)](#masters-geographic) | Implemented | Implemented | Partial |
 | [Reporting](#reporting) | Partial | Partial | Partial |
-| [Integrations & devices](#integrations-and-devices) | Partial | Partial | Planned |
+| [Integrations & devices](#integrations-and-devices) | Partial | Partial | Partial |
 
 ---
 
@@ -75,16 +77,17 @@ Cross-cutting Angular/Electron shell (not a business module).
 - Dashboard — `src/app/components/dashboard/`
 - Main layout + sidebar nav — `src/app/components/shell/`
 - Permission-filtered menu — `nav.config.ts`, `nav.utils.ts`
-- i18n — `public/i18n/en.json`
+- i18n — `public/i18n/english.json`, `public/i18n/marathi.json`
+- Header sync status label — `main-layout.component.ts`
 
 ### UI gaps
 
-- UI-PLATFORM-1: No in-app sync status indicator.
+- None significant for shell chrome.
 
 ### UX gaps
 
-- UI-PLATFORM-2: Keyboard shortcuts (F2, F4, F8, Ctrl+S) registered but handlers are no-op (`KeyboardShortcutService`).
-- UI-PLATFORM-3: Electron IPC limited to `deviceId` and `secureStore` — no print/scan bridge yet.
+- UI-PLATFORM-2: F4 global medicine search and Ctrl+S save-on-active-screen partially wired; sales F2/F8 on list/counter.
+- ~~UI-PLATFORM-1~~ / ~~UI-PLATFORM-3~~ — sync badge in header; Electron print/save/barcode wedge via `ElectronService` and `electron/preload.js`.
 
 ---
 
@@ -154,7 +157,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-SEC-1: No self-service password change flow in Angular (API may exist).
+- UI-SEC-1: Self-service change password at `/security/change-password` (also linked from shell user menu); legacy `/settings/change-password` redirects.
 
 ---
 
@@ -190,7 +193,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UX gaps
 
 - UI-MED-1: F4 "search medicine" shortcut not wired to global search.
-- UI-MED-2: No barcode scan-to-select on medicine list.
+- UI-MED-2: Barcode wedge on medicine list (Electron); stock list and counter line scan Planned.
 
 ---
 
@@ -265,7 +268,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI screens
 
-- Routes: `/purchase/orders`, `goods-receipts`, `invoices`, `returns`
+- Routes: `/purchase/orders`, `goods-receipts`, `invoices`, `returns`, `/purchase/grn-wizard`
 - Code: `src/app/features/purchase/purchase.routes.ts`
 - Nav: Purchase group in `nav.config.ts`
 - Pattern: list + detail + items tabs per document type
@@ -276,7 +279,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-PUR-1: No guided PO → GRN wizard (separate screens today).
+- ~~UI-PUR-1~~ — PO → GRN wizard at `/purchase/grn-wizard` (nav under Purchase).
 - UI-PUR-2: Three-way match indicators not surfaced on invoice screen.
 
 ---
@@ -287,7 +290,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 |-------|--------|
 | Backend | Partial |
 | UI | Implemented |
-| UX | Planned |
+| UX | Partial |
 
 ### Backend
 
@@ -302,7 +305,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | GAP-2 | Payment not captured at finalise — invoice may stay UNPAID | Low |
 | GAP-3 | Return: only RESTOCK disposition supported | Medium |
 | GAP-4 | No standalone refund flow on invoice | Low |
-| GAP-5 | Prescription checked only — not marked dispensed | Medium |
+| GAP-5 | Prescription dispense on post wired; line-level UI match still Partial | Medium |
 | GAP-6 | No Schedule-H / controlled-drug enforcement at post | High |
 | GAP-7 | No automated tests for Sales module | Medium |
 | GAP-8 | No end-to-end tests for sales invoice workflow | Medium |
@@ -311,21 +314,21 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI screens
 
-- Routes: `/sales/invoices`, `/sales/returns`
+- Routes: `/sales/invoices`, `/sales/invoices/:id/counter`, `/sales/returns`
 - Code: `src/app/features/sales/sales.routes.ts`
-- Nav: Sales group in `nav.config.ts`
-- Pattern: list + detail; invoice items tab + payments tab; return items tab
+- Nav: Sales group in `nav.config.ts` (counter entry via invoice list / Counter nav label)
+- Pattern: list + counter POS + admin detail; invoice items tab + payments tab; return items tab
 
 ### UI gaps
 
-- UI-SALES-1: No dedicated counter/POS layout — admin list/detail pattern only.
-- UI-SALES-2: Loyalty earn/redeem controls not on invoice screen (no loyalty UI module).
+- UI-SALES-1: Counter exists; medicine/batch line lookups on items tab Partial.
+- ~~UI-SALES-2~~ — loyalty redeem on counter post; earn via backend integration.
 
 ### UX gaps
 
-- UI-SALES-3: F2 new sale, F8 payment shortcuts not wired.
-- UI-SALES-4: Post → pay → print not on single keyboard-driven flow.
-- UI-SALES-5: Receipt print not hooked to Electron printer service.
+- UI-SALES-3: F2/F8 on sales list and counter; global F4/Ctrl+S Partial.
+- UI-SALES-4: Counter consolidates post/pay/print; admin detail path remains separate.
+- ~~UI-SALES-5~~ — receipt print via `ElectronService` (printer config mapping Partial).
 
 ---
 
@@ -412,35 +415,36 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Partial |
-| UI | Planned |
-| UX | Planned |
+| UI | Partial |
+| UX | Partial |
 
 ### Backend
 
 - `LoyaltyProgram` CRUD, `CustomerLoyaltyMembership` enrollment, `LoyaltyTransaction` ledger.
 - Earn/redeem on sales invoice **post** via `LoyaltyIntegrationService` (`redeemPoints` on workflow DTO).
+- Customer APIs: summary, transactions list, manual adjustment — `customers/:id/loyalty/*`.
+- Sales return loyalty reversal via `LoyaltyIntegrationService` on approve.
 - `LOYALTY_*` permissions seeded; outbox entity types registered.
 
 **Backend gaps**
 
-- Sales return/cancel loyalty reversal Planned.
-- Manual adjustment API Planned (DTO exists).
 - Points expiry job and reconciliation Planned.
 
 ### UI screens
 
-- Routes: `/loyalty/programs`
-- Code: `src/app/features/loyalty/loyalty.routes.ts`
+- Routes: `/loyalty/programs`, `/loyalty/programs/new`, `/loyalty/programs/:programId`
+- Customer loyalty tab on `/party/customers/:id`
+- Code: `src/app/features/loyalty/`, `customer-loyalty-tab.component.ts`
 - Nav: Loyalty under Admin in `nav.config.ts`
 
 ### UI gaps
 
-- UI-LOY-1: Program create/edit screens minimal (list only).
-- UI-LOY-2: Customer points history screen Planned.
+- UI-LOY-1: Program list + detail forms (not full toolbar/grid polish).
+- UI-LOY-2: Points history on customer tab; dedicated history route Partial.
 
 ### UX gaps
 
-- UI-LOY-3: Earn/redeem at invoice post not on sales screen.
+- ~~UI-LOY-3~~ — redeem on counter; manual adjustment dialog on customer tab.
 
 ---
 
@@ -450,18 +454,19 @@ Cross-cutting Angular/Electron shell (not a business module).
 |-------|--------|
 | Backend | Partial |
 | UI | Implemented |
-| UX | Planned |
+| UX | Partial |
 
 ### Backend
 
 - Prescription and PrescriptionItem CRUD; link to sales via `prescriptionId`.
+- `POST /prescriptions/:id/reactivate` for expired prescriptions.
 - Status values include PARTIALLY_DISPENSED / DISPENSED in schema.
 
 **Backend gaps**
 
 | ID | Gap | Severity |
 |----|-----|----------|
-| GAP-RX-1 | Sales dispensing not wired — Rx not updated on sale | High |
+| GAP-RX-1 | Dispense on sales post wired; UI line-level linkage Partial | Medium |
 | GAP-RX-2 | PARTIALLY_DISPENSED / DISPENSED statuses unused | Medium |
 | GAP-RX-3 | Sales only validates prescription FK — no line-level dispense match | Medium |
 
@@ -479,7 +484,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UX gaps
 
 - UI-RX-2: Schedule-H block at sale not surfaced in billing UX.
-- UI-RX-3: Expired-Rx override workflow not in UI.
+- UI-RX-3: Reactivate on Rx detail; override-at-sale dialog Partial (reactivate-then-retry).
 
 ---
 
@@ -488,8 +493,8 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Partial |
-| UI | Planned |
-| UX | Planned |
+| UI | Partial |
+| UX | Partial |
 
 ### Backend
 
@@ -504,18 +509,18 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI screens
 
-- Routes: `/sync` — manual sync + last run summary
+- Routes: `/sync`, `/sync/outbox`, `/sync/conflicts`
 - Code: `src/app/features/sync/sync.routes.ts`
 - Nav: Sync under Admin in `nav.config.ts`
 
 ### UI gaps
 
-- UI-SYNC-1: Outbox queue viewer Planned (admin API exists).
-- UI-SYNC-2: Conflict resolution screen Planned (admin API exists).
+- UI-SYNC-1: Outbox AppGrid with retry (uses row version).
+- UI-SYNC-2: Conflict list AppGrid; resolve actions per API.
 
 ### UX gaps
 
-- UI-SYNC-3: Background sync status indicator Planned.
+- ~~UI-SYNC-3~~ — header sync status in main layout (see Platform shell).
 
 ---
 
@@ -524,12 +529,13 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Implemented |
-| UI | Planned |
-| UX | Planned |
+| UI | Partial |
+| UX | Partial |
 
 ### Backend
 
 - AuditLog on mutations inside UnitOfWork; ChangeHistory for entity field diffs.
+- List APIs: `GET /audit-logs`, `GET /change-histories` with filters.
 - Correlation ID on HTTP requests.
 
 **Backend gaps**
@@ -539,17 +545,18 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI screens
 
-- No `src/app/features/audit/` folder.
-- No audit log search or change-history viewer routes.
+- Routes: `/audit/audit-logs`, `/audit/change-histories`
+- Code: `src/app/features/audit/audit.routes.ts`
+- Nav: Audit under Admin in `nav.config.ts`
 
 ### UI gaps
 
-- UI-AUD-1: Audit log search screen Planned.
-- UI-AUD-2: Entity change-history viewer Planned.
+- UI-AUD-1: Audit log AppGrid with search/filters.
+- UI-AUD-2: Change-history AppGrid with entity filters.
 
 ### UX gaps
 
-- UI-AUD-3: Inline "who changed this" on document detail screens Planned.
+- UI-AUD-3: `DocumentChangeHistoryPanel` on key document detail screens.
 
 ---
 
@@ -583,7 +590,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-CONF-1: Printer/barcode config screens exist but hardware test buttons not wired.
+- ~~UI-CONF-1~~ — test print on printer configuration detail.
 
 ---
 
@@ -611,7 +618,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-SET-1: Settings grouped by category/domain for pharmacist-friendly browsing Planned.
+- ~~UI-SET-1~~ — category filter chips on setting list.
 
 ---
 
@@ -705,13 +712,13 @@ Hardware and device integration (see [integrations-and-devices.md](./integration
 
 ### UI gaps
 
-- UI-DEV-1: No print preview or test-print from sales screen.
+- UI-DEV-1: Print preview dialog before receipt print (Partial).
 - UI-DEV-2: No payment terminal configuration screen.
 
 ### UX gaps
 
-- UI-DEV-3: Thermal receipt print from post not wired.
-- UI-DEV-4: USB barcode scanner integration not wired in Angular.
+- ~~UI-DEV-3~~ — receipt print from counter post via Electron.
+- ~~UI-DEV-4~~ — barcode wedge on medicine list and counter (Partial).
 - UI-DEV-5: Card/UPI terminal flow Planned.
 
 ---

@@ -25,8 +25,8 @@
       "admin": "प्रशासन"
     },
     "dashboard": "डॅशबोर्ड",
-    "sales": { "title": "विक्री", "invoices": "विक्री पावत्या", "returns": "विक्री परतावे" },
-    "purchase": { "title": "खरेदी", "orders": "खरेदी ऑर्डर", "invoices": "खरेदी पावत्या", "returns": "खरेदी परतावे", "goodsReceipts": "माल प्राप्ती" },
+    "sales": { "title": "विक्री", "counter": "काउंटर विक्री", "invoices": "विक्री पावत्या", "returns": "विक्री परतावे" },
+    "purchase": { "title": "खरेदी", "orders": "खरेदी ऑर्डर", "invoices": "खरेदी पावत्या", "returns": "खरेदी परतावे", "goodsReceipts": "माल प्राप्ती", "grnWizard": "PO ते GRN विझार्ड" },
     "inventory": { "title": "इन्व्हेंटरी", "batches": "बॅच", "stocks": "स्टॉक", "movements": "स्टॉक हालचाल", "adjustments": "स्टॉक समायोजन", "transfers": "स्टॉक हस्तांतरण", "stockTakes": "स्टॉक तपासणी" },
     "party": { "title": "पक्ष", "parties": "पक्ष", "customers": "ग्राहक", "suppliers": "पुरवठादार", "doctors": "डॉक्टर", "employees": "कर्मचारी" },
     "medicine": { "title": "औषधे", "medicines": "औषधे", "categories": "श्रेणी", "generics": "जेनेरिक", "schedules": "शेड्यूल", "manufacturers": "उत्पादक", "saltCompositions": "साल्ट रचना", "units": "मापन एकक" },
@@ -35,9 +35,12 @@
     "finance": { "title": "वित्त", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते" },
     "prescriptions": { "list": "प्रिस्क्रिप्शन" },
     "reports": { "title": "अहवाल" },
-    "security": { "title": "सुरक्षा", "users": "वापरकर्ते", "roles": "भूमिका", "permissions": "परवानग्या", "sessions": "सत्र" },
+    "security": { "title": "सुरक्षा", "users": "वापरकर्ते", "roles": "भूमिका", "permissions": "परवानग्या", "sessions": "सत्र", "changePassword": "पासवर्ड बदला" },
     "configuration": { "title": "कॉन्फिगरेशन", "companies": "कंपन्या", "branches": "शाखा", "financialYears": "आर्थिक वर्ष", "sequenceGenerators": "अनुक्रम जनरेटर", "barcodeConfigs": "बारकोड", "printerConfigs": "प्रिंटर" },
-    "settings": { "title": "सेटिंग्ज" }
+    "settings": { "title": "सेटिंग्ज" },
+    "sync": { "title": "सिंक", "dashboard": "सिंक डॅशबोर्ड", "outbox": "आउटबॉक्स", "conflicts": "संघर्ष" },
+    "loyalty": { "programs": "लॉयल्टी कार्यक्रम" },
+    "audit": { "title": "ऑडिट", "logs": "ऑडिट नोंदी", "changes": "बदल इतिहास" }
   },
   "auth": {
     "loginTitle": "साइन इन",
