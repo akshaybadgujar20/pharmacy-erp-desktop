@@ -1,49 +1,27 @@
-import { ValidationPipe } from '@nestjs/common';
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from '../src/app.module';
-import { PrismaService } from '../src/prisma.service';
-
-interface ApiEnvelope<T> {
-  success: boolean;
-  data?: T;
-  error?: { code: string; message: string };
-}
+import { PrismaService } from 'src/prisma.service';
+import {
+  ApiEnvelope,
+  closeHttpTestApp,
+  createHttpTestApp,
+  loginAs,
+  resetAllUserPasswords,
+} from '../support/http-test.helpers';
 
 describe('Auth (e2e)', () => {
   let app: INestApplication<App>;
+  let prisma: PrismaService;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
-    await app.init();
-
-    const prisma = app.get(PrismaService);
-    const passwordHash = bcrypt.hashSync('admin123', 10);
-    await prisma.client.user.updateMany({
-      data: {
-        passwordHash,
-        failedLoginAttempts: 0,
-        lockedUntil: null,
-      },
-    });
+    app = await createHttpTestApp();
+    prisma = app.get(PrismaService);
+    await resetAllUserPasswords(prisma);
   });
 
   afterEach(async () => {
-    await app.close();
+    await closeHttpTestApp(app);
   });
 
   it('POST /auth/login rejects invalid credentials', () => {
@@ -63,16 +41,10 @@ describe('Auth (e2e)', () => {
   });
 
   it('login → authorized /auth/me → logout flow', async () => {
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ username: 'admin', password: 'admin123' })
-      .expect(201);
-
-    const loginBody = loginResponse.body as ApiEnvelope<{
-      accessToken: string;
-    }>;
-    expect(loginBody.success).toBe(true);
-    const accessToken = loginBody.data?.accessToken ?? '';
+    const accessToken = await loginAs(app, {
+      username: 'admin',
+      password: 'admin123',
+    });
 
     await request(app.getHttpServer())
       .get('/auth/me')
@@ -91,15 +63,10 @@ describe('Auth (e2e)', () => {
   });
 
   it('GET /settings returns 403 for cashier without settings permission', async () => {
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ username: 'cashier1', password: 'admin123' })
-      .expect(201);
-
-    const loginBody = loginResponse.body as ApiEnvelope<{
-      accessToken: string;
-    }>;
-    const accessToken = loginBody.data?.accessToken ?? '';
+    const accessToken = await loginAs(app, {
+      username: 'cashier1',
+      password: 'admin123',
+    });
 
     await request(app.getHttpServer())
       .get('/settings')

@@ -43,3 +43,4 @@ Thumbs.db
 /db
 /backend/prisma/migrations/
 /db/pharmacy.sqlite
+/db/pharmacy.test.sqlite

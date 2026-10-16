@@ -42,7 +42,9 @@ npm run test             # unit tests (src/**/*.spec.ts)
 npm run test:watch       # unit watch mode
 npm run test:cov         # unit coverage
 npm run test:persistence # persistence integration (--runInBand)
-npm run test:e2e         # HTTP e2e tests
+npm run test:integration # HTTP API integration (--runInBand)
+npm run test:e2e         # HTTP e2e tests (--runInBand)
+npm run db:test:prepare  # reset db/pharmacy.test.sqlite for DB-backed tests
 npm run db:seed          # append seed (no wipe; adds demo data)
 npm run db:seed:fresh    # wipe seed tables + full reseed
 npm run db:seed -- --only sales   # resume from phase (see seed/README.md)

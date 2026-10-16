@@ -11,21 +11,23 @@ How to run unit, integration, persistence, and end-to-end tests in **pharmacy-er
 | Suite | Location | Config | Command (from `backend/`) | DB / network |
 |-------|----------|--------|---------------------------|--------------|
 | **Backend unit** | `backend/src/**/*.spec.ts` | `package.json` `jest` | `npm run test` | Mocked — no DB |
-| **Persistence integration** | `backend/test/persistence/**/*.integration.spec.ts` | `test/persistence/jest-persistence.json` | `npm run test:persistence` | Seeded `db/pharmacy.sqlite` |
-| **Backend e2e** | `backend/test/*.e2e-spec.ts` | `test/jest-e2e.json` | `npm run test:e2e` | Seeded SQLite + HTTP |
+| **Persistence integration** | `backend/test/persistence/**/*.integration.spec.ts` | `test/persistence/jest-persistence.json` | `npm run test:persistence` | Seeded `db/pharmacy.test.sqlite` |
+| **HTTP API integration** | `backend/test/integration/**/*.integration.spec.ts` | `test/integration/jest-integration.json` | `npm run test:integration` | Seeded `db/pharmacy.test.sqlite` + HTTP |
+| **Backend e2e** | `backend/test/e2e/*.e2e-spec.ts` | `test/jest-e2e.json` | `npm run test:e2e` | Seeded `db/pharmacy.test.sqlite` + HTTP |
 | **Angular unit** | `src/**/*.spec.ts` | `jest.config.ts` (repo root) | `npm test` (repo root) | jsdom — no backend |
 
-Persistence and e2e tests share the SQLite file — run persistence with `--runInBand` (already set in `test:persistence` script).
+Persistence, HTTP integration, and e2e use the **test database** (`db/pharmacy.test.sqlite`). Dev data stays in `db/pharmacy.sqlite`. All three DB-backed suites run with `--runInBand` where configured in `package.json`.
 
-### Before persistence / e2e tests
+### Before persistence / integration / e2e tests
 
 ```bash
 cd backend
-npm run db:seed:fresh   # recommended: clean baseline before integration/e2e
-# npm run db:seed       # append only if DB already matches schema and you need more rows
+npm run db:test:prepare   # delete test DB → schema push → seed:fresh into pharmacy.test.sqlite
 ```
 
-Seed modes: `db:seed:fresh` wipes and reseeds; `db:seed` appends; `--only <phase>` resumes from a phase. Details: [backend/seed/README.md](../../../backend/seed/README.md).
+Run `db:test:prepare` manually when the schema or seed changes, or when tests fail due to stale data. Day-to-day dev on `pharmacy.sqlite` still uses `npm run db:seed:fresh` / `db:seed`. Seed modes: [backend/seed/README.md](../../../backend/seed/README.md).
+
+HTTP integration and e2e tests load `DATABASE_URL` from [backend/.env.test](../../../backend/.env.test) via `test/setup/test-env.setup.ts`. Shared helpers: `test/support/http-test.helpers.ts`.
 
 ---
 
@@ -48,6 +50,9 @@ npm run test:debug
 
 # Persistence integration (serial, seeded DB)
 npm run test:persistence
+
+# HTTP API integration (per-module APIs)
+npm run test:integration
 
 # HTTP e2e (auth, party, app smoke)
 npm run test:e2e
@@ -137,6 +142,18 @@ Helpers: `backend/test/persistence/persistence-test.helpers.ts` (`createPersiste
 
 ---
 
+## HTTP API integration — by feature
+
+```bash
+cd backend
+
+# All integration specs
+npm run test:integration
+
+# Purchase orders
+npm run test:integration -- --testPathPatterns=purchase-order.integration
+```
+
 ## Backend e2e — by feature
 
 ```bash
@@ -194,11 +211,12 @@ Config: `jest.config.ts`, setup: `setup-jest.ts`, tests: `src/**/*.spec.ts`.
 
 ## Quick reference — feature → command
 
-| Feature / area | Unit (`backend/`) | Persistence | E2e | Angular (root) |
-|----------------|-------------------|-------------|-----|----------------|
-| Auth | `npm run test -- --testPathPatterns=auth` | — | `npm run test:e2e -- --testPathPatterns=auth.e2e-spec` | `npm test -- --testPathPatterns=auth.service.spec` |
-| Party | `npm run test -- --testPathPatterns=party` | — | `npm run test:e2e -- --testPathPatterns=party.e2e-spec` | — |
-| Reporting | `npm run test -- --testPathPatterns=reporting` | — | — | — |
+| Feature / area | Unit (`backend/`) | Persistence | Integration | E2e | Angular (root) |
+|----------------|-------------------|-------------|-------------|-----|----------------|
+| Auth | `npm run test -- --testPathPatterns=auth` | — | — | `npm run test:e2e -- --testPathPatterns=auth.e2e-spec` | `npm test -- --testPathPatterns=auth.service.spec` |
+| Party | `npm run test -- --testPathPatterns=party` | — | — | `npm run test:e2e -- --testPathPatterns=party.e2e-spec` | — |
+| Purchase | `npm run test -- --testPathPatterns=purchase` | — | `npm run test:integration -- --testPathPatterns=purchase-order` | — | — |
+| Reporting | `npm run test -- --testPathPatterns=reporting` | — | — | — | — |
 | Settings | `npm run test -- --testPathPatterns=settings` | — | — | — |
 | Persistence layer | — | `npm run test:persistence` | — | — |
 | Sequence | — | `npm run test:persistence -- --testPathPatterns=sequence-generator` | — | — |
@@ -229,9 +247,11 @@ npm run test:persistence
 
 ```bash
 cd backend
+npm run db:test:prepare
 npm run lint
 npm run test
 npm run test:persistence
+npm run test:integration
 npm run test:e2e
 ```
 
@@ -239,7 +259,7 @@ npm run test:e2e
 
 ```bash
 npm test                    # Angular unit (repo root)
-cd backend && npm run lint && npm run test && npm run test:persistence && npm run test:e2e
+cd backend && npm run db:test:prepare && npm run lint && npm run test && npm run test:persistence && npm run test:integration && npm run test:e2e
 ```
 
 ---
@@ -272,7 +292,13 @@ cd backend && npm run lint && npm run test && npm run test:persistence && npm ru
 | `atomic-workflow.integration.spec.ts` | Multi-step transactional flow |
 | `audit-service.integration.spec.ts` | Audit in transaction |
 
-### Backend e2e (`backend/test/`)
+### HTTP API integration (`backend/test/integration/`)
+
+| File | Area |
+|------|------|
+| `purchase-order.integration.spec.ts` | Purchase order HTTP API |
+
+### Backend e2e (`backend/test/e2e/`)
 
 | File | Area |
 |------|------|

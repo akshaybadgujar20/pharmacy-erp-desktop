@@ -9,11 +9,14 @@ alwaysApply: false
 | Location | Type | Command |
 |----------|------|---------|
 | `src/**/*.spec.ts` | Unit tests (co-located) | `npm run test` |
-| `test/persistence/**/*.spec.ts` | Persistence integration | `npm run test:persistence` |
-| `test/app.e2e-spec.ts` | End-to-end | `npm run test:e2e` |
+| `test/persistence/**/*.integration.spec.ts` | Persistence integration | `npm run test:persistence` |
+| `test/integration/**/*.integration.spec.ts` | HTTP API integration | `npm run test:integration` |
+| `test/e2e/*.e2e-spec.ts` | End-to-end HTTP flows | `npm run test:e2e` |
 
 - Unit tests: Jest `rootDir: src`, pattern `*.spec.ts`
-- Persistence tests: separate config at [jest-persistence.json](backend/test/persistence/jest-persistence.json), run with `--runInBand` (shared SQLite file)
+- DB-backed suites use `db/pharmacy.test.sqlite` — run `npm run db:test:prepare` before persistence / integration / e2e
+- HTTP tests: shared helpers in [http-test.helpers.ts](backend/test/support/http-test.helpers.ts); env from [test-env.setup.ts](backend/test/setup/test-env.setup.ts)
+- Persistence / integration / e2e: run with `--runInBand` (SQLite write contention)
 
 ---
 
@@ -137,9 +140,16 @@ npm run test
 npm run test -- --testPathPatterns=auth|party|reporting|settings
 npm run test -- party/customer.service.spec.ts    # single file (path under src/)
 
-# Persistence integration (seed DB first if needed)
+# Test DB (before persistence / integration / e2e)
+npm run db:test:prepare
+
+# Persistence integration
 npm run test:persistence
 npm run test:persistence -- --testPathPatterns=sequence-generator
+
+# HTTP API integration
+npm run test:integration
+npm run test:integration -- --testPathPatterns=purchase-order
 
 # HTTP e2e
 npm run test:e2e

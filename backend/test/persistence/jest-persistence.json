@@ -1,6 +1,7 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": "..",
+  "rootDir": "../..",
+  "roots": ["<rootDir>/test/persistence"],
   "testRegex": "integration\\.spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
@@ -8,5 +9,6 @@
   "testEnvironment": "node",
   "moduleNameMapper": {
     "^src/(.*)$": "<rootDir>/src/$1"
-  }
+  },
+  "setupFiles": ["<rootDir>/test/setup/test-env.setup.ts"]
 }

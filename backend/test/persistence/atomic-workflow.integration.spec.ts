@@ -67,14 +67,18 @@ describe('Atomic workflow (integration)', () => {
           branchCode: seed.branch.branchCode,
         });
 
+        const now = BigInt(Date.now());
         const invoice = await tx.salesInvoice.create({
           data: {
             uuid: invoiceUuid,
             invoiceNumber: documentNumber,
             branchId: seed.branch.id,
+            invoiceDate: now,
             grossAmount: batch.mrp,
             netAmount: batch.mrp,
             balanceAmount: new Prisma.Decimal(0),
+            createdAt: now,
+            updatedAt: now,
           },
         });
 

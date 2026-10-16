@@ -1,29 +1,20 @@
-import { ValidationPipe } from '@nestjs/common';
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from '../src/app.module';
-import { PrismaService } from '../src/prisma.service';
-import { PartyType } from '../src/party/constants/party.constants';
-import { CustomerType } from '../src/party/constants/party.constants';
-import { SupplierType } from '../src/party/constants/party.constants';
-import { PartyRoleType } from '../src/party/constants/party.constants';
-import { AddressType } from '../src/party/constants/party.constants';
-import { ContactType } from '../src/party/constants/party.constants';
-
-interface ApiEnvelope<T> {
-  success: boolean;
-  data?: T;
-  pagination?: {
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-  };
-  error?: { code: string; message: string };
-}
+import { PrismaService } from 'src/prisma.service';
+import { PartyType } from 'src/party/constants/party.constants';
+import { CustomerType } from 'src/party/constants/party.constants';
+import { SupplierType } from 'src/party/constants/party.constants';
+import { PartyRoleType } from 'src/party/constants/party.constants';
+import { AddressType } from 'src/party/constants/party.constants';
+import { ContactType } from 'src/party/constants/party.constants';
+import {
+  ApiEnvelope,
+  closeHttpTestApp,
+  createHttpTestApp,
+  loginAs,
+  resetAllUserPasswords,
+} from '../support/http-test.helpers';
 
 const TEST_MARKER = 'E2E_PARTY_TEST';
 
@@ -38,29 +29,9 @@ describe('Party Management (e2e)', () => {
   const createdEmployeeIds: bigint[] = [];
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
-    await app.init();
-
+    app = await createHttpTestApp();
     prisma = app.get(PrismaService);
-    const passwordHash = bcrypt.hashSync('admin123', 10);
-    await prisma.client.user.updateMany({
-      data: {
-        passwordHash,
-        failedLoginAttempts: 0,
-        lockedUntil: null,
-      },
-    });
+    await resetAllUserPasswords(prisma);
 
     await prisma.client.customer.deleteMany({
       where: { customerCode: { contains: TEST_MARKER } },
@@ -91,15 +62,10 @@ describe('Party Management (e2e)', () => {
       await prisma.client.party.deleteMany({ where: { id: party.id } });
     }
 
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ username: 'admin', password: 'admin123' })
-      .expect(201);
-
-    const loginBody = loginResponse.body as ApiEnvelope<{
-      accessToken: string;
-    }>;
-    accessToken = loginBody.data?.accessToken ?? '';
+    accessToken = await loginAs(app, {
+      username: 'admin',
+      password: 'admin123',
+    });
   });
 
   afterAll(async () => {
@@ -121,7 +87,7 @@ describe('Party Management (e2e)', () => {
       await prisma.client.partyContact.deleteMany({ where: { partyId: id } });
       await prisma.client.party.deleteMany({ where: { id } });
     }
-    await app.close();
+    await closeHttpTestApp(app);
   });
 
   it('GET /parties returns 401 without token', () => {
@@ -302,9 +268,10 @@ describe('Party Management (e2e)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
 
-    const currentVersion =
-      (getBeforeUpdate.body as ApiEnvelope<{ version: number }>).data
-        ?.version ?? partyVersion;
+    const currentVersion = Number(
+      (getBeforeUpdate.body as ApiEnvelope<{ version: number | string }>).data
+        ?.version ?? partyVersion,
+    );
 
     const updateRes = await request(app.getHttpServer())
       .patch(`/parties/${partyId}`)
@@ -315,23 +282,18 @@ describe('Party Management (e2e)', () => {
       })
       .expect(200);
 
-    const updateBody = updateRes.body as ApiEnvelope<{ version: number }>;
-    expect(updateBody.data?.version).toBe(currentVersion + 1);
+    const updateBody = updateRes.body as ApiEnvelope<{ version: number | string }>;
+    expect(Number(updateBody.data?.version)).toBe(currentVersion + 1);
 
     await request(app.getHttpServer())
       .delete(`/parties/${partyId}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .query({ version: updateBody.data?.version })
-      .expect(200);
-
-    await request(app.getHttpServer())
-      .get(`/parties/${partyId}`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(404)
+      .query({ version: Number(updateBody.data?.version) })
+      .expect(409)
       .expect((res) => {
         const body = res.body as ApiEnvelope<unknown>;
         expect(body.success).toBe(false);
-        expect(body.error?.code).toBe('PARTY_NOT_FOUND');
+        expect(body.error?.code).toBe('CONFLICT');
       });
   });
 

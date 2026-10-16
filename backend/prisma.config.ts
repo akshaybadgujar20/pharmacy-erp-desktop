@@ -9,6 +9,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: 'file:../db/pharmacy.sqlite',
+    url: process.env.DATABASE_URL ?? 'file:../db/pharmacy.sqlite',
   },
 });

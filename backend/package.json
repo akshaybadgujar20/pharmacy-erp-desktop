@@ -17,11 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "db:seed": "tsx seed/seed.ts",
     "db:seed:fresh": "tsx seed/seed.ts --fresh",
     "db:reset": "prisma db push --force-reset && npm run db:seed:fresh",
+    "db:test:prepare": "tsx scripts/prepare-test-db.ts",
     "test:persistence": "jest --config ./test/persistence/jest-persistence.json --runInBand",
+    "test:integration": "jest --config ./test/integration/jest-integration.json --runInBand",
     "test:workflows": "python ../docs/pharmacy_erp_architecture_docs/workflows/test_generators.py"
   },
   "dependencies": {
