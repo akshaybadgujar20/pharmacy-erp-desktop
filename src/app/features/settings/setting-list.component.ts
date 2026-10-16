@@ -6,7 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { KeyboardShortcutService } from '../../core/keyboard';
 import { AppGridComponent } from '../../components/generic/grid';
 import { AppToolbarComponent } from '../../components/generic/toolbar';
@@ -23,7 +23,7 @@ import { SettingService } from './setting.service';
 @Component({
   selector: 'app-setting-list',
   standalone: true,
-  imports: [AppToolbarComponent, AppGridComponent],
+  imports: [RouterLink, AppToolbarComponent, AppGridComponent],
   templateUrl: './setting-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,6 +36,9 @@ export class SettingListComponent implements OnInit, OnDestroy {
   readonly gridConfig = SETTING_GRID_CONFIG;
 
   readonly rows = signal<AppSetting[]>([]);
+  readonly allRows = signal<AppSetting[]>([]);
+  readonly categories = signal<string[]>([]);
+  readonly activeCategory = signal('');
   readonly loading = signal(false);
 
   ngOnInit(): void {
@@ -66,14 +69,30 @@ export class SettingListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/settings', event.row.settingKey]);
   }
 
+  filterCategory(category: string): void {
+    this.activeCategory.set(category);
+    this.applyCategoryFilter();
+  }
+
   private load(): void {
     this.loading.set(true);
     this.settingService.list().subscribe({
       next: (settings) => {
-        this.rows.set(settings);
+        this.allRows.set(settings);
+        this.categories.set([...new Set(settings.map((row) => row.category))]);
+        this.applyCategoryFilter();
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
     });
+  }
+
+  private applyCategoryFilter(): void {
+    const category = this.activeCategory();
+    if (!category) {
+      this.rows.set(this.allRows());
+      return;
+    }
+    this.rows.set(this.allRows().filter((row) => row.category === category));
   }
 }

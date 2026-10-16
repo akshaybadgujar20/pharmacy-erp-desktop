@@ -36,6 +36,7 @@ import {
   assertPrescriptionCancellable,
   assertPrescriptionDraft,
   assertPrescriptionExpirable,
+  assertPrescriptionReactivatable,
   assertPrescriptionNotInUse,
   assertPrescriptionNumberUnique,
   optimisticUpdate,
@@ -307,6 +308,16 @@ export class PrescriptionService {
       dto,
       PrescriptionStatus.EXPIRED,
       assertPrescriptionExpirable,
+      AuditAction.UPDATE,
+    );
+  }
+
+  async reactivate(id: bigint, dto: PrescriptionWorkflowDto) {
+    return this.transitionStatus(
+      id,
+      dto,
+      PrescriptionStatus.ACTIVE,
+      assertPrescriptionReactivatable,
       AuditAction.UPDATE,
     );
   }

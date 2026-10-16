@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import { GridFilterChange, GridPageChange } from '../../../components/generic/grid/types/grid-events.types';
@@ -20,7 +21,7 @@ import { StockService } from './stock.service';
 @Component({
   selector: 'app-stock-list',
   standalone: true,
-  imports: [AppToolbarComponent, AppGridComponent],
+  imports: [RouterLink, AppToolbarComponent, AppGridComponent],
   templateUrl: './stock-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -48,12 +48,14 @@ export class SalesInvoiceListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.shortcuts.registerHandler('global.refresh', () => this.load());
     this.shortcuts.registerHandler('global.new', () => this.onNew());
+    this.shortcuts.registerHandler('sales.new', () => this.onNew());
     this.load();
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('global.refresh');
     this.shortcuts.unregisterHandler('global.new');
+    this.shortcuts.unregisterHandler('sales.new');
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {
@@ -82,7 +84,7 @@ export class SalesInvoiceListComponent implements OnInit, OnDestroy {
       return;
     }
     if (event.action === 'edit') {
-      this.router.navigate(['/sales/invoices', event.row.id]);
+      this.router.navigate(['/sales/invoices', event.row.id, 'counter']);
     }
     if (event.action === 'delete') {
       this.salesInvoiceService.delete(event.row.id, event.row.version).subscribe({
@@ -92,7 +94,7 @@ export class SalesInvoiceListComponent implements OnInit, OnDestroy {
   }
 
   onRowDoubleClick(event: GridRowClickEvent<SalesInvoice>): void {
-    this.router.navigate(['/sales/invoices', event.row.id]);
+    this.router.navigate(['/sales/invoices', event.row.id, 'counter']);
   }
 
   private onNew(): void {

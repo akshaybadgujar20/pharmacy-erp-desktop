@@ -1,10 +1,18 @@
-<div class="page-layout">
-  <app-grid
-    [config]="gridConfig"
-    [data]="rows()"
-    [loading]="loading()"
-    (filterChange)="onFilterChange($event)"
-    (rowDoubleClick)="onRowDoubleClick($event)"
-  />
-</div>
+<div class="page-layout">
+  <div class="report-filters">
+    <button type="button" (click)="setCategory('')">All</button>
+    <button type="button" (click)="setCategory('party')">Party</button>
+    <button type="button" (click)="setCategory('sales')">Sales</button>
+    <button type="button" (click)="setCategory('purchase')">Purchase</button>
+    <button type="button" (click)="setCategory('inventory')">Inventory</button>
+    <button type="button" (click)="setCategory('finance')">Finance</button>
+  </div>
+  <app-grid
+    [config]="gridConfig"
+    [data]="rows()"
+    [loading]="loading()"
+    (filterChange)="onFilterChange($event)"
+    (rowDoubleClick)="onRowDoubleClick($event)"
+  />
+</div>
 

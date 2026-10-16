@@ -94,6 +94,7 @@
             <svg data-p-icon="sidebar"></svg>
           </button>
           <div class="ml-auto flex items-center gap-2">
+            <span class="text-xs text-surface-500">Sync: {{ syncStatus() }}</span>
             <app-language-selector />
 
             <button pButton type="button" severity="secondary" text size="small" [attr.aria-label]="'keyboard.openShortcuts' | translate" (click)="shortcutService.openDialog()" pTooltip="{{ 'auth.shortcut' | translate }}" tooltipPosition="left">

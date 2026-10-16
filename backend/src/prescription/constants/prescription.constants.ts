@@ -27,3 +27,7 @@ export const PRESCRIPTION_EXPIRABLE_STATUSES = [
   PrescriptionStatus.ACTIVE,
   PrescriptionStatus.PARTIALLY_DISPENSED,
 ] as const;
+
+export const PRESCRIPTION_REACTIVATABLE_STATUSES = [
+  PrescriptionStatus.EXPIRED,
+] as const;

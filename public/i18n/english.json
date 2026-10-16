@@ -107,6 +107,20 @@
     },
     "settings": {
       "title": "Settings"
+    },
+    "sync": {
+      "title": "Sync",
+      "dashboard": "Sync dashboard",
+      "outbox": "Outbox queue",
+      "conflicts": "Conflicts"
+    },
+    "loyalty": {
+      "programs": "Loyalty programs"
+    },
+    "audit": {
+      "title": "Audit",
+      "logs": "Audit logs",
+      "changes": "Change history"
     }
   },
   "auth": {

@@ -12,6 +12,11 @@ export const settingsRoutes: Routes = [
           import('./setting-list.component').then((m) => m.SettingListComponent),
       },
       {
+        path: 'change-password',
+        loadComponent: () =>
+          import('./change-password.component').then((m) => m.ChangePasswordComponent),
+      },
+      {
         path: ':key',
         loadComponent: () =>
           import('./setting-detail.component').then((m) => m.SettingDetailComponent),

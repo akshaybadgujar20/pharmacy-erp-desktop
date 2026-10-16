@@ -1,0 +1,38 @@
+<form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="detail-form__field">
+    <label for="programCode">Program code</label>
+    <input pInputText id="programCode" formControlName="programCode" />
+  </div>
+  <div class="detail-form__field">
+    <label for="programName">Program name</label>
+    <input pInputText id="programName" formControlName="programName" />
+  </div>
+  <div class="detail-form__field">
+    <label for="pointsPerAmount">Points per amount</label>
+    <input pInputText id="pointsPerAmount" formControlName="pointsPerAmount" />
+  </div>
+  <div class="detail-form__field">
+    <label for="redemptionValue">Redemption value</label>
+    <input pInputText id="redemptionValue" formControlName="redemptionValue" />
+  </div>
+  <div class="detail-form__field">
+    <label for="minimumRedemptionPoints">Minimum redemption points</label>
+    <input pInputText id="minimumRedemptionPoints" type="number" formControlName="minimumRedemptionPoints" />
+  </div>
+  <div class="detail-form__field">
+    <label for="effectiveFrom">Effective from (ISO)</label>
+    <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isDefault" [binary]="true" inputId="isDefault" />
+    <label for="isDefault">Default program</label>
+  </div>
+  <div class="detail-form__field">
+    <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
+    <label for="isActive">Active</label>
+  </div>
+  <button pButton type="submit" [disabled]="saving() || form.invalid">Save</button>
+  @if (errorMessage()) {
+    <p class="detail-form__error">{{ errorMessage() }}</p>
+  }
+</form>

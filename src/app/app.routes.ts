@@ -98,6 +98,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/loyalty/loyalty.routes').then((m) => m.loyaltyRoutes),
       },
+      {
+        path: 'audit',
+        loadChildren: () =>
+          import('./features/audit/audit.routes').then((m) => m.auditRoutes),
+      },
     ],
   },
 ];

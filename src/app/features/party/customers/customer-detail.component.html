@@ -1,3 +1,25 @@
+@if (!isNew()) {
+  <p-tabs value="overview">
+    <p-tablist>
+      <p-tab value="overview">Overview</p-tab>
+      <p-tab value="loyalty">Loyalty</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="overview">
+        <ng-container *ngTemplateOutlet="overviewForm" />
+      </p-tabpanel>
+      <p-tabpanel value="loyalty">
+        @if (customerId(); as id) {
+          <app-customer-loyalty-tab [customerId]="id" />
+        }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+} @else {
+  <ng-container *ngTemplateOutlet="overviewForm" />
+}
+
+<ng-template #overviewForm>
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="partyId">Party ID</label>
@@ -48,3 +70,4 @@
     <p class="detail-form__error">{{ errorMessage() }}</p>
   }
 </form>
+</ng-template>

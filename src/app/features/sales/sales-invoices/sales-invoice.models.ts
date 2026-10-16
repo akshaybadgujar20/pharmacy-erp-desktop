@@ -49,4 +49,5 @@ export interface UpdateSalesInvoiceRequest {
 export interface SalesWorkflowRequest {
   version: string;
   remarks?: string;
+  redeemPoints?: number;
 }

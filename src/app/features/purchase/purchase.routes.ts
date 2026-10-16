@@ -3,6 +3,14 @@ import { permissionGuard } from '../../core/guards/permission.guard';
 
 export const purchaseRoutes: Routes = [
   {
+    path: 'grn-wizard',
+    canActivate: [permissionGuard('PURCHASE:GOODS_RECEIPT:CREATE')],
+    loadComponent: () =>
+      import('./purchase-grn-wizard/purchase-grn-wizard.component').then(
+        (m) => m.PurchaseGrnWizardComponent,
+      ),
+  },
+  {
     path: 'orders',
     canActivate: [permissionGuard('PURCHASE:PURCHASE_ORDER:READ')],
     children: [

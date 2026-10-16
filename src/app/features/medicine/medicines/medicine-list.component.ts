@@ -16,6 +16,7 @@ import { toListParams } from '../../../shared/utils/list-query.util';
 import { MEDICINE_GRID_CONFIG } from './medicine-grid.config';
 import { MEDICINE_TOOLBAR_CONFIG } from './medicine-toolbar.config';
 import { Medicine } from './medicine.models';
+import { ElectronService } from '../../../core/services/electron.service';
 import { MedicineService } from './medicine.service';
 
 @Component({
@@ -29,6 +30,8 @@ export class MedicineListComponent implements OnInit, OnDestroy {
   private readonly medicineService = inject(MedicineService);
   private readonly router = inject(Router);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly electron = inject(ElectronService);
+  private unsubscribeBarcode?: () => void;
 
   readonly toolbarConfig = MEDICINE_TOOLBAR_CONFIG;
   readonly gridConfig = MEDICINE_GRID_CONFIG;
@@ -43,12 +46,18 @@ export class MedicineListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.shortcuts.registerHandler('global.refresh', () => this.load());
     this.shortcuts.registerHandler('global.new', () => this.onNew());
+    this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
+      this.search.set(code);
+      this.page.set(1);
+      this.load();
+    });
     this.load();
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('global.refresh');
     this.shortcuts.unregisterHandler('global.new');
+    this.unsubscribeBarcode?.();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

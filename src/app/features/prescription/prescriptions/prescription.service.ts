@@ -47,6 +47,10 @@ export class PrescriptionService {
     return this.api.post<Prescription>(`${this.basePath}/${id}/cancel`, body);
   }
 
+  reactivate(id: string, body: PrescriptionWorkflowRequest): Observable<Prescription> {
+    return this.api.post<Prescription>(`${this.basePath}/${id}/reactivate`, body);
+  }
+
   expire(id: string, body: PrescriptionWorkflowRequest): Observable<Prescription> {
     return this.api.post<Prescription>(`${this.basePath}/${id}/expire`, body);
   }

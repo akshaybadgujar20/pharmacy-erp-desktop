@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,12 +12,22 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { ApiClientError } from '../../../core/models/api-response.types';
+import { TabsModule } from 'primeng/tabs';
+import { CustomerLoyaltyTabComponent } from './customer-loyalty-tab.component';
 import { CustomerService } from './customer.service';
 
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+  imports: [
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule,
+    CheckboxModule,
+    TabsModule,
+    CustomerLoyaltyTabComponent,
+    NgTemplateOutlet,
+  ],
   templateUrl: './customer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,6 +42,7 @@ export class CustomerDetailComponent implements OnInit {
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
   readonly version = signal('0');
+  readonly customerId = signal<string | null>(null);
 
   private entityId: string | null = null;
 
@@ -50,6 +62,7 @@ export class CustomerDetailComponent implements OnInit {
     if (id) {
       this.isNew.set(false);
       this.entityId = id;
+      this.customerId.set(id);
       this.load(id);
     }
   }

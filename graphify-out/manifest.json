@@ -2238,10 +2238,10 @@
     "semantic_hash": "fc13c1f9cda99adc9b51401c51c48ee0"
   },
   "backend/src/prescription/constants/prescription.constants.ts": {
-    "mtime": 1790490634.6192973,
-    "seen": 1792127902.8052137,
-    "ast_hash": "89384756a7cb79f83a0661560bb899f3",
-    "semantic_hash": "89384756a7cb79f83a0661560bb899f3"
+    "mtime": 1792134691.1756215,
+    "seen": 1792135013.8294003,
+    "ast_hash": "42cd417fe092618f7496e72877ece867",
+    "semantic_hash": ""
   },
   "backend/src/prescription/controllers/prescription-item.controller.ts": {
     "mtime": 1790490634.6192973,
@@ -2250,10 +2250,10 @@
     "semantic_hash": "a7636a30af075ab4ca0ce9f6ad404dd2"
   },
   "backend/src/prescription/controllers/prescription.controller.ts": {
-    "mtime": 1790490634.6192973,
-    "seen": 1792127902.8052137,
-    "ast_hash": "a7dcfa65cf3dbbc5b14350bfd02d8cf8",
-    "semantic_hash": "a7dcfa65cf3dbbc5b14350bfd02d8cf8"
+    "mtime": 1792134703.7188032,
+    "seen": 1792135013.8303769,
+    "ast_hash": "ad76bc8ee7ef3bced3084aa253ac3ff9",
+    "semantic_hash": ""
   },
   "backend/src/prescription/dto/create-prescription-item.dto.ts": {
     "mtime": 1790490634.6192973,
@@ -2322,16 +2322,16 @@
     "semantic_hash": "c88a5546db4f2a874df902367f8cce19"
   },
   "backend/src/prescription/services/prescription.service.ts": {
-    "mtime": 1792133406.3332977,
-    "seen": 1792134083.8321595,
-    "ast_hash": "da905ca25df6f41eaf691f89b0bca4ef",
+    "mtime": 1792134708.2698076,
+    "seen": 1792135013.831917,
+    "ast_hash": "fe0af6ec979b52785e193173576d34db",
     "semantic_hash": ""
   },
   "backend/src/prescription/utils/prescription.util.ts": {
-    "mtime": 1790490634.6222267,
-    "seen": 1792127902.8052137,
-    "ast_hash": "e99367fb7fa15d32ab9557ff3d810829",
-    "semantic_hash": "e99367fb7fa15d32ab9557ff3d810829"
+    "mtime": 1792134700.01434,
+    "seen": 1792135013.831917,
+    "ast_hash": "86068bbba64bdee5db2f0537d1c055ad",
+    "semantic_hash": ""
   },
   "backend/src/pricing/constants/pricing.constants.ts": {
     "mtime": 1790490634.6232035,
@@ -3036,9 +3036,9 @@
     "semantic_hash": ""
   },
   "backend/src/sales/services/sales-return.service.ts": {
-    "mtime": 1792133360.343232,
-    "seen": 1792134083.8514798,
-    "ast_hash": "3b6e8c481c795d12a3075ce4324e318a",
+    "mtime": 1792134687.3414376,
+    "seen": 1792135013.8536503,
+    "ast_hash": "14388875964ea79f416ab9019e3bde0a",
     "semantic_hash": ""
   },
   "backend/src/sales/utils/sales.util.ts": {
@@ -3588,15 +3588,15 @@
     "semantic_hash": "d1ecd7e4a7908a500ae4b3e5fca29d49"
   },
   "electron/main.js": {
-    "mtime": 1792133770.8952143,
-    "seen": 1792134083.872181,
-    "ast_hash": "ea9f72d2c85bc8d1c4b104b5eeb5f562",
+    "mtime": 1792134632.9715285,
+    "seen": 1792135013.8774016,
+    "ast_hash": "296519bd05325393191892ba8b6c4a9e",
     "semantic_hash": ""
   },
   "electron/preload.js": {
-    "mtime": 1792133769.7120752,
-    "seen": 1792134083.872181,
-    "ast_hash": "0336ef30c27e616ce68e030db324fb51",
+    "mtime": 1792134626.6273918,
+    "seen": 1792135013.8774016,
+    "ast_hash": "d2b73d5a2395b9a573ba4d2ba764a306",
     "semantic_hash": ""
   },
   "jest.config.ts": {
@@ -3612,9 +3612,9 @@
     "semantic_hash": ""
   },
   "public/i18n/english.json": {
-    "mtime": 1790490635.027344,
-    "seen": 1792127902.8061903,
-    "ast_hash": "6ed02394e5df4debaad133b4b9b8700b",
+    "mtime": 1792134899.4785903,
+    "seen": 1792135013.8774016,
+    "ast_hash": "f99067e51c966f065de642775b1f5e73",
     "semantic_hash": ""
   },
   "public/i18n/marathi.json": {
@@ -3648,9 +3648,9 @@
     "semantic_hash": "0ed7251a9d1c94577ce23b3fdbbf1020"
   },
   "src/app/app.routes.ts": {
-    "mtime": 1792133765.3986266,
-    "seen": 1792134083.8731549,
-    "ast_hash": "f1c1be1204831dfbee1f0aebc892fcec",
+    "mtime": 1792134825.2525098,
+    "seen": 1792135013.878378,
+    "ast_hash": "db7a31242bf6947a9f56854429593ed9",
     "semantic_hash": ""
   },
   "src/app/components/dashboard/dashboard.component.ts": {
@@ -4236,15 +4236,15 @@
     "semantic_hash": "a30709f512741881dcdf5d24dc92606d"
   },
   "src/app/components/shell/main-layout.component.ts": {
-    "mtime": 1790490635.0546832,
-    "seen": 1792127902.8061903,
-    "ast_hash": "fd7116b12af391299c7ea5b07e8ff7b1",
+    "mtime": 1792134860.33103,
+    "seen": 1792135013.8966477,
+    "ast_hash": "50381862102152b5b68ca68688bcaf78",
     "semantic_hash": ""
   },
   "src/app/components/shell/nav.config.ts": {
-    "mtime": 1792133768.8940153,
-    "seen": 1792134083.8913507,
-    "ast_hash": "9b4b9ec0febc01f769d846248ffe73a3",
+    "mtime": 1792134827.4007823,
+    "seen": 1792135013.8966477,
+    "ast_hash": "d41ca7eff89ff693d6a75aabfcb244c0",
     "semantic_hash": ""
   },
   "src/app/components/shell/nav.utils.ts": {
@@ -4332,10 +4332,10 @@
     "semantic_hash": ""
   },
   "src/app/core/models/electron-api.types.ts": {
-    "mtime": 1790490635.0585904,
-    "seen": 1792127902.8061903,
-    "ast_hash": "28abf065b747ab77c5d7f503b28902f1",
-    "semantic_hash": "28abf065b747ab77c5d7f503b28902f1"
+    "mtime": 1792134617.2139797,
+    "seen": 1792135013.899543,
+    "ast_hash": "434a98d59518baeb8158d00a4794197c",
+    "semantic_hash": ""
   },
   "src/app/core/services/api.service.spec.ts": {
     "mtime": 1790490635.0585904,
@@ -4548,9 +4548,9 @@
     "semantic_hash": ""
   },
   "src/app/features/configuration/printer-configurations/printer-configuration-detail.component.ts": {
-    "mtime": 1790490635.0673769,
-    "seen": 1792127902.8061903,
-    "ast_hash": "2d9f927d6b94b2ab40463f2c6ed34307",
+    "mtime": 1792134888.0382886,
+    "seen": 1792135013.9064856,
+    "ast_hash": "4d3882e39f28704334d32aee7c9cc208",
     "semantic_hash": ""
   },
   "src/app/features/configuration/printer-configurations/printer-configuration-grid.config.ts": {
@@ -5028,10 +5028,10 @@
     "semantic_hash": "eff9d2e7050dc49ba36a4c38a30d0325"
   },
   "src/app/features/inventory/stocks/stock-list.component.ts": {
-    "mtime": 1790490635.0884895,
-    "seen": 1792127902.8061903,
-    "ast_hash": "5018afd45b8fa1ca16b66a287e4d1004",
-    "semantic_hash": "5018afd45b8fa1ca16b66a287e4d1004"
+    "mtime": 1792134903.072009,
+    "seen": 1792135013.9218569,
+    "ast_hash": "814949b44f8b8115b8f8350eeffbf4a2",
+    "semantic_hash": ""
   },
   "src/app/features/inventory/stocks/stock-toolbar.config.ts": {
     "mtime": 1790490635.0884895,
@@ -5340,10 +5340,10 @@
     "semantic_hash": "774ecf9577d5d7d7b4ed253d083dcb63"
   },
   "src/app/features/medicine/medicines/medicine-list.component.ts": {
-    "mtime": 1790490635.1014793,
-    "seen": 1792127902.8061903,
-    "ast_hash": "a26126e4f416a17ab118bcc6f44d14fc",
-    "semantic_hash": "a26126e4f416a17ab118bcc6f44d14fc"
+    "mtime": 1792134891.0096114,
+    "seen": 1792135013.9306872,
+    "ast_hash": "59b8cbd1977340fa26c74ea548d94f34",
+    "semantic_hash": ""
   },
   "src/app/features/medicine/medicines/medicine-salt-grid.config.ts": {
     "mtime": 1790490635.1014793,
@@ -5496,9 +5496,9 @@
     "semantic_hash": ""
   },
   "src/app/features/party/customers/customer-detail.component.ts": {
-    "mtime": 1790490635.108294,
-    "seen": 1792127902.8061903,
-    "ast_hash": "746464b827e7834a1e4409a5b7732e2d",
+    "mtime": 1792134792.8313193,
+    "seen": 1792135013.9346654,
+    "ast_hash": "e78c7a2b4b72f1d8b6aed3b9193df935",
     "semantic_hash": ""
   },
   "src/app/features/party/customers/customer-grid.config.ts": {
@@ -5772,9 +5772,9 @@
     "semantic_hash": "1fd049b937f884c8b56636c06f81647a"
   },
   "src/app/features/prescription/prescriptions/prescription-detail.component.ts": {
-    "mtime": 1790490635.1190386,
-    "seen": 1792127902.8061903,
-    "ast_hash": "b4595ef3f14295001f2477f3b763e2cd",
+    "mtime": 1792134856.3863587,
+    "seen": 1792135013.9445293,
+    "ast_hash": "739c9a7d689763dc999685ff93ad3f5f",
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-grid.config.ts": {
@@ -5832,9 +5832,9 @@
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription.service.ts": {
-    "mtime": 1790490635.1209915,
-    "seen": 1792127902.8061903,
-    "ast_hash": "2aadcfbddeb0ed69ce45088461cc8bb5",
+    "mtime": 1792134847.492242,
+    "seen": 1792135013.9464853,
+    "ast_hash": "034de520e8571d072bda68320de812af",
     "semantic_hash": ""
   },
   "src/app/features/pricing/discount-rules/discount-rule-detail.component.ts": {
@@ -6246,10 +6246,10 @@
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase.routes.ts": {
-    "mtime": 1790490635.1370332,
-    "seen": 1792127902.8061903,
-    "ast_hash": "d530e8839c220f0f82d7b3371fd681f7",
-    "semantic_hash": "d530e8839c220f0f82d7b3371fd681f7"
+    "mtime": 1792134878.9406466,
+    "seen": 1792135013.9588785,
+    "ast_hash": "a3108119370c6c786cdf6cd16edc2b96",
+    "semantic_hash": ""
   },
   "src/app/features/reporting/report-list-grid.config.ts": {
     "mtime": 1790490635.1380095,
@@ -6264,10 +6264,10 @@
     "semantic_hash": "f2c5a12341dd2ed6cade3f8b3232c595"
   },
   "src/app/features/reporting/report-list.component.ts": {
-    "mtime": 1790490635.1380095,
-    "seen": 1792127902.8061903,
-    "ast_hash": "3dc1d959e71021c186a8f7aff31843d1",
-    "semantic_hash": "3dc1d959e71021c186a8f7aff31843d1"
+    "mtime": 1792134872.127221,
+    "seen": 1792135013.959819,
+    "ast_hash": "163581693b4738333c56aa3a49363590",
+    "semantic_hash": ""
   },
   "src/app/features/reporting/report-runner.component.ts": {
     "mtime": 1790490635.138986,
@@ -6300,9 +6300,9 @@
     "semantic_hash": "b9994c5d4e7bd95de3e604bb20ae934c"
   },
   "src/app/features/sales/sales-invoices/sales-invoice-detail.component.ts": {
-    "mtime": 1790490635.1399622,
-    "seen": 1792127902.8061903,
-    "ast_hash": "7fef1fa7940505553b9ffa15787061e0",
+    "mtime": 1792134888.8956916,
+    "seen": 1792135013.959819,
+    "ast_hash": "96c3450a97f747c9602cbea56ba6e742",
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-grid.config.ts": {
@@ -6342,10 +6342,10 @@
     "semantic_hash": "5e4c83bf2fcab53ec9eb814b7c9c7b07"
   },
   "src/app/features/sales/sales-invoices/sales-invoice-list.component.ts": {
-    "mtime": 1790490635.1409392,
-    "seen": 1792127902.8061903,
-    "ast_hash": "125621a20f68f8f23fc2e92855187f9f",
-    "semantic_hash": "125621a20f68f8f23fc2e92855187f9f"
+    "mtime": 1792134750.1601162,
+    "seen": 1792135013.9608312,
+    "ast_hash": "028bb45343c5e861e77e0ec52c55489b",
+    "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-payment-grid.config.ts": {
     "mtime": 1790490635.1409392,
@@ -6378,9 +6378,9 @@
     "semantic_hash": "a2c14d81ad240802e32853d7b23f0fc8"
   },
   "src/app/features/sales/sales-invoices/sales-invoice.models.ts": {
-    "mtime": 1790490635.1419158,
-    "seen": 1792127902.8061903,
-    "ast_hash": "8cdeb09e6cb9e988c4bcdb8a112873c9",
+    "mtime": 1792134711.1828713,
+    "seen": 1792135013.9618673,
+    "ast_hash": "36ab7e4ff4f98a1ed1380e9849b4ee3f",
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice.service.ts": {
@@ -6450,10 +6450,10 @@
     "semantic_hash": ""
   },
   "src/app/features/sales/sales.routes.ts": {
-    "mtime": 1790490635.144845,
-    "seen": 1792127902.8061903,
-    "ast_hash": "eedd65a8f9705f0a0dd4531be181f550",
-    "semantic_hash": "eedd65a8f9705f0a0dd4531be181f550"
+    "mtime": 1792134740.6881626,
+    "seen": 1792135013.9638586,
+    "ast_hash": "ebe1a5f548caf193c3e5e1dbc4c40310",
+    "semantic_hash": ""
   },
   "src/app/features/security/permissions/permission-grid.config.ts": {
     "mtime": 1790490635.144845,
@@ -6690,10 +6690,10 @@
     "semantic_hash": "5f4fdfbed3dc90d1c8945dd22a0b261d"
   },
   "src/app/features/settings/setting-list.component.ts": {
-    "mtime": 1790490635.1536343,
-    "seen": 1792127902.8061903,
-    "ast_hash": "753351d186b9dc9dca5adb53f9ebf746",
-    "semantic_hash": "753351d186b9dc9dca5adb53f9ebf746"
+    "mtime": 1792134905.01271,
+    "seen": 1792135013.9717376,
+    "ast_hash": "1646b608eab256c7f71f4c31312fcfa4",
+    "semantic_hash": ""
   },
   "src/app/features/settings/setting-toolbar.config.ts": {
     "mtime": 1790490635.1546443,
@@ -6714,10 +6714,10 @@
     "semantic_hash": "b42d1eafd41c57d15d5424bd7de9d831"
   },
   "src/app/features/settings/settings.routes.ts": {
-    "mtime": 1790490635.1546443,
-    "seen": 1792127902.8061903,
-    "ast_hash": "ce1c9641e785a6b18d04319ef4983857",
-    "semantic_hash": "ce1c9641e785a6b18d04319ef4983857"
+    "mtime": 1792134869.7441912,
+    "seen": 1792135013.9727223,
+    "ast_hash": "640eeae44b80bfd8390cdff5bff49507",
+    "semantic_hash": ""
   },
   "src/app/shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component.spec.ts": {
     "mtime": 1790490635.1556213,
@@ -9108,9 +9108,9 @@
     "semantic_hash": ""
   },
   "src/app/components/shell/main-layout.component.html": {
-    "mtime": 1790490635.0546832,
-    "seen": 1792127902.807167,
-    "ast_hash": "610951fcef463718c569a6cfe603b69d",
+    "mtime": 1792134861.091022,
+    "seen": 1792135014.043795,
+    "ast_hash": "3e9be266ff537f87db7673d36ac6dac2",
     "semantic_hash": ""
   },
   "src/app/core/keyboard/README.md": {
@@ -9174,9 +9174,9 @@
     "semantic_hash": ""
   },
   "src/app/features/configuration/printer-configurations/printer-configuration-detail.component.html": {
-    "mtime": 1790490635.0673769,
-    "seen": 1792127902.807167,
-    "ast_hash": "8398ef1a7179e0af81dee2df70065782",
+    "mtime": 1792134897.641605,
+    "seen": 1792135014.0457487,
+    "ast_hash": "9104d5be1b49657a4a2c995c6e8a878f",
     "semantic_hash": ""
   },
   "src/app/features/configuration/printer-configurations/printer-configuration-list.component.html": {
@@ -9312,9 +9312,9 @@
     "semantic_hash": ""
   },
   "src/app/features/inventory/stocks/stock-list.component.html": {
-    "mtime": 1790490635.0884895,
-    "seen": 1792127902.807167,
-    "ast_hash": "e4373f458b9e352859ff9d7a0b12367b",
+    "mtime": 1792134898.2818284,
+    "seen": 1792135014.0496187,
+    "ast_hash": "cba58ea6037ac4223c77432149bea73c",
     "semantic_hash": ""
   },
   "src/app/features/masters/areas/area-detail.component.html": {
@@ -9456,9 +9456,9 @@
     "semantic_hash": ""
   },
   "src/app/features/party/customers/customer-detail.component.html": {
-    "mtime": 1790490635.108294,
-    "seen": 1792127902.807167,
-    "ast_hash": "9c8e2574fb571ea0df88eb9490aa15b6",
+    "mtime": 1792134793.4130366,
+    "seen": 1792135014.0542254,
+    "ast_hash": "db3079e037608232c71446428e3d7414",
     "semantic_hash": ""
   },
   "src/app/features/party/customers/customer-list.component.html": {
@@ -9534,9 +9534,9 @@
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-detail.component.html": {
-    "mtime": 1790490635.1190386,
-    "seen": 1792127902.807167,
-    "ast_hash": "8801fd235946f4e0f4d1a9ff89b4bfd4",
+    "mtime": 1792134855.1310773,
+    "seen": 1792135014.05622,
+    "ast_hash": "b6bcdf07fe2c340505707fcd3eb6167c",
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-items-tab.component.html": {
@@ -9666,9 +9666,9 @@
     "semantic_hash": ""
   },
   "src/app/features/reporting/report-list.component.html": {
-    "mtime": 1790490635.1380095,
-    "seen": 1792127902.807167,
-    "ast_hash": "66c28fe5de4b3a4b9199a746215b8103",
+    "mtime": 1792134880.016451,
+    "seen": 1792135014.060126,
+    "ast_hash": "4863de7aac67ab3f14beea1b08a47729",
     "semantic_hash": ""
   },
   "src/app/features/reporting/report-runner.component.html": {
@@ -9780,9 +9780,9 @@
     "semantic_hash": ""
   },
   "src/app/features/settings/setting-list.component.html": {
-    "mtime": 1790490635.1536343,
-    "seen": 1792127902.807167,
-    "ast_hash": "8486609a9b6bf2a66e3f54dde22c5fa4",
+    "mtime": 1792134904.1668189,
+    "seen": 1792135014.0636613,
+    "ast_hash": "7e2b2c377eea981bd19d4c6444daabff",
     "semantic_hash": ""
   },
   "src/app/shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component.html": {
@@ -10056,9 +10056,9 @@
     "semantic_hash": ""
   },
   "backend/src/loyalty/loyalty.module.ts": {
-    "mtime": 1792133724.2415335,
-    "seen": 1792134083.802075,
-    "ast_hash": "8d9de325159bcc30702ec9180b29cf12",
+    "mtime": 1792134676.7871919,
+    "seen": 1792135013.8027778,
+    "ast_hash": "4bd3fea52a2b087c390f960f0bdd7ec4",
     "semantic_hash": ""
   },
   "backend/src/loyalty/mappers/loyalty-program.mapper.ts": {
@@ -10074,9 +10074,9 @@
     "semantic_hash": ""
   },
   "backend/src/loyalty/services/loyalty-integration.service.ts": {
-    "mtime": 1792133719.1024694,
-    "seen": 1792134083.802075,
-    "ast_hash": "0d9b2d60d9ab128f469f878a70a4a56f",
+    "mtime": 1792134679.6582024,
+    "seen": 1792135013.8027778,
+    "ast_hash": "f76ba452e7fb01bc94947bfa2858aa18",
     "semantic_hash": ""
   },
   "backend/src/loyalty/services/loyalty-program.service.ts": {
@@ -10164,27 +10164,27 @@
     "semantic_hash": ""
   },
   "src/app/core/utils/api-error-message.util.ts": {
-    "mtime": 1792133427.0215569,
-    "seen": 1792134083.8952525,
-    "ast_hash": "a7045e8c698d3e675656c4f438f54dda",
+    "mtime": 1792134624.1454022,
+    "seen": 1792135013.9005568,
+    "ast_hash": "c63ad42bd687b667970ad7d3f042d59e",
     "semantic_hash": ""
   },
   "src/app/features/loyalty/loyalty-program-list.component.ts": {
-    "mtime": 1792133763.509835,
-    "seen": 1792134083.9144495,
-    "ast_hash": "4a2a2ce095ab214d379ca9792e5c8c2e",
+    "mtime": 1792134808.6954246,
+    "seen": 1792135013.9218569,
+    "ast_hash": "e79aedcc6c435382ac60f38fee2c132c",
     "semantic_hash": ""
   },
   "src/app/features/loyalty/loyalty-program.service.ts": {
-    "mtime": 1792133761.9690113,
-    "seen": 1792134083.9144495,
-    "ast_hash": "421b82862ee3f6c7bbc632e8add815eb",
+    "mtime": 1792134803.3584168,
+    "seen": 1792135013.9218569,
+    "ast_hash": "101e2c463bb58c508cc15b83d8cb1093",
     "semantic_hash": ""
   },
   "src/app/features/loyalty/loyalty.routes.ts": {
-    "mtime": 1792133764.385317,
-    "seen": 1792134083.9144495,
-    "ast_hash": "08742a5edbe2acafbd924911e74782fe",
+    "mtime": 1792134805.1550882,
+    "seen": 1792135013.9218569,
+    "ast_hash": "c600f082f82a06eafab6490e2ac60c02",
     "semantic_hash": ""
   },
   "src/app/features/sync/sync-dashboard.component.ts": {
@@ -10194,9 +10194,9 @@
     "semantic_hash": ""
   },
   "src/app/features/sync/sync.routes.ts": {
-    "mtime": 1792133760.8271616,
-    "seen": 1792134083.9634488,
-    "ast_hash": "022d6ad4b871af3a401fe41a5750d3e3",
+    "mtime": 1792134824.4315758,
+    "seen": 1792135013.9727223,
+    "ast_hash": "3da33b80377a120d915910ce1736344e",
     "semantic_hash": ""
   },
   "src/app/features/sync/sync.service.ts": {
@@ -10221,6 +10221,186 @@
     "mtime": 1792133965.6045618,
     "seen": 1792134084.0075254,
     "ast_hash": "0c18fb689c963abb5623841534ca63f0",
+    "semantic_hash": ""
+  },
+  "backend/src/loyalty/controllers/loyalty-customer.controller.ts": {
+    "mtime": 1792134674.644204,
+    "seen": 1792135013.8017945,
+    "ast_hash": "aa9c5baeb55b31de7a215c54910b0556",
+    "semantic_hash": ""
+  },
+  "backend/src/loyalty/dto/create-loyalty-adjustment.dto.ts": {
+    "mtime": 1792134658.8857582,
+    "seen": 1792135013.8017945,
+    "ast_hash": "e5a015351cfec866377ea9609a12d93d",
+    "semantic_hash": ""
+  },
+  "backend/src/loyalty/dto/loyalty-transaction-list-query.dto.ts": {
+    "mtime": 1792134658.4029016,
+    "seen": 1792135013.8027778,
+    "ast_hash": "99bdb7b401b103c936d4742ea8b4d711",
+    "semantic_hash": ""
+  },
+  "backend/src/loyalty/services/loyalty-customer.service.ts": {
+    "mtime": 1792134929.5771904,
+    "seen": 1792135013.8027778,
+    "ast_hash": "c117c0fe04f086d2b99692c402a4e1c2",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/electron.service.spec.ts": {
+    "mtime": 1792134648.9657466,
+    "seen": 1792135013.899543,
+    "ast_hash": "0549c721ed461318de18c1231ae09981",
+    "semantic_hash": ""
+  },
+  "src/app/core/services/electron.service.ts": {
+    "mtime": 1792134621.321009,
+    "seen": 1792135013.899543,
+    "ast_hash": "9d51bbd9862ca77dc336893febf95f45",
+    "semantic_hash": ""
+  },
+  "src/app/features/audit/audit-log-list.component.ts": {
+    "mtime": 1792134814.9714277,
+    "seen": 1792135013.9005568,
+    "ast_hash": "15303882ee483d2fb7ba885eb53bf3ab",
+    "semantic_hash": ""
+  },
+  "src/app/features/audit/audit-log.service.ts": {
+    "mtime": 1792134812.5596848,
+    "seen": 1792135013.9005568,
+    "ast_hash": "21e162599a047be7a6c1e49278b1b192",
+    "semantic_hash": ""
+  },
+  "src/app/features/audit/audit.routes.ts": {
+    "mtime": 1792134817.205469,
+    "seen": 1792135013.9005568,
+    "ast_hash": "48af87c88308eff99ed0460c2fdfb3d4",
+    "semantic_hash": ""
+  },
+  "src/app/features/audit/change-history-list.component.ts": {
+    "mtime": 1792134816.1722353,
+    "seen": 1792135013.9005568,
+    "ast_hash": "d2042630337c02dedb07d33b3f24d16f",
+    "semantic_hash": ""
+  },
+  "src/app/features/audit/change-history.service.ts": {
+    "mtime": 1792134813.5831375,
+    "seen": 1792135013.9005568,
+    "ast_hash": "3b809bbe94993175dc6733b13b2f76f7",
+    "semantic_hash": ""
+  },
+  "src/app/features/loyalty/loyalty-program-detail.component.ts": {
+    "mtime": 1792134857.4029121,
+    "seen": 1792135013.9218569,
+    "ast_hash": "87eeabbef2bcf0c5e3b733b38d0f8642",
+    "semantic_hash": ""
+  },
+  "src/app/features/loyalty/loyalty-program.models.ts": {
+    "mtime": 1792134758.804461,
+    "seen": 1792135013.9218569,
+    "ast_hash": "1cf74be37337a4bc877cbc886c662c3f",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/customers/customer-loyalty-tab.component.ts": {
+    "mtime": 1792134777.7557096,
+    "seen": 1792135013.9356396,
+    "ast_hash": "30b257b8cf75568c936bbb01c4cfa2cc",
+    "semantic_hash": ""
+  },
+  "src/app/features/party/customers/customer-loyalty.service.ts": {
+    "mtime": 1792134761.6505082,
+    "seen": 1792135013.9356396,
+    "ast_hash": "f1fae3aedee24d6fd3b99ac5df5cbde7",
+    "semantic_hash": ""
+  },
+  "src/app/features/purchase/purchase-grn-wizard/purchase-grn-wizard.component.ts": {
+    "mtime": 1792134874.5173225,
+    "seen": 1792135013.9529135,
+    "ast_hash": "35fc6c87d892f84caad32977bf298e17",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/customer-loyalty-summary.service.ts": {
+    "mtime": 1792134713.57685,
+    "seen": 1792135013.959819,
+    "ast_hash": "3ad326da053f67398b732b01a8c7af7f",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-counter.component.ts": {
+    "mtime": 1792134739.0970647,
+    "seen": 1792135013.959819,
+    "ast_hash": "8936707c66684ad7476b9a02ac9e5bba",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-receipt.util.ts": {
+    "mtime": 1792134712.4327335,
+    "seen": 1792135013.9628499,
+    "ast_hash": "2639e44f4b8adf218364baf82695a669",
+    "semantic_hash": ""
+  },
+  "src/app/features/settings/change-password.component.ts": {
+    "mtime": 1792134864.0353096,
+    "seen": 1792135013.9717376,
+    "ast_hash": "702d53bcbb5749545dceff209240692a",
+    "semantic_hash": ""
+  },
+  "src/app/features/sync/outbox-admin.service.ts": {
+    "mtime": 1792134818.390393,
+    "seen": 1792135013.9727223,
+    "ast_hash": "f1ab88c4d112f90bf77f109909797a97",
+    "semantic_hash": ""
+  },
+  "src/app/features/sync/outbox-list.component.ts": {
+    "mtime": 1792134821.2553866,
+    "seen": 1792135013.9727223,
+    "ast_hash": "bc6e19d88c10eab619d1d5d7e512630e",
+    "semantic_hash": ""
+  },
+  "src/app/features/sync/sync-conflict-list.component.ts": {
+    "mtime": 1792134823.0224948,
+    "seen": 1792135013.9727223,
+    "ast_hash": "05fef4365a796911ffba34e069004f84",
+    "semantic_hash": ""
+  },
+  "src/app/features/sync/sync-conflict.service.ts": {
+    "mtime": 1792134819.3826244,
+    "seen": 1792135013.9727223,
+    "ast_hash": "b8cc523e3fe4be814582b5bb96c1caf6",
+    "semantic_hash": ""
+  },
+  "src/app/shared/lookups/customer-lookup.component.ts": {
+    "mtime": 1792134638.658618,
+    "seen": 1792135013.9737318,
+    "ast_hash": "d16505cf97417c06a062acc014ec88c0",
+    "semantic_hash": ""
+  },
+  "src/app/shared/lookups/lookup.types.ts": {
+    "mtime": 1792134635.2564423,
+    "seen": 1792135013.9737318,
+    "ast_hash": "e60fe6676ec3338e2a6a82fb6ba11b3c",
+    "semantic_hash": ""
+  },
+  "src/app/shared/lookups/medicine-lookup.component.ts": {
+    "mtime": 1792134642.6104028,
+    "seen": 1792135013.9737318,
+    "ast_hash": "02f53f50460facb10ee777cc5662e1fb",
+    "semantic_hash": ""
+  },
+  "src/app/shared/lookups/prescription-lookup.component.ts": {
+    "mtime": 1792134648.4209182,
+    "seen": 1792135013.9737318,
+    "ast_hash": "5ff2b8f39c8f7159f9606bb5d3d891b1",
+    "semantic_hash": ""
+  },
+  "src/app/features/loyalty/loyalty-program-detail.component.html": {
+    "mtime": 1792134801.4920208,
+    "seen": 1792135014.0496187,
+    "ast_hash": "8cecbf10be6d9781d91d6ebe848552d4",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-invoice-counter.component.html": {
+    "mtime": 1792134739.6359196,
+    "seen": 1792135014.060126,
+    "ast_hash": "34e6de329c7112934af0ad5017df860f",
     "semantic_hash": ""
   }
 }

@@ -36,6 +36,13 @@ export const salesRoutes: Routes = [
           ),
       },
       {
+        path: ':invoiceId/counter',
+        loadComponent: () =>
+          import('./sales-invoices/sales-invoice-counter.component').then(
+            (m) => m.SalesInvoiceCounterComponent,
+          ),
+      },
+      {
         path: ':invoiceId',
         loadComponent: () =>
           import('./sales-invoices/sales-invoice-detail.component').then(

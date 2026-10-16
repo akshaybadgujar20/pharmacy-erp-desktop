@@ -7,6 +7,7 @@ import {
   PRESCRIPTION_ACTIVATABLE_STATUSES,
   PRESCRIPTION_CANCELLABLE_STATUSES,
   PRESCRIPTION_EXPIRABLE_STATUSES,
+  PRESCRIPTION_REACTIVATABLE_STATUSES,
   PrescriptionStatus,
 } from '../constants/prescription.constants';
 
@@ -94,6 +95,21 @@ export function assertPrescriptionCancellable(status: string): void {
     throw new ApplicationException(
       ErrorCode.INVALID_DOCUMENT_STATUS,
       `Prescription cannot be cancelled from status: ${status}`,
+      HttpStatus.CONFLICT,
+      { status },
+    );
+  }
+}
+
+export function assertPrescriptionReactivatable(status: string): void {
+  if (
+    !PRESCRIPTION_REACTIVATABLE_STATUSES.includes(
+      status as (typeof PRESCRIPTION_REACTIVATABLE_STATUSES)[number],
+    )
+  ) {
+    throw new ApplicationException(
+      ErrorCode.INVALID_DOCUMENT_STATUS,
+      `Prescription cannot be reactivated from status: ${status}`,
       HttpStatus.CONFLICT,
       { status },
     );

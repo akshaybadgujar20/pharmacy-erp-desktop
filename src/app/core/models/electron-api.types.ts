@@ -10,7 +10,22 @@ export interface ElectronSecureStore {
   delete(key: string): Promise<void>;
 }
 
+export interface ElectronSaveExportRequest {
+  defaultFileName: string;
+  mimeType: string;
+  base64Data: string;
+}
+
+export interface ElectronSaveExportResult {
+  saved: boolean;
+  filePath?: string;
+}
+
 export interface ElectronApi {
   getDeviceInfo(): Promise<ElectronDeviceInfo>;
   secureStore: ElectronSecureStore;
+  printReceipt(html: string): Promise<void>;
+  saveExport(request: ElectronSaveExportRequest): Promise<ElectronSaveExportResult>;
+  onSyncRunRequested(callback: () => void): () => void;
+  onBarcodeScan(callback: (barcode: string) => void): () => void;
 }

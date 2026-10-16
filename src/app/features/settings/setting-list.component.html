@@ -1,4 +1,11 @@
 <div class="page-layout">
+  <div class="setting-categories">
+    <button type="button" (click)="filterCategory('')">All</button>
+    @for (category of categories(); track category) {
+      <button type="button" (click)="filterCategory(category)">{{ category }}</button>
+    }
+    <a routerLink="/settings/change-password">Change password</a>
+  </div>
   <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
   <app-grid
     [config]="gridConfig"

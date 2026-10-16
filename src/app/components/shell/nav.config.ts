@@ -180,8 +180,24 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
         ],
       },
       { icon: 'sliders-h', label: 'nav.settings.title', route: '/settings', permission: 'CONFIGURATION:APP_SETTING:READ' },
-      { icon: 'sync', label: 'nav.sync.title', route: '/sync', permission: 'SYNC:SYNC:EXECUTE' },
+      {
+        icon: 'sync',
+        label: 'nav.sync.title',
+        subItems: [
+          { icon: 'sync', label: 'nav.sync.dashboard', route: '/sync', permission: 'SYNC:SYNC:EXECUTE' },
+          { icon: 'inbox', label: 'nav.sync.outbox', route: '/sync/outbox', permission: 'SYNC:OUTBOX:READ' },
+          { icon: 'exclamation', label: 'nav.sync.conflicts', route: '/sync/conflicts', permission: 'SYNC:SYNC_CONFLICT:READ' },
+        ],
+      },
       { icon: 'gift', label: 'nav.loyalty.programs', route: '/loyalty/programs', permission: 'LOYALTY:LOYALTY_PROGRAM:READ' },
+      {
+        icon: 'history',
+        label: 'nav.audit.title',
+        subItems: [
+          { icon: 'list', label: 'nav.audit.logs', route: '/audit/audit-logs', permission: 'AUDIT:AUDIT_LOG:READ' },
+          { icon: 'code-branch', label: 'nav.audit.changes', route: '/audit/change-histories', permission: 'AUDIT:CHANGE_HISTORY:READ' },
+        ],
+      },
     ],
   },
 ];

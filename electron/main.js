@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, safeStorage } = require('electron')
+const { app, BrowserWindow, ipcMain, safeStorage, dialog } = require('electron')
 const path = require('path')
 const os = require('os')
+const fs = require('fs')
 const { randomUUID } = require('crypto')
 
 const secureStore = new Map()
@@ -62,6 +63,64 @@ ipcMain.handle('secure-store:set', (_event, key, value) => {
 
 ipcMain.handle('secure-store:delete', (_event, key) => {
   secureStore.delete(key)
+})
+
+ipcMain.handle('print:receipt', async (_event, html) => {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    return
+  }
+  const printWindow = new BrowserWindow({
+    show: false,
+    webPreferences: { contextIsolation: true },
+  })
+  await printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
+  await new Promise((resolve) => {
+    printWindow.webContents.print({ silent: false }, () => {
+      printWindow.close()
+      resolve()
+    })
+  })
+})
+
+ipcMain.handle('export:save', async (_event, request) => {
+  const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: request.defaultFileName,
+  })
+  if (canceled || !filePath) {
+    return { saved: false }
+  }
+  const buffer = Buffer.from(request.base64Data, 'base64')
+  fs.writeFileSync(filePath, buffer)
+  return { saved: true, filePath }
+})
+
+let barcodeBuffer = ''
+let barcodeTimer = null
+
+function flushBarcodeBuffer() {
+  if (barcodeBuffer.length > 0 && mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('barcode:scan', barcodeBuffer)
+  }
+  barcodeBuffer = ''
+  barcodeTimer = null
+}
+
+app.on('web-contents-created', (_event, contents) => {
+  contents.on('before-input-event', (_e, input) => {
+    if (input.type !== 'keyDown' || input.key === 'Enter') {
+      if (input.key === 'Enter' && barcodeBuffer.length > 0) {
+        flushBarcodeBuffer()
+      }
+      return
+    }
+    if (input.key.length === 1 && !input.control && !input.alt && !input.meta) {
+      barcodeBuffer += input.key
+      if (barcodeTimer) {
+        clearTimeout(barcodeTimer)
+      }
+      barcodeTimer = setTimeout(flushBarcodeBuffer, 80)
+    }
+  })
 })
 
 function triggerSyncRun() {

@@ -5,9 +5,29 @@ export const loyaltyRoutes: Routes = [
   {
     path: 'programs',
     canActivate: [permissionGuard('LOYALTY:LOYALTY_PROGRAM:READ')],
-    loadComponent: () =>
-      import('./loyalty-program-list.component').then(
-        (m) => m.LoyaltyProgramListComponent,
-      ),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./loyalty-program-list.component').then(
+            (m) => m.LoyaltyProgramListComponent,
+          ),
+      },
+      {
+        path: 'new',
+        canActivate: [permissionGuard('LOYALTY:LOYALTY_PROGRAM:CREATE')],
+        loadComponent: () =>
+          import('./loyalty-program-detail.component').then(
+            (m) => m.LoyaltyProgramDetailComponent,
+          ),
+      },
+      {
+        path: ':programId',
+        loadComponent: () =>
+          import('./loyalty-program-detail.component').then(
+            (m) => m.LoyaltyProgramDetailComponent,
+          ),
+      },
+    ],
   },
 ];

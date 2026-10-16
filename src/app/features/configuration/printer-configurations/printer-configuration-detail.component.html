@@ -48,6 +48,7 @@
       Save
     </button>
     @if (!isNew()) {
+      <button pButton type="button" (click)="testPrint()">Test print</button>
       <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
         Delete
       </button>

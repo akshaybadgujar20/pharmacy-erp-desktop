@@ -83,4 +83,13 @@ export class PrescriptionController {
   ) {
     return this.prescriptionService.expire(id, dto);
   }
+
+  @Post(':id/reactivate')
+  @RequirePermissions('PRESCRIPTION:PRESCRIPTION:ACTIVATE')
+  reactivate(
+    @Param('id', ParseBigIntPipe) id: bigint,
+    @Body() dto: PrescriptionWorkflowDto,
+  ) {
+    return this.prescriptionService.reactivate(id, dto);
+  }
 }

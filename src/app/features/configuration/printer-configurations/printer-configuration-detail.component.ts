@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { ApiClientError } from '../../../core/models/api-response.types';
+import { ElectronService } from '../../../core/services/electron.service';
 import { PrinterConfigurationService } from './printer-configuration.service';
 
 @Component({
@@ -22,6 +23,7 @@ import { PrinterConfigurationService } from './printer-configuration.service';
 })
 export class PrinterConfigurationDetailComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly electron = inject(ElectronService);
   private readonly printerConfigurationService = inject(PrinterConfigurationService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -132,6 +134,13 @@ export class PrinterConfigurationDetailComponent implements OnInit {
         this.handleError(error);
       },
     });
+  }
+
+  testPrint(): void {
+    const name = this.form.controls.printerName.value;
+    void this.electron.printReceipt(
+      `<html><body><h1>Test print</h1><p>${name}</p></body></html>`,
+    );
   }
 
   goBack(): void {

@@ -15,6 +15,8 @@ import {SidebarCollapsible, SidebarModule, SidebarSide, SidebarVariant} from 'pr
 import { PIcon } from '@primeicons/angular/p-icon';
 import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
+import { ElectronService } from '../../core/services/electron.service';
+import { SyncService } from '../../features/sync/sync.service';
 import { KeyboardShortcutService } from '../../core/keyboard';
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
@@ -58,7 +60,12 @@ interface NavGroup {
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
+  private readonly syncService = inject(SyncService);
+  private readonly electron = inject(ElectronService);
   readonly shortcutService = inject(KeyboardShortcutService);
+  readonly syncStatus = signal<string>('—');
+  private syncPollTimer?: ReturnType<typeof setInterval>;
+  private unsubscribeSync?: () => void;
 
   variant: SidebarVariant = 'floating';
   collapsible: SidebarCollapsible = 'icon';
@@ -104,10 +111,26 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       this.open.set(!e.matches);
     };
     this.mql.addEventListener('change', this.mqlListener);
+    this.refreshSyncStatus();
+    this.syncPollTimer = setInterval(() => this.refreshSyncStatus(), 60_000);
+    this.unsubscribeSync = this.electron.onSyncRunRequested(() => this.refreshSyncStatus());
   }
 
   ngOnDestroy(): void {
     this.mql?.removeEventListener('change', this.mqlListener!);
+    if (this.syncPollTimer) {
+      clearInterval(this.syncPollTimer);
+    }
+    this.unsubscribeSync?.();
+  }
+
+  private refreshSyncStatus(): void {
+    this.syncService.latest().subscribe({
+      next: (summary) => {
+        this.syncStatus.set(summary?.status ?? 'No runs yet');
+      },
+      error: () => this.syncStatus.set('Unknown'),
+    });
   }
 
   userInitials(): string {

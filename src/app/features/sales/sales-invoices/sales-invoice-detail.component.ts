@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { fromEpochMs, toEpochMs } from '../sales-date.util';
 import { SalesInvoiceItemsTabComponent } from './sales-invoice-items-tab.component';
 import { SalesInvoicePaymentsTabComponent } from './sales-invoice-payments-tab.component';
@@ -83,8 +83,10 @@ export class SalesInvoiceDetailComponent implements OnInit {
       this.load(invoiceId);
       return;
     }
+    const prescriptionId = this.route.snapshot.queryParamMap.get('prescriptionId');
     this.form.patchValue({
       invoiceDate: new Date().toISOString(),
+      prescriptionId: prescriptionId ?? '',
     });
   }
 
@@ -262,12 +264,9 @@ export class SalesInvoiceDetailComponent implements OnInit {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.posting.set(false);
+    this.cancelling.set(false);
+    this.deleting.set(false);
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

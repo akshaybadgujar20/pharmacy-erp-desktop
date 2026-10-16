@@ -60,6 +60,7 @@ import {
   readSalesSettings,
   throwNotFound,
 } from '../utils/sales.util';
+import { LoyaltyIntegrationService } from '../../loyalty/services/loyalty-integration.service';
 
 @Injectable()
 export class SalesReturnService {
@@ -73,6 +74,7 @@ export class SalesReturnService {
     private readonly inventoryLedger: InventoryLedgerService,
     private readonly ledgerPosting: LedgerPostingService,
     private readonly settingsService: SettingsService,
+    private readonly loyaltyIntegration: LoyaltyIntegrationService,
   ) {}
 
   async list(query: PaginationQueryDto) {
@@ -482,6 +484,16 @@ export class SalesReturnService {
 
       await recomputeSalesInvoiceSettlement(tx, salesReturn.salesInvoiceId);
       await this.updateInvoiceReturnStatus(tx, salesReturn.salesInvoiceId);
+
+      if (invoice.customerId) {
+        await this.loyaltyIntegration.reverseForApprovedReturn(tx, {
+          customerId: invoice.customerId,
+          salesInvoiceId: invoice.id,
+          returnNetAmount: netAmount,
+          returnDate: salesReturn.returnDate,
+          operationId: `${salesReturn.uuid}:return`,
+        });
+      }
 
       const updated = await tx.salesReturn.findFirstOrThrow({ where: { id } });
       await this.emitChange(

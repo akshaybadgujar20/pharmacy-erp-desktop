@@ -109,6 +109,57 @@ export class LoyaltyIntegrationService {
     });
   }
 
+  async reverseForApprovedReturn(
+    tx: TxClient,
+    input: {
+      customerId: bigint;
+      salesInvoiceId: bigint;
+      returnNetAmount: Prisma.Decimal;
+      returnDate: bigint;
+      operationId: string;
+    },
+  ): Promise<void> {
+    const transactions = await tx.loyaltyTransaction.findMany({
+      where: {
+        customerId: input.customerId,
+        salesInvoiceId: input.salesInvoiceId,
+        deletedAt: null,
+      },
+    });
+    if (transactions.length === 0) {
+      return;
+    }
+
+    const customer = await tx.customer.findFirstOrThrow({
+      where: { id: input.customerId },
+    });
+    let balance = customer.loyaltyPoints;
+    const now = BigInt(Date.now());
+
+    for (const txn of transactions) {
+      const reversalPoints = -txn.points;
+      if (reversalPoints === 0) {
+        continue;
+      }
+      balance += reversalPoints;
+      await this.writeTransaction(tx, {
+        program: { id: txn.loyaltyProgramId },
+        customerId: input.customerId,
+        invoiceId: input.salesInvoiceId,
+        points: reversalPoints,
+        type: LoyaltyTransactionType.REVERSAL,
+        balance,
+        date: input.returnDate,
+        operationId: `${input.operationId}:rev:${txn.uuid}`,
+      });
+    }
+
+    await tx.customer.update({
+      where: { id: input.customerId },
+      data: { loyaltyPoints: balance, updatedAt: now },
+    });
+  }
+
   private async writeTransaction(
     tx: TxClient,
     input: {

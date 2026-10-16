@@ -1,0 +1,62 @@
+<section class="counter">
+  <header class="counter__header">
+    <h2>Counter sale</h2>
+    @if (invoiceNumber()) {
+      <span>{{ invoiceNumber() }}</span>
+    }
+    <span>{{ status() }} / {{ paymentStatus() }}</span>
+    @if (netAmount() != null) {
+      <strong>Net: {{ netAmount() }}</strong>
+    }
+    @if (loyaltyBalance() != null) {
+      <span>Points: {{ loyaltyBalance() }}</span>
+    }
+  </header>
+
+  @if (errorMessage()) {
+    <p class="counter__error">{{ errorMessage() }}</p>
+  }
+
+  <form class="counter__form" [formGroup]="form">
+    <div class="counter__field">
+      <label>Customer</label>
+      <app-customer-lookup formControlName="customerId" />
+    </div>
+    <div class="counter__field">
+      <label>Prescription</label>
+      <app-prescription-lookup formControlName="prescriptionId" />
+    </div>
+    <button pButton type="button" label="Save header" (click)="saveHeader()" [disabled]="!isDraft()"></button>
+  </form>
+
+  <div class="counter__tabs">
+    <button pButton type="button" label="Items" (click)="activeTab.set('items')"></button>
+    <button pButton type="button" label="Payments (F8)" (click)="focusPayments()"></button>
+  </div>
+
+  @if (activeTab() === 'items' && invoiceId()) {
+    <app-sales-invoice-items-tab [invoiceId]="invoiceId()!" />
+  }
+  @if (activeTab() === 'payments' && invoiceId()) {
+    <app-sales-invoice-payments-tab [invoiceId]="invoiceId()!" />
+  }
+
+  <footer class="counter__actions">
+    @if (isDraft()) {
+      <button pButton type="button" label="Post sale" (click)="openPostDialog()"></button>
+    }
+  </footer>
+</section>
+
+<p-dialog header="Post invoice" [visible]="postDialogVisible()" (visibleChange)="postDialogVisible.set($event)" [modal]="true">
+  <label>Redeem points (optional)</label>
+  <p-inputnumber
+    [ngModel]="redeemPoints()"
+    (ngModelChange)="redeemPoints.set($event ?? 0)"
+    [min]="0"
+  />
+  <div class="counter__dialog-actions">
+    <button pButton type="button" label="Cancel" (click)="postDialogVisible.set(false)"></button>
+    <button pButton type="button" label="Post" [loading]="posting()" (click)="confirmPost()"></button>
+  </div>
+</p-dialog>
