@@ -27,6 +27,7 @@ model LoyaltyProgram {
   version BigInt @default(1)
 
   transactions LoyaltyTransaction[]
+  memberships  CustomerLoyaltyMembership[]
 
   @@index([isActive])
   @@index([isDefault])

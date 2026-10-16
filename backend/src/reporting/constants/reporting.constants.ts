@@ -16,10 +16,18 @@ export const REPORT_FORMATS: ReportFormat[] = [
 
 export const ReportPermission = {
   PARTY_VIEW: 'REPORT_PARTY_VIEW',
+  SALES_VIEW: 'REPORT_SALES_VIEW',
+  PURCHASE_VIEW: 'REPORT_PURCHASE_VIEW',
+  INVENTORY_VIEW: 'REPORT_INVENTORY_VIEW',
+  FINANCE_VIEW: 'REPORT_FINANCE_VIEW',
 } as const;
 
 export const ReportCategory = {
   PARTY: 'party',
+  SALES: 'sales',
+  PURCHASE: 'purchase',
+  INVENTORY: 'inventory',
+  FINANCE: 'finance',
 } as const;
 
 export const EXPORT_MAX_ROWS = 10_000;

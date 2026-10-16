@@ -56,6 +56,9 @@ export const OutboxEntityType = {
   STATE: 'State',
   CITY: 'City',
   AREA: 'Area',
+  LOYALTY_PROGRAM: 'LoyaltyProgram',
+  LOYALTY_TRANSACTION: 'LoyaltyTransaction',
+  CUSTOMER_LOYALTY_MEMBERSHIP: 'CustomerLoyaltyMembership',
 } as const;
 
 export type OutboxEntityType =

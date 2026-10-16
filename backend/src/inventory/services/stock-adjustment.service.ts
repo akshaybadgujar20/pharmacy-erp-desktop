@@ -35,6 +35,10 @@ import {
 } from '../constants/inventory.constants';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
+import {
   assertDraftStatus,
   optimisticUpdate,
   throwNotFound,
@@ -117,6 +121,12 @@ export class StockAdjustmentService {
         );
       }
 
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.adjustmentDate,
+      );
+
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
         branchId: branch.id,
@@ -179,6 +189,13 @@ export class StockAdjustmentService {
       }
 
       assertDraftStatus(existing.status, 'Stock adjustment');
+
+      const adjustmentDate = dto.adjustmentDate ?? existing.adjustmentDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        adjustmentDate,
+      );
 
       const updateResult = await tx.stockAdjustment.updateMany({
         where: { id, version: dto.version, deletedAt: null },

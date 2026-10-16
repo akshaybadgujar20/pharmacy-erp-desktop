@@ -42,9 +42,9 @@ Backend gap severity: **High** = compliance or financial risk; **Medium** = oper
 | [Sales](#sales) | Partial | Implemented | Planned |
 | [Financial](#financial) | Partial | Implemented | Partial |
 | [Pricing](#pricing) | Implemented | Implemented | Partial |
-| [Loyalty](#loyalty) | Partial | Planned | Planned |
+| [Loyalty](#loyalty) | Partial | Partial | Planned |
 | [Prescription](#prescription) | Partial | Implemented | Planned |
-| [Synchronization](#synchronization) | Partial | Planned | Planned |
+| [Synchronization](#synchronization) | Partial | Partial | Planned |
 | [Audit](#audit) | Implemented | Planned | Planned |
 | [Configuration](#configuration) | Implemented | Implemented | Partial |
 | [Settings](#settings-app-settings) | Implemented | Implemented | Partial |
@@ -350,9 +350,9 @@ Cross-cutting Angular/Electron shell (not a business module).
 | GAP-PAY-2 | Dual settlement: SalesPayment + Receipt (by design) | Info |
 | GAP-ME-1 | Pre-close checks — no ClosingService | High |
 | GAP-ME-2 | Stock reconciliation not wired to close | Medium |
-| GAP-ME-3 | Trial balance report not implemented | Medium |
-| GAP-ME-4 | GST summary report not implemented | Medium |
-| GAP-ME-6 | CLOSED financial year does not block all mutation paths | Medium |
+| GAP-ME-3 | Trial balance report — **implemented** (`finance.trial-balance`); month-end wizard still Planned | Low |
+| GAP-ME-4 | GST summary report — **implemented** (`finance.gst-summary`) | Low |
+| GAP-ME-6 | ~~CLOSED FY block~~ — **resolved** on transactional document dates (see [product-gaps-delivery](../architecture/product-gaps-delivery.md)) | — |
 | GAP-ME-7 | Archive reports at close — no pipeline | Medium |
 | GAP-ME-8 | No ClosingService or pre-close wizard | High |
 | GAP-ME-9 | No reopen-period API | Low |
@@ -366,7 +366,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UI gaps
 
 - UI-FIN-1: No month-end close wizard screen.
-- UI-FIN-2: No trial balance or GST summary views (backend reports Planned).
+- UI-FIN-2: Trial balance / GST available via `/reports` runner; dedicated finance dashboard views Planned.
 
 ### UX gaps
 
@@ -417,23 +417,25 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### Backend
 
-- Schema and service scaffolding; earn/redeem hooks referenced from sales design.
-- `LOYALTY_POINTS_RATIO` setting seeded.
+- `LoyaltyProgram` CRUD, `CustomerLoyaltyMembership` enrollment, `LoyaltyTransaction` ledger.
+- Earn/redeem on sales invoice **post** via `LoyaltyIntegrationService` (`redeemPoints` on workflow DTO).
+- `LOYALTY_*` permissions seeded; outbox entity types registered.
 
 **Backend gaps**
 
-- Full earn/redeem at invoice post may not be complete end-to-end.
-- Loyalty program CRUD permissions partially Planned.
+- Sales return/cancel loyalty reversal Planned.
+- Manual adjustment API Planned (DTO exists).
 - Points expiry job and reconciliation Planned.
 
 ### UI screens
 
-- No `src/app/features/loyalty/` folder.
-- No routes or nav entries.
+- Routes: `/loyalty/programs`
+- Code: `src/app/features/loyalty/loyalty.routes.ts`
+- Nav: Loyalty under Admin in `nav.config.ts`
 
 ### UI gaps
 
-- UI-LOY-1: Loyalty program list/detail screens Planned.
+- UI-LOY-1: Program create/edit screens minimal (list only).
 - UI-LOY-2: Customer points history screen Planned.
 
 ### UX gaps
@@ -491,22 +493,25 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### Backend
 
-- Outbox pattern, sync log, conflict entities; delta sync design documented.
-- Background worker and cloud Spring Boot sync Planned for production.
+- Outbox pattern, sync log, conflict entities; **push** worker `POST /sync/runs` (`SYNC_CLOUD_URL`).
+- Electron interval + `sync:runNow` IPC triggers renderer to call Nest.
+- Pull delta / cloud Spring Boot service Planned for production.
 
 **Backend gaps**
 
-- Sync worker not always running in desktop dev setup.
+- No pull/apply pipeline; conflict resolve remains metadata-only.
+- `SYNC_CLOUD_URL` must be set for push runs (dev often unset).
 
 ### UI screens
 
-- No `src/app/features/sync/` folder.
-- No routes or nav entries.
+- Routes: `/sync` — manual sync + last run summary
+- Code: `src/app/features/sync/sync.routes.ts`
+- Nav: Sync under Admin in `nav.config.ts`
 
 ### UI gaps
 
-- UI-SYNC-1: Outbox queue viewer Planned.
-- UI-SYNC-2: Conflict resolution screen Planned.
+- UI-SYNC-1: Outbox queue viewer Planned (admin API exists).
+- UI-SYNC-2: Conflict resolution screen Planned (admin API exists).
 
 ### UX gaps
 
@@ -564,7 +569,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 | ID | Gap | Severity |
 |----|-----|----------|
-| GAP-ME-6 | Closed FY does not block all document paths | Medium |
+| GAP-ME-6 | ~~Closed FY block~~ — enforced via `financial-year-guard.util` on transactional documents | — |
 
 ### UI screens
 
@@ -652,12 +657,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### Backend
 
-- Report registry, party reports (customer list, supplier list, customer outstanding).
+- Report registry; party + sales/purchase/inventory/finance providers (see [reporting.md](./reporting.md)).
 - Export: JSON, CSV, Excel, PDF.
 
 **Backend gaps**
 
-- Sales, purchase, inventory, finance report providers Planned (see [reporting.md](./reporting.md)).
+- Stored month-end archive at FY close Planned (`finance.month-end-pack` is on-demand export only).
 
 ### UI screens
 
@@ -668,7 +673,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-REP-1: Only party reports available from API today.
+- UI-REP-1: All seeded catalog reports appear in list when permissions granted; category filters may need polish.
 - UI-REP-2: No saved report favourites or scheduled runs.
 
 ### UX gaps
@@ -749,3 +754,4 @@ When adding or changing a feature:
 - [User experience](./user-experience.md)
 - [Integrations and devices](./integrations-and-devices.md)
 - [Workflow handbook](../workflows/README.md)
+- [Product gaps delivery](../architecture/product-gaps-delivery.md) — FY, reporting, sync push, loyalty foundation

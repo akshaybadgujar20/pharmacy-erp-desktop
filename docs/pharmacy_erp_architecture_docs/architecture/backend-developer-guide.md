@@ -979,7 +979,9 @@ flowchart TB
 | Pricing (logical) | `resolvePriceListItem` queries price list tables directly |
 | Prescription (FK) | `prescriptionId` validated on post |
 
-**Not implemented:** Loyalty, non-RESTOCK dispositions.
+**Not implemented:** Full loyalty EPIC (return reversal, adjustment API, invoice UI); non-RESTOCK dispositions.
+
+**Loyalty (partial):** `LoyaltyIntegrationService` on invoice post — see [loyalty-module.md](../../../.cursor/rules/docs/loyalty-module.md).
 
 **Key decisions:** [ADR-068](./adrs/ADR-068-sales-all-five-tables-v1.md), [ADR-072](./adrs/ADR-072-fefo-batch-allocation-at-post.md), [ADR-076](./adrs/ADR-076-block-sales-cancel-when-paid-or-return.md), [ADR-136](./adrs/ADR-136-sales-post-stock-outbound-boundary.md).
 
@@ -1043,6 +1045,8 @@ flowchart TB
 |----------|---------|--------------|
 | `POST /outbox/:id/retry` | `sync/services/outbox.service.ts` | FAILED/PROCESSING → PENDING |
 | `POST /sync-conflicts/:id/resolve` | `sync-conflict.service.ts` | Metadata only — does not apply payload to business tables |
+| `POST /sync/runs` | `sync-run.service.ts` | Push pending outbox to `SYNC_CLOUD_URL`; writes `SyncLog` |
+| `GET /sync/runs/latest` | `sync-run.service.ts` | Last push summary for device |
 
 **Non-trivial files:**
 
@@ -1059,9 +1063,9 @@ flowchart TB
 | Persistence `OutboxService` | `persistence/outbox/outbox.service.ts` | **Write** — `enqueue(tx)` in mutation tx |
 | Sync `OutboxService` | `sync/services/outbox.service.ts` | **Read/admin** — list, get, retry |
 
-**Not implemented:** Cloud sync worker, applying conflict resolution to business entities.
+**Not implemented:** Pull/apply pipeline, applying conflict resolution payloads to business entities, hosted cloud service.
 
-**Pointers:** [sync-module.md](../../../.cursor/rules/docs/sync-module.md), [synchronization.md](../database/tables/synchronization/synchronization.md)
+**Pointers:** [sync-module.md](../../../.cursor/rules/docs/sync-module.md), [synchronization.md](../database/tables/synchronization/synchronization.md), [product-gaps-delivery.md](./product-gaps-delivery.md)
 
 ---
 
@@ -1086,7 +1090,8 @@ flowchart TB
 |------|-------------------------|---------|
 | [`core/report-registry.service.ts`](../../../backend/src/reporting/core/report-registry.service.ts) | Providers register `ReportDefinition` at startup; permission filter | `ReportController` |
 | [`core/report-definition.interface.ts`](../../../backend/src/reporting/core/report-definition.interface.ts) | Contract for new reports: `id`, `permission`, `run(params, ctx)` | All providers |
-| [`providers/party/party-reports.provider.ts`](../../../backend/src/reporting/providers/party/party-reports.provider.ts) | Example: party list reports — **copy this pattern for new reports** | Registered in `reporting.module.ts` |
+| [`providers/party/party-reports.provider.ts`](../../../backend/src/reporting/providers/party/party-reports.provider.ts) | Party list reports | Registered in `reporting.module.ts` |
+| [`providers/sales/`](../../../backend/src/reporting/providers/sales/), [`purchase/`](../../../backend/src/reporting/providers/purchase/), [`inventory/`](../../../backend/src/reporting/providers/inventory/), [`finance/`](../../../backend/src/reporting/providers/finance/) | Transactional report providers | Same registration pattern |
 | [`export/report-exporter.service.ts`](../../../backend/src/reporting/export/report-exporter.service.ts) | Delegates to csv/xlsx/pdf exporters | Report controller |
 | [`utils/report.util.ts`](../../../backend/src/reporting/utils/report.util.ts) | Date range validation; `Content-Disposition` header | Report controller |
 
@@ -1494,12 +1499,16 @@ See also: [Part 4.1](#41-retail-otc-sale), [Sales capsule](#sales), [sales-flow.
 | Gap | Notes |
 |-----|-------|
 | `party-contact` service | No `auditService.log` on mutations (exception to convention) |
-| Closed financial year | Configuration can close FY; not enforced on all transaction modules yet |
-| Sync worker | Outbox enqueue implemented; cloud upload worker not built |
+| Closed financial year | **Enforced** on transactional document dates via [`financial-year-guard.util.ts`](../../../backend/src/configuration/utils/financial-year-guard.util.ts); see [product-gaps-delivery.md](./product-gaps-delivery.md) |
+| Sync worker | **Push stub** implemented (`POST /sync/runs`, `SYNC_CLOUD_URL`); no pull/apply or production cloud service in this repo |
 | Conflict resolution | Metadata-only; does not apply payloads to business tables |
-| Reporting | Only party reports registered; financial/inventory reports pending |
+| Reporting | Party + sales/purchase/inventory/finance providers registered; see [reporting.md](./reporting.md) |
+| Loyalty | **Partial** — program CRUD, enrollment, earn/redeem on sales post; full EPIC-011 ADO not complete |
 | Prescription auto-expire | Manual `expire` endpoint only |
+| Month-end close | No ClosingService / archive pipeline |
 | Agent memory README | Updated — see [`.cursor/rules/docs/README.md`](../../../.cursor/rules/docs/README.md) |
+
+Delivery detail: [product-gaps-delivery.md](./product-gaps-delivery.md).
 
 ---
 

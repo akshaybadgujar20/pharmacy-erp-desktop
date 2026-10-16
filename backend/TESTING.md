@@ -50,7 +50,10 @@ npm run test -- party/customer.service.spec.ts
 npm run test:persistence -- --testPathPatterns=sequence-generator
 npm run test:integration -- --testPathPatterns=purchase-order
 npm run test:e2e -- --testPathPatterns=auth.e2e-spec
+npm run test:integration -- --testPathPatterns="financial-year|reports|sync-run"
 ```
+
+Sync integration/e2e specs expect `SYNC_CLOUD_URL` (see `test/support/cloud-sync-mock.ts` or `.env.test`).
 
 ## Layout
 
@@ -58,6 +61,7 @@ npm run test:e2e -- --testPathPatterns=auth.e2e-spec
 test/
   setup/test-env.setup.ts      # loads .env.test for DB suites
   support/http-test.helpers.ts # createHttpTestApp, loginAs, etc.
+  support/cloud-sync-mock.ts   # minimal HTTP server for SYNC_CLOUD_URL in sync tests
   persistence/*.integration.spec.ts
   integration/*.integration.spec.ts
   e2e/*.e2e-spec.ts

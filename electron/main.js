@@ -64,7 +64,23 @@ ipcMain.handle('secure-store:delete', (_event, key) => {
   secureStore.delete(key)
 })
 
-app.whenReady().then(createWindow)
+function triggerSyncRun() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('sync:runNow')
+  }
+}
+
+function startSyncScheduler() {
+  const minutes = parseInt(process.env.SYNC_INTERVAL_MINUTES ?? '15', 10)
+  const intervalMs = Math.max(minutes, 1) * 60 * 1000
+  setInterval(triggerSyncRun, intervalMs)
+}
+
+app.whenReady().then(() => {
+  createWindow()
+  startSyncScheduler()
+  triggerSyncRun()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

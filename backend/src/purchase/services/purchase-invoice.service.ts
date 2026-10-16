@@ -37,6 +37,10 @@ import { CreatePurchaseInvoiceDto } from '../dto/create-purchase-invoice.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdatePurchaseInvoiceDto } from '../dto/update-purchase-invoice.dto';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import { toPurchaseInvoiceResponse } from '../mappers/purchase-invoice.mapper';
 import {
   assertDraftStatus,
@@ -125,6 +129,11 @@ export class PurchaseInvoiceService {
       }
 
       await assertSupplierActive(tx, dto.supplierId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.invoiceDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -188,6 +197,13 @@ export class PurchaseInvoiceService {
         existing.status,
         'Purchase invoice',
         PurchaseInvoiceStatus.DRAFT,
+      );
+
+      const invoiceDate = dto.invoiceDate ?? existing.invoiceDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        invoiceDate,
       );
 
       if (dto.supplierId) {

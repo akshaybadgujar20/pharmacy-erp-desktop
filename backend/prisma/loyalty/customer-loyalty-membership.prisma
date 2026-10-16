@@ -1,0 +1,27 @@
+model CustomerLoyaltyMembership {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique @default(uuid())
+
+  customerId       BigInt @map("customer_id")
+  loyaltyProgramId BigInt @map("loyalty_program_id")
+
+  status String @default("ACTIVE")
+
+  enrolledAt BigInt  @map("enrolled_at")
+  endedAt    BigInt? @map("ended_at")
+
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
+
+  version BigInt @default(1)
+
+  customer       Customer       @relation(fields: [customerId], references: [id])
+  loyaltyProgram LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
+
+  @@unique([customerId, loyaltyProgramId])
+  @@index([loyaltyProgramId])
+  @@index([status])
+  @@map("customer_loyalty_memberships")
+}

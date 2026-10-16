@@ -28,6 +28,10 @@ import { PaymentListQueryDto } from '../dto/payment-list-query.dto';
 import { UpdatePaymentDto } from '../dto/update-payment.dto';
 import { toPaymentResponse } from '../mappers/payment.mapper';
 import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
+import {
   adjustPurchaseInvoicePaymentAllocation,
   adjustSupplierOutstanding,
   assertPaymentTypeSupportsLedger,
@@ -121,6 +125,11 @@ export class PaymentService {
         where: { id: scope.branchId, deletedAt: null },
         select: { id: true, branchCode: true, companyId: true },
       });
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.paymentDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -161,6 +170,7 @@ export class PaymentService {
 
   async update(id: bigint, dto: UpdatePaymentDto) {
     return this.unitOfWork.run(async (tx) => {
+      const scope = getTenantScope(this.requestContext);
       const existing = await tx.payment.findFirst({
         where: { id, deletedAt: null },
       });
@@ -172,6 +182,13 @@ export class PaymentService {
       }
 
       this.assertPendingStatus(existing.status, 'Payment');
+
+      const paymentDate = dto.paymentDate ?? existing.paymentDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        scope.branchId,
+        paymentDate,
+      );
 
       const updateResult = await tx.payment.updateMany({
         where: { id, version: dto.version, deletedAt: null },

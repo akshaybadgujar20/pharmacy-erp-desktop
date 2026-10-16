@@ -29,6 +29,7 @@ model Customer {
   updatedByUser       User?                @relation("CustomerUpdatedBy", fields: [updatedBy], references: [id])
   deletedByUser       User?                @relation("CustomerDeletedBy", fields: [deletedBy], references: [id])
   loyaltyTransactions LoyaltyTransaction[]
+  loyaltyMemberships  CustomerLoyaltyMembership[]
   prescriptions       Prescription[]
   discountRules       DiscountRule[]
   salesInvoices       SalesInvoice[]

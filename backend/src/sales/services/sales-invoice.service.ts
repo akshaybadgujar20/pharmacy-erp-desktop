@@ -32,6 +32,7 @@ import { DocumentType } from '../../persistence/sequence/document-type.constants
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
+import { LoyaltyIntegrationService } from '../../loyalty/services/loyalty-integration.service';
 import { SettingsService } from '../../settings/settings.service';
 import {
   SALES_INVOICE_CANCELLABLE_STATUSES,
@@ -45,6 +46,10 @@ import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesInvoiceDto } from '../dto/update-sales-invoice.dto';
 import { toSalesInvoiceResponse } from '../mappers/sales-invoice.mapper';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import {
   allocateFefoBatches,
   applyPrescriptionDispensing,
@@ -74,6 +79,7 @@ export class SalesInvoiceService {
     private readonly ledgerPosting: LedgerPostingService,
     private readonly inventoryLedger: InventoryLedgerService,
     private readonly settingsService: SettingsService,
+    private readonly loyaltyIntegration: LoyaltyIntegrationService,
   ) {}
 
   async list(query: PaginationQueryDto) {
@@ -131,7 +137,12 @@ export class SalesInvoiceService {
   async create(dto: CreateSalesInvoiceDto) {
     return this.unitOfWork.run(async (tx) => {
       const scope = getTenantScope(this.requestContext);
-      await assertBranchExists(tx, dto.branchId);
+      const branch = await assertBranchExists(tx, dto.branchId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.invoiceDate,
+      );
 
       if (dto.branchId !== scope.branchId) {
         throw new ApplicationException(
@@ -205,6 +216,13 @@ export class SalesInvoiceService {
       }
 
       assertDraftStatus(existing.status, 'Sales invoice');
+
+      const invoiceDate = dto.invoiceDate ?? existing.invoiceDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        invoiceDate,
+      );
 
       if (dto.customerId) {
         await assertCustomerActive(tx, dto.customerId);
@@ -517,6 +535,10 @@ export class SalesInvoiceService {
       }
 
       const updated = await tx.salesInvoice.findFirstOrThrow({ where: { id } });
+      await this.loyaltyIntegration.applyForPostedInvoice(tx, updated, {
+        redeemPoints: dto.redeemPoints,
+        operationId: `${updated.uuid}:post`,
+      });
       await this.emitChange(
         tx,
         updated,

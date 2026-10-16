@@ -1,0 +1,21 @@
+---
+description: Loyalty module conventions — read memory doc before editing backend/src/loyalty
+globs: backend/src/loyalty/**
+alwaysApply: false
+---
+
+# Loyalty module
+
+**Read the full memory model first:** [`.cursor/rules/docs/loyalty-module.md`](docs/loyalty-module.md)
+
+Program CRUD, enrollment, and sales-post integration. Not full EPIC-011.
+
+## Golden rules
+
+1. **Writes** use `unitOfWork.run` with audit + outbox in the same transaction.
+2. **Sales integration** stays in `LoyaltyIntegrationService` — do not duplicate earn/redeem logic in sales services.
+3. **Balance invariants** — use helpers in `utils/loyalty.util.ts` for version conflicts and ledger rows.
+
+## Architecture reference
+
+Functional status: [implementation-status.md](../docs/pharmacy_erp_architecture_docs/functional/implementation-status.md#loyalty).

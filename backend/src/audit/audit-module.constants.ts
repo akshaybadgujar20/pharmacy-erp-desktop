@@ -11,6 +11,7 @@ export const AuditModule = {
   PRICING: 'Pricing',
   PRESCRIPTION: 'Prescription',
   LOOKUP: 'Lookup',
+  LOYALTY: 'Loyalty',
 } as const;
 
 export type AuditModule = (typeof AuditModule)[keyof typeof AuditModule];

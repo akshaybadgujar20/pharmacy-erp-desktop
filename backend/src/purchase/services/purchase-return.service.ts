@@ -24,6 +24,10 @@ import { DocumentType } from '../../persistence/sequence/document-type.constants
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
 import { VoucherType } from '../../finance/constants/finance.constants';
 import { buildPurchaseReturnLedgerLines } from '../../finance/utils/finance.util';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { LedgerPostingService } from '../../persistence/ledger/ledger-posting.service';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
@@ -124,6 +128,11 @@ export class PurchaseReturnService {
       }
 
       await assertSupplierActive(tx, dto.supplierId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.returnDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -184,6 +193,13 @@ export class PurchaseReturnService {
         existing.status,
         'Purchase return',
         PurchaseReturnStatus.DRAFT,
+      );
+
+      const returnDate = dto.returnDate ?? existing.returnDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        returnDate,
       );
 
       if (dto.supplierId) {

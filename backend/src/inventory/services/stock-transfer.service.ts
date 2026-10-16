@@ -32,6 +32,10 @@ import { UpdateStockTransferDto } from '../dto/update-stock-transfer.dto';
 import { toStockTransferResponse } from '../mappers/stock-transfer.mapper';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
+import {
   assertDraftStatus,
   optimisticUpdate,
   throwConflict,
@@ -110,6 +114,11 @@ export class StockTransferService {
     return this.unitOfWork.run(async (tx) => {
       const sourceBranch = await assertBranchExists(tx, dto.sourceBranchId);
       await assertBranchExists(tx, dto.destinationBranchId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        sourceBranch.companyId,
+        dto.transferDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: sourceBranch.companyId,
@@ -173,6 +182,13 @@ export class StockTransferService {
       }
 
       assertDraftStatus(existing.status, 'Stock transfer');
+
+      const transferDate = dto.transferDate ?? existing.transferDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.sourceBranchId,
+        transferDate,
+      );
 
       const updateResult = await tx.stockTransfer.updateMany({
         where: { id, version: dto.version, deletedAt: null },

@@ -1,5 +1,5 @@
 import { MandatoryBigIntField } from '../../common/dto/bigint.decorator';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class SalesWorkflowDto {
   @MandatoryBigIntField()
@@ -9,4 +9,9 @@ export class SalesWorkflowDto {
   @IsString()
   @MaxLength(500)
   remarks?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  redeemPoints?: number;
 }

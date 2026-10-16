@@ -28,6 +28,10 @@ import { CreatePurchaseOrderDto } from '../dto/create-purchase-order.dto';
 import { PurchaseWorkflowDto } from '../dto/purchase-workflow.dto';
 import { UpdatePurchaseOrderDto } from '../dto/update-purchase-order.dto';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import { toPurchaseOrderResponse } from '../mappers/purchase-order.mapper';
 import {
   assertPoEditableStatus,
@@ -116,6 +120,11 @@ export class PurchaseOrderService {
       }
 
       await assertSupplierActive(tx, dto.supplierId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.orderDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -183,6 +192,14 @@ export class PurchaseOrderService {
 
       assertPoEditableStatus(existing.status);
 
+      const orderDate = dto.orderDate ?? existing.orderDate;
+      const branch = await assertBranchExists(tx, existing.branchId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        orderDate,
+      );
+
       if (dto.supplierId) {
         await assertSupplierActive(tx, dto.supplierId);
       }
@@ -242,6 +259,11 @@ export class PurchaseOrderService {
       }
 
       assertPoEditableStatus(existing.status);
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        existing.orderDate,
+      );
 
       const updateResult = await tx.purchaseOrder.updateMany({
         where: { id, version, deletedAt: null },
@@ -354,6 +376,11 @@ export class PurchaseOrderService {
       }
 
       await assertPurchaseOrderHasNoReceipts(tx, id);
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        order.branchId,
+        order.orderDate,
+      );
 
       const updateResult = await tx.purchaseOrder.updateMany({
         where: { id, version: dto.version, deletedAt: null },
@@ -421,6 +448,12 @@ export class PurchaseOrderService {
           { id: id.toString() },
         );
       }
+
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        order.branchId,
+        order.orderDate,
+      );
 
       if (!options.from.includes(order.status)) {
         throw new ApplicationException(

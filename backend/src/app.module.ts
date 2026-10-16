@@ -1,37 +1,20 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-
 import { ConfigModule } from '@nestjs/config';
-
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-
 import { AppController } from './app.controller';
-
 import { AppService } from './app.service';
-
 import { AuditModule } from './audit/audit.module';
-
 import { AuthModule } from './auth/auth.module';
-
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-
 import { PermissionsGuard } from './auth/guards/permissions.guard';
-
 import { GlobalExceptionFilter } from './common/exceptions/global-exception.filter';
-
 import { ContextEnrichInterceptor } from './common/interceptors/context-enrich.interceptor';
-
 import { CorrelationMiddleware } from './common/logging/correlation.middleware';
-
 import { LoggingInterceptor } from './common/logging/logging.interceptor';
-
 import { LoggingModule } from './common/logging/logging.module';
-
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-
 import { PrismaModule } from './prisma.module';
-
 import { PersistenceModule } from './persistence/persistence.module';
-
 import { SettingsModule } from './settings/settings.module';
 import { PartyModule } from './party/party.module';
 import { ReportingModule } from './reporting/reporting.module';
@@ -45,6 +28,7 @@ import { PricingModule } from './pricing/pricing.module';
 import { PrescriptionModule } from './prescription/prescription.module';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { SyncModule } from './sync/sync.module';
+import { LoyaltyModule } from './loyalty/loyalty.module';
 import { MastersModule } from './masters/masters.module';
 
 @Module({
@@ -67,6 +51,7 @@ import { MastersModule } from './masters/masters.module';
     PrescriptionModule,
     ConfigurationModule,
     SyncModule,
+    LoyaltyModule,
     MastersModule,
     ReportingModule,
   ],

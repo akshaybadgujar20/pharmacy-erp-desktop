@@ -11,6 +11,7 @@ import {
   buildPagination,
   PaginatedResult,
 } from '../../common/response/paginated-result';
+import { assertOpenFinancialYearForBranchDocument } from '../../configuration/utils/financial-year-guard.util';
 import {
   getTenantScope,
   withBranchScope,
@@ -125,6 +126,11 @@ export class PrescriptionService {
       await assertPrescriptionNumberUnique(tx, dto.prescriptionNumber);
       await assertCustomerExists(tx, dto.customerId);
       await assertDoctorExists(tx, dto.doctorId);
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        scope.branchId,
+        dto.prescriptionDate,
+      );
 
       const now = BigInt(Date.now());
       const prescription = await tx.prescription.create({
@@ -173,6 +179,14 @@ export class PrescriptionService {
       }
 
       assertPrescriptionDraft(existing.status);
+
+      const prescriptionDate =
+        dto.prescriptionDate ?? existing.prescriptionDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        prescriptionDate,
+      );
 
       if (
         dto.prescriptionNumber &&

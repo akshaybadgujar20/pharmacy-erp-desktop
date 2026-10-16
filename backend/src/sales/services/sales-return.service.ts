@@ -45,6 +45,10 @@ import { CreateSalesReturnDto } from '../dto/create-sales-return.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesReturnDto } from '../dto/update-sales-return.dto';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import { toSalesReturnResponse } from '../mappers/sales-return.mapper';
 import {
   assertCustomerActive,
@@ -157,6 +161,12 @@ export class SalesReturnService {
         await assertCustomerActive(tx, dto.customerId);
       }
 
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.returnDate,
+      );
+
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
         branchId: branch.id,
@@ -213,6 +223,13 @@ export class SalesReturnService {
       }
 
       assertDraftStatus(existing.status, 'Sales return');
+
+      const returnDate = dto.returnDate ?? existing.returnDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        returnDate,
+      );
 
       if (dto.customerId) {
         await assertCustomerActive(tx, dto.customerId);

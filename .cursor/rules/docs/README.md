@@ -39,6 +39,7 @@ Module memory docs below describe **what exists**; coding principles govern **ho
 | [security-module.md](security-module.md) | `backend/src/security/` | [security-module.mdc](../security-module.mdc) |
 | [settings-module.md](settings-module.md) | `backend/src/settings/` | [settings-module.mdc](../settings-module.mdc) |
 | [sync-module.md](sync-module.md) | `backend/src/sync/` | [sync-module.mdc](../sync-module.mdc) |
+| [loyalty-module.md](loyalty-module.md) | `backend/src/loyalty/` | [loyalty-module.mdc](../loyalty-module.mdc) |
 
 ## Adding a new module doc
 

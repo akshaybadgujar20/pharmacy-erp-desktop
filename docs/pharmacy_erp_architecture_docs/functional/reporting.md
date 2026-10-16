@@ -63,22 +63,30 @@ Same URL as run, with `format=csv|xlsx|pdf`. Browser or Electron saves the attac
 | `party.customer-list` | Customer List | `REPORT_PARTY_VIEW` |
 | `party.supplier-list` | Supplier List | `REPORT_PARTY_VIEW` |
 | `party.customer-outstanding` | Customer Outstanding | `REPORT_PARTY_VIEW` |
+| `sales.daily-summary` | Sales Daily Summary | `REPORT_SALES_VIEW` |
+| `sales.register` | Sales Register | `REPORT_SALES_VIEW` |
+| `sales.gst-summary` | Sales GST Summary | `REPORT_SALES_VIEW` |
+| `purchase.po-status` | Purchase Order Status | `REPORT_PURCHASE_VIEW` |
+| `purchase.register` | Purchase Register | `REPORT_PURCHASE_VIEW` |
+| `purchase.supplier-summary` | Supplier-wise Purchase | `REPORT_PURCHASE_VIEW` |
+| `inventory.stock-on-hand` | Stock On Hand | `REPORT_INVENTORY_VIEW` |
+| `inventory.near-expiry` | Near Expiry Stock | `REPORT_INVENTORY_VIEW` |
+| `inventory.movement-register` | Stock Movement Register | `REPORT_INVENTORY_VIEW` |
+| `finance.day-book` | Day Book | `REPORT_FINANCE_VIEW` |
+| `finance.trial-balance` | Trial Balance | `REPORT_FINANCE_VIEW` |
+| `finance.gst-summary` | GST Summary | `REPORT_FINANCE_VIEW` |
+| `finance.month-end-pack` | Month-end Pack | `REPORT_FINANCE_VIEW` |
 
-Seeded **Administrator** role has `REPORT_VIEW` and `REPORT_PARTY_VIEW`.
+Seeded **Administrator** has `REPORT_VIEW` plus category `REPORT_*_VIEW` permissions (reseed or `db:test:prepare` after permission changes).
+
+Transactional reports accept `fromDate` / `toDate` (ISO date strings) and use the JWT branch unless `branchId` is passed.
 
 ---
 
 ## Planned coverage
 
-Aligns with product roadmap and [integrations doc](../architecture/integrations.md#reporting):
-
-- Sales — daily summary, register, GST
-- Purchase — PO status, purchase register
-- Inventory — stock on hand, expiry, movement
-- Finance — day book, trial balance, GST summary
-- Month-end — archived close reports
-
-Angular/Electron report picker UI is Planned.
+- Stored month-end **archive** snapshots at FY close (today: `finance.month-end-pack` is a parameterized export only).
+- Additional analytics (fast/slow movers, consolidated multi-branch) per [integrations doc](../architecture/integrations.md#reporting).
 
 ---
 
@@ -100,7 +108,7 @@ Angular/Electron report picker UI is Planned.
 |------------|-----|
 | `REPORT:REPORT:READ` (`REPORT_VIEW`) | Access `/reports` endpoints |
 | `REPORT:PARTY_REPORT:READ` (`REPORT_PARTY_VIEW`) | Run `party.*` reports |
-| Future `REPORT_SALES_VIEW`, etc. | Per-category report access |
+| `REPORT_SALES_VIEW`, `REPORT_PURCHASE_VIEW`, `REPORT_INVENTORY_VIEW`, `REPORT_FINANCE_VIEW` | Per-category transactional reports |
 
 ---
 
@@ -109,15 +117,15 @@ Angular/Electron report picker UI is Planned.
 | Module | Connection |
 |--------|------------|
 | **Party Management** | Customer/supplier list and outstanding reports |
-| **Financial** | Future trial balance, GST (Planned) |
-| **Sales / Purchase / Inventory** | Future transactional reports (Planned) |
+| **Financial** | Day book, trial balance, GST summary, month-end pack |
+| **Sales / Purchase / Inventory** | Registers and operational summaries (see table above) |
 | **User & Security** | Permission checks on every run |
 
 ---
 
 ## Maturity & known gaps
 
-**Status: Partial** — backend registry and party reports Implemented; report list/runner UI exists; broader report catalog Planned.
+**Status: Partial** — planned catalog registered on backend; list/runner UI exists; advanced analytics and close-archive pipeline Planned.
 
 See Backend / UI / UX columns: [implementation-status.md — Reporting](./implementation-status.md#reporting).
 

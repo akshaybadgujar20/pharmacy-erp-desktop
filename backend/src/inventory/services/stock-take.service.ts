@@ -37,6 +37,10 @@ import { UpdateStockTakeDto } from '../dto/update-stock-take.dto';
 import { toStockTakeResponse } from '../mappers/stock-take.mapper';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
 import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
+import {
   assertDraftStatus,
   assertEmployeeExists,
   optimisticUpdate,
@@ -121,6 +125,12 @@ export class StockTakeService {
         );
       }
 
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.stockTakeDate,
+      );
+
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
         branchId: branch.id,
@@ -182,6 +192,13 @@ export class StockTakeService {
       }
 
       assertDraftStatus(existing.status, 'Stock take');
+
+      const stockTakeDate = dto.stockTakeDate ?? existing.stockTakeDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        stockTakeDate,
+      );
 
       if (dto.countedByEmployeeId) {
         await assertEmployeeExists(tx, dto.countedByEmployeeId);

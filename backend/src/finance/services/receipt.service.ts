@@ -31,6 +31,10 @@ import { ReceiptListQueryDto } from '../dto/receipt-list-query.dto';
 import { UpdateReceiptDto } from '../dto/update-receipt.dto';
 import { toReceiptResponse } from '../mappers/receipt.mapper';
 import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
+import {
   adjustCustomerOutstanding,
   assertTransactionDateInOpenYear,
   buildReceiptLedgerLines,
@@ -124,6 +128,11 @@ export class ReceiptService {
         where: { id: scope.branchId, deletedAt: null },
         select: { id: true, branchCode: true, companyId: true },
       });
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.receiptDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -164,6 +173,7 @@ export class ReceiptService {
 
   async update(id: bigint, dto: UpdateReceiptDto) {
     return this.unitOfWork.run(async (tx) => {
+      const scope = getTenantScope(this.requestContext);
       const existing = await tx.receipt.findFirst({
         where: { id, deletedAt: null },
       });
@@ -175,6 +185,13 @@ export class ReceiptService {
       }
 
       this.assertPendingStatus(existing.status, 'Receipt');
+
+      const receiptDate = dto.receiptDate ?? existing.receiptDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        scope.branchId,
+        receiptDate,
+      );
 
       const updateResult = await tx.receipt.updateMany({
         where: { id, version: dto.version, deletedAt: null },

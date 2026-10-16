@@ -1,6 +1,6 @@
 # ADR-256: Financial year close not enforced on all transaction modules
 
-**Status:** Deferred  
+**Status:** Superseded  
 **Confidence:** Strongly inferred  
 **Modules:** configuration
 
@@ -22,7 +22,7 @@ Should all transaction modules block writes when FY is CLOSED?
 
 ## Decision Selected
 
-Financial year close API implemented (OPEN → CLOSED); enforcing closed FY on all transaction modules is **out of scope v1**.
+Financial year close API implemented (OPEN → CLOSED). Cross-module enforcement is implemented via `assertDocumentDateInOpenFinancialYear` / `assertOpenFinancialYearForBranchDocument` in [`financial-year-guard.util.ts`](../../../../backend/src/configuration/utils/financial-year-guard.util.ts) on transactional document create/update/workflow paths.
 
 ## Rationale
 

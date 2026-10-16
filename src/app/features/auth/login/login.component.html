@@ -2,34 +2,31 @@
   <div class="login-language">
     <app-language-selector />
   </div>
-  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()" (keydown.control.enter)="submit()">
     <h1 class="flex items-center justify-center">{{ 'auth.loginTitle' | translate }}</h1>
 
     <label>
       <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
-        <label pLabel for="basic-inputtext">{{ 'auth.username' | translate }}</label>
-        <input pInputText id="basic-inputtext" formControlName="username" autocomplete="username" />
+        <label pLabel for="username">{{ 'auth.username' | translate }}</label>
+        <input pInputText id="username" formControlName="username" autocomplete="username" />
       </div>
     </label>
 
     @if (loginMode == LoginMode.PASSWORD) {
       <label>
         <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
-          <label pLabel for="basic-inputtext">{{ 'auth.password' | translate }}</label>
-          <input pInputText id="basic-inputtext" formControlName="password" autocomplete="current-password" />
+          <label pLabel for="password">{{ 'auth.password' | translate }}</label>
+          <input pInputText id="password" formControlName="password" autocomplete="current-password" />
         </div>
       </label>
     }
 
     @if (loginMode == LoginMode.PIN) {
       <label>
-        {{ 'auth.pin' | translate }}
-        <p-inputotp [length]="6" [integerOnly]="true"  autocomplete="current-password" formControlName="pin" [mask]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3"/>
-        <!--<p-inputotp formControlName="pin" >
-          <ng-template #input let-token let-events="events">
-            <input class="custom-otp-input" (keydown)="events.keydown($event)" (input)="events.input($event)" type="text" [attr.value]="token" [maxLength]="1" />
-          </ng-template>
-        </p-inputotp>-->
+        <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
+          <label pLabel for="pin">{{ 'auth.pin' | translate }}</label>
+          <p-inputotp  id="pin" [length]="6" [integerOnly]="true"  autocomplete="current-password" formControlName="pin" [mask]="true" class="w-full *:flex-1 *:aspect-square **:text-2xl! **:font-bold! my-auto gap-3"/>
+        </div>
       </label>
     }
 
@@ -47,10 +44,6 @@
       <button pButton iconOnly [variant]="dialpadVariant" (click)="toggleDialpadButton()"><span class="material-icons">password</span></button>
     </div>
 
-    <div class="flex justify-center gap-2">
-      <button pButton type="button" variant="outlined">Reject</button>
-      <button pButton type="button">Accept</button>
-    </div>
     <p class="hint">{{ 'auth.demoHint' | translate }}</p>
   </form>
 </div>

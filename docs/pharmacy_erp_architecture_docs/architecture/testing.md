@@ -152,6 +152,9 @@ npm run test:integration
 
 # Purchase orders
 npm run test:integration -- --testPathPatterns=purchase-order.integration
+
+# Financial year guard, reports, sync push (set SYNC_CLOUD_URL in test env or use mock)
+npm run test:integration -- --testPathPatterns="financial-year|reports|sync-run"
 ```
 
 ## Backend e2e — by feature
@@ -170,6 +173,9 @@ npm run test:e2e -- --testPathPatterns=party.e2e-spec
 
 # App bootstrap smoke
 npm run test:e2e -- --testPathPatterns=app.e2e-spec
+
+# Sync push run (uses cloud-sync-mock when SYNC_CLOUD_URL points at it)
+npm run test:e2e -- --testPathPatterns=sync-run.e2e-spec
 ```
 
 Auth e2e resets user password hashes to `admin123` in `beforeEach`.
@@ -216,7 +222,9 @@ Config: `jest.config.ts`, setup: `setup-jest.ts`, tests: `src/**/*.spec.ts`.
 | Auth | `npm run test -- --testPathPatterns=auth` | — | — | `npm run test:e2e -- --testPathPatterns=auth.e2e-spec` | `npm test -- --testPathPatterns=auth.service.spec` |
 | Party | `npm run test -- --testPathPatterns=party` | — | — | `npm run test:e2e -- --testPathPatterns=party.e2e-spec` | — |
 | Purchase | `npm run test -- --testPathPatterns=purchase` | — | `npm run test:integration -- --testPathPatterns=purchase-order` | — | — |
-| Reporting | `npm run test -- --testPathPatterns=reporting` | — | — | — | — |
+| Reporting | `npm run test -- --testPathPatterns=reporting` | — | `npm run test:integration -- --testPathPatterns=reports.integration` | — | — |
+| Financial year | — | — | `npm run test:integration -- --testPathPatterns=financial-year` | — | — |
+| Sync push | — | — | `npm run test:integration -- --testPathPatterns=sync-run` | `npm run test:e2e -- --testPathPatterns=sync-run` | — |
 | Settings | `npm run test -- --testPathPatterns=settings` | — | — | — |
 | Persistence layer | — | `npm run test:persistence` | — | — |
 | Sequence | — | `npm run test:persistence -- --testPathPatterns=sequence-generator` | — | — |
@@ -297,6 +305,9 @@ cd backend && npm run db:test:prepare && npm run lint && npm run test && npm run
 | File | Area |
 |------|------|
 | `purchase-order.integration.spec.ts` | Purchase order HTTP API |
+| `financial-year.integration.spec.ts` | Closed FY blocks purchase order create |
+| `reports.integration.spec.ts` | Transactional report smoke runs |
+| `sync-run.integration.spec.ts` | Push outbox to mock cloud (`test/support/cloud-sync-mock.ts`) |
 
 ### Backend e2e (`backend/test/e2e/`)
 
@@ -305,6 +316,7 @@ cd backend && npm run db:test:prepare && npm run lint && npm run test && npm run
 | `auth.e2e-spec.ts` | Auth HTTP API |
 | `party.e2e-spec.ts` | Party HTTP API |
 | `app.e2e-spec.ts` | App bootstrap |
+| `sync-run.e2e-spec.ts` | `POST /sync/runs` with mock cloud |
 
 ### Angular unit (`src/`)
 

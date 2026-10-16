@@ -3,6 +3,7 @@ import { AuditModule } from '../audit/audit.module';
 import { PrismaModule } from '../prisma.module';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { SettingsModule } from '../settings/settings.module';
+import { LoyaltyModule } from '../loyalty/loyalty.module';
 import { SalesInvoiceController } from './controllers/sales-invoice.controller';
 import { SalesInvoiceItemController } from './controllers/sales-invoice-item.controller';
 import { SalesPaymentController } from './controllers/sales-payment.controller';
@@ -15,7 +16,13 @@ import { SalesReturnService } from './services/sales-return.service';
 import { SalesReturnItemService } from './services/sales-return-item.service';
 
 @Module({
-  imports: [PrismaModule, PersistenceModule, AuditModule, SettingsModule],
+  imports: [
+    PrismaModule,
+    PersistenceModule,
+    AuditModule,
+    SettingsModule,
+    LoyaltyModule,
+  ],
   controllers: [
     SalesInvoiceController,
     SalesInvoiceItemController,

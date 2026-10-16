@@ -10,8 +10,8 @@ Implementation-grounded reference for `backend/src/sync/`.
 |------|-------|
 | **Purpose** | Outbox admin (read/retry), SyncLog read, SyncConflict read/resolve |
 | **Module** | [`sync.module.ts`](../../../backend/src/sync/sync.module.ts) |
-| **Controllers** | 3 |
-| **Services** | 3 (`OutboxAdminService`, `SyncLogService`, `SyncConflictService`) |
+| **Controllers** | 4 (includes `SyncRunController`) |
+| **Services** | 4 (`OutboxAdminService`, `SyncLogService`, `SyncConflictService`, `SyncRunService`) |
 | **Outbox write** | Existing [`OutboxService.enqueue`](../../../backend/src/persistence/outbox/outbox.service.ts) in business modules |
 
 ---
@@ -23,6 +23,7 @@ Implementation-grounded reference for `backend/src/sync/`.
 | Outbox | `/outbox` | List (`dateFrom`/`dateTo`, `syncStatus`, `entityType`, `deviceId`), get, retry |
 | SyncLog | `/sync-logs` | Read-only (`dateFrom`/`dateTo`, `status`, `syncType`, `syncDirection`, `deviceId`) |
 | SyncConflict | `/sync-conflicts` | List (`syncLogId`, `resolutionStatus`, `entityType`, `deviceId`), get, resolve |
+| Sync run | `/sync/runs` | Push pending outbox to cloud (`SYNC_CLOUD_URL`) |
 
 ### Workflow routes
 
@@ -30,8 +31,10 @@ Implementation-grounded reference for `backend/src/sync/`.
 |--------|------|------------|
 | POST | `/outbox/:id/retry` | `SYNC:OUTBOX:RETRY` |
 | POST | `/sync-conflicts/:id/resolve` | `SYNC:SYNC_CONFLICT:RESOLVE` |
+| POST | `/sync/runs` | `SYNC:SYNC:EXECUTE` (`SYNC_RUN`) |
+| GET | `/sync/runs/latest` | `SYNC:SYNC_LOG:READ` |
 
-Legacy: `SYNC_RUN` (`SYNC:SYNC:EXECUTE`) — future worker stub, not implemented in v1.
+Requires env `SYNC_CLOUD_URL` (optional `SYNC_BATCH_SIZE`). See [product-gaps-delivery.md](../../../docs/pharmacy_erp_architecture_docs/architecture/product-gaps-delivery.md).
 
 ---
 
@@ -57,8 +60,9 @@ Legacy: `SYNC_RUN` (`SYNC:SYNC:EXECUTE`) — future worker stub, not implemented
 
 ---
 
-## 5. Out of scope (v1)
+## 5. Out of scope
 
-- Cloud sync worker / upload pipeline
-- Applying conflict resolution to business entities
+- Pull delta / apply remote changes
+- Applying conflict resolution payloads to business entities
 - Physical delete of outbox/sync rows
+- Production cloud service in this repo (tests use `test/support/cloud-sync-mock.ts`)

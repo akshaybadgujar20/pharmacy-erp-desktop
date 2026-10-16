@@ -88,6 +88,16 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/reporting/reporting.routes').then((m) => m.reportingRoutes),
       },
+      {
+        path: 'sync',
+        loadChildren: () =>
+          import('./features/sync/sync.routes').then((m) => m.syncRoutes),
+      },
+      {
+        path: 'loyalty',
+        loadChildren: () =>
+          import('./features/loyalty/loyalty.routes').then((m) => m.loyaltyRoutes),
+      },
     ],
   },
 ];

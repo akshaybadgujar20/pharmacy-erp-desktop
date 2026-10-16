@@ -174,6 +174,7 @@ Two layers:
 |------|---------|
 | `REPORT_VIEW` | Access reporting endpoints |
 | `REPORT_PARTY_VIEW` | Run party reports (`party.*`) |
+| `REPORT_SALES_VIEW`, `REPORT_PURCHASE_VIEW`, `REPORT_INVENTORY_VIEW`, `REPORT_FINANCE_VIEW` | Transactional reports per domain |
 
 Add new codes in `backend/seed/data/security/permission.json` and grant them in `role-permission.json`. Re-seed or migrate seed data so roles receive the new permission.
 
@@ -263,6 +264,23 @@ Party master data is **company-wide** (no `branchId` on `Customer` / `Supplier`)
 | `party.customer-outstanding` | Customer Outstanding | code, name, outstanding | `outstandingAmount > 0`; `totals.grandTotal` |
 
 Provider: `backend/src/reporting/providers/party/party-reports.provider.ts`.
+
+---
+
+## Implemented reports (transactional)
+
+Branch-scoped via JWT (`ReportContext.scope`). Use `fromDate` / `toDate` where noted.
+
+| Domain | Report ids | Permission |
+|--------|------------|------------|
+| Sales | `sales.daily-summary`, `sales.register`, `sales.gst-summary` | `REPORT_SALES_VIEW` |
+| Purchase | `purchase.po-status`, `purchase.register`, `purchase.supplier-summary` | `REPORT_PURCHASE_VIEW` |
+| Inventory | `inventory.stock-on-hand`, `inventory.near-expiry`, `inventory.movement-register` | `REPORT_INVENTORY_VIEW` |
+| Finance | `finance.day-book`, `finance.trial-balance`, `finance.gst-summary`, `finance.month-end-pack` | `REPORT_FINANCE_VIEW` |
+
+Providers: `backend/src/reporting/providers/{sales,purchase,inventory,finance}/`. Shared date/branch helpers: `utils/transactional-report.util.ts`.
+
+Functional catalog: [functional/reporting.md](../functional/reporting.md).
 
 ---
 

@@ -22,6 +22,10 @@ import { OutboxOperation } from '../../persistence/outbox/outbox-operation.const
 import { OutboxService } from '../../persistence/outbox/outbox.service';
 import { DocumentType } from '../../persistence/sequence/document-type.constants';
 import { SequenceGeneratorService } from '../../persistence/sequence/sequence-generator.service';
+import {
+  assertDocumentDateInOpenFinancialYear,
+  assertOpenFinancialYearForBranchDocument,
+} from '../../configuration/utils/financial-year-guard.util';
 import { assertTransactionDateInOpenYear } from '../../persistence/ledger/ledger-posting.util';
 import { UnitOfWorkService } from '../../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../../prisma.service';
@@ -138,6 +142,11 @@ export class GoodsReceiptService {
         dto.purchaseOrderId,
         this.settingsService,
       );
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.receiptDate,
+      );
 
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
@@ -210,6 +219,13 @@ export class GoodsReceiptService {
         existing.status,
         'Goods receipt',
         GoodsReceiptStatus.DRAFT,
+      );
+
+      const receiptDate = dto.receiptDate ?? existing.receiptDate;
+      await assertOpenFinancialYearForBranchDocument(
+        tx,
+        existing.branchId,
+        receiptDate,
       );
 
       if (dto.supplierId) {

@@ -180,6 +180,8 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
         ],
       },
       { icon: 'sliders-h', label: 'nav.settings.title', route: '/settings', permission: 'CONFIGURATION:APP_SETTING:READ' },
+      { icon: 'sync', label: 'nav.sync.title', route: '/sync', permission: 'SYNC:SYNC:EXECUTE' },
+      { icon: 'gift', label: 'nav.loyalty.programs', route: '/loyalty/programs', permission: 'LOYALTY:LOYALTY_PROGRAM:READ' },
     ],
   },
 ];

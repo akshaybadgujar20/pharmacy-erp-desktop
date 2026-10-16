@@ -36,6 +36,7 @@ import { CreateSalesPaymentDto } from '../dto/create-sales-payment.dto';
 import { SalesWorkflowDto } from '../dto/sales-workflow.dto';
 import { UpdateSalesPaymentDto } from '../dto/update-sales-payment.dto';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import { assertDocumentDateInOpenFinancialYear } from '../../configuration/utils/financial-year-guard.util';
 import { toSalesPaymentResponse } from '../mappers/sales-payment.mapper';
 import {
   assertInvoicePosted,
@@ -129,6 +130,11 @@ export class SalesPaymentService {
       assertInvoicePosted(invoice.status);
 
       const branch = await assertBranchExists(tx, invoice.branchId);
+      await assertDocumentDateInOpenFinancialYear(
+        tx,
+        branch.companyId,
+        dto.paymentDate,
+      );
       const { documentNumber } = await this.sequences.next(tx, {
         companyId: branch.companyId,
         branchId: branch.id,

@@ -2558,5 +2558,85 @@
     "action": "DELETE",
     "isSystemPermission": true,
     "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc17",
+    "permissionCode": "REPORT_SALES_VIEW",
+    "permissionName": "View Sales Reports",
+    "module": "REPORT",
+    "resource": "SALES_REPORT",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc18",
+    "permissionCode": "REPORT_PURCHASE_VIEW",
+    "permissionName": "View Purchase Reports",
+    "module": "REPORT",
+    "resource": "PURCHASE_REPORT",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc19",
+    "permissionCode": "REPORT_INVENTORY_VIEW",
+    "permissionName": "View Inventory Reports",
+    "module": "REPORT",
+    "resource": "INVENTORY_REPORT",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1a",
+    "permissionCode": "REPORT_FINANCE_VIEW",
+    "permissionName": "View Finance Reports",
+    "module": "REPORT",
+    "resource": "FINANCE_REPORT",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1b",
+    "permissionCode": "LOYALTY_PROGRAM_READ",
+    "permissionName": "Read Loyalty Programs",
+    "module": "LOYALTY",
+    "resource": "LOYALTY_PROGRAM",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1c",
+    "permissionCode": "LOYALTY_PROGRAM_CREATE",
+    "permissionName": "Create Loyalty Programs",
+    "module": "LOYALTY",
+    "resource": "LOYALTY_PROGRAM",
+    "action": "CREATE",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1d",
+    "permissionCode": "LOYALTY_PROGRAM_UPDATE",
+    "permissionName": "Update Loyalty Programs",
+    "module": "LOYALTY",
+    "resource": "LOYALTY_PROGRAM",
+    "action": "UPDATE",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1e",
+    "permissionCode": "LOYALTY_MEMBERSHIP_CREATE",
+    "permissionName": "Enroll Loyalty Membership",
+    "module": "LOYALTY",
+    "resource": "LOYALTY_MEMBERSHIP",
+    "action": "CREATE",
+    "isSystemPermission": true,
+    "isActive": true
   }
 ]

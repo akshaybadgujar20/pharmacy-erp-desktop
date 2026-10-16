@@ -89,7 +89,7 @@ Triggers: app start, interval (`SYNC_INTERVAL_MINUTES` default 15), manual sync,
 | Medicine master | Prefer server authority |
 | Masters generally | Version check; optimistic lock |
 
-**Worker status:** Sync drain worker is **deferred** — outbox contract is implemented; background processor not yet shipped.
+**Worker status:** **Push stub shipped** — `POST /sync/runs` drains pending outbox to `SYNC_CLOUD_URL`; Electron schedules runs via `SYNC_INTERVAL_MINUTES`. Pull/apply and production cloud service remain Planned.
 
 ---
 
