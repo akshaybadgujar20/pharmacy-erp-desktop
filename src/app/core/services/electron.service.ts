@@ -10,9 +10,12 @@ export class ElectronService {
     return typeof window !== 'undefined' && !!window.electronAPI;
   }
 
-  async printReceipt(html: string): Promise<void> {
+  async printReceipt(
+    html: string,
+    options?: { deviceName?: string },
+  ): Promise<void> {
     if (window.electronAPI?.printReceipt) {
-      await window.electronAPI.printReceipt(html);
+      await window.electronAPI.printReceipt(html, options);
       return;
     }
     const printWindow = window.open('', '_blank', 'width=400,height=600');

@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   getDeviceInfo: () => ipcRenderer.invoke('device:getInfo'),
-  printReceipt: (html) => ipcRenderer.invoke('print:receipt', html),
+  printReceipt: (html, options) => ipcRenderer.invoke('print:receipt', html, options),
   saveExport: (request) => ipcRenderer.invoke('export:save', request),
   onSyncRunRequested: (callback) => {
     const listener = () => callback()

@@ -65,7 +65,7 @@ ipcMain.handle('secure-store:delete', (_event, key) => {
   secureStore.delete(key)
 })
 
-ipcMain.handle('print:receipt', async (_event, html) => {
+ipcMain.handle('print:receipt', async (_event, html, options) => {
   if (!mainWindow || mainWindow.isDestroyed()) {
     return
   }
@@ -75,7 +75,11 @@ ipcMain.handle('print:receipt', async (_event, html) => {
   })
   await printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
   await new Promise((resolve) => {
-    printWindow.webContents.print({ silent: false }, () => {
+    const printOptions = { silent: false }
+    if (options?.deviceName) {
+      printOptions.deviceName = options.deviceName
+    }
+    printWindow.webContents.print(printOptions, () => {
       printWindow.close()
       resolve()
     })

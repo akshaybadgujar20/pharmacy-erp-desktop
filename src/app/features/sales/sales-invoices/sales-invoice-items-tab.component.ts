@@ -46,6 +46,7 @@ export class SalesInvoiceItemsTabComponent {
 
   readonly invoiceId = input.required<string>();
   readonly editable = input(true);
+  readonly seedMedicineId = input<string | null>(null);
 
   readonly gridConfig = SALES_INVOICE_ITEM_GRID_CONFIG;
   readonly rows = signal<SalesInvoiceItem[]>([]);
@@ -73,6 +74,14 @@ export class SalesInvoiceItemsTabComponent {
       const id = this.invoiceId();
       if (id) {
         this.load();
+      }
+    });
+    effect(() => {
+      const medicineId = this.seedMedicineId();
+      if (medicineId && this.editable()) {
+        this.openCreate();
+        this.form.patchValue({ medicineId });
+        this.onMedicineChange(medicineId);
       }
     });
     this.form.get('medicineId')?.valueChanges.subscribe((medicineId) => {

@@ -1,0 +1,32 @@
+<section class="page-layout">
+  <h2>Month-end close</h2>
+  <form [formGroup]="form" (ngSubmit)="loadChecklist()">
+    <label>
+      Branch ID (optional)
+      <input pInputText formControlName="branchId" />
+    </label>
+    <button pButton type="submit" label="Load pre-close checklist"></button>
+  </form>
+
+  @if (checklist(); as result) {
+    <p>Can close: {{ result.canClose ? 'Yes' : 'No' }}</p>
+    <ul>
+      @for (blocker of result.blockers; track blocker.code) {
+        <li>{{ blocker.message }} ({{ blocker.count }})</li>
+      }
+    </ul>
+  }
+
+  <button
+    pButton
+    type="button"
+    severity="danger"
+    label="Close current financial year"
+    [disabled]="closingInProgress() || !financialYearId()"
+    (click)="closeFinancialYear()"
+  ></button>
+
+  @if (message()) {
+    <p>{{ message() }}</p>
+  }
+</section>

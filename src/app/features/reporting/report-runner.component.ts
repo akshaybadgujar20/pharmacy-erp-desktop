@@ -35,6 +35,7 @@ import { toListParams } from '../../shared/utils/list-query.util';
 import { ReportRunResult } from './report.models';
 
 import { ElectronService } from '../../core/services/electron.service';
+import { ReportFavoriteService } from './report-favorite.service';
 import { ReportService } from './report.service';
 
 
@@ -58,6 +59,7 @@ export class ReportRunnerComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   private readonly reportService = inject(ReportService);
+  private readonly favorites = inject(ReportFavoriteService);
 
   private readonly route = inject(ActivatedRoute);
 
@@ -178,6 +180,17 @@ export class ReportRunnerComponent implements OnInit {
   }
 
 
+
+  addFavorite(): void {
+    const reportId = this.reportId();
+    if (!reportId) {
+      return;
+    }
+    this.favorites.add(reportId).subscribe({
+      next: () => this.errorMessage.set(''),
+      error: (error: ApiClientError) => this.errorMessage.set(error.message),
+    });
+  }
 
   goBack(): void {
 

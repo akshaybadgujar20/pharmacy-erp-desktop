@@ -22,6 +22,13 @@ export const partyRoutes: Routes = [
           ),
       },
       {
+        path: ':customerId/loyalty',
+        loadComponent: () =>
+          import('./customers/customer-loyalty-route.component').then(
+            (m) => m.CustomerLoyaltyRouteComponent,
+          ),
+      },
+      {
         path: ':id',
         loadComponent: () =>
           import('./customers/customer-detail.component').then(

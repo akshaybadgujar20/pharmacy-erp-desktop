@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -17,7 +18,9 @@ import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
 import { ElectronService } from '../../core/services/electron.service';
 import { SyncService } from '../../features/sync/sync.service';
+import { ActiveScreenSaveService } from '../../core/services/active-screen-save.service';
 import { KeyboardShortcutService } from '../../core/keyboard';
+import { MedicineSearchDialogComponent } from '../../shared/components/medicine-search-dialog/medicine-search-dialog.component';
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
 import { ERP_NAV_GROUPS } from './nav.config';
@@ -52,6 +55,7 @@ interface NavGroup {
     Sidebar,
     KeyboardShortcutsDialogComponent,
     LanguageSelectorComponent,
+    MedicineSearchDialogComponent,
     Tooltip,
   ],
   templateUrl: './main-layout.component.html',
@@ -61,6 +65,8 @@ interface NavGroup {
 export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly medicineSearchDialog = viewChild(MedicineSearchDialogComponent);
   private readonly syncService = inject(SyncService);
   private readonly electron = inject(ElectronService);
   readonly shortcutService = inject(KeyboardShortcutService);
@@ -116,8 +122,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     this.syncPollTimer = setInterval(() => this.refreshSyncStatus(), 60_000);
     this.unsubscribeSync = this.electron.onSyncRunRequested(() => this.refreshSyncStatus());
     this.shortcutService.registerHandler('global.lookup', () => {
-      this.router.navigate(['/medicine/medicines']);
+      this.medicineSearchDialog()?.open();
     });
+    this.shortcutService.registerHandler('global.save', () => this.activeSave.save());
   }
 
   ngOnDestroy(): void {
@@ -127,6 +134,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     }
     this.unsubscribeSync?.();
     this.shortcutService.unregisterHandler('global.lookup');
+    this.shortcutService.unregisterHandler('global.save');
   }
 
   private refreshSyncStatus(): void {

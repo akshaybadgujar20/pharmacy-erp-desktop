@@ -338,11 +338,17 @@ export class StockAdjustmentService {
       );
       const userId = this.requestContext.tryGet()?.userId;
 
+      let valuationTotal = new Prisma.Decimal(0);
+
       for (const item of adjustment.items) {
         const qty = new Prisma.Decimal(item.quantity);
         if (qty.eq(0)) {
           continue;
         }
+
+        valuationTotal = valuationTotal.add(
+          qty.abs().mul(new Prisma.Decimal(item.unitCost)),
+        );
 
         const isGain = qty.gt(0);
         await this.inventoryLedger.applyMovement(tx, {
@@ -394,7 +400,10 @@ export class StockAdjustmentService {
         },
       });
 
-      return toStockAdjustmentResponse(updated);
+      return {
+        ...toStockAdjustmentResponse(updated),
+        valuationTotal: valuationTotal.toNumber(),
+      };
     });
   }
 }

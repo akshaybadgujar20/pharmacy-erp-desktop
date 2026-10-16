@@ -9,10 +9,8 @@
     <p-tabpanel value="overview">
       @if (!isNew()) {
         <p class="detail-form__status">Status: {{ status() }}</p>
-        @if (form.get('goodsReceiptId')?.value) {
-          <span>Match: GRN linked</span>
-        } @else {
-          <span>Match: No GRN — three-way match incomplete</span>
+        @if (matchSummary()) {
+          <p>Three-way match: {{ matchSummary() }}</p>
         }
       }
       <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">

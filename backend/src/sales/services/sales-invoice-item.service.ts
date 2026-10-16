@@ -97,6 +97,16 @@ export class SalesInvoiceItemService {
         orderBy: { lineNumber: 'asc' },
         skip: (page - 1) * pageSize,
         take: pageSize,
+        include: {
+          medicine: {
+            select: {
+              requiresPrescription: true,
+              schedule: {
+                select: { scheduleCode: true, controlledSubstance: true },
+              },
+            },
+          },
+        },
       }),
     ]);
 

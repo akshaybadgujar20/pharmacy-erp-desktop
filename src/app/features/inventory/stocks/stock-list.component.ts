@@ -6,7 +6,8 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { GridActionEvent } from '../../../components/generic/grid/types/grid-events.types';
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import { GridFilterChange, GridPageChange } from '../../../components/generic/grid/types/grid-events.types';
@@ -29,6 +30,7 @@ import { BatchService } from '../batches/batch.service';
 })
 export class StockListComponent implements OnInit, OnDestroy {
   private readonly stockService = inject(StockService);
+  private readonly router = inject(Router);
   private readonly batchService = inject(BatchService);
   private readonly electron = inject(ElectronService);
   private readonly shortcuts = inject(KeyboardShortcutService);
@@ -62,13 +64,24 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
 
   loadFefoForMedicine(medicineId: string): void {
-    this.batchService.list({ medicineId, page: '1', pageSize: '20' }).subscribe({
-      next: ({ data }) => {
-        const sorted = [...data].sort((a, b) => a.expiryDate.localeCompare(b.expiryDate));
+    this.stockService.fefoPreview(medicineId).subscribe({
+      next: (rows) => {
         this.fefoPreview.set(
-          sorted.map((b) => `${b.batchNumber} exp ${b.expiryDate} (batch ${b.id})`),
+          rows.map(
+            (row) =>
+              `${row.batchNumber} exp ${row.expiryDate} avail ${row.availableQuantity} (batch ${row.batchId})`,
+          ),
         );
       },
+    });
+  }
+
+  onGridAction(event: GridActionEvent<Stock>): void {
+    if (!event.row || event.action !== 'adjust') {
+      return;
+    }
+    this.router.navigate(['/inventory/stock-adjustments/new'], {
+      queryParams: { batchId: event.row.batchId, branchId: event.row.branchId },
     });
   }
 

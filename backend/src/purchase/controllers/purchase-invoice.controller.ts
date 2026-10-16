@@ -29,6 +29,12 @@ export class PurchaseInvoiceController {
     return this.purchaseInvoiceService.list(query);
   }
 
+  @Get(':id/match-summary')
+  @RequirePermissions('PURCHASE:PURCHASE_INVOICE:READ')
+  getMatchSummary(@Param('id', ParseBigIntPipe) id: bigint) {
+    return this.purchaseInvoiceService.getMatchSummary(id);
+  }
+
   @Get(':id')
   @RequirePermissions('PURCHASE:PURCHASE_INVOICE:READ')
   getById(@Param('id', ParseBigIntPipe) id: bigint) {

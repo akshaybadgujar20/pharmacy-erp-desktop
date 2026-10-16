@@ -60,6 +60,19 @@ export class FinancialYearController {
     });
   }
 
+  @Post(':id/reopen')
+  @RequirePermissions('CONFIGURATION:FINANCIAL_YEAR:CLOSE')
+  reopen(
+    @Param('id', ParseBigIntPipe) id: bigint,
+    @Query() query: CloseFinancialYearQueryDto,
+  ) {
+    return this.financialYearService.reopen(
+      id,
+      query.version,
+      query.forceReason,
+    );
+  }
+
   @Delete(':id')
   @RequirePermissions('CONFIGURATION:FINANCIAL_YEAR:DELETE')
   delete(

@@ -24,6 +24,7 @@
       <button pButton type="submit" severity="primary" [disabled]="running()">
         Run Report
       </button>
+      <button pButton type="button" severity="help" (click)="addFavorite()">Add favourite</button>
       <button pButton type="button" severity="secondary" (click)="exportReport('csv')">Export CSV</button>
       <button pButton type="button" severity="secondary" (click)="exportReport('xlsx')">Export Excel</button>
       <button pButton type="button" severity="secondary" (click)="exportReport('pdf')">Export PDF</button>

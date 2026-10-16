@@ -8,12 +8,22 @@ export interface SyncConflictRow {
   version: string;
 }
 
+export interface SyncConflictDetail extends SyncConflictRow {
+  localPayload: string | null;
+  serverPayload: string | null;
+  remarks: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SyncConflictAdminService {
   private readonly api = inject(ApiService);
 
   list(params: Record<string, string>) {
     return this.api.getPaginated<SyncConflictRow>('/sync-conflicts', params);
+  }
+
+  getById(id: string) {
+    return this.api.get<SyncConflictDetail>(`/sync-conflicts/${id}`);
   }
 
   resolve(id: string, version: string, remarks?: string) {

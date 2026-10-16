@@ -35,15 +35,11 @@
   @if (scheduleWarning()) {
     <p class="counter__error">{{ scheduleWarning() }}</p>
   }
-  @if (rxLines().length > 0) {
-    <section>
-      <h3>Prescription lines</h3>
-      <ul>
-        @for (line of rxLines(); track line.id) {
-          <li>Medicine {{ line.medicineId }} — qty {{ line.prescribedQuantity }}</li>
-        }
-      </ul>
-    </section>
+  @if (form.get('prescriptionId')?.value) {
+    <app-sales-prescription-lines-panel
+      [prescriptionId]="form.get('prescriptionId')!.value"
+      (add)="onAddFromPrescription($event)"
+    />
   }
 
   <div class="counter__tabs">
@@ -52,7 +48,10 @@
   </div>
 
   @if (activeTab() === 'items' && invoiceId()) {
-    <app-sales-invoice-items-tab [invoiceId]="invoiceId()!" />
+    <app-sales-invoice-items-tab
+      [invoiceId]="invoiceId()!"
+      [seedMedicineId]="seedMedicineId()"
+    />
   }
   @if (activeTab() === 'payments' && invoiceId()) {
     <app-sales-invoice-payments-tab [invoiceId]="invoiceId()!" />
@@ -76,6 +75,13 @@
     <button pButton type="button" label="Cancel" (click)="postDialogVisible.set(false)"></button>
     <button pButton type="button" label="Post" [loading]="posting()" (click)="confirmPost()"></button>
   </div>
+</p-dialog>
+
+<p-dialog header="Prescription issue" [visible]="rxPostErrorVisible()" (visibleChange)="rxPostErrorVisible.set($event)" [modal]="true">
+  <p>{{ errorMessage() }}</p>
+  @if (form.get('prescriptionId')?.value) {
+    <a [routerLink]="['/prescriptions', form.get('prescriptionId')!.value]">Open prescription</a>
+  }
 </p-dialog>
 
 <p-dialog header="Receipt preview" [visible]="receiptPreviewVisible()" (visibleChange)="receiptPreviewVisible.set($event)" [modal]="true" [style]="{ width: '24rem' }">

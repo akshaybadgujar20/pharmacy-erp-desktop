@@ -31,6 +31,7 @@ import { ReceiveStockTransferDto } from '../dto/receive-stock-transfer.dto';
 import { UpdateStockTransferDto } from '../dto/update-stock-transfer.dto';
 import { toStockTransferResponse } from '../mappers/stock-transfer.mapper';
 import { assertBranchExists } from '../../configuration/utils/configuration.util';
+import { adjustInTransitQuantity } from '../utils/inventory.util';
 import {
   assertDocumentDateInOpenFinancialYear,
   assertOpenFinancialYearForBranchDocument,
@@ -348,6 +349,12 @@ export class StockTransferService {
           createdBy: userId,
           remarks: dto.remarks ?? item.remarks ?? undefined,
         });
+        await adjustInTransitQuantity(
+          tx,
+          transfer.destinationBranchId,
+          item.batchId,
+          item.sentQuantity,
+        );
       }
 
       const now = BigInt(Date.now());
@@ -439,6 +446,13 @@ export class StockTransferService {
         if (receivedQty.lte(0)) {
           continue;
         }
+
+        await adjustInTransitQuantity(
+          tx,
+          transfer.destinationBranchId,
+          item.batchId,
+          receivedQty.neg(),
+        );
 
         await this.inventoryLedger.applyMovement(tx, {
           branchId: transfer.destinationBranchId,

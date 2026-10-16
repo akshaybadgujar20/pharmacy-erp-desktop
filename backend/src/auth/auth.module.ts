@@ -8,6 +8,8 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import { PrismaModule } from '../prisma.module';
 import { AUTH_CONSTANTS } from './constants/auth.constants';
 import { AuthController } from './auth.controller';
+import { MfaController } from './mfa.controller';
+import { MfaService } from './mfa.service';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { PasswordService } from './password.service';
@@ -38,8 +40,8 @@ import { getJwtSecret } from './utils/auth-config.util';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, PasswordService, JwtStrategy],
+  controllers: [AuthController, MfaController],
+  providers: [AuthService, PasswordService, JwtStrategy, MfaService],
   exports: [AuthService, JwtModule, PasswordService],
 })
 export class AuthModule {}

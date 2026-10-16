@@ -1,4 +1,11 @@
 <div class="nested-tab">
+  @for (row of rows(); track row.id) {
+    @if (row.scheduleCode === 'H' || row.requiresPrescription || row.controlledSubstance) {
+      <p class="counter__error">
+        Line {{ row.lineNumber }}: Rx / Schedule-H — medicine {{ row.medicineId }}
+      </p>
+    }
+  }
   @if (editable()) {
     <div class="nested-tab__actions">
       <button pButton type="button" severity="primary" (click)="openCreate()">New Item</button>

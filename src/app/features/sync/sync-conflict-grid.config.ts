@@ -10,5 +10,8 @@ export const SYNC_CONFLICT_GRID_CONFIG: GridConfig<SyncConflictRow> = {
   row: { getId: (row) => row.id },
   pagination: { enabled: true, serverSide: true, pageSize: 25 },
   filtering: { enabled: true, globalSearch: true, serverSide: true },
-  actions: [{ id: 'resolve', label: 'Resolve', icon: 'pi pi-check' }],
+  actions: [
+    { id: 'detail', label: 'Detail', icon: 'pi pi-eye' },
+    { id: 'resolve', label: 'Resolve', icon: 'pi pi-check' },
+  ],
 };

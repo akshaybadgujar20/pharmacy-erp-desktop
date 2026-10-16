@@ -6,6 +6,7 @@ export const SALES_INVOICE_ITEM_GRID_CONFIG: GridConfig<SalesInvoiceItem> = {
   columns: [
     { field: 'lineNumber', headerName: 'Line', type: 'number' },
     { field: 'medicineId', headerName: 'Medicine ID', sortable: true, filterable: true },
+    { field: 'scheduleCode', headerName: 'Schedule', sortable: true },
     { field: 'batchId', headerName: 'Batch ID', sortable: true, filterable: true },
     { field: 'soldQuantity', headerName: 'Qty', type: 'number' },
     { field: 'unitPrice', headerName: 'Unit Price', type: 'currency' },

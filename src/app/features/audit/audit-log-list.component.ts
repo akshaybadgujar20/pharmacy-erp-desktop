@@ -15,6 +15,8 @@ import {
 } from '../../components/generic/grid/types/grid-events.types';
 import { ToolbarActionEvent } from '../../components/generic/toolbar/types/toolbar-events.types';
 import { toListParams } from '../../shared/utils/list-query.util';
+import { DialogModule } from 'primeng/dialog';
+import { GridRowClickEvent } from '../../components/generic/grid/types/grid-events.types';
 import { AUDIT_LOG_GRID_CONFIG } from './audit-log-grid.config';
 import { AUDIT_LOG_TOOLBAR_CONFIG } from './audit-log-toolbar.config';
 import { AuditLogRow, AuditLogService } from './audit-log.service';
@@ -22,7 +24,7 @@ import { AuditLogRow, AuditLogService } from './audit-log.service';
 @Component({
   selector: 'app-audit-log-list',
   standalone: true,
-  imports: [AppToolbarComponent, AppGridComponent],
+  imports: [AppToolbarComponent, AppGridComponent, DialogModule],
   templateUrl: './audit-log-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,6 +41,8 @@ export class AuditLogListComponent implements OnInit, OnDestroy {
   readonly page = signal(1);
   readonly pageSize = signal(25);
   readonly search = signal('');
+  readonly detailVisible = signal(false);
+  readonly detailRow = signal<AuditLogRow | null>(null);
 
   ngOnInit(): void {
     this.shortcuts.registerHandler('global.refresh', () => this.load());
@@ -65,6 +69,15 @@ export class AuditLogListComponent implements OnInit, OnDestroy {
     this.search.set(event.globalSearch ?? '');
     this.page.set(1);
     this.load();
+  }
+
+  onRowClick(event: GridRowClickEvent<AuditLogRow>): void {
+    this.auditLogs.getById(event.row.id).subscribe({
+      next: (row) => {
+        this.detailRow.set(row);
+        this.detailVisible.set(true);
+      },
+    });
   }
 
   private load(): void {

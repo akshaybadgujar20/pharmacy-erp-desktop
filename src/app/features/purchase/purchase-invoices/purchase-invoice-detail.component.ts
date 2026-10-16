@@ -50,6 +50,7 @@ export class PurchaseInvoiceDetailComponent implements OnInit {
   readonly workflowRunning = signal('');
   readonly errorMessage = signal('');
   readonly version = signal('0');
+  readonly matchSummary = signal<string>('');
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canPost = computed(() => this.status() === 'DRAFT');
@@ -199,6 +200,15 @@ export class PurchaseInvoiceDetailComponent implements OnInit {
           invoiceDate: invoice.invoiceDate,
           dueDate: invoice.dueDate ?? '',
           remarks: invoice.remarks ?? '',
+        });
+        this.purchaseInvoiceService.getMatchSummary(id).subscribe({
+          next: (summary) =>
+            this.matchSummary.set(
+              `${summary.matchStatus}: invoice ${summary.invoiceLineCount} lines (${summary.invoiceTotalQty} qty)` +
+                (summary.goodsReceiptId
+                  ? ` vs GRN ${summary.grnLineCount} lines (${summary.grnTotalQty} qty)`
+                  : ''),
+            ),
         });
       },
       error: (error) => this.handleError(error),

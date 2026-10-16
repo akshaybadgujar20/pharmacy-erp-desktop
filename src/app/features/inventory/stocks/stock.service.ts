@@ -19,4 +19,20 @@ export class StockService {
   getById(id: string): Observable<Stock> {
     return this.api.get<Stock>(`${this.basePath}/${id}`);
   }
+
+  fefoPreview(medicineId: string, branchId?: string) {
+    const params: Record<string, string> = { medicineId };
+    if (branchId) {
+      params['branchId'] = branchId;
+    }
+    return this.api.get<
+      {
+        batchId: string;
+        batchNumber: string;
+        expiryDate: string;
+        availableQuantity: number;
+        inTransitQuantity: number;
+      }[]
+    >('/inventory/fefo-preview', params);
+  }
 }

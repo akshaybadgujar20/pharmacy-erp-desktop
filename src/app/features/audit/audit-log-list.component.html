@@ -6,4 +6,21 @@
   [totalRecords]="totalRecords()"
   (pageChange)="onPageChange($event)"
   (filterChange)="onFilterChange($event)"
+  (rowClick)="onRowClick($event)"
 />
+
+<p-dialog
+  [visible]="detailVisible()"
+  [modal]="true"
+  header="Audit log detail"
+  [style]="{ width: '36rem' }"
+  (onHide)="detailVisible.set(false)"
+>
+  @if (detailRow(); as row) {
+    <p><strong>Module:</strong> {{ row.module }}</p>
+    <p><strong>Action:</strong> {{ row.action }}</p>
+    <p><strong>Entity:</strong> {{ row.entityType }} {{ row.entityId }}</p>
+    <p><strong>Summary:</strong> {{ row.summary }}</p>
+    <p><strong>Time:</strong> {{ row.createdAt }}</p>
+  }
+</p-dialog>

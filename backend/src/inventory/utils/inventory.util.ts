@@ -133,3 +133,60 @@ export function computeVarianceType(varianceQuantity: Prisma.Decimal): string {
   }
   return 'MATCHED';
 }
+
+export async function adjustInTransitQuantity(
+  tx: TxClient,
+  branchId: bigint,
+  batchId: bigint,
+  delta: Prisma.Decimal,
+): Promise<void> {
+  const now = BigInt(Date.now());
+  const stock = await tx.stock.findFirst({
+    where: { branchId, batchId, deletedAt: null },
+  });
+
+  if (stock) {
+    const next = new Prisma.Decimal(stock.inTransitQuantity ?? 0).add(delta);
+    if (next.lt(0)) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'In-transit quantity cannot be negative',
+        HttpStatus.BAD_REQUEST,
+        {
+          branchId: branchId.toString(),
+          batchId: batchId.toString(),
+        },
+      );
+    }
+    await tx.stock.update({
+      where: { id: stock.id },
+      data: {
+        inTransitQuantity: next,
+        updatedAt: now,
+        version: { increment: 1 },
+      },
+    });
+    return;
+  }
+
+  if (delta.lte(0)) {
+    throw new ApplicationException(
+      ErrorCode.STOCK_NOT_FOUND,
+      'Stock record not found for in-transit adjustment',
+      HttpStatus.NOT_FOUND,
+      { branchId: branchId.toString(), batchId: batchId.toString() },
+    );
+  }
+
+  await tx.stock.create({
+    data: {
+      branchId,
+      batchId,
+      availableQuantity: 0,
+      inTransitQuantity: delta,
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+}

@@ -5,6 +5,7 @@ import { Pagination } from '../../../core/models/api-response.types';
 import {
   CreatePurchaseInvoiceRequest,
   PurchaseInvoice,
+  PurchaseInvoiceMatchSummary,
   PurchaseInvoiceWorkflowRequest,
   UpdatePurchaseInvoiceRequest,
 } from './purchase-invoice.models';
@@ -23,6 +24,10 @@ export class PurchaseInvoiceService {
 
   getById(id: string): Observable<PurchaseInvoice> {
     return this.api.get<PurchaseInvoice>(`${this.basePath}/${id}`);
+  }
+
+  getMatchSummary(id: string) {
+    return this.api.get<PurchaseInvoiceMatchSummary>(`${this.basePath}/${id}/match-summary`);
   }
 
   create(body: CreatePurchaseInvoiceRequest): Observable<PurchaseInvoice> {

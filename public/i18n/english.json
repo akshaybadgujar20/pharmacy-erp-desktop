@@ -83,7 +83,9 @@
       "title": "Finance",
       "ledgers": "Ledgers",
       "payments": "Payments",
-      "receipts": "Receipts"
+      "receipts": "Receipts",
+      "monthEndClose": "Month-end close",
+      "cashDrawer": "Cash drawer"
     },
     "prescriptions": {
       "list": "Prescriptions"

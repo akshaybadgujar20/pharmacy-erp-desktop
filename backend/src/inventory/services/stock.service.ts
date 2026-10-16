@@ -69,4 +69,31 @@ export class StockService {
 
     return toStockResponse(stock);
   }
+
+  async getFefoPreview(medicineId: bigint, branchId?: bigint) {
+    const scope = getTenantScope(this.requestContext);
+    const resolvedBranchId = branchId ?? scope.branchId;
+
+    const rows = await this.prisma.client.stock.findMany({
+      where: withBranchScope(scope, {
+        branchId: resolvedBranchId,
+        deletedAt: null,
+        batch: { medicineId, deletedAt: null },
+      }),
+      include: {
+        batch: {
+          select: { batchNumber: true, expiryDate: true },
+        },
+      },
+      orderBy: { batch: { expiryDate: 'asc' } },
+    });
+
+    return rows.map((row) => ({
+      batchId: row.batchId.toString(),
+      batchNumber: row.batch.batchNumber,
+      expiryDate: row.batch.expiryDate.toString(),
+      availableQuantity: row.availableQuantity.toNumber(),
+      inTransitQuantity: row.inTransitQuantity.toNumber(),
+    }));
+  }
 }

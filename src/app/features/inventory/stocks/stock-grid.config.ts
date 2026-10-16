@@ -16,4 +16,12 @@ export const STOCK_GRID_CONFIG: GridConfig<Stock> = {
   row: { getId: (row) => row.id },
   pagination: { enabled: true, serverSide: true, pageSize: 25 },
   filtering: { enabled: true, globalSearch: true, serverSide: true },
+  actions: [
+    {
+      id: 'adjust',
+      label: 'Adjust',
+      icon: 'pi pi-sliders-h',
+      permission: 'INVENTORY:STOCK_ADJUSTMENT:CREATE',
+    },
+  ],
 };

@@ -673,6 +673,14 @@ export class AuthService {
       );
     }
 
+    if (dto.newPassword.length < 8) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'Password must be at least 8 characters',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const passwordHash = await this.passwordService.hash(dto.newPassword);
 
     return this.unitOfWork.run(async (tx) => {

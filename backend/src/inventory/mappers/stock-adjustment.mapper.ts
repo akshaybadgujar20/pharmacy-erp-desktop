@@ -18,6 +18,7 @@ export interface StockAdjustmentResponse {
   updatedAt: bigint;
   deletedAt: bigint | null;
   version: string;
+  valuationTotal?: number;
 }
 
 export function toStockAdjustmentResponse(

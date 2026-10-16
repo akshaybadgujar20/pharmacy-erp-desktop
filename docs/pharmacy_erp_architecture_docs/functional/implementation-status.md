@@ -6,7 +6,7 @@
 
 **Parent:** [Functional overview](./functional-overview.md)
 
-**Last verified:** Desktop-first UI delivery ([product-gaps-delivery.md](../architecture/product-gaps-delivery.md)); routes/nav audited against `src/app/features/` and `nav.config.ts`.
+**Last verified:** Full pending backlog epic (PR0–PR12): Rx/PUR match, POS depth, inventory v2, loyalty, audit/sync pull stub, month-end wizard, report favourites, MFA TOTP, masters import, FY reopen/archive stub; `ng build` + backend `npm run build` green.
 
 ---
 
@@ -122,7 +122,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-PARTY-1: No quick customer lookup widget embedded in sales screen (navigate to separate list).
+- ~~UI-PARTY-1~~ — customer/Rx lookups on sales invoice detail and counter.
 
 ---
 
@@ -176,7 +176,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 **Backend gaps**
 
-- Schedule-H **enforcement at sale** is not wired (see Sales, Prescription).
+- Schedule-H check at sales post (see workflow index GAP-6 Resolved).
 - External drug database import Planned.
 
 ### UI screens
@@ -214,16 +214,14 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 | ID | Gap | Severity |
 |----|-----|----------|
-| GAP-ADJ-1 | No submit step — DRAFT → approve directly on adjustment | Low |
-| GAP-ADJ-2 | No cancel or reversal endpoint for adjustments | Medium |
-| GAP-ADJ-3 | No finance valuation posting on adjustment approve | Low |
-| GAP-XFER-1 | `inTransitQuantity` bucket not implemented | Medium |
-| GAP-XFER-2 | IN_TRANSIT status never set — transfer is direct OUT + IN | Low |
-| GAP-XFER-3 | No cancel route after dispatch | Medium |
-| GAP-XFER-4 | PENDING_APPROVAL with no submit route | Low |
-| GAP-TAKE-1 | Stock take not wired to month-end close wizard | Medium |
-
-**Note:** Target transfer lifecycle (In Transit) is Planned; code does direct branch-to-branch move.
+| GAP-ADJ-1 | No submit step — DRAFT → approve directly | Low | Accepted v1 |
+| GAP-ADJ-2 | No cancel — reversals via new adjustment | Medium | Accepted v1 |
+| GAP-ADJ-3 | No finance valuation posting on adjustment approve | Low | Open |
+| GAP-XFER-1 | `inTransitQuantity` bucket not implemented | Medium | Deferred v2 |
+| GAP-XFER-2 | Dispatch sets IN_TRANSIT | — | Resolved (workflow index) |
+| GAP-XFER-3 | Cancel after dispatch route | — | Resolved |
+| GAP-XFER-4 | Dispatch accepts DRAFT only | — | Resolved |
+| GAP-TAKE-1 | Stock take in pre-close checklist | Medium | Partial (ClosingService) |
 
 ### UI screens
 
@@ -234,12 +232,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-INV-1: Stock list is read-only (no inline adjustment from stock grid).
+- UI-INV-1: Stock list row action → new adjustment (query params) — Partial.
 
 ### UX gaps
 
-- UI-INV-2: No FEFO preview when viewing stock by medicine.
-- UI-INV-3: Barcode scan for stock inquiry not wired.
+- UI-INV-2: FEFO preview by medicine on stock list — Partial.
+- ~~UI-INV-3~~ — barcode scan on stock list (Electron).
 
 ---
 
@@ -262,7 +260,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 |----|-----|----------|
 | GAP-GRN | GRN without PO allowed only when setting enabled | Low |
 | GAP-INV | Invoice post does not move stock (by design — stock at GRN) | Info |
-| GAP-RET-4 | No supplier ledger update on purchase return approve | Medium |
+| GAP-RET-4 | Supplier ledger on purchase return approve | — | Resolved (workflow index) |
 | GAP-7-P | No automated unit tests for Purchase module | Medium |
 | GAP-8-P | No end-to-end tests for purchase workflow | Medium |
 
@@ -301,16 +299,16 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 | ID | Gap | Severity |
 |----|-----|----------|
-| GAP-1 | Round-off not applied at finalise | Medium |
-| GAP-2 | Payment not captured at finalise — invoice may stay UNPAID | Low |
-| GAP-3 | Return: only RESTOCK disposition supported | Medium |
-| GAP-4 | No standalone refund flow on invoice | Low |
-| GAP-5 | Prescription dispense on post wired; line-level UI match still Partial | Medium |
-| GAP-6 | No Schedule-H / controlled-drug enforcement at post | High |
-| GAP-7 | No automated tests for Sales module | Medium |
-| GAP-8 | No end-to-end tests for sales invoice workflow | Medium |
-| GAP-RET-2 | RESTOCK only — no quarantine/expired disposition | Medium |
-| GAP-RET-3 | Return policy / Schedule H not enforced on return | High |
+| GAP-1 | Round-off at post when setting enabled | — | Resolved |
+| GAP-2 | Payment captured via separate payment flow | Low | Accepted v1 |
+| GAP-3 | Return: only RESTOCK | Medium | Accepted v1 |
+| GAP-4 | Return refund on approve | — | Resolved |
+| GAP-5 | Rx dispense on post; line-level UI Partial | Medium | Open (UI) |
+| GAP-6 | Schedule-H / controlled-drug check at post | — | Resolved |
+| GAP-7 | Sales module test coverage partial | Medium | Open |
+| GAP-8 | No end-to-end sales workflow tests | Medium | Open |
+| GAP-RET-2 | RESTOCK only | Medium | Accepted v1 |
+| GAP-RET-3 | Return window + Schedule H approval | — | Resolved |
 
 ### UI screens
 
@@ -551,12 +549,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-AUD-1: Audit log AppGrid with search/filters.
-- UI-AUD-2: Change-history AppGrid with entity filters.
+- ~~UI-AUD-1~~ — audit log AppGrid (search/pagination).
+- ~~UI-AUD-2~~ — change-history AppGrid + entity filters.
 
 ### UX gaps
 
-- UI-AUD-3: `DocumentChangeHistoryPanel` on key document detail screens.
+- ~~UI-AUD-3~~ — change history panel on sales/purchase invoice and customer detail; log detail drawer Partial.
 
 ---
 
@@ -685,7 +683,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-REP-3: Export download UX may need polish for Electron file save.
+- ~~UI-REP-3~~ — report export via Electron saveExport + web fallback.
 
 ---
 

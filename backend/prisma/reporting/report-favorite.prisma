@@ -1,0 +1,20 @@
+model ReportFavorite {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique @default(uuid())
+
+  userId     BigInt @map("user_id")
+  reportCode String @map("report_code")
+  sortOrder  Int    @default(0) @map("sort_order")
+
+  createdAt BigInt  @map("created_at")
+  updatedAt BigInt  @map("updated_at")
+  deletedAt BigInt? @map("deleted_at")
+
+  version BigInt @default(1)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, reportCode])
+  @@index([userId])
+}

@@ -46,6 +46,7 @@
     "exceljs": "^4.4.0",
     "helmet": "^8.1.0",
     "nest-winston": "^1.10.2",
+    "otplib": "^13.5.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pdfmake": "^0.3.11",

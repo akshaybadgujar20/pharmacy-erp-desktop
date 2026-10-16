@@ -372,8 +372,98 @@ export class FinancialYearService {
           status: financialYear.status,
         },
       });
+      await this.writeArchivePackStub(financialYear);
       return toFinancialYearResponse(financialYear);
     });
+  }
+
+  async reopen(id: bigint, version: bigint, remarks?: string) {
+    const scope = getTenantScope(this.requestContext);
+
+    return this.unitOfWork.run(async (tx) => {
+      const existing = await tx.financialYear.findFirst({
+        where: { id, companyId: scope.companyId, deletedAt: null },
+      });
+
+      if (!existing) {
+        throwNotFound(
+          ErrorCode.FINANCIAL_YEAR_NOT_FOUND,
+          `Financial year not found: ${id}`,
+          { id: id.toString() },
+        );
+      }
+
+      if (existing.status !== FinancialYearStatus.CLOSED) {
+        throw new ApplicationException(
+          ErrorCode.INVALID_DOCUMENT_STATUS,
+          'Only closed financial years can be reopened',
+          HttpStatus.CONFLICT,
+          { status: existing.status },
+        );
+      }
+
+      const now = BigInt(Date.now());
+      const updateResult = await tx.financialYear.updateMany({
+        where: {
+          id,
+          version,
+          deletedAt: null,
+          status: FinancialYearStatus.CLOSED,
+        },
+        data: {
+          status: FinancialYearStatus.OPEN,
+          closingDate: null,
+          updatedAt: now,
+          version: { increment: 1 },
+          remarks: remarks ?? existing.remarks,
+        },
+      });
+
+      optimisticUpdate(
+        updateResult,
+        id,
+        `Financial year version conflict or not found: ${id}`,
+      );
+
+      const financialYear = await tx.financialYear.findFirstOrThrow({
+        where: { id },
+      });
+      await auditAndLogChanges(
+        tx,
+        this.auditService,
+        {
+          entityType: OutboxEntityType.FINANCIAL_YEAR,
+          entityId: financialYear.id,
+          entityUuid: financialYear.uuid,
+          action: AuditAction.UPDATE,
+          module: AuditModule.CONFIGURATION,
+        },
+        existing as unknown as Record<string, unknown>,
+        financialYear as unknown as Record<string, unknown>,
+        FINANCIAL_YEAR_AUDIT_FIELDS,
+      );
+      await this.outboxService.enqueue(tx, {
+        entityType: OutboxEntityType.FINANCIAL_YEAR,
+        entityUuid: financialYear.uuid,
+        operation: OutboxOperation.UPDATE,
+        payload: {
+          uuid: financialYear.uuid,
+          financialYearCode: financialYear.financialYearCode,
+          status: financialYear.status,
+        },
+      });
+      return toFinancialYearResponse(financialYear);
+    });
+  }
+
+  private async writeArchivePackStub(
+    financialYear: { financialYearCode: string; uuid: string },
+  ): Promise<void> {
+    const basePath =
+      process.env.FY_ARCHIVE_PATH?.trim() ||
+      process.cwd() + '/archives/financial-years';
+    // v1: record intended archive location; full report export in follow-up job.
+    void `${basePath}/${financialYear.financialYearCode}-${financialYear.uuid}.zip`;
   }
 
   async delete(id: bigint, version: bigint) {

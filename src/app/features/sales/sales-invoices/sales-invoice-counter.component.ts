@@ -10,13 +10,14 @@ import {
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PrescriptionItemService } from '../../prescription/prescriptions/prescription-item.service';
-import { PrescriptionItem } from '../../prescription/prescriptions/prescription-item.models';
 import { SalesInvoice } from './sales-invoice.models';
+import { SalesPrescriptionLinesPanelComponent } from './sales-prescription-lines-panel.component';
+import { PrescriptionLineAddEvent } from './sales-prescription-lines-panel.component';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { ElectronService } from '../../../core/services/electron.service';
 import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
@@ -26,6 +27,8 @@ import { CustomerLoyaltySummaryService } from './customer-loyalty-summary.servic
 import { SalesInvoicePaymentsTabComponent } from './sales-invoice-payments-tab.component';
 import { SalesInvoiceItemsTabComponent } from './sales-invoice-items-tab.component';
 import { buildSalesReceiptHtml } from './sales-receipt.util';
+import { MedicineService } from '../../medicine/medicines/medicine.service';
+import { PrinterConfigurationService } from '../../configuration/printer-configurations/printer-configuration.service';
 import { SalesInvoiceService } from './sales-invoice.service';
 
 @Component({
@@ -43,6 +46,7 @@ import { SalesInvoiceService } from './sales-invoice.service';
     PrescriptionLookupComponent,
     SalesInvoiceItemsTabComponent,
     SalesInvoicePaymentsTabComponent,
+    SalesPrescriptionLinesPanelComponent,
   ],
   templateUrl: './sales-invoice-counter.component.html',
   styleUrl: './sales-invoice-counter.component.scss',
@@ -51,13 +55,16 @@ import { SalesInvoiceService } from './sales-invoice.service';
 export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly salesInvoiceService = inject(SalesInvoiceService);
+  private readonly medicineService = inject(MedicineService);
+  private readonly printerConfigs = inject(PrinterConfigurationService);
+  private defaultReceiptPrinter = '';
   private readonly loyaltySummary = inject(CustomerLoyaltySummaryService);
   private readonly electron = inject(ElectronService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSave = inject(ActiveScreenSaveService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly prescriptionItems = inject(PrescriptionItemService);
   private unsubscribeBarcode?: () => void;
 
   readonly invoiceId = signal<string | null>(null);
@@ -72,8 +79,9 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   readonly redeemPoints = signal(0);
   readonly errorMessage = signal('');
   readonly activeTab = signal<'items' | 'payments'>('items');
-  readonly rxLines = signal<PrescriptionItem[]>([]);
   readonly scheduleWarning = signal('');
+  readonly seedMedicineId = signal<string | null>(null);
+  readonly rxPostErrorVisible = signal(false);
   readonly receiptPreviewVisible = signal(false);
   readonly receiptPreviewHtml = signal<SafeHtml>('');
   private pendingInvoice: SalesInvoice | null = null;
@@ -99,16 +107,40 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
     this.invoiceId.set(id);
     this.load(id);
     this.shortcuts.registerHandler('sales.payment', () => this.focusPayments());
-    this.shortcuts.registerHandler('global.save', () => this.saveHeader());
-    this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
-      this.router.navigate(['/medicine/medicines'], { queryParams: { search: code } });
+    this.activeSave.register(() => this.saveHeader());
+    this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => this.onBarcodeScan(code));
+    this.printerConfigs
+      .list({ page: '1', pageSize: '50', documentType: 'RECEIPT' })
+      .subscribe({
+        next: ({ data }) => {
+          const defaultPrinter = data.find((row) => row.isDefault) ?? data[0];
+          this.defaultReceiptPrinter = defaultPrinter?.printerName ?? '';
+        },
+      });
+  }
+
+  private onBarcodeScan(code: string): void {
+    this.medicineService.list({ search: code, page: '1', pageSize: '1' }).subscribe({
+      next: ({ data }) => {
+        const medicine = data[0];
+        if (!medicine) {
+          this.errorMessage.set(`No medicine found for barcode: ${code}`);
+          return;
+        }
+        this.seedMedicineId.set(medicine.id);
+        this.activeTab.set('items');
+      },
     });
-    this.form.get('prescriptionId')?.valueChanges.subscribe((id) => this.loadPrescriptionLines(id ?? ''));
+  }
+
+  onAddFromPrescription(event: PrescriptionLineAddEvent): void {
+    this.seedMedicineId.set(event.medicineId);
+    this.activeTab.set('items');
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('sales.payment');
-    this.shortcuts.unregisterHandler('global.save');
+    this.activeSave.unregister();
     this.unsubscribeBarcode?.();
   }
 
@@ -170,6 +202,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           this.errorMessage.set(message);
           if (message.toLowerCase().includes('prescription')) {
             this.scheduleWarning.set(`${message} — reactivate the prescription and retry.`);
+            this.rxPostErrorVisible.set(true);
           }
         },
       });
@@ -196,7 +229,11 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           invoiceDate: invoice.invoiceDate,
         });
         this.refreshLoyalty(invoice.customerId ?? '');
-        this.loadPrescriptionLines(invoice.prescriptionId ?? '');
+        if (invoice.prescriptionId) {
+          this.scheduleWarning.set(
+            'Linked prescription — verify Schedule-H compliance before post.',
+          );
+        }
       },
     });
   }
@@ -205,26 +242,10 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
     if (!this.pendingInvoice) {
       return;
     }
-    await this.electron.printReceipt(buildSalesReceiptHtml(this.pendingInvoice));
-    this.receiptPreviewVisible.set(false);
-  }
-
-  private loadPrescriptionLines(prescriptionId: string): void {
-    if (!prescriptionId) {
-      this.rxLines.set([]);
-      this.scheduleWarning.set('');
-      return;
-    }
-    this.prescriptionItems.list(prescriptionId, { page: '1', pageSize: '50' }).subscribe({
-      next: ({ data }) => {
-        this.rxLines.set(data);
-        this.scheduleWarning.set(
-          data.length > 0
-            ? 'Linked prescription — verify Schedule-H compliance before post.'
-            : '',
-        );
-      },
+    await this.electron.printReceipt(buildSalesReceiptHtml(this.pendingInvoice), {
+      deviceName: this.defaultReceiptPrinter || undefined,
     });
+    this.receiptPreviewVisible.set(false);
   }
 
   private refreshLoyalty(customerId: string): void {

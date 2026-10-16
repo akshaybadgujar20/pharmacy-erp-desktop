@@ -3,6 +3,11 @@ import { permissionGuard } from '../../core/guards/permission.guard';
 
 export const securityRoutes: Routes = [
   {
+    path: 'mfa-enroll',
+    loadComponent: () =>
+      import('./mfa-enroll.component').then((m) => m.MfaEnrollComponent),
+  },
+  {
     path: 'change-password',
     loadComponent: () =>
       import('../settings/change-password.component').then((m) => m.ChangePasswordComponent),

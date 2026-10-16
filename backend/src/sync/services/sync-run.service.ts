@@ -170,4 +170,36 @@ export class SyncRunService {
       status: finalStatus,
     };
   }
+
+  async runPull(): Promise<{ recordsDownloaded: number; status: string }> {
+    const cloudUrl = process.env.SYNC_CLOUD_URL?.trim();
+    if (!cloudUrl) {
+      return { recordsDownloaded: 0, status: 'SKIPPED' };
+    }
+
+    const deviceId = this.requestContext.getDeviceId();
+    const pullUrl = `${cloudUrl.replace(/\/$/, '')}/pull?deviceId=${encodeURIComponent(deviceId)}`;
+
+    try {
+      const response = await fetch(pullUrl, { method: 'GET' });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || `HTTP ${response.status}`);
+      }
+      const payload = (await response.json()) as { records?: unknown[] };
+      const records = Array.isArray(payload.records) ? payload.records : [];
+      return { recordsDownloaded: records.length, status: 'COMPLETED' };
+    } catch {
+      return { recordsDownloaded: 0, status: 'FAILED' };
+    }
+  }
+
+  async runPushAndPull(): Promise<{
+    push: SyncRunSummary;
+    pull: { recordsDownloaded: number; status: string };
+  }> {
+    const push = await this.runPush();
+    const pull = await this.runPull();
+    return { push, pull };
+  }
 }

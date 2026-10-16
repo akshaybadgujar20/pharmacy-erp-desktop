@@ -18,6 +18,9 @@ export interface SalesInvoiceItem {
   lineAmount: number | null;
   taxId: string | null;
   remarks: string | null;
+  scheduleCode: string | null;
+  requiresPrescription: boolean;
+  controlledSubstance: boolean;
   version: string;
 }
 

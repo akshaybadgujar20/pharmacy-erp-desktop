@@ -3,6 +3,12 @@ import { permissionGuard } from '../../core/guards/permission.guard';
 
 export const mastersRoutes: Routes = [
   {
+    path: 'import',
+    canActivate: [permissionGuard('LOOKUP:COUNTRY:CREATE')],
+    loadComponent: () =>
+      import('./masters-import.component').then((m) => m.MastersImportComponent),
+  },
+  {
     path: 'countries',
     canActivate: [permissionGuard('LOOKUP:COUNTRY:READ')],
     children: [

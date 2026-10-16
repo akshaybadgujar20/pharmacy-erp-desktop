@@ -52,6 +52,20 @@ export const financeRoutes: Routes = [
     ],
   },
   {
+    path: 'month-end-close',
+    canActivate: [permissionGuard('CONFIGURATION:FINANCIAL_YEAR:READ')],
+    loadComponent: () =>
+      import('./month-end-close/month-end-close.component').then(
+        (m) => m.MonthEndCloseComponent,
+      ),
+  },
+  {
+    path: 'cash-drawer',
+    canActivate: [permissionGuard('FINANCE:RECEIPT:READ')],
+    loadComponent: () =>
+      import('./cash-drawer/cash-drawer.component').then((m) => m.CashDrawerComponent),
+  },
+  {
     path: 'receipts',
     canActivate: [permissionGuard('FINANCE:RECEIPT:READ')],
     children: [

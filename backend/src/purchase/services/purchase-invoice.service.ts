@@ -42,6 +42,7 @@ import {
   assertOpenFinancialYearForBranchDocument,
 } from '../../configuration/utils/financial-year-guard.util';
 import { toPurchaseInvoiceResponse } from '../mappers/purchase-invoice.mapper';
+import { computePurchaseInvoiceMatchStatus } from '../utils/purchase-invoice-match.util';
 import {
   assertDraftStatus,
   assertSupplierActive,
@@ -112,6 +113,72 @@ export class PurchaseInvoiceService {
     }
 
     return toPurchaseInvoiceResponse(invoice);
+  }
+
+  async getMatchSummary(id: bigint) {
+    const scope = getTenantScope(this.requestContext);
+    const invoice = await this.prisma.client.purchaseInvoice.findFirst({
+      where: withBranchScope(scope, { id, deletedAt: null }),
+      include: {
+        items: { where: { deletedAt: null } },
+        goodsReceipt: {
+          include: { items: { where: { deletedAt: null } } },
+        },
+      },
+    });
+
+    if (!invoice) {
+      throwNotFound(
+        ErrorCode.PURCHASE_INVOICE_NOT_FOUND,
+        `Purchase invoice not found: ${id}`,
+        { id: id.toString() },
+      );
+    }
+
+    const invoiceLineCount = invoice.items.length;
+    const invoiceTotalQty = invoice.items.reduce(
+      (sum, row) => sum + Number(row.invoiceQuantity),
+      0,
+    );
+
+    if (!invoice.goodsReceiptId || !invoice.goodsReceipt) {
+      return {
+        purchaseInvoiceId: id.toString(),
+        goodsReceiptId: null,
+        purchaseOrderId: null,
+        invoiceLineCount,
+        invoiceTotalQty,
+        grnLineCount: 0,
+        grnTotalQty: 0,
+        matchStatus: 'NO_GRN',
+      };
+    }
+
+    const grn = invoice.goodsReceipt;
+    const grnLineCount = grn.items.length;
+    const grnTotalQty = grn.items.reduce(
+      (sum, row) => sum + Number(row.acceptedQuantity),
+      0,
+    );
+
+    const matchStatus = computePurchaseInvoiceMatchStatus(
+      true,
+      invoiceLineCount,
+      invoiceTotalQty,
+      grnLineCount,
+      grnTotalQty,
+    );
+
+    return {
+      purchaseInvoiceId: id.toString(),
+      goodsReceiptId: invoice.goodsReceiptId.toString(),
+      purchaseOrderId: grn.purchaseOrderId?.toString() ?? null,
+      invoiceLineCount,
+      invoiceTotalQty,
+      grnLineCount,
+      grnTotalQty,
+      matchStatus,
+    };
   }
 
   async create(dto: CreatePurchaseInvoiceDto) {

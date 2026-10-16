@@ -1,5 +1,16 @@
 import { PurchaseWorkflowRequest } from '../purchase-workflow.models';
 
+export interface PurchaseInvoiceMatchSummary {
+  purchaseInvoiceId: string;
+  goodsReceiptId: string | null;
+  purchaseOrderId: string | null;
+  invoiceLineCount: number;
+  invoiceTotalQty: number;
+  grnLineCount: number;
+  grnTotalQty: number;
+  matchStatus: string;
+}
+
 export interface PurchaseInvoice {
   id: string;
   uuid: string;

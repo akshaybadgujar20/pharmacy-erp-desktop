@@ -24,7 +24,7 @@ export interface ElectronSaveExportResult {
 export interface ElectronApi {
   getDeviceInfo(): Promise<ElectronDeviceInfo>;
   secureStore: ElectronSecureStore;
-  printReceipt(html: string): Promise<void>;
+  printReceipt(html: string, options?: { deviceName?: string }): Promise<void>;
   saveExport(request: ElectronSaveExportRequest): Promise<ElectronSaveExportResult>;
   onSyncRunRequested(callback: () => void): () => void;
   onBarcodeScan(callback: (barcode: string) => void): () => void;

@@ -5,6 +5,7 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import { BatchController } from './controllers/batch.controller';
 import { StockAdjustmentController } from './controllers/stock-adjustment.controller';
 import { StockAdjustmentItemController } from './controllers/stock-adjustment-item.controller';
+import { InventoryQueryController } from './controllers/inventory-query.controller';
 import { StockController } from './controllers/stock.controller';
 import { StockMovementController } from './controllers/stock-movement.controller';
 import { StockTakeController } from './controllers/stock-take.controller';
@@ -25,6 +26,7 @@ import { StockTransferItemService } from './services/stock-transfer-item.service
   imports: [PrismaModule, PersistenceModule, AuditModule],
   controllers: [
     BatchController,
+    InventoryQueryController,
     StockController,
     StockMovementController,
     StockAdjustmentController,

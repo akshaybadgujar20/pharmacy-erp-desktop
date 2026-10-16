@@ -140,6 +140,8 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
           { icon: 'book', label: 'nav.finance.ledgers', route: '/finance/ledgers', permission: 'FINANCE:LEDGER:READ' },
           { icon: 'credit-card', label: 'nav.finance.payments', route: '/finance/payments', permission: 'FINANCE:PAYMENT:READ' },
           { icon: 'receipt', label: 'nav.finance.receipts', route: '/finance/receipts', permission: 'FINANCE:RECEIPT:READ' },
+          { icon: 'calendar', label: 'nav.finance.monthEndClose', route: '/finance/month-end-close', permission: 'CONFIGURATION:FINANCIAL_YEAR:READ' },
+          { icon: 'wallet', label: 'nav.finance.cashDrawer', route: '/finance/cash-drawer', permission: 'FINANCE:RECEIPT:READ' },
         ],
       },
     ],

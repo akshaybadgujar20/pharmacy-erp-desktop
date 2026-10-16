@@ -16,6 +16,9 @@ model User {
 
   mustChangePassword Boolean @default(false) @map("must_change_password")
 
+  totpSecret  String? @map("totp_secret")
+  totpEnabled Boolean @default(false) @map("totp_enabled")
+
   // Pin authentication
   pinHash      String  @map("pin_hash")
   pinChangedAt BigInt? @map("pin_changed_at")
@@ -38,7 +41,8 @@ model User {
 
   userSessions UserSession[]
   userBranches UserBranch[]
-  auditLogs    AuditLog[]
+  auditLogs        AuditLog[]
+  reportFavorites  ReportFavorite[]
 
   partiesUpdated          Party[]           @relation("PartyUpdatedBy")
   partiesDeleted          Party[]           @relation("PartyDeletedBy")

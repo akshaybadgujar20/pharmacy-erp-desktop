@@ -8,6 +8,7 @@ import { LoyaltyProgramController } from './controllers/loyalty-program.controll
 import { LoyaltyCustomerService } from './services/loyalty-customer.service';
 import { LoyaltyEnrollmentService } from './services/loyalty-enrollment.service';
 import { LoyaltyIntegrationService } from './services/loyalty-integration.service';
+import { LoyaltyExpiryService } from './services/loyalty-expiry.service';
 import { LoyaltyProgramService } from './services/loyalty-program.service';
 
 @Module({
@@ -22,6 +23,7 @@ import { LoyaltyProgramService } from './services/loyalty-program.service';
     LoyaltyEnrollmentService,
     LoyaltyCustomerService,
     LoyaltyIntegrationService,
+    LoyaltyExpiryService,
   ],
   exports: [LoyaltyIntegrationService],
 })

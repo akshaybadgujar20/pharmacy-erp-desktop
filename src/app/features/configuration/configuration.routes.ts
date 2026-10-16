@@ -170,4 +170,12 @@ export const configurationRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'payment-terminal',
+    canActivate: [permissionGuard('CONFIGURATION:APP_SETTING:READ')],
+    loadComponent: () =>
+      import('./payment-terminal/payment-terminal-config.component').then(
+        (m) => m.PaymentTerminalConfigComponent,
+      ),
+  },
 ];

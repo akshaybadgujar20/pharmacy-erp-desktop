@@ -32,7 +32,7 @@
     "medicine": { "title": "औषधे", "medicines": "औषधे", "categories": "श्रेणी", "generics": "जेनेरिक", "schedules": "शेड्यूल", "manufacturers": "उत्पादक", "saltCompositions": "साल्ट रचना", "units": "मापन एकक" },
     "masters": { "title": "संदर्भ डेटा", "countries": "देश", "states": "राज्ये", "cities": "शहरे", "areas": "क्षेत्र" },
     "pricing": { "title": "किंमत", "discountRules": "सवलत नियम", "priceLists": "किंमत यादी", "taxes": "कर" },
-    "finance": { "title": "वित्त", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते" },
+    "finance": { "title": "वित्त", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते", "monthEndClose": "महिना समाप्ती", "cashDrawer": "रोख पेटी" },
     "prescriptions": { "list": "प्रिस्क्रिप्शन" },
     "reports": { "title": "अहवाल" },
     "security": { "title": "सुरक्षा", "users": "वापरकर्ते", "roles": "भूमिका", "permissions": "परवानग्या", "sessions": "सत्र", "changePassword": "पासवर्ड बदला" },

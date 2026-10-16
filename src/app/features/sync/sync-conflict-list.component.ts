@@ -17,13 +17,18 @@ import {
 import { ToolbarActionEvent } from '../../components/generic/toolbar/types/toolbar-events.types';
 import { toListParams } from '../../shared/utils/list-query.util';
 import { SYNC_CONFLICT_GRID_CONFIG } from './sync-conflict-grid.config';
-import { SyncConflictAdminService, SyncConflictRow } from './sync-conflict.service';
+import { DialogModule } from 'primeng/dialog';
+import {
+  SyncConflictAdminService,
+  SyncConflictDetail,
+  SyncConflictRow,
+} from './sync-conflict.service';
 import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
 
 @Component({
   selector: 'app-sync-conflict-list',
   standalone: true,
-  imports: [AppToolbarComponent, AppGridComponent],
+  imports: [AppToolbarComponent, AppGridComponent, DialogModule],
   template: `
     <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
     <app-grid
@@ -35,6 +40,21 @@ import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
       (filterChange)="onFilterChange($event)"
       (action)="onGridAction($event)"
     />
+    <p-dialog
+      [visible]="detailVisible()"
+      [modal]="true"
+      header="Sync conflict"
+      [style]="{ width: '48rem' }"
+      (onHide)="detailVisible.set(false)"
+    >
+      @if (detail(); as row) {
+        <p><strong>Entity:</strong> {{ row.entityType }}</p>
+        <h4>Local payload</h4>
+        <pre>{{ row.localPayload }}</pre>
+        <h4>Server payload</h4>
+        <pre>{{ row.serverPayload }}</pre>
+      }
+    </p-dialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,6 +71,8 @@ export class SyncConflictListComponent implements OnInit, OnDestroy {
   readonly page = signal(1);
   readonly pageSize = signal(25);
   readonly search = signal('');
+  readonly detailVisible = signal(false);
+  readonly detail = signal<SyncConflictDetail | null>(null);
 
   ngOnInit(): void {
     this.shortcuts.registerHandler('global.refresh', () => this.load());
@@ -80,12 +102,23 @@ export class SyncConflictListComponent implements OnInit, OnDestroy {
   }
 
   onGridAction(event: GridActionEvent<SyncConflictRow>): void {
-    if (!event.row || event.action !== 'resolve') {
+    if (!event.row) {
       return;
     }
-    this.conflicts.resolve(event.row.id, event.row.version, 'Resolved from UI').subscribe({
-      next: () => this.load(),
-    });
+    if (event.action === 'detail') {
+      this.conflicts.getById(event.row.id).subscribe({
+        next: (row) => {
+          this.detail.set(row);
+          this.detailVisible.set(true);
+        },
+      });
+      return;
+    }
+    if (event.action === 'resolve') {
+      this.conflicts.resolve(event.row.id, event.row.version, 'Resolved from UI').subscribe({
+        next: () => this.load(),
+      });
+    }
   }
 
   private load(): void {

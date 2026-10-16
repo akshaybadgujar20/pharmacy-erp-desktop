@@ -9,7 +9,7 @@ export class SyncRunController {
   @Post()
   @RequirePermissions('SYNC:SYNC:EXECUTE')
   run() {
-    return this.syncRunService.runPush();
+    return this.syncRunService.runPushAndPull();
   }
 
   @Get('latest')
