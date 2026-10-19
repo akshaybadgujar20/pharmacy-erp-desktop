@@ -51,6 +51,8 @@
     <app-sales-invoice-items-tab
       [invoiceId]="invoiceId()!"
       [seedMedicineId]="seedMedicineId()"
+      [seedSoldQuantity]="seedSoldQuantity()"
+      [seedToken]="seedToken()"
     />
   }
   @if (activeTab() === 'payments' && invoiceId()) {
@@ -86,5 +88,8 @@
 
 <p-dialog header="Receipt preview" [visible]="receiptPreviewVisible()" (visibleChange)="receiptPreviewVisible.set($event)" [modal]="true" [style]="{ width: '24rem' }">
   <div [innerHTML]="receiptPreviewHtml()"></div>
-  <button pButton type="button" label="Print" (click)="printPreview()"></button>
+  <div class="counter__dialog-actions">
+    <button pButton type="button" label="Record payment" (click)="recordPayment()"></button>
+    <button pButton type="button" label="Print" (click)="printPreview()"></button>
+  </div>
 </p-dialog>

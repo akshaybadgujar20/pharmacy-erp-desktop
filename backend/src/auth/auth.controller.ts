@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { ChangePinDto } from './dto/change-pin.dto';
 import { ChangeRequiredPinDto } from './dto/change-required-pin.dto';
 import { LoginWithPinDto } from './dto/loginWithPin.dto';
+import { CompleteMfaLoginDto } from './dto/complete-mfa-login.dto';
 
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
@@ -23,6 +24,12 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: LoginDto, @Req() req: Request) {
     return this.authService.login(dto, req);
+  }
+
+  @Public()
+  @Post('login/mfa')
+  completeMfaLogin(@Body() dto: CompleteMfaLoginDto, @Req() req: Request) {
+    return this.authService.completeMfaLogin(dto, req);
   }
 
   @Public()

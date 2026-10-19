@@ -24,9 +24,9 @@
     "semantic_hash": "fa439650fa28a1a7aa8c2b6d81c8cc20"
   },
   "backend/package.json": {
-    "mtime": 1792138657.0896442,
-    "seen": 1792141446.474947,
-    "ast_hash": "0e6820e22696be2ef3485cbc5bd15578",
+    "mtime": 1792399087.4254286,
+    "seen": 1792399136.705194,
+    "ast_hash": "e5c6bea253ce0aed24d3ffa648f5f6b9",
     "semantic_hash": ""
   },
   "backend/prisma.config.ts": {
@@ -162,15 +162,15 @@
     "semantic_hash": "0e80089969731ad105710b88a2303668"
   },
   "backend/seed/data/security/permission.json": {
-    "mtime": 1792133745.587634,
-    "seen": 1792134083.7672946,
-    "ast_hash": "bdf90c875f19799777e17a0ef2eec09f",
+    "mtime": 1792142857.7396433,
+    "seen": 1792399136.705194,
+    "ast_hash": "e2fb63bc86fce185b6f6fc563b8b5c18",
     "semantic_hash": ""
   },
   "backend/seed/data/security/role-permission.json": {
-    "mtime": 1792133748.2595487,
-    "seen": 1792134083.7672946,
-    "ast_hash": "bb1b13994465d921c4f46b58d8ac3b32",
+    "mtime": 1792142859.1572392,
+    "seen": 1792399136.705194,
+    "ast_hash": "2948db4efa85c103f5f4b456c95b9111",
     "semantic_hash": ""
   },
   "backend/seed/data/security/role.json": {
@@ -390,9 +390,9 @@
     "semantic_hash": "f637c13826e31cfe85345ae5ae27afc1"
   },
   "backend/src/auth/auth.controller.ts": {
-    "mtime": 1790490634.5519826,
-    "seen": 1792127902.8052137,
-    "ast_hash": "ed0d99381299c357b18e2ba9e0e8811c",
+    "mtime": 1792142855.8329108,
+    "seen": 1792399136.705194,
+    "ast_hash": "b312843f0cd8a13400c2d525863958e8",
     "semantic_hash": ""
   },
   "backend/src/auth/auth.module.ts": {
@@ -402,15 +402,15 @@
     "semantic_hash": ""
   },
   "backend/src/auth/auth.service.spec.ts": {
-    "mtime": 1790490634.5519826,
-    "seen": 1792127902.8052137,
-    "ast_hash": "ee4549ae046d5dd0fa4f7e60615970d9",
-    "semantic_hash": "ee4549ae046d5dd0fa4f7e60615970d9"
+    "mtime": 1792399035.7368906,
+    "seen": 1792399136.705194,
+    "ast_hash": "149a0761842b48dc6ad03c04a9e29f2f",
+    "semantic_hash": ""
   },
   "backend/src/auth/auth.service.ts": {
-    "mtime": 1792137000.6053963,
-    "seen": 1792137257.8190722,
-    "ast_hash": "4b9ac73dc50f0df3503b0e9909a2f720",
+    "mtime": 1792399027.6703506,
+    "seen": 1792399136.705194,
+    "ast_hash": "311801b69b36ca4c1d9c2a1f3e5ad216",
     "semantic_hash": ""
   },
   "backend/src/auth/constants/auth.constants.ts": {
@@ -894,9 +894,9 @@
     "semantic_hash": ""
   },
   "backend/src/configuration/services/financial-year.service.ts": {
-    "mtime": 1792136981.1263735,
-    "seen": 1792137257.8342588,
-    "ast_hash": "f5e0ebdd070305fbc8991e5752f32fcd",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.721298,
+    "ast_hash": "ccc526e84187a925797480245175f46d",
     "semantic_hash": ""
   },
   "backend/src/configuration/services/printer-configuration.service.ts": {
@@ -2292,9 +2292,9 @@
     "semantic_hash": ""
   },
   "backend/src/prescription/mappers/prescription-item.mapper.ts": {
-    "mtime": 1790490634.6212504,
-    "seen": 1792127902.8052137,
-    "ast_hash": "41d95d1a977619fc7b632dc2dd421420",
+    "mtime": 1792399083.4209106,
+    "seen": 1792399136.771071,
+    "ast_hash": "1ade45cf7c073aad3300655212a9eb3b",
     "semantic_hash": ""
   },
   "backend/src/prescription/mappers/prescription.mapper.ts": {
@@ -2310,9 +2310,9 @@
     "semantic_hash": "f243ea390952f0a3a0cd060c740057f6"
   },
   "backend/src/prescription/services/prescription-item.service.ts": {
-    "mtime": 1790490634.6212504,
-    "seen": 1792127902.8052137,
-    "ast_hash": "58a78d8ce7265fb48d22d6fe70f2c424",
+    "mtime": 1792399083.8709917,
+    "seen": 1792399136.786975,
+    "ast_hash": "4459193524a6d354cf04c0837d412980",
     "semantic_hash": ""
   },
   "backend/src/prescription/services/prescription.service.spec.ts": {
@@ -2748,9 +2748,9 @@
     "semantic_hash": ""
   },
   "backend/src/purchase/services/purchase-invoice.service.ts": {
-    "mtime": 1792136912.698406,
-    "seen": 1792137257.896831,
-    "ast_hash": "aea2efe2d5343b04908792debfbe6608",
+    "mtime": 1792399081.5878587,
+    "seen": 1792399136.7888727,
+    "ast_hash": "be120a9d88f4503ab48a0adb42b66ea7",
     "semantic_hash": ""
   },
   "backend/src/purchase/services/purchase-order-item.service.ts": {
@@ -2976,9 +2976,9 @@
     "semantic_hash": ""
   },
   "backend/src/sales/mappers/sales-invoice-item.mapper.ts": {
-    "mtime": 1792136899.3602526,
-    "seen": 1792137257.9050193,
-    "ast_hash": "d27ed3f648f05edd51bf5a96612d5296",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.8048916,
+    "ast_hash": "2febe0e27e718362ceb09e7a449d4e92",
     "semantic_hash": ""
   },
   "backend/src/sales/mappers/sales-invoice.mapper.ts": {
@@ -3606,9 +3606,9 @@
     "semantic_hash": "080d9e2f26e52ad0b663b4b7f3d43159"
   },
   "package.json": {
-    "mtime": 1790490635.0238767,
-    "seen": 1792127902.8061903,
-    "ast_hash": "1761ece306e90e90cd0547fa69c346b7",
+    "mtime": 1792398918.375296,
+    "seen": 1792399136.82081,
+    "ast_hash": "a42804b5c7c8873b78490ef39e1cc31f",
     "semantic_hash": ""
   },
   "public/i18n/english.json": {
@@ -4236,9 +4236,9 @@
     "semantic_hash": "a30709f512741881dcdf5d24dc92606d"
   },
   "src/app/components/shell/main-layout.component.ts": {
-    "mtime": 1792136750.1307137,
-    "seen": 1792137257.9507127,
-    "ast_hash": "a94a330d453846a6eda81545167cfb5d",
+    "mtime": 1792142886.5025616,
+    "seen": 1792399136.852561,
+    "ast_hash": "e3b403d9018ecbee5d720fe5612e619f",
     "semantic_hash": ""
   },
   "src/app/components/shell/nav.config.ts": {
@@ -4326,9 +4326,9 @@
     "semantic_hash": "830588db27790d416c86809bd614394c"
   },
   "src/app/core/models/auth.models.ts": {
-    "mtime": 1790490635.0585904,
-    "seen": 1792127902.8061903,
-    "ast_hash": "a59cf75b05913d500b58347ee0cd773e",
+    "mtime": 1792398814.6314828,
+    "seen": 1792399136.8551931,
+    "ast_hash": "3156bdb7ec7607be6687726358785d52",
     "semantic_hash": ""
   },
   "src/app/core/models/electron-api.types.ts": {
@@ -4356,9 +4356,9 @@
     "semantic_hash": "ff686bdc9f5e3a840acf14f027817410"
   },
   "src/app/core/services/auth.service.ts": {
-    "mtime": 1790490635.0585904,
-    "seen": 1792127902.8061903,
-    "ast_hash": "1cc3c64c700ebf1f0e5444d610d12650",
+    "mtime": 1792398819.1898885,
+    "seen": 1792399136.8551931,
+    "ast_hash": "e41d22caeaf5e3d36226a6199566bb87",
     "semantic_hash": ""
   },
   "src/app/core/services/device.service.ts": {
@@ -4386,9 +4386,9 @@
     "semantic_hash": "41a5ab6c8104d315a1dd8b8bf2693612"
   },
   "src/app/features/auth/login/login.component.ts": {
-    "mtime": 1790490635.0605445,
-    "seen": 1792127902.8061903,
-    "ast_hash": "b5661e9ae4b58ecf53afe2131397ec59",
+    "mtime": 1792398822.5818996,
+    "seen": 1792399136.8551931,
+    "ast_hash": "de3488282953f2978a63d67c37c73774",
     "semantic_hash": ""
   },
   "src/app/features/configuration/barcode-configurations/barcode-configuration-detail.component.ts": {
@@ -4542,9 +4542,9 @@
     "semantic_hash": ""
   },
   "src/app/features/configuration/financial-years/financial-year.service.ts": {
-    "mtime": 1790490635.0673769,
-    "seen": 1792127902.8061903,
-    "ast_hash": "c53a55869b16e2e2dbcdd0311b284c62",
+    "mtime": 1792398845.9946496,
+    "seen": 1792399136.8551931,
+    "ast_hash": "1fa5495ab932904f6e0967763d863259",
     "semantic_hash": ""
   },
   "src/app/features/configuration/printer-configurations/printer-configuration-detail.component.ts": {
@@ -5028,9 +5028,9 @@
     "semantic_hash": ""
   },
   "src/app/features/inventory/stocks/stock-list.component.ts": {
-    "mtime": 1792137114.4591334,
-    "seen": 1792137257.9762292,
-    "ast_hash": "f9e8d463bec11dba81a90e337584276e",
+    "mtime": 1792398809.1113517,
+    "seen": 1792399136.873241,
+    "ast_hash": "d82cdd159c2b39ef4a5199df75b2c162",
     "semantic_hash": ""
   },
   "src/app/features/inventory/stocks/stock-toolbar.config.ts": {
@@ -5340,9 +5340,9 @@
     "semantic_hash": "774ecf9577d5d7d7b4ed253d083dcb63"
   },
   "src/app/features/medicine/medicines/medicine-list.component.ts": {
-    "mtime": 1792134891.0096114,
-    "seen": 1792135013.9306872,
-    "ast_hash": "59b8cbd1977340fa26c74ea548d94f34",
+    "mtime": 1792398859.7843971,
+    "seen": 1792399136.873241,
+    "ast_hash": "c39f8ed0d4792fafb53c4a5c74193973",
     "semantic_hash": ""
   },
   "src/app/features/medicine/medicines/medicine-salt-grid.config.ts": {
@@ -5790,9 +5790,9 @@
     "semantic_hash": "b60f29522d21c59c0295a6a2b8abd117"
   },
   "src/app/features/prescription/prescriptions/prescription-item.models.ts": {
-    "mtime": 1790490635.1200144,
-    "seen": 1792127902.8061903,
-    "ast_hash": "947d3cf61de2a4388c7889d6c38531b8",
+    "mtime": 1792142874.9391322,
+    "seen": 1792399136.888479,
+    "ast_hash": "e825b45b8f49f982ae180cca69101b7b",
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-item.service.ts": {
@@ -6054,9 +6054,9 @@
     "semantic_hash": "b9994c5d4e7bd95de3e604bb20ae934c"
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice-detail.component.ts": {
-    "mtime": 1792136700.680352,
-    "seen": 1792137258.0076888,
-    "ast_hash": "491ebd12eea708e0b76c23a4ef571f66",
+    "mtime": 1792398804.4828959,
+    "seen": 1792399136.9051156,
+    "ast_hash": "acaa2a53ed8556460ca2d4bf3b9ec3f6",
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice-grid.config.ts": {
@@ -6102,9 +6102,9 @@
     "semantic_hash": "9f388f4cf4921bd6299e0e70edf1d9a6"
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice.models.ts": {
-    "mtime": 1792136695.3121157,
-    "seen": 1792137258.0097203,
-    "ast_hash": "27ec67bad6544cc25a5f6f597bfa8696",
+    "mtime": 1792142890.5367231,
+    "seen": 1792399136.9051156,
+    "ast_hash": "e3d9ff67dd0ce0ce771bb6511f31b75d",
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice.service.ts": {
@@ -6264,9 +6264,9 @@
     "semantic_hash": "f2c5a12341dd2ed6cade3f8b3232c595"
   },
   "src/app/features/reporting/report-list.component.ts": {
-    "mtime": 1792134872.127221,
-    "seen": 1792135013.959819,
-    "ast_hash": "163581693b4738333c56aa3a49363590",
+    "mtime": 1792398872.2844555,
+    "seen": 1792399136.9051156,
+    "ast_hash": "976cd25fa73e609358feef18b60faca6",
     "semantic_hash": ""
   },
   "src/app/features/reporting/report-runner.component.ts": {
@@ -6330,9 +6330,9 @@
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-items-tab.component.ts": {
-    "mtime": 1792136712.895472,
-    "seen": 1792137258.015923,
-    "ast_hash": "1957e80191462aa5edf080e4afbffaa7",
+    "mtime": 1792142872.498098,
+    "seen": 1792399136.9051156,
+    "ast_hash": "6cb2ec22f0e4b5897b4ca142ab083d8b",
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-list.component.spec.ts": {
@@ -8436,9 +8436,9 @@
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/architecture/testing.md": {
-    "mtime": 1792134028.8432968,
-    "seen": 1792134084.0085022,
-    "ast_hash": "e09c3982b7540b58f27c165eb9899207",
+    "mtime": 1792142190.5446446,
+    "seen": 1792399136.9718366,
+    "ast_hash": "ab320a768ce8a950eded0fddc29f84ce",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/database/architecture-review.md": {
@@ -8748,9 +8748,9 @@
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/functional/implementation-status.md": {
-    "mtime": 1792141397.9582303,
-    "seen": 1792141446.7472515,
-    "ast_hash": "4081a0adee737a1715ee0160eb6e390b",
+    "mtime": 1792398935.885135,
+    "seen": 1792399136.9718366,
+    "ast_hash": "9aa5d1bd0f92da756295ecabb8e42b1d",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/functional/integrations-and-devices.md": {
@@ -8934,9 +8934,9 @@
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/workflows/workflow-gap-index.md": {
-    "mtime": 1792141367.0819554,
-    "seen": 1792141446.752257,
-    "ast_hash": "ecf83ef6662b29003cb8ea67a530a03c",
+    "mtime": 1792398945.2686205,
+    "seen": 1792399136.9879246,
+    "ast_hash": "83a3ea6579beef9402a295cbe9bb8943",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_handbook.md": {
@@ -9108,9 +9108,9 @@
     "semantic_hash": ""
   },
   "src/app/components/shell/main-layout.component.html": {
-    "mtime": 1792136750.5187612,
-    "seen": 1792137258.0992534,
-    "ast_hash": "2963dd35380f8afa91b920b03721661c",
+    "mtime": 1792398913.5013692,
+    "seen": 1792399136.9879246,
+    "ast_hash": "94909d085b44126253c4cde111b080e8",
     "semantic_hash": ""
   },
   "src/app/core/keyboard/README.md": {
@@ -9120,9 +9120,9 @@
     "semantic_hash": ""
   },
   "src/app/features/auth/login/login.component.html": {
-    "mtime": 1790528781.9381752,
-    "seen": 1792127902.807167,
-    "ast_hash": "4875c9bbbb6e5230d14349f81d39881a",
+    "mtime": 1792398824.2063632,
+    "seen": 1792399136.9879246,
+    "ast_hash": "7dbbca75a2805d1b218f0c1bf096dd7e",
     "semantic_hash": ""
   },
   "src/app/features/configuration/barcode-configurations/barcode-configuration-detail.component.html": {
@@ -9312,9 +9312,9 @@
     "semantic_hash": ""
   },
   "src/app/features/inventory/stocks/stock-list.component.html": {
-    "mtime": 1792137110.7280927,
-    "seen": 1792137258.1042528,
-    "ast_hash": "2202c8a8f23135e4b8ff21c760b800b8",
+    "mtime": 1792398806.8210618,
+    "seen": 1792399136.9879246,
+    "ast_hash": "f933dafc807d91175e87e290a4fb55b3",
     "semantic_hash": ""
   },
   "src/app/features/masters/areas/area-detail.component.html": {
@@ -9534,9 +9534,9 @@
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-detail.component.html": {
-    "mtime": 1792134855.1310773,
-    "seen": 1792135014.05622,
-    "ast_hash": "b6bcdf07fe2c340505707fcd3eb6167c",
+    "mtime": 1792398805.464609,
+    "seen": 1792399137.005862,
+    "ast_hash": "750c676d3967c8b0adfce3ce50cee7b8",
     "semantic_hash": ""
   },
   "src/app/features/prescription/prescriptions/prescription-items-tab.component.html": {
@@ -9612,9 +9612,9 @@
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice-detail.component.html": {
-    "mtime": 1792136701.6108124,
-    "seen": 1792137258.1144125,
-    "ast_hash": "81c4ceb4071dbba26c84e9cd8876e351",
+    "mtime": 1792398800.916633,
+    "seen": 1792399137.005862,
+    "ast_hash": "bf92711d37031756aaa157367ef41592",
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase-invoices/purchase-invoice-items-tab.component.html": {
@@ -9666,9 +9666,9 @@
     "semantic_hash": ""
   },
   "src/app/features/reporting/report-list.component.html": {
-    "mtime": 1792134880.016451,
-    "seen": 1792135014.060126,
-    "ast_hash": "4863de7aac67ab3f14beea1b08a47729",
+    "mtime": 1792398855.1004415,
+    "seen": 1792399137.005862,
+    "ast_hash": "a04dc0b6917955dd8acb3c1131f945fd",
     "semantic_hash": ""
   },
   "src/app/features/reporting/report-runner.component.html": {
@@ -9936,9 +9936,9 @@
     "semantic_hash": ""
   },
   "backend/test/e2e/party.e2e-spec.ts": {
-    "mtime": 1792127840.935053,
-    "seen": 1792127902.8061903,
-    "ast_hash": "24a91131856a84745a2c0d8d43efbf17",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "3bcea853ff24ef3d4ba665520fbbc218",
     "semantic_hash": ""
   },
   "backend/test/integration/jest-integration.json": {
@@ -9966,9 +9966,9 @@
     "semantic_hash": ""
   },
   "backend/test/support/http-test.helpers.ts": {
-    "mtime": 1792138625.0058625,
-    "seen": 1792141446.5848727,
-    "ast_hash": "bebc8e799c41e4328fc189028c79a5ff",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "71fa2b1e3e34fade529c45d39d29902d",
     "semantic_hash": ""
   },
   "backend/tsconfig.test.json": {
@@ -10074,15 +10074,15 @@
     "semantic_hash": ""
   },
   "backend/src/loyalty/services/loyalty-integration.service.ts": {
-    "mtime": 1792134679.6582024,
-    "seen": 1792135013.8027778,
-    "ast_hash": "f76ba452e7fb01bc94947bfa2858aa18",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7384527,
+    "ast_hash": "8dfa96de529d08349c6492c957f8d405",
     "semantic_hash": ""
   },
   "backend/src/loyalty/services/loyalty-program.service.ts": {
-    "mtime": 1792133698.4038625,
-    "seen": 1792134083.802075,
-    "ast_hash": "02ae28150f058039455bd3090965dcad",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.754421,
+    "ast_hash": "304df3e4215b40cfc20377d2c08f93d4",
     "semantic_hash": ""
   },
   "backend/src/loyalty/utils/loyalty.util.ts": {
@@ -10098,27 +10098,27 @@
     "semantic_hash": ""
   },
   "backend/src/reporting/providers/inventory/inventory-reports.provider.ts": {
-    "mtime": 1792133545.8404377,
-    "seen": 1792134083.846553,
-    "ast_hash": "49439915d4af98d03eee592037924f4b",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7888727,
+    "ast_hash": "0f3c2c001b716ca4e9451184d3409662",
     "semantic_hash": ""
   },
   "backend/src/reporting/providers/purchase/purchase-reports.provider.ts": {
-    "mtime": 1792133513.0228195,
-    "seen": 1792134083.8475363,
-    "ast_hash": "0faa117539d97642cfbc6d9076153c2d",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7888727,
+    "ast_hash": "71dd240879b0eea3119bbcd061dc3e3a",
     "semantic_hash": ""
   },
   "backend/src/reporting/providers/sales/sales-reports.provider.ts": {
-    "mtime": 1792133470.1309688,
-    "seen": 1792134083.8475363,
-    "ast_hash": "ab9bce2ba646c7e54bb5c8d0fe7b8a42",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7888727,
+    "ast_hash": "b6afa46e9cf7ff6a0c8c0d48855e1cd4",
     "semantic_hash": ""
   },
   "backend/src/reporting/utils/transactional-report.util.ts": {
-    "mtime": 1792133546.577685,
-    "seen": 1792134083.8475363,
-    "ast_hash": "c442f8cb0ca2fcdbc13ef713b7c65d45",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.8048916,
+    "ast_hash": "e26f408b42aae3e92798f8f53934944a",
     "semantic_hash": ""
   },
   "backend/src/sync/controllers/sync-run.controller.ts": {
@@ -10140,15 +10140,15 @@
     "semantic_hash": ""
   },
   "backend/test/integration/financial-year.integration.spec.ts": {
-    "mtime": 1792141316.0535889,
-    "seen": 1792141446.5818725,
-    "ast_hash": "8364fcc60af15fe85bcbf9004ef5973a",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "6f81d18992590c0aca119aa672ccc7da",
     "semantic_hash": ""
   },
   "backend/test/integration/reports.integration.spec.ts": {
-    "mtime": 1792141077.9183626,
-    "seen": 1792141446.5828726,
-    "ast_hash": "ced9525fb3fc497c49be875258838170",
+    "mtime": 1792398885.0018106,
+    "seen": 1792399136.82081,
+    "ast_hash": "b7c497bf9e8573a03c570b63b29b1418",
     "semantic_hash": ""
   },
   "backend/test/integration/sync-run.integration.spec.ts": {
@@ -10212,9 +10212,9 @@
     "semantic_hash": ""
   },
   "backend/TESTING.md": {
-    "mtime": 1792138662.106071,
-    "seen": 1792141446.697234,
-    "ast_hash": "49b95b2ff24842dc6fc0a1d6bd9f9437",
+    "mtime": 1792142189.474199,
+    "seen": 1792399136.9368975,
+    "ast_hash": "c4f5e2d90fb4cc26b1413d48ad73b59e",
     "semantic_hash": ""
   },
   "docs/pharmacy_erp_architecture_docs/architecture/product-gaps-delivery.md": {
@@ -10224,9 +10224,9 @@
     "semantic_hash": ""
   },
   "backend/src/loyalty/controllers/loyalty-customer.controller.ts": {
-    "mtime": 1792134674.644204,
-    "seen": 1792135013.8017945,
-    "ast_hash": "aa9c5baeb55b31de7a215c54910b0556",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7384527,
+    "ast_hash": "0061c0fe1ba86bdb19f7dd8e63b8514e",
     "semantic_hash": ""
   },
   "backend/src/loyalty/dto/create-loyalty-adjustment.dto.ts": {
@@ -10242,9 +10242,9 @@
     "semantic_hash": ""
   },
   "backend/src/loyalty/services/loyalty-customer.service.ts": {
-    "mtime": 1792134929.5771904,
-    "seen": 1792135013.8027778,
-    "ast_hash": "c117c0fe04f086d2b99692c402a4e1c2",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7384527,
+    "ast_hash": "0675fbe06b7d968411d280db08d410dc",
     "semantic_hash": ""
   },
   "src/app/core/services/electron.service.spec.ts": {
@@ -10266,9 +10266,9 @@
     "semantic_hash": ""
   },
   "src/app/features/audit/audit-log.service.ts": {
-    "mtime": 1792135901.0352743,
-    "seen": 1792136179.2258327,
-    "ast_hash": "e9bde1aa4d25d114481a911803782166",
+    "mtime": 1792398834.5717895,
+    "seen": 1792399136.8551931,
+    "ast_hash": "e29ea4320bd3a58d2e0013efade74f75",
     "semantic_hash": ""
   },
   "src/app/features/audit/audit.routes.ts": {
@@ -10314,9 +10314,9 @@
     "semantic_hash": ""
   },
   "src/app/features/purchase/purchase-grn-wizard/purchase-grn-wizard.component.ts": {
-    "mtime": 1792134874.5173225,
-    "seen": 1792135013.9529135,
-    "ast_hash": "35fc6c87d892f84caad32977bf298e17",
+    "mtime": 1792398810.741609,
+    "seen": 1792399136.9051156,
+    "ast_hash": "0271755b2adc6f549922eed9f4907563",
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/customer-loyalty-summary.service.ts": {
@@ -10326,9 +10326,9 @@
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-counter.component.ts": {
-    "mtime": 1792137020.605603,
-    "seen": 1792137258.0149307,
-    "ast_hash": "975115802ec4c0450a74fdaec9bfa82e",
+    "mtime": 1792142883.185383,
+    "seen": 1792399136.9051156,
+    "ast_hash": "b7d669d2be10a6c4e97501645af07de1",
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-receipt.util.ts": {
@@ -10356,15 +10356,15 @@
     "semantic_hash": ""
   },
   "src/app/features/sync/sync-conflict-list.component.ts": {
-    "mtime": 1792137075.200141,
-    "seen": 1792137258.0291238,
-    "ast_hash": "e990c35fa625c4618514db44d4b1b90a",
+    "mtime": 1792398829.0011485,
+    "seen": 1792399136.9210782,
+    "ast_hash": "9f5493481416caf407c78deb90559afd",
     "semantic_hash": ""
   },
   "src/app/features/sync/sync-conflict.service.ts": {
-    "mtime": 1792137071.2284808,
-    "seen": 1792137258.0291238,
-    "ast_hash": "537d98eb1cf3c317b0724d636f9148b2",
+    "mtime": 1792398825.2528834,
+    "seen": 1792399136.9210782,
+    "ast_hash": "81ea37bdef2a8eefd2b51d50cbb27c68",
     "semantic_hash": ""
   },
   "src/app/shared/lookups/customer-lookup.component.ts": {
@@ -10398,9 +10398,9 @@
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-invoice-counter.component.html": {
-    "mtime": 1792136725.1632848,
-    "seen": 1792137258.1155431,
-    "ast_hash": "86c152bafa000dcbbf1a8ed02095102e",
+    "mtime": 1792142885.1263208,
+    "seen": 1792399137.005862,
+    "ast_hash": "6393704090717c13ffeeb685afb82c3a",
     "semantic_hash": ""
   },
   "src/app/features/audit/audit-log-grid.config.ts": {
@@ -10446,9 +10446,9 @@
     "semantic_hash": ""
   },
   "src/app/features/audit/audit-log-list.component.html": {
-    "mtime": 1792137037.487673,
-    "seen": 1792137258.0992534,
-    "ast_hash": "e036aee332d45e60580367496426e0c5",
+    "mtime": 1792398835.8456714,
+    "seen": 1792399136.9879246,
+    "ast_hash": "d8db4b47b50fd2273fe8dc5682766c92",
     "semantic_hash": ""
   },
   "src/app/features/audit/change-history-list.component.html": {
@@ -10464,9 +10464,9 @@
     "semantic_hash": ""
   },
   "backend/src/auth/mfa.service.ts": {
-    "mtime": 1792137164.845479,
-    "seen": 1792137257.8220778,
-    "ast_hash": "90be5e778462c34b75e29565edfbd891",
+    "mtime": 1792142842.0114844,
+    "seen": 1792399136.721298,
+    "ast_hash": "87d99356e0452bca6b6a6a9eae3f331a",
     "semantic_hash": ""
   },
   "backend/src/inventory/controllers/inventory-query.controller.ts": {
@@ -10506,21 +10506,21 @@
     "semantic_hash": ""
   },
   "backend/src/purchase/utils/purchase-invoice-match.util.spec.ts": {
-    "mtime": 1792136907.8486419,
-    "seen": 1792137257.896831,
-    "ast_hash": "a3682aa094309db427ad7ad4f07f9b55",
+    "mtime": 1792399084.67329,
+    "seen": 1792399136.7888727,
+    "ast_hash": "0b684145781b6344623c8a91ad81f4a5",
     "semantic_hash": ""
   },
   "backend/src/purchase/utils/purchase-invoice-match.util.ts": {
-    "mtime": 1792136901.7655141,
-    "seen": 1792137257.896831,
-    "ast_hash": "651a5af3d26e192030b1771007e29d84",
+    "mtime": 1792399082.5875554,
+    "seen": 1792399136.7888727,
+    "ast_hash": "90dcd811ad76960c1fd345a8004a7132",
     "semantic_hash": ""
   },
   "backend/src/reporting/report-favorite.controller.ts": {
-    "mtime": 1792136957.0044265,
-    "seen": 1792137257.9008317,
-    "ast_hash": "048d13d780eeef23628242b62f10d445",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.7888727,
+    "ast_hash": "1397f2142933b7d6671ac3b0409673fc",
     "semantic_hash": ""
   },
   "backend/src/reporting/report-favorite.service.ts": {
@@ -10536,15 +10536,15 @@
     "semantic_hash": ""
   },
   "src/app/features/configuration/payment-terminal/payment-terminal-config.component.ts": {
-    "mtime": 1792137103.1026406,
-    "seen": 1792137257.9618928,
-    "ast_hash": "731672f42fd7fbc0b2338b11c51beeb0",
+    "mtime": 1792398836.3513844,
+    "seen": 1792399136.8551931,
+    "ast_hash": "76ecfd5ee2340ef86eecc377884343b9",
     "semantic_hash": ""
   },
   "src/app/features/finance/cash-drawer/cash-drawer.component.ts": {
-    "mtime": 1792137078.985733,
-    "seen": 1792137257.9638987,
-    "ast_hash": "043651995dc8c8716933db5c2c9325dd",
+    "mtime": 1792398851.4018505,
+    "seen": 1792399136.8551931,
+    "ast_hash": "6ab625cb68b1fb14146829c2c161288f",
     "semantic_hash": ""
   },
   "src/app/features/finance/closing/closing.service.ts": {
@@ -10554,9 +10554,9 @@
     "semantic_hash": ""
   },
   "src/app/features/finance/month-end-close/month-end-close.component.ts": {
-    "mtime": 1792137047.4584541,
-    "seen": 1792137257.9660854,
-    "ast_hash": "3ccc0c0fcdde0b7f432707c7f99b03b4",
+    "mtime": 1792398847.3168259,
+    "seen": 1792399136.8551931,
+    "ast_hash": "0c1400c1a60de2c0eb5a7612ae7c2b9f",
     "semantic_hash": ""
   },
   "src/app/features/loyalty/loyalty-program-grid.config.ts": {
@@ -10590,9 +10590,9 @@
     "semantic_hash": ""
   },
   "src/app/features/sales/sales-invoices/sales-prescription-lines-panel.component.ts": {
-    "mtime": 1792136705.212029,
-    "seen": 1792137258.017923,
-    "ast_hash": "5d427eebd7a43b8f3e35c9c1d8d1a880",
+    "mtime": 1792142869.9651856,
+    "seen": 1792399136.9051156,
+    "ast_hash": "2680256effd9aef829d3523293701e82",
     "semantic_hash": ""
   },
   "src/app/features/security/mfa-enroll.component.ts": {
@@ -10602,15 +10602,15 @@
     "semantic_hash": ""
   },
   "src/app/shared/components/medicine-search-dialog/medicine-search-dialog.component.ts": {
-    "mtime": 1792136731.9575756,
-    "seen": 1792137258.0301235,
-    "ast_hash": "bec403b741de8ba3211dfe178a4c6084",
+    "mtime": 1792398861.9695034,
+    "seen": 1792399136.9210782,
+    "ast_hash": "3bbb02b4357384f66329b6a6f164800d",
     "semantic_hash": ""
   },
   "src/app/features/finance/month-end-close/month-end-close.component.html": {
-    "mtime": 1792137045.199546,
-    "seen": 1792137258.1022532,
-    "ast_hash": "cd78e3b70cde9c1504a85f5d8c96e72f",
+    "mtime": 1792398865.969333,
+    "seen": 1792399136.9879246,
+    "ast_hash": "947808b46fc11f24c26ba1f03f310d58",
     "semantic_hash": ""
   },
   "backend/scripts/fix-scaffold-specs-use-mocker.ts": {
@@ -11136,9 +11136,9 @@
     "semantic_hash": ""
   },
   "backend/test/e2e/sales-flow.e2e-spec.ts": {
-    "mtime": 1792139229.7863662,
-    "seen": 1792141446.5818725,
-    "ast_hash": "3e29f24fc480a9917dfe6eea1440cc74",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "0a98a43219aa9f6096834df1746400cc",
     "semantic_hash": ""
   },
   "backend/test/integration/audit.integration.spec.ts": {
@@ -11148,9 +11148,9 @@
     "semantic_hash": ""
   },
   "backend/test/integration/closing.integration.spec.ts": {
-    "mtime": 1792139282.229943,
-    "seen": 1792141446.5818725,
-    "ast_hash": "17b3a5081a60ba61d55b6e5664bf2c21",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "30586cebcee67f2990fdefa56986b4a8",
     "semantic_hash": ""
   },
   "backend/test/integration/inventory-stocks.integration.spec.ts": {
@@ -11160,9 +11160,9 @@
     "semantic_hash": ""
   },
   "backend/test/integration/loyalty.integration.spec.ts": {
-    "mtime": 1792139289.6114097,
-    "seen": 1792141446.5818725,
-    "ast_hash": "d89c41aedb30f4263f91db4686a58202",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "69b2a9d1190102e08d633d1c2023b912",
     "semantic_hash": ""
   },
   "backend/test/integration/masters.integration.spec.ts": {
@@ -11178,15 +11178,15 @@
     "semantic_hash": ""
   },
   "backend/test/integration/party-customers.integration.spec.ts": {
-    "mtime": 1792139276.7078352,
-    "seen": 1792141446.5818725,
-    "ast_hash": "b2d0eb9166c7c25a32bd68967ffe19a0",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "bffd6c892da0c42ef344bcf99d345def",
     "semantic_hash": ""
   },
   "backend/test/integration/prescription.integration.spec.ts": {
-    "mtime": 1792139291.0582178,
-    "seen": 1792141446.5818725,
-    "ast_hash": "6c42929de9752ea7b904aae2c08e3647",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "f68b384303f51ddef2e6226d960df203",
     "semantic_hash": ""
   },
   "backend/test/integration/pricing.integration.spec.ts": {
@@ -11196,9 +11196,9 @@
     "semantic_hash": ""
   },
   "backend/test/integration/purchase-invoice.integration.spec.ts": {
-    "mtime": 1792141017.5146282,
-    "seen": 1792141446.5818725,
-    "ast_hash": "b77c9ee678ecabd505e442fed445fcc9",
+    "mtime": 1792398939.0127923,
+    "seen": 1792399136.82081,
+    "ast_hash": "3abb77a79abd701b979bbb7bfa6ffbce",
     "semantic_hash": ""
   },
   "backend/test/integration/report-favorites.integration.spec.ts": {
@@ -11208,9 +11208,9 @@
     "semantic_hash": ""
   },
   "backend/test/integration/sales-invoices.integration.spec.ts": {
-    "mtime": 1792139279.3832264,
-    "seen": 1792141446.5828726,
-    "ast_hash": "9cda9ee5d6ff554633370cb8ec604466",
+    "mtime": 1792398995.515604,
+    "seen": 1792399136.82081,
+    "ast_hash": "c4bca64bce11e7010758b9d7b07666f7",
     "semantic_hash": ""
   },
   "backend/test/integration/security-users.integration.spec.ts": {
@@ -11220,9 +11220,9 @@
     "semantic_hash": ""
   },
   "backend/test/persistence/stock-transfer-in-transit.integration.spec.ts": {
-    "mtime": 1792139241.0568306,
-    "seen": 1792141446.5838728,
-    "ast_hash": "59408f623ad60eb5b0bfddd327a3af20",
+    "mtime": 1792398940.3000636,
+    "seen": 1792399136.82081,
+    "ast_hash": "0d01cc39492a8a5581b9407a4d9b60f7",
     "semantic_hash": ""
   },
   "backend/test/setup/otplib.mock.ts": {
@@ -11262,15 +11262,57 @@
     "semantic_hash": ""
   },
   ".github/workflows/backend-tests.yml": {
-    "mtime": 1792138648.274604,
-    "seen": 1792141446.697234,
-    "ast_hash": "0ef035170e702c79141e76d1a46f9456",
+    "mtime": 1792398926.4878213,
+    "seen": 1792399136.9368975,
+    "ast_hash": "dbe133bc61e6083b7013f9a2ac375b0c",
     "semantic_hash": ""
   },
   "backend/test/TEST_MATRIX.md": {
     "mtime": 1792138646.383556,
     "seen": 1792141446.6982336,
     "ast_hash": "64d92ea4a8c8b137886c29399c067865",
+    "semantic_hash": ""
+  },
+  "backend/src/auth/dto/complete-mfa-login.dto.ts": {
+    "mtime": 1792142842.5470066,
+    "seen": 1792399136.705194,
+    "ast_hash": "4fb062c0dea5fc98720ea0882067d8e9",
+    "semantic_hash": ""
+  },
+  "backend/test/integration/sync-conflict.integration.spec.ts": {
+    "mtime": 1792398889.8165343,
+    "seen": 1792399136.82081,
+    "ast_hash": "ce2dfa6ecd756493b4ba9f2edd1ecfa5",
+    "semantic_hash": ""
+  },
+  "e2e/global-setup.ts": {
+    "mtime": 1792398895.2844925,
+    "seen": 1792399136.82081,
+    "ast_hash": "2ef020bf85ce54ccacf3a3ff5f207e89",
+    "semantic_hash": ""
+  },
+  "e2e/smoke.spec.ts": {
+    "mtime": 1792398912.9414616,
+    "seen": 1792399136.82081,
+    "ast_hash": "1450acd18bfd8a53ac09715b866a76b3",
+    "semantic_hash": ""
+  },
+  "playwright.config.ts": {
+    "mtime": 1792398909.7968395,
+    "seen": 1792399136.82081,
+    "ast_hash": "6a33e9f89e2d6690c81e33bf4dde2cd3",
+    "semantic_hash": ""
+  },
+  "src/app/features/sales/sales-invoices/sales-prescription-lines-panel.component.spec.ts": {
+    "mtime": 1792398920.2349224,
+    "seen": 1792399136.9051156,
+    "ast_hash": "aa26785ac0a3bd5dcdca726fe462f38d",
+    "semantic_hash": ""
+  },
+  "TESTING.md": {
+    "mtime": 1792398925.9428256,
+    "seen": 1792399136.9368975,
+    "ast_hash": "79ebeb87b38baab282bdf5531a3cfde4",
     "semantic_hash": ""
   }
 }

@@ -74,6 +74,29 @@ npm test -- --testPathPatterns="mfa-enroll|masters-import"
 
 ---
 
+## Browser smoke (Playwright)
+
+Playwright targets the **Angular dev server** at `http://localhost:4200` with the Nest API at `http://localhost:3000`. Config: [`playwright.config.ts`](playwright.config.ts). Specs: [`e2e/smoke.spec.ts`](e2e/smoke.spec.ts).
+
+Prerequisites: prepared SQLite test DB (same as backend integration tests) when running in CI — see [backend/TESTING.md](backend/TESTING.md) `db:test:prepare`.
+
+| Command | Purpose |
+|---------|---------|
+| `npm run test:e2e:ui` | Login, counter, GRN wizard, month-end, sync smoke |
+
+Environment (optional):
+
+| Variable | Default |
+|----------|---------|
+| `E2E_USERNAME` | `admin` |
+| `E2E_PASSWORD` | `admin123` |
+| `PLAYWRIGHT_BASE_URL` | `http://127.0.0.1:4200` |
+| `PLAYWRIGHT_API_URL` | `http://127.0.0.1:3000` |
+
+First-time local run: `npx playwright install chromium`
+
+---
+
 ## Full-stack reference
 
 Architecture doc (backend + frontend + CI): [docs/pharmacy_erp_architecture_docs/architecture/testing.md](docs/pharmacy_erp_architecture_docs/architecture/testing.md)

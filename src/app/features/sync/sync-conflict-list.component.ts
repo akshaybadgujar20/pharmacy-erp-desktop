@@ -18,6 +18,8 @@ import { ToolbarActionEvent } from '../../components/generic/toolbar/types/toolb
 import { toListParams } from '../../shared/utils/list-query.util';
 import { SYNC_CONFLICT_GRID_CONFIG } from './sync-conflict-grid.config';
 import { DialogModule } from 'primeng/dialog';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import {
   SyncConflictAdminService,
   SyncConflictDetail,
@@ -28,8 +30,10 @@ import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
 @Component({
   selector: 'app-sync-conflict-list',
   standalone: true,
-  imports: [AppToolbarComponent, AppGridComponent, DialogModule],
+  imports: [AppToolbarComponent, AppGridComponent, DialogModule, ToastModule],
+  providers: [MessageService],
   template: `
+    <p-toast />
     <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
     <app-grid
       [config]="gridConfig"
@@ -61,6 +65,7 @@ import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
 export class SyncConflictListComponent implements OnInit, OnDestroy {
   private readonly conflicts = inject(SyncConflictAdminService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly messages = inject(MessageService);
 
   readonly toolbarConfig = AUDIT_LOG_TOOLBAR_CONFIG;
   readonly gridConfig = SYNC_CONFLICT_GRID_CONFIG;
@@ -115,9 +120,22 @@ export class SyncConflictListComponent implements OnInit, OnDestroy {
       return;
     }
     if (event.action === 'resolve') {
-      this.conflicts.resolve(event.row.id, event.row.version, 'Resolved from UI').subscribe({
-        next: () => this.load(),
-      });
+      this.conflicts
+        .resolve(event.row.id, event.row.version, 'SERVER_WINS', 'Resolved from UI')
+        .subscribe({
+          next: () => {
+            this.messages.add({
+              severity: 'success',
+              summary: 'Conflict resolved',
+            });
+            this.load();
+          },
+          error: () =>
+            this.messages.add({
+              severity: 'error',
+              summary: 'Resolve failed',
+            }),
+        });
     }
   }
 

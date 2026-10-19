@@ -456,9 +456,10 @@ export class FinancialYearService {
     });
   }
 
-  private async writeArchivePackStub(
-    financialYear: { financialYearCode: string; uuid: string },
-  ): Promise<void> {
+  private async writeArchivePackStub(financialYear: {
+    financialYearCode: string;
+    uuid: string;
+  }): Promise<void> {
     const basePath =
       process.env.FY_ARCHIVE_PATH?.trim() ||
       process.cwd() + '/archives/financial-years';

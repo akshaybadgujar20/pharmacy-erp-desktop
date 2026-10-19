@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
 import { DeleteEntityQueryDto } from '../common/dto/delete-entity-query.dto';
 import { ParseBigIntPipe } from '../common/pipes/parse-bigint.pipe';
@@ -13,19 +21,19 @@ export class ReportFavoriteController {
   constructor(private readonly favorites: ReportFavoriteService) {}
 
   @Get()
-  @RequirePermissions('REPORTING:REPORT:READ')
+  @RequirePermissions('REPORT:REPORT:READ')
   list() {
     return this.favorites.listForCurrentUser();
   }
 
   @Post()
-  @RequirePermissions('REPORTING:REPORT:READ')
+  @RequirePermissions('REPORT:REPORT:READ')
   add(@Body() dto: AddReportFavoriteDto) {
     return this.favorites.add(dto.reportCode);
   }
 
   @Delete(':id')
-  @RequirePermissions('REPORTING:REPORT:READ')
+  @RequirePermissions('REPORT:REPORT:READ')
   remove(
     @Param('id', ParseBigIntPipe) id: bigint,
     @Query() query: DeleteEntityQueryDto,

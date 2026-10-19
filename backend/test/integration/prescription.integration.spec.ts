@@ -23,7 +23,9 @@ describe('Prescriptions (integration)', () => {
   afterAll(async () => closeHttpTestApp(app));
 
   it('GET /prescriptions returns 401 without token', () => {
-    return request(app.getHttpServer()).get('/prescriptions?page=1').expect(401);
+    return request(app.getHttpServer())
+      .get('/prescriptions?page=1')
+      .expect(401);
   });
 
   it('GET /prescriptions returns envelope', async () => {

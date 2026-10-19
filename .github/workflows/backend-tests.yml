@@ -53,3 +53,11 @@ jobs:
 
       - name: Angular unit tests
         run: npm run test:ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: UI smoke (Playwright)
+        run: npm run test:e2e:ui
+        env:
+          CI: true

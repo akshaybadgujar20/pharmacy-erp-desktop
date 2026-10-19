@@ -126,7 +126,10 @@
       }
     },
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^otplib$": "<rootDir>/../test/setup/otplib.mock.ts"
+    }
   },
   "prisma": {
     "seed": "tsx seed/seed.ts --fresh"

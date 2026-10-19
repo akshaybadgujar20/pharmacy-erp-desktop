@@ -6,6 +6,7 @@ export interface PrescriptionItemResponse {
   uuid: string;
   prescriptionId: string;
   medicineId: string;
+  medicineName: string | null;
   unitId: string;
   lineNumber: number;
   prescribedQuantity: string;
@@ -24,14 +25,19 @@ export interface PrescriptionItemResponse {
   version: string;
 }
 
+type PrescriptionItemWithMedicine = PrescriptionItem & {
+  medicine?: { medicineName: string } | null;
+};
+
 export function toPrescriptionItemResponse(
-  item: PrescriptionItem,
+  item: PrescriptionItemWithMedicine,
 ): PrescriptionItemResponse {
   return {
     id: item.id.toString(),
     uuid: item.uuid,
     prescriptionId: item.prescriptionId.toString(),
     medicineId: item.medicineId.toString(),
+    medicineName: item.medicine?.medicineName ?? null,
     unitId: item.unitId.toString(),
     lineNumber: item.lineNumber,
     prescribedQuantity: serializeDecimal(item.prescribedQuantity) ?? '0',

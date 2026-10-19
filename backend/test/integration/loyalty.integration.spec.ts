@@ -23,7 +23,9 @@ describe('Loyalty programs (integration)', () => {
   afterAll(async () => closeHttpTestApp(app));
 
   it('GET /loyalty-programs returns 401 without token', () => {
-    return request(app.getHttpServer()).get('/loyalty-programs?page=1').expect(401);
+    return request(app.getHttpServer())
+      .get('/loyalty-programs?page=1')
+      .expect(401);
   });
 
   it('GET /loyalty-programs returns envelope', async () => {

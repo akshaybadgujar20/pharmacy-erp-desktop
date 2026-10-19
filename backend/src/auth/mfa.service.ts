@@ -83,4 +83,26 @@ export class MfaService {
 
     return { enrolled: true };
   }
+
+  async verifyLoginCode(userId: bigint, token: string): Promise<void> {
+    const user = await this.prisma.client.user.findFirst({
+      where: { id: userId, deletedAt: null },
+    });
+    if (!user?.totpEnabled || !user.totpSecret) {
+      throw new ApplicationException(
+        ErrorCode.BAD_REQUEST,
+        'MFA is not enabled for this user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const valid = await verify({ token, secret: user.totpSecret });
+    if (!valid) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid verification code',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
 }

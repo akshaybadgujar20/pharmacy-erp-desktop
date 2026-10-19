@@ -30,6 +30,9 @@ import { buildSalesReceiptHtml } from './sales-receipt.util';
 import { MedicineService } from '../../medicine/medicines/medicine.service';
 import { PrinterConfigurationService } from '../../configuration/printer-configurations/printer-configuration.service';
 import { SalesInvoiceService } from './sales-invoice.service';
+import { ApiClientError } from '../../../core/models/api-response.types';
+import { AuthService } from '../../../core/services/auth.service';
+import { toEpochMs } from '../sales-date.util';
 
 @Component({
   selector: 'app-sales-invoice-counter',
@@ -55,6 +58,7 @@ import { SalesInvoiceService } from './sales-invoice.service';
 export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly salesInvoiceService = inject(SalesInvoiceService);
+  private readonly auth = inject(AuthService);
   private readonly medicineService = inject(MedicineService);
   private readonly printerConfigs = inject(PrinterConfigurationService);
   private defaultReceiptPrinter = '';
@@ -81,6 +85,8 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   readonly activeTab = signal<'items' | 'payments'>('items');
   readonly scheduleWarning = signal('');
   readonly seedMedicineId = signal<string | null>(null);
+  readonly seedSoldQuantity = signal<number | null>(null);
+  readonly seedToken = signal(0);
   readonly rxPostErrorVisible = signal(false);
   readonly receiptPreviewVisible = signal(false);
   readonly receiptPreviewHtml = signal<SafeHtml>('');
@@ -107,6 +113,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
     this.invoiceId.set(id);
     this.load(id);
     this.shortcuts.registerHandler('sales.payment', () => this.focusPayments());
+    this.shortcuts.registerHandler('sales.new', () => this.startNewCounterSale());
     this.activeSave.register(() => this.saveHeader());
     this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => this.onBarcodeScan(code));
     this.printerConfigs
@@ -128,6 +135,8 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           return;
         }
         this.seedMedicineId.set(medicine.id);
+        this.seedSoldQuantity.set(1);
+        this.seedToken.set(Date.now());
         this.activeTab.set('items');
       },
     });
@@ -135,11 +144,14 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
 
   onAddFromPrescription(event: PrescriptionLineAddEvent): void {
     this.seedMedicineId.set(event.medicineId);
+    this.seedSoldQuantity.set(event.soldQuantity);
+    this.seedToken.set(Date.now());
     this.activeTab.set('items');
   }
 
   ngOnDestroy(): void {
     this.shortcuts.unregisterHandler('sales.payment');
+    this.shortcuts.unregisterHandler('sales.new');
     this.activeSave.unregister();
     this.unsubscribeBarcode?.();
   }
@@ -200,8 +212,21 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           this.posting.set(false);
           const message = resolveApiErrorMessage(error);
           this.errorMessage.set(message);
-          if (message.toLowerCase().includes('prescription')) {
-            this.scheduleWarning.set(`${message} — reactivate the prescription and retry.`);
+          const code =
+            error instanceof ApiClientError ? error.code : '';
+          const rxRelated =
+            message.toLowerCase().includes('prescription') ||
+            message.toLowerCase().includes('schedule h') ||
+            [
+              'SCHEDULE_H_PRESCRIPTION_REQUIRED',
+              'PRESCRIPTION_NOT_FOUND',
+              'PRESCRIPTION_QUANTITY_EXCEEDED',
+              'PRESCRIPTION_NOT_DRAFT',
+            ].includes(code);
+          if (rxRelated) {
+            this.scheduleWarning.set(
+              `${message} — open the prescription, reactivate if expired, then retry post.`,
+            );
             this.rxPostErrorVisible.set(true);
           }
         },
@@ -212,6 +237,29 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
     if (this.canPay()) {
       this.activeTab.set('payments');
     }
+  }
+
+  recordPayment(): void {
+    this.receiptPreviewVisible.set(false);
+    this.activeTab.set('payments');
+  }
+
+  private startNewCounterSale(): void {
+    const branchId = this.auth.currentUser()?.branchId;
+    if (!branchId) {
+      this.router.navigate(['/sales/invoices']);
+      return;
+    }
+    this.salesInvoiceService
+      .create({
+        branchId,
+        invoiceDate: toEpochMs(new Date().toISOString()),
+        salesType: 'RETAIL_OTC',
+      })
+      .subscribe({
+        next: (invoice) =>
+          this.router.navigate(['/sales/invoices', invoice.id, 'counter']),
+      });
   }
 
   private load(id: string): void {

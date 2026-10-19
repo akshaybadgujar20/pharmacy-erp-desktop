@@ -76,6 +76,11 @@
           <p-sidebar-footer>
             <p-sidebar-menu>
               <p-sidebar-menu-item>
+                <a pSidebarMenuButton class="p-1!" routerLink="/security/mfa-enroll">
+                  <span>MFA</span>
+                </a>
+              </p-sidebar-menu-item>
+              <p-sidebar-menu-item>
                 <a pSidebarMenuButton class="p-1!" routerLink="/security/change-password">
                   <p-avatar [label]="userInitials()" shape="circle" class="size-6 shrink-0 text-xs" />
                   <span>{{ currentUser()?.username ?? 'User' }}</span>

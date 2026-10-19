@@ -23,7 +23,9 @@ describe('Closing (integration)', () => {
   afterAll(async () => closeHttpTestApp(app));
 
   it('GET /closing/pre-close-checklist returns 401 without token', () => {
-    return request(app.getHttpServer()).get('/closing/pre-close-checklist').expect(401);
+    return request(app.getHttpServer())
+      .get('/closing/pre-close-checklist')
+      .expect(401);
   });
 
   it('GET /closing/pre-close-checklist returns checklist', async () => {

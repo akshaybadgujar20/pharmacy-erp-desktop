@@ -27,7 +27,9 @@ describe('Sales flow (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    const listBody = listResponse.body as ApiEnvelope<{ id: string; status: string }[]>;
+    const listBody = listResponse.body as ApiEnvelope<
+      { id: string; status: string }[]
+    >;
     expect(listBody.success).toBe(true);
     const draft = listBody.data?.find((row) => row.status === 'DRAFT');
     if (!draft) {

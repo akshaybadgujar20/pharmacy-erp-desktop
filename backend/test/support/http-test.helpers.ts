@@ -86,32 +86,34 @@ export async function loginAsAdmin(
 }
 
 export async function getSeededIds(prisma: PrismaService): Promise<SeededIds> {
-  const [branch, supplier, customer, medicine, batch, user] = await Promise.all([
-    prisma.client.branch.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.client.supplier.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.client.customer.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.client.medicine.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.client.batch.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-    prisma.client.user.findFirst({
-      where: { deletedAt: null, isActive: true },
-      orderBy: { id: 'asc' },
-    }),
-  ]);
+  const [branch, supplier, customer, medicine, batch, user] = await Promise.all(
+    [
+      prisma.client.branch.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+      prisma.client.supplier.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+      prisma.client.customer.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+      prisma.client.medicine.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+      prisma.client.batch.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+      prisma.client.user.findFirst({
+        where: { deletedAt: null, isActive: true },
+        orderBy: { id: 'asc' },
+      }),
+    ],
+  );
 
   if (!branch) {
     throw new Error('No active branch in test database');

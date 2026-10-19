@@ -21,6 +21,11 @@
     <p><strong>Action:</strong> {{ row.action }}</p>
     <p><strong>Entity:</strong> {{ row.entityType }} {{ row.entityId }}</p>
     <p><strong>Summary:</strong> {{ row.summary }}</p>
-    <p><strong>Time:</strong> {{ row.createdAt }}</p>
+    <p><strong>User ID:</strong> {{ row.userId ?? '—' }}</p>
+    <p><strong>Branch ID:</strong> {{ row.branchId ?? '—' }}</p>
+    <p><strong>Entity UUID:</strong> {{ row.entityUuid ?? '—' }}</p>
+    <p><strong>IP:</strong> {{ row.ipAddress ?? '—' }}</p>
+    <p><strong>Correlation:</strong> {{ row.correlationId ?? '—' }}</p>
+    <p><strong>Action time:</strong> {{ row.actionTimestamp ?? row.createdAt }}</p>
   }
 </p-dialog>

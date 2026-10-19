@@ -23,7 +23,9 @@ describe('Sales invoices (integration)', () => {
   afterAll(async () => closeHttpTestApp(app));
 
   it('GET /sales-invoices returns 401 without token', () => {
-    return request(app.getHttpServer()).get('/sales-invoices?page=1').expect(401);
+    return request(app.getHttpServer())
+      .get('/sales-invoices?page=1')
+      .expect(401);
   });
 
   it('GET /sales-invoices returns envelope', async () => {

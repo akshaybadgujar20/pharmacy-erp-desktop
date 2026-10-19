@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { LowerCasePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +20,7 @@ import {
 } from '../purchase-date.util';
 import { DocumentChangeHistoryPanelComponent } from '../../../shared/audit/document-change-history-panel.component';
 import { PurchaseInvoiceItemsTabComponent } from './purchase-invoice-items-tab.component';
+import { PurchaseInvoiceMatchSummary } from './purchase-invoice.models';
 import { PurchaseInvoiceService } from './purchase-invoice.service';
 
 @Component({
@@ -31,6 +33,7 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
     TabsModule,
     DocumentChangeHistoryPanelComponent,
     PurchaseInvoiceItemsTabComponent,
+    LowerCasePipe,
   ],
   templateUrl: './purchase-invoice-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,7 +53,7 @@ export class PurchaseInvoiceDetailComponent implements OnInit {
   readonly workflowRunning = signal('');
   readonly errorMessage = signal('');
   readonly version = signal('0');
-  readonly matchSummary = signal<string>('');
+  readonly matchSummary = signal<PurchaseInvoiceMatchSummary | null>(null);
 
   readonly isDraft = computed(() => this.status() === 'DRAFT');
   readonly canPost = computed(() => this.status() === 'DRAFT');
@@ -202,13 +205,7 @@ export class PurchaseInvoiceDetailComponent implements OnInit {
           remarks: invoice.remarks ?? '',
         });
         this.purchaseInvoiceService.getMatchSummary(id).subscribe({
-          next: (summary) =>
-            this.matchSummary.set(
-              `${summary.matchStatus}: invoice ${summary.invoiceLineCount} lines (${summary.invoiceTotalQty} qty)` +
-                (summary.goodsReceiptId
-                  ? ` vs GRN ${summary.grnLineCount} lines (${summary.grnTotalQty} qty)`
-                  : ''),
-            ),
+          next: (summary) => this.matchSummary.set(summary),
         });
       },
       error: (error) => this.handleError(error),

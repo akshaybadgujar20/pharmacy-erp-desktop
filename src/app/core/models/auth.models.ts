@@ -14,6 +14,17 @@ export interface AuthTokenResponse {
   user: AuthUser;
 }
 
+export interface MfaLoginChallengeResponse {
+  mfaRequired: true;
+  mfaChallengeToken: string;
+}
+
+export function isMfaLoginChallenge(
+  value: AuthTokenResponse | MfaLoginChallengeResponse,
+): value is MfaLoginChallengeResponse {
+  return 'mfaRequired' in value && value.mfaRequired === true;
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

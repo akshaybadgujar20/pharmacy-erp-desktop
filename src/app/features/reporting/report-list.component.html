@@ -1,4 +1,18 @@
 <div class="page-layout">
+  @if (favoriteReports().length > 0) {
+    <section class="report-favourites">
+      <h3>Favourites</h3>
+      <ul>
+        @for (report of favoriteReports(); track report.id) {
+          <li>
+            <button type="button" (click)="openFavorite(report)">
+              {{ report.name }}
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
   <div class="report-filters">
     <button type="button" (click)="setCategory('')">All</button>
     <button type="button" (click)="setCategory('party')">Party</button>

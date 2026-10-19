@@ -157,7 +157,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-SEC-1: Self-service change password at `/security/change-password` (also linked from shell user menu); legacy `/settings/change-password` redirects.
+- ~~UI-SEC-1~~ — change password at `/security/change-password`; MFA enroll link in shell; login TOTP step when `totpEnabled`.
 
 ---
 
@@ -192,7 +192,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-MED-1: F4 "search medicine" shortcut not wired to global search.
+- ~~UI-MED-1~~ — F4 opens medicine search; search navigates to medicine list with `search` query param.
 - UI-MED-2: Barcode wedge on medicine list (Electron); stock list and counter line scan Planned.
 
 ---
@@ -232,11 +232,11 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-INV-1: Stock list row action → new adjustment (query params) — Partial.
+- ~~UI-INV-1~~ — stock list adjust action → `/inventory/stock-adjustments/new` with branch/batch query params.
 
 ### UX gaps
 
-- UI-INV-2: FEFO preview by medicine on stock list — Partial.
+- ~~UI-INV-2~~ — FEFO preview dialog on stock list (`GET /inventory/fefo-preview`).
 - ~~UI-INV-3~~ — barcode scan on stock list (Electron).
 
 ---
@@ -278,7 +278,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UX gaps
 
 - ~~UI-PUR-1~~ — PO → GRN wizard at `/purchase/grn-wizard` (nav under Purchase).
-- UI-PUR-2: Three-way match indicators not surfaced on invoice screen.
+- ~~UI-PUR-2~~ — purchase invoice overview shows match badge + per-medicine line table from `match-summary`.
 
 ---
 
@@ -303,7 +303,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | GAP-2 | Payment captured via separate payment flow | Low | Accepted v1 |
 | GAP-3 | Return: only RESTOCK | Medium | Accepted v1 |
 | GAP-4 | Return refund on approve | — | Resolved |
-| GAP-5 | Rx dispense on post; line-level UI Partial | Medium | Open (UI) |
+| GAP-5 | Rx dispense on post; counter Rx panel + seed line UX | Medium | Mitigated (UI) |
 | GAP-6 | Schedule-H / controlled-drug check at post | — | Resolved |
 | GAP-7 | Sales module: co-located unit specs + `sales-flow.e2e-spec.ts` smoke | Medium | Mitigated |
 | GAP-8 | No end-to-end sales workflow tests | Medium | Open |
@@ -319,12 +319,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-SALES-1: Counter exists; medicine/batch line lookups on items tab Partial.
+- ~~UI-SALES-1~~ — counter items tab uses medicine lookup + batch FEFO sort (same services as admin detail).
 - ~~UI-SALES-2~~ — loyalty redeem on counter post; earn via backend integration.
 
 ### UX gaps
 
-- UI-SALES-3: F2/F8 on sales list and counter; global F4/Ctrl+S Partial.
+- ~~UI-SALES-3~~ — F2 new sale (list + counter), F8 payments on counter, F4 medicine search (shell), Ctrl+S header save on counter.
 - UI-SALES-4: Counter consolidates post/pay/print; admin detail path remains separate.
 - ~~UI-SALES-5~~ — receipt print via `ElectronService` (printer config mapping Partial).
 
@@ -366,12 +366,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-FIN-1: No month-end close wizard screen.
+- ~~UI-FIN-1~~ — month-end close checklist + force-close reason aligned with FY close API.
 - UI-FIN-2: Trial balance / GST available via `/reports` runner; dedicated finance dashboard views Planned.
 
 ### UX gaps
 
-- UI-FIN-3: Cash-drawer reconciliation UI Planned.
+- ~~UI-FIN-3~~ — cash drawer variance (v1 manual system receipts + local notes persistence).
 
 ---
 
@@ -477,12 +477,12 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-RX-1: No dispense workflow linking Rx lines to invoice lines in UI.
+- ~~UI-RX-1~~ — counter Rx panel (medicine name, qty, add-to-invoice seeds items tab).
 
 ### UX gaps
 
-- UI-RX-2: Schedule-H block at sale not surfaced in billing UX.
-- UI-RX-3: Reactivate on Rx detail; override-at-sale dialog Partial (reactivate-then-retry).
+- ~~UI-RX-2~~ — counter post errors dialog with Rx/Schedule-H messages + prescription link.
+- ~~UI-RX-3~~ — expired Rx hint on detail; counter reactivate-then-retry messaging (no override API).
 
 ---
 
@@ -554,7 +554,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- ~~UI-AUD-3~~ — change history panel on sales/purchase invoice and customer detail; log detail drawer Partial.
+- ~~UI-AUD-3~~ — audit log detail drawer includes user, branch, IP, correlation, entity UUID.
 
 ---
 
@@ -678,8 +678,8 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-REP-1: All seeded catalog reports appear in list when permissions granted; category filters may need polish.
-- UI-REP-2: No saved report favourites or scheduled runs.
+- ~~UI-REP-1~~ — report list category chips; admin seed includes `REPORT_VIEW`, per-report permissions, `REPORTING:REPORT:READ`.
+- UI-REP-2: Favourites section on report list + runner; scheduled runs **Deferred** (no cron UI).
 
 ### UX gaps
 
@@ -710,14 +710,14 @@ Hardware and device integration (see [integrations-and-devices.md](./integration
 
 ### UI gaps
 
-- UI-DEV-1: Print preview dialog before receipt print (Partial).
-- UI-DEV-2: No payment terminal configuration screen.
+- ~~UI-DEV-1~~ — receipt preview dialog on counter before Electron print.
+- ~~UI-DEV-2~~ — payment terminal stub screen under configuration (no live gateway).
 
 ### UX gaps
 
 - ~~UI-DEV-3~~ — receipt print from counter post via Electron.
 - ~~UI-DEV-4~~ — barcode wedge on medicine list and counter (Partial).
-- UI-DEV-5: Card/UPI terminal flow Planned.
+- ~~UI-DEV-5~~ — payment terminal placeholder (integrations disabled v1).
 
 ---
 

@@ -282,7 +282,9 @@ describe('Party Management (e2e)', () => {
       })
       .expect(200);
 
-    const updateBody = updateRes.body as ApiEnvelope<{ version: number | string }>;
+    const updateBody = updateRes.body as ApiEnvelope<{
+      version: number | string;
+    }>;
     expect(Number(updateBody.data?.version)).toBe(currentVersion + 1);
 
     await request(app.getHttpServer())

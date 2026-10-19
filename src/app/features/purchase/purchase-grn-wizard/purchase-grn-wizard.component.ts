@@ -10,6 +10,7 @@ import { PurchaseOrderService } from '../purchase-orders/purchase-order.service'
   template: `
     <h2>PO to GRN wizard</h2>
     <p>Select a posted purchase order, then create a goods receipt from it.</p>
+    <p>After GRN is saved, open the GRN detail to post it, then create a purchase invoice linked to that GRN.</p>
     <ul>
       @for (row of orders(); track row.id) {
         <li>

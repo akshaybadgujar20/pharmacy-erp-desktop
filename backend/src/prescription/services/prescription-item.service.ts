@@ -64,6 +64,7 @@ export class PrescriptionItemService {
         orderBy: { lineNumber: 'asc' },
         skip: (page - 1) * pageSize,
         take: pageSize,
+        include: { medicine: { select: { medicineName: true } } },
       }),
     ]);
 

@@ -8,7 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
   imports: [ReactiveFormsModule, ButtonModule, InputTextModule],
   template: `
     <section class="page-layout">
-      <h2>Payment terminal (stub)</h2>
+      <h2>Payment terminal</h2>
+      <p>Live gateway integrations are disabled in v1. Configure device IDs for future use only.</p>
       <form [formGroup]="form" (ngSubmit)="save()">
         <input pInputText formControlName="deviceId" placeholder="Device ID" />
         <input pInputText formControlName="provider" placeholder="Provider" />

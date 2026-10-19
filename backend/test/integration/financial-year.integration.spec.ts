@@ -60,7 +60,10 @@ describe('Financial year enforcement (integration)', () => {
       .get(`/financial-years/${financialYearId}`)
       .set('Authorization', `Bearer ${adminToken}`)
       .expect(200);
-    const freshBody = fresh.body as ApiEnvelope<{ version: string; status: string }>;
+    const freshBody = fresh.body as ApiEnvelope<{
+      version: string;
+      status: string;
+    }>;
     financialYearVersion = freshBody.data?.version ?? financialYearVersion;
 
     if (freshBody.data?.status === 'CLOSED') {
@@ -83,10 +86,12 @@ describe('Financial year enforcement (integration)', () => {
       .set('Authorization', `Bearer ${adminToken}`);
 
     if (closeResponse.status === 409) {
-      const getBody = (await request(app.getHttpServer())
-        .get(`/financial-years/${financialYearId}`)
-        .set('Authorization', `Bearer ${adminToken}`)
-        .expect(200)).body as ApiEnvelope<{ status: string }>;
+      const getBody = (
+        await request(app.getHttpServer())
+          .get(`/financial-years/${financialYearId}`)
+          .set('Authorization', `Bearer ${adminToken}`)
+          .expect(200)
+      ).body as ApiEnvelope<{ status: string }>;
       expect(['CLOSED', 'OPEN']).toContain(getBody.data?.status);
       return;
     }

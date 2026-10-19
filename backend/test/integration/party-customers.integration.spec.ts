@@ -23,7 +23,9 @@ describe('Party customers (integration)', () => {
   afterAll(async () => closeHttpTestApp(app));
 
   it('GET /customers returns 401 without token', () => {
-    return request(app.getHttpServer()).get('/customers?page=1&pageSize=5').expect(401);
+    return request(app.getHttpServer())
+      .get('/customers?page=1&pageSize=5')
+      .expect(401);
   });
 
   it('GET /customers lists seeded customers', async () => {

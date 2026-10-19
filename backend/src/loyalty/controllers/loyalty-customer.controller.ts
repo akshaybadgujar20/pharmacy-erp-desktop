@@ -7,7 +7,9 @@ import { LoyaltyCustomerService } from '../services/loyalty-customer.service';
 
 @Controller('customers/:customerId/loyalty')
 export class LoyaltyCustomerController {
-  constructor(private readonly loyaltyCustomerService: LoyaltyCustomerService) {}
+  constructor(
+    private readonly loyaltyCustomerService: LoyaltyCustomerService,
+  ) {}
 
   @Get('summary')
   @RequirePermissions('LOYALTY:LOYALTY_PROGRAM:READ')

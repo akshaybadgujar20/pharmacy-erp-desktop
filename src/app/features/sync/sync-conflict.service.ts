@@ -26,7 +26,16 @@ export class SyncConflictAdminService {
     return this.api.get<SyncConflictDetail>(`/sync-conflicts/${id}`);
   }
 
-  resolve(id: string, version: string, remarks?: string) {
-    return this.api.post(`/sync-conflicts/${id}/resolve`, { version, remarks });
+  resolve(
+    id: string,
+    version: string,
+    resolutionStrategy: string,
+    remarks?: string,
+  ) {
+    return this.api.post(`/sync-conflicts/${id}/resolve`, {
+      version,
+      resolutionStrategy,
+      remarks,
+    });
   }
 }

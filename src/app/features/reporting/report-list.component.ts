@@ -14,6 +14,7 @@ import {
 import { REPORT_LIST_GRID_CONFIG } from './report-list-grid.config';
 import { ReportDefinitionMeta } from './report.models';
 import { ReportService } from './report.service';
+import { ReportFavorite, ReportFavoriteService } from './report-favorite.service';
 
 @Component({
   selector: 'app-report-list',
@@ -24,6 +25,7 @@ import { ReportService } from './report.service';
 })
 export class ReportListComponent implements OnInit {
   private readonly reportService = inject(ReportService);
+  private readonly favorites = inject(ReportFavoriteService);
   private readonly router = inject(Router);
 
   readonly gridConfig = REPORT_LIST_GRID_CONFIG;
@@ -33,9 +35,14 @@ export class ReportListComponent implements OnInit {
   readonly loading = signal(false);
   readonly search = signal('');
   readonly category = signal('');
+  readonly favoriteReports = signal<ReportDefinitionMeta[]>([]);
 
   ngOnInit(): void {
     this.load();
+  }
+
+  openFavorite(report: ReportDefinitionMeta): void {
+    this.router.navigate(['/reports', report.id]);
   }
 
   onFilterChange(event: GridFilterChange): void {
@@ -53,6 +60,14 @@ export class ReportListComponent implements OnInit {
       next: (reports) => {
         this.allRows.set(reports);
         this.applyFilter();
+        this.favorites.list().subscribe({
+          next: (favRows: ReportFavorite[]) => {
+            const codes = new Set(favRows.map((row) => row.reportCode));
+            this.favoriteReports.set(
+              reports.filter((report) => codes.has(report.id)),
+            );
+          },
+        });
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

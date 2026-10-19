@@ -30,7 +30,7 @@ Consolidated list of known gaps from L1 workflow diagram generators. Update when
 
 | ID | Module | Diagram | Gap summary | Severity | Status |
 |----|--------|---------|-------------|----------|--------|
-| GAP-2 | Sales | sales-invoice-flow | Payment not captured at finalise — separate payment-flow | Low | Accepted v1 |
+| GAP-2 | Sales | sales-invoice-flow | Payment not captured at finalise — counter guides to Payments tab / Record payment | Low | Accepted v1 (UX mitigated) |
 | GAP-3 | Sales | sales-invoice-flow | Return: only RESTOCK supported | Medium | Accepted v1 |
 | GAP-7 | Sales | sales-invoice-flow | Unit specs scaffolded per service; deepen behavior tests over time | Medium | Mitigated |
 | GAP-8 | Sales | sales-invoice-flow | `sales-flow.e2e-spec.ts` smoke (list/load draft) | Medium | Mitigated |
@@ -41,7 +41,7 @@ Consolidated list of known gaps from L1 workflow diagram generators. Update when
 | GAP-ADJ-1 | Inventory | stock-adjustment-flow | No submit step — DRAFT → approve directly | Low | Accepted v1 |
 | GAP-ADJ-2 | Inventory | stock-adjustment-flow | No cancel — reversals via new adjustment | Medium | Accepted v1 |
 | GAP-ADJ-3 | Inventory | stock-adjustment-flow | No finance valuation posting | Low | Open |
-| GAP-XFER-1 | Inventory | stock-transfer-flow | inTransitQuantity bucket not implemented | Medium | Deferred v2 |
+| GAP-XFER-1 | Inventory | stock-transfer-flow | `inTransitQuantity` updated on dispatch/receive (persistence smoke) | Medium | Mitigated |
 | GAP-PAY-2 | Payment | payment-flow | Dual settlement: SalesPayment + Receipt | Info | By design |
 | GAP-RET-2 | Return | return-flow | RESTOCK only — no quarantine/expired | Medium | Accepted v1 |
 | GAP-ME-3 | Month-end | month-end-flow | Trial balance — no report | Medium | Deferred |

@@ -8,6 +8,7 @@ import { OutboxService } from '../persistence/outbox/outbox.service';
 import { UnitOfWorkService } from '../persistence/unit-of-work/unit-of-work.service';
 import { PrismaService } from '../prisma.service';
 import { AuthService } from './auth.service';
+import { MfaService } from './mfa.service';
 import { PasswordService } from './password.service';
 
 describe('AuthService', () => {
@@ -31,7 +32,7 @@ describe('AuthService', () => {
     rolePermission: { findMany: jest.Mock };
   };
   let passwordService: { verify: jest.Mock };
-  let jwtService: { sign: jest.Mock };
+  let jwtService: { sign: jest.Mock; verify: jest.Mock };
   let unitOfWork: { run: jest.Mock };
   let auditService: { log: jest.Mock };
   let outboxService: { enqueue: jest.Mock };
@@ -67,6 +68,7 @@ describe('AuthService', () => {
 
     jwtService = {
       sign: jest.fn().mockReturnValue('signed-jwt'),
+      verify: jest.fn(),
     };
 
     unitOfWork = {
@@ -92,6 +94,10 @@ describe('AuthService', () => {
         { provide: UnitOfWorkService, useValue: unitOfWork },
         { provide: AuditService, useValue: auditService },
         { provide: OutboxService, useValue: outboxService },
+        {
+          provide: MfaService,
+          useValue: { verifyLoginCode: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -138,6 +144,7 @@ describe('AuthService', () => {
       failedLoginAttempts: 0,
       lockedUntil: null,
       mustChangePassword: false,
+      totpEnabled: false,
       deletedAt: null,
     });
     passwordService.verify.mockResolvedValue(true);
@@ -159,8 +166,8 @@ describe('AuthService', () => {
       mockRequest,
     );
 
-    expect(result.accessToken).toBe('signed-jwt');
-    expect(result.user.username).toBe('admin');
+    expect('accessToken' in result && result.accessToken).toBe('signed-jwt');
+    expect('user' in result && result.user.username).toBe('admin');
     expect(jwtService.sign).toHaveBeenCalled();
     expect(auditService.log).toHaveBeenCalled();
   });

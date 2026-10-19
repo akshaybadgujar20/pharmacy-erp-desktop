@@ -19,24 +19,24 @@ import { Stock } from './stock.models';
 import { STOCK_TOOLBAR_CONFIG } from './stock-toolbar.config';
 import { ElectronService } from '../../../core/services/electron.service';
 import { StockService } from './stock.service';
-import { BatchService } from '../batches/batch.service';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-stock-list',
   standalone: true,
-  imports: [RouterLink, AppToolbarComponent, AppGridComponent],
+  imports: [RouterLink, AppToolbarComponent, AppGridComponent, DialogModule],
   templateUrl: './stock-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StockListComponent implements OnInit, OnDestroy {
   private readonly stockService = inject(StockService);
   private readonly router = inject(Router);
-  private readonly batchService = inject(BatchService);
   private readonly electron = inject(ElectronService);
   private readonly shortcuts = inject(KeyboardShortcutService);
   private unsubscribeBarcode?: () => void;
 
   readonly fefoPreview = signal<string[]>([]);
+  readonly fefoDialogVisible = signal(false);
 
   readonly toolbarConfig = STOCK_TOOLBAR_CONFIG;
   readonly gridConfig = STOCK_GRID_CONFIG;
@@ -63,8 +63,12 @@ export class StockListComponent implements OnInit, OnDestroy {
     this.unsubscribeBarcode?.();
   }
 
-  loadFefoForMedicine(medicineId: string): void {
-    this.stockService.fefoPreview(medicineId).subscribe({
+  openFefoDialog(medicineId: string): void {
+    const id = medicineId.trim();
+    if (!id) {
+      return;
+    }
+    this.stockService.fefoPreview(id).subscribe({
       next: (rows) => {
         this.fefoPreview.set(
           rows.map(
@@ -72,6 +76,7 @@ export class StockListComponent implements OnInit, OnDestroy {
               `${row.batchNumber} exp ${row.expiryDate} avail ${row.availableQuantity} (batch ${row.batchId})`,
           ),
         );
+        this.fefoDialogVisible.set(true);
       },
     });
   }

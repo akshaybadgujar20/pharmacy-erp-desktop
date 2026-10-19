@@ -3,6 +3,7 @@ export interface PrescriptionItem {
   uuid: string;
   prescriptionId: string;
   medicineId: string;
+  medicineName?: string | null;
   unitId: string;
   lineNumber: number;
   prescribedQuantity: string;

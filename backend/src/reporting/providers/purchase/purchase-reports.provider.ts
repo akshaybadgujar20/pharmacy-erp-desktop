@@ -104,7 +104,11 @@ export class PurchaseReportsProvider implements OnModuleInit {
 
     return {
       columns: [
-        { key: 'purchaseOrderNumber', label: 'PO #', type: ReportColumnTypes.STRING },
+        {
+          key: 'purchaseOrderNumber',
+          label: 'PO #',
+          type: ReportColumnTypes.STRING,
+        },
         { key: 'orderDate', label: 'Date', type: ReportColumnTypes.DATE },
         { key: 'status', label: 'Status', type: ReportColumnTypes.STRING },
         {
@@ -201,13 +205,15 @@ export class PurchaseReportsProvider implements OnModuleInit {
         party: { select: { displayName: true } },
       },
     });
-    const supplierMap = new Map(
-      suppliers.map((s) => [s.id.toString(), s]),
-    );
+    const supplierMap = new Map(suppliers.map((s) => [s.id.toString(), s]));
 
     return {
       columns: [
-        { key: 'supplierCode', label: 'Supplier', type: ReportColumnTypes.STRING },
+        {
+          key: 'supplierCode',
+          label: 'Supplier',
+          type: ReportColumnTypes.STRING,
+        },
         {
           key: 'invoiceCount',
           label: 'Invoices',

@@ -31,6 +31,8 @@ import {
 import { ChangeRequiredPinDto } from './dto/change-required-pin.dto';
 import { ChangePinDto } from './dto/change-pin.dto';
 import { LoginWithPinDto } from './dto/loginWithPin.dto';
+import { CompleteMfaLoginDto } from './dto/complete-mfa-login.dto';
+import { MfaService } from './mfa.service';
 
 export interface AuthTokenResponse {
   accessToken: string;
@@ -46,6 +48,11 @@ export interface AuthTokenResponse {
   };
 }
 
+export interface MfaLoginChallengeResponse {
+  mfaRequired: true;
+  mfaChallengeToken: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -55,9 +62,13 @@ export class AuthService {
     private readonly unitOfWork: UnitOfWorkService,
     private readonly auditService: AuditService,
     private readonly outboxService: OutboxService,
+    private readonly mfaService: MfaService,
   ) {}
 
-  async login(dto: LoginDto, req: Request): Promise<AuthTokenResponse> {
+  async login(
+    dto: LoginDto,
+    req: Request,
+  ): Promise<AuthTokenResponse | MfaLoginChallengeResponse> {
     const user = await this.prisma.client.user.findFirst({
       where: {
         username: dto.username,
@@ -105,6 +116,81 @@ export class AuthService {
       );
     }
 
+    if (user.totpEnabled) {
+      const mfaChallengeToken = this.jwtService.sign(
+        { sub: user.id.toString(), purpose: 'mfa-login' },
+        { expiresIn: '5m' },
+      );
+      return { mfaRequired: true, mfaChallengeToken };
+    }
+
+    return this.issueSessionForUser(user, dto, req);
+  }
+
+  async completeMfaLogin(
+    dto: CompleteMfaLoginDto,
+    req: Request,
+  ): Promise<AuthTokenResponse> {
+    let payload: JwtPayload & { purpose?: string };
+    try {
+      payload = this.jwtService.verify(dto.mfaChallengeToken);
+    } catch {
+      throw new ApplicationException(
+        ErrorCode.AUTH_SESSION_EXPIRED,
+        'MFA challenge expired. Sign in again.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    if (payload.purpose !== 'mfa-login' || !payload.sub) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid MFA challenge',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const userId = safeBigInt(payload.sub);
+    if (userId == null) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid MFA challenge',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    const user = await this.prisma.client.user.findFirst({
+      where: { id: userId, deletedAt: null },
+    });
+
+    if (!user || !user.isActive || user.username !== dto.username) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or password',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const passwordValid = await this.passwordService.verify(
+      dto.password,
+      user.passwordHash,
+    );
+    if (!passwordValid) {
+      throw new ApplicationException(
+        ErrorCode.AUTH_INVALID_CREDENTIALS,
+        'Invalid username or password',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    await this.mfaService.verifyLoginCode(userId, dto.totpCode);
+    return this.issueSessionForUser(user, dto, req);
+  }
+
+  private async issueSessionForUser(
+    user: { id: bigint; username: string },
+    dto: LoginDto,
+    req: Request,
+  ): Promise<AuthTokenResponse> {
     const { companyId, branchId } = await this.resolveTenantScope(
       user.id,
       dto.branchId,

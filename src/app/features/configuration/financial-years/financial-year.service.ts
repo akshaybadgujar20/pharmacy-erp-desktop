@@ -32,9 +32,20 @@ export class FinancialYearService {
     return this.api.patch<FinancialYear>(`${this.basePath}/${id}`, body);
   }
 
-  close(id: string, version: string): Observable<FinancialYear> {
+  close(
+    id: string,
+    version: string,
+    options?: { force?: boolean; forceReason?: string },
+  ): Observable<FinancialYear> {
+    const params = new URLSearchParams({ version });
+    if (options?.force) {
+      params.set('force', 'true');
+    }
+    if (options?.forceReason?.trim()) {
+      params.set('forceReason', options.forceReason.trim());
+    }
     return this.api.post<FinancialYear>(
-      `${this.basePath}/${id}/close?version=${version}`,
+      `${this.basePath}/${id}/close?${params.toString()}`,
     );
   }
 

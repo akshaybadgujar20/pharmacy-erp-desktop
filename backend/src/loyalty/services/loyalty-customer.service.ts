@@ -40,10 +40,11 @@ export class LoyaltyCustomerService {
       );
     }
 
-    const membership = await this.prisma.client.customerLoyaltyMembership.findFirst({
-      where: { customerId, status: 'ACTIVE', deletedAt: null },
-      include: { loyaltyProgram: true },
-    });
+    const membership =
+      await this.prisma.client.customerLoyaltyMembership.findFirst({
+        where: { customerId, status: 'ACTIVE', deletedAt: null },
+        include: { loyaltyProgram: true },
+      });
 
     return {
       customerId: customer.id.toString(),

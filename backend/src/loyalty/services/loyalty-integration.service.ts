@@ -28,7 +28,10 @@ export class LoyaltyIntegrationService {
         isActive: true,
         isDefault: true,
         effectiveFrom: { lte: invoice.invoiceDate },
-        OR: [{ effectiveTo: null }, { effectiveTo: { gte: invoice.invoiceDate } }],
+        OR: [
+          { effectiveTo: null },
+          { effectiveTo: { gte: invoice.invoiceDate } },
+        ],
       },
     });
     if (!program) {
@@ -86,8 +89,7 @@ export class LoyaltyIntegrationService {
 
     const net = new Prisma.Decimal(invoice.netAmount);
     const ratio = new Prisma.Decimal(program.pointsPerAmount);
-    const earned =
-      ratio.gt(0) ? Math.floor(net.div(ratio).toNumber()) : 0;
+    const earned = ratio.gt(0) ? Math.floor(net.div(ratio).toNumber()) : 0;
 
     if (earned > 0) {
       balance += earned;

@@ -5,6 +5,7 @@ import type {
   ReportDefinition,
   ReportDefinitionMeta,
 } from './report-definition.interface';
+import { userCanRunReport } from '../utils/report-permission.util';
 
 @Injectable()
 export class ReportRegistryService {
@@ -49,7 +50,7 @@ export class ReportRegistryService {
 
   listForUser(permissions: string[]): ReportDefinitionMeta[] {
     return this.list().filter((definition) =>
-      permissions.includes(definition.permission),
+      userCanRunReport(permissions, definition.permission),
     );
   }
 }

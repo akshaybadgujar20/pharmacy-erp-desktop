@@ -1,6 +1,9 @@
 import { Prisma } from '@prisma/client';
 import { serializeDecimal } from '../../party/utils/party.util';
-import type { ReportContext, ReportParams } from '../core/report-definition.interface';
+import type {
+  ReportContext,
+  ReportParams,
+} from '../core/report-definition.interface';
 
 export function resolveReportBranchId(
   params: ReportParams,

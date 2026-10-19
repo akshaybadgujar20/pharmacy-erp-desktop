@@ -7,7 +7,10 @@ import { TokenStorageService } from './token-storage.service';
 import {
   AuthTokenResponse,
   AuthUser,
-  LoginRequest, LoginWithPinRequest,
+  isMfaLoginChallenge,
+  LoginRequest,
+  LoginWithPinRequest,
+  MfaLoginChallengeResponse,
 } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
@@ -22,10 +25,40 @@ export class AuthService {
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
 
-  async login(credentials: LoginRequest): Promise<AuthTokenResponse> {
+  async login(
+    credentials: LoginRequest,
+  ): Promise<AuthTokenResponse | MfaLoginChallengeResponse> {
     const deviceInfo = await this.deviceService.getDeviceInfo();
     const response = await firstValueFrom(
-      this.api.post<AuthTokenResponse>('/auth/login', {
+      this.api.post<AuthTokenResponse | MfaLoginChallengeResponse>(
+        '/auth/login',
+        {
+          ...credentials,
+          deviceName: deviceInfo.deviceName,
+          deviceType: deviceInfo.deviceType,
+          operatingSystem: deviceInfo.operatingSystem,
+          applicationVersion: deviceInfo.applicationVersion,
+        },
+      ),
+    );
+
+    if (isMfaLoginChallenge(response)) {
+      return response;
+    }
+
+    await this.persistSession(response);
+    return response;
+  }
+
+  async completeMfaLogin(
+    credentials: LoginRequest & {
+      mfaChallengeToken: string;
+      totpCode: string;
+    },
+  ): Promise<AuthTokenResponse> {
+    const deviceInfo = await this.deviceService.getDeviceInfo();
+    const response = await firstValueFrom(
+      this.api.post<AuthTokenResponse>('/auth/login/mfa', {
         ...credentials,
         deviceName: deviceInfo.deviceName,
         deviceType: deviceInfo.deviceType,
@@ -33,7 +66,6 @@ export class AuthService {
         applicationVersion: deviceInfo.applicationVersion,
       }),
     );
-
     await this.persistSession(response);
     return response;
   }

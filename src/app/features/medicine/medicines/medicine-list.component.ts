@@ -6,7 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
@@ -29,6 +29,7 @@ import { MedicineService } from './medicine.service';
 export class MedicineListComponent implements OnInit, OnDestroy {
   private readonly medicineService = inject(MedicineService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly shortcuts = inject(KeyboardShortcutService);
   private readonly electron = inject(ElectronService);
   private unsubscribeBarcode?: () => void;
@@ -51,6 +52,10 @@ export class MedicineListComponent implements OnInit, OnDestroy {
       this.page.set(1);
       this.load();
     });
+    const querySearch = this.route.snapshot.queryParamMap.get('search');
+    if (querySearch) {
+      this.search.set(querySearch);
+    }
     this.load();
   }
 

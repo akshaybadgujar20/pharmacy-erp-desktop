@@ -1,66 +1,66 @@
-# Graph Report - pharmacy-erp-desktop  (2026-10-16)
+# Graph Report - pharmacy-erp-desktop  (2026-10-19)
 
 ## Corpus Check
-- 1739 files · ~673,313 words
+- 1746 files · ~676,459 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 140 file(s) not represented in the graph (top: .prisma 78, .mdc 23, .scss 17)
 
 ## Summary
-- 17155 nodes · 38715 edges · 1063 communities (970 shown, 93 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 2454 edges (avg confidence: 0.9)
+- 17203 nodes · 38849 edges · 1037 communities (944 shown, 93 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 2466 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fbb4ca31`
+- Built from commit: `4ba12647`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- auditAndLogChanges
+- masters.util.ts
 - @angular/core
 - KeyboardShortcutService
 - toolbar/index.ts
-- sync-log.service.ts
+- services/outbox-admin.service.ts
 - @nestjs/testing
-- .run
+- .enqueue
 - GridFilterChange
 - party.generator.ts
 - GridSelectionState
-- finance.constants.ts
+- FinanceWorkflowDto
 - ref_nestjs_common
 - configuration.util.ts
 - Party module — agent memory model
 - Loyalty
-- ReportDefinition
+- InventoryReportsProvider
 - CreatePriceListDto
 - main-layout.component.ts
-- LoyaltyAdjustmentDto
+- grid/index.ts
 - BranchListComponent
 - ApplicationException
 - Inventory
 - KeyboardShortcutsDialogComponent
 - ReportContext
-- getTenantScope
+- .run
 - backend/package.json
 - AuthService
 - Engineering Standards
 - phase-03-party-management-ado.json
-- medicine.util.ts
+- services/medicine.service.ts
 - ref_path
 - seed.ts
 - RequirePermissions
 - CreateUserDto
 - package.json
 - AppLogger
-- Medicine
+- Party
 - CreatePrinterConfigurationDto
-- UpdateStockAdjustmentDto
+- CreateStockAdjustmentDto
 - CreateBatchDto
 - CreateFinancialYearDto
 - CreateDiscountRuleDto
-- SeedContext
-- CreateSalesPaymentDto
-- report-exporter.service.ts
+- uuid
+- sales.util.ts
+- report.controller.ts
 - settings.controller.ts
 - dialog/index.ts
 - SalesWorkflowDto
@@ -69,9 +69,9 @@
 - Supplier Domain
 - MedicineSalt
 - ReportRegistryService
-- PriceListListComponent
-- CorrelationMiddleware
-- GlobalExceptionFilter
+- medicine-list.component.ts
+- CreateSupplierDto
+- PrescriptionWorkflowDto
 - CreateGoodsReceiptItemDto
 - UpdateSalesReturnItemDto
 - Early Foundations (Implemented)
@@ -80,13 +80,14 @@
 - CreateBarcodeConfigurationDto
 - CreateSequenceGeneratorDto
 - CreatePrescriptionItemDto
-- SettingsService
+- CreateDoctorDto
 - devDependencies
-- NotificationService
+- pharmacy_erp_architecture_docs/README.md
+- CreateStockAdjustmentItemDto
 - CreateCountryDto
-- medicine-salt.controller.ts
-- AppDialog
-- CreatePriceListItemDto
+- ReplaceMedicineSaltsDto
+- StockTakeController
+- UpdateLedgerDto
 - prescription.util.ts
 - CreatePermissionDto
 - CreateRoleDto
@@ -105,39 +106,39 @@
 - dependencies
 - StockAdjustmentItem
 - StockTakeItem
-- StockTake
-- loyalty-customer.controller.ts
+- stock-take-list.component.ts
+- LoyaltyCustomerService
 - SalesInvoiceItemsTabComponent
 - UserSessionListQueryDto
 - Financial
-- Tax
-- ToolbarActionEvent
+- LedgerEntry
+- Customer
 - Reporting
-- party-contacts-tab.component.ts
-- UpdatePartyContactDto
+- PartyContact
+- purchase-return-items-tab.component.ts
 - Architecture context update (important)
-- PriceListItemsTabComponent
+- Receipt
 - Sales
 - Month End Closing
 - User
 - CreateCompanyDto
-- ContextEnrichInterceptor
+- GoodsReceiptItem
 - CreateMedicineScheduleDto
 - generate-route-index.ts
 - barcode-configuration-list.component.ts
-- UserSession
-- report-runner.component.ts
+- ADR-009: Prisma client extension for BIGINT PK assignment on SQLite
+- report-list.component.ts
 - stock-transfer-items-tab.component.ts
-- SalesReturnItem
+- SalesReturnItemsTabComponent
 - salt-composition-list.component.ts
 - unit-of-measure-list.component.ts
 - CreatePartyDto
-- doctor-list.component.ts
-- Backend Developer Guide
-- Overview & Aggregate
+- Doctor
+- PurchaseOrder
+- write_diagram
 - role-list.component.ts
-- UserBranchesTabComponent
-- user-roles-tab.component.ts
+- user-branches-tab.component.ts
+- UserRole
 - CreateManufacturerDto
 - Medicine Master
 - CreateSaltCompositionDto
@@ -147,41 +148,41 @@
 - 21. FEAT-131 — Financial Year & Period Controls
 - GoodsReceiptItemsTabComponent
 - Configuration
-- Reporting — Functional Guide
+- SalesReportsProvider
 - SettingDetailComponent
 - CreatePurchaseInvoiceItemDto
 - printer-configuration-list.component.ts
 - CreateMedicineDto
 - area-list.component.ts
 - medicine-category-list.component.ts
-- PharmacyErp
-- medicine-category.controller.ts
-- PurchaseReturnController
+- sales-return-items-tab.component.ts
+- CreateMedicineCategoryDto
+- SyncLogListQueryDto
 - scaffold-service-specs.ts
 - ChangeHistoryListQueryDto
 - discount-rule-list.component.ts
 - outbox.controller.ts
 - User & Security
-- uuid
+- Customer Domain
 - UpdateStockTakeItemDto
 - compilerOptions
 - MainLayoutComponent
-- form-builder.adapter.ts
+- app-form.component.spec.ts
 - FinancialYearDetailComponent
-- state-list.component.ts
+- State
 - CreateSalesInvoiceItemDto
 - Phase 13 Quality Assurance, Testing & Validation.md
-- LedgerListComponent
+- Country
 - data_ownership
 - legacy_mapping
 - form/index.ts
 - JwtAuthGuard
-- party-addresses-tab.component.ts
-- medicine.generator.ts
+- PartyAddress
+- inventory-query.controller.ts
 - legacy_workflow_mapping
 - End-to-end flow diagram design
 - scripts
-- SupplierListComponent
+- Supplier
 - phase-07-purchase-management-ado.json
 - devDependencies
 - DashboardComponent
@@ -193,25 +194,25 @@
 - suggested_ado_priority
 - schematics
 - load-masters.ts
-- UpdateTaxDto
+- CreateTaxDto
 - legacy_mapping
 - testing_matrix
-- Business rules
+- .resolve
 - Pricing
 - Persistence Foundation Patterns
 - PurchaseOrderDetailComponent
-- unit-of-measure.controller.ts
+- CreateUnitOfMeasureDto
 - CreateMedicineGenericDto
 - Phase 14 Deployment, DevOps, Operations & Infrastructure.md
 - Phase 9 Frontend Architecture & Application Design.md
-- StockTakeListComponent
+- PrescriptionItem
 - Phase 7 System Architecture.md
 - Phase 11 Security, Authentication & Authorization.md
 - phase-08-sales-billing-management-ado.json
 - company-list.component.ts
 - stock-adjustment-list.component.ts
 - city-list.component.ts
-- medicine-generic-list.component.ts
+- MedicineGeneric
 - Phase 6 User Interface (UI) & User Experience (UX) Design.md
 - PurchaseReturnDetailComponent
 - UserDetailComponent
@@ -224,34 +225,34 @@
 - pharmacy_erp_architecture_handbook.md
 - Phase 8 Backend Architecture & Service Design.md
 - GoodsReceiptDetailComponent
-- BatchListComponent
+- ADR-007: Outbox enqueue in same transaction as business mutation
 - hydrate.ts
 - PurchaseInvoice
-- LedgerEntryListQueryDto
+- PaginationQueryDto
 - MandatoryBigIntField
 - Lookup / Masters
 - phase-01-foundation-architecture-ado-exact.json
 - phase-09-financial-management-ado.json
 - phase-12-prescription-management-ado.json
 - sync-conflict-list.component.ts
-- PartyListComponent
-- MedicineSchedule
+- 21. Required Prisma Changes
+- medicine-schedule-list.component.ts
 - pharmacy_erp_backend_crud_foundation.md
 - Phase 10 Reporting, Analytics & Business Intelligence.md
 - AppService
 - winston.config.ts
-- Party
+- Ledger
 - UserBranchController
 - feature_focus
 - scripts
-- Pharmacy ERP — Functional Overview (Plain English)
+- 3. Core building blocks (vocabulary)
 - Phase 12 Integrations, External Systems & Interoperability.md
 - GoodsReceiptListComponent
-- Backend reporting implementation
-- app-dialog.service.ts
+- PrescriptionItemsTabComponent
+- PriceListItemsTabComponent
 - Employee
-- Persistence patterns (NestJS + Prisma)
-- Pagination
+- TaxListComponent
+- month-end-close.component.ts
 - Phase 15 Product Roadmap, Future Enhancements & Innovation.md
 - Pharmacy ERP Architecture Review
 - SalesInvoiceDetailComponent
@@ -260,7 +261,7 @@
 - IsBigIntArrayConstraint
 - Synchronization
 - early-foundations_4083198d.plan.md
-- Stock Transfer
+- PurchaseInvoiceListComponent
 - RolePermissionController
 - FinancialYearListComponent
 - phase-02-organization-geography-configuration-ado-exact.json
@@ -275,14 +276,14 @@
 - PaymentDetailComponent
 - Prescription
 - ReceiptDetailComponent
-- ADR-258: Stock-take variance fields server-computed on item write
+- Inventory module — agent memory model
 - pharmacy_erp_ado_backlog_standard.md
 - ADR-NNN: Short descriptive title
 - purchase-order-items-tab.component.ts
 - RoleDetailComponent
 - auth.controller.ts
 - pharmacy-erp
-- MedicineScheduleListComponent
+- PurchaseOrderListComponent
 - 003_party_management.md
 - http-test.helpers.ts
 - phase
@@ -294,9 +295,9 @@
 - production
 - Audit
 - ReportRunnerComponent
-- backend-memory-map.md
-- SettingListComponent
-- EmployeeListComponent
+- Major concepts present
+- AppSetting
+- jwt.strategy.ts
 - epic
 - phase
 - phase
@@ -310,8 +311,8 @@
 - SequenceGeneratorDetailComponent
 - Stock
 - sys
-- loyalty-program-list.component.ts
-- ADR-006: All business writes through UnitOfWorkService.run
+- loyalty/loyalty-program.service.ts
+- backend-memory-map.md
 - AreaDetailComponent
 - CityDetailComponent
 - CountryDetailComponent
@@ -330,7 +331,7 @@
 - PriceListDetailComponent
 - Testing
 - Prescription
-- PurchaseOrder
+- Batch
 - angular.json
 - Node
 - Module	What it does
@@ -338,8 +339,8 @@
 - 008_sales_billing_management.md
 - Permissions by module (representative)
 - 22. FEAT-095 — Purchase Testing, Performance & Readiness
-- Pharmacy ERP Backend — Agent Guide
-- reporting.module.ts
+- StockAdjustmentDetailComponent
+- ReportDefinition
 - epic
 - ado_hierarchy
 - ownership
@@ -373,7 +374,7 @@
 - source
 - architect
 - Extending the Backend
-- cursor_logging_framework_recommendation.md
+- AppModule
 - source
 - work_item_summary
 - dependencies
@@ -404,7 +405,7 @@
 - integration_boundaries
 - phase
 - work_item_ranges
-- 4. API catalog
+- StockTransferDetailComponent
 - 002_organization_geography_configuration.md
 - 007_purchase_management.md
 - 27. FEAT-116 — Sales Testing, Performance & Readiness
@@ -451,32 +452,32 @@
 - 3. API catalog
 - Functional Specification Per Screen
 - Phase 5 Business Rules Engine.md
-- write_diagram
+- FlowBuilder
 - 010_pricing_taxation_management.md
 - FEAT-141 — Pricing Domain & Data Model
 - Pharmacy ERP Database Tables Overview
-- Validation
-- Backend seed script issues
-- RolePermission
+- Business Rules & Invariants
+- StockTransferListComponent
+- role-permissions-tab.component.ts
 - 3. Business rules
 - 005_medicine_master_management.md
 - 18. FEAT-077 — Inventory UI/UX & Keyboard Workflow
 - 7. FEAT-066 — Batch Master & Batch Lifecycle
-- ADR-016: Winston AppLogger for technical logs; AuditService for business audit
+- CountryListComponent
 - Synchronization Strategy
 - Functional Modules
 - table_catalog.md
 - Workflow Components
 - Integrations and Devices — Functional Guide
 - User Experience — Functional Guide
-- ADR-159: Party reports provider ships first under reporting/providers
+- StateService
 - 17. Feature: Party Integration Foundation
 - 5. Feature: User Account Management
 - 12. FEAT-058 — Medicine Master
 - 19. FEAT-065 — Medicine Testing, Performance & Readiness
 - 20. FEAT-079 — Inventory Testing, Performance & Readiness
 - 20. FEAT-093 — Purchase Angular UI & Keyboard Workflow
-- Architecture Decision Records (ADRs)
+- SalesReturnListComponent
 - 5. Features and User Stories
 - 11. FEAT-070 — Stock Transfer
 - FEAT-156 — Pricing Security, Audit & Testing
@@ -485,10 +486,10 @@
 - Inventory Workflows
 - Financial — Functional Guide
 - Inventory — Functional Guide
-- PurchaseReportsProvider
+- CustomerLookupComponent
 - MedicineLookupComponent
 - Finance module — agent memory model
-- Pharmacy ERP early priorities
+- ADR-010: RequestContext via AsyncLocalStorage for tenant and device
 - 001_foundation_architecture.md
 - FEAT-013 — Company Management
 - 21. FEAT-094 — Offline-First Purchase & Synchronization
@@ -505,7 +506,7 @@
 - Purchase — Functional Guide
 - Sales — Functional Guide
 - ADR-002: String status fields instead of Prisma enums on SQLite
-- Common Module Hardening Plan
+- GlobalExceptionFilter
 - 3. API catalog
 - Sales module — agent memory model
 - 12. Feature: Financial Year Management
@@ -528,8 +529,8 @@
 - 012_prescription_management.md
 - CreateCustomerDto
 - backend-developer-guide.md
-- StockTakeItemsTabComponent
-- UpdateEmployeeDto
+- ADR-151: Read-only reports register into ReportRegistryService
+- ChangeHistoryListComponent
 - 13. Configuration
 - Phase 1 Pharmacy Business Domain.md
 - Phase 2 Functional Specification.md
@@ -541,7 +542,7 @@
 - Pricing — Functional Guide
 - Synchronization — Functional Guide
 - 2. Design Principles
-- id-sequence-models.util.ts
+- 3. DTO & mapper detail per entity
 - PurchaseInvoiceDetailComponent
 - ADR-011: LedgerPostingService in persistence module (shared double-entry)
 - Domain Events
@@ -595,11 +596,11 @@
 - ADR-183: Finance simplification refactor scope unresolved
 - ADR-219: Sales dispensing hook out of scope for prescription v1
 - Geographic Masters — Functional Guide
-- TokenStorageService
-- Business Rules & Invariants
+- User & Security — Functional Guide
+- LoyaltyProgramListComponent
 - SalesInvoiceCounterComponent
 - 11. FEAT-121 — Receipt Management
-- AuthController
+- .enroll
 - 13. Feature: Employee Management
 - 15. FEAT-061 — Medicine Lifecycle & Data Quality
 - 19. FEAT-078 — Offline-First Inventory & Synchronization
@@ -608,8 +609,8 @@
 - 9. FEAT-082 — Purchase Order Item & Supplier Ordering
 - 15. FEAT-104 — Sales Return
 - 22. FEAT-132 — Ledger & Accounting Views
-- persistence-test.helpers.ts
-- PartyRolesTabComponent
+- PrismaService
+- PartyRole
 - ADR-015: Party module as backend CRUD reference template
 - ADR-018: Electron safeStorage for tokens; in-memory fallback for ng serve
 - ADR-019: bcrypt for password hashing
@@ -757,7 +758,7 @@
 - ADR-256: Financial year close not enforced on all transaction modules
 - ADR-257: MFA and password complexity policy out of scope v1
 - PrescriptionListComponent
-- ADR-184: SalesPayment nested API; Finance Receipt stays separate
+- ADR-260: auditAndLogChanges helper for UPDATE ChangeHistory
 - 3. Medicine Master
 - 1. Party Management
 - 5. Purchase
@@ -765,11 +766,11 @@
 - Accounting Workflows
 - Add per-category overview docs under database/tables
 - Consolidate the architecture docs
-- AppSetting
+- PriceListItem
 - Keyboard Shortcuts
 - 8. FEAT-118 — Ledger & Chart-of-Accounts Boundary
-- Aggregate structure
-- Inventory Flow
+- Backend Code Review Remediation Plan
+- workflows/README.md
 - form-field.component.ts
 - 5. What needs DTOs / mappers (priority order)
 - Masters (lookup) module — agent memory model
@@ -796,11 +797,11 @@
 - 29. Core Sales Business Rules
 - 10. FEAT-120 — Payment Management
 - 9. FEAT-119 — LedgerEntry & Double-Entry Posting
-- UserListComponent
+- BatchDetailComponent
 - 7. Core Prescription Business Rules
 - ADR-025: Report registry with provider registration at startup
-- services/closing.service.ts
-- loyalty-program.controller.ts
+- Sync module — agent memory model
+- CreateLoyaltyProgramDto
 - 14. Lookup / Masters
 - 4. Inventory
 - Artificial Intelligence Roadmap
@@ -810,8 +811,8 @@
 - 13. Synchronization Strategy
 - AppGrid
 - ADR-180: Finance module tests deferred in v1
-- masters-import.controller.ts
-- CreateEmployeeDto
+- masters-import.service.ts
+- Integrations
 - 3. Domain Boundary
 - FEAT-004 — Prisma & Database Foundation
 - FEAT-008 — Common Persistence Capabilities
@@ -839,11 +840,11 @@
 - 4. Core Accounting Flow
 - 15. FEAT-125 — Customer Outstanding
 - 16. FEAT-126 — Supplier Outstanding
-- Phase 12 — Prescription Management
+- audit-log.mapper.ts
 - 20. FEAT-130 — Voucher Lifecycle & Reversal
-- Lifecycle & States
-- Inventory Domain
-- .run
+- CreateLoyaltyAdjustmentDto
+- LoyaltyExpiryService
+- Audit
 - FEAT-152 — Sales Integration
 - ADR-259: Stock transfer dispatch accepts DRAFT without approval step
 - Product & UX
@@ -852,12 +853,12 @@
 - app-form.component.ts
 - Expiry Management Workflows
 - Batch Rules
-- Inventory
+- Platform shell
 - 4. Technology Stack
 - CustomerLoyaltyTabComponent
-- Pharmacy ERP — Full Functional Understanding (Plain English)
+- @playwright/test
 - CreatePartyRoleDto
-- PrescriptionItem
+- prescription-items-tab.component.ts
 - Prescription module — agent memory model
 - Pricing module — agent memory model
 - Other layout problems
@@ -881,14 +882,14 @@
 - 17. FEAT-076 — Inventory API & Domain Services
 - 13. FEAT-086 — Purchase Invoice Calculation & Validation
 - ADR-154: Reports are read-only — no UnitOfWork, Outbox, or Audit
-- Integrations
+- generate-stock-transfer-flow.py
 - 12. FEAT-101 — Sales Invoice Validation & Calculation
 - 18. FEAT-107 — Barcode & Fast Billing
 - 23. FEAT-112 — Sales Authorization & Audit
 - 8. FEAT-097 — Sales Invoice Creation
-- ReplacePriceListItemDto
+- CashDrawerComponent
 - 26. FEAT-136 — Financial Permissions & Audit
-- ADR-014: SettingsService with in-memory cache for runtime toggles
+- LoginMode
 - ADR-155: Coarse REPORT_VIEW plus per-report permission
 - Phase 10 — Pricing & Taxation Management
 - Seed script fixes and resumable seeding
@@ -898,7 +899,7 @@
 - ReplacePrescriptionItemDto
 - US-201 — End-to-end inventory workflows
 - 6. Sales
-- CreateGoodsReceiptDto
+- PaymentTerminalConfigComponent
 - Hardware Integration
 - Regulatory Workflows
 - Sales Rules
@@ -907,11 +908,9 @@
 - Implementation Status — Functional Modules
 - Pharmacy ERP Knowledge Base
 - Disaster Recovery
-- Audit module — agent memory model
 - Docs Consolidation Plan
-- Module memory docs
 - 14. FEAT-124 — Purchase Financial Integration
-- customer-loyalty-tab.component.ts
+- CustomerLoyaltyService
 - LoginComponent
 - EPIC-001 — Foundation & Architecture
 - FEAT-006 — API Standards & Error Handling
@@ -929,14 +928,13 @@
 - EPIC-004 — User, Role, Permission & Security Management
 - 2. Important Boundary
 - EPIC-005 — Medicine Master Management
-- sync.constants.ts
 - 18. FEAT-128 — Bank Management
 - 27. FEAT-137 — Financial REST API & NestJS Services
 - 17. FEAT-106 — Prescription Integration
 - 19. FEAT-108 — Cashier Workflow
 - 22. FEAT-111 — Delivery Challan / Temporary Sales Boundary
 - 24. FEAT-113 — Sales REST API & NestJS Services
-- purchase-invoice-items-tab.component.ts
+- PurchaseInvoiceItem
 - 17. FEAT-127 — Cash Management
 - Purchase
 - 24. FEAT-134 — Bank Reconciliation Boundary
@@ -945,8 +943,6 @@
 - 27. ADO Tagging Standard
 - 28. ADO Work Item Template
 - 3. Core ADO Hierarchy
-- AppDialogComponent
-- AppDrawerComponent
 - app.module.ts
 - 8. Pricing
 - Program Completion
@@ -957,21 +953,14 @@
 - Product Rules
 - Pricing Rules
 - Backend Layers
-- Reporting
-- Sales
 - User & Security
-- Migration Strategy
 - Inventory
-- .runWithRetry
-- Sales
 - Financial
 - EPIC-006 — Inventory Management
 - LoyaltyProgram
-- US-258 — Finalize Sales schema
 - Configuration
 - Settings (App settings)
 - Masters (Geographic)
-- cloud-sync-mock.ts
 - Integrations and devices
 - Party Management
 - Functional Documentation
@@ -1031,22 +1020,9 @@
 - 9. Engineering Task Breakdown
 - __init__.py
 - 17. UX Guidelines
-- Backend testing (quick guide)
-- UserSessionListComponent
-- PartyRole
+- Frontend testing (`src/`)
 - 7. Core Loyalty Business Rules
-- Business audit (`AuditService`)
-- AppModule
-- StockMovementListComponent
-- PermissionListComponent
-- LoginDto
-- LoginWithPinDto
-- Settings module — agent memory model
 - 10. FEAT-083 — Goods Receipt Management
-- ChangePasswordDto
-- ChangePinDto
-- ChangeRequiredPasswordDto
-- ChangeRequiredPinDto
 - .place_at
 - 18. FEAT-091 — Purchase Authorization, Audit & Controls
 - 19. FEAT-092 — Purchase API & NestJS Services
@@ -1064,28 +1040,27 @@
 - Prescription
 - Synchronization
 - What works better (3 layers)
-- Workflow GAP Index
 - Backend Cursor & Language Rules
 
 ## God Nodes (most connected - your core abstractions)
 1. `RequirePermissions()` - 476 edges
-2. `ApplicationException` - 291 edges
+2. `ApplicationException` - 293 edges
 3. `@angular/core` - 258 edges
 4. `MandatoryBigIntField()` - 241 edges
-5. `PrismaService` - 228 edges
+5. `PrismaService` - 229 edges
 6. `PaginationQueryDto` - 225 edges
 7. `getTenantScope()` - 210 edges
 8. `@prisma/client` - 197 edges
-9. `class-validator` - 184 edges
+9. `class-validator` - 185 edges
 10. `OptionalBigIntField()` - 184 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Supplier master events` --references--> `gstin()`  [INFERRED]
-  docs/pharmacy_erp_architecture_docs/domain/supplier.md → backend/seed/lib/faker.ts
 - `3. The core building blocks (the vocabulary you must know)` --references--> `uuid()`  [INFERRED]
   discussion/cursor_pharmacy_erp_functional_overview.md → backend/seed/lib/faker.ts
 - `Problem / Context` --references--> `uuid()`  [INFERRED]
   docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-004-sync-entity-uuid-identity.md → backend/seed/lib/faker.ts
+- `Rationale` --references--> `uuid()`  [INFERRED]
+  docs/pharmacy_erp_architecture_docs/architecture/adrs/ADR-010-entity-version-bigint.md → backend/seed/lib/faker.ts
 - `22. Migration Risk` --references--> `uuid()`  [INFERRED]
   docs/pharmacy_erp_architecture_docs/database/architecture-review.md → backend/seed/lib/faker.ts
 - `Business Rules` --references--> `uuid()`  [INFERRED]
@@ -1094,138 +1069,134 @@
 ## Import Cycles
 - None detected.
 
-## Communities (1063 total, 93 thin omitted)
+## Communities (1037 total, 93 thin omitted)
 
-### Community 0 - "auditAndLogChanges"
-Cohesion: 0.06
-Nodes (40): auditAndLogChanges(), buildFieldChanges(), FieldChangeInput, inferDataType(), serializeValue(), valuesEqual(), AreaResponse, toAreaResponse() (+32 more)
+### Community 0 - "masters.util.ts"
+Cohesion: 0.07
+Nodes (31): AreaResponse, toAreaResponse(), CityResponse, toCityResponse(), CountryResponse, toCountryResponse(), StateResponse, toStateResponse() (+23 more)
 
 ### Community 1 - "@angular/core"
 Cohesion: 0.04
-Nodes (72): Angular client layer, @angular/common, ref_angular_common_http, ref_angular_common_locales_en_in, @angular/core, @angular/forms, ref_angular_platform_browser_animations, @angular/router (+64 more)
+Nodes (76): @angular/common, ref_angular_common_http, @angular/core, @angular/forms, @angular/router, ref_primeng_button, ref_primeng_checkbox, ref_primeng_dialog (+68 more)
 
 ### Community 2 - "KeyboardShortcutService"
-Cohesion: 0.10
-Nodes (22): Angular (`src/app/`), DEFAULT_SHORTCUT_DEFINITIONS, SHORTCUT_CATEGORY_ORDER, KeyboardShortcutService, Injectable, clearOverrides(), exportOverrides(), loadOverrides() (+14 more)
+Cohesion: 0.07
+Nodes (32): ref_angular_core_testing, ref_angular_platform_browser_dynamic_testing, DEFAULT_SHORTCUT_DEFINITIONS, SHORTCUT_CATEGORY_ORDER, KeyboardShortcutService, Injectable, clearOverrides(), exportOverrides() (+24 more)
 
 ### Community 3 - "toolbar/index.ts"
-Cohesion: 0.06
-Nodes (51): ref_primeng_buttongroup, ref_primeng_splitbutton, DemoCustomerForm, DemoRow, DynamicDialogDemoComponent, Component, cloneMenuItem(), cloneToolbarItem() (+43 more)
+Cohesion: 0.11
+Nodes (35): ref_primeng_buttongroup, ref_primeng_splitbutton, cloneMenuItem(), cloneToolbarItem(), DEFAULT_TOOLBAR_CONFIG, mergeToolbarConfig(), toPrimeMenuItem(), toPrimeMenuItems() (+27 more)
 
-### Community 4 - "sync-log.service.ts"
-Cohesion: 0.14
-Nodes (15): OutboxResponse, toOutboxResponse(), SyncConflictResponse, toSyncConflictResponse(), SyncLogResponse, toSyncLogResponse(), OutboxAdminService, Injectable (+7 more)
+### Community 4 - "services/outbox-admin.service.ts"
+Cohesion: 0.09
+Nodes (25): OutboxSyncStatus, OutboxAuditEntityType, SyncConflictAuditEntityType, SyncConflictResolutionStatus, SyncConflictResolutionStrategy, OUTBOX_SYNC_STATUSES, OutboxResponse, toOutboxResponse() (+17 more)
 
 ### Community 5 - "@nestjs/testing"
-Cohesion: 0.03
-Nodes (26): AuditLogService, Injectable, MfaService, Injectable, PasswordService, Injectable, StockMovementService, Injectable (+18 more)
+Cohesion: 0.04
+Nodes (13): AuditLogService, Injectable, StockMovementService, Injectable, toLoyaltyProgramResponse(), LoyaltyEnrollmentService, Injectable, LoyaltyIntegrationService (+5 more)
 
-### Community 6 - ".run"
+### Community 6 - ".enqueue"
 Cohesion: 0.02
-Nodes (113): assertBranchExists(), toStockAdjustmentResponse(), toStockTakeResponse(), toStockTransferResponse(), BatchService, Injectable, StockAdjustmentItemService, Injectable (+105 more)
+Nodes (92): CustomerResponse, toCustomerResponse(), DoctorResponse, toDoctorResponse(), EmployeeResponse, toEmployeeResponse(), PartyAddressResponse, toPartyAddressResponse() (+84 more)
 
 ### Community 7 - "GridFilterChange"
 Cohesion: 0.02
-Nodes (117): PurchaseReturnItem, ag-grid-angular, ag-grid-community, date-fns, ref_primeng_dialog, buildGridOptions(), buildValueFormatter(), GRID_ACTIONS_COLUMN_ID (+109 more)
+Nodes (90): GridActionEvent, GridFilterChange, GridPageChange, GridRowClickEvent, AppToolbarComponent, Component, ToolbarAppearanceConfig, ToolbarSize (+82 more)
 
 ### Community 8 - "party.generator.ts"
-Cohesion: 0.10
-Nodes (24): gstin(), indianMobile(), pan(), CITY_MAP, CUSTOMER_TYPES, INDIAN_FIRST, INDIAN_LAST, PartySpec (+16 more)
+Cohesion: 0.13
+Nodes (15): indianMobile(), pan(), CITY_MAP, CUSTOMER_TYPES, INDIAN_FIRST, INDIAN_LAST, PartySpec, seedParties() (+7 more)
 
 ### Community 9 - "GridSelectionState"
 Cohesion: 0.15
 Nodes (4): Phase 6 — Low-severity polish, Supported field types (v1), GridSelectionState, DemoRow
 
-### Community 10 - "finance.constants.ts"
-Cohesion: 0.03
-Nodes (87): BANK_PAYMENT_METHODS, CASH_PAYMENT_METHODS, FinanceReferenceType, LedgerType, PaymentMethod, PaymentStatus, PaymentType, ReceiptStatus (+79 more)
+### Community 10 - "FinanceWorkflowDto"
+Cohesion: 0.04
+Nodes (50): PaymentController, Body, Controller, Delete, Get, Param, Patch, Post (+42 more)
 
 ### Community 11 - "ref_nestjs_common"
-Cohesion: 0.07
-Nodes (84): AuditAction, AuditModule, AUDIT_ACTION_VALUES, AUDIT_MODULE_VALUES, AuditLogInput, AuditService, Injectable, FieldDefinition (+76 more)
+Cohesion: 0.10
+Nodes (70): AuditAction, AuditModule, AUDIT_ACTION_VALUES, AUDIT_MODULE_VALUES, AuditLogInput, FieldChangeInput, FieldDefinition, AuthTokenResponse (+62 more)
 
 ### Community 12 - "configuration.util.ts"
-Cohesion: 0.05
-Nodes (51): BarcodeAppliesTo, BarcodeType, FinancialYearStatus, PrinterDocumentType, PrinterType, PrintOrientation, BarcodeConfigurationResponse, toBarcodeConfigurationResponse() (+43 more)
+Cohesion: 0.04
+Nodes (58): auditAndLogChanges(), buildFieldChanges(), inferDataType(), serializeValue(), valuesEqual(), BarcodeAppliesTo, BarcodeType, FinancialYearStatus (+50 more)
 
 ### Community 13 - "Party module — agent memory model"
-Cohesion: 0.13
-Nodes (15): 10. Reporting (implemented), 11. Out of scope / follow-ups, 12. Related documentation, 1. Module snapshot, 2. Domain model, 3. Lifecycle rules, 5. Layer map, 7. Mapper conventions (+7 more)
+Cohesion: 0.09
+Nodes (23): 11. Out of scope / follow-ups, 12. Related documentation, 1. Module snapshot, 2. Domain model, 3. Lifecycle rules, 4. API catalog, 5. Layer map, 7. Mapper conventions (+15 more)
 
 ### Community 14 - "Loyalty"
-Cohesion: 0.09
-Nodes (22): Business Rules, Business Rules, Columns, Columns, Constraints, Constraints, How the Tables Work Together, Indexes (+14 more)
-
-### Community 15 - "ReportDefinition"
-Cohesion: 0.19
-Nodes (5): ReportDefinition, FinanceReportsProvider, Injectable, InventoryReportsProvider, Injectable
+Cohesion: 0.10
+Nodes (21): Business Rules, Business Rules, Columns, Columns, Constraints, Constraints, Indexes, Indexes (+13 more)
 
 ### Community 16 - "CreatePriceListDto"
-Cohesion: 0.08
-Nodes (25): PriceListController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
+Cohesion: 0.09
+Nodes (20): PriceListController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 17 - "main-layout.component.ts"
-Cohesion: 0.04
-Nodes (44): @angular/platform-browser, ref_ngx_translate_core, ref_primeicons_angular_p_icon, ref_primeicons_angular_sidebar, ref_primeng_avatar, ref_primeng_progressspinner, ref_primeng_sidebar, ref_primeng_tooltip (+36 more)
+Cohesion: 0.03
+Nodes (61): Angular (`src/app/`), Angular client layer, ref_angular_common_locales_en_in, @angular/platform-browser, ref_angular_platform_browser_animations, ref_ngx_translate_core, ref_ngx_translate_http_loader, ref_primeicons_angular_p_icon (+53 more)
 
-### Community 18 - "LoyaltyAdjustmentDto"
-Cohesion: 0.40
-Nodes (5): LoyaltyAdjustmentDto, IsInt, IsOptional, IsString, MaxLength
+### Community 18 - "grid/index.ts"
+Cohesion: 0.03
+Nodes (62): ag-grid-angular, ag-grid-community, date-fns, DemoCustomerForm, DemoRow, DynamicDialogDemoComponent, Component, buildGridOptions() (+54 more)
 
 ### Community 20 - "ApplicationException"
 Cohesion: 0.02
-Nodes (165): Error handling, throwNotFound(), ApplicationException, LedgerEntryResponse, toLedgerEntryResponse(), LedgerResponse, toLedgerResponse(), PaymentResponse (+157 more)
+Nodes (162): MfaService, Injectable, ApplicationException, isPaginatedResult(), BANK_PAYMENT_METHODS, CASH_PAYMENT_METHODS, PaymentStatus, ReceiptStatus (+154 more)
 
 ### Community 21 - "Inventory"
 Cohesion: 0.03
-Nodes (79): Batch, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+71 more)
+Nodes (74): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+66 more)
 
 ### Community 22 - "KeyboardShortcutsDialogComponent"
-Cohesion: 0.21
+Cohesion: 0.24
 Nodes (3): HostListener, KeyboardShortcutsDialogComponent, Component
 
 ### Community 23 - "ReportContext"
 Cohesion: 0.19
-Nodes (18): ApiErrorResponse, ApiResponse, Pagination, TenantScope, ReportCategory, ReportPermission, ReportColumnType, ReportColumnTypes (+10 more)
+Nodes (11): ReportContext, ReportParams, ReportResult, FinanceReportsProvider, Injectable, PurchaseReportsProvider, Injectable, decimalCell() (+3 more)
 
-### Community 24 - "getTenantScope"
-Cohesion: 0.03
-Nodes (110): AuditLogResponse, serializeEpochMs(), serializeOptionalBigInt(), toAuditLogResponse(), ChangeHistoryResponse, serializeEpochMs(), toChangeHistoryResponse(), ChangeHistoryService (+102 more)
+### Community 24 - ".run"
+Cohesion: 0.02
+Nodes (158): ChangeHistoryResponse, serializeEpochMs(), toChangeHistoryResponse(), ChangeHistoryService, Injectable, throwNotFound(), assertBranchExists(), assertDocumentDateInOpenFinancialYear() (+150 more)
 
 ### Community 25 - "backend/package.json"
 Cohesion: 0.04
-Nodes (50): author, description, jest, @nestjs/common, @ngx-translate/core, @ngx-translate/http-loader, rxjs, ts-jest (+42 more)
+Nodes (52): author, description, jest, @nestjs/common, @ngx-translate/core, @ngx-translate/http-loader, rxjs, ts-jest (+44 more)
 
 ### Community 26 - "AuthService"
-Cohesion: 0.21
-Nodes (5): AuthService, Injectable, generateRefreshToken(), hashRefreshToken(), parseDurationMs()
+Cohesion: 0.13
+Nodes (10): AuthService, Injectable, PasswordService, Injectable, generateRefreshToken(), hashRefreshToken(), parseDurationMs(), safeBigInt() (+2 more)
 
 ### Community 27 - "Engineering Standards"
-Cohesion: 0.17
-Nodes (12): Backup & Recovery, CI/CD, Coding Standards, Engineering Standards, Error Handling, Feature Flags, Observability, Performance Guidelines (+4 more)
+Cohesion: 0.18
+Nodes (11): Backup & Recovery, CI/CD, Coding Standards, Engineering Standards, Error Handling, Feature Flags, Observability, Performance Guidelines (+3 more)
 
 ### Community 28 - "phase-03-party-management-ado.json"
 Cohesion: 0.05
 Nodes (42): ado_hierarchy, epic, features, task_range, user_story_range, ado_import_note, cross_cutting_areas, dependencies (+34 more)
 
-### Community 29 - "medicine.util.ts"
+### Community 29 - "services/medicine.service.ts"
 Cohesion: 0.04
-Nodes (59): ManufacturerResponse, toManufacturerResponse(), MedicineCategoryResponse, toMedicineCategoryResponse(), toMedicineGenericResponse(), MedicineResponse, toMedicineResponse(), MedicineSaltResponse (+51 more)
+Nodes (60): ManufacturerResponse, toManufacturerResponse(), MedicineCategoryResponse, toMedicineCategoryResponse(), MedicineGenericResponse, toMedicineGenericResponse(), MedicineResponse, toMedicineResponse() (+52 more)
 
 ### Community 30 - "ref_path"
 Cohesion: 0.11
 Nodes (16): backendRoot, srcRoot, walk(), backendRoot, covered, missing, services, srcRoot (+8 more)
 
 ### Community 31 - "seed.ts"
-Cohesion: 0.18
-Nodes (17): initFaker(), seedMedicine(), seedPricing(), seedSync(), clearRegistry(), disconnectPrisma(), getPrisma(), resolveDatabasePathFromEnv() (+9 more)
+Cohesion: 0.16
+Nodes (19): initFaker(), seedMedicine(), seedPricing(), seedSync(), clearRegistry(), loadUsers(), seedUserBranches(), disconnectPrisma() (+11 more)
 
 ### Community 32 - "RequirePermissions"
 Cohesion: 0.03
-Nodes (89): RequirePermissions(), PaymentController, Body, Controller, Delete, Get, Param, Patch (+81 more)
+Nodes (79): RequirePermissions(), LedgerEntryController, Controller, Get, Param, Query, StockController, Controller (+71 more)
 
 ### Community 33 - "CreateUserDto"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (26): Body, Controller, Delete, Get, Param, Patch, Post, Query (+18 more)
 
 ### Community 34 - "package.json"
@@ -1233,84 +1204,88 @@ Cohesion: 0.05
 Nodes (36): jest, @nestjs/common, @ngx-translate/core, @ngx-translate/http-loader, rxjs, ts-jest, @types/jest, typescript (+28 more)
 
 ### Community 35 - "AppLogger"
-Cohesion: 0.06
-Nodes (36): AppLogger, Injectable, LoggingInterceptor, Injectable, 8. My strongest recommendation for your Pharmacy ERP, Audit logging, Bottom line, Business audit (+28 more)
-
-### Community 36 - "Medicine"
 Cohesion: 0.04
-Nodes (49): Upgraded (1), Medicine, Aggregate structure, Audit, Business rules, Business Rules & Invariants, Cross-cutting, Cross-field validation (+41 more)
+Nodes (57): AppLogger, Injectable, LoggingInterceptor, Injectable, LoggingModule, Module, New canonical doc, 8. My strongest recommendation for your Pharmacy ERP (+49 more)
+
+### Community 36 - "Party"
+Cohesion: 0.04
+Nodes (41): 9. Product / Medicine / Manufacturer Review, Batch uniqueness scope, Manufacturer, Medicine as product master, How the Tables Work Together, Manufacturer, Party, Aggregate structure (+33 more)
 
 ### Community 37 - "CreatePrinterConfigurationDto"
 Cohesion: 0.07
 Nodes (29): PrinterConfigurationController, Body, Controller, Delete, Get, Param, Patch, Post (+21 more)
 
-### Community 38 - "UpdateStockAdjustmentDto"
-Cohesion: 0.04
-Nodes (49): StockAdjustmentController, Body, Controller, Delete, Get, Param, Patch, Post (+41 more)
+### Community 38 - "CreateStockAdjustmentDto"
+Cohesion: 0.05
+Nodes (41): StockAdjustmentController, Body, Controller, Delete, Get, Param, Patch, Post (+33 more)
 
 ### Community 39 - "CreateBatchDto"
 Cohesion: 0.02
-Nodes (94): BatchController, Body, Controller, Delete, Get, Param, Patch, Post (+86 more)
+Nodes (86): BatchController, Body, Controller, Delete, Get, Param, Patch, Post (+78 more)
 
 ### Community 40 - "CreateFinancialYearDto"
 Cohesion: 0.06
 Nodes (34): FinancialYearController, Body, Controller, Delete, Get, Param, Patch, Post (+26 more)
 
 ### Community 41 - "CreateDiscountRuleDto"
-Cohesion: 0.07
+Cohesion: 0.06
 Nodes (29): DiscountRuleController, Body, Controller, Delete, Get, Param, Patch, Post (+21 more)
 
-### Community 42 - "SeedContext"
-Cohesion: 0.16
-Nodes (11): backend_seed_lib_faker_faker, recordMovement(), seedInventory(), seedPurchase(), pickBatchFefo(), seedSales(), seedFinancialAndAudit(), decimal() (+3 more)
+### Community 42 - "uuid"
+Cohesion: 0.13
+Nodes (19): backend_seed_lib_faker_faker, uuid(), recordMovement(), seedInventory(), seedPurchase(), pickBatchFefo(), seedSales(), seedFinancialAndAudit() (+11 more)
 
-### Community 43 - "CreateSalesPaymentDto"
-Cohesion: 0.09
-Nodes (25): SalesPaymentController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
+### Community 43 - "sales.util.ts"
+Cohesion: 0.05
+Nodes (45): SalesReturnStatus, SalesInvoiceItemResponse, SalesInvoiceItemWithMedicine, toSalesInvoiceItemResponse(), SalesInvoiceResponse, SalesPaymentResponse, toSalesPaymentResponse(), SalesReturnItemResponse (+37 more)
 
-### Community 44 - "report-exporter.service.ts"
-Cohesion: 0.11
-Nodes (30): EXPORT_MAX_ROWS, REPORT_FORMATS, ReportFormat, ReportColumn, ReportQueryDto, IsIn, IsOptional, exportCsv() (+22 more)
+### Community 44 - "report.controller.ts"
+Cohesion: 0.15
+Nodes (25): EXPORT_MAX_ROWS, REPORT_FORMATS, ReportFormat, ReportColumn, ReportQueryDto, IsIn, IsOptional, exportCsv() (+17 more)
 
 ### Community 45 - "settings.controller.ts"
 Cohesion: 0.08
 Nodes (23): CreateSettingDto, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ListSettingsQueryDto, IsOptional (+15 more)
 
 ### Community 46 - "dialog/index.ts"
-Cohesion: 0.14
-Nodes (28): ref_primeng_drawer, PrimeDialogBindings, PrimeDrawerBindings, toDynamicDialogOptions(), toPrimeConfirmOptions(), toPrimeConfirmPopupOptions(), toPrimeDialogBindings(), toPrimeDrawerBindings() (+20 more)
+Cohesion: 0.07
+Nodes (54): ref_primeng_confirmdialog, ref_primeng_confirmpopup, ref_primeng_drawer, applyConfirmPreset(), CONFIRM_PRESET_DANGER, CONFIRM_PRESET_INFO, getConfirmPresetDefaults(), PrimeDialogBindings (+46 more)
 
 ### Community 47 - "SalesWorkflowDto"
-Cohesion: 0.05
-Nodes (44): SalesInvoiceController, Body, Controller, Delete, Get, Param, Patch, Post (+36 more)
+Cohesion: 0.03
+Nodes (69): SalesInvoiceController, Body, Controller, Delete, Get, Param, Patch, Post (+61 more)
 
 ### Community 48 - "CreateAreaDto"
 Cohesion: 0.08
-Nodes (22): AreaController, Body, Controller, Delete, Get, Param, Patch, Post (+14 more)
+Nodes (25): AreaController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
 
 ### Community 49 - "CreateCityDto"
 Cohesion: 0.08
-Nodes (22): CityController, Body, Controller, Delete, Get, Param, Patch, Post (+14 more)
+Nodes (25): CityController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
 
 ### Community 50 - "Supplier Domain"
-Cohesion: 0.07
-Nodes (28): Audit, Conceptual model (future), Contracts (Not Modeled), Domain Events, Finance, Finance events (consumed), Integrations, Ledger posting pattern (+20 more)
+Cohesion: 0.05
+Nodes (41): gstin(), Aggregate structure, Audit, Business rules, Business Rules & Invariants, Conceptual model (future), Contracts (Not Modeled), Cross-field (+33 more)
 
 ### Community 51 - "MedicineSalt"
-Cohesion: 0.08
-Nodes (20): Prisma schema (SQLite-local), 19. Critical Architecture Red Flags, 8. Prisma Schema Review, Constraint review highlights, Critical (data corruption / sync failure / wrong inventory), High (major technical debt), Identity inconsistencies, Low (+12 more)
+Cohesion: 0.12
+Nodes (11): Prisma schema (SQLite-local), MedicineSalt, Long term, Medium term, Near term, Product, MedicineSalt, MedicineSaltService (+3 more)
 
 ### Community 52 - "ReportRegistryService"
+Cohesion: 0.06
+Nodes (37): ReportRegistryService, Injectable, ReportExporterService, Injectable, ReportController, Controller, Get, Param (+29 more)
+
+### Community 53 - "medicine-list.component.ts"
 Cohesion: 0.07
-Nodes (21): Reporting, ReportRegistryService, Injectable, Extending for future modules, ADR-151: Read-only reports register into ReportRegistryService, Decision Selected, Historical Source, Options Considered (+13 more)
+Nodes (16): MEDICINE_GRID_CONFIG, MedicineListComponent, AppGridStubComponent, AppToolbarStubComponent, Component, Component, CreateMedicineRequest, UpdateMedicineRequest (+8 more)
 
-### Community 54 - "CorrelationMiddleware"
-Cohesion: 0.13
-Nodes (14): CorrelationMiddleware, parseBigIntFromHeaderOrEnv(), parseBigIntHeader(), Injectable, Add Winston Logging Framework + Transactional Audit to Backend, Dependencies (add to backend/package.json), Docs (the "how to use"), New: audit module — `backend/src/audit/` (+6 more)
+### Community 54 - "CreateSupplierDto"
+Cohesion: 0.06
+Nodes (30): SupplierController, Body, Controller, Delete, Get, Param, Patch, Post (+22 more)
 
-### Community 55 - "GlobalExceptionFilter"
-Cohesion: 0.14
-Nodes (11): GlobalExceptionFilter, Injectable, Catch, Backend code review plan, Phase 0 — Cross-cutting, Phase 2 — Persistence, Phase 3 — Party, Phase 4 — Reporting (+3 more)
+### Community 55 - "PrescriptionWorkflowDto"
+Cohesion: 0.09
+Nodes (26): PrescriptionController, Body, Controller, Delete, Get, Param, Patch, Post (+18 more)
 
 ### Community 56 - "CreateGoodsReceiptItemDto"
 Cohesion: 0.08
@@ -1321,16 +1296,16 @@ Cohesion: 0.08
 Nodes (25): SalesReturnItemController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
 
 ### Community 58 - "Early Foundations (Implemented)"
-Cohesion: 0.11
-Nodes (16): OUTBOX_PAYLOAD_VERSION, OutboxPayloadEnvelope, Architecture overview, Demo login (seeded database), Early Foundations (Implemented), Electron IPC, Environment variables (backend), Fresh database (+8 more)
+Cohesion: 0.06
+Nodes (32): Architecture docs, Before finishing, Commands, Cursor rules, Error handling, Key conventions, Logging and audit, Module memory docs (+24 more)
 
 ### Community 59 - "CreateBranchDto"
-Cohesion: 0.08
-Nodes (23): BranchController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
+Cohesion: 0.10
+Nodes (20): BranchController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 60 - "CreateStateDto"
-Cohesion: 0.09
-Nodes (20): StateController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
+Cohesion: 0.08
+Nodes (23): StateController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
 
 ### Community 61 - "CreateBarcodeConfigurationDto"
 Cohesion: 0.07
@@ -1341,96 +1316,96 @@ Cohesion: 0.07
 Nodes (29): SequenceGeneratorController, Body, Controller, Delete, Get, Param, Patch, Post (+21 more)
 
 ### Community 63 - "CreatePrescriptionItemDto"
-Cohesion: 0.13
-Nodes (18): PrescriptionItemController, Body, Controller, Delete, Get, Param, Patch, Post (+10 more)
+Cohesion: 0.10
+Nodes (23): PrescriptionItemController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
 
-### Community 64 - "SettingsService"
-Cohesion: 0.12
-Nodes (13): AppSettingResponse, toAppSettingResponse(), SettingsService, Injectable, optimisticUpdate(), serializeEpochMs(), 3. Business rules, Decision Selected (+5 more)
+### Community 64 - "CreateDoctorDto"
+Cohesion: 0.08
+Nodes (26): DoctorController, Body, Controller, Delete, Get, Param, Patch, Post (+18 more)
 
 ### Community 65 - "devDependencies"
 Cohesion: 0.07
 Nodes (29): devDependencies, eslint, eslint-config-prettier, @eslint/eslintrc, @eslint/js, eslint-plugin-prettier, @faker-js/faker, globals (+21 more)
 
-### Community 67 - "NotificationService"
+### Community 66 - "pharmacy_erp_architecture_docs/README.md"
 Cohesion: 0.13
-Nodes (13): NotificationService, Injectable, API, AppToast / NotificationService, Conventions, Custom host config, Generic show, Loading promise pattern (+5 more)
+Nodes (7): Documentation Structure, High-Level Architecture, Local vs Cloud Persistence, Naming Conventions, Pharmacy ERP Database Overview, Purpose, Target Databases
+
+### Community 67 - "CreateStockAdjustmentItemDto"
+Cohesion: 0.09
+Nodes (24): StockAdjustmentItemController, Body, Controller, Delete, Get, Param, Patch, Post (+16 more)
 
 ### Community 68 - "CreateCountryDto"
 Cohesion: 0.09
 Nodes (20): CountryController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
-### Community 69 - "medicine-salt.controller.ts"
-Cohesion: 0.09
-Nodes (26): NullableStringField(), MedicineSaltController, Body, Controller, Delete, Get, Param, Patch (+18 more)
+### Community 69 - "ReplaceMedicineSaltsDto"
+Cohesion: 0.12
+Nodes (17): MedicineSaltController, Body, Controller, Delete, Get, Param, Patch, Post (+9 more)
 
-### Community 70 - "AppDialog"
-Cohesion: 0.14
-Nodes (11): ref_primeng_confirmdialog, ref_primeng_confirmpopup, App shell setup, AppDialog, Confirm presets, Declarative API, Footer actions, Imperative API (+3 more)
-
-### Community 71 - "CreatePriceListItemDto"
+### Community 70 - "StockTakeController"
 Cohesion: 0.10
-Nodes (21): PriceListItemController, Body, Controller, Delete, Get, Param, Patch, Post (+13 more)
+Nodes (18): StockTakeController, Body, Controller, Delete, Get, Param, Patch, Post (+10 more)
+
+### Community 71 - "UpdateLedgerDto"
+Cohesion: 0.09
+Nodes (21): LedgerController, Body, Controller, Delete, Get, Param, Patch, Post (+13 more)
 
 ### Community 72 - "prescription.util.ts"
-Cohesion: 0.06
-Nodes (43): PRESCRIPTION_ACTIVATABLE_STATUSES, PRESCRIPTION_CANCELLABLE_STATUSES, PRESCRIPTION_EXPIRABLE_STATUSES, PRESCRIPTION_REACTIVATABLE_STATUSES, PrescriptionController, Body, Controller, Delete (+35 more)
+Cohesion: 0.11
+Nodes (26): PRESCRIPTION_ACTIVATABLE_STATUSES, PRESCRIPTION_CANCELLABLE_STATUSES, PRESCRIPTION_EXPIRABLE_STATUSES, PRESCRIPTION_REACTIVATABLE_STATUSES, PrescriptionItemStatus, PrescriptionStatus, PrescriptionItemResponse, PrescriptionItemWithMedicine (+18 more)
 
 ### Community 73 - "CreatePermissionDto"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (20): PermissionController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 74 - "CreateRoleDto"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (20): RoleController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
-
-### Community 75 - "StockTakeDetailComponent"
-Cohesion: 0.07
-Nodes (11): BatchDetailComponent, Component, nullableEpochMs(), optionalEpochMs(), toEpochMs(), StockAdjustmentDetailComponent, Component, StockTakeDetailComponent (+3 more)
 
 ### Community 76 - "dependencies"
 Cohesion: 0.07
 Nodes (29): dependencies, bcrypt, better-sqlite3, class-transformer, class-validator, exceljs, helmet, nest-winston (+21 more)
 
 ### Community 77 - "GoodsReceipt"
-Cohesion: 0.21
-Nodes (7): GoodsReceipt, CreateGoodsReceiptRequest, GoodsReceipt, GoodsReceiptWorkflowRequest, UpdateGoodsReceiptRequest, GoodsReceiptService, Injectable
+Cohesion: 0.15
+Nodes (11): 14. Purchase / Sales / Transfer Review, Purchase chain, Sales chain, Transfer, GoodsReceipt, CreateGoodsReceiptRequest, GoodsReceipt, GoodsReceiptWorkflowRequest (+3 more)
 
 ### Community 78 - "CreatePurchaseOrderItemDto"
 Cohesion: 0.09
 Nodes (21): PurchaseOrderItemController, Body, Controller, Delete, Get, Param, Patch, Post (+13 more)
 
 ### Community 79 - "PurchaseReturn"
-Cohesion: 0.21
-Nodes (7): PurchaseReturn, CreatePurchaseReturnRequest, PurchaseReturn, PurchaseReturnWorkflowRequest, UpdatePurchaseReturnRequest, PurchaseReturnService, Injectable
+Cohesion: 0.15
+Nodes (10): PurchaseReturn, CreatePurchaseOrderRequest, UpdatePurchaseOrderRequest, CreatePurchaseReturnRequest, PurchaseReturn, PurchaseReturnWorkflowRequest, UpdatePurchaseReturnRequest, PurchaseReturnService (+2 more)
 
 ### Community 80 - "ResponseInterceptor"
-Cohesion: 0.10
-Nodes (19): ResponseInterceptor, Injectable, 2. Two report shapes — pick per endpoint, Where you are today, ADR-157: File exports bypass ResponseInterceptor via @Res, Decision Selected, Historical Source, Options Considered (+11 more)
+Cohesion: 0.06
+Nodes (30): ResponseInterceptor, Injectable, ApiErrorResponse, ApiResponse, ApiSuccessResponse, serializeForJson(), Backend code review plan, Phase 0 — Cross-cutting (+22 more)
 
 ### Community 81 - "toast/index.ts"
-Cohesion: 0.18
-Nodes (18): ref_primeng_toast, DEFAULT_TOAST_HOST_CONFIG, DEFAULT_TOAST_HOST_KEY, DEFAULT_TOAST_MESSAGE, mergeToastHostConfig(), mergeToastMessageConfig(), ResolvedToastHostConfig, toPrimeMessage() (+10 more)
+Cohesion: 0.10
+Nodes (29): ref_primeng_toast, DEFAULT_TOAST_HOST_CONFIG, DEFAULT_TOAST_HOST_KEY, DEFAULT_TOAST_MESSAGE, mergeToastHostConfig(), mergeToastMessageConfig(), ResolvedToastHostConfig, toPrimeMessage() (+21 more)
 
 ### Community 82 - "StockTransfer"
-Cohesion: 0.12
-Nodes (11): 1. Objective, Terminology, StockTransferListComponent, Component, CreateStockTransferRequest, DispatchStockTransferRequest, ReceiveStockTransferRequest, StockTransfer (+3 more)
+Cohesion: 0.19
+Nodes (9): Notes, StockTransfer, CreateStockTransferRequest, DispatchStockTransferRequest, ReceiveStockTransferRequest, StockTransfer, UpdateStockTransferRequest, StockTransferService (+1 more)
 
 ### Community 83 - "CreatePurchaseReturnItemDto"
 Cohesion: 0.09
 Nodes (23): PurchaseReturnItemController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
 
 ### Community 84 - "FinancialYear"
-Cohesion: 0.15
-Nodes (10): FinancialYear, How the Tables Work Together, Main Flow, Pattern 3: SequenceGenerator service, FINANCIAL_YEAR_GRID_CONFIG, CreateFinancialYearRequest, FinancialYear, UpdateFinancialYearRequest (+2 more)
+Cohesion: 0.16
+Nodes (9): FinancialYear, How the Tables Work Together, Main Flow, Pattern 3: SequenceGenerator service, CreateFinancialYearRequest, FinancialYear, UpdateFinancialYearRequest, FinancialYearService (+1 more)
 
 ### Community 85 - "sales-invoice-counter.component.ts"
 Cohesion: 0.03
-Nodes (41): ref_primeng_autocomplete, ref_primeng_inputnumber, ActiveScreenSaveService, Injectable, ElectronService, Injectable, MEDICINE_GRID_CONFIG, CreateMedicineRequest (+33 more)
+Nodes (45): ref_primeng_autocomplete, ActiveScreenSaveService, Injectable, ElectronService, Injectable, FRIENDLY_BY_CODE, resolveApiErrorMessage(), LoyaltyProgramDetailComponent (+37 more)
 
 ### Community 86 - "Party Management"
 Cohesion: 0.03
-Nodes (72): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+64 more)
+Nodes (69): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+61 more)
 
 ### Community 87 - "dependencies"
 Cohesion: 0.07
@@ -1441,75 +1416,75 @@ Cohesion: 0.11
 Nodes (12): 13. Stock Adjustment Review, Auditability, Header + items pattern: **Correct**, Should items reference Stock instead of Batch?, StockAdjustmentItem, CreateStockAdjustmentItemRequest, StockAdjustmentItem, UpdateStockAdjustmentItemRequest (+4 more)
 
 ### Community 89 - "StockTakeItem"
-Cohesion: 0.18
-Nodes (7): StockTakeItem, STOCK_TAKE_ITEM_GRID_CONFIG, CreateStockTakeItemRequest, StockTakeItem, UpdateStockTakeItemRequest, StockTakeItemService, Injectable
+Cohesion: 0.14
+Nodes (8): StockTakeItem, CreateStockTakeItemRequest, StockTakeItem, UpdateStockTakeItemRequest, StockTakeItemService, Injectable, StockTakeItemsTabComponent, Component
 
-### Community 90 - "StockTake"
-Cohesion: 0.20
-Nodes (7): StockTake, CreateStockTakeRequest, ReconcileStockTakeRequest, StockTake, UpdateStockTakeRequest, StockTakeService, Injectable
+### Community 90 - "stock-take-list.component.ts"
+Cohesion: 0.12
+Nodes (11): StockTake, STOCK_TAKE_GRID_CONFIG, StockTakeListComponent, Component, CreateStockTakeRequest, ReconcileStockTakeRequest, StockTake, UpdateStockTakeRequest (+3 more)
 
-### Community 91 - "loyalty-customer.controller.ts"
-Cohesion: 0.13
-Nodes (15): LoyaltyCustomerController, Body, Controller, Get, Param, Post, Query, CreateLoyaltyAdjustmentDto (+7 more)
+### Community 91 - "LoyaltyCustomerService"
+Cohesion: 0.17
+Nodes (9): LoyaltyCustomerController, Body, Controller, Get, Param, Post, Query, LoyaltyCustomerService (+1 more)
 
 ### Community 93 - "UserSessionListQueryDto"
 Cohesion: 0.14
 Nodes (12): Controller, Get, Param, Post, Query, UserSessionController, IsBoolean, IsOptional (+4 more)
 
 ### Community 94 - "Financial"
-Cohesion: 0.03
-Nodes (56): 12. FEAT-122 — Journal Voucher, Tasks, Tasks, US-327 — Finalize Journal Voucher data model, US-328 — Create Journal Voucher, Business Rules, Business Rules, Business Rules (+48 more)
-
-### Community 95 - "Tax"
 Cohesion: 0.04
-Nodes (41): 5.0 Master-data setup (one-time prerequisite), 5.1 Procure-to-Stock (Purchasing) — how medicines come IN, 5.2 Sell-to-Cash (Sales) — how medicines go OUT and money comes in, 5.3 Inventory operations — keeping quantities honest, 5.4 Finance — the money truth, 5.5 Customer & Supplier lifecycle, 5. End-to-end business flows (with variations), Tax (+33 more)
+Nodes (45): Business Rules, Business Rules, Business Rules, Business Rules, Columns, Columns, Columns, Columns (+37 more)
 
-### Community 96 - "ToolbarActionEvent"
+### Community 95 - "LedgerEntry"
 Cohesion: 0.03
-Nodes (46): Country, ref_angular_core_testing, ref_angular_platform_browser_dynamic_testing, ToolbarActionEvent, COUNTRY_GRID_CONFIG, CountryListComponent, AppGridStubComponent, AppToolbarStubComponent (+38 more)
+Nodes (66): 1. A shared report query DTO (date range + pagination), 4. Lean on the existing indexes, 5. When `groupBy` isn't enough → raw SQL, 6. Permissions + serialization, 7. One caveat to decide up front, Backend reporting implementation, Cross-links added/updated, Primary guide (+58 more)
+
+### Community 96 - "Customer"
+Cohesion: 0.08
+Nodes (18): Extending for future modules, Purpose, How the Tables Work Together, Customer, API surface, Constants & error codes, Key facts driving the design, Party Management CRUD API (+10 more)
 
 ### Community 97 - "Reporting"
-Cohesion: 0.12
-Nodes (16): Angular / Electron client (guidance), API reference, Architecture, curl example, Error codes, Export (CSV, Excel, PDF), Export formats, JSON response shapes (+8 more)
+Cohesion: 0.09
+Nodes (22): Adding a category permission (example), Angular / Electron client (guidance), API reference, Architecture, curl example, Error codes, Export (CSV, Excel, PDF), Export formats (+14 more)
 
-### Community 98 - "party-contacts-tab.component.ts"
+### Community 98 - "PartyContact"
 Cohesion: 0.14
-Nodes (9): PartyContact, PARTY_CONTACT_GRID_CONFIG, CreatePartyContactRequest, PartyContact, UpdatePartyContactRequest, PartyContactService, Injectable, PartyContactsTabComponent (+1 more)
+Nodes (8): PartyContact, CreatePartyContactRequest, PartyContact, UpdatePartyContactRequest, PartyContactService, Injectable, PartyContactsTabComponent, Component
 
-### Community 99 - "UpdatePartyContactDto"
-Cohesion: 0.13
-Nodes (15): PartyContactController, Body, Controller, Delete, Get, Param, Patch, Post (+7 more)
+### Community 99 - "purchase-return-items-tab.component.ts"
+Cohesion: 0.15
+Nodes (9): PurchaseReturnItem, PURCHASE_RETURN_ITEM_GRID_CONFIG, CreatePurchaseReturnItemRequest, PurchaseReturnItem, UpdatePurchaseReturnItemRequest, PurchaseReturnItemService, Injectable, PurchaseReturnItemsTabComponent (+1 more)
 
 ### Community 100 - "Architecture context update (important)"
-Cohesion: 0.07
-Nodes (28): 1. Immediate: the backend no longer compiles against the new client, 1. Native `enum` blocks in party docs (5 files) — high priority, 2. Global document-number uniqueness (4 files) — high priority, 2. Migration state is still broken, 4. Enforce integrity with SQLite CHECK constraints, 5. Money as Decimal — confirm the SQLite adapter path, 6. FEFO / expiry logic is a domain rule, not just an index, 7. Compliance surface (India pharmacy) (+20 more)
+Cohesion: 0.06
+Nodes (30): 1. Immediate: the backend no longer compiles against the new client, 1. Native `enum` blocks in party docs (5 files) — high priority, 2. Global document-number uniqueness (4 files) — high priority, 2. Migration state is still broken, 4. Enforce integrity with SQLite CHECK constraints, 5. Money as Decimal — confirm the SQLite adapter path, 6. FEFO / expiry logic is a domain rule, not just an index, 7. Compliance surface (India pharmacy) (+22 more)
 
-### Community 101 - "PriceListItemsTabComponent"
+### Community 101 - "Receipt"
 Cohesion: 0.07
-Nodes (8): ReceiptListComponent, Component, StockListComponent, Component, PriceListItemsTabComponent, Component, SalesReturnListComponent, Component
+Nodes (22): 12. FEAT-122 — Journal Voucher, Tasks, Tasks, US-327 — Finalize Journal Voucher data model, US-328 — Create Journal Voucher, ADR-184: SalesPayment nested API; Finance Receipt stays separate, Decision Selected, Historical Source (+14 more)
 
 ### Community 102 - "Sales"
-Cohesion: 0.02
-Nodes (103): 1. Purpose, Planned reports (not yet implemented), 14. Purchase / Sales / Transfer Review, Purchase chain, Sales chain, Transfer, Notes, Business Rules (+95 more)
+Cohesion: 0.04
+Nodes (45): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Columns, Columns, Columns (+37 more)
 
 ### Community 103 - "Month End Closing"
 Cohesion: 0.13
 Nodes (15): Actors, Alternate Flows, Business Objective, Business Owner, Business Rules, Data Model, Database Tables, Exception Handling (+7 more)
 
 ### Community 104 - "User"
-Cohesion: 0.16
-Nodes (10): 17. Auditability Review, Missing / inconsistent, Present, User, CreateUserRequest, ResetPasswordRequest, UpdateUserRequest, User (+2 more)
+Cohesion: 0.09
+Nodes (17): 17. Auditability Review, 8. Prisma Schema Review, Constraint review highlights, Identity inconsistencies, Missing / inconsistent, Present, Schema organization, Suspicious / broken relations (+9 more)
 
 ### Community 105 - "CreateCompanyDto"
-Cohesion: 0.08
-Nodes (23): CompanyController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
+Cohesion: 0.09
+Nodes (20): CompanyController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
-### Community 106 - "ContextEnrichInterceptor"
-Cohesion: 0.15
-Nodes (11): ContextEnrichInterceptor, Injectable, ADR-013: JWT-enriched RequestContext (headers demoted to dev fallback), Architectural Impact, Decision Selected, Historical Source, Options Considered, Problem / Context (+3 more)
+### Community 106 - "GoodsReceiptItem"
+Cohesion: 0.11
+Nodes (17): Lower-priority / optional, Summary of changes, 1. Objective, Phase 7 — Purchase Management, GoodsReceiptItem, Aggregate structure, In scope, Out of scope (+9 more)
 
 ### Community 107 - "CreateMedicineScheduleDto"
-Cohesion: 0.14
+Cohesion: 0.13
 Nodes (16): MedicineScheduleController, Body, Controller, Delete, Get, Param, Patch, Post (+8 more)
 
 ### Community 108 - "generate-route-index.ts"
@@ -1520,24 +1495,20 @@ Nodes (11): extractClassName(), extractControllerPrefix(), extractPermissionsNea
 Cohesion: 0.12
 Nodes (10): BarcodeConfiguration, BARCODE_CONFIGURATION_GRID_CONFIG, BarcodeConfigurationListComponent, Component, BarcodeConfiguration, CreateBarcodeConfigurationRequest, UpdateBarcodeConfigurationRequest, BarcodeConfigurationService (+2 more)
 
-### Community 110 - "UserSession"
-Cohesion: 0.24
-Nodes (7): safeBigInt(), Phase 1 — Auth security, UserSession, Phase 1 — Auth security (Critical/High), UserSession, Injectable, UserSessionService
+### Community 110 - "ADR-009: Prisma client extension for BIGINT PK assignment on SQLite"
+Cohesion: 0.12
+Nodes (15): ADR-009: Prisma client extension for BIGINT PK assignment on SQLite, Affected Modules / Components, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale (+7 more)
 
-### Community 111 - "report-runner.component.ts"
-Cohesion: 0.11
-Nodes (13): ReportFavoriteService, Injectable, ReportListComponent, AppGridStubComponent, Component, Component, REPORT_LIST_GRID_CONFIG, ReportColumn (+5 more)
+### Community 111 - "report-list.component.ts"
+Cohesion: 0.10
+Nodes (12): ReportFavorite, ReportFavoriteService, Injectable, ReportListComponent, Component, REPORT_LIST_GRID_CONFIG, ReportColumn, ReportDefinitionMeta (+4 more)
 
 ### Community 112 - "stock-transfer-items-tab.component.ts"
 Cohesion: 0.14
 Nodes (9): StockTransferItem, STOCK_TRANSFER_ITEM_GRID_CONFIG, CreateStockTransferItemRequest, StockTransferItem, UpdateStockTransferItemRequest, StockTransferItemService, Injectable, StockTransferItemsTabComponent (+1 more)
 
-### Community 113 - "SalesReturnItem"
-Cohesion: 0.15
-Nodes (7): SalesReturnItem, Responsibilities, SalesReturnItem, SalesReturnItemService, Injectable, SalesReturnItemsTabComponent, Component
-
 ### Community 114 - "salt-composition-list.component.ts"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (10): SaltComposition, SALT_COMPOSITION_GRID_CONFIG, SaltCompositionListComponent, Component, CreateSaltCompositionRequest, SaltComposition, UpdateSaltCompositionRequest, SaltCompositionService (+2 more)
 
 ### Community 115 - "unit-of-measure-list.component.ts"
@@ -1548,49 +1519,49 @@ Nodes (12): UnitOfMeasure, UNIT_OF_MEASURE_GRID_CONFIG, Component, UnitOfMeasure
 Cohesion: 0.09
 Nodes (22): PartyController, Body, Controller, Delete, Get, Param, Patch, Post (+14 more)
 
-### Community 117 - "doctor-list.component.ts"
-Cohesion: 0.13
-Nodes (10): Doctor, DOCTOR_GRID_CONFIG, DoctorListComponent, Component, CreateDoctorRequest, Doctor, UpdateDoctorRequest, DoctorService (+2 more)
+### Community 117 - "Doctor"
+Cohesion: 0.12
+Nodes (10): Per-module smaller gaps, Doctor, DOCTOR_GRID_CONFIG, DoctorListComponent, Component, CreateDoctorRequest, Doctor, UpdateDoctorRequest (+2 more)
 
-### Community 118 - "Backend Developer Guide"
-Cohesion: 0.08
-Nodes (24): Appendix B — Auth and permissions chain, Appendix C — Troubleshooting, Appendix E — Backend vs UI maturity, Auth (`backend/src/auth/`), Backend Developer Guide, Common (`backend/src/common/`), Demo login, Finding code by concern (+16 more)
+### Community 118 - "PurchaseOrder"
+Cohesion: 0.24
+Nodes (5): PurchaseOrder, PurchaseOrder, PurchaseOrderWorkflowRequest, PurchaseOrderService, Injectable
 
-### Community 119 - "Overview & Aggregate"
-Cohesion: 0.17
-Nodes (12): Aggregate relationships, Aggregates, In scope, Journal posting unit (conceptual), Ledger aggregate (chart of accounts), Out of scope, Overview & Aggregate, Payment aggregate (+4 more)
+### Community 119 - "write_diagram"
+Cohesion: 0.18
+Nodes (12): build_flow(), main(), Generate L1 month-end-flow.drawio and .svg., build_flow(), main(), Generate L1 stock-adjustment-flow.drawio and .svg., _box(), build_flow() (+4 more)
 
 ### Community 120 - "role-list.component.ts"
 Cohesion: 0.13
 Nodes (10): Role, ROLE_GRID_CONFIG, RoleListComponent, Component, CreateRoleRequest, Role, UpdateRoleRequest, RoleService (+2 more)
 
-### Community 121 - "UserBranchesTabComponent"
-Cohesion: 0.15
-Nodes (7): CreateUserBranchRequest, UpdateUserBranchRequest, UserBranch, Injectable, UserBranchService, Component, UserBranchesTabComponent
-
-### Community 122 - "user-roles-tab.component.ts"
+### Community 121 - "user-branches-tab.component.ts"
 Cohesion: 0.14
-Nodes (9): UserRole, USER_ROLE_GRID_CONFIG, CreateUserRoleRequest, UpdateUserRoleRequest, UserRole, Injectable, UserRoleService, Component (+1 more)
+Nodes (9): Phase 1 — Auth security, USER_BRANCH_GRID_CONFIG, CreateUserBranchRequest, UpdateUserBranchRequest, UserBranch, Injectable, UserBranchService, Component (+1 more)
+
+### Community 122 - "UserRole"
+Cohesion: 0.14
+Nodes (8): UserRole, CreateUserRoleRequest, UpdateUserRoleRequest, UserRole, Injectable, UserRoleService, Component, UserRolesTabComponent
 
 ### Community 123 - "CreateManufacturerDto"
-Cohesion: 0.11
-Nodes (16): Body, Get, Param, Patch, Post, CreateManufacturerDto, IsBoolean, IsNotEmpty (+8 more)
+Cohesion: 0.09
+Nodes (20): ManufacturerController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 124 - "Medicine Master"
-Cohesion: 0.03
-Nodes (71): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+63 more)
+Cohesion: 0.02
+Nodes (94): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+86 more)
 
 ### Community 125 - "CreateSaltCompositionDto"
-Cohesion: 0.08
-Nodes (23): SaltCompositionController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
+Cohesion: 0.09
+Nodes (20): SaltCompositionController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 126 - "backend/README.md"
-Cohesion: 0.08
-Nodes (25): All suites, Apply existing migrations, Check migration status, Compile and run the project, Create and apply a migration, Database Setup, Deployment, Description (+17 more)
+Cohesion: 0.05
+Nodes (37): All suites, Apply existing migrations, Check migration status, Compile and run the project, Create and apply a migration, Database Setup, Deployment, Description (+29 more)
 
 ### Community 127 - "Purchase"
 Cohesion: 0.03
-Nodes (68): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+60 more)
+Nodes (67): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+59 more)
 
 ### Community 128 - "generate-phase-modules.mjs"
 Cohesion: 0.15
@@ -1602,43 +1573,43 @@ Nodes (7): 21. FEAT-131 — Financial Year & Period Controls, Tasks, Tasks, Task
 
 ### Community 131 - "Configuration"
 Cohesion: 0.03
-Nodes (65): Branch, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+57 more)
+Nodes (61): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules (+53 more)
 
-### Community 132 - "Reporting — Functional Guide"
-Cohesion: 0.17
-Nodes (12): Export, Integrations, Key concepts, Maturity & known gaps, Permissions summary, Planned coverage, References, Reporting — Functional Guide (+4 more)
+### Community 132 - "SalesReportsProvider"
+Cohesion: 0.09
+Nodes (19): SalesReportsProvider, Injectable, Frontend, Phase 2 — Reporting catalog, Report ids (registered at startup), Tests, Export, Implemented today (+11 more)
 
 ### Community 134 - "CreatePurchaseInvoiceItemDto"
 Cohesion: 0.09
 Nodes (23): PurchaseInvoiceItemController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
 
 ### Community 135 - "printer-configuration-list.component.ts"
-Cohesion: 0.13
-Nodes (9): PRINTER_CONFIGURATION_GRID_CONFIG, PrinterConfigurationListComponent, Component, CreatePrinterConfigurationRequest, PrinterConfiguration, UpdatePrinterConfigurationRequest, PrinterConfigurationService, Injectable (+1 more)
+Cohesion: 0.12
+Nodes (11): PrinterConfiguration, Printing, PRINTER_CONFIGURATION_GRID_CONFIG, PrinterConfigurationListComponent, Component, CreatePrinterConfigurationRequest, PrinterConfiguration, UpdatePrinterConfigurationRequest (+3 more)
 
 ### Community 136 - "CreateMedicineDto"
-Cohesion: 0.09
-Nodes (21): RequireAnyPermission(), MedicineController, Body, Controller, Delete, Get, Param, Patch (+13 more)
+Cohesion: 0.12
+Nodes (16): RequireAnyPermission(), MedicineController, Body, Controller, Delete, Get, Param, Patch (+8 more)
 
 ### Community 137 - "area-list.component.ts"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (10): Area, AREA_GRID_CONFIG, AreaListComponent, Component, Area, CreateAreaRequest, UpdateAreaRequest, AreaService (+2 more)
 
 ### Community 138 - "medicine-category-list.component.ts"
 Cohesion: 0.12
 Nodes (10): MedicineCategory, MEDICINE_CATEGORY_GRID_CONFIG, MedicineCategoryListComponent, Component, CreateMedicineCategoryRequest, MedicineCategory, UpdateMedicineCategoryRequest, MedicineCategoryService (+2 more)
 
-### Community 139 - "PharmacyErp"
+### Community 139 - "sales-return-items-tab.component.ts"
+Cohesion: 0.23
+Nodes (5): SALES_RETURN_ITEM_GRID_CONFIG, CreateSalesReturnItemRequest, UpdateSalesReturnItemRequest, SalesReturnItemService, Injectable
+
+### Community 140 - "CreateMedicineCategoryDto"
+Cohesion: 0.12
+Nodes (18): MedicineCategoryController, Body, Controller, Delete, Get, Param, Patch, Post (+10 more)
+
+### Community 141 - "SyncLogListQueryDto"
 Cohesion: 0.17
-Nodes (12): Additional Resources, Backend tests, Building, Code scaffolding, Cursor rules, Development server, Generate module, service, controller, PharmacyErp (+4 more)
-
-### Community 140 - "medicine-category.controller.ts"
-Cohesion: 0.11
-Nodes (21): MedicineCategoryController, Body, Controller, Delete, Get, Param, Patch, Post (+13 more)
-
-### Community 141 - "PurchaseReturnController"
-Cohesion: 0.11
-Nodes (19): PurchaseReturnController, Body, Controller, Delete, Get, Param, Patch, Post (+11 more)
+Nodes (10): SyncLogController, Controller, Get, Param, Query, SyncLogListQueryDto, IsOptional, IsString (+2 more)
 
 ### Community 142 - "scaffold-service-specs.ts"
 Cohesion: 0.22
@@ -1660,29 +1631,29 @@ Nodes (14): OutboxController, Body, Controller, Get, Param, Post, Query, OutboxL
 Cohesion: 0.04
 Nodes (51): Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Business Rules, Columns, Columns (+43 more)
 
-### Community 147 - "uuid"
-Cohesion: 0.04
-Nodes (57): uuid(), What each row must include (per your schema), 3. Mapper conventions (all files), Audit fields (inconsistent but intentional per entity), Exports, Relations, Structure (uniform), `toXResponse` patterns (+49 more)
+### Community 147 - "Customer Domain"
+Cohesion: 0.05
+Nodes (42): 10. Reporting (implemented), Aggregate structure, Audit & Settings, Business rules, Business Rules & Invariants, Customer, Customer aggregate events, Customer classification (+34 more)
 
 ### Community 148 - "UpdateStockTakeItemDto"
-Cohesion: 0.06
-Nodes (34): StockTakeItemController, Body, Controller, Delete, Get, Param, Patch, Post (+26 more)
+Cohesion: 0.09
+Nodes (23): StockTakeItemController, Body, Controller, Delete, Get, Param, Patch, Post (+15 more)
 
 ### Community 149 - "compilerOptions"
 Cohesion: 0.10
 Nodes (20): compilerOptions, allowSyntheticDefaultImports, baseUrl, emitDecoratorMetadata, esModuleInterop, experimentalDecorators, forceConsistentCasingInFileNames, incremental (+12 more)
 
-### Community 151 - "form-builder.adapter.ts"
-Cohesion: 0.32
-Nodes (9): buildFormGroup(), getDefaultValueForFieldType(), getFormErrors(), patchFormValue(), DemoForm, buildFieldValidators(), getFieldErrorMessage(), toValidatorFn() (+1 more)
+### Community 151 - "app-form.component.spec.ts"
+Cohesion: 0.19
+Nodes (15): buildFormGroup(), getDefaultValueForFieldType(), getFormErrors(), patchFormValue(), DemoForm, buildFieldValidators(), getFieldErrorMessage(), toValidatorFn() (+7 more)
 
 ### Community 152 - "FinancialYearDetailComponent"
 Cohesion: 0.15
 Nodes (7): BranchDetailComponent, Component, nullableEpochMs(), optionalEpochMs(), toEpochMs(), FinancialYearDetailComponent, Component
 
-### Community 153 - "state-list.component.ts"
-Cohesion: 0.13
-Nodes (10): State, STATE_GRID_CONFIG, StateListComponent, Component, CreateStateRequest, State, UpdateStateRequest, StateService (+2 more)
+### Community 153 - "State"
+Cohesion: 0.23
+Nodes (5): Reality check, State, StateListComponent, Component, State
 
 ### Community 154 - "CreateSalesInvoiceItemDto"
 Cohesion: 0.09
@@ -1691,6 +1662,10 @@ Nodes (23): SalesInvoiceItemController, Body, Controller, Delete, Get, Param, Pa
 ### Community 155 - "Phase 13 Quality Assurance, Testing & Validation.md"
 Cohesion: 0.04
 Nodes (48): Accessibility Testing, API Testing, Automation Strategy, Backup & Recovery Testing, Business Rule Testing, CI/CD Integration, Compatibility Testing, Component Testing (+40 more)
+
+### Community 156 - "Country"
+Cohesion: 0.22
+Nodes (6): Country, Country, CreateCountryRequest, UpdateCountryRequest, CountryService, Injectable
 
 ### Community 157 - "data_ownership"
 Cohesion: 0.10
@@ -1701,20 +1676,20 @@ Cohesion: 0.10
 Nodes (20): legacy_mapping, Batch Lock/Unlock, Batch MRP/Expiry changes, Debit Note / Claim, Expiry/Breakage/Return/Shortage, Goods Receipt Purchase Bill, Goods Receipt Purchase DM, Goods Receipt Replacement (+12 more)
 
 ### Community 159 - "form/index.ts"
-Cohesion: 0.21
-Nodes (15): cloneField(), DEFAULT_FORM_CONFIG, mergeFormConfig(), DemoForm, FormActionsConfig, FormAppearanceConfig, FormShowErrors, FormFieldType (+7 more)
+Cohesion: 0.25
+Nodes (12): cloneField(), DEFAULT_FORM_CONFIG, mergeFormConfig(), DemoForm, FormActionsConfig, FormAppearanceConfig, FormShowErrors, FormLabelPosition (+4 more)
 
 ### Community 160 - "JwtAuthGuard"
-Cohesion: 0.06
-Nodes (32): JwtAuthGuard, Injectable, PermissionsGuard, Injectable, Suggested first slice, Options Considered, API endpoints, Auth error codes (+24 more)
+Cohesion: 0.04
+Nodes (47): AuthModule, Module, JwtAuthGuard, Injectable, PermissionsGuard, Injectable, ContextEnrichInterceptor, Injectable (+39 more)
 
-### Community 161 - "party-addresses-tab.component.ts"
-Cohesion: 0.14
-Nodes (9): PartyAddress, PARTY_ADDRESS_GRID_CONFIG, CreatePartyAddressRequest, PartyAddress, UpdatePartyAddressRequest, PartyAddressService, Injectable, PartyAddressesTabComponent (+1 more)
+### Community 161 - "PartyAddress"
+Cohesion: 0.12
+Nodes (10): Excluded, Masters (lookup), PartyAddress, CreatePartyAddressRequest, PartyAddress, UpdatePartyAddressRequest, PartyAddressService, Injectable (+2 more)
 
-### Community 162 - "medicine.generator.ts"
-Cohesion: 0.18
-Nodes (9): CATEGORY_MAP, MANUFACTURERS, MEDICINES, SALT_UUIDS, SCHEDULE_MAP, BatchRecord, BranchRecord, MedicineRecord (+1 more)
+### Community 162 - "inventory-query.controller.ts"
+Cohesion: 0.22
+Nodes (7): InventoryQueryController, Controller, Get, Query, FefoPreviewQueryDto, IsOptional, IsString
 
 ### Community 163 - "legacy_workflow_mapping"
 Cohesion: 0.11
@@ -1722,19 +1697,23 @@ Nodes (18): legacy_workflow_mapping, cashier_window, customer_return_goods, dele
 
 ### Community 164 - "End-to-end flow diagram design"
 Cohesion: 0.04
-Nodes (45): Bottom line, Deliverables, Diagram anatomy (the "flowchart + table" format), Done (plan deliverables), End-to-end flow diagram design, Fixes applied, Flow at a glance, Follow-up for you (+37 more)
+Nodes (46): Bottom line, Deliverables, Diagram anatomy (the "flowchart + table" format), Done (plan deliverables), End-to-end flow diagram design, Fixes applied, Flow at a glance, Follow-up for you (+38 more)
 
 ### Community 165 - "scripts"
 Cohesion: 0.09
 Nodes (22): scripts, build, db:reset, db:seed, db:seed:fresh, db:test:prepare, format, lint (+14 more)
+
+### Community 166 - "Supplier"
+Cohesion: 0.13
+Nodes (9): Supplier, Service write pattern (all creates/updates/deletes), SupplierListComponent, Component, CreateSupplierRequest, Supplier, UpdateSupplierRequest, SupplierService (+1 more)
 
 ### Community 167 - "phase-07-purchase-management-ado.json"
 Cohesion: 0.12
 Nodes (16): ado_import_note, business_flow, critical_business_rules, definition_of_done, dependencies, downstream, upstream, phase_boundary (+8 more)
 
 ### Community 168 - "devDependencies"
-Cohesion: 0.12
-Nodes (17): devDependencies, @angular/build, @angular/cli, @angular/compiler-cli, concurrently, electron, istanbul-lib-instrument, jest (+9 more)
+Cohesion: 0.11
+Nodes (18): devDependencies, @angular/build, @angular/cli, @angular/compiler-cli, concurrently, electron, istanbul-lib-instrument, jest (+10 more)
 
 ### Community 169 - "DashboardComponent"
 Cohesion: 0.13
@@ -1769,12 +1748,12 @@ Cohesion: 0.13
 Nodes (15): schematics, type, typeSeparator, typeSeparator, typeSeparator, typeSeparator, typeSeparator, type (+7 more)
 
 ### Community 177 - "load-masters.ts"
-Cohesion: 0.35
-Nodes (15): register(), resolve(), tryResolve(), DATA_ROOT, loadJson(), loadConfiguration(), loadFinancialLedgers(), loadGeo() (+7 more)
+Cohesion: 0.24
+Nodes (18): CATEGORY_MAP, MANUFACTURERS, MEDICINES, SALT_UUIDS, SCHEDULE_MAP, register(), resolve(), tryResolve() (+10 more)
 
-### Community 178 - "UpdateTaxDto"
-Cohesion: 0.08
-Nodes (25): TaxController, Body, Controller, Delete, Get, Param, Patch, Post (+17 more)
+### Community 178 - "CreateTaxDto"
+Cohesion: 0.09
+Nodes (20): TaxController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
 ### Community 179 - "legacy_mapping"
 Cohesion: 0.13
@@ -1784,24 +1763,24 @@ Nodes (15): legacy_mapping, account_statement, balance_sheet, cash_book, credit_
 Cohesion: 0.13
 Nodes (15): testing_matrix, audit, batch_pricing, database, discount, offline, performance, price_resolution (+7 more)
 
-### Community 181 - "Business rules"
-Cohesion: 0.18
-Nodes (11): Business rules, Business Rules & Invariants, Customer, Customer classification, Financial attributes, Identity and role, Lifecycle, Loyalty (+3 more)
+### Community 181 - ".resolve"
+Cohesion: 0.22
+Nodes (7): SyncConflictController, Body, Controller, Get, Param, Post, Query
 
 ### Community 182 - "Pricing"
 Cohesion: 0.04
-Nodes (53): 15. Source Boundary, Purpose, How the Tables Work Together, Business Rules, Business Rules, Business Rules, Business Rules, Columns (+45 more)
+Nodes (45): Business Rules, Business Rules, Business Rules, Business Rules, Columns, Columns, Columns, Columns (+37 more)
 
 ### Community 183 - "Persistence Foundation Patterns"
 Cohesion: 0.18
-Nodes (11): Current state, Documentation touch-up (small), Error codes to add, Integration tests (validation — no feature APIs), Known SQLite prerequisite, Module layout (new), Out of scope (this plan), Persistence Foundation Patterns (+3 more)
+Nodes (11): Current state, Documentation touch-up (small), Error codes to add, Known SQLite prerequisite, Module layout (new), Out of scope (this plan), Pattern 2: Outbox-in-transaction (`OutboxService`), Persistence Foundation Patterns (+3 more)
 
-### Community 185 - "unit-of-measure.controller.ts"
-Cohesion: 0.11
+### Community 185 - "CreateUnitOfMeasureDto"
+Cohesion: 0.09
 Nodes (22): CATEGORY_HIERARCHY_MAX_DEPTH, UnitType, Body, Controller, Delete, Get, Param, Patch (+14 more)
 
 ### Community 186 - "CreateMedicineGenericDto"
-Cohesion: 0.14
+Cohesion: 0.13
 Nodes (16): MedicineGenericController, Body, Controller, Delete, Get, Param, Patch, Post (+8 more)
 
 ### Community 187 - "Phase 14 Deployment, DevOps, Operations & Infrastructure.md"
@@ -1811,6 +1790,10 @@ Nodes (44): Alerting, Architecture Overview, Auto Update System, Backup Schedule
 ### Community 188 - "Phase 9 Frontend Architecture & Application Design.md"
 Cohesion: 0.04
 Nodes (44): Accessibility, Angular Project Structure, API Communication, Coding Standards, Component Categories, Component Library, Core Module, Design Tokens (+36 more)
+
+### Community 189 - "PrescriptionItem"
+Cohesion: 0.29
+Nodes (5): 14. Source Boundary, PrescriptionItem, PrescriptionItem, SalesPrescriptionLinesPanelComponent, Component
 
 ### Community 190 - "Phase 7 System Architecture.md"
 Cohesion: 0.05
@@ -1825,7 +1808,7 @@ Cohesion: 0.14
 Nodes (13): ado_import_note, critical_business_rules, definition_of_done, phase_boundary, does_not_implement, implements, reporting_readiness, sales_tables (+5 more)
 
 ### Community 193 - "company-list.component.ts"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (10): Company, COMPANY_GRID_CONFIG, CompanyListComponent, Component, Company, CreateCompanyRequest, UpdateCompanyRequest, CompanyService (+2 more)
 
 ### Community 194 - "stock-adjustment-list.component.ts"
@@ -1836,9 +1819,9 @@ Nodes (11): StockAdjustment, STOCK_ADJUSTMENT_GRID_CONFIG, StockAdjustmentListCo
 Cohesion: 0.13
 Nodes (10): City, CITY_GRID_CONFIG, CityListComponent, Component, City, CreateCityRequest, UpdateCityRequest, CityService (+2 more)
 
-### Community 196 - "medicine-generic-list.component.ts"
-Cohesion: 0.12
-Nodes (10): MedicineGeneric, MEDICINE_GENERIC_GRID_CONFIG, MedicineGenericListComponent, Component, CreateMedicineGenericRequest, MedicineGeneric, UpdateMedicineGenericRequest, MedicineGenericService (+2 more)
+### Community 196 - "MedicineGeneric"
+Cohesion: 0.13
+Nodes (9): MedicineGeneric, In scope, MedicineGenericListComponent, Component, CreateMedicineGenericRequest, MedicineGeneric, UpdateMedicineGenericRequest, MedicineGenericService (+1 more)
 
 ### Community 197 - "Phase 6 User Interface (UI) & User Experience (UX) Design.md"
 Cohesion: 0.05
@@ -1857,8 +1840,8 @@ Cohesion: 0.17
 Nodes (10): AuditLogController, Controller, Get, Param, Query, AuditLogListQueryDto, IsOptional, IsString (+2 more)
 
 ### Community 203 - "Future Roadmap"
-Cohesion: 0.09
-Nodes (22): Compliance, Compliance and privacy, Credit and finance, Customer, Deferred / not modeled, Dependencies, Future Roadmap, Integration (+14 more)
+Cohesion: 0.05
+Nodes (41): Already implemented (foundation), Compliance, Compliance and privacy, Credit and finance, Customer, Deferred / not modeled, Dependencies, Finance (+33 more)
 
 ### Community 204 - "phase-10-pricing-taxation-management-ado.json"
 Cohesion: 0.15
@@ -1876,21 +1859,25 @@ Nodes (39): 10. Prisma ORM, 11. Authentication, 12. Offline First, 14. Event Dri
 Cohesion: 0.05
 Nodes (38): API Documentation Template, API Structure, API Versioning, Audit Service, Backend Design Principles, Background Jobs, Caching Strategy, DTO Design (+30 more)
 
+### Community 209 - "ADR-007: Outbox enqueue in same transaction as business mutation"
+Cohesion: 0.18
+Nodes (11): ADR-007: Outbox enqueue in same transaction as business mutation, Affected Modules / Components, Architectural Impact, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed (+3 more)
+
 ### Community 210 - "hydrate.ts"
-Cohesion: 0.14
-Nodes (19): hydrateContext(), hydrateDocumentSequences(), hydrateFromDb(), hydrateRegistry(), hydrateRegistryModel(), maxSeqFromNumbers(), setSeqIfHigher(), BIGINT IDs and document numbers (+11 more)
+Cohesion: 0.10
+Nodes (26): hydrateContext(), hydrateDocumentSequences(), hydrateFromDb(), hydrateRegistry(), hydrateRegistryModel(), maxSeqFromNumbers(), setSeqIfHigher(), BIGINT IDs and document numbers (+18 more)
 
 ### Community 211 - "PurchaseInvoice"
-Cohesion: 0.08
-Nodes (20): Actors, Business Objective, Business Owner, Business Rules, Data Model, Database Tables, Main Flow (purchase return), Main Flow (sales return) (+12 more)
+Cohesion: 0.17
+Nodes (10): PurchaseInvoice, PURCHASE_INVOICE_GRID_CONFIG, CreatePurchaseInvoiceRequest, PurchaseInvoice, PurchaseInvoiceMatchLine, PurchaseInvoiceMatchSummary, PurchaseInvoiceWorkflowRequest, UpdatePurchaseInvoiceRequest (+2 more)
 
-### Community 212 - "LedgerEntryListQueryDto"
-Cohesion: 0.13
-Nodes (11): LedgerEntryController, Controller, Get, Param, Query, LedgerEntryListQueryDto, IsIn, IsOptional (+3 more)
+### Community 212 - "PaginationQueryDto"
+Cohesion: 0.04
+Nodes (80): DeleteEntityQueryDto, PaginationQueryDto, IsInt, IsOptional, IsString, MaxLength, Min, Type (+72 more)
 
 ### Community 213 - "MandatoryBigIntField"
 Cohesion: 0.02
-Nodes (111): PERMISSIONS_ANY_KEY, DEVICE_TYPES, DEVICE_TYPES, ClearableOptionalBigIntField(), MandatoryBigIntField(), NullableBigIntField, OptionalBigIntField(), OptionalBigIntDto (+103 more)
+Nodes (119): DEVICE_TYPES, DEVICE_TYPES, ClearableOptionalBigIntField(), MandatoryBigIntField(), NullableBigIntField, OptionalBigIntField(), OptionalBigIntDto, coerceToBigInt() (+111 more)
 
 ### Community 214 - "Lookup / Masters"
 Cohesion: 0.05
@@ -1909,12 +1896,16 @@ Cohesion: 0.17
 Nodes (11): approved_database_tables, core_workflow, critical_business_rules, definition_of_done, dependencies, key_consumers, upstream, schema_version (+3 more)
 
 ### Community 218 - "sync-conflict-list.component.ts"
-Cohesion: 0.04
+Cohesion: 0.05
 Nodes (28): AUDIT_LOG_GRID_CONFIG, AuditLogListComponent, Component, AuditLogApiRow, AuditLogRow, AuditLogService, toAuditLogRow(), Injectable (+20 more)
 
-### Community 220 - "MedicineSchedule"
-Cohesion: 0.19
-Nodes (7): MedicineSchedule, MEDICINE_SCHEDULE_GRID_CONFIG, CreateMedicineScheduleRequest, MedicineSchedule, UpdateMedicineScheduleRequest, MedicineScheduleService, Injectable
+### Community 219 - "21. Required Prisma Changes"
+Cohesion: 0.18
+Nodes (11): 21. Required Prisma Changes, All enums (29), Batch, Document numbers (SalesInvoice, PurchaseInvoice, StockTransfer, StockAdjustment, StockMovement), Outbox / SyncConflict, Rename file, SalesInvoice.salesType, schema.prisma datasource (+3 more)
+
+### Community 220 - "medicine-schedule-list.component.ts"
+Cohesion: 0.12
+Nodes (10): MedicineSchedule, MEDICINE_SCHEDULE_GRID_CONFIG, MedicineScheduleListComponent, Component, CreateMedicineScheduleRequest, MedicineSchedule, UpdateMedicineScheduleRequest, MedicineScheduleService (+2 more)
 
 ### Community 221 - "pharmacy_erp_backend_crud_foundation.md"
 Cohesion: 0.05
@@ -1932,9 +1923,9 @@ Nodes (5): AppController, Controller, Get, AppService, Injectable
 Cohesion: 0.27
 Nodes (12): isSensitiveKey(), redactSensitiveFields(), safeSerializeValue(), SENSITIVE_KEY_PATTERNS, buildWinstonModuleOptions(), consoleFormat(), defaultLogDir(), jsonFileFormat() (+4 more)
 
-### Community 225 - "Party"
-Cohesion: 0.04
-Nodes (58): 6. Settlement and collection paths, Invoice cancel rules (purchase-parity), Excluded, Acceptance Criteria, Implemented reports (party), 9. Product / Medicine / Manufacturer Review, Batch uniqueness scope, Major concepts present (+50 more)
+### Community 225 - "Ledger"
+Cohesion: 0.06
+Nodes (27): Ledger, Aggregate relationships, Aggregates, Finance Domain, In scope, Journal posting unit (conceptual), Ledger aggregate (chart of accounts), Ledger master (+19 more)
 
 ### Community 226 - "UserBranchController"
 Cohesion: 0.13
@@ -1945,36 +1936,24 @@ Cohesion: 0.18
 Nodes (11): feature_focus, FEAT-157, FEAT-158, FEAT-159, FEAT-160, FEAT-161, FEAT-162, FEAT-163 (+3 more)
 
 ### Community 228 - "scripts"
-Cohesion: 0.17
-Nodes (12): scripts, build, dev, electron, ng, start, test, test:ci (+4 more)
+Cohesion: 0.15
+Nodes (13): scripts, build, dev, electron, ng, start, test, test:ci (+5 more)
 
-### Community 229 - "Pharmacy ERP — Functional Overview (Plain English)"
-Cohesion: 0.10
-Nodes (20): 10. Three-sentence summary, 1. What this software is, 2. Big-picture architecture, 4. The 14 functional modules, 5.0 Master-data setup (prerequisite), 5.1 Procure-to-Stock (Purchasing), 5.2 Sell-to-Cash (Sales), 5.3 Inventory operations (+12 more)
+### Community 229 - "3. Core building blocks (vocabulary)"
+Cohesion: 0.09
+Nodes (23): 10. Three-sentence summary, 1. What this software is, 2. Big-picture architecture, 3. Core building blocks (vocabulary), 4. The 14 functional modules, 5.0 Master-data setup (prerequisite), 5.1 Procure-to-Stock (Purchasing), 5.2 Sell-to-Cash (Sales) (+15 more)
 
 ### Community 230 - "Phase 12 Integrations, External Systems & Interoperability.md"
 Cohesion: 0.05
 Nodes (36): Accounting Integrations, API Standards, Banking Integration, Configuration, Conflict Resolution, Distributor Integrations, Documentation Template, Error Handling (+28 more)
 
-### Community 232 - "Backend reporting implementation"
-Cohesion: 0.11
-Nodes (17): 1. A shared report query DTO (date range + pagination), 5. When `groupBy` isn't enough → raw SQL, 6. Permissions + serialization, 7. One caveat to decide up front, Backend reporting implementation, Cross-links added/updated, Dependencies, Docs (+9 more)
-
-### Community 233 - "app-dialog.service.ts"
-Cohesion: 0.16
-Nodes (15): ref_primeng_api, ref_primeng_dynamicdialog, applyConfirmPreset(), CONFIRM_PRESET_DANGER, CONFIRM_PRESET_INFO, getConfirmPresetDefaults(), mergeConfirmConfig(), resolveConfirmConfig() (+7 more)
-
 ### Community 234 - "Employee"
-Cohesion: 0.21
-Nodes (6): Employee, How the Tables Work Together, Relationship Diagram, Employee, EmployeeService, Injectable
+Cohesion: 0.12
+Nodes (10): Employee, How the Tables Work Together, Relationship Diagram, EmployeeListComponent, Component, CreateEmployeeRequest, Employee, UpdateEmployeeRequest (+2 more)
 
-### Community 235 - "Persistence patterns (NestJS + Prisma)"
-Cohesion: 0.15
-Nodes (12): formatDocumentNumber(), FormatDocumentNumberInput, Phase 6 — Polish, Document sequences, Integration tests, Inventory ledger, Outbox, Persistence patterns (NestJS + Prisma) (+4 more)
-
-### Community 236 - "Pagination"
-Cohesion: 0.03
-Nodes (63): ref_rxjs, ApiErrorBody, ApiErrorResponse, ApiResponse, ApiSuccessResponse, Pagination, ApiService, Injectable (+55 more)
+### Community 236 - "month-end-close.component.ts"
+Cohesion: 0.22
+Nodes (6): ClosingService, PreCloseBlocker, PreCloseChecklistResult, Injectable, MonthEndCloseComponent, Component
 
 ### Community 237 - "Phase 15 Product Roadmap, Future Enhancements & Innovation.md"
 Cohesion: 0.06
@@ -1982,7 +1961,7 @@ Nodes (35): Analytics Platform, Annual Review Process, API Platform, Automation 
 
 ### Community 238 - "Pharmacy ERP Architecture Review"
 Cohesion: 0.04
-Nodes (55): 10. Batch Review, 11. Stock Review, 12. Stock Movement Review, 15. Synchronization Readiness, 16. Transaction & Consistency Review, 18. Index & Performance Review, 1. Executive Summary, 20. Recommended Target Architecture (+47 more)
+Nodes (49): 10. Batch Review, 11. Stock Review, 12. Stock Movement Review, 15. Synchronization Readiness, 16. Transaction & Consistency Review, 18. Index & Performance Review, 19. Critical Architecture Red Flags, 1. Executive Summary (+41 more)
 
 ### Community 241 - "development"
 Cohesion: 0.20
@@ -1997,12 +1976,8 @@ Cohesion: 0.06
 Nodes (32): Business Rules, Business Rules, Business Rules, Columns, Columns, Columns, Constraints, Constraints (+24 more)
 
 ### Community 244 - "early-foundations_4083198d.plan.md"
-Cohesion: 0.10
-Nodes (18): ADR-012: Global JWT auth and PermissionsGuard with @Public opt-out, Decision Selected, Historical Source, Problem / Context, Question Discussed, Rationale, Rejected Alternatives, 3a. Branch scoping (§36) (+10 more)
-
-### Community 245 - "Stock Transfer"
-Cohesion: 0.20
-Nodes (9): Business Objective, Business Owner, Business Rules, Data Model, Database Tables, Main Flow, Mermaid Sequence, Status Lifecycle (String fields) (+1 more)
+Cohesion: 0.06
+Nodes (32): ADR-012: Global JWT auth and PermissionsGuard with @Public opt-out, Decision Selected, Historical Source, Problem / Context, Question Discussed, Rationale, Rejected Alternatives, ADR-013: JWT-enriched RequestContext (headers demoted to dev fallback) (+24 more)
 
 ### Community 246 - "RolePermissionController"
 Cohesion: 0.05
@@ -2041,32 +2016,32 @@ Cohesion: 0.20
 Nodes (9): AppToolbar, Events, Item types, Keyboard shortcuts, Layout, Loading, Location, Rules (+1 more)
 
 ### Community 256 - "Workflows"
-Cohesion: 0.18
-Nodes (11): Batch, Costing, Expiry and FEFO, Ledger reference mapping, Reservation, Stock, Stock adjustment, Stock take (+3 more)
+Cohesion: 0.06
+Nodes (33): Batch, Batch, Batch and Stock status, Costing, Domain Events, Expiry and FEFO, Expiry (planned / monitoring), In scope (+25 more)
 
 ### Community 258 - "Prescription"
-Cohesion: 0.21
-Nodes (7): Prescription, CreatePrescriptionRequest, Prescription, PrescriptionWorkflowRequest, UpdatePrescriptionRequest, PrescriptionService, Injectable
+Cohesion: 0.23
+Nodes (6): CreatePrescriptionRequest, Prescription, PrescriptionWorkflowRequest, UpdatePrescriptionRequest, PrescriptionService, Injectable
 
-### Community 260 - "ADR-258: Stock-take variance fields server-computed on item write"
-Cohesion: 0.25
-Nodes (7): ADR-258: Stock-take variance fields server-computed on item write, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
+### Community 260 - "Inventory module — agent memory model"
+Cohesion: 0.08
+Nodes (26): computeVarianceType(), 10. Cross-cutting references, 11. Out of scope (not implemented), 12. Related documentation, 1. Module snapshot, 2. Domain model, 3. Status machines, 5. Layer map (+18 more)
 
 ### Community 261 - "pharmacy_erp_ado_backlog_standard.md"
 Cohesion: 0.08
 Nodes (24): 10. Backend Task Standard, 11. UI Task Standard, 12. Security Tasks, 13. Audit Tasks, 14. Synchronization Tasks, 15. Testing Task Standard, 16. Documentation Tasks, 17. Cross-Cutting Platform Features (+16 more)
 
 ### Community 262 - "ADR-NNN: Short descriptive title"
-Cohesion: 0.14
-Nodes (14): ADR-NNN: Short descriptive title, Affected Modules / Components, Architectural Impact, Constraints / Assumptions, Decision Selected, Evolution, Historical Source, Options Considered (+6 more)
+Cohesion: 0.08
+Nodes (23): Architecture Decision Records (ADRs), Confidence levels, ID convention, Index, Phase 1 (recovered 2026-09-10), Phase 2 (recovered 2026-09-11), Records, Review (+15 more)
 
 ### Community 263 - "purchase-order-items-tab.component.ts"
 Cohesion: 0.15
 Nodes (9): PurchaseOrderItem, PURCHASE_ORDER_ITEM_GRID_CONFIG, CreatePurchaseOrderItemRequest, PurchaseOrderItem, UpdatePurchaseOrderItemRequest, PurchaseOrderItemService, Injectable, PurchaseOrderItemsTabComponent (+1 more)
 
 ### Community 265 - "auth.controller.ts"
-Cohesion: 0.13
-Nodes (14): Get, CurrentUser, RefreshTokenDto, IsNotEmpty, IsString, AuthenticatedUser, ConfirmMfaDto, MfaController (+6 more)
+Cohesion: 0.04
+Nodes (60): AuthController, Body, Controller, Get, Post, Req, CurrentUser, IS_PUBLIC_KEY (+52 more)
 
 ### Community 266 - "pharmacy-erp"
 Cohesion: 0.22
@@ -2077,8 +2052,8 @@ Cohesion: 0.09
 Nodes (22): 18. Cross-Cutting Authorization, 19. Cross-Cutting Audit Integration, 1. Objective, 20. Data Privacy & Sensitive Information, 21. Database Standards, 25. Party Data Flow, 27. Phase 3 Completion Checklist, 28. Phase 3 Work Item Summary (+14 more)
 
 ### Community 269 - "http-test.helpers.ts"
-Cohesion: 0.29
-Nodes (11): ApiEnvelope, closeHttpTestApp(), createHttpTestApp(), getSeededIds(), loginAs(), loginAsAdmin(), resetAllUserPasswords(), SeededIds (+3 more)
+Cohesion: 0.15
+Nodes (26): ApiEnvelope, startCloudSyncMock(), closeHttpTestApp(), createHttpTestApp(), getSeededIds(), loginAs(), loginAsAdmin(), resetAllUserPasswords() (+18 more)
 
 ### Community 270 - "phase"
 Cohesion: 0.22
@@ -2104,9 +2079,17 @@ Nodes (8): serve, production, budgets, buildTarget, outputHashing, builder, conf
 Cohesion: 0.09
 Nodes (23): Audit, AuditLog, Business Rules, Business Rules, ChangeHistory, Columns, Columns, Constraints (+15 more)
 
-### Community 279 - "backend-memory-map.md"
-Cohesion: 0.08
-Nodes (18): ADR-017: AuditService.log inside UnitOfWork transaction, Decision Selected, Historical Source, Problem / Context, Rationale, ADR-260: auditAndLogChanges helper for UPDATE ChangeHistory, Historical Source, Problem / Context (+10 more)
+### Community 279 - "Major concepts present"
+Cohesion: 0.06
+Nodes (31): ADR-003: Stock balance per branch per batch (not one stock per batch globally), Affected Modules / Components, Architectural Impact, Constraints / Assumptions, Decision Selected, Historical Source, Options Considered, Problem / Context (+23 more)
+
+### Community 280 - "AppSetting"
+Cohesion: 0.13
+Nodes (10): 2. API catalog, 4. Layer map, 5. Cross-cutting refs, Settings module — agent memory model, Release Checklist, AppSetting, Relationship Diagram, SettingListComponent (+2 more)
+
+### Community 281 - "jwt.strategy.ts"
+Cohesion: 0.29
+Nodes (5): JwtPayload, JwtStrategy, Injectable, getJwtSecret(), passport-jwt
 
 ### Community 282 - "epic"
 Cohesion: 0.25
@@ -2138,19 +2121,19 @@ Nodes (8): validation, correction, expected_epics, expected_features, expected_t
 
 ### Community 293 - "Stock"
 Cohesion: 0.03
-Nodes (101): Schema rules enforced, 10. Cross-cutting references, 11. Out of scope (not implemented), 12. Related documentation, 1. Module snapshot, 2. Domain model, 3. Status machines, 5. Layer map (+93 more)
+Nodes (102): Recommendation: Multiple diagrams (a small hierarchy), not one, 2. Entities (from Prisma + domain), 4. Gaps vs party module patterns, 6. Recommended build sequence, Explore inventory DTOs/mappers, Inventory Module — Planning Summary, 1. Objective, Phase 6 — Inventory Management (+94 more)
 
 ### Community 294 - "sys"
 Cohesion: 0.11
-Nodes (17): argparse, main(), Regenerate one or all workflow diagrams., run_script(), build_flow(), main(), Generate minimal L1 prescription-flow.drawio and .svg., build_flow() (+9 more)
+Nodes (17): argparse, main(), Regenerate one or all workflow diagrams., run_script(), build_flow(), main(), Generate L1 purchase-invoice-flow.drawio and .svg., build_flow() (+9 more)
 
-### Community 295 - "loyalty-program-list.component.ts"
-Cohesion: 0.14
-Nodes (9): LOYALTY_PROGRAM_GRID_CONFIG, LoyaltyProgramListComponent, Component, CreateLoyaltyProgramRequest, UpdateLoyaltyProgramRequest, LoyaltyProgramRow, LoyaltyProgramService, Injectable (+1 more)
+### Community 295 - "loyalty/loyalty-program.service.ts"
+Cohesion: 0.29
+Nodes (4): CreateLoyaltyProgramRequest, UpdateLoyaltyProgramRequest, LoyaltyProgramService, Injectable
 
-### Community 296 - "ADR-006: All business writes through UnitOfWorkService.run"
-Cohesion: 0.04
-Nodes (41): ADR-006: All business writes through UnitOfWorkService.run, Affected Modules / Components, Architectural Impact, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed (+33 more)
+### Community 296 - "backend-memory-map.md"
+Cohesion: 0.08
+Nodes (16): ADR-006: All business writes through UnitOfWorkService.run, Affected Modules / Components, Architectural Impact, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed (+8 more)
 
 ### Community 313 - "Testing"
 Cohesion: 0.08
@@ -2158,31 +2141,31 @@ Nodes (24): After changing a backend service, After changing persistence / UnitO
 
 ### Community 314 - "Prescription"
 Cohesion: 0.10
-Nodes (21): Business Rules, Business Rules, Columns, Columns, Constraints, Constraints, How the Tables Work Together, Indexes (+13 more)
+Nodes (21): Business Rules, Business Rules, Columns, Columns, Constraints, Constraints, Indexes, Indexes (+13 more)
 
-### Community 315 - "PurchaseOrder"
-Cohesion: 0.05
-Nodes (46): Lower-priority / optional, Summary of changes, 1. Objective, Phase 7 — Purchase Management, GoodsReceiptItem, PurchaseOrder, Aggregate structure, Approval flow (+38 more)
+### Community 315 - "Batch"
+Cohesion: 0.04
+Nodes (50): CLI, Layout, Modes, Pharmacy ERP seed data, Schema rules enforced, Target volumes (approximate, per fresh run), Verification, What is JSON vs generated (+42 more)
 
 ### Community 316 - "angular.json"
 Cohesion: 0.29
 Nodes (6): cli, analytics, newProjectRoot, projects, $schema, version
 
 ### Community 317 - "Node"
-Cohesion: 0.16
-Nodes (20): dataclasses, Phase 0 — Shared engine, _box(), build_flow(), link(), main(), Generate L0 system-map-flow.drawio and .svg — module handoffs only., Edge (+12 more)
+Cohesion: 0.22
+Nodes (15): dataclasses, Phase 0 — Shared engine, Edge, esc(), Node, node_bottom(), node_center(), node_left() (+7 more)
 
 ### Community 318 - "Module	What it does"
-Cohesion: 0.09
-Nodes (22): Business screens (list + detail CRUD pattern), Central document expanded, Created (14 submodule guides in `functional/`), Cross-cutting additions that would strengthen the whole set, Downstream updates, Key findings documented, Missing whole topics (no functional doc exists), Module	What it does (+14 more)
+Cohesion: 0.06
+Nodes (31): 1. What this software actually is, 2. The big picture — how the pieces fit, 3. The core building blocks (the vocabulary you must know), 4. The 14 functional modules at a glance, 7. One diagram to remember it all, 8. Variations summary (quick reference — nothing left out), 9. Where to read more (reference index), Business screens (list + detail CRUD pattern) (+23 more)
 
 ### Community 319 - "004_user_role_permission_security.md"
 Cohesion: 0.10
 Nodes (20): 1. Objective, 20. Recommended Initial Security Roles, 24. API Security Standards, 26. Security Review Checklist, 27. Phase 4 Dependencies, 28. Security Dependency Flow, 29. Example Authorization Flow, 2. Scope (+12 more)
 
 ### Community 320 - "008_sales_billing_management.md"
-Cohesion: 0.11
-Nodes (17): 28. Sales Permission Catalog, 2. Phase 8 Scope, 30. Data Ownership, 31. Integration Architecture, 32. Legacy Feature Mapping, 33. Reporting Readiness, 34. Testing Matrix, 35. Definition of Done (+9 more)
+Cohesion: 0.10
+Nodes (20): 28. Sales Permission Catalog, 2. Phase 8 Scope, 30. Data Ownership, 31. Integration Architecture, 32. Legacy Feature Mapping, 33. Reporting Readiness, 34. Testing Matrix, 35. Definition of Done (+12 more)
 
 ### Community 321 - "Permissions by module (representative)"
 Cohesion: 0.10
@@ -2192,13 +2175,9 @@ Nodes (21): Configuration (`CONFIGURATION`), Finance (`FINANCE`), Integrations, 
 Cohesion: 0.10
 Nodes (20): 22. FEAT-095 — Purchase Testing, Performance & Readiness, Tasks, Tasks, Tasks, Tasks, Tasks, Tasks, Tasks (+12 more)
 
-### Community 323 - "Pharmacy ERP Backend — Agent Guide"
-Cohesion: 0.13
-Nodes (14): Architecture docs, Before finishing, Commands, Cursor rules, Key conventions, Logging and audit, Module memory docs, Pharmacy ERP Backend — Agent Guide (+6 more)
-
-### Community 324 - "reporting.module.ts"
-Cohesion: 0.22
-Nodes (5): ReportFavoriteController, Body, Controller, Get, Post
+### Community 324 - "ReportDefinition"
+Cohesion: 0.21
+Nodes (11): Pagination, TenantScope, ReportCategory, ReportPermission, ReportColumnType, ReportColumnTypes, ReportDefinition, ReportDefinitionMeta (+3 more)
 
 ### Community 325 - "epic"
 Cohesion: 0.29
@@ -2237,7 +2216,7 @@ Cohesion: 0.33
 Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 
 ### Community 335 - "ManualFlow"
-Cohesion: 0.15
+Cohesion: 0.14
 Nodes (11): build_flow(), main(), Generate L1 inventory-movement-flow.drawio and .svg — ledger hub., build_flow(), main(), Generate L1 payment-flow.drawio and .svg., build_flow(), main() (+3 more)
 
 ### Community 336 - "cross_cutting_requirements"
@@ -2328,9 +2307,9 @@ Nodes (5): extract-i18n, test, builder, architect, builder
 Cohesion: 0.22
 Nodes (9): 1. Mental model, 2. The shared building blocks you extend, 5. Do / Don't, Audit (`audit/`), Auth layer (`auth/`), Extending the Backend, Feature module anatomy, Golden rules (+1 more)
 
-### Community 358 - "cursor_logging_framework_recommendation.md"
-Cohesion: 0.11
-Nodes (18): 1. Separate your logs into two categories, 2. Business Audit Logs — separate database table, 3. Recommended logging layers, 4. Request ID is highly recommended, 5. What I would log automatically, 6. Log levels, 7. I would create a LoggingModule, A. Technical/Application Logs (+10 more)
+### Community 358 - "AppModule"
+Cohesion: 0.07
+Nodes (25): AppModule, Module, 1. Separate your logs into two categories, 2. Business Audit Logs — separate database table, 3. Recommended logging layers, 4. Request ID is highly recommended, 5. What I would log automatically, 6. Log levels (+17 more)
 
 ### Community 359 - "source"
 Cohesion: 0.40
@@ -2451,10 +2430,6 @@ Nodes (5): phase, key, name, number, objective
 ### Community 388 - "work_item_ranges"
 Cohesion: 0.40
 Nodes (5): work_item_ranges, epic, features, tasks, user_stories
-
-### Community 389 - "4. API catalog"
-Cohesion: 0.22
-Nodes (9): 4. API catalog, Customer — role detail, Doctor — role detail, Employee — role detail, Party addresses (`/parties/:partyId/addresses`), Party contacts (`/parties/:partyId/contacts`), Party — header, Party roles (`/parties/:partyId/roles`) (+1 more)
 
 ### Community 390 - "002_organization_geography_configuration.md"
 Cohesion: 0.11
@@ -2606,7 +2581,7 @@ Nodes (8): AppForm, Conditional fields, Events, Inputs, Location, Permissions, P
 
 ### Community 430 - "009_financial_management_accounting.md"
 Cohesion: 0.11
-Nodes (17): 1. Purpose, 2. Phase 9 Scope, 32. Financial Data Ownership, 33. Legacy-to-Modern Mapping, 34. Testing Matrix, 35. Definition of Done, 36. Phase 9 Summary, 37. Final Architecture (+9 more)
+Nodes (18): 1. Purpose, 2. Phase 9 Scope, 32. Financial Data Ownership, 33. Legacy-to-Modern Mapping, 34. Testing Matrix, 35. Definition of Done, 36. Phase 9 Summary, 37. Final Architecture (+10 more)
 
 ### Community 431 - "006_inventory_management.md"
 Cohesion: 0.11
@@ -2628,13 +2603,13 @@ Nodes (17): 10. Calculations, 11. Inventory Impact, 12. Accounting Impact, 13. A
 Cohesion: 0.12
 Nodes (16): Audit Requirements, Business Rule Documentation Template, Configuration Matrix, Configuration Rules, Decision Trees, Estimated Size, Exit Criteria, Expected Deliverables (+8 more)
 
-### Community 436 - "write_diagram"
-Cohesion: 0.11
-Nodes (21): build_flow(), main(), Generate L2 cross-cutting-persistence-flow.drawio and .svg., build_flow(), main(), Generate L1 month-end-flow.drawio and .svg., build_flow(), main() (+13 more)
+### Community 436 - "FlowBuilder"
+Cohesion: 0.16
+Nodes (11): build_flow(), main(), Generate L2 cross-cutting-persistence-flow.drawio and .svg., build_flow(), main(), Generate minimal L1 prescription-flow.drawio and .svg., build_flow(), main() (+3 more)
 
 ### Community 437 - "010_pricing_taxation_management.md"
-Cohesion: 0.13
-Nodes (14): 10. Offline & Synchronization Design, 11. UI Standards, 12. Testing Matrix, 13. Definition of Done, 14. Phase 10 Summary, 6. EPIC-010 — Pricing & Taxation Management, 8. Sales Integration Contract, 9. Purchase Integration Contract (+6 more)
+Cohesion: 0.12
+Nodes (15): 10. Offline & Synchronization Design, 11. UI Standards, 12. Testing Matrix, 13. Definition of Done, 14. Phase 10 Summary, 15. Source Boundary, 6. EPIC-010 — Pricing & Taxation Management, 8. Sales Integration Contract (+7 more)
 
 ### Community 438 - "FEAT-141 — Pricing Domain & Data Model"
 Cohesion: 0.12
@@ -2644,17 +2619,13 @@ Nodes (16): Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Accep
 Cohesion: 0.12
 Nodes (15): Audit, Configuration, Financial, Inventory, Lookup / Masters, Loyalty, Medicine Master, Party Management (+7 more)
 
-### Community 440 - "Validation"
-Cohesion: 0.25
-Nodes (8): Batch, Common, Expiry / FEFO (sales path), Stock / ledger (InventoryLedgerService), StockAdjustment, StockTake, StockTransfer, Validation
+### Community 440 - "Business Rules & Invariants"
+Cohesion: 0.12
+Nodes (16): Batch, Batch and expiry, Business Rules & Invariants, Common, Expiry / FEFO (sales path), Ledger and costing, Stock adjustment, Stock balances (+8 more)
 
-### Community 441 - "Backend seed script issues"
-Cohesion: 0.22
-Nodes (8): Also updated, Backend seed script issues, Docs ([`backend/seed/README.md`](backend/seed/README.md)), New hydration layer ([`backend/seed/lib/hydrate.ts`](backend/seed/lib/hydrate.ts)), Primary update — [`backend/README.md`](backend/README.md), Resumable / append-safe generators, Seed runner ([`backend/seed/seed.ts`](backend/seed/seed.ts)), Verification (all passed)
-
-### Community 442 - "RolePermission"
+### Community 442 - "role-permissions-tab.component.ts"
 Cohesion: 0.14
-Nodes (8): RolePermission, CreateRolePermissionRequest, RolePermission, UpdateRolePermissionRequest, RolePermissionService, Injectable, RolePermissionsTabComponent, Component
+Nodes (9): RolePermission, ROLE_PERMISSION_GRID_CONFIG, CreateRolePermissionRequest, RolePermission, UpdateRolePermissionRequest, RolePermissionService, Injectable, RolePermissionsTabComponent (+1 more)
 
 ### Community 443 - "3. Business rules"
 Cohesion: 0.13
@@ -2671,10 +2642,6 @@ Nodes (15): 18. FEAT-077 — Inventory UI/UX & Keyboard Workflow, Dashboard info
 ### Community 446 - "7. FEAT-066 — Batch Master & Batch Lifecycle"
 Cohesion: 0.13
 Nodes (15): 7. FEAT-066 — Batch Master & Batch Lifecycle, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Purpose, Tasks, Tasks, Tasks (+7 more)
-
-### Community 447 - "ADR-016: Winston AppLogger for technical logs; AuditService for business audit"
-Cohesion: 0.22
-Nodes (9): ADR-016: Winston AppLogger for technical logs; AuditService for business audit, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives (+1 more)
 
 ### Community 448 - "Synchronization Strategy"
 Cohesion: 0.13
@@ -2693,16 +2660,16 @@ Cohesion: 0.13
 Nodes (15): Accounting Impact, Actors, Alternative Flow, Decision Points, Exception Flow, Inventory Movement, Notifications, Preconditions (+7 more)
 
 ### Community 452 - "Integrations and Devices — Functional Guide"
-Cohesion: 0.13
-Nodes (15): Barcode, Integrations, Integrations and Devices — Functional Guide, Key concepts, Maturity & known gaps, Payment devices, Payment terminal (Planned), Permissions summary (+7 more)
+Cohesion: 0.14
+Nodes (14): Barcode, Integrations, Integrations and Devices — Functional Guide, Key concepts, Maturity & known gaps, Payment devices, Payment terminal (Planned), Permissions summary (+6 more)
 
 ### Community 453 - "User Experience — Functional Guide"
 Cohesion: 0.13
 Nodes (15): Cashier flow (target), Integrations, Inventory, Key concepts, Keyboard shortcuts (placeholders), Maturity & known gaps, Module-specific UX notes, Purchase (+7 more)
 
-### Community 454 - "ADR-159: Party reports provider ships first under reporting/providers"
+### Community 454 - "StateService"
 Cohesion: 0.22
-Nodes (8): ADR-159: Party reports provider ships first under reporting/providers, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
+Nodes (4): CreateStateRequest, UpdateStateRequest, StateService, Injectable
 
 ### Community 455 - "17. Feature: Party Integration Foundation"
 Cohesion: 0.14
@@ -2727,10 +2694,6 @@ Nodes (14): 20. FEAT-079 — Inventory Testing, Performance & Readiness, Accepta
 ### Community 460 - "20. FEAT-093 — Purchase Angular UI & Keyboard Workflow"
 Cohesion: 0.14
 Nodes (14): 20. FEAT-093 — Purchase Angular UI & Keyboard Workflow, Dashboard, Screen structure, Screen structure, Tasks, Tasks, Tasks, Tasks (+6 more)
-
-### Community 461 - "Architecture Decision Records (ADRs)"
-Cohesion: 0.22
-Nodes (9): Architecture Decision Records (ADRs), Confidence levels, ID convention, Index, Phase 1 (recovered 2026-09-10), Phase 2 (recovered 2026-09-11), Records, Review (+1 more)
 
 ### Community 462 - "5. Features and User Stories"
 Cohesion: 0.15
@@ -2764,17 +2727,13 @@ Nodes (13): Customer receipt, Financial — Functional Guide, Integrations, Key 
 Cohesion: 0.15
 Nodes (13): Integrations, Inventory — Functional Guide, Key concepts, Maturity & known gaps, Permissions summary, References, Rules and variations, Stock adjustment (+5 more)
 
-### Community 470 - "PurchaseReportsProvider"
-Cohesion: 0.14
-Nodes (10): PurchaseReportsProvider, Injectable, SalesReportsProvider, Injectable, Frontend, Phase 2 — Reporting catalog, Report ids (registered at startup), Tests (+2 more)
-
 ### Community 472 - "Finance module — agent memory model"
-Cohesion: 0.18
-Nodes (11): 1. Module snapshot, 2. Domain model, 3. API catalog, 4. Workflow ledger (summary), 6. Not implemented, Finance module — agent memory model, Golden rules, Ledger (COA) (+3 more)
+Cohesion: 0.17
+Nodes (12): 1. Module snapshot, 2. Domain model, 3. API catalog, 4. Workflow ledger (summary), 5. Layer map, 6. Not implemented, Finance module — agent memory model, Golden rules (+4 more)
 
-### Community 473 - "Pharmacy ERP early priorities"
-Cohesion: 0.15
-Nodes (12): Electron, How to run, Implement / lock down early (cheap now, expensive later), New primary doc, Party module (`backend/src/party/`), Pharmacy ERP early priorities, Safe to defer, Supporting fix (+4 more)
+### Community 473 - "ADR-010: RequestContext via AsyncLocalStorage for tenant and device"
+Cohesion: 0.22
+Nodes (9): ADR-010: RequestContext via AsyncLocalStorage for tenant and device, Affected Modules / Components, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale (+1 more)
 
 ### Community 474 - "001_foundation_architecture.md"
 Cohesion: 0.17
@@ -2813,8 +2772,8 @@ Cohesion: 0.17
 Nodes (11): 1. Statistics, 2. Per-ADR Analysis, 3. Cross-cutting observations, ADR Review — Plain-English Assessment and Recommendations, Config, sync, and cross-cutting (ADR-114–156), Flagged ADRs by theme, Foundations and persistence (ADR-001–026), Pricing, prescription, audit, SCM, closeout (ADR-209–260) (+3 more)
 
 ### Community 484 - "SequenceGenerator"
-Cohesion: 0.05
-Nodes (34): 3. No persistence/service layer yet — design the critical patterns before writing features, 4. Common extension scenarios, A mutation that allocates a document number, A mutation that changes stock, A public (unauthenticated) endpoint, Optimistic concurrency on update / delete, Seed data for the new feature, Architecture split (+26 more)
+Cohesion: 0.04
+Nodes (45): formatDocumentNumber(), FormatDocumentNumberInput, Phase 6 — Polish, 3. No persistence/service layer yet — design the critical patterns before writing features, 4. Common extension scenarios, A mutation that allocates a document number, A mutation that changes stock, A public (unauthenticated) endpoint (+37 more)
 
 ### Community 485 - "Loyalty — Functional Guide"
 Cohesion: 0.17
@@ -2836,9 +2795,9 @@ Nodes (12): Counter sale (OTC), Integrations, Invoice document states, Key conce
 Cohesion: 0.17
 Nodes (12): ADR-002: String status fields instead of Prisma enums on SQLite, Affected Modules / Components, Architectural Impact, Constraints / Assumptions, Decision Selected, Historical Source, Options Considered, Problem / Context (+4 more)
 
-### Community 490 - "Common Module Hardening Plan"
-Cohesion: 0.22
-Nodes (8): 1. Log unexpected 500 errors, 2. Register filter/interceptor via DI, 3. Replace paginated shape heuristic with explicit marker, Common Module Hardening Plan, Current flow, Files to touch, Optional small follow-up (out of scope unless you want it), Verification
+### Community 490 - "GlobalExceptionFilter"
+Cohesion: 0.13
+Nodes (12): GlobalExceptionFilter, Injectable, Catch, Where it's spot-on, 1. Log unexpected 500 errors, 2. Register filter/interceptor via DI, 3. Replace paginated shape heuristic with explicit marker, Common Module Hardening Plan (+4 more)
 
 ### Community 491 - "3. API catalog"
 Cohesion: 0.18
@@ -2917,20 +2876,20 @@ Cohesion: 0.18
 Nodes (10): 10. UI Standards, 11. Testing Matrix, 12. Definition of Done, 13. Phase 11 Summary, 14. Source Boundary, 6. EPIC-011 — Loyalty & Customer Rewards, 8. Sales Integration, 9. Offline & Synchronization (+2 more)
 
 ### Community 510 - "012_prescription_management.md"
-Cohesion: 0.18
-Nodes (10): 10. UI Standards, 11. Testing Matrix, 12. Definition of Done, 13. Phase 12 Summary, 14. Source Boundary, 6. EPIC-012 — Prescription Management, 8. Sales / Dispensing Integration, 9. Offline & Synchronization (+2 more)
+Cohesion: 0.12
+Nodes (15): 10. UI Standards, 11. Testing Matrix, 12. Definition of Done, 13. Phase 12 Summary, 1. Purpose, 2. Scope, 3. Domain Boundary, 4. Core Workflow (+7 more)
 
 ### Community 511 - "CreateCustomerDto"
 Cohesion: 0.02
-Nodes (127): DoctorController, Body, Controller, Delete, Get, Param, Patch, Post (+119 more)
+Nodes (110): EmployeeController, Body, Controller, Delete, Get, Param, Patch, Post (+102 more)
 
 ### Community 512 - "backend-developer-guide.md"
-Cohesion: 0.11
-Nodes (8): Backend API Route Index, Documentation Structure, High-Level Architecture, Local vs Cloud Persistence, Naming Conventions, Pharmacy ERP Database Overview, Purpose, Target Databases
+Cohesion: 0.12
+Nodes (11): 1. Module snapshot, 2. API catalog, 3. Write patterns, 4. Layer map, Audit module — agent memory model, Adding a new module doc, Always-applied rules, Current entries (+3 more)
 
-### Community 514 - "UpdateEmployeeDto"
-Cohesion: 0.25
-Nodes (8): IsBoolean, IsNumber, IsOptional, IsString, MaxLength, Min, Type, UpdateEmployeeDto
+### Community 513 - "ADR-151: Read-only reports register into ReportRegistryService"
+Cohesion: 0.22
+Nodes (8): ADR-151: Read-only reports register into ReportRegistryService, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
 ### Community 515 - "13. Configuration"
 Cohesion: 0.18
@@ -2976,9 +2935,9 @@ Nodes (11): Integrations, Key concepts, Maturity & known gaps, Outbox write (eve
 Cohesion: 0.18
 Nodes (11): 2. Design Principles, Modularity, Offline First, Performance First, Principle 1, Principle 2, Principle 3, Principle 4 (+3 more)
 
-### Community 526 - "id-sequence-models.util.ts"
-Cohesion: 0.43
-Nodes (6): AllocatableModel, DmmfField, getAllocatableModel(), getAllocatableModels(), ID_SEQUENCE_MODEL_NAME, isBigIntPrimaryKeyField()
+### Community 526 - "3. DTO & mapper detail per entity"
+Cohesion: 0.25
+Nodes (8): BatchResponse, 3. DTO & mapper detail per entity, Batch — best starting point, Stock — structurally closest DTOs, StockAdjustment + StockAdjustmentItem, StockMovement — DTOs are party copies, StockTake + StockTakeItem, StockTransfer + StockTransferItem
 
 ### Community 528 - "ADR-011: LedgerPostingService in persistence module (shared double-entry)"
 Cohesion: 0.25
@@ -2986,7 +2945,7 @@ Nodes (7): ADR-011: LedgerPostingService in persistence module (shared double-en
 
 ### Community 529 - "Domain Events"
 Cohesion: 0.25
-Nodes (8): Batch, Domain Events, Expiry (planned / monitoring), Reservation (planned), Stock and ledger, StockAdjustment, StockTake, StockTransfer
+Nodes (8): Domain Events, Journal events, Ledger master events, Payment events, Receipt events, Reconciliation events, Subscribers, Tax events
 
 ### Community 530 - "Documentation merge review"
 Cohesion: 0.20
@@ -3188,21 +3147,21 @@ Nodes (9): ADR-219: Sales dispensing hook out of scope for prescription v1, Deci
 Cohesion: 0.20
 Nodes (10): Address capture, Geographic Masters — Functional Guide, Integrations, Key concepts, Maturity & known gaps, Permissions summary, References, Rules and variations (+2 more)
 
-### Community 581 - "Business Rules & Invariants"
+### Community 580 - "User & Security — Functional Guide"
 Cohesion: 0.25
-Nodes (8): Batch and expiry, Business Rules & Invariants, Ledger and costing, Stock adjustment, Stock balances, Stock take, Stock transfer, Structural rules
+Nodes (8): Integrations, Key concepts, Maturity & known gaps, Permissions summary (examples), References, Rules and variations, User & Security — Functional Guide, What it does
 
 ### Community 582 - "SalesInvoiceCounterComponent"
-Cohesion: 0.22
+Cohesion: 0.19
 Nodes (3): SalesInvoiceCounterComponent, Component, buildSalesReceiptHtml()
 
 ### Community 583 - "11. FEAT-121 — Receipt Management"
 Cohesion: 0.29
 Nodes (7): 11. FEAT-121 — Receipt Management, Tasks, Tasks, Tasks, US-324 — Create Receipt, US-325 — Cash Receipt, US-326 — Bank Receipt
 
-### Community 584 - "AuthController"
-Cohesion: 0.28
-Nodes (7): AuthController, Body, Controller, Post, Req, Public(), UseGuards
+### Community 584 - ".enroll"
+Cohesion: 0.29
+Nodes (5): LoyaltyEnrollmentController, Body, Controller, Param, Post
 
 ### Community 585 - "13. Feature: Employee Management"
 Cohesion: 0.22
@@ -3236,9 +3195,13 @@ Nodes (9): 15. FEAT-104 — Sales Return, Acceptance Criteria, Required flow, Ta
 Cohesion: 0.22
 Nodes (9): 22. FEAT-132 — Ledger & Accounting Views, Tasks, Tasks, Tasks, Tasks, US-352 — Ledger view, US-353 — Full ledger view, US-354 — Typewise ledger view (+1 more)
 
-### Community 593 - "persistence-test.helpers.ts"
-Cohesion: 0.06
-Nodes (44): Persistence, RequestContextData, runWithRequestContext(), storage, tryGetRequestContext(), ID_SEQUENCE_MAX_RETRIES, ID_SEQUENCE_TABLE_NAME, allocateIdBlock() (+36 more)
+### Community 593 - "PrismaService"
+Cohesion: 0.04
+Nodes (69): Persistence, AuditService, Injectable, ClosingController, Controller, ClosingService, Injectable, RequestContextData (+61 more)
+
+### Community 594 - "PartyRole"
+Cohesion: 0.13
+Nodes (9): How the Tables Work Together, PartyRole, CreatePartyRoleRequest, PartyRole, UpdatePartyRoleRequest, PartyRoleService, Injectable, PartyRolesTabComponent (+1 more)
 
 ### Community 595 - "ADR-015: Party module as backend CRUD reference template"
 Cohesion: 0.22
@@ -3433,8 +3396,8 @@ Cohesion: 0.22
 Nodes (8): ADR-153: Central reporting core with domain provider registration, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
 ### Community 643 - "jest"
-Cohesion: 0.10
-Nodes (21): global, ./src/common/, branches, functions, lines, statements, jest, collectCoverageFrom (+13 more)
+Cohesion: 0.09
+Nodes (23): global, ./src/common/, branches, functions, lines, statements, jest, collectCoverageFrom (+15 more)
 
 ### Community 644 - "ADR-156: Report exports: JSON, CSV, Excel, PDF"
 Cohesion: 0.22
@@ -3445,8 +3408,8 @@ Cohesion: 0.22
 Nodes (8): ADR-158: Namespaced report IDs (domain.report-name), Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
 ### Community 646 - "serializeDecimal"
-Cohesion: 0.14
-Nodes (14): serializeDecimal(), PartyReportsProvider, Injectable, ReportingModule, Module, Checklist, Column types, Example — sales daily summary (transactional, branch-scoped) (+6 more)
+Cohesion: 0.15
+Nodes (11): serializeDecimal(), PartyReportsProvider, Injectable, ADR-159: Party reports provider ships first under reporting/providers, Decision Selected, Historical Source, Options Considered, Problem / Context (+3 more)
 
 ### Community 647 - "ADR-160: Export libraries: exceljs and pdfmake"
 Cohesion: 0.22
@@ -3824,9 +3787,9 @@ Nodes (7): ADR-256: Financial year close not enforced on all transaction modules
 Cohesion: 0.22
 Nodes (8): ADR-257: MFA and password complexity policy out of scope v1, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
-### Community 742 - "ADR-184: SalesPayment nested API; Finance Receipt stays separate"
-Cohesion: 0.22
-Nodes (8): ADR-184: SalesPayment nested API; Finance Receipt stays separate, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
+### Community 742 - "ADR-260: auditAndLogChanges helper for UPDATE ChangeHistory"
+Cohesion: 0.29
+Nodes (6): ADR-260: auditAndLogChanges helper for UPDATE ChangeHistory, Historical Source, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
 ### Community 743 - "3. Medicine Master"
 Cohesion: 0.22
@@ -3856,9 +3819,9 @@ Nodes (8): Add per-category overview docs under database/tables, Doc to upgrade,
 Cohesion: 0.22
 Nodes (8): Before / after, Consolidate the architecture docs, Content merge map (target <- sources), Goal, Inbound link fixes (outside architecture/), Out of scope, Target structure (architecture/), Why
 
-### Community 750 - "AppSetting"
-Cohesion: 0.08
-Nodes (24): Anchor reference, Created (12 new), Cross-links updated, Domain (~90 files), New structure (`docs/pharmacy_erp_architecture_docs/architecture/`), Removed, Roadmap (4 files), Updated inbound links (+16 more)
+### Community 750 - "PriceListItem"
+Cohesion: 0.04
+Nodes (50): Anchor reference, Created (12 new), Cross-links updated, Domain (~90 files), New structure (`docs/pharmacy_erp_architecture_docs/architecture/`), Removed, Roadmap (4 files), Updated inbound links (+42 more)
 
 ### Community 751 - "Keyboard Shortcuts"
 Cohesion: 0.22
@@ -3868,13 +3831,13 @@ Nodes (8): Backend sync (future), Default shortcut ids, Dialog access, Keyboard 
 Cohesion: 0.29
 Nodes (7): 8. FEAT-118 — Ledger & Chart-of-Accounts Boundary, Tasks, Tasks, Tasks, US-315 — Finalize Ledger meaning, US-316 — Determine whether a separate Chart-of-Accounts model is required, US-317 — Ledger master UI/API boundary
 
-### Community 753 - "Aggregate structure"
+### Community 753 - "Backend Code Review Remediation Plan"
 Cohesion: 0.29
-Nodes (7): Aggregate structure, Batch aggregate (soft boundary), Stock aggregate (balance root per branch + batch), StockAdjustment aggregate, StockMovement (ledger entry — not an aggregate root), StockTake aggregate, StockTransfer aggregate
+Nodes (6): Backend Code Review Remediation Plan, Phase 0 — Cross-cutting foundations (do first), Phase 2 — Persistence & data integrity (Critical/High/Medium), Phase 3 — Party module correctness (Critical/High/Medium), Phase 4 — Reporting (High/Medium/Low), Validation per phase
 
-### Community 754 - "Inventory Flow"
-Cohesion: 0.04
-Nodes (49): Actors, Alternate Flows, Business Objective, Business Owner, Business Rules, Data Model (corrected), Database Tables, Exception Handling (+41 more)
+### Community 754 - "workflows/README.md"
+Cohesion: 0.03
+Nodes (61): Actors, Alternate Flows, Business Objective, Business Owner, Business Rules, Data Model (corrected), Database Tables, Exception Handling (+53 more)
 
 ### Community 755 - "form-field.component.ts"
 Cohesion: 0.29
@@ -3988,13 +3951,13 @@ Nodes (8): 7.1 Prescription owns prescribing information, 7.2 Finalized history 
 Cohesion: 0.22
 Nodes (8): ADR-025: Report registry with provider registration at startup, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
-### Community 784 - "services/closing.service.ts"
-Cohesion: 0.14
-Nodes (10): ClosingController, Controller, ClosingService, PreCloseBlocker, PreCloseChecklistResult, Injectable, StockTakeStatus, StockTransferStatus (+2 more)
+### Community 784 - "Sync module — agent memory model"
+Cohesion: 0.33
+Nodes (6): 2. API catalog, 3. Business rules, 4. Layer map, 5. Out of scope, Sync module — agent memory model, Workflow routes
 
-### Community 785 - "loyalty-program.controller.ts"
-Cohesion: 0.08
-Nodes (23): LoyaltyProgramController, Body, Controller, Get, Param, Patch, Post, Query (+15 more)
+### Community 785 - "CreateLoyaltyProgramDto"
+Cohesion: 0.10
+Nodes (16): LoyaltyProgramController, Body, Controller, Get, Param, Patch, Post, Query (+8 more)
 
 ### Community 786 - "14. Lookup / Masters"
 Cohesion: 0.25
@@ -4032,13 +3995,13 @@ Nodes (7): AppGrid, Client vs server mode, Events, Extension points, Location, R
 Cohesion: 0.22
 Nodes (8): ADR-180: Finance module tests deferred in v1, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
-### Community 795 - "masters-import.controller.ts"
+### Community 795 - "masters-import.service.ts"
 Cohesion: 0.15
-Nodes (11): MastersImportController, Body, Controller, Post, MastersImportDto, IsBoolean, IsIn, IsOptional (+3 more)
+Nodes (12): MastersImportController, Body, Controller, Post, MastersImportDto, IsBoolean, IsIn, IsOptional (+4 more)
 
-### Community 796 - "CreateEmployeeDto"
-Cohesion: 0.11
-Nodes (18): EmployeeController, Body, Controller, Delete, Get, Param, Patch, Post (+10 more)
+### Community 796 - "Integrations"
+Cohesion: 0.33
+Nodes (6): Barcode, Hardware Integration, Integrations, Printing, Related docs, Reporting
 
 ### Community 797 - "3. Domain Boundary"
 Cohesion: 0.33
@@ -4144,25 +4107,21 @@ Nodes (7): 15. FEAT-125 — Customer Outstanding, Tasks, Tasks, Tasks, US-333 �
 Cohesion: 0.29
 Nodes (7): 16. FEAT-126 — Supplier Outstanding, Tasks, Tasks, Tasks, US-336 — Calculate supplier outstanding, US-337 — Supplier outstanding screen, US-338 — Adjust supplier outstanding
 
-### Community 824 - "Phase 12 — Prescription Management"
-Cohesion: 0.33
-Nodes (6): 1. Purpose, 2. Scope, 3. Domain Boundary, 4. Core Workflow, 5. ADO Hierarchy, Phase 12 — Prescription Management
+### Community 824 - "audit-log.mapper.ts"
+Cohesion: 0.60
+Nodes (4): AuditLogResponse, serializeEpochMs(), serializeOptionalBigInt(), toAuditLogResponse()
 
 ### Community 825 - "20. FEAT-130 — Voucher Lifecycle & Reversal"
 Cohesion: 0.29
 Nodes (7): 20. FEAT-130 — Voucher Lifecycle & Reversal, Tasks, Tasks, Tasks, US-346 — Financial transaction lifecycle, US-347 — Cancel financial transaction, US-348 — Reverse posted transaction
 
-### Community 826 - "Lifecycle & States"
-Cohesion: 0.33
-Nodes (6): Batch and Stock status, Lifecycle & States, StockAdjustment, StockTake, StockTransfer, Transfer transition matrix (simplified)
+### Community 826 - "CreateLoyaltyAdjustmentDto"
+Cohesion: 0.40
+Nodes (5): CreateLoyaltyAdjustmentDto, IsInt, IsOptional, IsString, MaxLength
 
-### Community 827 - "Inventory Domain"
-Cohesion: 0.33
-Nodes (6): In scope, Inventory Domain, Overview & Aggregate, Permissions, Related entities, Responsibilities
-
-### Community 828 - ".run"
-Cohesion: 0.21
-Nodes (8): ReportController, Controller, Get, Param, Query, Req, buildContentDisposition(), Reporting
+### Community 828 - "Audit"
+Cohesion: 0.40
+Nodes (5): Audit, Backend, UI gaps, UI screens, UX gaps
 
 ### Community 829 - "FEAT-152 — Sales Integration"
 Cohesion: 0.29
@@ -4196,25 +4155,21 @@ Nodes (7): 31. Near Expiry Identification, 32. Expired Stock Removal, 33. Suppli
 Cohesion: 0.29
 Nodes (7): Batch Lock Rule, Batch Rules, Duplicate Batch Rule, Expired Batch Rule, FEFO Rule, FIFO Rule, Near Expiry Rule
 
-### Community 837 - "Inventory"
-Cohesion: 0.33
-Nodes (6): Integration initiatives, Inventory, Long term, Medium term, Near term, Technical debt
+### Community 837 - "Platform shell"
+Cohesion: 0.40
+Nodes (5): Backend, Platform shell, UI gaps, UI screens, UX gaps
 
 ### Community 838 - "4. Technology Stack"
 Cohesion: 0.29
 Nodes (7): 4. Technology Stack, Backend, Cloud, Desktop, Frontend, Local Database, ORM
 
-### Community 840 - "Pharmacy ERP — Full Functional Understanding (Plain English)"
-Cohesion: 0.17
-Nodes (11): 1. What this software actually is, 2. The big picture — how the pieces fit, 3. The core building blocks (the vocabulary you must know), 4. The 14 functional modules at a glance, 6. Cross-cutting concerns (present in every flow), 7. One diagram to remember it all, 8. Variations summary (quick reference — nothing left out), 9. Where to read more (reference index) (+3 more)
-
 ### Community 841 - "CreatePartyRoleDto"
 Cohesion: 0.10
 Nodes (20): PartyRoleController, Body, Controller, Delete, Get, Param, Patch, Post (+12 more)
 
-### Community 842 - "PrescriptionItem"
-Cohesion: 0.11
-Nodes (11): PrescriptionItem, CreatePrescriptionItemRequest, PrescriptionItem, UpdatePrescriptionItemRequest, PrescriptionItemService, Injectable, PrescriptionItemsTabComponent, Component (+3 more)
+### Community 842 - "prescription-items-tab.component.ts"
+Cohesion: 0.19
+Nodes (7): ref_primeng_inputnumber, PRESCRIPTION_ITEM_GRID_CONFIG, CreatePrescriptionItemRequest, UpdatePrescriptionItemRequest, PrescriptionItemService, Injectable, PrescriptionLineAddEvent
 
 ### Community 843 - "Prescription module — agent memory model"
 Cohesion: 0.33
@@ -4308,9 +4263,9 @@ Nodes (6): 13. FEAT-086 — Purchase Invoice Calculation & Validation, Calculati
 Cohesion: 0.25
 Nodes (7): ADR-154: Reports are read-only — no UnitOfWork, Outbox, or Audit, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
-### Community 866 - "Integrations"
-Cohesion: 0.40
-Nodes (5): ApplyMovementInput, Event consumers, Integrations, Internal services, Validation stack
+### Community 866 - "generate-stock-transfer-flow.py"
+Cohesion: 0.67
+Nodes (3): build_flow(), main(), Generate L1 stock-transfer-flow.drawio and .svg.
 
 ### Community 867 - "12. FEAT-101 — Sales Invoice Validation & Calculation"
 Cohesion: 0.33
@@ -4328,21 +4283,17 @@ Nodes (6): 23. FEAT-112 — Sales Authorization & Audit, Events, Tasks, Tasks, U
 Cohesion: 0.33
 Nodes (6): 8. FEAT-097 — Sales Invoice Creation, Acceptance Criteria, Tasks, Tasks, US-259 — Create new Sales Invoice, US-260 — Support walk-in/cash customer billing
 
-### Community 871 - "ReplacePriceListItemDto"
-Cohesion: 0.40
-Nodes (5): ReplacePriceListItemDto, IsBoolean, IsNotEmpty, IsOptional, IsString
-
 ### Community 872 - "26. FEAT-136 — Financial Permissions & Audit"
 Cohesion: 0.33
 Nodes (6): 26. FEAT-136 — Financial Permissions & Audit, Events, Tasks, Tasks, US-364 — Financial permission catalog, US-365 — Financial audit events
 
-### Community 873 - "ADR-014: SettingsService with in-memory cache for runtime toggles"
-Cohesion: 0.29
-Nodes (6): ADR-014: SettingsService with in-memory cache for runtime toggles, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale
+### Community 873 - "LoginMode"
+Cohesion: 0.67
+Nodes (3): LoginMode, PASSWORD, PIN
 
 ### Community 874 - "ADR-155: Coarse REPORT_VIEW plus per-report permission"
-Cohesion: 0.13
-Nodes (12): ReportDefinitionMeta, ADR-155: Coarse REPORT_VIEW plus per-report permission, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale (+4 more)
+Cohesion: 0.22
+Nodes (8): ADR-155: Coarse REPORT_VIEW plus per-report permission, Decision Selected, Historical Source, Options Considered, Problem / Context, Question Discussed, Rationale, Rejected Alternatives
 
 ### Community 875 - "Phase 10 — Pricing & Taxation Management"
 Cohesion: 0.33
@@ -4361,8 +4312,8 @@ Cohesion: 0.33
 Nodes (6): 6. Example Feature Decomposition, Inventory, Medicine Master, Party Management, Procurement, Sales
 
 ### Community 879 - "SyncRunService"
-Cohesion: 0.04
-Nodes (37): SyncConflictController, Controller, Get, Param, Query, SyncLogController, Controller, Get (+29 more)
+Cohesion: 0.19
+Nodes (7): SyncRunController, Controller, Get, Post, SyncRunService, Injectable, 1. Module snapshot
 
 ### Community 880 - "ReplacePrescriptionItemDto"
 Cohesion: 0.29
@@ -4375,10 +4326,6 @@ Nodes (7): Tasks, US-201 — End-to-end inventory workflows, Workflow 1 — Rece
 ### Community 882 - "6. Sales"
 Cohesion: 0.33
 Nodes (6): 38. SalesInvoice, 39. SalesInvoiceItem, 40. SalesReturn, 41. SalesReturnItem, 42. SalesPayment, 6. Sales
-
-### Community 883 - "CreateGoodsReceiptDto"
-Cohesion: 0.40
-Nodes (5): CreateGoodsReceiptDto, IsBoolean, IsOptional, IsString, MaxLength
 
 ### Community 884 - "Hardware Integration"
 Cohesion: 0.33
@@ -4402,7 +4349,7 @@ Nodes (6): Inventory Rules, Maximum Stock Rule, Minimum Stock Rule, Negative Sto
 
 ### Community 889 - "Implementation Status — Functional Modules"
 Cohesion: 0.12
-Nodes (16): Audit, Backend, Backend, Cross-cutting (tests and month-end), How to update, Implementation Status — Functional Modules, Legend, Platform shell (+8 more)
+Nodes (16): Backend, Backend, Cross-cutting (tests and month-end), How to update, Implementation Status — Functional Modules, Legend, References, Reporting (+8 more)
 
 ### Community 890 - "Pharmacy ERP Knowledge Base"
 Cohesion: 0.33
@@ -4412,25 +4359,13 @@ Nodes (6): Architecture, Database, Domain, Functional, Legacy, Pharmacy ERP Know
 Cohesion: 0.33
 Nodes (6): Disaster Recovery, Implemented, Planned, Recovery procedure (target), Related, Threat model (desktop ERP)
 
-### Community 892 - "Audit module — agent memory model"
-Cohesion: 0.40
-Nodes (5): 1. Module snapshot, 2. API catalog, 3. Write patterns, 4. Layer map, Audit module — agent memory model
-
 ### Community 893 - "Docs Consolidation Plan"
 Cohesion: 0.33
 Nodes (5): Docs Consolidation Plan, Expected outcome, Phase 1 - Domain: 7 contexts x ~13 files -> 7 files, Phase 2 - Database: fold numbered files into per-category files, Phase 3 - Fix indexes, links, and the convention
 
-### Community 894 - "Module memory docs"
-Cohesion: 0.40
-Nodes (5): Adding a new module doc, Always-applied rules, Current entries, How this differs from architecture docs, Module memory docs
-
 ### Community 895 - "14. FEAT-124 — Purchase Financial Integration"
 Cohesion: 0.40
 Nodes (5): 14. FEAT-124 — Purchase Financial Integration, Tasks, Tasks, US-331 — Post Purchase Invoice to Financial, US-332 — Post Purchase Return to Financial
-
-### Community 896 - "customer-loyalty-tab.component.ts"
-Cohesion: 0.26
-Nodes (5): CustomerLoyaltyService, CustomerLoyaltySummary, LoyaltyTransactionRow, Injectable, LOYALTY_TRANSACTION_GRID_CONFIG
 
 ### Community 898 - "EPIC-001 — Foundation & Architecture"
 Cohesion: 0.40
@@ -4496,10 +4431,6 @@ Nodes (5): 1. Objective, 2. Important Boundary, Inventory owns later, Medicine M
 Cohesion: 0.40
 Nodes (5): 4. Epic, Business Value, Description, EPIC-005 — Medicine Master Management, Epic Completion Criteria
 
-### Community 914 - "sync.constants.ts"
-Cohesion: 0.40
-Nodes (4): OutboxAuditEntityType, SyncConflictAuditEntityType, SyncConflictResolutionStatus, SyncConflictResolutionStrategy
-
 ### Community 915 - "18. FEAT-128 — Bank Management"
 Cohesion: 0.40
 Nodes (5): 18. FEAT-128 — Bank Management, Tasks, Tasks, US-341 — Bank Book, US-342 — Bank account configuration boundary
@@ -4524,9 +4455,9 @@ Nodes (5): 22. FEAT-111 — Delivery Challan / Temporary Sales Boundary, Tasks, 
 Cohesion: 0.40
 Nodes (5): 24. FEAT-113 — Sales REST API & NestJS Services, Tasks, Tasks, US-297 — Sales REST APIs, US-298 — Sales domain services
 
-### Community 921 - "purchase-invoice-items-tab.component.ts"
-Cohesion: 0.15
-Nodes (9): PurchaseInvoiceItem, PURCHASE_INVOICE_ITEM_GRID_CONFIG, CreatePurchaseInvoiceItemRequest, PurchaseInvoiceItem, UpdatePurchaseInvoiceItemRequest, PurchaseInvoiceItemService, Injectable, PurchaseInvoiceItemsTabComponent (+1 more)
+### Community 921 - "PurchaseInvoiceItem"
+Cohesion: 0.14
+Nodes (8): PurchaseInvoiceItem, CreatePurchaseInvoiceItemRequest, PurchaseInvoiceItem, UpdatePurchaseInvoiceItemRequest, PurchaseInvoiceItemService, Injectable, PurchaseInvoiceItemsTabComponent, Component
 
 ### Community 922 - "17. FEAT-127 — Cash Management"
 Cohesion: 0.40
@@ -4557,8 +4488,8 @@ Cohesion: 0.40
 Nodes (5): 3. Core ADO Hierarchy, Epic, Feature, Task, User Story
 
 ### Community 932 - "app.module.ts"
-Cohesion: 0.05
-Nodes (71): AuditModule, Module, AuthModule, Module, AUTH_CONSTANTS, JwtPayload, JwtStrategy, Injectable (+63 more)
+Cohesion: 0.09
+Nodes (46): AuditModule, Module, AUTH_CONSTANTS, ConfigurationModule, Module, FinanceModule, Module, InventoryModule (+38 more)
 
 ### Community 933 - "8. Pricing"
 Cohesion: 0.40
@@ -4596,29 +4527,13 @@ Nodes (5): Margin Rule, Minimum Selling Price Rule, MRP Rule, Pricing Rules, Pur
 Cohesion: 0.40
 Nodes (5): Application Layer, Backend Layers, Domain Layer, Infrastructure Layer, Presentation Layer
 
-### Community 942 - "Reporting"
-Cohesion: 0.40
-Nodes (5): Backend, Reporting, UI gaps, UI screens, UX gaps
-
-### Community 943 - "Sales"
-Cohesion: 0.40
-Nodes (5): Integration initiatives, Long term, Medium term, Near term, Sales
-
 ### Community 944 - "User & Security"
 Cohesion: 0.40
 Nodes (5): Backend, UI gaps, UI screens, User & Security, UX gaps
 
-### Community 945 - "Migration Strategy"
-Cohesion: 0.40
-Nodes (5): Current state, Implemented, Migration Strategy, Planned (customer data migration), Related
-
 ### Community 946 - "Inventory"
 Cohesion: 0.40
 Nodes (5): Backend, Inventory, UI gaps, UI screens, UX gaps
-
-### Community 948 - "Sales"
-Cohesion: 0.40
-Nodes (5): Backend, Sales, UI gaps, UI screens, UX gaps
 
 ### Community 949 - "Financial"
 Cohesion: 0.40
@@ -4630,11 +4545,7 @@ Nodes (5): 5. Epic, Business Value, Description, EPIC-006 — Inventory Manageme
 
 ### Community 951 - "LoyaltyProgram"
 Cohesion: 0.12
-Nodes (18): 2. API catalog, 3. Persistence, 4. Layer map, 5. Out of scope (current), Loyalty module — agent memory model, Backend module, Frontend, Phase 4 — Loyalty (EPIC-011 foundation) (+10 more)
-
-### Community 953 - "US-258 — Finalize Sales schema"
-Cohesion: 0.50
-Nodes (4): 7. FEAT-096 — Sales Domain & Data Model, Acceptance Criteria, Tasks, US-258 — Finalize Sales schema
+Nodes (17): 2. API catalog, 3. Persistence, 4. Layer map, 5. Out of scope (current), Loyalty module — agent memory model, Backend module, Frontend, Phase 4 — Loyalty (EPIC-011 foundation) (+9 more)
 
 ### Community 954 - "Configuration"
 Cohesion: 0.40
@@ -4856,57 +4767,17 @@ Nodes (3): Financial Report Rule, Report Access Rule, Reporting Rules
 Cohesion: 0.67
 Nodes (3): 1. Vision & Product Philosophy, Goal, Product Goals
 
-### Community 1033 - "Backend testing (quick guide)"
-Cohesion: 0.15
-Nodes (11): Backend test matrix, Backend testing (quick guide), Layout, More detail, Prepare the test database, Run one file or area, Test matrix, Test suites (+3 more)
-
-### Community 1043 - "PartyRole"
-Cohesion: 0.27
-Nodes (5): How the Tables Work Together, PartyRole, PartyRole, PartyRoleService, Injectable
+### Community 1033 - "Frontend testing (`src/`)"
+Cohesion: 0.17
+Nodes (9): Backend test matrix, Browser smoke (Playwright), Commands (run from repo root), Frontend testing (`src/`), Full-stack reference, Prerequisites, Run one area or file, Typical workflow before a PR (+1 more)
 
 ### Community 1044 - "7. Core Loyalty Business Rules"
 Cohesion: 0.25
 Nodes (8): 7.1 LoyaltyTransaction is the historical source of truth, 7.2 Balance must be deterministic, 7.3 Sales must not award points for failed transactions, 7.4 Redemption must be atomic, 7.5 Returns must reverse loyalty effects, 7.6 Manual changes require authorization, 7.7 Historical loyalty data must survive program changes, 7. Core Loyalty Business Rules
 
-### Community 1045 - "Business audit (`AuditService`)"
-Cohesion: 0.40
-Nodes (5): Action and module constants, Business audit (`AuditService`), Field-level changes, When to audit, Writing audit entries
-
-### Community 1048 - "AppModule"
-Cohesion: 0.11
-Nodes (13): AppModule, Module, IS_PUBLIC_KEY, API surface, Constants & error codes, Party Management CRUD API, Seed permissions (RBAC), Shared infrastructure (new, reusable) (+5 more)
-
-### Community 1051 - "LoginDto"
-Cohesion: 0.29
-Nodes (7): LoginDto, IsIn, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength
-
-### Community 1052 - "LoginWithPinDto"
-Cohesion: 0.29
-Nodes (7): LoginWithPinDto, IsIn, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength
-
-### Community 1053 - "Settings module — agent memory model"
-Cohesion: 0.29
-Nodes (7): ConfigurationModule, Module, 1. Module snapshot, 2. API catalog, 4. Layer map, 5. Cross-cutting refs, Settings module — agent memory model
-
 ### Community 1058 - "10. FEAT-083 — Goods Receipt Management"
 Cohesion: 0.29
 Nodes (7): 10. FEAT-083 — Goods Receipt Management, Acceptance Criteria, Acceptance Criteria, Tasks, Tasks, US-216 — Create Goods Receipt, US-217 — Receive against Purchase Order
-
-### Community 1059 - "ChangePasswordDto"
-Cohesion: 0.33
-Nodes (5): ChangePasswordDto, IsNotEmpty, IsString, MaxLength, MinLength
-
-### Community 1060 - "ChangePinDto"
-Cohesion: 0.33
-Nodes (5): ChangePinDto, IsNotEmpty, IsString, MaxLength, MinLength
-
-### Community 1061 - "ChangeRequiredPasswordDto"
-Cohesion: 0.33
-Nodes (5): ChangeRequiredPasswordDto, IsNotEmpty, IsString, MaxLength, MinLength
-
-### Community 1062 - "ChangeRequiredPinDto"
-Cohesion: 0.33
-Nodes (5): ChangeRequiredPinDto, IsNotEmpty, IsString, MaxLength, MinLength
 
 ### Community 1066 - ".place_at"
 Cohesion: 0.33
@@ -4940,6 +4811,10 @@ Nodes (6): Angular, API Design, Application Architecture, Electron, NestJS, Rela
 Cohesion: 0.50
 Nodes (4): Architecture, Related, Start here, Templates & ADRs
 
+### Community 1078 - "purchase-invoice-match.util.ts"
+Cohesion: 0.38
+Nodes (5): buildPurchaseInvoiceMatchLines(), computePurchaseInvoiceMatchStatus(), PurchaseInvoiceMatchLine, PurchaseInvoiceMatchLineStatus, PurchaseInvoiceMatchStatus
+
 ### Community 1079 - "Not pending from the plan, but still open work"
 Cohesion: 0.40
 Nodes (5): Minor follow-ups you might want later, Not pending from the plan, but still open work, Optional / nice-to-have (plan said “if useful”), Remaining product GAPs (~35), Tier 3 — Month-end (roadmap)
@@ -4972,29 +4847,25 @@ Nodes (5): Backend, Synchronization, UI gaps, UI screens, UX gaps
 Cohesion: 0.50
 Nodes (4): Layer 0 — One system map (1 diagram), Layer 1 — One flowchart per module (9 diagrams, like Sales), Layer 2 — Optional shared reference (1 diagram), What works better (3 layers)
 
-### Community 1090 - "Workflow GAP Index"
-Cohesion: 0.67
-Nodes (3): Open / Accepted / Deferred, Resolved, Workflow GAP Index
-
 ## Knowledge Gaps
-- **6492 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+6487 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 8453 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **6504 isolated node(s):** `$schema`, `version`, `newProjectRoot`, `projectType`, `style` (+6499 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 8472 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **93 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `RequirePermissions()` connect `RequirePermissions` to `CreatePurchaseInvoiceItemDto`, `CreateMedicineDto`, `auth.controller.ts`, `finance.constants.ts`, `ref_nestjs_common`, `medicine-category.controller.ts`, `PurchaseReturnController`, `ChangeHistoryListQueryDto`, `services/closing.service.ts`, `loyalty-program.controller.ts`, `CreatePriceListDto`, `outbox.controller.ts`, `UpdateStockTakeItemDto`, `CreateSalesInvoiceItemDto`, `masters-import.controller.ts`, `CreateEmployeeDto`, `CreateUserDto`, `app.module.ts`, `CreatePrinterConfigurationDto`, `UpdateStockAdjustmentDto`, `CreateBatchDto`, `CreateFinancialYearDto`, `CreateDiscountRuleDto`, `CreateSalesPaymentDto`, `settings.controller.ts`, `SalesWorkflowDto`, `CreateAreaDto`, `CreateCityDto`, `UpdateTaxDto`, `CreateGoodsReceiptItemDto`, `unit-of-measure.controller.ts`, `CreateMedicineGenericDto`, `CreateBranchDto`, `CreateStateDto`, `CreateBarcodeConfigurationDto`, `CreateSequenceGeneratorDto`, `CreatePrescriptionItemDto`, `.run`, `UpdateSalesReturnItemDto`, `CreateCountryDto`, `medicine-salt.controller.ts`, `reporting.module.ts`, `CreatePriceListItemDto`, `prescription.util.ts`, `CreatePartyRoleDto`, `AuditLogListQueryDto`, `CreatePermissionDto`, `CreateRoleDto`, `CreatePurchaseOrderItemDto`, `CreatePurchaseReturnItemDto`, `LedgerEntryListQueryDto`, `MandatoryBigIntField`, `loyalty-customer.controller.ts`, `UserSessionListQueryDto`, `UserBranchController`, `UpdatePartyContactDto`, `CreateCompanyDto`, `CreateMedicineScheduleDto`, `SyncRunService`, `CreatePartyDto`, `RolePermissionController`, `CreateManufacturerDto`, `CreateSaltCompositionDto`, `CreateCustomerDto`?**
-  _High betweenness centrality (0.070) - this node is a cross-community bridge._
-- **Why does `AuditService` connect `ref_nestjs_common` to `auditAndLogChanges`, `Configuration`, `@nestjs/testing`, `.run`, `Audit — Functional Guide`, `ApplicationException`, `Business audit (`AuditService`)`, `getTenantScope`, `AppLogger`, `app.module.ts`, `Stock`, `Architecture`, `CorrelationMiddleware`, `persistence-test.helpers.ts`, `FinancialYear`, `Integrations`, `SequenceGenerator`, `Extending the Backend`, `AppSetting`, `UserSession`, `Audit module — agent memory model`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
-- **Why does `@angular/core` connect `@angular/core` to `customer-loyalty-tab.component.ts`, `KeyboardShortcutService`, `toolbar/index.ts`, `GridFilterChange`, `printer-configuration-list.component.ts`, `area-list.component.ts`, `medicine-category-list.component.ts`, `purchase-order-items-tab.component.ts`, `discount-rule-list.component.ts`, `main-layout.component.ts`, `state-list.component.ts`, `purchase-invoice-items-tab.component.ts`, `party-addresses-tab.component.ts`, `package.json`, `loyalty-program-list.component.ts`, `dialog/index.ts`, `company-list.component.ts`, `app-form.component.ts`, `PinInputDirective`, `stock-adjustment-list.component.ts`, `city-list.component.ts`, `AppDialog`, `medicine-generic-list.component.ts`, `PrescriptionItem`, `toast/index.ts`, `sales-invoice-counter.component.ts`, `sync-conflict-list.component.ts`, `ToolbarActionEvent`, `party-contacts-tab.component.ts`, `app-dialog.service.ts`, `Pagination`, `barcode-configuration-list.component.ts`, `report-runner.component.ts`, `stock-transfer-items-tab.component.ts`, `salt-composition-list.component.ts`, `form-field.component.ts`, `unit-of-measure-list.component.ts`, `doctor-list.component.ts`, `role-list.component.ts`, `user-roles-tab.component.ts`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+- **Why does `RequirePermissions()` connect `RequirePermissions` to `CreatePurchaseInvoiceItemDto`, `CreateMedicineDto`, `FinanceWorkflowDto`, `CreateMedicineCategoryDto`, `SyncLogListQueryDto`, `ChangeHistoryListQueryDto`, `CreatePriceListDto`, `CreateLoyaltyProgramDto`, `outbox.controller.ts`, `UpdateStockTakeItemDto`, `CreateSalesInvoiceItemDto`, `masters-import.service.ts`, `CreateUserDto`, `inventory-query.controller.ts`, `CreatePrinterConfigurationDto`, `CreateStockAdjustmentDto`, `CreateBatchDto`, `CreateFinancialYearDto`, `CreateDiscountRuleDto`, `report.controller.ts`, `settings.controller.ts`, `SalesWorkflowDto`, `CreateAreaDto`, `CreateCityDto`, `CreateTaxDto`, `ReportRegistryService`, `.resolve`, `CreateSupplierDto`, `PrescriptionWorkflowDto`, `CreateGoodsReceiptItemDto`, `CreateUnitOfMeasureDto`, `CreateMedicineGenericDto`, `CreateBranchDto`, `CreateStateDto`, `CreateBarcodeConfigurationDto`, `CreateSequenceGeneratorDto`, `CreatePrescriptionItemDto`, `CreateDoctorDto`, `UpdateSalesReturnItemDto`, `CreateStockAdjustmentItemDto`, `CreateCountryDto`, `ReplaceMedicineSaltsDto`, `StockTakeController`, `UpdateLedgerDto`, `.enroll`, `CreatePartyRoleDto`, `AuditLogListQueryDto`, `CreatePermissionDto`, `CreateRoleDto`, `CreatePurchaseOrderItemDto`, `PrismaService`, `CreatePurchaseReturnItemDto`, `PaginationQueryDto`, `MandatoryBigIntField`, `LoyaltyCustomerService`, `UserSessionListQueryDto`, `UserBranchController`, `CreateCompanyDto`, `CreateMedicineScheduleDto`, `SyncRunService`, `CreatePartyDto`, `RolePermissionController`, `CreateManufacturerDto`, `CreateSaltCompositionDto`, `CreateCustomerDto`?**
+  _High betweenness centrality (0.089) - this node is a cross-community bridge._
+- **Why does `AuditService` connect `PrismaService` to `backend-developer-guide.md`, `Configuration`, `services/outbox-admin.service.ts`, `.enqueue`, `Audit — Functional Guide`, `ref_nestjs_common`, `configuration.util.ts`, `ApplicationException`, `.run`, `AuthService`, `services/medicine.service.ts`, `AppLogger`, `app.module.ts`, `Stock`, `Architecture`, `FinancialYear`, `SequenceGenerator`, `Extending the Backend`, `PriceListItem`?**
+  _High betweenness centrality (0.042) - this node is a cross-community bridge._
+- **Why does `@angular/core` connect `@angular/core` to `KeyboardShortcutService`, `toolbar/index.ts`, `GridFilterChange`, `printer-configuration-list.component.ts`, `area-list.component.ts`, `medicine-category-list.component.ts`, `purchase-order-items-tab.component.ts`, `sales-return-items-tab.component.ts`, `discount-rule-list.component.ts`, `main-layout.component.ts`, `grid/index.ts`, `app-form.component.spec.ts`, `package.json`, `loyalty/loyalty-program.service.ts`, `dialog/index.ts`, `medicine-list.component.ts`, `Pricing`, `role-permissions-tab.component.ts`, `company-list.component.ts`, `app-form.component.ts`, `PinInputDirective`, `stock-adjustment-list.component.ts`, `city-list.component.ts`, `prescription-items-tab.component.ts`, `toast/index.ts`, `StockTransfer`, `PurchaseInvoice`, `sales-invoice-counter.component.ts`, `sync-conflict-list.component.ts`, `stock-take-list.component.ts`, `medicine-schedule-list.component.ts`, `purchase-return-items-tab.component.ts`, `month-end-close.component.ts`, `barcode-configuration-list.component.ts`, `report-list.component.ts`, `stock-transfer-items-tab.component.ts`, `salt-composition-list.component.ts`, `form-field.component.ts`, `unit-of-measure-list.component.ts`, `role-list.component.ts`, `user-branches-tab.component.ts`?**
+  _High betweenness centrality (0.042) - this node is a cross-community bridge._
 - **Are the 16 inferred relationships involving `ApplicationException` (e.g. with `Error handling` and `Phase 0 — Cross-cutting`) actually correct?**
   _`ApplicationException` has 16 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `MandatoryBigIntField()` (e.g. with `6. DTO conventions` and `Common (used by party DTOs/controllers)`) actually correct?**
   _`MandatoryBigIntField()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `version`, `newProjectRoot` to the rest of the system?**
-  _6492 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `auditAndLogChanges` be split into smaller, more focused modules?**
-  _Cohesion score 0.0629399585921325 - nodes in this community are weakly interconnected._
+  _6504 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `masters.util.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.06963645673323093 - nodes in this community are weakly interconnected._

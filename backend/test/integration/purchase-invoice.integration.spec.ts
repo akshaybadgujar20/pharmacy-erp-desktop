@@ -59,9 +59,11 @@ describe('Purchase invoices (integration)', () => {
     const body = response.body as ApiEnvelope<{
       matchStatus: string;
       purchaseInvoiceId: string;
+      lines?: unknown[];
     }>;
     expect(body.success).toBe(true);
     expect(body.data?.purchaseInvoiceId).toBe(invoice.id.toString());
     expect(body.data?.matchStatus).toBeDefined();
+    expect(Array.isArray(body.data?.lines)).toBe(true);
   });
 });

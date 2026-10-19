@@ -1238,5 +1238,10 @@
     "uuid": "dddddddd-dddd-4ddd-8ddd-ddddddddd10f",
     "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
     "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1e"
+  },
+  {
+    "uuid": "dddddddd-dddd-4ddd-8ddd-ddddddddd110",
+    "roleUuid": "cccccccc-cccc-4ccc-8ccc-cccccccccc01",
+    "permissionUuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1f"
   }
 ]

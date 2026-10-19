@@ -52,6 +52,9 @@ export class LoginComponent {
 
   loading = false;
   errorMessage = '';
+  mfaStep = false;
+  mfaChallengeToken = '';
+  totpCode = '';
 
   async submit(): Promise<void> {
     if (this.form.invalid) {
@@ -63,15 +66,29 @@ export class LoginComponent {
     const formValue = this.form.getRawValue();
     try {
       this.loadingService.show();
-      if(this.loginMode === LoginMode.PIN){
+      if (this.loginMode === LoginMode.PIN) {
         const { password, ...formData } = formValue;
         await this.authService.loginWithPin(formData);
-      }else {
+        await this.router.navigate(['/dashboard']);
+      } else if (this.mfaStep) {
         const { pin, ...formData } = formValue;
-        await this.authService.login(formData);
+        await this.authService.completeMfaLogin({
+          ...formData,
+          mfaChallengeToken: this.mfaChallengeToken,
+          totpCode: this.totpCode,
+        });
+        await this.router.navigate(['/dashboard']);
+      } else {
+        const { pin, ...formData } = formValue;
+        const result = await this.authService.login(formData);
+        if ('mfaRequired' in result && result.mfaRequired) {
+          this.mfaChallengeToken = result.mfaChallengeToken;
+          this.mfaStep = true;
+          this.errorMessage = '';
+          return;
+        }
+        await this.router.navigate(['/dashboard']);
       }
-
-      await this.router.navigate(['/dashboard']);
       this.loadingService.hide();
     } catch (error) {
       this.loadingService.hide();

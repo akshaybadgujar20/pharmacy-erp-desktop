@@ -62,6 +62,10 @@ export class MedicineSearchDialogComponent {
     this.medicines.list({ page: '1', pageSize: '20', search }).subscribe({
       next: ({ data }) => this.results.set(data),
     });
+    this.router.navigate(['/medicine/medicines'], {
+      queryParams: { search },
+    });
+    this.visible.set(false);
   }
 
   pick(row: Medicine): void {

@@ -9,8 +9,43 @@
     <p-tabpanel value="overview">
       @if (!isNew()) {
         <p class="detail-form__status">Status: {{ status() }}</p>
-        @if (matchSummary()) {
-          <p>Three-way match: {{ matchSummary() }}</p>
+        @if (matchSummary(); as summary) {
+          <div class="match-summary">
+            <p>
+              Three-way match:
+              <span class="match-badge match-badge--{{ summary.matchStatus | lowercase }}">
+                {{ summary.matchStatus }}
+              </span>
+            </p>
+            <p>
+              Invoice {{ summary.invoiceLineCount }} lines ({{ summary.invoiceTotalQty }} qty)
+              @if (summary.goodsReceiptId) {
+                vs GRN {{ summary.grnLineCount }} lines ({{ summary.grnTotalQty }} qty)
+              }
+            </p>
+            @if (summary.lines?.length) {
+              <table class="match-lines">
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Invoice qty</th>
+                    <th>GRN qty</th>
+                    <th>Line status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (line of summary.lines; track line.medicineId) {
+                    <tr>
+                      <td>{{ line.medicineName || line.medicineId }}</td>
+                      <td>{{ line.invoiceQty }}</td>
+                      <td>{{ line.grnQty }}</td>
+                      <td>{{ line.lineStatus }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </div>
         }
       }
       <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">

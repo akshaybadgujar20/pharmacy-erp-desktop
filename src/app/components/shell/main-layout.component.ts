@@ -124,6 +124,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     this.shortcutService.registerHandler('global.lookup', () => {
       this.medicineSearchDialog()?.open();
     });
+    this.shortcutService.registerHandler('global.history', () => {
+      this.medicineSearchDialog()?.open();
+    });
     this.shortcutService.registerHandler('global.save', () => this.activeSave.save());
   }
 
@@ -134,6 +137,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     }
     this.unsubscribeSync?.();
     this.shortcutService.unregisterHandler('global.lookup');
+    this.shortcutService.unregisterHandler('global.history');
     this.shortcutService.unregisterHandler('global.save');
   }
 

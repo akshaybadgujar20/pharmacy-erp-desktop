@@ -86,7 +86,11 @@ export class SalesReportsProvider implements OnModuleInit {
     return {
       columns: [
         { key: 'invoiceDate', label: 'Date', type: ReportColumnTypes.DATE },
-        { key: 'invoiceCount', label: 'Invoices', type: ReportColumnTypes.NUMBER },
+        {
+          key: 'invoiceCount',
+          label: 'Invoices',
+          type: ReportColumnTypes.NUMBER,
+        },
         {
           key: 'netAmount',
           label: 'Net Amount',
@@ -134,7 +138,11 @@ export class SalesReportsProvider implements OnModuleInit {
 
     return {
       columns: [
-        { key: 'invoiceNumber', label: 'Invoice #', type: ReportColumnTypes.STRING },
+        {
+          key: 'invoiceNumber',
+          label: 'Invoice #',
+          type: ReportColumnTypes.STRING,
+        },
         { key: 'invoiceDate', label: 'Date', type: ReportColumnTypes.DATE },
         { key: 'status', label: 'Status', type: ReportColumnTypes.STRING },
         {

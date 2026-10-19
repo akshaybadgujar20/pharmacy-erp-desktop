@@ -1,21 +1,28 @@
-<section class="page-layout">
+<section class="page-layout" [formGroup]="form">
   <h2>Month-end close</h2>
-  <form [formGroup]="form" (ngSubmit)="loadChecklist()">
-    <label>
-      Branch ID (optional)
-      <input pInputText formControlName="branchId" />
-    </label>
-    <button pButton type="submit" label="Load pre-close checklist"></button>
-  </form>
+  <label>
+    Branch ID (optional)
+    <input pInputText formControlName="branchId" />
+  </label>
+  <button pButton type="button" label="Load pre-close checklist" (click)="loadChecklist()"></button>
 
   @if (checklist(); as result) {
-    <p>Can close: {{ result.canClose ? 'Yes' : 'No' }}</p>
-    <ul>
+    <p data-testid="month-end-can-close">Can close: {{ result.canClose ? 'Yes' : 'No' }}</p>
+    <ul data-testid="month-end-blockers">
       @for (blocker of result.blockers; track blocker.code) {
         <li>{{ blocker.message }} ({{ blocker.count }})</li>
       }
     </ul>
   }
+
+  <label>
+    Force close (requires reason when blockers exist)
+    <input type="checkbox" formControlName="forceClose" />
+  </label>
+  <label>
+    Force-close reason
+    <input pInputText formControlName="forceReason" />
+  </label>
 
   <button
     pButton

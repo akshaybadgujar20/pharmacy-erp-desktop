@@ -81,7 +81,9 @@ export class InventoryReportsProvider implements OnModuleInit {
         where,
         include: {
           batch: {
-            include: { medicine: { select: { medicineName: true, medicineCode: true } } },
+            include: {
+              medicine: { select: { medicineName: true, medicineCode: true } },
+            },
           },
         },
         orderBy: { id: 'asc' },
@@ -92,7 +94,11 @@ export class InventoryReportsProvider implements OnModuleInit {
 
     return {
       columns: [
-        { key: 'medicineCode', label: 'Medicine', type: ReportColumnTypes.STRING },
+        {
+          key: 'medicineCode',
+          label: 'Medicine',
+          type: ReportColumnTypes.STRING,
+        },
         { key: 'batchNumber', label: 'Batch', type: ReportColumnTypes.STRING },
         {
           key: 'availableQuantity',
@@ -135,7 +141,11 @@ export class InventoryReportsProvider implements OnModuleInit {
 
     return {
       columns: [
-        { key: 'medicineCode', label: 'Medicine', type: ReportColumnTypes.STRING },
+        {
+          key: 'medicineCode',
+          label: 'Medicine',
+          type: ReportColumnTypes.STRING,
+        },
         { key: 'batchNumber', label: 'Batch', type: ReportColumnTypes.STRING },
         { key: 'expiryDate', label: 'Expiry', type: ReportColumnTypes.DATE },
         {
@@ -186,7 +196,11 @@ export class InventoryReportsProvider implements OnModuleInit {
 
     return {
       columns: [
-        { key: 'movementNumber', label: 'Movement #', type: ReportColumnTypes.STRING },
+        {
+          key: 'movementNumber',
+          label: 'Movement #',
+          type: ReportColumnTypes.STRING,
+        },
         { key: 'movementDate', label: 'Date', type: ReportColumnTypes.DATE },
         { key: 'movementType', label: 'Type', type: ReportColumnTypes.STRING },
         {

@@ -42,7 +42,10 @@ import {
   assertOpenFinancialYearForBranchDocument,
 } from '../../configuration/utils/financial-year-guard.util';
 import { toPurchaseInvoiceResponse } from '../mappers/purchase-invoice.mapper';
-import { computePurchaseInvoiceMatchStatus } from '../utils/purchase-invoice-match.util';
+import {
+  buildPurchaseInvoiceMatchLines,
+  computePurchaseInvoiceMatchStatus,
+} from '../utils/purchase-invoice-match.util';
 import {
   assertDraftStatus,
   assertSupplierActive,
@@ -120,9 +123,17 @@ export class PurchaseInvoiceService {
     const invoice = await this.prisma.client.purchaseInvoice.findFirst({
       where: withBranchScope(scope, { id, deletedAt: null }),
       include: {
-        items: { where: { deletedAt: null } },
+        items: {
+          where: { deletedAt: null },
+          include: { medicine: { select: { medicineName: true } } },
+        },
         goodsReceipt: {
-          include: { items: { where: { deletedAt: null } } },
+          include: {
+            items: {
+              where: { deletedAt: null },
+              include: { medicine: { select: { medicineName: true } } },
+            },
+          },
         },
       },
     });
@@ -133,6 +144,7 @@ export class PurchaseInvoiceService {
         `Purchase invoice not found: ${id}`,
         { id: id.toString() },
       );
+      throw new Error('unreachable');
     }
 
     const invoiceLineCount = invoice.items.length;
@@ -151,6 +163,7 @@ export class PurchaseInvoiceService {
         grnLineCount: 0,
         grnTotalQty: 0,
         matchStatus: 'NO_GRN',
+        lines: [],
       };
     }
 
@@ -169,6 +182,8 @@ export class PurchaseInvoiceService {
       grnTotalQty,
     );
 
+    const lines = buildPurchaseInvoiceMatchLines(invoice.items, grn.items);
+
     return {
       purchaseInvoiceId: id.toString(),
       goodsReceiptId: invoice.goodsReceiptId.toString(),
@@ -178,6 +193,7 @@ export class PurchaseInvoiceService {
       grnLineCount,
       grnTotalQty,
       matchStatus,
+      lines,
     };
   }
 

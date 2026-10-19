@@ -2,15 +2,8 @@
   <a routerLink="/inventory/stock-adjustments/new">New stock adjustment</a>
   <div class="flex gap-2 items-center my-2">
     <input #medicineIdInput placeholder="Medicine ID for FEFO preview" />
-    <button type="button" (click)="loadFefoForMedicine(medicineIdInput.value)">FEFO preview</button>
+    <button type="button" (click)="openFefoDialog(medicineIdInput.value)">FEFO preview</button>
   </div>
-  @if (fefoPreview().length > 0) {
-    <ul>
-      @for (line of fefoPreview(); track line) {
-        <li>{{ line }}</li>
-      }
-    </ul>
-  }
   <app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
   <app-grid
     [config]="gridConfig"
@@ -22,3 +15,21 @@
     (action)="onGridAction($event)"
   />
 </div>
+
+<p-dialog
+  header="FEFO preview"
+  [visible]="fefoDialogVisible()"
+  [modal]="true"
+  [style]="{ width: '32rem' }"
+  (onHide)="fefoDialogVisible.set(false)"
+>
+  @if (fefoPreview().length === 0) {
+    <p>No batches found for this medicine.</p>
+  } @else {
+    <ul>
+      @for (line of fefoPreview(); track line) {
+        <li>{{ line }}</li>
+      }
+    </ul>
+  }
+</p-dialog>

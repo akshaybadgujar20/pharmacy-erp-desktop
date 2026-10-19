@@ -13,6 +13,11 @@
             <label for="status">Status</label>
             <input pInputText id="status" [value]="status()" readonly />
           </div>
+          @if (status() === 'EXPIRED') {
+            <p class="detail-form__hint">
+              Sales blocked while expired — use Reactivate below, then retry posting from the counter.
+            </p>
+          }
         }
         <div class="detail-form__field">
           <label for="prescriptionNumber">Prescription Number</label>

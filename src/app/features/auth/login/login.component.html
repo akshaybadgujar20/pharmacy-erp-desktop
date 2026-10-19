@@ -12,7 +12,22 @@
       </div>
     </label>
 
-    @if (loginMode == LoginMode.PASSWORD) {
+    @if (mfaStep) {
+      <label>
+        <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
+          <label pLabel for="totp">Authenticator code</label>
+          <p-inputotp
+            id="totp"
+            [length]="6"
+            [integerOnly]="true"
+            [(ngModel)]="totpCode"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+      </label>
+    }
+
+    @if (loginMode == LoginMode.PASSWORD && !mfaStep) {
       <label>
         <div class="flex flex-col gap-1.5 mx-auto w-full max-w-xs">
           <label pLabel for="password">{{ 'auth.password' | translate }}</label>

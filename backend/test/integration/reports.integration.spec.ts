@@ -28,17 +28,21 @@ describe('Domain reports (integration)', () => {
     await closeHttpTestApp(app);
   });
 
-  it('GET /reports returns 403 without REPORT_VIEW permission', async () => {
-    await request(app.getHttpServer())
+  it('GET /reports returns 200 for admin with REPORT_VIEW', async () => {
+    const response = await request(app.getHttpServer())
       .get('/reports')
       .set('Authorization', `Bearer ${adminToken}`)
-      .expect(403);
+      .expect(200);
+
+    const body = response.body as ApiEnvelope<unknown[]>;
+    expect(body.success).toBe(true);
+    expect(Array.isArray(body.data)).toBe(true);
   });
 
-  it('GET /reports/:id returns 403 when admin lacks report permission', async () => {
+  it('GET /reports/:id returns 200 for permitted sales report', async () => {
     await request(app.getHttpServer())
       .get('/reports/sales.daily-summary')
       .set('Authorization', `Bearer ${adminToken}`)
-      .expect(403);
+      .expect(200);
   });
 });

@@ -25,6 +25,8 @@ export class MonthEndCloseComponent implements OnInit {
 
   readonly form = this.fb.nonNullable.group({
     branchId: [''],
+    forceClose: [false],
+    forceReason: [''],
   });
 
   ngOnInit(): void {
@@ -52,7 +54,13 @@ export class MonthEndCloseComponent implements OnInit {
       return;
     }
     this.closingInProgress.set(true);
-    this.financialYears.close(id, this.financialYearVersion()).subscribe({
+    const { forceClose, forceReason } = this.form.getRawValue();
+    this.financialYears
+      .close(id, this.financialYearVersion(), {
+        force: forceClose,
+        forceReason: forceClose ? forceReason : undefined,
+      })
+      .subscribe({
       next: (year) => {
         this.closingInProgress.set(false);
         this.financialYearVersion.set(year.version);

@@ -84,7 +84,12 @@ export class LoyaltyProgramService {
           updatedAt: now,
         },
       });
-      await this.emitChange(tx, program, AuditAction.CREATE, OutboxOperation.CREATE);
+      await this.emitChange(
+        tx,
+        program,
+        AuditAction.CREATE,
+        OutboxOperation.CREATE,
+      );
       return toLoyaltyProgramResponse(program);
     });
   }
@@ -109,9 +114,20 @@ export class LoyaltyProgramService {
           version: { increment: 1 },
         },
       });
-      optimisticUpdate(updateResult, id, `Loyalty program version conflict: ${id}`);
-      const program = await tx.loyaltyProgram.findFirstOrThrow({ where: { id } });
-      await this.emitChange(tx, program, AuditAction.UPDATE, OutboxOperation.UPDATE);
+      optimisticUpdate(
+        updateResult,
+        id,
+        `Loyalty program version conflict: ${id}`,
+      );
+      const program = await tx.loyaltyProgram.findFirstOrThrow({
+        where: { id },
+      });
+      await this.emitChange(
+        tx,
+        program,
+        AuditAction.UPDATE,
+        OutboxOperation.UPDATE,
+      );
       return toLoyaltyProgramResponse(program);
     });
   }

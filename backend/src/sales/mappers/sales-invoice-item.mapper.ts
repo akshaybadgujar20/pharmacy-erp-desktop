@@ -3,7 +3,10 @@ import { serializeBigInt, serializeDecimal } from '../utils/sales.util';
 
 export type SalesInvoiceItemWithMedicine = SalesInvoiceItem & {
   medicine?: Pick<Medicine, 'requiresPrescription'> & {
-    schedule?: Pick<MedicineSchedule, 'scheduleCode' | 'controlledSubstance'> | null;
+    schedule?: Pick<
+      MedicineSchedule,
+      'scheduleCode' | 'controlledSubstance'
+    > | null;
   };
 };
 

@@ -23,6 +23,7 @@ import {
   validateReportDateRange,
   buildContentDisposition,
 } from './utils/report.util';
+import { toJwtReportPermission, userCanRunReport } from './utils/report-permission.util';
 
 @Controller('reports')
 export class ReportController {
@@ -33,14 +34,14 @@ export class ReportController {
   ) {}
 
   @Get()
-  @RequirePermissions('REPORT_VIEW')
+  @RequirePermissions('REPORT:REPORT:READ')
   list(@Req() request: Request) {
     const user = this.getAuthenticatedUser(request);
     return this.registry.listForUser(user.permissions);
   }
 
   @Get(':reportId')
-  @RequirePermissions('REPORT_VIEW')
+  @RequirePermissions('REPORT:REPORT:READ')
   async run(
     @Param('reportId') reportId: string,
     @Query() query: ReportQueryDto,
@@ -49,12 +50,15 @@ export class ReportController {
     const user = this.getAuthenticatedUser(request);
     const definition = this.registry.get(reportId);
 
-    if (!user.permissions.includes(definition.permission)) {
+    if (!userCanRunReport(user.permissions, definition.permission)) {
       throw new ApplicationException(
         ErrorCode.AUTH_PERMISSION_DENIED,
         'You do not have permission to run this report',
         HttpStatus.FORBIDDEN,
-        { reportId, requiredPermission: definition.permission },
+        {
+          reportId,
+          requiredPermission: toJwtReportPermission(definition.permission),
+        },
       );
     }
 

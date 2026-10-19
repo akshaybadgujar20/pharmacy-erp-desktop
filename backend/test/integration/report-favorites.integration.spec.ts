@@ -25,10 +25,10 @@ describe('Report favorites (integration)', () => {
     return request(app.getHttpServer()).get('/report-favorites').expect(401);
   });
 
-  it('GET /report-favorites returns 403 without REPORTING permission', () => {
+  it('GET /report-favorites returns 200 for admin with REPORT:REPORT:READ', () => {
     return request(app.getHttpServer())
       .get('/report-favorites')
       .set('Authorization', `Bearer ${adminToken}`)
-      .expect(403);
+      .expect(200);
   });
 });

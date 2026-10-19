@@ -2600,6 +2600,16 @@
     "isActive": true
   },
   {
+    "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1f",
+    "permissionCode": "REPORTING_REPORT_READ",
+    "permissionName": "Read report favourites",
+    "module": "REPORTING",
+    "resource": "REPORT",
+    "action": "READ",
+    "isSystemPermission": true,
+    "isActive": true
+  },
+  {
     "uuid": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbc1b",
     "permissionCode": "LOYALTY_PROGRAM_READ",
     "permissionName": "Read Loyalty Programs",
