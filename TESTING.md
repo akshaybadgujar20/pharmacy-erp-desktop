@@ -1,8 +1,33 @@
 # Frontend testing (`src/`)
 
-Angular unit tests live next to components and services under **`src/app/**/*.spec.ts`**. They use **Jest** (not Karma) with **jsdom** — no backend process and no SQLite.
+Angular unit tests live next to components and services under **`src/app/**/*.spec.ts`**. They use **Jest** (not Karma or JUnit) with **jsdom** — no backend process and no SQLite.
 
-**Backend** (NestJS, integration, e2e): [backend/TESTING.md](backend/TESTING.md)
+**Backend** (NestJS unit, integration, HTTP e2e): [backend/TESTING.md](backend/TESTING.md)  
+**Full matrix** (all suites + CI): [docs/pharmacy_erp_architecture_docs/architecture/testing.md](docs/pharmacy_erp_architecture_docs/architecture/testing.md)
+
+---
+
+## Test types — where to run what
+
+This repo does **not** use Java JUnit. **Unit** tests on both stacks are **Jest** (`*.spec.ts`). **Integration** and **e2e** are backend-only unless noted.
+
+| What | Where | Working directory | Command | Needs test DB? |
+|------|--------|-------------------|---------|----------------|
+| **Angular unit** | `src/**/*.spec.ts` | repo root | `npm test` / `npm run test:ci` | No |
+| **Backend unit** | `backend/src/**/*.spec.ts` | `backend/` | `npm run test` | No |
+| **Persistence integration** | `backend/test/persistence/` | `backend/` | `npm run test:persistence` | Yes — `npm run db:test:prepare` first |
+| **HTTP integration** | `backend/test/integration/` | `backend/` | `npm run test:integration` | Yes — prepare first |
+| **HTTP e2e** | `backend/test/e2e/` | `backend/` | `npm run test:e2e` | Yes — prepare first |
+| **UI e2e (browser)** | `e2e/smoke.spec.ts` | repo root | `npm run test:e2e:ui` | Yes — prepare + Playwright starts API + Angular |
+
+Prepare the test database once (or after schema/seed changes):
+
+```bash
+cd backend
+npm run db:test:prepare
+```
+
+Full backend steps: [backend/TESTING.md](backend/TESTING.md).
 
 ---
 

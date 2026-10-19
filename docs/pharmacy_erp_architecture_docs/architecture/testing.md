@@ -22,6 +22,9 @@ How to run unit, integration, persistence, and end-to-end tests in **pharmacy-er
 | **HTTP API integration** | `backend/test/integration/**/*.integration.spec.ts` | `test/integration/jest-integration.json` | `npm run test:integration` | Seeded `db/pharmacy.test.sqlite` + HTTP |
 | **Backend e2e** | `backend/test/e2e/*.e2e-spec.ts` | `test/jest-e2e.json` | `npm run test:e2e` | Seeded `db/pharmacy.test.sqlite` + HTTP |
 | **Angular unit** | `src/**/*.spec.ts` | `jest.config.ts` (repo root) | `npm test` (repo root) | jsdom — no backend |
+| **UI e2e (Playwright)** | `e2e/*.spec.ts` (repo root) | `playwright.config.ts` | `npm run test:e2e:ui` (repo root) | Test DB + `webServer` (API :3000, Angular :4200) |
+
+There is **no JUnit** in this repo; **unit** tests are **Jest** on both backend and Angular.
 
 Persistence, HTTP integration, and e2e use the **test database** (`db/pharmacy.test.sqlite`). Dev data stays in `db/pharmacy.sqlite`. All three DB-backed suites run with `--runInBand` where configured in `package.json`.
 
@@ -219,6 +222,20 @@ npm test -- --testPathPatterns=auth.service.spec
 Config: `jest.config.ts`, setup: `setup-jest.ts`, tests: `src/**/*.spec.ts`.
 
 **Note:** Root `README.md` still mentions `ng test` (Karma). This project uses **Jest** for Angular unit tests via `npm test`.
+
+---
+
+## UI e2e (Playwright)
+
+Browser smoke against the Angular app with a live Nest API. Run from **repository root**.
+
+```bash
+cd backend && npm run db:test:prepare && cd ..
+npx playwright install chromium   # first time only
+npm run test:e2e:ui
+```
+
+`playwright.config.ts` starts `backend` (`npm run start:dev`) and `ng serve` unless servers are already up (`reuseExistingServer` when not in CI). Specs: `e2e/smoke.spec.ts`. Credentials default to `admin` / `admin123` (`E2E_USERNAME`, `E2E_PASSWORD`). Details: [TESTING.md](../../../TESTING.md).
 
 ---
 

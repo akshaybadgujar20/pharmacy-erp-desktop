@@ -1,8 +1,36 @@
 # Backend testing
 
-NestJS unit, persistence, HTTP integration, and e2e tests. Run commands from **`backend/`**.
+NestJS **unit** (Jest — not JUnit), **persistence integration**, **HTTP integration**, and **HTTP e2e** tests. Run commands from **`backend/`**.
 
-**Angular (`src/`)** tests are separate (no DB): [../TESTING.md](../TESTING.md)
+**Angular (`src/`)** unit tests and **Playwright** UI smoke: [../TESTING.md](../TESTING.md)
+
+---
+
+## Quick reference — unit, integration, e2e
+
+| Suite | Jest config | Command | Database |
+|-------|-------------|---------|----------|
+| **Unit** | `package.json` → `jest` | `npm run test` | None (mocks) |
+| **Persistence integration** | `test/persistence/jest-persistence.json` | `npm run test:persistence` | `../db/pharmacy.test.sqlite` |
+| **HTTP integration** | `test/integration/jest-integration.json` | `npm run test:integration` | Test DB + Supertest |
+| **HTTP e2e** | `test/jest-e2e.json` | `npm run test:e2e` | Test DB + Supertest |
+
+Before any row that uses the test DB:
+
+```bash
+npm run db:test:prepare
+```
+
+Filter one file or area (Jest 30):
+
+```bash
+npm run test -- auth/auth.service.spec.ts
+npm run test:integration -- --testPathPatterns=purchase-invoice
+npm run test:e2e -- --testPathPatterns=auth.e2e-spec
+npm run test:persistence -- --testPathPatterns=stock-transfer-in-transit
+```
+
+Browser UI smoke (login, counter, GRN, month-end) is **not** in this folder — from repo root: `npm run test:e2e:ui` (see [../TESTING.md](../TESTING.md)).
 
 ---
 
