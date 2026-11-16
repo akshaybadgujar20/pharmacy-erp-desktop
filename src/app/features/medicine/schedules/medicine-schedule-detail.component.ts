@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { TextareaModule } from 'primeng/textarea';
 import { MedicineScheduleService } from './medicine-schedule.service';
 
 
@@ -20,7 +22,14 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-medicine-schedule-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    TextareaModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './medicine-schedule-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -81,6 +90,7 @@ export class MedicineScheduleDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -178,12 +188,6 @@ export class MedicineScheduleDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

@@ -18,7 +18,7 @@ Summary of the **phased full-stack** work: closed financial-year enforcement, pl
 
 ### Frontend
 
-- [`src/app/core/utils/api-error-message.util.ts`](../../../src/app/core/utils/api-error-message.util.ts) — friendly `FINANCIAL_YEAR_CLOSED` message (used on purchase order detail; extend to other forms as needed).
+- [`src/app/core/utils/api-error-message.util.ts`](../../../src/app/core/utils/api-error-message.util.ts) — friendly `FINANCIAL_YEAR_CLOSED` (and Rx/loyalty codes) via `resolveApiErrorMessage` on transactional **and master-data** detail save paths (party, medicine, pricing, configuration, masters, security, settings).
 - Financial year detail help text: closed years block transactional dates.
 
 ### Tests
@@ -112,13 +112,13 @@ Transactional reports use JWT **branch** scope and optional `fromDate` / `toDate
 
 ### Frontend
 
-- `/loyalty/programs` — program list (minimal); nav under Admin.
+- `/loyalty/programs` — program list + detail (i18n, shortcuts).
+- Customer loyalty tab — program lookup enroll/adjust; `/loyalty/customers/:customerId/transactions` history.
 
 ### Remaining gaps (full Phase 11 ADO)
 
-- Return/cancel **loyalty reversal** on sales return.
-- **Manual adjustment** HTTP API (DTO exists; controller not wired).
-- Sales invoice UI for redeem points; points history; expiry job; full ADO test matrix.
+- Points **expiry job** UI/ops; full ADO test matrix.
+- Scheduled report runs (deferred).
 
 ---
 

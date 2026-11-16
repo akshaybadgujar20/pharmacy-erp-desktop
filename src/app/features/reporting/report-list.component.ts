@@ -36,6 +36,7 @@ export class ReportListComponent implements OnInit {
   readonly search = signal('');
   readonly category = signal('');
   readonly favoriteReports = signal<ReportDefinitionMeta[]>([]);
+  readonly favoriteRows = signal<ReportFavorite[]>([]);
 
   ngOnInit(): void {
     this.load();
@@ -43,6 +44,17 @@ export class ReportListComponent implements OnInit {
 
   openFavorite(report: ReportDefinitionMeta): void {
     this.router.navigate(['/reports', report.id]);
+  }
+
+  removeFavorite(report: ReportDefinitionMeta, event: Event): void {
+    event.stopPropagation();
+    const fav = this.favoriteRows().find((row) => row.reportCode === report.id);
+    if (!fav) {
+      return;
+    }
+    this.favorites.remove(fav.id, fav.version).subscribe({
+      next: () => this.load(),
+    });
   }
 
   onFilterChange(event: GridFilterChange): void {
@@ -62,6 +74,7 @@ export class ReportListComponent implements OnInit {
         this.applyFilter();
         this.favorites.list().subscribe({
           next: (favRows: ReportFavorite[]) => {
+            this.favoriteRows.set(favRows);
             const codes = new Set(favRows.map((row) => row.reportCode));
             this.favoriteReports.set(
               reports.filter((report) => codes.has(report.id)),

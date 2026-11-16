@@ -10,17 +10,26 @@
     <p-tabpanel value="overview">
       <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
         <div class="detail-form__field">
-          <label for="employeeId">Employee ID</label>
-          <input pInputText id="employeeId" formControlName="employeeId" />
+          <label for="employeeId">Employee</label>
+          <app-employee-lookup id="employeeId" formControlName="employeeId" />
+          @if (form.controls.employeeId.invalid && form.controls.employeeId.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="username">Username</label>
           <input pInputText id="username" formControlName="username" [readonly]="!isNew()" />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         @if (isNew()) {
           <div class="detail-form__field">
             <label for="password">Password</label>
-            <input pInputText id="password" type="password" formControlName="password" />
+            <p-password inputId="password" formControlName="password" [feedback]="false" [toggleMask]="true" inputStyleClass="w-full" />
+            @if (form.controls.password.invalid && form.controls.password.touched) {
+              <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+            }
           </div>
         }
         <div class="detail-form__field">
@@ -98,7 +107,10 @@
   <form class="detail-form" [formGroup]="resetPasswordForm" (ngSubmit)="resetPassword()">
     <div class="detail-form__field">
       <label for="newPassword">New Password</label>
-      <input pInputText id="newPassword" type="password" formControlName="newPassword" />
+      <p-password inputId="newPassword" formControlName="newPassword" [feedback]="false" [toggleMask]="true" inputStyleClass="w-full" />
+      @if (resetPasswordForm.controls.newPassword.invalid && resetPasswordForm.controls.newPassword.touched) {
+        <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+      }
     </div>
     <div class="detail-form__field">
       <p-checkbox

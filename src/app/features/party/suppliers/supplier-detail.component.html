@@ -1,15 +1,21 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="partyId">Party ID</label>
-    <input pInputText id="partyId" formControlName="partyId" />
+    <label for="partyId">Party</label>
+    <app-party-lookup id="partyId" formControlName="partyId" />
+    @if (form.controls.partyId.invalid && form.controls.partyId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="supplierCode">Supplier Code</label>
     <input pInputText id="supplierCode" formControlName="supplierCode" />
+    @if (form.controls.supplierCode.invalid && form.controls.supplierCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="supplierType">Supplier Type</label>
-    <input pInputText id="supplierType" formControlName="supplierType" />
+    <p-select inputId="supplierType" formControlName="supplierType" [options]="supplierTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
   </div>
   <div class="detail-form__field">
     <label for="gstin">GSTIN</label>
@@ -25,11 +31,11 @@
   </div>
   <div class="detail-form__field">
     <label for="creditLimit">Credit Limit</label>
-    <input pInputText id="creditLimit" type="number" formControlName="creditLimit" />
+    <p-inputnumber inputId="creditLimit" formControlName="creditLimit" mode="decimal" [minFractionDigits]="2" />
   </div>
   <div class="detail-form__field">
     <label for="paymentTermsDays">Payment Terms (days)</label>
-    <input pInputText id="paymentTermsDays" type="number" formControlName="paymentTermsDays" />
+    <p-inputnumber inputId="paymentTermsDays" formControlName="paymentTermsDays" [min]="0" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="preferredSupplier" [binary]="true" inputId="preferredSupplier" />

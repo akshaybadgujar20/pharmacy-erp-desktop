@@ -14,6 +14,7 @@ import { PrescriptionItem } from '../../prescription/prescriptions/prescription-
 import { PrescriptionItemService } from '../../prescription/prescriptions/prescription-item.service';
 
 export interface PrescriptionLineAddEvent {
+  prescriptionItemId: string;
   medicineId: string;
   soldQuantity: number;
 }
@@ -95,7 +96,11 @@ export class SalesPrescriptionLinesPanelComponent implements OnInit {
     if (soldQuantity > this.maxQty(line)) {
       return;
     }
-    this.add.emit({ medicineId: line.medicineId, soldQuantity });
+    this.add.emit({
+      prescriptionItemId: line.id,
+      medicineId: line.medicineId,
+      soldQuantity,
+    });
   }
 
   private load(prescriptionId: string): void {

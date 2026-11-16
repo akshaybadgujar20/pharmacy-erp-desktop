@@ -1,15 +1,24 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="partyId">Party ID</label>
-    <input pInputText id="partyId" formControlName="partyId" />
+    <label for="partyId">Party</label>
+    <app-party-lookup id="partyId" formControlName="partyId" />
+    @if (form.controls.partyId.invalid && form.controls.partyId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="doctorCode">Doctor Code</label>
     <input pInputText id="doctorCode" formControlName="doctorCode" />
+    @if (form.controls.doctorCode.invalid && form.controls.doctorCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="registrationNumber">Registration Number</label>
     <input pInputText id="registrationNumber" formControlName="registrationNumber" />
+    @if (form.controls.registrationNumber.invalid && form.controls.registrationNumber.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="qualification">Qualification</label>
@@ -25,7 +34,7 @@
   </div>
   <div class="detail-form__field">
     <label for="consultationFee">Consultation Fee</label>
-    <input pInputText id="consultationFee" type="number" formControlName="consultationFee" />
+    <p-inputnumber inputId="consultationFee" formControlName="consultationFee" mode="decimal" [minFractionDigits]="2" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isVisitingDoctor" [binary]="true" inputId="isVisitingDoctor" />

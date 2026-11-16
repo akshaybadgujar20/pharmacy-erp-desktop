@@ -14,14 +14,14 @@ import { formatShortcutTooltipHtml } from './shortcut-tooltip.util';
   hostDirectives: [
     {
       directive: Tooltip,
-      inputs: ['tooltipPosition: shortcutTooltipPosition'],
+      inputs: [
+        'pTooltip: tooltipContent',
+        'escape: tooltipEscape',
+        'tooltipPosition: shortcutTooltipPosition',
+        'tooltipStyleClass: shortcutTooltipStyleClass',
+      ],
     },
   ],
-  host: {
-    '[pTooltip]': 'tooltipContent()',
-    '[escape]': 'false',
-    tooltipStyleClass: 'app-shortcut-tooltip',
-  },
 })
 export class ShortcutTooltipDirective {
   private readonly shortcuts = inject(KeyboardShortcutService);
@@ -29,6 +29,9 @@ export class ShortcutTooltipDirective {
   readonly label = input.required<string>({ alias: 'appShortcutTooltip' });
   readonly shortcutId = input<string>();
   readonly shortcutTooltipPosition = input<string>('top');
+
+  readonly tooltipEscape = false;
+  readonly shortcutTooltipStyleClass = 'app-shortcut-tooltip';
 
   readonly tooltipContent = computed(() => {
     this.shortcuts.bindingsChanged();

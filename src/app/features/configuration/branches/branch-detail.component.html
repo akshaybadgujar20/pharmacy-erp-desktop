@@ -2,14 +2,23 @@
   <div class="detail-form__field">
     <label for="branchCode">Branch Code</label>
     <input pInputText id="branchCode" formControlName="branchCode" />
+    @if (form.controls.branchCode.invalid && form.controls.branchCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="branchName">Branch Name</label>
     <input pInputText id="branchName" formControlName="branchName" />
+    @if (form.controls.branchName.invalid && form.controls.branchName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="displayName">Display Name</label>
     <input pInputText id="displayName" formControlName="displayName" />
+    @if (form.controls.displayName.invalid && form.controls.displayName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="gstNumber">GST Number</label>
@@ -57,7 +66,7 @@
   </div>
   <div class="detail-form__field">
     <label for="openingDate">Opening Date</label>
-    <input pInputText id="openingDate" formControlName="openingDate" />
+    <p-datepicker inputId="openingDate" formControlName="openingDate" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" inputStyleClass="w-full" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isHeadOffice" [binary]="true" inputId="isHeadOffice" />

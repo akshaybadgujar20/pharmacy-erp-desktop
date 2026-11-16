@@ -1,0 +1,62 @@
+<p-toast />
+<app-toolbar [config]="toolbarConfig" (action)="onToolbarAction($event)" />
+<app-grid
+  [config]="gridConfig"
+  [data]="rows()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  (pageChange)="onPageChange($event)"
+  (filterChange)="onFilterChange($event)"
+  (action)="onGridAction($event)"
+/>
+<p-dialog
+  [visible]="detailVisible()"
+  [modal]="true"
+  [header]="'sync.conflict.detailTitle' | translate"
+  [style]="{ width: '48rem' }"
+  (onHide)="detailVisible.set(false)"
+>
+  @if (detail(); as row) {
+    <p><strong>{{ 'sync.conflict.entity' | translate }}:</strong> {{ row.entityType }}</p>
+    <h4>{{ 'sync.conflict.localPayload' | translate }}</h4>
+    <pre>{{ row.localPayload }}</pre>
+    <h4>{{ 'sync.conflict.serverPayload' | translate }}</h4>
+    <pre>{{ row.serverPayload }}</pre>
+  }
+</p-dialog>
+<p-dialog
+  [visible]="resolveVisible()"
+  [modal]="true"
+  [header]="'sync.conflict.resolveTitle' | translate"
+  [style]="{ width: '32rem' }"
+  (onHide)="closeResolve()"
+>
+  @if (resolveTarget(); as row) {
+    <form class="detail-form" [formGroup]="resolveForm" (ngSubmit)="submitResolve()">
+      <p>{{ 'sync.conflict.entity' | translate }}: {{ row.entityType }}</p>
+      <div class="detail-form__field">
+        <label for="strategy">{{ 'sync.conflict.strategy' | translate }}</label>
+        <p-select
+          inputId="strategy"
+          formControlName="resolutionStrategy"
+          [options]="resolutionStrategies"
+        />
+      </div>
+      @if (resolveForm.value.resolutionStrategy === 'MERGED' || resolveForm.value.resolutionStrategy === 'MANUAL') {
+        <p class="detail-form__hint">{{ 'sync.conflict.metadataOnlyHint' | translate }}</p>
+      }
+      <div class="detail-form__field">
+        <label for="remarks">{{ 'sync.conflict.remarks' | translate }}</label>
+        <input pInputText id="remarks" formControlName="remarks" />
+      </div>
+      <div class="detail-form__actions">
+        <button pButton type="submit" [disabled]="resolveForm.invalid || resolving()">
+          {{ 'sync.conflict.resolveSubmit' | translate }}
+        </button>
+        <button pButton type="button" severity="secondary" (click)="closeResolve()">
+          {{ 'common.cancel' | translate }}
+        </button>
+      </div>
+    </form>
+  }
+</p-dialog>

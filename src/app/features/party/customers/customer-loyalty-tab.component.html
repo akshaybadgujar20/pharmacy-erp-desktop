@@ -1,0 +1,60 @@
+@if (summary()) {
+  <p>{{ 'loyalty.balancePoints' | translate }}: {{ summary()!.balancePoints }}</p>
+  @if (summary()!.membership) {
+    <p>{{ 'loyalty.program' | translate }}: {{ summary()!.membership!.programName }}</p>
+  }
+}
+<div class="detail-form__field">
+  <label for="enrollProgram">{{ 'loyalty.enrollProgram' | translate }}</label>
+  <app-loyalty-program-lookup id="enrollProgram" [formControl]="enrollProgramControl" />
+  <button pButton type="button" (click)="enroll()">{{ 'loyalty.enroll' | translate }}</button>
+  <button
+    pButton
+    type="button"
+    severity="help"
+    (click)="adjustDialogVisible.set(true)"
+  >
+    {{ 'loyalty.adjustPoints' | translate }}
+  </button>
+  <a
+    pButton
+    severity="secondary"
+    [routerLink]="['/loyalty/customers', customerId(), 'transactions']"
+  >
+    {{ 'loyalty.viewHistory' | translate }}
+  </a>
+</div>
+<app-grid
+  [config]="gridConfig"
+  [data]="transactions()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  (pageChange)="onPageChange($event)"
+/>
+<p-dialog
+  [header]="'loyalty.manualAdjustment' | translate"
+  [visible]="adjustDialogVisible()"
+  [modal]="true"
+  (onHide)="adjustDialogVisible.set(false)"
+>
+  <form [formGroup]="adjustForm" (ngSubmit)="submitAdjust()">
+    <div class="detail-form__field">
+      <label for="adjustProgram">{{ 'loyalty.program' | translate }}</label>
+      <app-loyalty-program-lookup formControlName="loyaltyProgramId" />
+    </div>
+    <div class="detail-form__field">
+      <label for="pointsDelta">{{ 'loyalty.pointsDelta' | translate }}</label>
+      <input pInputText id="pointsDelta" type="number" formControlName="pointsDelta" />
+    </div>
+    <div class="detail-form__field">
+      <label for="remarks">{{ 'loyalty.remarks' | translate }}</label>
+      <input pInputText id="remarks" formControlName="remarks" />
+    </div>
+    @if (adjustError()) {
+      <p class="detail-form__error">{{ adjustError() }}</p>
+    }
+    <button pButton type="submit" [disabled]="adjustForm.invalid">
+      {{ 'common.save' | translate }}
+    </button>
+  </form>
+</p-dialog>

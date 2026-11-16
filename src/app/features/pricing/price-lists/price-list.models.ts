@@ -1,3 +1,12 @@
+export const PRICE_LIST_TYPE_OPTIONS = [
+  { label: 'Retail', value: 'RETAIL' },
+  { label: 'Wholesale', value: 'WHOLESALE' },
+  { label: 'Hospital', value: 'HOSPITAL' },
+  { label: 'Distributor', value: 'DISTRIBUTOR' },
+  { label: 'Corporate', value: 'CORPORATE' },
+  { label: 'Promotional', value: 'PROMOTIONAL' },
+];
+
 export interface PriceList {
   id: string;
   uuid: string;

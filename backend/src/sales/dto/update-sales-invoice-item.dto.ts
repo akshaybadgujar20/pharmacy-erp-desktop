@@ -58,6 +58,9 @@ export class UpdateSalesInvoiceItemDto {
   @OptionalBigIntField()
   taxId?: bigint;
 
+  @OptionalBigIntField()
+  prescriptionItemId?: bigint;
+
   @IsOptional()
   @IsString()
   @MaxLength(500)

@@ -1,37 +1,79 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="programCode">Program code</label>
+    <label for="programCode">{{ 'loyalty.programCode' | translate }}</label>
     <input pInputText id="programCode" formControlName="programCode" />
+    @if (form.controls.programCode.invalid && form.controls.programCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="programName">Program name</label>
+    <label for="programName">{{ 'loyalty.programName' | translate }}</label>
     <input pInputText id="programName" formControlName="programName" />
+    @if (form.controls.programName.invalid && form.controls.programName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="pointsPerAmount">Points per amount</label>
+    <label for="pointsPerAmount">{{ 'loyalty.pointsPerAmount' | translate }}</label>
     <input pInputText id="pointsPerAmount" formControlName="pointsPerAmount" />
+    @if (form.controls.pointsPerAmount.invalid && form.controls.pointsPerAmount.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="redemptionValue">Redemption value</label>
+    <label for="redemptionValue">{{ 'loyalty.redemptionValue' | translate }}</label>
     <input pInputText id="redemptionValue" formControlName="redemptionValue" />
+    @if (form.controls.redemptionValue.invalid && form.controls.redemptionValue.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="minimumRedemptionPoints">Minimum redemption points</label>
-    <input pInputText id="minimumRedemptionPoints" type="number" formControlName="minimumRedemptionPoints" />
+    <label for="minimumRedemptionPoints">{{ 'loyalty.minimumRedemptionPoints' | translate }}</label>
+    <p-inputNumber inputId="minimumRedemptionPoints" formControlName="minimumRedemptionPoints" [min]="0" [useGrouping]="false" />
+    @if (form.controls.minimumRedemptionPoints.invalid && form.controls.minimumRedemptionPoints.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="effectiveFrom">Effective from (ISO)</label>
-    <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+    <label for="effectiveFrom">{{ 'loyalty.effectiveFrom' | translate }}</label>
+    <p-datepicker inputId="effectiveFrom" formControlName="effectiveFrom" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" inputStyleClass="w-full" />
+    @if (form.controls.effectiveFrom.invalid && form.controls.effectiveFrom.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isDefault" [binary]="true" inputId="isDefault" />
-    <label for="isDefault">Default program</label>
+    <label for="isDefault">{{ 'loyalty.defaultProgram' | translate }}</label>
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />
-    <label for="isActive">Active</label>
+    <label for="isActive">{{ 'loyalty.active' | translate }}</label>
   </div>
-  <button pButton type="submit" [disabled]="saving() || form.invalid">Save</button>
+  <div class="detail-form__actions">
+    <button
+      pButton
+      type="submit"
+      severity="primary"
+      [disabled]="saving() || form.invalid"
+      appShortcutTooltip="Save"
+      shortcutId="global.save"
+      shortcutTooltipPosition="bottom"
+    >
+      {{ 'common.save' | translate }}
+    </button>
+    <button
+      pButton
+      type="button"
+      severity="secondary"
+      variant="outlined"
+      appShortcutTooltip="Back"
+      shortcutId="global.cancel"
+      shortcutTooltipPosition="bottom"
+      (click)="goBack()"
+    >
+      {{ 'common.cancel' | translate }}
+    </button>
+  </div>
   @if (errorMessage()) {
     <p class="detail-form__error">{{ errorMessage() }}</p>
   }

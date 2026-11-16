@@ -8,6 +8,8 @@ import {
 
   inject,
 
+  input,
+
   OnInit,
 
   signal,
@@ -56,6 +58,9 @@ import { ReportService } from './report.service';
 
 export class ReportRunnerComponent implements OnInit {
 
+  readonly embedded = input(false);
+  readonly embeddedReportId = input<string | null>(null);
+
   private readonly fb = inject(FormBuilder);
 
   private readonly reportService = inject(ReportService);
@@ -70,6 +75,9 @@ export class ReportRunnerComponent implements OnInit {
 
 
   readonly reportId = signal('');
+
+  readonly favoriteId = signal<string | null>(null);
+  readonly favoriteVersion = signal<string | null>(null);
 
   readonly running = signal(false);
 
@@ -142,15 +150,24 @@ export class ReportRunnerComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    const reportId = this.route.snapshot.paramMap.get('reportId');
-
-    if (reportId) {
-
-      this.reportId.set(reportId);
-
+    const embeddedId = this.embeddedReportId();
+    if (embeddedId) {
+      this.reportId.set(embeddedId);
+    } else {
+      const reportId = this.route.snapshot.paramMap.get('reportId');
+      if (reportId) {
+        this.reportId.set(reportId);
+      }
     }
-
+    if (this.embedded()) {
+      const today = new Date();
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1)
+        .toISOString()
+        .slice(0, 10);
+      const monthEnd = today.toISOString().slice(0, 10);
+      this.form.patchValue({ fromDate: monthStart, toDate: monthEnd });
+    }
+    this.refreshFavoriteState();
   }
 
 
@@ -187,8 +204,41 @@ export class ReportRunnerComponent implements OnInit {
       return;
     }
     this.favorites.add(reportId).subscribe({
-      next: () => this.errorMessage.set(''),
+      next: () => {
+        this.errorMessage.set('');
+        this.refreshFavoriteState();
+      },
       error: (error: ApiClientError) => this.errorMessage.set(error.message),
+    });
+  }
+
+  removeFavorite(): void {
+    const favoriteId = this.favoriteId();
+    const version = this.favoriteVersion();
+    if (!favoriteId || !version) {
+      return;
+    }
+    this.favorites.remove(favoriteId, version).subscribe({
+      next: () => {
+        this.favoriteId.set(null);
+        this.favoriteVersion.set(null);
+        this.errorMessage.set('');
+      },
+      error: (error: ApiClientError) => this.errorMessage.set(error.message),
+    });
+  }
+
+  private refreshFavoriteState(): void {
+    const reportId = this.reportId();
+    if (!reportId) {
+      return;
+    }
+    this.favorites.list().subscribe({
+      next: (rows) => {
+        const match = rows.find((row) => row.reportCode === reportId);
+        this.favoriteId.set(match?.id ?? null);
+        this.favoriteVersion.set(match?.version ?? null);
+      },
     });
   }
 

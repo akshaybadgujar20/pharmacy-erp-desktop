@@ -1,11 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
-import { UNIT_TYPES } from './unit-of-measure.models';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { UNIT_TYPE_OPTIONS } from './unit-of-measure.models';
 import { UnitOfMeasureService } from './unit-of-measure.service';
 
 
@@ -21,7 +24,15 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-unit-of-measure-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    SelectModule,
+    TextareaModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './unit-of-measure-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,7 +47,7 @@ export class UnitOfMeasureDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly unitTypes = UNIT_TYPES;
+  readonly unitTypeOptions = UNIT_TYPE_OPTIONS;
   readonly isNew = signal(true);
   readonly saving = signal(false);
   readonly deleting = signal(false);
@@ -82,6 +93,7 @@ export class UnitOfMeasureDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -176,12 +188,6 @@ export class UnitOfMeasureDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

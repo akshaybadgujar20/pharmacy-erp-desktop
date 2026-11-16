@@ -4,9 +4,12 @@
       <h3>Favourites</h3>
       <ul>
         @for (report of favoriteReports(); track report.id) {
-          <li>
+          <li class="report-favourites__item">
             <button type="button" (click)="openFavorite(report)">
               {{ report.name }}
+            </button>
+            <button type="button" class="report-favourites__remove" (click)="removeFavorite(report, $event)">
+              Remove
             </button>
           </li>
         }

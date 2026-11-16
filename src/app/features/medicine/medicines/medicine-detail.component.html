@@ -16,26 +16,41 @@
             formControlName="medicineCode"
             [readonly]="!isNew()"
           />
+          @if (form.controls.medicineCode.invalid && form.controls.medicineCode.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="medicineName">Medicine Name</label>
           <input pInputText id="medicineName" formControlName="medicineName" />
+          @if (form.controls.medicineName.invalid && form.controls.medicineName.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="manufacturerId">Manufacturer ID</label>
-          <input pInputText id="manufacturerId" formControlName="manufacturerId" />
+          <p-select inputId="manufacturerId" formControlName="manufacturerId" [options]="manufacturerOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+          @if (form.controls.manufacturerId.invalid && form.controls.manufacturerId.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="categoryId">Category ID</label>
-          <input pInputText id="categoryId" formControlName="categoryId" />
+          <p-select inputId="categoryId" formControlName="categoryId" [options]="categoryOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+          @if (form.controls.categoryId.invalid && form.controls.categoryId.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="scheduleId">Schedule ID</label>
-          <input pInputText id="scheduleId" formControlName="scheduleId" />
+          <p-select inputId="scheduleId" formControlName="scheduleId" [options]="scheduleOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" [showClear]="true" />
         </div>
         <div class="detail-form__field">
           <label for="unitId">Unit ID</label>
-          <input pInputText id="unitId" formControlName="unitId" />
+          <p-select inputId="unitId" formControlName="unitId" [options]="unitOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+          @if (form.controls.unitId.invalid && form.controls.unitId.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="brandName">Brand Name</label>
@@ -48,6 +63,9 @@
         <div class="detail-form__field">
           <label for="dosageForm">Dosage Form</label>
           <input pInputText id="dosageForm" formControlName="dosageForm" />
+          @if (form.controls.dosageForm.invalid && form.controls.dosageForm.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="packSize">Pack Size</label>

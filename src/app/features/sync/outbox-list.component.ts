@@ -18,7 +18,7 @@ import { ToolbarActionEvent } from '../../components/generic/toolbar/types/toolb
 import { toListParams } from '../../shared/utils/list-query.util';
 import { OUTBOX_GRID_CONFIG } from './outbox-grid.config';
 import { OutboxAdminService, OutboxRow } from './outbox-admin.service';
-import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
+import { OUTBOX_TOOLBAR_CONFIG } from './outbox-toolbar.config';
 
 @Component({
   selector: 'app-outbox-list',
@@ -45,7 +45,7 @@ export class OutboxListComponent implements OnInit, OnDestroy {
   private readonly grid = viewChild(AppGridComponent);
   private listShortcutBinding?: ShortcutBinding;
 
-  readonly toolbarConfig = AUDIT_LOG_TOOLBAR_CONFIG;
+  readonly toolbarConfig = OUTBOX_TOOLBAR_CONFIG;
   readonly gridConfig = OUTBOX_GRID_CONFIG;
 
   readonly rows = signal<OutboxRow[]>([]);

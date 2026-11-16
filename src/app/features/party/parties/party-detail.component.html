@@ -12,11 +12,17 @@
       <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
         <div class="detail-form__field">
           <label for="partyType">Party Type</label>
-          <input pInputText id="partyType" formControlName="partyType" />
+          <p-select inputId="partyType" formControlName="partyType" [options]="partyTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+          @if (form.controls.partyType.invalid && form.controls.partyType.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="displayName">Display Name</label>
           <input pInputText id="displayName" formControlName="displayName" />
+          @if (form.controls.displayName.invalid && form.controls.displayName.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="firstName">First Name</label>

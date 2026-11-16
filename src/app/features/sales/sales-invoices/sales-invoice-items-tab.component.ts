@@ -18,7 +18,9 @@ import {
 } from '../../../components/generic/grid/types/grid-events.types';
 import { BatchService } from '../../inventory/batches/batch.service';
 import { MedicineService } from '../../medicine/medicines/medicine.service';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { MedicineLookupComponent } from '../../../shared/lookups/medicine-lookup.component';
+import { PrescriptionLineLookupComponent } from '../../../shared/lookups/prescription-line-lookup.component';
 import { toListParams } from '../../../shared/utils/list-query.util';
 import { SALES_INVOICE_ITEM_GRID_CONFIG } from './sales-invoice-item-grid.config';
 import { SalesInvoiceItem } from './sales-invoice-item.models';
@@ -34,6 +36,7 @@ import { SalesInvoiceItemService } from './sales-invoice-item.service';
     DialogModule,
     InputTextModule,
     MedicineLookupComponent,
+    PrescriptionLineLookupComponent,
   ],
   templateUrl: './sales-invoice-items-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,8 +48,10 @@ export class SalesInvoiceItemsTabComponent {
   private readonly medicineService = inject(MedicineService);
 
   readonly invoiceId = input.required<string>();
+  readonly prescriptionId = input<string | null>(null);
   readonly editable = input(true);
   readonly seedMedicineId = input<string | null>(null);
+  readonly seedPrescriptionItemId = input<string | null>(null);
   readonly seedSoldQuantity = input<number | null>(null);
   readonly seedToken = input(0);
 
@@ -61,10 +66,12 @@ export class SalesInvoiceItemsTabComponent {
   readonly editingId = signal<string | null>(null);
   readonly editingVersion = signal('0');
   readonly saving = signal(false);
+  readonly saveError = signal('');
   readonly batchOptions = signal<{ id: string; label: string }[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     medicineId: ['', Validators.required],
+    prescriptionItemId: [''],
     batchId: ['', Validators.required],
     unitId: ['', Validators.required],
     soldQuantity: [1, Validators.required],
@@ -85,8 +92,9 @@ export class SalesInvoiceItemsTabComponent {
         return;
       }
       const soldQuantity = this.seedSoldQuantity() ?? 1;
+      const prescriptionItemId = this.seedPrescriptionItemId() ?? '';
       this.openCreate();
-      this.form.patchValue({ medicineId, soldQuantity });
+      this.form.patchValue({ medicineId, soldQuantity, prescriptionItemId });
       this.onMedicineChange(medicineId);
     });
     this.form.get('medicineId')?.valueChanges.subscribe((medicineId) => {
@@ -151,6 +159,7 @@ export class SalesInvoiceItemsTabComponent {
     this.editingVersion.set('0');
     this.form.reset({
       medicineId: '',
+      prescriptionItemId: '',
       batchId: '',
       unitId: '',
       soldQuantity: 1,
@@ -165,6 +174,7 @@ export class SalesInvoiceItemsTabComponent {
     this.editingVersion.set(item.version);
     this.form.patchValue({
       medicineId: item.medicineId,
+      prescriptionItemId: item.prescriptionItemId ?? '',
       batchId: item.batchId,
       unitId: item.unitId,
       soldQuantity: item.soldQuantity ?? 1,
@@ -184,6 +194,7 @@ export class SalesInvoiceItemsTabComponent {
     }
 
     this.saving.set(true);
+    this.saveError.set('');
     const value = this.form.getRawValue();
     const invoiceId = this.invoiceId();
 
@@ -191,6 +202,7 @@ export class SalesInvoiceItemsTabComponent {
       this.salesInvoiceItemService
         .update(invoiceId, this.editingId()!, {
           version: this.editingVersion(),
+          prescriptionItemId: value.prescriptionItemId || null,
           batchId: value.batchId,
           unitId: value.unitId,
           soldQuantity: value.soldQuantity,
@@ -202,7 +214,10 @@ export class SalesInvoiceItemsTabComponent {
             this.closeDialog();
             this.load();
           },
-          error: () => this.saving.set(false),
+          error: (error) => {
+            this.saving.set(false);
+            this.saveError.set(resolveApiErrorMessage(error));
+          },
         });
       return;
     }
@@ -210,6 +225,7 @@ export class SalesInvoiceItemsTabComponent {
     this.salesInvoiceItemService
       .create(invoiceId, {
         medicineId: value.medicineId,
+        prescriptionItemId: value.prescriptionItemId || undefined,
         batchId: value.batchId,
         unitId: value.unitId,
         soldQuantity: value.soldQuantity,
@@ -221,7 +237,10 @@ export class SalesInvoiceItemsTabComponent {
           this.closeDialog();
           this.load();
         },
-        error: () => this.saving.set(false),
+        error: (error) => {
+          this.saving.set(false);
+          this.saveError.set(resolveApiErrorMessage(error));
+        },
       });
   }
 

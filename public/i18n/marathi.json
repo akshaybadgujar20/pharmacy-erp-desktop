@@ -2,6 +2,9 @@
   "app": {
     "title": "फार्मसी ERP"
   },
+  "common": {
+    "required": "आवश्यक"
+  },
   "navigation": {
     "title": "नेव्हिगेशन",
     "home": "मुख्यपृष्ठ",
@@ -30,9 +33,9 @@
     "inventory": { "title": "इन्व्हेंटरी", "batches": "बॅच", "stocks": "स्टॉक", "movements": "स्टॉक हालचाल", "adjustments": "स्टॉक समायोजन", "transfers": "स्टॉक हस्तांतरण", "stockTakes": "स्टॉक तपासणी" },
     "party": { "title": "पक्ष", "parties": "पक्ष", "customers": "ग्राहक", "suppliers": "पुरवठादार", "doctors": "डॉक्टर", "employees": "कर्मचारी" },
     "medicine": { "title": "औषधे", "medicines": "औषधे", "categories": "श्रेणी", "generics": "जेनेरिक", "schedules": "शेड्यूल", "manufacturers": "उत्पादक", "saltCompositions": "साल्ट रचना", "units": "मापन एकक" },
-    "masters": { "title": "संदर्भ डेटा", "countries": "देश", "states": "राज्ये", "cities": "शहरे", "areas": "क्षेत्र" },
+    "masters": { "title": "संदर्भ डेटा", "countries": "देश", "states": "राज्ये", "cities": "शहरे", "areas": "क्षेत्र", "import": "CSV आयात" },
     "pricing": { "title": "किंमत", "discountRules": "सवलत नियम", "priceLists": "किंमत यादी", "taxes": "कर" },
-    "finance": { "title": "वित्त", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते", "monthEndClose": "महिना समाप्ती", "cashDrawer": "रोख पेटी" },
+    "finance": { "title": "वित्त", "dashboard": "वित्त डॅशबोर्ड", "ledgers": "खाते", "payments": "पेमेंट", "receipts": "पावते", "monthEndClose": "महिना समाप्ती", "cashDrawer": "रोख पेटी" },
     "prescriptions": { "list": "प्रिस्क्रिप्शन" },
     "reports": { "title": "अहवाल" },
     "security": { "title": "सुरक्षा", "users": "वापरकर्ते", "roles": "भूमिका", "permissions": "परवानग्या", "sessions": "सत्र", "changePassword": "पासवर्ड बदला" },
@@ -102,5 +105,84 @@
       "prescription": "प्रिस्क्रिप्शन",
       "pricing": "किंमत"
     }
+  },
+  "pricing": {
+    "branch": "शाखा",
+    "branchHint": "संस्था-व्यापी यादीसाठी रिकामे ठेवा; शाखा-विशिष्ट किंमतीसाठी शाखा निवडा.",
+    "searchBranch": "शाखा शोधा",
+    "priceListTypeLabel": "किंमत यादी प्रकार",
+    "priceListType": {
+      "retail": "किरकोळ",
+      "wholesale": "घाऊक",
+      "hospital": "रुग्णालय",
+      "distributor": "वितरक",
+      "corporate": "कॉर्पोरेट",
+      "promotional": "प्रचार"
+    }
+  },
+  "finance": {
+    "dashboardTitle": "वित्त डॅशबोर्ड",
+    "dashboardIntro": "चालू महिन्यासाठी मुख्य वित्त अहवाल चालवा. तारखा बदला आणि रिफ्रेश करण्यासाठी चालवा.",
+    "trialBalancePanel": "चाचणी शिल्लक",
+    "gstSummaryPanel": "GST सारांश"
+  },
+  "sync": {
+    "conflict": {
+      "detailTitle": "सिंक संघर्ष",
+      "resolveTitle": "संघर्ष सोडवा",
+      "entity": "घटक",
+      "localPayload": "स्थानिक डेटा",
+      "serverPayload": "सर्व्हर डेटा",
+      "strategy": "निराकरण धोरण",
+      "remarks": "टिप्पणी",
+      "resolveSubmit": "सोडवा",
+      "metadataOnlyHint": "MERGED आणि MANUAL v1 मध्ये फक्त संघर्ष मेटाडेटा अद्यतनित करतात; व्यवसाय पंक्ती विलीन होत नाहीत."
+    }
+  },
+  "masters": {
+    "import": {
+      "title": "भौगोलिक मास्टर्स आयात",
+      "hint": "CSV पंक्ती पेस्ट करा (प्रति ओळ एक नोंद). ड्राय रन जतन न करता पार्सिंग तपासते.",
+      "entityLabel": "घटक प्रकार",
+      "entity": {
+        "country": "देश",
+        "state": "राज्य",
+        "city": "शहर",
+        "area": "क्षेत्र"
+      },
+      "csv": "CSV मजकूर",
+      "dryRun": "ड्राय रन",
+      "commit": "प्रमाणित करा (जतन नाही)",
+      "commitHint": "फक्त पंक्ती प्रमाणित करते; v1 मध्ये डेटाबेस आयात अंमलात नाही.",
+      "validationOnlyBanner": "पंक्ती फक्त प्रमाणित केल्या; v1 मध्ये डेटाबेस आयात अंमलात नाही.",
+      "summary": "आयात निकाल",
+      "dryRunLabel": "ड्राय रन",
+      "committed": "प्रमाणित",
+      "colLine": "ओळ",
+      "colStatus": "स्थिती",
+      "colMessage": "संदेश"
+    }
+  },
+  "loyalty": {
+    "searchProgram": "लॉयल्टी कार्यक्रम शोधा",
+    "balancePoints": "शिल्लक गुण",
+    "program": "कार्यक्रम",
+    "enrollProgram": "कार्यक्रमात नोंदणी",
+    "enroll": "नोंदणी",
+    "adjustPoints": "गुण समायोजित करा",
+    "viewHistory": "संपूर्ण गुण इतिहास",
+    "manualAdjustment": "वैयक्तिक समायोजन",
+    "pointsDelta": "गुण बदल",
+    "remarks": "टिप्पणी",
+    "pointsHistory": "लॉयल्टी व्यवहार इतिहास",
+    "backToCustomer": "ग्राहकाकडे परत",
+    "programCode": "कार्यक्रम कोड",
+    "programName": "कार्यक्रम नाव",
+    "pointsPerAmount": "प्रति रक्कम गुण",
+    "redemptionValue": "रिडेम्प्शन मूल्य",
+    "minimumRedemptionPoints": "किमान रिडेम्प्शन गुण",
+    "effectiveFrom": "प्रभावी पासून (ISO)",
+    "defaultProgram": "डीफॉल्ट कार्यक्रम",
+    "active": "सक्रिय"
   }
 }

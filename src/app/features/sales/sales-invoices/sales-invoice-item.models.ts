@@ -3,6 +3,7 @@ export interface SalesInvoiceItem {
   uuid: string;
   salesInvoiceId: string;
   medicineId: string;
+  prescriptionItemId: string | null;
   batchId: string;
   unitId: string;
   lineNumber: number;
@@ -26,6 +27,7 @@ export interface SalesInvoiceItem {
 
 export interface CreateSalesInvoiceItemRequest {
   medicineId: string;
+  prescriptionItemId?: string;
   batchId: string;
   unitId: string;
   soldQuantity: number;
@@ -40,6 +42,7 @@ export interface CreateSalesInvoiceItemRequest {
 
 export interface UpdateSalesInvoiceItemRequest {
   version: string;
+  prescriptionItemId?: string | null;
   batchId?: string;
   unitId?: string;
   soldQuantity?: number;

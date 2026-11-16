@@ -629,11 +629,90 @@ export async function assertScheduleHCompliance(
   }
 }
 
+export type SalesInvoicePostLine = {
+  medicineId: bigint;
+  soldQuantity: Prisma.Decimal;
+  prescriptionItemId?: bigint | null;
+};
+
+export async function assertPrescriptionItemLink(
+  tx: TxClient,
+  prescriptionId: bigint,
+  medicineId: bigint,
+  prescriptionItemId: bigint,
+): Promise<void> {
+  const rxItem = await tx.prescriptionItem.findFirst({
+    where: {
+      id: prescriptionItemId,
+      prescriptionId,
+      deletedAt: null,
+    },
+  });
+  if (!rxItem) {
+    throw new ApplicationException(
+      ErrorCode.PRESCRIPTION_ITEM_MISMATCH,
+      'Prescription line does not belong to the linked prescription',
+      HttpStatus.CONFLICT,
+      { prescriptionItemId: prescriptionItemId.toString() },
+    );
+  }
+  if (rxItem.medicineId !== medicineId) {
+    throw new ApplicationException(
+      ErrorCode.PRESCRIPTION_ITEM_MISMATCH,
+      'Sales line medicine does not match prescription line',
+      HttpStatus.CONFLICT,
+      {
+        prescriptionItemId: prescriptionItemId.toString(),
+        medicineId: medicineId.toString(),
+      },
+    );
+  }
+}
+
 export async function assertPrescriptionQuantitiesForPost(
   tx: TxClient,
   prescriptionId: bigint,
-  items: Array<{ medicineId: bigint; soldQuantity: Prisma.Decimal }>,
+  items: SalesInvoicePostLine[],
 ): Promise<void> {
+  const lineLinked = items.filter((item) => item.prescriptionItemId);
+  if (lineLinked.length > 0) {
+    const soldByRxLine = new Map<string, Prisma.Decimal>();
+    for (const item of lineLinked) {
+      const key = item.prescriptionItemId!.toString();
+      const current = soldByRxLine.get(key) ?? new Prisma.Decimal(0);
+      soldByRxLine.set(key, current.add(item.soldQuantity));
+    }
+    for (const [rxItemId, soldQty] of soldByRxLine) {
+      const rxItem = await tx.prescriptionItem.findFirst({
+        where: {
+          id: BigInt(rxItemId),
+          prescriptionId,
+          deletedAt: null,
+        },
+      });
+      if (!rxItem) {
+        throw new ApplicationException(
+          ErrorCode.PRESCRIPTION_ITEM_MISMATCH,
+          'Prescription line not found',
+          HttpStatus.CONFLICT,
+          { prescriptionItemId: rxItemId },
+        );
+      }
+      if (soldQty.gt(new Prisma.Decimal(rxItem.remainingQuantity))) {
+        throw new ApplicationException(
+          ErrorCode.PRESCRIPTION_QUANTITY_EXCEEDED,
+          'Sold quantity exceeds prescription line remaining quantity',
+          HttpStatus.CONFLICT,
+          {
+            prescriptionItemId: rxItemId,
+            soldQuantity: soldQty.toString(),
+            remaining: rxItem.remainingQuantity.toString(),
+          },
+        );
+      }
+    }
+    return;
+  }
   const prescriptionItems = await tx.prescriptionItem.findMany({
     where: { prescriptionId, deletedAt: null },
     select: {
@@ -686,7 +765,7 @@ export async function assertPrescriptionQuantitiesForPost(
 export async function applyPrescriptionDispensing(
   tx: TxClient,
   prescriptionId: bigint,
-  items: Array<{ medicineId: bigint; soldQuantity: Prisma.Decimal }>,
+  items: SalesInvoicePostLine[],
 ): Promise<void> {
   const prescription = await tx.prescription.findFirstOrThrow({
     where: { id: prescriptionId, deletedAt: null },
@@ -695,8 +774,21 @@ export async function applyPrescriptionDispensing(
     },
   });
 
+  const soldByRxLine = new Map<string, Prisma.Decimal>();
+  for (const item of items) {
+    if (!item.prescriptionItemId) {
+      continue;
+    }
+    const key = item.prescriptionItemId.toString();
+    const current = soldByRxLine.get(key) ?? new Prisma.Decimal(0);
+    soldByRxLine.set(key, current.add(item.soldQuantity));
+  }
+
   const soldByMedicine = new Map<string, Prisma.Decimal>();
   for (const item of items) {
+    if (item.prescriptionItemId) {
+      continue;
+    }
     const key = item.medicineId.toString();
     const current = soldByMedicine.get(key) ?? new Prisma.Decimal(0);
     soldByMedicine.set(key, current.add(item.soldQuantity));
@@ -707,8 +799,9 @@ export async function applyPrescriptionDispensing(
   let allDispensed = true;
 
   for (const rxItem of prescription.items) {
-    const soldQty =
-      soldByMedicine.get(rxItem.medicineId.toString()) ?? new Prisma.Decimal(0);
+    const soldQty = soldByRxLine.has(rxItem.id.toString())
+      ? soldByRxLine.get(rxItem.id.toString())!
+      : soldByMedicine.get(rxItem.medicineId.toString()) ?? new Prisma.Decimal(0);
     if (soldQty.lte(0)) {
       if (new Prisma.Decimal(rxItem.remainingQuantity).gt(0)) {
         allDispensed = false;

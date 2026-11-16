@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { StateService } from '../states/state.service';
 import { CityService } from './city.service';
 
 
@@ -20,7 +24,15 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-city-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './city-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,10 +44,12 @@ export class CityDetailComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly cityService = inject(CityService);
+  private readonly stateService = inject(StateService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   readonly isNew = signal(true);
+  readonly stateOptions = signal<{ label: string; value: string }[]>([]);
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
@@ -70,6 +84,8 @@ export class CityDetailComponent implements OnInit, OnDestroy {
       },
     );
 
+    this.loadStateOptions();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isNew.set(false);
@@ -80,6 +96,7 @@ export class CityDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -153,6 +170,19 @@ export class CityDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/masters/cities']);
   }
 
+  private loadStateOptions(): void {
+    this.stateService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.stateOptions.set(
+          result.data.map((state) => ({
+            label: state.stateName,
+            value: state.id,
+          })),
+        );
+      },
+    });
+  }
+
   private load(id: string): void {
     this.cityService.getById(id).subscribe({
       next: (city) => {
@@ -174,12 +204,6 @@ export class CityDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

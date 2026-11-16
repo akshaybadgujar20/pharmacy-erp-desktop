@@ -1,3 +1,11 @@
+export const TAX_TYPE_OPTIONS = [
+  { label: 'GST', value: 'GST' },
+  { label: 'CGST', value: 'CGST' },
+  { label: 'SGST', value: 'SGST' },
+  { label: 'IGST', value: 'IGST' },
+  { label: 'CESS', value: 'CESS' },
+];
+
 export interface Tax {
   id: string;
   uuid: string;

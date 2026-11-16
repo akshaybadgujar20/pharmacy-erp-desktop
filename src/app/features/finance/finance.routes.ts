@@ -3,6 +3,12 @@ import { permissionGuard } from '../../core/guards/permission.guard';
 
 export const financeRoutes: Routes = [
   {
+    path: 'dashboard',
+    canActivate: [permissionGuard('REPORT:REPORT:READ')],
+    loadComponent: () =>
+      import('./finance-dashboard.component').then((m) => m.FinanceDashboardComponent),
+  },
+  {
     path: 'ledgers',
     canActivate: [permissionGuard('FINANCE:LEDGER:READ')],
     children: [

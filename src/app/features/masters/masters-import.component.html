@@ -1,0 +1,80 @@
+<section class="page-layout">
+  <h2>{{ 'masters.import.title' | translate }}</h2>
+  <p class="detail-form__hint">{{ 'masters.import.hint' | translate }}</p>
+  <form class="detail-form" [formGroup]="form" (ngSubmit)="run(true)">
+    <div class="detail-form__field">
+      <label for="entityType">{{ 'masters.import.entityLabel' | translate }}</label>
+      <p-select
+        inputId="entityType"
+        formControlName="entityType"
+        [options]="entityOptions"
+        optionValue="value"
+        optionLabel="value"
+      >
+        <ng-template let-option pTemplate="item">
+          {{ option.labelKey | translate }}
+        </ng-template>
+        <ng-template let-selected pTemplate="selectedItem">
+          @if (selected) {
+            {{ selected.labelKey | translate }}
+          }
+        </ng-template>
+      </p-select>
+    </div>
+    <div class="detail-form__field">
+      <label for="csvText">{{ 'masters.import.csv' | translate }}</label>
+      <textarea id="csvText" formControlName="csvText" rows="12"></textarea>
+    </div>
+    <div class="detail-form__actions">
+      <button pButton type="submit" [disabled]="loading() || form.invalid">
+        {{ 'masters.import.dryRun' | translate }}
+      </button>
+      <button
+        pButton
+        type="button"
+        severity="warn"
+        [disabled]="loading() || form.invalid"
+        [title]="'masters.import.commitHint' | translate"
+        (click)="run(false)"
+      >
+        {{ 'masters.import.commit' | translate }}
+      </button>
+    </div>
+    @if (errorMessage()) {
+      <p class="detail-form__error">{{ errorMessage() }}</p>
+    }
+  </form>
+  @if (result(); as res) {
+    @if (res.committed) {
+      <p class="detail-form__hint">{{ 'masters.import.validationOnlyBanner' | translate }}</p>
+    }
+    <p>
+      {{ 'masters.import.summary' | translate }}:
+      {{ res.rowCount }} rows
+      @if (res.dryRun) {
+        ({{ 'masters.import.dryRunLabel' | translate }})
+      }
+      @if (res.committed) {
+        ({{ 'masters.import.committed' | translate }})
+      }
+    </p>
+    <table class="masters-import-table">
+      <thead>
+        <tr>
+          <th>{{ 'masters.import.colLine' | translate }}</th>
+          <th>{{ 'masters.import.colStatus' | translate }}</th>
+          <th>{{ 'masters.import.colMessage' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of res.results; track row.line) {
+          <tr>
+            <td>{{ row.line }}</td>
+            <td>{{ row.status }}</td>
+            <td>{{ row.message ?? '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

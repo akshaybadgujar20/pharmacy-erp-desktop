@@ -8,6 +8,8 @@ const FRIENDLY_BY_CODE: Record<string, string> = {
   PRESCRIPTION_NOT_FOUND: 'Prescription not found for this branch.',
   PRESCRIPTION_QUANTITY_EXCEEDED:
     'Dispensed quantity exceeds the remaining amount on the prescription.',
+  PRESCRIPTION_ITEM_MISMATCH:
+    'The selected prescription line does not match this invoice or medicine.',
   PRESCRIPTION_NOT_DRAFT: 'Prescription cannot be changed in its current status.',
   LOYALTY_INSUFFICIENT_POINTS: 'Not enough loyalty points for this redemption.',
   LOYALTY_MEMBERSHIP_NOT_FOUND: 'Customer is not enrolled in a loyalty program.',

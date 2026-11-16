@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { MedicineGenericService } from '../generics/medicine-generic.service';
+import { UnitOfMeasureService } from '../units-of-measure/unit-of-measure.service';
 import { SaltCompositionService } from './salt-composition.service';
 
 
@@ -20,7 +25,15 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-salt-composition-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    SelectModule,
+    TextareaModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './salt-composition-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,10 +45,14 @@ export class SaltCompositionDetailComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly saltCompositionService = inject(SaltCompositionService);
+  private readonly genericService = inject(MedicineGenericService);
+  private readonly unitOfMeasureService = inject(UnitOfMeasureService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   readonly isNew = signal(true);
+  readonly genericOptions = signal<{ label: string; value: string }[]>([]);
+  readonly unitOptions = signal<{ label: string; value: string }[]>([]);
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
@@ -69,6 +86,8 @@ export class SaltCompositionDetailComponent implements OnInit, OnDestroy {
       },
     );
 
+    this.loadLookupOptions();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isNew.set(false);
@@ -79,6 +98,7 @@ export class SaltCompositionDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -150,6 +170,29 @@ export class SaltCompositionDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/medicine/salt-compositions']);
   }
 
+  private loadLookupOptions(): void {
+    this.genericService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.genericOptions.set(
+          result.data.map((generic) => ({
+            label: generic.genericName,
+            value: generic.id,
+          })),
+        );
+      },
+    });
+    this.unitOfMeasureService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.unitOptions.set(
+          result.data.map((unit) => ({
+            label: unit.unitName,
+            value: unit.id,
+          })),
+        );
+      },
+    });
+  }
+
   private load(id: string): void {
     this.saltCompositionService.getById(id).subscribe({
       next: (composition) => {
@@ -170,12 +213,6 @@ export class SaltCompositionDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

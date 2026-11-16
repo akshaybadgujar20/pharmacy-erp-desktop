@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { CountryService } from '../countries/country.service';
 import { StateService } from './state.service';
 
 
@@ -20,7 +23,14 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-state-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    SelectModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './state-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,10 +42,12 @@ export class StateDetailComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly stateService = inject(StateService);
+  private readonly countryService = inject(CountryService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   readonly isNew = signal(true);
+  readonly countryOptions = signal<{ label: string; value: string }[]>([]);
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
@@ -68,6 +80,8 @@ export class StateDetailComponent implements OnInit, OnDestroy {
       },
     );
 
+    this.loadCountryOptions();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isNew.set(false);
@@ -78,6 +92,7 @@ export class StateDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -147,6 +162,19 @@ export class StateDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/masters/states']);
   }
 
+  private loadCountryOptions(): void {
+    this.countryService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.countryOptions.set(
+          result.data.map((country) => ({
+            label: country.countryName,
+            value: country.id,
+          })),
+        );
+      },
+    });
+  }
+
   private load(id: string): void {
     this.stateService.getById(id).subscribe({
       next: (state) => {
@@ -166,12 +194,6 @@ export class StateDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

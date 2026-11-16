@@ -3,7 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
 import { fromEpochMs, toEpochMs } from '../finance-date.util';
 import { PaymentService } from './payment.service';
 
@@ -16,6 +15,7 @@ import {
 import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
 import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { ShortcutTooltipDirective } from '../../../shared/keyboard';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 @Component({
   selector: 'app-payment-detail',
   standalone: true,
@@ -228,12 +228,6 @@ export class PaymentDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

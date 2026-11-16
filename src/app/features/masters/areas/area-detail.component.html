@@ -1,15 +1,24 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="cityId">City ID</label>
-    <input pInputText id="cityId" formControlName="cityId" />
+    <p-select inputId="cityId" formControlName="cityId" [options]="cityOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.cityId.invalid && form.controls.cityId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="areaCode">Area Code</label>
     <input pInputText id="areaCode" formControlName="areaCode" />
+    @if (form.controls.areaCode.invalid && form.controls.areaCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="areaName">Area Name</label>
     <input pInputText id="areaName" formControlName="areaName" />
+    @if (form.controls.areaName.invalid && form.controls.areaName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="postalCode">Postal Code</label>
@@ -25,11 +34,11 @@
   </div>
   <div class="detail-form__field">
     <label for="latitude">Latitude</label>
-    <input pInputText id="latitude" type="number" formControlName="latitude" />
+    <p-inputnumber inputId="latitude" formControlName="latitude" mode="decimal" />
   </div>
   <div class="detail-form__field">
     <label for="longitude">Longitude</label>
-    <input pInputText id="longitude" type="number" formControlName="longitude" />
+    <p-inputnumber inputId="longitude" formControlName="longitude" mode="decimal" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="isActive" />

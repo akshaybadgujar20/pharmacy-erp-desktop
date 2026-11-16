@@ -2,6 +2,9 @@
   "app": {
     "title": "Pharmacy ERP"
   },
+  "common": {
+    "required": "Required"
+  },
   "navigation": {
     "title": "Navigation",
     "home": "Home",
@@ -71,7 +74,8 @@
       "countries": "Countries",
       "states": "States",
       "cities": "Cities",
-      "areas": "Areas"
+      "areas": "Areas",
+      "import": "CSV import"
     },
     "pricing": {
       "title": "Pricing",
@@ -81,6 +85,7 @@
     },
     "finance": {
       "title": "Finance",
+      "dashboard": "Finance dashboard",
       "ledgers": "Ledgers",
       "payments": "Payments",
       "receipts": "Receipts",
@@ -211,5 +216,84 @@
       "prescription": "Prescription",
       "pricing": "Pricing"
     }
+  },
+  "pricing": {
+    "branch": "Branch",
+    "branchHint": "Leave empty for org-wide list; set branch for branch-specific retail pricing.",
+    "searchBranch": "Search branch",
+    "priceListTypeLabel": "Price list type",
+    "priceListType": {
+      "retail": "Retail",
+      "wholesale": "Wholesale",
+      "hospital": "Hospital",
+      "distributor": "Distributor",
+      "corporate": "Corporate",
+      "promotional": "Promotional"
+    }
+  },
+  "finance": {
+    "dashboardTitle": "Finance dashboard",
+    "dashboardIntro": "Run key finance reports for the current month. Adjust dates and run to refresh.",
+    "trialBalancePanel": "Trial balance",
+    "gstSummaryPanel": "GST summary"
+  },
+  "sync": {
+    "conflict": {
+      "detailTitle": "Sync conflict",
+      "resolveTitle": "Resolve conflict",
+      "entity": "Entity",
+      "localPayload": "Local payload",
+      "serverPayload": "Server payload",
+      "strategy": "Resolution strategy",
+      "remarks": "Remarks",
+      "resolveSubmit": "Resolve",
+      "metadataOnlyHint": "MERGED and MANUAL update conflict metadata only; business rows are not merged in v1."
+    }
+  },
+  "masters": {
+    "import": {
+      "title": "Geographic masters import",
+      "hint": "Paste CSV rows (one record per line). Dry run validates parsing without saving.",
+      "entityLabel": "Entity type",
+      "entity": {
+        "country": "Country",
+        "state": "State",
+        "city": "City",
+        "area": "Area"
+      },
+      "csv": "CSV text",
+      "dryRun": "Dry run",
+      "commit": "Validate commit (no save)",
+      "commitHint": "Validates rows only; database import is not implemented in v1.",
+      "validationOnlyBanner": "Rows were validated only; database import is not implemented in v1.",
+      "summary": "Import result",
+      "dryRunLabel": "dry run",
+      "committed": "committed",
+      "colLine": "Line",
+      "colStatus": "Status",
+      "colMessage": "Message"
+    }
+  },
+  "loyalty": {
+    "searchProgram": "Search loyalty program",
+    "balancePoints": "Balance points",
+    "program": "Program",
+    "enrollProgram": "Enroll in program",
+    "enroll": "Enroll",
+    "adjustPoints": "Adjust points",
+    "viewHistory": "Full points history",
+    "manualAdjustment": "Manual adjustment",
+    "pointsDelta": "Points change",
+    "remarks": "Remarks",
+    "pointsHistory": "Loyalty transaction history",
+    "backToCustomer": "Back to customer",
+    "programCode": "Program code",
+    "programName": "Program name",
+    "pointsPerAmount": "Points per amount",
+    "redemptionValue": "Redemption value",
+    "minimumRedemptionPoints": "Minimum redemption points",
+    "effectiveFrom": "Effective from (ISO)",
+    "defaultProgram": "Default program",
+    "active": "Active"
   }
 }

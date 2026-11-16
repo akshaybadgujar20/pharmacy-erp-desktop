@@ -22,28 +22,37 @@
 <ng-template #overviewForm>
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="partyId">Party ID</label>
-    <input pInputText id="partyId" formControlName="partyId" />
+    <label for="partyId">Party</label>
+    <app-party-lookup id="partyId" formControlName="partyId" />
+    @if (form.controls.partyId.invalid && form.controls.partyId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="customerCode">Customer Code</label>
     <input pInputText id="customerCode" formControlName="customerCode" />
+    @if (form.controls.customerCode.invalid && form.controls.customerCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="customerType">Customer Type</label>
-    <input pInputText id="customerType" formControlName="customerType" />
+    <p-select inputId="customerType" formControlName="customerType" [options]="customerTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.customerType.invalid && form.controls.customerType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="creditLimit">Credit Limit</label>
-    <input pInputText id="creditLimit" type="number" formControlName="creditLimit" />
+    <p-inputnumber inputId="creditLimit" formControlName="creditLimit" mode="decimal" [minFractionDigits]="2" />
   </div>
   <div class="detail-form__field">
     <label for="outstandingAmount">Outstanding Amount</label>
-    <input pInputText id="outstandingAmount" type="number" formControlName="outstandingAmount" />
+    <p-inputnumber inputId="outstandingAmount" formControlName="outstandingAmount" mode="decimal" [minFractionDigits]="2" />
   </div>
   <div class="detail-form__field">
     <label for="paymentTermsDays">Payment Terms (days)</label>
-    <input pInputText id="paymentTermsDays" type="number" formControlName="paymentTermsDays" />
+    <p-inputnumber inputId="paymentTermsDays" formControlName="paymentTermsDays" [min]="0" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isTaxExempt" [binary]="true" inputId="isTaxExempt" />

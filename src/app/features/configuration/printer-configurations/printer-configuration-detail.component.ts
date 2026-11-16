@@ -1,10 +1,20 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { BranchSelectComponent } from '../../../shared/lookups/branch-select.component';
+import {
+  PRINT_ORIENTATION_OPTIONS,
+  PRINTER_DOCUMENT_TYPE_OPTIONS,
+  PRINTER_TYPE_OPTIONS,
+} from './printer-configuration.models';
 import { ElectronService } from '../../../core/services/electron.service';
 import { PrinterConfigurationService } from './printer-configuration.service';
 
@@ -21,7 +31,17 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-printer-configuration-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    TextareaModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+    BranchSelectComponent,
+  ],
   templateUrl: './printer-configuration-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -44,6 +64,10 @@ export class PrinterConfigurationDetailComponent implements OnInit, OnDestroy {
   readonly version = signal('0');
 
   private entityId: string | null = null;
+
+  readonly printerTypeOptions = PRINTER_TYPE_OPTIONS;
+  readonly documentTypeOptions = PRINTER_DOCUMENT_TYPE_OPTIONS;
+  readonly printOrientationOptions = PRINT_ORIENTATION_OPTIONS;
 
   readonly form = this.fb.nonNullable.group({
     branchId: [''],
@@ -85,6 +109,7 @@ export class PrinterConfigurationDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -195,12 +220,6 @@ export class PrinterConfigurationDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

@@ -1,3 +1,16 @@
+export const DISCOUNT_TYPE_OPTIONS = [
+  { label: 'Percent', value: 'PERCENT' },
+  { label: 'Flat', value: 'FLAT' },
+];
+
+export const DISCOUNT_APPLIES_TO_OPTIONS = [
+  { label: 'Medicine', value: 'MEDICINE' },
+  { label: 'Category', value: 'CATEGORY' },
+  { label: 'Customer', value: 'CUSTOMER' },
+  { label: 'Price List', value: 'PRICE_LIST' },
+  { label: 'Global', value: 'GLOBAL' },
+];
+
 export interface DiscountRule {
   id: string;
   uuid: string;

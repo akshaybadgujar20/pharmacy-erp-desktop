@@ -1,11 +1,16 @@
 import { NgTemplateOutlet } from '@angular/common';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { PartyLookupComponent } from '../../../shared/lookups/party-lookup.component';
+import { CUSTOMER_TYPE_OPTIONS } from './customer.models';
 import { TabsModule } from 'primeng/tabs';
 import { DocumentChangeHistoryPanelComponent } from '../../../shared/audit/document-change-history-panel.component';
 import { CustomerLoyaltyTabComponent } from './customer-loyalty-tab.component';
@@ -27,8 +32,12 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
+    InputNumberModule,
+    SelectModule,
     ButtonModule,
     CheckboxModule,
+    TranslatePipe,
+    PartyLookupComponent,
     TabsModule,
     CustomerLoyaltyTabComponent,
     DocumentChangeHistoryPanelComponent,
@@ -56,6 +65,8 @@ export class CustomerDetailComponent implements OnInit, OnDestroy {
   readonly customerId = signal<string | null>(null);
 
   private entityId: string | null = null;
+
+  readonly customerTypeOptions = CUSTOMER_TYPE_OPTIONS;
 
   readonly form = this.fb.nonNullable.group({
     partyId: ['', Validators.required],
@@ -95,6 +106,7 @@ export class CustomerDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -181,6 +193,7 @@ export class CustomerDetailComponent implements OnInit, OnDestroy {
           isTaxExempt: customer.isTaxExempt,
           isActive: customer.isActive,
         });
+        this.form.controls.partyId.disable();
       },
       error: (error) => this.handleError(error),
     });
@@ -188,12 +201,6 @@ export class CustomerDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

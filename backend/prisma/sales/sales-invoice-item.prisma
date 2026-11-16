@@ -4,6 +4,7 @@ model SalesInvoiceItem {
 
   salesInvoiceId BigInt @map("sales_invoice_id")
   medicineId     BigInt @map("medicine_id")
+  prescriptionItemId BigInt? @map("prescription_item_id")
   batchId        BigInt @map("batch_id")
   unitId         BigInt @map("unit_id") // Sales UOM (e.g., Strip, Tablet, Bottle)
 
@@ -38,6 +39,7 @@ model SalesInvoiceItem {
   // Relations
   salesInvoice SalesInvoice  @relation(fields: [salesInvoiceId], references: [id])
   medicine     Medicine      @relation(fields: [medicineId], references: [id])
+  prescriptionItem PrescriptionItem? @relation(fields: [prescriptionItemId], references: [id])
   batch        Batch         @relation(fields: [batchId], references: [id])
   unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
 
@@ -48,6 +50,7 @@ model SalesInvoiceItem {
   @@unique([salesInvoiceId, batchId]) // Prevent duplicate batch rows on the same bill
   @@index([salesInvoiceId])
   @@index([medicineId])
+  @@index([prescriptionItemId])
   @@index([batchId])
   @@index([lineNumber])
   @@map("sales_invoice_items")

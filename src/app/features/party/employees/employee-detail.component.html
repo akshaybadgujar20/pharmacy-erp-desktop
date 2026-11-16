@@ -1,11 +1,17 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="partyId">Party ID</label>
-    <input pInputText id="partyId" formControlName="partyId" />
+    <label for="partyId">Party</label>
+    <app-party-lookup id="partyId" formControlName="partyId" />
+    @if (form.controls.partyId.invalid && form.controls.partyId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="employeeCode">Employee Code</label>
     <input pInputText id="employeeCode" formControlName="employeeCode" />
+    @if (form.controls.employeeCode.invalid && form.controls.employeeCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="designation">Designation</label>
@@ -17,7 +23,7 @@
   </div>
   <div class="detail-form__field">
     <label for="salary">Salary</label>
-    <input pInputText id="salary" type="number" formControlName="salary" />
+    <p-inputnumber inputId="salary" formControlName="salary" mode="decimal" [minFractionDigits]="2" />
   </div>
   <div class="detail-form__field">
     <label for="licenseNumber">License Number</label>

@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { TextareaModule } from 'primeng/textarea';
 import { RolePermissionsTabComponent } from './role-permissions-tab.component';
 import { RoleService } from './role.service';
 
@@ -25,9 +27,11 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
+    TextareaModule,
     ButtonModule,
     CheckboxModule,
     TabsModule,
+    TranslatePipe,
     RolePermissionsTabComponent,
   ],
   templateUrl: './role-detail.component.html',
@@ -104,6 +108,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -200,12 +205,6 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

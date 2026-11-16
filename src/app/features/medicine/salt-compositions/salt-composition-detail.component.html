@@ -1,27 +1,42 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="genericId">Generic ID</label>
-    <input pInputText id="genericId" formControlName="genericId" />
+    <p-select inputId="genericId" formControlName="genericId" [options]="genericOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.genericId.invalid && form.controls.genericId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="unitId">Unit ID</label>
-    <input pInputText id="unitId" formControlName="unitId" />
+    <p-select inputId="unitId" formControlName="unitId" [options]="unitOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.unitId.invalid && form.controls.unitId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="compositionCode">Composition Code</label>
     <input pInputText id="compositionCode" formControlName="compositionCode" />
+    @if (form.controls.compositionCode.invalid && form.controls.compositionCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="strength">Strength</label>
     <input pInputText id="strength" formControlName="strength" />
+    @if (form.controls.strength.invalid && form.controls.strength.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="strengthUnit">Strength Unit</label>
     <input pInputText id="strengthUnit" formControlName="strengthUnit" />
+    @if (form.controls.strengthUnit.invalid && form.controls.strengthUnit.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="description">Description</label>
-    <input pInputText id="description" formControlName="description" />
+    <textarea pTextarea id="description" formControlName="description" rows="3"></textarea>
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="saltCompositionIsActive" />

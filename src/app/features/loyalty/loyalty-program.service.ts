@@ -16,11 +16,8 @@ export class LoyaltyProgramService {
   private readonly api = inject(ApiService);
   private readonly basePath = '/loyalty-programs';
 
-  list(page = '1', pageSize = '20') {
-    return this.api.getPaginated<LoyaltyProgramRow>(this.basePath, {
-      page,
-      pageSize,
-    });
+  list(params: Record<string, string>) {
+    return this.api.getPaginated<LoyaltyProgramRow>(this.basePath, params);
   }
 
   getById(id: string) {

@@ -1,3 +1,10 @@
+export const SUPPLIER_TYPE_OPTIONS = [
+  { label: 'Manufacturer', value: 'MANUFACTURER' },
+  { label: 'Distributor', value: 'DISTRIBUTOR' },
+  { label: 'Wholesaler', value: 'WHOLESALER' },
+  { label: 'Other', value: 'OTHER' },
+];
+
 export interface Supplier {
   id: string;
   partyId: string;

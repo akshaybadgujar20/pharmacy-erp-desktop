@@ -1,11 +1,17 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="partyId">Party ID</label>
-    <input pInputText id="partyId" formControlName="partyId" [readonly]="!isNew()" />
+    <app-party-lookup id="partyId" formControlName="partyId" />
+    @if (form.controls.partyId.invalid && form.controls.partyId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="manufacturerCode">Manufacturer Code</label>
     <input pInputText id="manufacturerCode" formControlName="manufacturerCode" />
+    @if (form.controls.manufacturerCode.invalid && form.controls.manufacturerCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="manufacturingLicenseNo">Manufacturing License No</label>

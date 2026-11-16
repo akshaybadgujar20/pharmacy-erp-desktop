@@ -1,11 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
-import { optionalEpochMs, toEpochMs } from '../configuration-date.util';
+import { TextareaModule } from 'primeng/textarea';
+import { BranchSelectComponent } from '../../../shared/lookups/branch-select.component';
+import {
+  dateToEpochMs,
+  epochToDate,
+  optionalDateToEpochMs,
+} from '../configuration-date.util';
 import { FinancialYearService } from './financial-year.service';
 
 
@@ -17,11 +24,21 @@ import {
 import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
 import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { ShortcutTooltipDirective } from '../../../shared/keyboard';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 @Component({
   selector: 'app-financial-year-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    TextareaModule,
+    DatePickerModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+    BranchSelectComponent,
+  ],
   templateUrl: './financial-year-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,8 +66,8 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
   readonly form = this.fb.nonNullable.group({
     financialYearCode: ['', Validators.required],
     financialYearName: ['', Validators.required],
-    startDate: ['', Validators.required],
-    endDate: ['', Validators.required],
+    startDate: this.fb.control<Date | null>(null, Validators.required),
+    endDate: this.fb.control<Date | null>(null, Validators.required),
     branchId: [''],
     isCurrent: [false],
     remarks: [''],
@@ -82,6 +99,7 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -94,8 +112,8 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
         .create({
           financialYearCode: value.financialYearCode,
           financialYearName: value.financialYearName,
-          startDate: toEpochMs(value.startDate),
-          endDate: toEpochMs(value.endDate),
+          startDate: dateToEpochMs(value.startDate),
+          endDate: dateToEpochMs(value.endDate),
           branchId: value.branchId || undefined,
           isCurrent: value.isCurrent,
           remarks: value.remarks || undefined,
@@ -115,8 +133,8 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
         version: this.version(),
         financialYearCode: value.financialYearCode,
         financialYearName: value.financialYearName,
-        startDate: optionalEpochMs(value.startDate),
-        endDate: optionalEpochMs(value.endDate),
+        startDate: optionalDateToEpochMs(value.startDate),
+        endDate: optionalDateToEpochMs(value.endDate),
         branchId: value.branchId || undefined,
         isCurrent: value.isCurrent,
         remarks: value.remarks || undefined,
@@ -182,8 +200,8 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
         this.form.patchValue({
           financialYearCode: financialYear.financialYearCode,
           financialYearName: financialYear.financialYearName,
-          startDate: financialYear.startDate,
-          endDate: financialYear.endDate,
+          startDate: epochToDate(financialYear.startDate),
+          endDate: epochToDate(financialYear.endDate),
           branchId: financialYear.branchId ?? '',
           isCurrent: financialYear.isCurrent,
           remarks: financialYear.remarks ?? '',
@@ -195,12 +213,6 @@ export class FinancialYearDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

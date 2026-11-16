@@ -2,14 +2,23 @@
   <div class="detail-form__field">
     <label for="companyCode">Company Code</label>
     <input pInputText id="companyCode" formControlName="companyCode" />
+    @if (form.controls.companyCode.invalid && form.controls.companyCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="companyName">Company Name</label>
     <input pInputText id="companyName" formControlName="companyName" />
+    @if (form.controls.companyName.invalid && form.controls.companyName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="displayName">Display Name</label>
     <input pInputText id="displayName" formControlName="displayName" />
+    @if (form.controls.displayName.invalid && form.controls.displayName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="gstNumber">GST Number</label>

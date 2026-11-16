@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
 import { toEpochMs } from '../inventory-date.util';
 import { StockTakeItemsTabComponent } from './stock-take-items-tab.component';
 import { StockTakeService } from './stock-take.service';
@@ -18,6 +17,7 @@ import {
 import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
 import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { ShortcutTooltipDirective } from '../../../shared/keyboard';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 @Component({
   selector: 'app-stock-take-detail',
   standalone: true,
@@ -277,12 +277,6 @@ export class StockTakeDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

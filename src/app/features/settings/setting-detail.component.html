@@ -19,7 +19,7 @@
     @if (currentSetting.description) {
       <div class="detail-form__field">
         <label for="description">Description</label>
-        <input pInputText id="description" [value]="currentSetting.description" readonly />
+        <textarea pTextarea id="description" [value]="currentSetting.description" rows="3" readonly [fluid]="true"></textarea>
       </div>
     }
     @if (currentSetting.defaultValue) {
@@ -41,20 +41,31 @@
         <label for="settingValue">Value</label>
         @if (dataType() === 'JSON') {
           <textarea
+            pTextarea
             id="settingValue"
-            class="detail-form__textarea"
             formControlName="settingValue"
             rows="6"
-            [readOnly]="!isEditable()"
+            [readonly]="!isEditable()"
+            [fluid]="true"
           ></textarea>
+        } @else if (dataType() === 'INTEGER' || dataType() === 'DECIMAL' || dataType() === 'NUMBER') {
+          <p-inputNumber
+            inputId="settingValue"
+            formControlName="settingValue"
+            [readonly]="!isEditable()"
+            [useGrouping]="false"
+            [maxFractionDigits]="dataType() === 'INTEGER' ? 0 : 6"
+          />
         } @else {
           <input
             pInputText
             id="settingValue"
             formControlName="settingValue"
-            [type]="dataType() === 'INTEGER' || dataType() === 'DECIMAL' || dataType() === 'NUMBER' ? 'number' : 'text'"
             [readOnly]="!isEditable()"
           />
+        }
+        @if (form.controls.settingValue.invalid && form.controls.settingValue.touched) {
+          <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
         }
       }
     </div>

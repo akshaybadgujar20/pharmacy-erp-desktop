@@ -87,6 +87,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
   readonly activeTab = signal<'items' | 'payments'>('items');
   readonly scheduleWarning = signal('');
   readonly seedMedicineId = signal<string | null>(null);
+  readonly seedPrescriptionItemId = signal<string | null>(null);
   readonly seedSoldQuantity = signal<number | null>(null);
   readonly seedToken = signal(0);
   readonly rxPostErrorVisible = signal(false);
@@ -137,6 +138,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
           return;
         }
         this.seedMedicineId.set(medicine.id);
+        this.seedPrescriptionItemId.set(null);
         this.seedSoldQuantity.set(1);
         this.seedToken.set(Date.now());
         this.activeTab.set('items');
@@ -146,6 +148,7 @@ export class SalesInvoiceCounterComponent implements OnInit, OnDestroy {
 
   onAddFromPrescription(event: PrescriptionLineAddEvent): void {
     this.seedMedicineId.set(event.medicineId);
+    this.seedPrescriptionItemId.set(event.prescriptionItemId);
     this.seedSoldQuantity.set(event.soldQuantity);
     this.seedToken.set(Date.now());
     this.activeTab.set('items');

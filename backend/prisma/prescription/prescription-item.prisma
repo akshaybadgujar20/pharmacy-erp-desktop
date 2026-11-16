@@ -32,6 +32,7 @@ model PrescriptionItem {
   prescription Prescription  @relation(fields: [prescriptionId], references: [id])
   medicine     Medicine      @relation(fields: [medicineId], references: [id])
   unit         UnitOfMeasure @relation(fields: [unitId], references: [id])
+  salesInvoiceItems SalesInvoiceItem[]
 
   @@index([prescriptionId])
   @@index([medicineId])

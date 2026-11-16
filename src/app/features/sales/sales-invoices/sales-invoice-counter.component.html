@@ -50,7 +50,9 @@
   @if (activeTab() === 'items' && invoiceId()) {
     <app-sales-invoice-items-tab
       [invoiceId]="invoiceId()!"
+      [prescriptionId]="form.get('prescriptionId')?.value || null"
       [seedMedicineId]="seedMedicineId()"
+      [seedPrescriptionItemId]="seedPrescriptionItemId()"
       [seedSoldQuantity]="seedSoldQuantity()"
       [seedToken]="seedToken()"
     />

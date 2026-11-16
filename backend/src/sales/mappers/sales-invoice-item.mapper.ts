@@ -15,6 +15,7 @@ export interface SalesInvoiceItemResponse {
   uuid: string;
   salesInvoiceId: string;
   medicineId: string;
+  prescriptionItemId: string | null;
   batchId: string;
   unitId: string;
   lineNumber: number;
@@ -47,6 +48,7 @@ export function toSalesInvoiceItemResponse(
     uuid: item.uuid,
     salesInvoiceId: item.salesInvoiceId.toString(),
     medicineId: item.medicineId.toString(),
+    prescriptionItemId: serializeBigInt(item.prescriptionItemId),
     batchId: item.batchId.toString(),
     unitId: item.unitId.toString(),
     lineNumber: item.lineNumber,

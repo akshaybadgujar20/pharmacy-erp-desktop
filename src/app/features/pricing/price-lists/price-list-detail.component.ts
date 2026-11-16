@@ -3,14 +3,21 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { TextareaModule } from 'primeng/textarea';
+import { TranslatePipe } from '@ngx-translate/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
+import { BranchSelectComponent } from '../../../shared/lookups/branch-select.component';
 import {
-  nullableEpochMs,
-  optionalEpochMs,
-  toEpochMs,
+  dateToEpochMs,
+  epochToDate,
+  nullableDateToEpochMs,
+  optionalDateToEpochMs,
 } from '../pricing-date.util';
+import { PRICE_LIST_TYPE_OPTIONS } from './price-list.models';
 import { PriceListItemsTabComponent } from './price-list-items-tab.component';
 import { PriceListService } from './price-list.service';
 
@@ -33,6 +40,11 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ButtonModule,
     CheckboxModule,
     TabsModule,
+    SelectModule,
+    TextareaModule,
+    DatePickerModule,
+    TranslatePipe,
+    BranchSelectComponent,
     PriceListItemsTabComponent,
   ],
   templateUrl: './price-list-detail.component.html',
@@ -56,14 +68,15 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
   readonly version = signal('0');
+  readonly priceListTypeOptions = [...PRICE_LIST_TYPE_OPTIONS];
 
   readonly form = this.fb.nonNullable.group({
     priceListCode: ['', Validators.required],
     priceListName: ['', Validators.required],
     branchId: [''],
     priceListType: ['RETAIL', Validators.required],
-    effectiveFrom: ['', Validators.required],
-    effectiveTo: [''],
+    effectiveFrom: this.fb.control<Date | null>(null, Validators.required),
+    effectiveTo: this.fb.control<Date | null>(null),
     isDefault: [false],
     isActive: [true],
     remarks: [''],
@@ -98,7 +111,7 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.form.patchValue({
-      effectiveFrom: new Date().toISOString(),
+      effectiveFrom: new Date(),
     });
   }
 
@@ -121,6 +134,7 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -135,8 +149,8 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
           priceListName: value.priceListName,
           branchId: value.branchId || undefined,
           priceListType: value.priceListType,
-          effectiveFrom: toEpochMs(value.effectiveFrom),
-          effectiveTo: optionalEpochMs(value.effectiveTo),
+          effectiveFrom: dateToEpochMs(value.effectiveFrom),
+          effectiveTo: optionalDateToEpochMs(value.effectiveTo),
           isDefault: value.isDefault,
           isActive: value.isActive,
           remarks: value.remarks || undefined,
@@ -163,8 +177,8 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
         priceListName: value.priceListName,
         branchId: value.branchId || null,
         priceListType: value.priceListType,
-        effectiveFrom: optionalEpochMs(value.effectiveFrom),
-        effectiveTo: nullableEpochMs(value.effectiveTo),
+        effectiveFrom: optionalDateToEpochMs(value.effectiveFrom),
+        effectiveTo: nullableDateToEpochMs(value.effectiveTo),
         isDefault: value.isDefault,
         isActive: value.isActive,
         remarks: value.remarks || undefined,
@@ -211,8 +225,8 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
           priceListName: priceList.priceListName,
           branchId: priceList.branchId ?? '',
           priceListType: priceList.priceListType,
-          effectiveFrom: priceList.effectiveFrom,
-          effectiveTo: priceList.effectiveTo ?? '',
+          effectiveFrom: epochToDate(priceList.effectiveFrom),
+          effectiveTo: epochToDate(priceList.effectiveTo),
           isDefault: priceList.isDefault,
           isActive: priceList.isActive,
           remarks: priceList.remarks ?? '',
@@ -224,12 +238,7 @@ export class PriceListDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.deleting.set(false);
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

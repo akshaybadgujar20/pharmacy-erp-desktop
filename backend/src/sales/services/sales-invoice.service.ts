@@ -462,6 +462,7 @@ export class SalesInvoiceService {
           refreshedItems.map((item) => ({
             medicineId: item.medicineId,
             soldQuantity: new Prisma.Decimal(item.soldQuantity),
+            prescriptionItemId: item.prescriptionItemId,
           })),
         );
       }
@@ -530,6 +531,7 @@ export class SalesInvoiceService {
           refreshedItems.map((item) => ({
             medicineId: item.medicineId,
             soldQuantity: new Prisma.Decimal(item.soldQuantity),
+            prescriptionItemId: item.prescriptionItemId,
           })),
         );
       }

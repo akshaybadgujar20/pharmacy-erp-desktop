@@ -1,9 +1,11 @@
 <div class="page-layout">
   <form class="detail-form" [formGroup]="form" (ngSubmit)="runReport()">
-    <div class="detail-form__field">
-      <label for="reportId">Report ID</label>
-      <input pInputText id="reportId" [value]="reportId()" readonly />
-    </div>
+    @if (!embedded()) {
+      <div class="detail-form__field">
+        <label for="reportId">Report ID</label>
+        <input pInputText id="reportId" [value]="reportId()" readonly />
+      </div>
+    }
     <div class="detail-form__field">
       <label for="fromDate">From Date</label>
       <input pInputText id="fromDate" formControlName="fromDate" />
@@ -24,13 +26,19 @@
       <button pButton type="submit" severity="primary" [disabled]="running()">
         Run Report
       </button>
-      <button pButton type="button" severity="help" (click)="addFavorite()">Add favourite</button>
+      @if (favoriteId()) {
+        <button pButton type="button" severity="help" (click)="removeFavorite()">Remove favourite</button>
+      } @else {
+        <button pButton type="button" severity="help" (click)="addFavorite()">Add favourite</button>
+      }
       <button pButton type="button" severity="secondary" (click)="exportReport('csv')">Export CSV</button>
       <button pButton type="button" severity="secondary" (click)="exportReport('xlsx')">Export Excel</button>
       <button pButton type="button" severity="secondary" (click)="exportReport('pdf')">Export PDF</button>
-      <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
-        Back
-      </button>
+      @if (!embedded()) {
+        <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+          Back
+        </button>
+      }
     </div>
     @if (errorMessage()) {
       <p class="detail-form__error">{{ errorMessage() }}</p>

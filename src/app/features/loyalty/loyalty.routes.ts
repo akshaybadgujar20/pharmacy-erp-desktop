@@ -30,4 +30,12 @@ export const loyaltyRoutes: Routes = [
       },
     ],
   },
+  {
+    path: 'customers/:customerId/transactions',
+    canActivate: [permissionGuard('LOYALTY:LOYALTY_PROGRAM:READ')],
+    loadComponent: () =>
+      import('./customer-loyalty-transactions.component').then(
+        (m) => m.CustomerLoyaltyTransactionsComponent,
+      ),
+  },
 ];

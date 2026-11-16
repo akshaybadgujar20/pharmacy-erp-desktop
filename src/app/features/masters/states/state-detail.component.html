@@ -1,15 +1,24 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="countryId">Country ID</label>
-    <input pInputText id="countryId" formControlName="countryId" />
+    <p-select inputId="countryId" formControlName="countryId" [options]="countryOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.countryId.invalid && form.controls.countryId.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="stateCode">State Code</label>
     <input pInputText id="stateCode" formControlName="stateCode" />
+    @if (form.controls.stateCode.invalid && form.controls.stateCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="stateName">State Name</label>
     <input pInputText id="stateName" formControlName="stateName" />
+    @if (form.controls.stateName.invalid && form.controls.stateName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="gstStateCode">GST State Code</label>

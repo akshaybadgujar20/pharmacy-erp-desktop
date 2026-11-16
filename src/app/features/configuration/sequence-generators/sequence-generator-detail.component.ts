@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { BranchSelectComponent } from '../../../shared/lookups/branch-select.component';
+import { DOCUMENT_TYPE_OPTIONS, RESET_POLICY_OPTIONS } from './sequence-generator.models';
 import { SequenceGeneratorService } from './sequence-generator.service';
 
 
@@ -20,7 +25,16 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-sequence-generator-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+    BranchSelectComponent,
+  ],
   templateUrl: './sequence-generator-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,6 +56,9 @@ export class SequenceGeneratorDetailComponent implements OnInit, OnDestroy {
   readonly version = signal(0);
 
   private entityId: string | null = null;
+
+  readonly documentTypeOptions = DOCUMENT_TYPE_OPTIONS;
+  readonly resetPolicyOptions = RESET_POLICY_OPTIONS;
 
   readonly form = this.fb.nonNullable.group({
     branchId: [''],
@@ -82,6 +99,7 @@ export class SequenceGeneratorDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -182,12 +200,6 @@ export class SequenceGeneratorDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

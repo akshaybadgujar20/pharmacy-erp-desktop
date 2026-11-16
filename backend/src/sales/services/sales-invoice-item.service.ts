@@ -26,6 +26,7 @@ import { toSalesInvoiceItemResponse } from '../mappers/sales-invoice-item.mapper
 import {
   assertDraftStatus,
   assertMedicineExists,
+  assertPrescriptionItemLink,
   computeLineAmounts,
   getNextLineNumber,
   optimisticUpdate,
@@ -151,6 +152,20 @@ export class SalesInvoiceItemService {
         });
       }
 
+      if (dto.prescriptionItemId) {
+        if (!parent.prescriptionId) {
+          throwConflict(
+            'Prescription line cannot be linked without a prescription on the invoice',
+          );
+        }
+        await assertPrescriptionItemLink(
+          tx,
+          parent.prescriptionId,
+          dto.medicineId,
+          dto.prescriptionItemId,
+        );
+      }
+
       const lineAmounts = computeLineAmounts(
         dto.soldQuantity,
         0,
@@ -166,6 +181,7 @@ export class SalesInvoiceItemService {
           uuid: randomUUID(),
           salesInvoiceId,
           medicineId: dto.medicineId,
+          prescriptionItemId: dto.prescriptionItemId,
           batchId: dto.batchId,
           unitId: dto.unitId,
           lineNumber: await getNextLineNumber(
@@ -218,6 +234,25 @@ export class SalesInvoiceItemService {
         );
       }
 
+      const medicineId = existing.medicineId;
+      const prescriptionItemId =
+        dto.prescriptionItemId !== undefined
+          ? dto.prescriptionItemId
+          : existing.prescriptionItemId;
+      if (prescriptionItemId) {
+        if (!parent.prescriptionId) {
+          throwConflict(
+            'Prescription line cannot be linked without a prescription on the invoice',
+          );
+        }
+        await assertPrescriptionItemLink(
+          tx,
+          parent.prescriptionId,
+          medicineId,
+          prescriptionItemId,
+        );
+      }
+
       const soldQuantity = dto.soldQuantity ?? existing.soldQuantity;
       const lineAmounts = computeLineAmounts(
         soldQuantity,
@@ -233,6 +268,7 @@ export class SalesInvoiceItemService {
         data: {
           batchId: dto.batchId,
           unitId: dto.unitId,
+          prescriptionItemId,
           soldQuantity: dto.soldQuantity,
           conversionFactor: dto.conversionFactor,
           discountPercent: dto.discountPercent,

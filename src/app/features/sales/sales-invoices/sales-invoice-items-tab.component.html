@@ -35,6 +35,20 @@
       <app-medicine-lookup formControlName="medicineId" />
     </div>
     <div class="detail-form__field">
+      <label for="prescriptionItemId">Prescription line (optional)</label>
+      @if (prescriptionId()) {
+        <app-prescription-line-lookup
+          id="prescriptionItemId"
+          [prescriptionId]="prescriptionId()"
+          formControlName="prescriptionItemId"
+        />
+      } @else if (seedPrescriptionItemId()) {
+        <input pInputText id="prescriptionItemId" formControlName="prescriptionItemId" readonly />
+      } @else {
+        <input pInputText id="prescriptionItemId" formControlName="prescriptionItemId" />
+      }
+    </div>
+    <div class="detail-form__field">
       <label for="batchId">Batch</label>
       <select id="batchId" formControlName="batchId">
         <option value="">Select batch</option>
@@ -55,6 +69,9 @@
       <label for="itemRemarks">Remarks</label>
       <input pInputText id="itemRemarks" formControlName="remarks" />
     </div>
+    @if (saveError()) {
+      <p class="detail-form__error">{{ saveError() }}</p>
+    }
     <div class="detail-form__actions">
       <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
         Save

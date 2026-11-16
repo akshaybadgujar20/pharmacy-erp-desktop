@@ -2,30 +2,45 @@
   <div class="detail-form__field">
     <label for="ruleCode">Rule Code</label>
     <input pInputText id="ruleCode" formControlName="ruleCode" />
+    @if (form.controls.ruleCode.invalid && form.controls.ruleCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="ruleName">Rule Name</label>
     <input pInputText id="ruleName" formControlName="ruleName" />
+    @if (form.controls.ruleName.invalid && form.controls.ruleName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="discountType">Discount Type</label>
-    <input pInputText id="discountType" formControlName="discountType" />
+    <p-select inputId="discountType" formControlName="discountType" [options]="discountTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.discountType.invalid && form.controls.discountType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="discountValue">Discount Value</label>
     <input pInputText id="discountValue" formControlName="discountValue" />
+    @if (form.controls.discountValue.invalid && form.controls.discountValue.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="appliesTo">Applies To</label>
-    <input pInputText id="appliesTo" formControlName="appliesTo" />
+    <p-select inputId="appliesTo" formControlName="appliesTo" [options]="appliesToOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.appliesTo.invalid && form.controls.appliesTo.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
-    <label for="medicineId">Medicine ID</label>
-    <input pInputText id="medicineId" formControlName="medicineId" />
+    <label for="medicineId">Medicine</label>
+    <app-medicine-lookup id="medicineId" formControlName="medicineId" />
   </div>
   <div class="detail-form__field">
-    <label for="categoryId">Category ID</label>
-    <input pInputText id="categoryId" formControlName="categoryId" />
+    <label for="categoryId">Category</label>
+    <p-select inputId="categoryId" formControlName="categoryId" [options]="categoryOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
   </div>
   <div class="detail-form__field">
     <label for="customerId">Customer ID</label>
@@ -45,15 +60,21 @@
   </div>
   <div class="detail-form__field">
     <label for="priority">Priority</label>
-    <input pInputText id="priority" type="number" formControlName="priority" />
+    <p-inputNumber inputId="priority" formControlName="priority" [min]="0" [useGrouping]="false" />
+    @if (form.controls.priority.invalid && form.controls.priority.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="effectiveFrom">Effective From</label>
-    <input pInputText id="effectiveFrom" formControlName="effectiveFrom" />
+    <p-datepicker inputId="effectiveFrom" formControlName="effectiveFrom" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" inputStyleClass="w-full" />
+    @if (form.controls.effectiveFrom.invalid && form.controls.effectiveFrom.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="effectiveTo">Effective To</label>
-    <input pInputText id="effectiveTo" formControlName="effectiveTo" />
+    <p-datepicker inputId="effectiveTo" formControlName="effectiveTo" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" inputStyleClass="w-full" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="discountRuleIsActive" />
@@ -61,7 +82,7 @@
   </div>
   <div class="detail-form__field">
     <label for="remarks">Remarks</label>
-    <input pInputText id="remarks" formControlName="remarks" />
+    <textarea pTextarea id="remarks" formControlName="remarks" rows="3" [fluid]="true"></textarea>
   </div>
   <div class="detail-form__actions">
     <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid" appShortcutTooltip="Save" shortcutId="global.save" shortcutTooltipPosition="bottom">

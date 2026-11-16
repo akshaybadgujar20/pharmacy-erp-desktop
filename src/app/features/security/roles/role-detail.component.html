@@ -11,14 +11,20 @@
         <div class="detail-form__field">
           <label for="roleCode">Role Code</label>
           <input pInputText id="roleCode" formControlName="roleCode" />
+          @if (form.controls.roleCode.invalid && form.controls.roleCode.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="roleName">Role Name</label>
           <input pInputText id="roleName" formControlName="roleName" />
+          @if (form.controls.roleName.invalid && form.controls.roleName.touched) {
+            <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+          }
         </div>
         <div class="detail-form__field">
           <label for="description">Description</label>
-          <input pInputText id="description" formControlName="description" />
+          <textarea pTextarea id="description" formControlName="description" rows="3" [fluid]="true"></textarea>
         </div>
         @if (!isNew()) {
           <div class="detail-form__field">

@@ -44,14 +44,14 @@ Backend gap severity: **High** = compliance or financial risk; **Medium** = oper
 | [Sales](#sales) | Partial | Implemented | Partial |
 | [Financial](#financial) | Partial | Implemented | Partial |
 | [Pricing](#pricing) | Implemented | Implemented | Partial |
-| [Loyalty](#loyalty) | Partial | Partial | Partial |
+| [Loyalty](#loyalty) | Partial | Implemented | Partial |
 | [Prescription](#prescription) | Partial | Implemented | Partial |
-| [Synchronization](#synchronization) | Partial | Partial | Partial |
-| [Audit](#audit) | Implemented | Partial | Partial |
+| [Synchronization](#synchronization) | Partial | Implemented | Partial |
+| [Audit](#audit) | Implemented | Implemented | Partial |
 | [Configuration](#configuration) | Implemented | Implemented | Partial |
 | [Settings](#settings-app-settings) | Implemented | Implemented | Partial |
 | [Masters (Geographic)](#masters-geographic) | Implemented | Implemented | Partial |
-| [Reporting](#reporting) | Partial | Partial | Partial |
+| [Reporting](#reporting) | Partial | Implemented | Partial |
 | [Integrations & devices](#integrations-and-devices) | Partial | Partial | Partial |
 
 ---
@@ -352,13 +352,13 @@ Cross-cutting Angular/Electron shell (not a business module).
 |----|-----|----------|
 | GAP-PAY-1 | Overpayment → customer advance not implemented | Medium |
 | GAP-PAY-2 | Dual settlement: SalesPayment + Receipt (by design) | Info |
-| GAP-ME-1 | Pre-close checks — no ClosingService | High |
+| ~~GAP-ME-1~~ | Pre-close checks — **resolved** (`ClosingService` + month-end close UI) | — |
 | GAP-ME-2 | Stock reconciliation not wired to close | Medium |
 | GAP-ME-3 | Trial balance report — **implemented** (`finance.trial-balance`); month-end wizard still Planned | Low |
 | GAP-ME-4 | GST summary report — **implemented** (`finance.gst-summary`) | Low |
 | GAP-ME-6 | ~~CLOSED FY block~~ — **resolved** on transactional document dates (see [product-gaps-delivery](../architecture/product-gaps-delivery.md)) | — |
 | GAP-ME-7 | Archive reports at close — no pipeline | Medium |
-| GAP-ME-8 | No ClosingService or pre-close wizard | High |
+| ~~GAP-ME-8~~ | ClosingService + pre-close wizard — **resolved** (`/finance/month-end-close`) | — |
 | GAP-ME-9 | No reopen-period API | Low |
 
 ### UI screens
@@ -370,7 +370,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UI gaps
 
 - ~~UI-FIN-1~~ — month-end close checklist + force-close reason aligned with FY close API.
-- UI-FIN-2: Trial balance / GST available via `/reports` runner; dedicated finance dashboard views Planned.
+- ~~UI-FIN-2~~ — `/finance/dashboard` embeds `finance.trial-balance` and `finance.gst-summary` report runners.
 
 ### UX gaps
 
@@ -403,7 +403,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-PRICE-1: Branch-specific price list selection rules may need screen polish.
+- ~~UI-PRICE-1~~ — branch lookup + price list type select on price list detail.
 
 ### UX gaps
 
@@ -416,7 +416,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Partial |
-| UI | Partial |
+| UI | Implemented |
 | UX | Partial |
 
 ### Backend
@@ -440,8 +440,8 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-LOY-1: Program list + detail forms (not full toolbar/grid polish).
-- UI-LOY-2: Points history on customer tab; dedicated history route Partial.
+- ~~UI-LOY-1~~ — program admin i18n, detail actions, list search.
+- ~~UI-LOY-2~~ — customer tab program lookup; `/loyalty/customers/:customerId/transactions` history route.
 
 ### UX gaps
 
@@ -467,9 +467,9 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 | ID | Gap | Severity |
 |----|-----|----------|
-| GAP-RX-1 | Dispense on sales post wired; UI line-level linkage Partial | Medium |
-| GAP-RX-2 | PARTIALLY_DISPENSED / DISPENSED statuses unused | Medium |
-| GAP-RX-3 | Sales only validates prescription FK — no line-level dispense match | Medium |
+| GAP-RX-1 | Dispense on sales post wired; counter seeds `prescriptionItemId`; admin items tab **prescription-line lookup** when header has `prescriptionId` | — | Mitigated |
+| GAP-RX-2 | `PARTIALLY_DISPENSED` / `DISPENSED` set from sales post | — | Resolved |
+| GAP-RX-3 | Optional `prescriptionItemId` on items; line remaining qty at post | — | Mitigated |
 
 ### UI screens
 
@@ -494,7 +494,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Partial |
-| UI | Partial |
+| UI | Implemented |
 | UX | Partial |
 
 ### Backend
@@ -518,8 +518,8 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UI gaps
 
-- UI-SYNC-1: Outbox AppGrid with retry (uses row version).
-- UI-SYNC-2: Conflict list AppGrid; resolve actions per API.
+- ~~UI-SYNC-1~~ — outbox AppGrid + retry; dedicated outbox toolbar config.
+- ~~UI-SYNC-2~~ — conflict grid + resolve dialog (strategy + remarks).
 
 ### UX gaps
 
@@ -532,7 +532,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 | Layer | Status |
 |-------|--------|
 | Backend | Implemented |
-| UI | Partial |
+| UI | Implemented |
 | UX | Partial |
 
 ### Backend
@@ -653,7 +653,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-MAST-1: Bulk import UI Planned.
+- ~~UI-MAST-1~~ — `/masters/import` nav + result table + dry-run/validate-commit (API `POST /masters/import`; **DB persist Planned**).
 
 ---
 
@@ -684,7 +684,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UI gaps
 
 - ~~UI-REP-1~~ — report list category chips; admin seed includes `REPORT_VIEW`, per-report permissions, `REPORTING:REPORT:READ`.
-- UI-REP-2: Favourites section on report list + runner; scheduled runs **Deferred** (no cron UI).
+- ~~UI-REP-2~~ — favourites add/remove on list + runner; scheduled runs **Deferred** (no cron UI).
 
 ### UX gaps
 

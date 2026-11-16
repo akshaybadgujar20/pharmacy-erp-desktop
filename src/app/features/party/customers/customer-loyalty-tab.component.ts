@@ -6,11 +6,15 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AppGridComponent } from '../../../components/generic/grid';
+import { LoyaltyProgramLookupComponent } from '../../../shared/lookups/loyalty-program-lookup.component';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { LOYALTY_TRANSACTION_GRID_CONFIG } from './loyalty-transaction-grid.config';
 import {
   CustomerLoyaltyService,
@@ -27,36 +31,11 @@ import {
     InputTextModule,
     DialogModule,
     AppGridComponent,
+    LoyaltyProgramLookupComponent,
+    RouterLink,
+    TranslatePipe,
   ],
-  template: `
-    @if (summary()) {
-      <p>Balance: {{ summary()!.balancePoints }} points</p>
-      @if (summary()!.membership) {
-        <p>Program: {{ summary()!.membership!.programName }}</p>
-      }
-    }
-    <div class="detail-form__field">
-      <label for="programId">Program ID to enroll</label>
-      <input pInputText id="programId" [value]="programId()" (input)="onProgramId($event)" />
-      <button pButton type="button" label="Enroll" (click)="enroll()"></button>
-      <button pButton type="button" label="Adjust points" (click)="adjustDialogVisible.set(true)"></button>
-    </div>
-    <app-grid
-      [config]="gridConfig"
-      [data]="transactions()"
-      [loading]="loading()"
-      [totalRecords]="totalRecords()"
-      (pageChange)="onPageChange($event)"
-    />
-    <p-dialog header="Manual adjustment" [visible]="adjustDialogVisible()" [modal]="true" (onHide)="adjustDialogVisible.set(false)">
-      <form [formGroup]="adjustForm" (ngSubmit)="submitAdjust()">
-        <input pInputText formControlName="loyaltyProgramId" placeholder="Program ID" />
-        <input pInputText type="number" formControlName="pointsDelta" placeholder="Points delta" />
-        <input pInputText formControlName="remarks" placeholder="Remarks" />
-        <button pButton type="submit" [disabled]="adjustForm.invalid">Submit</button>
-      </form>
-    </p-dialog>
-  `,
+  templateUrl: './customer-loyalty-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerLoyaltyTabComponent implements OnInit {
@@ -68,11 +47,13 @@ export class CustomerLoyaltyTabComponent implements OnInit {
   readonly gridConfig = LOYALTY_TRANSACTION_GRID_CONFIG;
   readonly summary = signal<CustomerLoyaltySummary | null>(null);
   readonly transactions = signal<LoyaltyTransactionRow[]>([]);
-  readonly programId = signal('');
   readonly loading = signal(false);
   readonly totalRecords = signal(0);
   readonly page = signal(1);
   readonly adjustDialogVisible = signal(false);
+  readonly adjustError = signal('');
+
+  readonly enrollProgramControl = new FormControl<string | null>(null);
 
   readonly adjustForm = this.fb.nonNullable.group({
     loyaltyProgramId: ['', Validators.required],
@@ -84,22 +65,22 @@ export class CustomerLoyaltyTabComponent implements OnInit {
     this.reload();
   }
 
-  onProgramId(event: Event): void {
-    this.programId.set((event.target as HTMLInputElement).value);
-  }
-
   onPageChange(event: { page: number; pageSize: number }): void {
     this.page.set(event.page);
     this.loadTransactions();
   }
 
   enroll(): void {
-    const programId = this.programId().trim();
+    const programId = this.enrollProgramControl.value?.trim();
     if (!programId) {
       return;
     }
     this.loyalty.enroll(this.customerId(), programId).subscribe({
-      next: () => this.reload(),
+      next: () => {
+        this.enrollProgramControl.setValue(null);
+        this.reload();
+      },
+      error: (error) => this.adjustError.set(resolveApiErrorMessage(error)),
     });
   }
 
@@ -107,6 +88,7 @@ export class CustomerLoyaltyTabComponent implements OnInit {
     if (this.adjustForm.invalid) {
       return;
     }
+    this.adjustError.set('');
     const value = this.adjustForm.getRawValue();
     this.loyalty
       .adjust(this.customerId(), {
@@ -119,6 +101,7 @@ export class CustomerLoyaltyTabComponent implements OnInit {
           this.adjustDialogVisible.set(false);
           this.reload();
         },
+        error: (error) => this.adjustError.set(resolveApiErrorMessage(error)),
       });
   }
 

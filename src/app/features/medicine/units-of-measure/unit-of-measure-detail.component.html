@@ -2,18 +2,30 @@
   <div class="detail-form__field">
     <label for="unitCode">Unit Code</label>
     <input pInputText id="unitCode" formControlName="unitCode" />
+    @if (form.controls.unitCode.invalid && form.controls.unitCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="unitName">Unit Name</label>
     <input pInputText id="unitName" formControlName="unitName" />
+    @if (form.controls.unitName.invalid && form.controls.unitName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="shortName">Short Name</label>
     <input pInputText id="shortName" formControlName="shortName" />
+    @if (form.controls.shortName.invalid && form.controls.shortName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="unitType">Unit Type</label>
-    <input pInputText id="unitType" formControlName="unitType" />
+    <p-select inputId="unitType" formControlName="unitType" [options]="unitTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.unitType.invalid && form.controls.unitType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="decimalAllowed" [binary]="true" inputId="decimalAllowed" />
@@ -21,7 +33,7 @@
   </div>
   <div class="detail-form__field">
     <label for="description">Description</label>
-    <input pInputText id="description" formControlName="description" />
+    <textarea pTextarea id="description" formControlName="description" rows="3"></textarea>
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isSystemUnit" [binary]="true" inputId="isSystemUnit" />

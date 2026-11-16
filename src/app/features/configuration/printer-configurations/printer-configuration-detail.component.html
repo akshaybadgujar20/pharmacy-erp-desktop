@@ -1,19 +1,28 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="branchId">Branch ID</label>
-    <input pInputText id="branchId" formControlName="branchId" />
+    <label for="branchId">Branch</label>
+    <app-branch-select id="branchId" formControlName="branchId" />
   </div>
   <div class="detail-form__field">
     <label for="printerName">Printer Name</label>
     <input pInputText id="printerName" formControlName="printerName" />
+    @if (form.controls.printerName.invalid && form.controls.printerName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="printerType">Printer Type</label>
-    <input pInputText id="printerType" formControlName="printerType" />
+    <p-select inputId="printerType" formControlName="printerType" [options]="printerTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.printerType.invalid && form.controls.printerType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="documentType">Document Type</label>
-    <input pInputText id="documentType" formControlName="documentType" />
+    <p-select inputId="documentType" formControlName="documentType" [options]="documentTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.documentType.invalid && form.controls.documentType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="printerPath">Printer Path</label>
@@ -25,11 +34,11 @@
   </div>
   <div class="detail-form__field">
     <label for="copies">Copies</label>
-    <input pInputText id="copies" type="number" formControlName="copies" />
+    <p-inputNumber inputId="copies" formControlName="copies" [min]="0" [useGrouping]="false" />
   </div>
   <div class="detail-form__field">
     <label for="printOrientation">Print Orientation</label>
-    <input pInputText id="printOrientation" formControlName="printOrientation" />
+    <p-select inputId="printOrientation" formControlName="printOrientation" [options]="printOrientationOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isDefault" [binary]="true" inputId="isDefault" />
@@ -41,7 +50,7 @@
   </div>
   <div class="detail-form__field">
     <label for="remarks">Remarks</label>
-    <input pInputText id="remarks" formControlName="remarks" />
+    <textarea pTextarea id="remarks" formControlName="remarks" rows="3" [fluid]="true"></textarea>
   </div>
   <div class="detail-form__actions">
     <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid" appShortcutTooltip="Save" shortcutId="global.save" shortcutTooltipPosition="bottom">

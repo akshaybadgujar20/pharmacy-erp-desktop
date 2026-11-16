@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { EmployeeLookupComponent } from '../../../shared/lookups/employee-lookup.component';
 import { UserBranchesTabComponent } from './user-branches-tab.component';
 import { UserRolesTabComponent } from './user-roles-tab.component';
 import { UserService } from './user.service';
@@ -27,10 +30,13 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
+    PasswordModule,
     ButtonModule,
     CheckboxModule,
     DialogModule,
     TabsModule,
+    TranslatePipe,
+    EmployeeLookupComponent,
     UserRolesTabComponent,
     UserBranchesTabComponent,
   ],
@@ -125,6 +131,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -222,6 +229,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   resetPassword(): void {
     const id = this.userId();
     if (!id || this.resetPasswordForm.invalid) {
+      if (this.resetPasswordForm.invalid) {
+        this.resetPasswordForm.markAllAsTouched();
+      }
       return;
     }
 
@@ -278,12 +288,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

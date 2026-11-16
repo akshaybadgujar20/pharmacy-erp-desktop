@@ -2,18 +2,30 @@
   <div class="detail-form__field">
     <label for="countryCode">Country Code</label>
     <input pInputText id="countryCode" formControlName="countryCode" />
+    @if (form.controls.countryCode.invalid && form.controls.countryCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="isoAlpha2">ISO Alpha-2</label>
     <input pInputText id="isoAlpha2" formControlName="isoAlpha2" />
+    @if (form.controls.isoAlpha2.invalid && form.controls.isoAlpha2.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="isoAlpha3">ISO Alpha-3</label>
     <input pInputText id="isoAlpha3" formControlName="isoAlpha3" />
+    @if (form.controls.isoAlpha3.invalid && form.controls.isoAlpha3.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="countryName">Country Name</label>
     <input pInputText id="countryName" formControlName="countryName" />
+    @if (form.controls.countryName.invalid && form.controls.countryName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="nationality">Nationality</label>

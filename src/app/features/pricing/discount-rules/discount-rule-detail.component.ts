@@ -1,15 +1,27 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { MedicineCategoryService } from '../../medicine/categories/medicine-category.service';
+import { MedicineLookupComponent } from '../../../shared/lookups/medicine-lookup.component';
 import {
-  nullableEpochMs,
-  optionalEpochMs,
-  toEpochMs,
+  dateToEpochMs,
+  epochToDate,
+  nullableDateToEpochMs,
+  optionalDateToEpochMs,
 } from '../pricing-date.util';
+import {
+  DISCOUNT_APPLIES_TO_OPTIONS,
+  DISCOUNT_TYPE_OPTIONS,
+} from './discount-rule.models';
 import { DiscountRuleService } from './discount-rule.service';
 
 
@@ -25,7 +37,18 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-discount-rule-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    TextareaModule,
+    DatePickerModule,
+    SelectModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+    MedicineLookupComponent,
+  ],
   templateUrl: './discount-rule-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -37,6 +60,7 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly discountRuleService = inject(DiscountRuleService);
+  private readonly categories = inject(MedicineCategoryService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -47,6 +71,10 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
   readonly version = signal('0');
 
   private entityId: string | null = null;
+
+  readonly discountTypeOptions = DISCOUNT_TYPE_OPTIONS;
+  readonly appliesToOptions = DISCOUNT_APPLIES_TO_OPTIONS;
+  readonly categoryOptions = signal<{ label: string; value: string }[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     ruleCode: ['', Validators.required],
@@ -61,8 +89,8 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
     minimumQuantity: [''],
     minimumAmount: [''],
     priority: [1, Validators.required],
-    effectiveFrom: ['', Validators.required],
-    effectiveTo: [''],
+    effectiveFrom: this.fb.control<Date | null>(null, Validators.required),
+    effectiveTo: this.fb.control<Date | null>(null),
     isActive: [true],
     remarks: [''],
   });
@@ -72,6 +100,17 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.categories.list({ page: '1', pageSize: '100' }).subscribe({
+      next: ({ data }) => {
+        this.categoryOptions.set(
+          data.map((category) => ({
+            label: category.categoryName,
+            value: category.id,
+          })),
+        );
+      },
+    });
+
     this.detailShortcutBinding = bindDetailScreenShortcuts(
       this.shortcuts,
       this.activeSave,
@@ -91,12 +130,13 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.form.patchValue({
-      effectiveFrom: new Date().toISOString(),
+      effectiveFrom: new Date(),
     });
   }
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -119,8 +159,8 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
           minimumQuantity: value.minimumQuantity || undefined,
           minimumAmount: value.minimumAmount || undefined,
           priority: value.priority,
-          effectiveFrom: toEpochMs(value.effectiveFrom),
-          effectiveTo: optionalEpochMs(value.effectiveTo),
+          effectiveFrom: dateToEpochMs(value.effectiveFrom),
+          effectiveTo: optionalDateToEpochMs(value.effectiveTo),
           isActive: value.isActive,
           remarks: value.remarks || undefined,
         })
@@ -149,8 +189,8 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
         minimumQuantity: value.minimumQuantity || undefined,
         minimumAmount: value.minimumAmount || undefined,
         priority: value.priority,
-        effectiveFrom: optionalEpochMs(value.effectiveFrom),
-        effectiveTo: nullableEpochMs(value.effectiveTo),
+        effectiveFrom: optionalDateToEpochMs(value.effectiveFrom),
+        effectiveTo: nullableDateToEpochMs(value.effectiveTo),
         isActive: value.isActive,
         remarks: value.remarks || undefined,
       })
@@ -203,8 +243,8 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
           minimumQuantity: discountRule.minimumQuantity ?? '',
           minimumAmount: discountRule.minimumAmount ?? '',
           priority: discountRule.priority,
-          effectiveFrom: discountRule.effectiveFrom,
-          effectiveTo: discountRule.effectiveTo ?? '',
+          effectiveFrom: epochToDate(discountRule.effectiveFrom),
+          effectiveTo: epochToDate(discountRule.effectiveTo),
           isActive: discountRule.isActive,
           remarks: discountRule.remarks ?? '',
         });
@@ -215,12 +255,6 @@ export class DiscountRuleDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

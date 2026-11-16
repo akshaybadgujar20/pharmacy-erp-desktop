@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { SettingDetailComponent } from './setting-detail.component';
 import { SettingService } from './setting.service';
@@ -46,6 +47,7 @@ describe('SettingDetailComponent', () => {
           },
         },
         { provide: Router, useValue: { navigate: jest.fn().mockResolvedValue(true) } },
+        provideTranslateService(),
       ],
     }).compileComponents();
 

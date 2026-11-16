@@ -1,3 +1,9 @@
+export const CUSTOMER_TYPE_OPTIONS = [
+  { label: 'Retail', value: 'RETAIL' },
+  { label: 'Wholesale', value: 'WHOLESALE' },
+  { label: 'Corporate', value: 'CORPORATE' },
+];
+
 export interface Customer {
   id: string;
   partyId: string;

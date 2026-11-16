@@ -196,9 +196,9 @@ export class AppGridComponent<T = unknown> implements OnDestroy {
     if (!cfg.toolbar?.search || !cfg.filtering?.globalSearch) {
       return;
     }
-    const input = this.hostRef.nativeElement.querySelector<HTMLInputElement>(
-      '.app-grid-search',
-    );
+    const input = (
+      this.hostRef.nativeElement as HTMLElement
+    ).querySelector<HTMLInputElement>('.app-grid-search');
     if (!input) {
       return;
     }

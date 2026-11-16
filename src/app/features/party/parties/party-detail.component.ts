@@ -1,14 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
 import { PartyAddressesTabComponent } from './party-addresses-tab.component';
 import { PartyContactsTabComponent } from './party-contacts-tab.component';
 import { PartyRolesTabComponent } from './party-roles-tab.component';
+import { PARTY_TYPE_OPTIONS } from './party.models';
 import { PartyService } from './party.service';
 
 
@@ -27,8 +30,10 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
+    SelectModule,
     ButtonModule,
     CheckboxModule,
+    TranslatePipe,
     TabsModule,
     PartyRolesTabComponent,
     PartyAddressesTabComponent,
@@ -48,6 +53,7 @@ export class PartyDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
+  readonly partyTypeOptions = PARTY_TYPE_OPTIONS;
   readonly isNew = signal(true);
   readonly partyId = signal<string | null>(null);
   readonly activeTab = signal('overview');
@@ -92,6 +98,7 @@ export class PartyDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -187,12 +194,6 @@ export class PartyDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

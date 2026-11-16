@@ -5,7 +5,6 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
 import { toEpochMs } from '../inventory-date.util';
 import { StockAdjustmentItemsTabComponent } from './stock-adjustment-items-tab.component';
 import { StockAdjustmentService } from './stock-adjustment.service';
@@ -19,6 +18,7 @@ import {
 import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
 import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { ShortcutTooltipDirective } from '../../../shared/keyboard';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 @Component({
   selector: 'app-stock-adjustment-detail',
   standalone: true,
@@ -231,12 +231,6 @@ export class StockAdjustmentDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

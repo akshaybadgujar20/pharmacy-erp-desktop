@@ -54,10 +54,20 @@ body {
   font-weight: 600;
 }
 
+.detail-form__field-error {
+  color: var(--p-red-500, #b91c1c);
+  font-size: 0.75rem;
+}
+
 .detail-form__actions {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
+  grid-column: 1 / -1;
+}
+
+.detail-form__error {
+  grid-column: 1 / -1;
 }
 
 .shortcut-tooltip,

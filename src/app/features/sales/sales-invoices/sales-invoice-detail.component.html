@@ -97,7 +97,11 @@
     </p-tabpanel>
     @if (invoiceId()) {
       <p-tabpanel value="items">
-        <app-sales-invoice-items-tab [invoiceId]="invoiceId()!" [editable]="isDraft()" />
+        <app-sales-invoice-items-tab
+          [invoiceId]="invoiceId()!"
+          [prescriptionId]="form.get('prescriptionId')?.value || null"
+          [editable]="isDraft()"
+        />
       </p-tabpanel>
       <p-tabpanel value="payments">
         <app-sales-invoice-payments-tab

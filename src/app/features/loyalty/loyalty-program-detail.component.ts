@@ -3,7 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslatePipe } from '@ngx-translate/core';
 import { resolveApiErrorMessage } from '../../core/utils/api-error-message.util';
 import { LoyaltyProgramService } from './loyalty-program.service';
 
@@ -20,7 +23,15 @@ import { ShortcutTooltipDirective } from '../../shared/keyboard';
   selector: 'app-loyalty-program-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    DatePickerModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './loyalty-program-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -47,7 +58,7 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
     pointsPerAmount: ['1', Validators.required],
     redemptionValue: ['1', Validators.required],
     minimumRedemptionPoints: [1, Validators.required],
-    effectiveFrom: [new Date().toISOString(), Validators.required],
+    effectiveFrom: this.fb.control<Date | null>(new Date(), Validators.required),
     isDefault: [false],
     isActive: [true],
   });
@@ -79,7 +90,7 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
             pointsPerAmount: program.pointsPerAmount,
             redemptionValue: program.redemptionValue,
             minimumRedemptionPoints: program.minimumRedemptionPoints,
-            effectiveFrom: program.effectiveFrom,
+            effectiveFrom: toLoyaltyDate(program.effectiveFrom),
             isDefault: program.isDefault,
             isActive: program.isActive,
           });
@@ -91,6 +102,7 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
     this.saving.set(true);
@@ -101,7 +113,7 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
       pointsPerAmount: value.pointsPerAmount,
       redemptionValue: value.redemptionValue,
       minimumRedemptionPoints: value.minimumRedemptionPoints,
-      effectiveFrom: value.effectiveFrom,
+      effectiveFrom: value.effectiveFrom ? value.effectiveFrom.toISOString() : '',
       isDefault: value.isDefault,
       isActive: value.isActive,
     };
@@ -113,7 +125,7 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
           pointsPerAmount: value.pointsPerAmount,
           redemptionValue: value.redemptionValue,
           minimumRedemptionPoints: value.minimumRedemptionPoints,
-          effectiveFrom: value.effectiveFrom,
+          effectiveFrom: value.effectiveFrom ? value.effectiveFrom.toISOString() : '',
           isDefault: value.isDefault,
           isActive: value.isActive,
         });
@@ -128,4 +140,19 @@ export class LoyaltyProgramDetailComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  goBack(): void {
+    void this.router.navigate(['/loyalty/programs']);
+  }
+}
+
+function toLoyaltyDate(value: string | null | undefined): Date | null {
+  if (!value) {
+    return null;
+  }
+  const millis = Number(value);
+  if (value.trim() !== '' && !Number.isNaN(millis)) {
+    return new Date(millis);
+  }
+  return new Date(value);
 }

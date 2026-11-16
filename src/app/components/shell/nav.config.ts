@@ -112,6 +112,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
           { icon: 'map', label: 'nav.masters.states', route: '/masters/states', permission: 'LOOKUP:STATE:READ' },
           { icon: 'city', label: 'nav.masters.cities', route: '/masters/cities', permission: 'LOOKUP:CITY:READ' },
           { icon: 'map-marker', label: 'nav.masters.areas', route: '/masters/areas', permission: 'LOOKUP:AREA:READ' },
+          { icon: 'upload', label: 'nav.masters.import', route: '/masters/import', permission: 'LOOKUP:COUNTRY:CREATE' },
         ],
       },
     ],
@@ -137,6 +138,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
         icon: 'wallet',
         label: 'nav.finance.title',
         subItems: [
+          { icon: 'chart-pie', label: 'nav.finance.dashboard', route: '/finance/dashboard', permission: 'REPORT:REPORT:READ' },
           { icon: 'book', label: 'nav.finance.ledgers', route: '/finance/ledgers', permission: 'FINANCE:LEDGER:READ' },
           { icon: 'credit-card', label: 'nav.finance.payments', route: '/finance/payments', permission: 'FINANCE:PAYMENT:READ' },
           { icon: 'receipt', label: 'nav.finance.receipts', route: '/finance/receipts', permission: 'FINANCE:RECEIPT:READ' },

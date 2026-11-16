@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
 import { MedicineCategoryService } from './medicine-category.service';
 
 
@@ -20,7 +24,16 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-medicine-category-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    TextareaModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './medicine-category-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,6 +49,7 @@ export class MedicineCategoryDetailComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
 
   readonly isNew = signal(true);
+  readonly parentCategoryOptions = signal<{ label: string; value: string }[]>([]);
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly errorMessage = signal('');
@@ -68,6 +82,8 @@ export class MedicineCategoryDetailComponent implements OnInit, OnDestroy {
       },
     );
 
+    this.loadParentCategoryOptions();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isNew.set(false);
@@ -78,6 +94,7 @@ export class MedicineCategoryDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -147,6 +164,19 @@ export class MedicineCategoryDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/medicine/categories']);
   }
 
+  private loadParentCategoryOptions(): void {
+    this.categoryService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.parentCategoryOptions.set(
+          result.data.map((category) => ({
+            label: category.categoryName,
+            value: category.id,
+          })),
+        );
+      },
+    });
+  }
+
   private load(id: string): void {
     this.categoryService.getById(id).subscribe({
       next: (category) => {
@@ -166,12 +196,6 @@ export class MedicineCategoryDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { PartyLookupComponent } from '../../../shared/lookups/party-lookup.component';
 import { DoctorService } from './doctor.service';
 
 
@@ -20,7 +23,15 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-doctor-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputNumberModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+    PartyLookupComponent,
+  ],
   templateUrl: './doctor-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -81,6 +92,7 @@ export class DoctorDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -170,6 +182,7 @@ export class DoctorDetailComponent implements OnInit, OnDestroy {
           isVisitingDoctor: doctor.isVisitingDoctor,
           isActive: doctor.isActive,
         });
+        this.form.controls.partyId.disable();
       },
       error: (error) => this.handleError(error),
     });
@@ -177,12 +190,6 @@ export class DoctorDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

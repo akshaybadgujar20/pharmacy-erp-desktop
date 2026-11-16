@@ -2,10 +2,16 @@
   <div class="detail-form__field">
     <label for="genericCode">Generic Code</label>
     <input pInputText id="genericCode" formControlName="genericCode" />
+    @if (form.controls.genericCode.invalid && form.controls.genericCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="genericName">Generic Name</label>
     <input pInputText id="genericName" formControlName="genericName" />
+    @if (form.controls.genericName.invalid && form.controls.genericName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="therapeuticClass">Therapeutic Class</label>
@@ -17,7 +23,7 @@
   </div>
   <div class="detail-form__field">
     <label for="description">Description</label>
-    <input pInputText id="description" formControlName="description" />
+    <textarea pTextarea id="description" formControlName="description" rows="3"></textarea>
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="genericIsActive" />

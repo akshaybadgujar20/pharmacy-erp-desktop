@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { MedicineCategoryService } from '../categories/medicine-category.service';
+import { ManufacturerService } from '../manufacturers/manufacturer.service';
+import { MedicineScheduleService } from '../schedules/medicine-schedule.service';
+import { UnitOfMeasureService } from '../units-of-measure/unit-of-measure.service';
 import { MedicineSaltsTabComponent } from './medicine-salts-tab.component';
 import { MedicineService } from './medicine.service';
 
@@ -25,8 +31,10 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
     ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
+    SelectModule,
     ButtonModule,
     CheckboxModule,
+    TranslatePipe,
     TabsModule,
     MedicineSaltsTabComponent,
   ],
@@ -41,10 +49,18 @@ export class MedicineDetailComponent implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly medicineService = inject(MedicineService);
+  private readonly manufacturerService = inject(ManufacturerService);
+  private readonly categoryService = inject(MedicineCategoryService);
+  private readonly scheduleService = inject(MedicineScheduleService);
+  private readonly unitOfMeasureService = inject(UnitOfMeasureService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   readonly isNew = signal(true);
+  readonly manufacturerOptions = signal<{ label: string; value: string }[]>([]);
+  readonly categoryOptions = signal<{ label: string; value: string }[]>([]);
+  readonly scheduleOptions = signal<{ label: string; value: string }[]>([]);
+  readonly unitOptions = signal<{ label: string; value: string }[]>([]);
   readonly medicineId = signal<string | null>(null);
   readonly activeTab = signal('overview');
   readonly saving = signal(false);
@@ -88,6 +104,8 @@ export class MedicineDetailComponent implements OnInit, OnDestroy {
       },
     );
 
+    this.loadLookupOptions();
+
     const medicineId = this.route.snapshot.paramMap.get('medicineId');
     if (medicineId) {
       this.isNew.set(false);
@@ -120,6 +138,7 @@ export class MedicineDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -211,6 +230,49 @@ export class MedicineDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/medicine/medicines']);
   }
 
+  private loadLookupOptions(): void {
+    this.manufacturerService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.manufacturerOptions.set(
+          result.data.map((manufacturer) => ({
+            label: manufacturer.manufacturerCode,
+            value: manufacturer.id,
+          })),
+        );
+      },
+    });
+    this.categoryService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.categoryOptions.set(
+          result.data.map((category) => ({
+            label: category.categoryName,
+            value: category.id,
+          })),
+        );
+      },
+    });
+    this.scheduleService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.scheduleOptions.set(
+          result.data.map((schedule) => ({
+            label: schedule.scheduleName,
+            value: schedule.id,
+          })),
+        );
+      },
+    });
+    this.unitOfMeasureService.list({ page: '1', pageSize: '100' }).subscribe({
+      next: (result) => {
+        this.unitOptions.set(
+          result.data.map((unit) => ({
+            label: unit.unitName,
+            value: unit.id,
+          })),
+        );
+      },
+    });
+  }
+
   private load(id: string): void {
     this.medicineService.getById(id).subscribe({
       next: (medicine) => {
@@ -241,12 +303,6 @@ export class MedicineDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

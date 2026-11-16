@@ -1,23 +1,29 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
     <label for="parentCategoryId">Parent Category ID</label>
-    <input pInputText id="parentCategoryId" formControlName="parentCategoryId" />
+    <p-select inputId="parentCategoryId" formControlName="parentCategoryId" [options]="parentCategoryOptions()" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" [showClear]="true" />
   </div>
   <div class="detail-form__field">
     <label for="categoryCode">Category Code</label>
     <input pInputText id="categoryCode" formControlName="categoryCode" />
+    @if (form.controls.categoryCode.invalid && form.controls.categoryCode.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="categoryName">Category Name</label>
     <input pInputText id="categoryName" formControlName="categoryName" />
+    @if (form.controls.categoryName.invalid && form.controls.categoryName.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="description">Description</label>
-    <input pInputText id="description" formControlName="description" />
+    <textarea pTextarea id="description" formControlName="description" rows="3"></textarea>
   </div>
   <div class="detail-form__field">
     <label for="displayOrder">Display Order</label>
-    <input pInputText id="displayOrder" type="number" formControlName="displayOrder" />
+    <p-inputnumber inputId="displayOrder" formControlName="displayOrder" />
   </div>
   <div class="detail-form__field">
     <p-checkbox formControlName="isActive" [binary]="true" inputId="categoryIsActive" />

@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
-import { optionalEpochMs } from '../configuration-date.util';
+import { epochToDate, optionalDateToEpochMs } from '../configuration-date.util';
 import { BranchService } from './branch.service';
 
 
@@ -21,7 +23,14 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-branch-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    DatePickerModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './branch-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -59,7 +68,7 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
     country: [''],
     pinCode: [''],
     managerName: [''],
-    openingDate: [''],
+    openingDate: this.fb.control<Date | null>(null),
     isHeadOffice: [false],
     isActive: [true],
   });
@@ -90,6 +99,7 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -114,7 +124,7 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
           country: value.country || undefined,
           pinCode: value.pinCode || undefined,
           managerName: value.managerName || undefined,
-          openingDate: optionalEpochMs(value.openingDate),
+          openingDate: optionalDateToEpochMs(value.openingDate),
           isHeadOffice: value.isHeadOffice,
           isActive: value.isActive,
         })
@@ -145,7 +155,7 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
         country: value.country || undefined,
         pinCode: value.pinCode || undefined,
         managerName: value.managerName || undefined,
-        openingDate: optionalEpochMs(value.openingDate),
+        openingDate: optionalDateToEpochMs(value.openingDate),
         isHeadOffice: value.isHeadOffice,
         isActive: value.isActive,
       })
@@ -200,7 +210,7 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
           country: branch.country ?? '',
           pinCode: branch.pinCode ?? '',
           managerName: branch.managerName ?? '',
-          openingDate: branch.openingDate ?? '',
+          openingDate: epochToDate(branch.openingDate),
           isHeadOffice: branch.isHeadOffice,
           isActive: branch.isActive,
         });
@@ -211,12 +221,6 @@ export class BranchDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

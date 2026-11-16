@@ -23,7 +23,9 @@ Consolidated list of known gaps from L1 workflow diagram generators. Update when
 | GAP-ME-8 | Month-end | `FinancialYear.close` gated by checklist (optional `force`) |
 | GAP-RX-1 | Prescription | Dispensing hook on sales invoice post |
 | GAP-RX-2 | Prescription | `PARTIALLY_DISPENSED` / `DISPENSED` set from sales post |
-| GAP-RX-3 | Prescription | Qty ≤ prescription remaining validated at post |
+| GAP-RX-3 | Prescription | Line-level `prescriptionItemId` on sales items + remaining qty per Rx line at post; admin items tab line lookup when invoice has `prescriptionId` |
+| GAP-ME-3 | Month-end | Trial balance report `finance.trial-balance` + finance dashboard runner |
+| GAP-ME-4 | Month-end | GST summary report `finance.gst-summary` + finance dashboard runner |
 | Follow-up | Sales | FY date guard on inventory and purchase stock paths |
 
 ## Open / Accepted / Deferred
@@ -44,8 +46,6 @@ Consolidated list of known gaps from L1 workflow diagram generators. Update when
 | GAP-XFER-1 | Inventory | stock-transfer-flow | `inTransitQuantity` updated on dispatch/receive (persistence smoke) | Medium | Mitigated |
 | GAP-PAY-2 | Payment | payment-flow | Dual settlement: SalesPayment + Receipt | Info | By design |
 | GAP-RET-2 | Return | return-flow | RESTOCK only — no quarantine/expired | Medium | Accepted v1 |
-| GAP-ME-3 | Month-end | month-end-flow | Trial balance — no report | Medium | Deferred |
-| GAP-ME-4 | Month-end | month-end-flow | GST summary — no report | Medium | Deferred |
 | GAP-ME-7 | Month-end | month-end-flow | Archive reports at close — no pipeline | Medium | Deferred |
 | GAP-ME-9 | Month-end | month-end-flow | No reopen-period API | Low | Deferred |
 

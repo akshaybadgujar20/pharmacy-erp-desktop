@@ -1,11 +1,14 @@
 <form class="detail-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="detail-form__field">
-    <label for="branchId">Branch ID</label>
-    <input pInputText id="branchId" formControlName="branchId" />
+    <label for="branchId">Branch</label>
+    <app-branch-select id="branchId" formControlName="branchId" />
   </div>
   <div class="detail-form__field">
     <label for="documentType">Document Type</label>
-    <input pInputText id="documentType" formControlName="documentType" />
+    <p-select inputId="documentType" formControlName="documentType" [options]="documentTypeOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.documentType.invalid && form.controls.documentType.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="prefix">Prefix</label>
@@ -18,18 +21,24 @@
   <div class="detail-form__field">
     <label for="currentNumber">Current Number</label>
     <input pInputText id="currentNumber" formControlName="currentNumber" />
+    @if (form.controls.currentNumber.invalid && form.controls.currentNumber.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="incrementBy">Increment By</label>
-    <input pInputText id="incrementBy" type="number" formControlName="incrementBy" />
+    <p-inputNumber inputId="incrementBy" formControlName="incrementBy" [min]="0" [useGrouping]="false" />
   </div>
   <div class="detail-form__field">
     <label for="paddingLength">Padding Length</label>
-    <input pInputText id="paddingLength" type="number" formControlName="paddingLength" />
+    <p-inputNumber inputId="paddingLength" formControlName="paddingLength" [min]="0" [useGrouping]="false" />
   </div>
   <div class="detail-form__field">
     <label for="resetPolicy">Reset Policy</label>
-    <input pInputText id="resetPolicy" formControlName="resetPolicy" />
+    <p-select inputId="resetPolicy" formControlName="resetPolicy" [options]="resetPolicyOptions" optionLabel="label" optionValue="value" appendTo="body" styleClass="w-full" />
+    @if (form.controls.resetPolicy.invalid && form.controls.resetPolicy.touched) {
+      <small class="detail-form__field-error">{{ 'common.required' | translate }}</small>
+    }
   </div>
   <div class="detail-form__field">
     <label for="format">Format</label>

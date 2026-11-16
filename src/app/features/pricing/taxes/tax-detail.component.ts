@@ -1,15 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApiClientError } from '../../../core/models/api-response.types';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
 import {
-  nullableEpochMs,
-  optionalEpochMs,
-  toEpochMs,
+  dateToEpochMs,
+  epochToDate,
+  nullableDateToEpochMs,
+  optionalDateToEpochMs,
 } from '../pricing-date.util';
+import { TAX_TYPE_OPTIONS } from './tax.models';
 import { TaxService } from './tax.service';
 
 
@@ -25,7 +31,16 @@ import { ShortcutTooltipDirective } from '../../../shared/keyboard';
   selector: 'app-tax-detail',
   standalone: true,
   imports: [
-    ShortcutTooltipDirective,ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule],
+    ShortcutTooltipDirective,
+    ReactiveFormsModule,
+    InputTextModule,
+    TextareaModule,
+    DatePickerModule,
+    SelectModule,
+    ButtonModule,
+    CheckboxModule,
+    TranslatePipe,
+  ],
   templateUrl: './tax-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -48,13 +63,15 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
 
   private entityId: string | null = null;
 
+  readonly taxTypeOptions = TAX_TYPE_OPTIONS;
+
   readonly form = this.fb.nonNullable.group({
     taxCode: ['', Validators.required],
     taxName: ['', Validators.required],
     taxType: ['GST', Validators.required],
     taxRate: ['', Validators.required],
-    effectiveFrom: ['', Validators.required],
-    effectiveTo: [''],
+    effectiveFrom: this.fb.control<Date | null>(null, Validators.required),
+    effectiveTo: this.fb.control<Date | null>(null),
     isActive: [true],
     description: [''],
   });
@@ -83,12 +100,13 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.form.patchValue({
-      effectiveFrom: new Date().toISOString(),
+      effectiveFrom: new Date(),
     });
   }
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
@@ -103,8 +121,8 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
           taxName: value.taxName,
           taxType: value.taxType,
           taxRate: value.taxRate,
-          effectiveFrom: toEpochMs(value.effectiveFrom),
-          effectiveTo: optionalEpochMs(value.effectiveTo),
+          effectiveFrom: dateToEpochMs(value.effectiveFrom),
+          effectiveTo: optionalDateToEpochMs(value.effectiveTo),
           isActive: value.isActive,
           description: value.description || undefined,
         })
@@ -125,8 +143,8 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
         taxName: value.taxName,
         taxType: value.taxType,
         taxRate: value.taxRate,
-        effectiveFrom: optionalEpochMs(value.effectiveFrom),
-        effectiveTo: nullableEpochMs(value.effectiveTo),
+        effectiveFrom: optionalDateToEpochMs(value.effectiveFrom),
+        effectiveTo: nullableDateToEpochMs(value.effectiveTo),
         isActive: value.isActive,
         description: value.description || undefined,
       })
@@ -171,8 +189,8 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
           taxName: tax.taxName,
           taxType: tax.taxType,
           taxRate: tax.taxRate,
-          effectiveFrom: tax.effectiveFrom,
-          effectiveTo: tax.effectiveTo ?? '',
+          effectiveFrom: epochToDate(tax.effectiveFrom),
+          effectiveTo: epochToDate(tax.effectiveTo),
           isActive: tax.isActive,
           description: tax.description ?? '',
         });
@@ -183,12 +201,6 @@ export class TaxDetailComponent implements OnInit, OnDestroy {
 
   private handleError(error: unknown): void {
     this.saving.set(false);
-    this.errorMessage.set(
-      error instanceof ApiClientError
-        ? error.message
-        : error instanceof Error
-          ? error.message
-          : 'Request failed',
-    );
+    this.errorMessage.set(resolveApiErrorMessage(error));
   }
 }

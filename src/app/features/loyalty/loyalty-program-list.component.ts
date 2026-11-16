@@ -22,6 +22,7 @@ import {
   GridRowClickEvent,
 } from '../../components/generic/grid/types/grid-events.types';
 import { ToolbarActionEvent } from '../../components/generic/toolbar/types/toolbar-events.types';
+import { toListParams } from '../../shared/utils/list-query.util';
 import { LOYALTY_PROGRAM_GRID_CONFIG } from './loyalty-program-grid.config';
 import { LOYALTY_PROGRAM_TOOLBAR_CONFIG } from './loyalty-program-toolbar.config';
 import { LoyaltyProgramRow, LoyaltyProgramService } from './loyalty-program.service';
@@ -59,6 +60,7 @@ export class LoyaltyProgramListComponent implements OnInit, OnDestroy {
   readonly totalRecords = signal(0);
   readonly page = signal(1);
   readonly pageSize = signal(25);
+  readonly search = signal('');
 
   ngOnInit(): void {
     this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
@@ -88,7 +90,8 @@ export class LoyaltyProgramListComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  onFilterChange(_event: GridFilterChange): void {
+  onFilterChange(event: GridFilterChange): void {
+    this.search.set(event.globalSearch ?? '');
     this.page.set(1);
     this.load();
   }
@@ -99,7 +102,9 @@ export class LoyaltyProgramListComponent implements OnInit, OnDestroy {
 
   private load(): void {
     this.loading.set(true);
-    this.loyaltyPrograms.list(String(this.page()), String(this.pageSize())).subscribe({
+    this.loyaltyPrograms
+      .list(toListParams(this.page(), this.pageSize(), this.search()))
+      .subscribe({
       next: ({ data, pagination }) => {
         this.rows.set(data);
         this.totalRecords.set(pagination.total);

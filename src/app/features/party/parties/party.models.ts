@@ -1,3 +1,8 @@
+export const PARTY_TYPE_OPTIONS = [
+  { label: 'Person', value: 'PERSON' },
+  { label: 'Organization', value: 'ORGANIZATION' },
+];
+
 export interface Party {
   id: string;
   uuid: string;
