@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -20,10 +13,20 @@ import {
 import { StockTransferItemsTabComponent } from './stock-transfer-items-tab.component';
 import { StockTransferService } from './stock-transfer.service';
 
+
+import {
+  bindDetailScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
+import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 @Component({
   selector: 'app-stock-transfer-detail',
   standalone: true,
   imports: [
+    ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
@@ -33,7 +36,12 @@ import { StockTransferService } from './stock-transfer.service';
   templateUrl: './stock-transfer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StockTransferDetailComponent implements OnInit {
+export class StockTransferDetailComponent implements OnInit, OnDestroy {
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly activePrint = inject(ActiveScreenPrintService);
+  private detailShortcutBinding?: ShortcutBinding;
+
   private readonly fb = inject(FormBuilder);
   private readonly stockTransferService = inject(StockTransferService);
   private readonly route = inject(ActivatedRoute);
@@ -65,7 +73,22 @@ export class StockTransferDetailComponent implements OnInit {
     remarks: [''],
   });
 
+  ngOnDestroy(): void {
+    this.detailShortcutBinding?.unregister();
+  }
+
   ngOnInit(): void {
+    this.detailShortcutBinding = bindDetailScreenShortcuts(
+      this.shortcuts,
+      this.activeSave,
+      this.activePrint,
+      {
+        save: () => this.save(),
+        delete: () => this.deleteRecord(),
+        cancel: () => this.goBack(),
+      },
+    );
+
     const transferId = this.route.snapshot.paramMap.get('transferId');
     if (transferId) {
       this.isNew.set(false);

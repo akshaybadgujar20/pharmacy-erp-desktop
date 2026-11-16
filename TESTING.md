@@ -94,7 +94,7 @@ npm test -- --testPathPatterns="mfa-enroll|masters-import"
 ## Writing specs
 
 - Mock **`ApiService`** or use **`HttpClientTestingModule`** for HTTP; assert envelope handling the same way the app does in production.
-- For standalone components, prefer **`compileComponents()`** (not `compile()`), stub heavy child components with **`overrideComponent`**, and mock services injected in `ngOnInit` (keyboard shortcuts, Electron barcode, active-screen save, etc.).
+- For standalone components, prefer **`compileComponents()`** (not `compile()`), stub heavy child components with **`overrideComponent`**, and mock services injected in `ngOnInit` (keyboard shortcuts, `ActiveScreenSearchService`, Electron barcode, active-screen save, etc.).
 - List/grid screens: follow existing patterns (e.g. `customer-list.component.spec.ts`, `purchase-order-list.component.spec.ts`) — stub `app-toolbar` / `app-grid` and mock the feature service.
 
 ---

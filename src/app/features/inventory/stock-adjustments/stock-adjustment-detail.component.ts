@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -17,10 +10,20 @@ import { toEpochMs } from '../inventory-date.util';
 import { StockAdjustmentItemsTabComponent } from './stock-adjustment-items-tab.component';
 import { StockAdjustmentService } from './stock-adjustment.service';
 
+
+import {
+  bindDetailScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
+import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 @Component({
   selector: 'app-stock-adjustment-detail',
   standalone: true,
   imports: [
+    ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
@@ -31,7 +34,12 @@ import { StockAdjustmentService } from './stock-adjustment.service';
   templateUrl: './stock-adjustment-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StockAdjustmentDetailComponent implements OnInit {
+export class StockAdjustmentDetailComponent implements OnInit, OnDestroy {
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly activePrint = inject(ActiveScreenPrintService);
+  private detailShortcutBinding?: ShortcutBinding;
+
   private readonly fb = inject(FormBuilder);
   private readonly stockAdjustmentService = inject(StockAdjustmentService);
   private readonly route = inject(ActivatedRoute);
@@ -57,7 +65,22 @@ export class StockAdjustmentDetailComponent implements OnInit {
     isActive: [true],
   });
 
+  ngOnDestroy(): void {
+    this.detailShortcutBinding?.unregister();
+  }
+
   ngOnInit(): void {
+    this.detailShortcutBinding = bindDetailScreenShortcuts(
+      this.shortcuts,
+      this.activeSave,
+      this.activePrint,
+      {
+        save: () => this.save(),
+        delete: () => this.deleteRecord(),
+        cancel: () => this.goBack(),
+      },
+    );
+
     const adjustmentId = this.route.snapshot.paramMap.get('adjustmentId');
     if (adjustmentId) {
       this.isNew.set(false);

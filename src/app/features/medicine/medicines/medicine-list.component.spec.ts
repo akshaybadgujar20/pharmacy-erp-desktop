@@ -1,6 +1,8 @@
 import { Component, input, output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ActiveScreenSearchService } from '../../../core/services/active-screen-search.service';
+import { ElectronService } from '../../../core/services/electron.service';
 import { of } from 'rxjs';
 import { KeyboardShortcutService } from '../../../core/keyboard';
 import { ToolbarActionEvent } from '../../../components/generic/toolbar/types/toolbar-events.types';
@@ -73,6 +75,18 @@ describe('MedicineListComponent', () => {
             registerHandler: jest.fn(),
             unregisterHandler: jest.fn(),
           },
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParamMap: { get: () => null } } },
+        },
+        {
+          provide: ActiveScreenSearchService,
+          useValue: { register: jest.fn(), unregister: jest.fn() },
+        },
+        {
+          provide: ElectronService,
+          useValue: { onBarcodeScan: () => () => undefined },
         },
       ],
     })

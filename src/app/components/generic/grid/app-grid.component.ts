@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   input,
   OnDestroy,
@@ -49,6 +50,7 @@ import {
   GridSelectionChange,
   GridSortChange,
 } from './types/grid-events.types';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 import { GridConfig } from './types/grid.types';
 import { GridToolbarAction } from './types/grid-toolbar.types';
 
@@ -60,6 +62,7 @@ import { GridToolbarAction } from './types/grid-toolbar.types';
     ButtonModule,
     InputTextModule,
     FormsModule,
+    ShortcutTooltipDirective,
   ],
   templateUrl: './app-grid.component.html',
   styleUrl: './app-grid.component.scss',
@@ -68,6 +71,7 @@ import { GridToolbarAction } from './types/grid-toolbar.types';
 export class AppGridComponent<T = unknown> implements OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly appDialogService = inject(AppDialogService);
+  private readonly hostRef = inject(ElementRef<HTMLElement>);
 
   config = input.required<GridConfig<T>>();
   data = input<T[]>([]);
@@ -185,6 +189,21 @@ export class AppGridComponent<T = unknown> implements OnDestroy {
     if (this.searchDebounceTimer) {
       clearTimeout(this.searchDebounceTimer);
     }
+  }
+
+  focusSearch(): void {
+    const cfg = this.mergedConfig();
+    if (!cfg.toolbar?.search || !cfg.filtering?.globalSearch) {
+      return;
+    }
+    const input = this.hostRef.nativeElement.querySelector<HTMLInputElement>(
+      '.app-grid-search',
+    );
+    if (!input) {
+      return;
+    }
+    input.focus();
+    input.select();
   }
 
   onGridReady(event: GridReadyEvent<T>): void {

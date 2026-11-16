@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -15,10 +9,20 @@ import { ApiClientError } from '../../../core/models/api-response.types';
 import { LedgerEntriesTabComponent } from './ledger-entries-tab.component';
 import { LedgerService } from './ledger.service';
 
+
+import {
+  bindDetailScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
+import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 @Component({
   selector: 'app-ledger-detail',
   standalone: true,
   imports: [
+    ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
@@ -29,7 +33,12 @@ import { LedgerService } from './ledger.service';
   templateUrl: './ledger-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LedgerDetailComponent implements OnInit {
+export class LedgerDetailComponent implements OnInit, OnDestroy {
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly activePrint = inject(ActiveScreenPrintService);
+  private detailShortcutBinding?: ShortcutBinding;
+
   private readonly fb = inject(FormBuilder);
   private readonly ledgerService = inject(LedgerService);
   private readonly route = inject(ActivatedRoute);
@@ -54,7 +63,22 @@ export class LedgerDetailComponent implements OnInit {
     isActive: [true],
   });
 
+  ngOnDestroy(): void {
+    this.detailShortcutBinding?.unregister();
+  }
+
   ngOnInit(): void {
+    this.detailShortcutBinding = bindDetailScreenShortcuts(
+      this.shortcuts,
+      this.activeSave,
+      this.activePrint,
+      {
+        save: () => this.save(),
+        delete: () => this.deleteRecord(),
+        cancel: () => this.goBack(),
+      },
+    );
+
     const ledgerId = this.route.snapshot.paramMap.get('ledgerId');
     if (ledgerId) {
       this.isNew.set(false);

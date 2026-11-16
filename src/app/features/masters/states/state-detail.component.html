@@ -24,15 +24,15 @@
     <label for="isActive">Active</label>
   </div>
   <div class="detail-form__actions">
-    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+    <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid" appShortcutTooltip="Save" shortcutId="global.save" shortcutTooltipPosition="bottom">
       Save
     </button>
     @if (!isNew()) {
-      <button pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
+      <button appShortcutTooltip="Delete" shortcutId="global.delete" shortcutTooltipPosition="bottom" pButton type="button" severity="danger" [disabled]="deleting()" (click)="deleteRecord()">
         Delete
       </button>
     }
-    <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+    <button appShortcutTooltip="Back" shortcutId="global.cancel" shortcutTooltipPosition="bottom" pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
       Back
     </button>
   </div>

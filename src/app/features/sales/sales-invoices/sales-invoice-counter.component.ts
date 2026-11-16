@@ -19,6 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
 import { KeyboardShortcutService } from '../../../core/keyboard';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 import { ElectronService } from '../../../core/services/electron.service';
 import { resolveApiErrorMessage } from '../../../core/utils/api-error-message.util';
 import { CustomerLookupComponent } from '../../../shared/lookups/customer-lookup.component';
@@ -50,6 +51,7 @@ import { toEpochMs } from '../sales-date.util';
     SalesInvoiceItemsTabComponent,
     SalesInvoicePaymentsTabComponent,
     SalesPrescriptionLinesPanelComponent,
+    ShortcutTooltipDirective,
   ],
   templateUrl: './sales-invoice-counter.component.html',
   styleUrl: './sales-invoice-counter.component.scss',

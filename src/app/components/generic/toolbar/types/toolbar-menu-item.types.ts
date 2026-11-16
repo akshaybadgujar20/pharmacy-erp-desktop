@@ -11,5 +11,6 @@ export interface ToolbarMenuItemConfig {
   disabled?: boolean;
   visible?: boolean;
   externalUrl?: string;
+  shortcutId?: string;
   items?: ToolbarMenuItemConfig[];
 }

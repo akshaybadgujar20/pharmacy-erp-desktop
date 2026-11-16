@@ -6,4 +6,5 @@ export interface GridActionConfig<T = unknown> {
   visible?: (row: T) => boolean;
   disabled?: (row: T) => boolean;
   confirmation?: boolean;
+  shortcutId?: string;
 }

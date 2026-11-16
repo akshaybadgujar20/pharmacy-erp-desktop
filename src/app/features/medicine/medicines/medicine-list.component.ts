@@ -1,13 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
-import { KeyboardShortcutService } from '../../../core/keyboard';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenSearchService } from '../../../core/services/active-screen-search.service';
+
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import { GridActionEvent, GridFilterChange, GridPageChange, GridRowClickEvent } from '../../../components/generic/grid/types/grid-events.types';
@@ -31,6 +31,9 @@ export class MedicineListComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
   private readonly electron = inject(ElectronService);
   private unsubscribeBarcode?: () => void;
 
@@ -45,8 +48,11 @@ export class MedicineListComponent implements OnInit, OnDestroy {
   readonly search = signal('');
 
   ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
-    this.shortcuts.registerHandler('global.new', () => this.onNew());
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      create: () => this.onNew(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
     this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
       this.search.set(code);
       this.page.set(1);
@@ -60,8 +66,7 @@ export class MedicineListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
-    this.shortcuts.unregisterHandler('global.new');
+    this.listShortcutBinding?.unregister();
     this.unsubscribeBarcode?.();
   }
 

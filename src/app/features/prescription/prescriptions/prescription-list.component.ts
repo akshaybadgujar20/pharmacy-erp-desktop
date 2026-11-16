@@ -1,13 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import { Router } from '@angular/router';
-import { KeyboardShortcutService } from '../../../core/keyboard';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenSearchService } from '../../../core/services/active-screen-search.service';
+
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import {
@@ -33,7 +33,10 @@ import { PrescriptionService } from './prescription.service';
 export class PrescriptionListComponent implements OnInit, OnDestroy {
   private readonly prescriptionService = inject(PrescriptionService);
   private readonly router = inject(Router);
-  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
 
   readonly toolbarConfig = PRESCRIPTION_TOOLBAR_CONFIG;
   readonly gridConfig = PRESCRIPTION_GRID_CONFIG;
@@ -45,15 +48,19 @@ export class PrescriptionListComponent implements OnInit, OnDestroy {
   readonly pageSize = signal(25);
   readonly search = signal('');
 
-  ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
+  ngOnInit(): void {
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      create: () => this.onNew(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
+
     this.shortcuts.registerHandler('global.new', () => this.onNew());
     this.load();
   }
 
-  ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
-    this.shortcuts.unregisterHandler('global.new');
+  ngOnDestroy(): void {
+    this.listShortcutBinding?.unregister();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

@@ -28,6 +28,7 @@ import { ToolbarConfirmConfig } from './types/toolbar-action-base.types';
 import { ToolbarActionEvent } from './types/toolbar-events.types';
 import { ToolbarActionItemConfig, ToolbarItemConfig } from './types/toolbar-item.types';
 import { ToolbarSplitButtonItemConfig } from './types/toolbar-split-button.types';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 import { ToolbarConfig } from './types/toolbar.types';
 
 @Component({
@@ -38,6 +39,7 @@ import { ToolbarConfig } from './types/toolbar.types';
     ButtonModule,
     ButtonGroupModule,
     SplitButtonModule,
+    ShortcutTooltipDirective,
   ],
   templateUrl: './app-toolbar.component.html',
   styleUrl: './app-toolbar.component.scss',
@@ -97,9 +99,17 @@ export class AppToolbarComponent {
 
   getMenuModel(item: ToolbarSplitButtonItemConfig): MenuItem[] {
     const access = createAccessContext(this.authService);
-    return toPrimeMenuItems(item.menuItems, access, item.id, (event) =>
-      this.emitAction(event),
+    return toPrimeMenuItems(
+      item.menuItems,
+      access,
+      item.id,
+      (event) => this.emitAction(event),
+      (shortcutId) => this.getShortcutLabel(shortcutId),
     );
+  }
+
+  tooltipLabel(item: ToolbarActionItemConfig): string {
+    return item.label ?? item.ariaLabel ?? item.id;
   }
 
   onButtonClick(item: ToolbarActionItemConfig): void {

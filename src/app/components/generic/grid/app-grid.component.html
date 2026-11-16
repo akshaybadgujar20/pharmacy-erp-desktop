@@ -9,6 +9,9 @@
             class="app-grid-search"
             [placeholder]="'Search...'"
             [value]="globalSearch()"
+            appShortcutTooltip="Search"
+            shortcutId="global.search"
+            shortcutTooltipPosition="bottom"
             (input)="onGlobalSearchInput($event)"
           />
         }
@@ -20,6 +23,9 @@
             icon="pi pi-refresh"
             label="Refresh"
             severity="secondary"
+            appShortcutTooltip="Refresh"
+            shortcutId="global.refresh"
+            shortcutTooltipPosition="bottom"
             (onClick)="emitToolbarAction('refresh')"
           />
         }

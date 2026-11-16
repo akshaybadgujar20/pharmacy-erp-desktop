@@ -1,16 +1,16 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import { GridFilterChange, GridPageChange } from '../../../components/generic/grid/types/grid-events.types';
 import { ToolbarActionEvent } from '../../../components/generic/toolbar/types/toolbar-events.types';
-import { KeyboardShortcutService } from '../../../core/keyboard';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenSearchService } from '../../../core/services/active-screen-search.service';
+
 import { toListParams } from '../../../shared/utils/list-query.util';
 import { STOCK_MOVEMENT_GRID_CONFIG } from './stock-movement-grid.config';
 import { StockMovement } from './stock-movement.models';
@@ -27,6 +27,9 @@ import { StockMovementService } from './stock-movement.service';
 export class StockMovementListComponent implements OnInit, OnDestroy {
   private readonly stockMovementService = inject(StockMovementService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
 
   readonly toolbarConfig = STOCK_MOVEMENT_TOOLBAR_CONFIG;
   readonly gridConfig = STOCK_MOVEMENT_GRID_CONFIG;
@@ -39,12 +42,16 @@ export class StockMovementListComponent implements OnInit, OnDestroy {
   readonly search = signal('');
 
   ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
+
     this.load();
   }
 
   ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
+    this.listShortcutBinding?.unregister();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

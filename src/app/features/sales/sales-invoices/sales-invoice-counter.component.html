@@ -29,7 +29,7 @@
       <label>Prescription</label>
       <app-prescription-lookup formControlName="prescriptionId" />
     </div>
-    <button pButton type="button" label="Save header" (click)="saveHeader()" [disabled]="!isDraft()"></button>
+    <button pButton type="button" label="Save header" (click)="saveHeader()" [disabled]="!isDraft()" appShortcutTooltip="Save header" shortcutId="global.save" shortcutTooltipPosition="bottom"></button>
   </form>
 
   @if (scheduleWarning()) {
@@ -44,7 +44,7 @@
 
   <div class="counter__tabs">
     <button pButton type="button" label="Items" (click)="activeTab.set('items')"></button>
-    <button pButton type="button" label="Payments (F8)" (click)="focusPayments()"></button>
+    <button pButton type="button" label="Payments" (click)="focusPayments()" appShortcutTooltip="Payments" shortcutId="sales.payment" shortcutTooltipPosition="bottom"></button>
   </div>
 
   @if (activeTab() === 'items' && invoiceId()) {

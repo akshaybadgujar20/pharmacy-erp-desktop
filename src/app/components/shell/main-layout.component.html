@@ -39,7 +39,7 @@
                     @for (item of group.items; track item.label) {
                       <p-sidebar-menu-item [collapsible]="!!item.subItems" [defaultOpen]="false">
                         @if (item.route) {
-                          <a pSidebarMenuButton [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                          <a pSidebarMenuButton [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" [appShortcutTooltip]="item.label | translate" shortcutTooltipPosition="right">
                             <svg [pIcon]="item.icon"></svg>
                             <span>{{ item.label | translate}}</span>
                           </a>
@@ -59,7 +59,7 @@
                           <p-sidebar-menu-sub>
                             @for (sub of item.subItems; track sub.label) {
                               <p-sidebar-menu-sub-item>
-                                <a pSidebarMenuSubButton [routerLink]="sub.route!" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                                <a pSidebarMenuSubButton [routerLink]="sub.route!" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" [appShortcutTooltip]="sub.label | translate" shortcutTooltipPosition="right">
                                   <span>{{ sub.label | translate }}</span>
                                 </a>
                               </p-sidebar-menu-sub-item>
@@ -102,11 +102,11 @@
             <span class="text-xs text-surface-500">Sync: {{ syncStatus() }}</span>
             <app-language-selector />
 
-            <button pButton type="button" severity="secondary" text size="small" [attr.aria-label]="'keyboard.openShortcuts' | translate" (click)="shortcutService.openDialog()" pTooltip="{{ 'auth.shortcut' | translate }}" tooltipPosition="left">
+            <button pButton type="button" severity="secondary" text size="small" [attr.aria-label]="'keyboard.openShortcuts' | translate" (click)="shortcutService.openDialog()" [appShortcutTooltip]="'keyboard.openShortcutsHint' | translate" shortcutTooltipPosition="left">
               <svg pIcon="key"></svg>
             </button>
 
-            <button pButton type="button" severity="secondary" text size="small" [disabled]="loggingOut" [attr.aria-label]="'auth.logout' | translate" (click)="logout()"  pTooltip="{{ 'auth.logout' | translate }}" tooltipPosition="left">
+            <button pButton type="button" severity="secondary" text size="small" [disabled]="loggingOut" [attr.aria-label]="'auth.logout' | translate" (click)="logout()" [appShortcutTooltip]="'auth.logout' | translate" shortcutTooltipPosition="left">
               <svg pIcon="sign-out"></svg>
             </button>
           </div>

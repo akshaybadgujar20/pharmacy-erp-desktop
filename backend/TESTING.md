@@ -32,6 +32,12 @@ npm run test:persistence -- --testPathPatterns=stock-transfer-in-transit
 
 Browser UI smoke (login, counter, GRN, month-end) is **not** in this folder — from repo root: `npm run test:e2e:ui` (see [../TESTING.md](../TESTING.md)).
 
+**Sync integration:** set `SYNC_CLOUD_URL` to a running Spring `/api/sync` base or use the in-memory mock from `test/support/cloud-sync-mock.ts` (returns batch `/push` + `/pull` URLs). Optional: `SYNC_PHASE2_ENABLED=true` to include transactional outbox types in push/pull filter.
+
+```bash
+npm run test:integration -- --testPathPatterns=sync-run
+```
+
 ---
 
 ## Prerequisites

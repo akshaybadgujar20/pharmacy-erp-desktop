@@ -18,8 +18,11 @@ import { Sidebar } from '@primeicons/angular/sidebar';
 import { AuthService } from '../../core/services/auth.service';
 import { ElectronService } from '../../core/services/electron.service';
 import { SyncService } from '../../features/sync/sync.service';
+import { ActiveScreenPrintService } from '../../core/services/active-screen-print.service';
 import { ActiveScreenSaveService } from '../../core/services/active-screen-save.service';
+import { ActiveScreenSearchService } from '../../core/services/active-screen-search.service';
 import { KeyboardShortcutService } from '../../core/keyboard';
+import { ShortcutTooltipDirective } from '../../shared/keyboard';
 import { MedicineSearchDialogComponent } from '../../shared/components/medicine-search-dialog/medicine-search-dialog.component';
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { KeyboardShortcutsDialogComponent } from '../../shared/components/keyboard-shortcuts/keyboard-shortcuts-dialog.component';
@@ -57,6 +60,7 @@ interface NavGroup {
     LanguageSelectorComponent,
     MedicineSearchDialogComponent,
     Tooltip,
+    ShortcutTooltipDirective,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
@@ -66,6 +70,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly activePrint = inject(ActiveScreenPrintService);
   private readonly medicineSearchDialog = viewChild(MedicineSearchDialogComponent);
   private readonly syncService = inject(SyncService);
   private readonly electron = inject(ElectronService);
@@ -128,6 +134,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       this.medicineSearchDialog()?.open();
     });
     this.shortcutService.registerHandler('global.save', () => this.activeSave.save());
+    this.shortcutService.registerHandler('global.search', () => this.activeSearch.focus());
+    this.shortcutService.registerHandler('global.print', () => this.activePrint.print());
   }
 
   ngOnDestroy(): void {
@@ -139,12 +147,20 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     this.shortcutService.unregisterHandler('global.lookup');
     this.shortcutService.unregisterHandler('global.history');
     this.shortcutService.unregisterHandler('global.save');
+    this.shortcutService.unregisterHandler('global.search');
+    this.shortcutService.unregisterHandler('global.print');
   }
 
   private refreshSyncStatus(): void {
     this.syncService.latest().subscribe({
       next: (summary) => {
-        this.syncStatus.set(summary?.status ?? 'No runs yet');
+        const pushStatus = summary?.push?.status;
+        const pullStatus = summary?.pull?.status;
+        this.syncStatus.set(
+          pushStatus
+            ? `Push ${pushStatus}${pullStatus ? ` / Pull ${pullStatus}` : ''}`
+            : 'No runs yet',
+        );
       },
       error: () => this.syncStatus.set('Unknown'),
     });

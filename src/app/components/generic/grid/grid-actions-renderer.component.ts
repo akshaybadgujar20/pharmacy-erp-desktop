@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { ButtonModule } from 'primeng/button';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 import { GridActionConfig } from './types/grid-action.types';
 
 export interface GridActionsRendererContext<T> {
@@ -13,14 +14,16 @@ export interface GridActionsRendererContext<T> {
 @Component({
   selector: 'app-grid-actions-renderer',
   standalone: true,
-  imports: [ButtonModule],
+  imports: [ButtonModule, ShortcutTooltipDirective],
   template: `
     <div class="app-grid-actions">
       @for (action of visibleActions(); track action.id) {
         <p-button
           type="button"
           [icon]="action.icon"
-          [attr.title]="action.label"
+          [appShortcutTooltip]="action.label"
+          [shortcutId]="action.shortcutId"
+          shortcutTooltipPosition="left"
           [disabled]="isDisabled(action)"
           severity="secondary"
           [text]="true"

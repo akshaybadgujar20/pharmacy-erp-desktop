@@ -99,7 +99,8 @@
       "roles": "Roles",
       "permissions": "Permissions",
       "sessions": "User Sessions",
-      "changePassword": "Change password"
+      "changePassword": "Change password",
+      "changePin": "Change PIN"
     },
     "configuration": {
       "title": "Configuration",
@@ -138,6 +139,26 @@
     "signingIn": "Signing in…",
     "demoHint": "Demo: admin / admin",
     "loginFailed": "Login failed",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset password",
+    "sendResetCode": "Send verification code",
+    "resetOtp": "Verification code",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match",
+    "resetPassword": "Reset password",
+    "backToLogin": "Back to sign in",
+    "changeRequiredPinTitle": "Change required PIN",
+    "changeRequiredPasswordTitle": "Change required password",
+    "changePinTitle": "Change PIN",
+    "currentPassword": "Current password",
+    "currentPin": "Current PIN",
+    "newPin": "New PIN",
+    "updatePin": "Update PIN",
+    "updatePassword": "Update password",
+    "resetSuccessMessage": "Password reset successful. Sign in with your new password, then update your PIN when prompted.",
+    "passwordChangedSuccess": "Password updated. You can sign in now.",
+    "pinUpdated": "PIN updated.",
     "logout": "Log out",
     "shortcut": "Keyboard Shortcut",
     "defaultUser": "User"
@@ -156,6 +177,7 @@
     "helpTitle": "Keyboard Shortcuts",
     "helpHint": "Press ? or F1 anytime to open this dialog",
     "openShortcuts": "Keyboard shortcuts",
+    "openShortcutsHint": "Keyboard shortcuts (? or F1)",
     "change": "Change",
     "reset": "Reset",
     "resetAll": "Reset all to defaults",
@@ -181,7 +203,13 @@
       "sales": "Sales",
       "purchase": "Purchase",
       "inventory": "Inventory",
-      "masters": "Masters"
+      "masters": "Masters",
+      "party": "Party",
+      "finance": "Finance",
+      "security": "Security",
+      "configuration": "Configuration",
+      "prescription": "Prescription",
+      "pricing": "Pricing"
     }
   }
 }

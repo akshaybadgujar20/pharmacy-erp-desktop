@@ -11,6 +11,7 @@ export const LOYALTY_PROGRAM_TOOLBAR_CONFIG: ToolbarConfig = {
       label: 'Refresh',
       icon: 'pi pi-refresh',
       variant: 'outlined',
+      shortcutId: 'global.refresh',
     },
     {
       type: 'button',
@@ -18,6 +19,7 @@ export const LOYALTY_PROGRAM_TOOLBAR_CONFIG: ToolbarConfig = {
       label: 'New program',
       icon: 'pi pi-plus',
       severity: 'primary',
+      shortcutId: 'global.new',
       permission: 'LOYALTY:LOYALTY_PROGRAM:CREATE',
     },
   ],

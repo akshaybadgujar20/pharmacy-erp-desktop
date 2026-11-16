@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { LowerCasePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,10 +16,20 @@ import { PurchaseInvoiceItemsTabComponent } from './purchase-invoice-items-tab.c
 import { PurchaseInvoiceMatchSummary } from './purchase-invoice.models';
 import { PurchaseInvoiceService } from './purchase-invoice.service';
 
+
+import {
+  bindDetailScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenPrintService } from '../../../core/services/active-screen-print.service';
+import { ActiveScreenSaveService } from '../../../core/services/active-screen-save.service';
+import { ShortcutTooltipDirective } from '../../../shared/keyboard';
 @Component({
   selector: 'app-purchase-invoice-detail',
   standalone: true,
   imports: [
+    ShortcutTooltipDirective,
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
@@ -38,7 +41,12 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
   templateUrl: './purchase-invoice-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PurchaseInvoiceDetailComponent implements OnInit {
+export class PurchaseInvoiceDetailComponent implements OnInit, OnDestroy {
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSave = inject(ActiveScreenSaveService);
+  private readonly activePrint = inject(ActiveScreenPrintService);
+  private detailShortcutBinding?: ShortcutBinding;
+
   private readonly fb = inject(FormBuilder);
   private readonly purchaseInvoiceService = inject(PurchaseInvoiceService);
   private readonly route = inject(ActivatedRoute);
@@ -69,7 +77,22 @@ export class PurchaseInvoiceDetailComponent implements OnInit {
     remarks: [''],
   });
 
+  ngOnDestroy(): void {
+    this.detailShortcutBinding?.unregister();
+  }
+
   ngOnInit(): void {
+    this.detailShortcutBinding = bindDetailScreenShortcuts(
+      this.shortcuts,
+      this.activeSave,
+      this.activePrint,
+      {
+        save: () => this.save(),
+        delete: () => this.deleteRecord(),
+        cancel: () => this.goBack(),
+      },
+    );
+
     const invoiceId = this.route.snapshot.paramMap.get('invoiceId');
     if (invoiceId) {
       this.isNew.set(false);

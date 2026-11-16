@@ -3,7 +3,13 @@ export type ShortcutCategory =
   | 'sales'
   | 'purchase'
   | 'inventory'
-  | 'masters';
+  | 'masters'
+  | 'party'
+  | 'finance'
+  | 'security'
+  | 'configuration'
+  | 'prescription'
+  | 'pricing';
 
 export interface KeyBinding {
   key: string;

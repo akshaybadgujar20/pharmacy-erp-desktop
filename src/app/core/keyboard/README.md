@@ -8,73 +8,69 @@ Global keyboard shortcut registry for pharmacy ERP screens.
 src/app/core/keyboard/
 ```
 
-Dialog UI: `src/app/shared/components/keyboard-shortcuts/`
+Dialog UI: `src/app/shared/components/keyboard-shortcuts/`  
+Tooltips: `src/app/shared/keyboard/`
 
-## Usage
+## Active screen delegation
 
-### Register handlers in a feature component
+Shell (`main-layout`) wires global shortcuts to the active screen:
+
+| Shortcut id | Service |
+|-------------|---------|
+| `global.save` | `ActiveScreenSaveService.save()` |
+| `global.search` | `ActiveScreenSearchService.focus()` |
+| `global.print` | `ActiveScreenPrintService.print()` |
+
+List/detail screens register callbacks while they are active.
+
+## List screens
 
 ```typescript
-private readonly shortcuts = inject(KeyboardShortcutService);
+import { bindListScreenShortcuts, KeyboardShortcutService } from '../../core/keyboard';
+import { ActiveScreenSearchService } from '../../core/services/active-screen-search.service';
 
-ngOnInit() {
-  this.shortcuts.registerHandler('global.save', () => this.onSave());
-  this.shortcuts.registerHandler('global.refresh', () => this.onRefresh());
-}
+this.listBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+  refresh: () => this.load(),
+  create: () => this.onNew(),
+  focusSearch: () => this.grid()?.focusSearch(),
+});
 
 ngOnDestroy() {
-  this.shortcuts.unregisterHandler('global.save');
-  this.shortcuts.unregisterHandler('global.refresh');
+  this.listBinding?.unregister();
 }
 ```
 
-### Link toolbar buttons to shortcuts
+Set `shortcutId` on toolbar config items. `app-toolbar` shows inline `<kbd>` plus a tooltip.
+
+## Detail screens
 
 ```typescript
-{
-  type: 'button',
-  id: 'save',
-  label: 'Save',
-  icon: 'pi pi-save',
-  shortcutId: 'global.save',
-}
+import { bindDetailScreenShortcuts } from '../../core/keyboard';
+
+this.detailBinding = bindDetailScreenShortcuts(
+  this.shortcuts,
+  this.activeSave,
+  this.activePrint,
+  {
+    save: () => this.save(),
+    delete: () => this.deleteRecord(),
+    cancel: () => this.goBack(),
+    print: () => this.print(), // optional
+  },
+);
 ```
 
-`app-toolbar` renders a `<kbd>` chip with the resolved shortcut label.
+Use `appShortcutTooltip` on Save / Delete / Back buttons.
 
 ## Dialog access
 
-- Top-right keyboard button in the app shell header
+- Header keyboard button
 - `?` or `F1` from anywhere (except text inputs)
 
-Users can remap shortcuts in the dialog. Overrides persist in `localStorage` under `app-keyboard-shortcuts:overrides`.
+Overrides persist in `localStorage` under `app-keyboard-shortcuts:overrides`.
 
-## Backend sync (future)
+## Dispatch priority
 
-```typescript
-// After loading user settings from API
-shortcutService.loadBindings(serverOverrides);
-
-// When saving user settings
-const payload = shortcutService.exportBindings();
-```
-
-Handlers are never serialized — only key bindings.
-
-## Default shortcut ids
-
-| id | Default |
-|----|---------|
-| `global.search` | Ctrl+F |
-| `global.new` | Ctrl+N |
-| `global.save` | Ctrl+S |
-| `global.print` | Ctrl+P |
-| `global.delete` | Ctrl+D |
-| `global.refresh` | F5 |
-| `global.lookup` | F2 |
-| `global.history` | F4 |
-| `global.cancel` | Esc |
-| `sales.new` | F2 |
-| `sales.payment` | F8 |
+When multiple shortcut ids share the same key (e.g. `sales.new` and `global.lookup` on F2), the handler for the **domain-specific** id wins if it is registered on the active screen.
 
 Add new definitions in `keyboard-shortcut.constants.ts` and i18n keys under `keyboard.*`.

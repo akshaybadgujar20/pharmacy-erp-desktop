@@ -59,4 +59,28 @@ body {
   gap: 0.5rem;
   margin-top: 1rem;
 }
+
+.shortcut-tooltip,
+.app-shortcut-tooltip .p-tooltip-text .shortcut-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shortcut-tooltip__label {
+  font-size: 0.85rem;
+}
+
+.shortcut-tooltip__key {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--p-content-border-color, #d1d5db);
+  border-radius: 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  font-weight: 600;
+  background: var(--p-content-background, #fff);
+  color: var(--p-text-muted-color, #6b7280);
+}
 /* You can add global styles to this file, and also import other style files */

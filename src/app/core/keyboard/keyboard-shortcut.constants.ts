@@ -75,4 +75,10 @@ export const SHORTCUT_CATEGORY_ORDER: ShortcutDefinition['category'][] = [
   'purchase',
   'inventory',
   'masters',
+  'party',
+  'finance',
+  'security',
+  'configuration',
+  'prescription',
+  'pricing',
 ];

@@ -2,9 +2,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  OnDestroy,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../core/keyboard';
+import { ActiveScreenSearchService } from '../../core/services/active-screen-search.service';
 import { Router } from '@angular/router';
 import { AppGridComponent } from '../../components/generic/grid';
 import { AppToolbarComponent } from '../../components/generic/toolbar';
@@ -36,9 +44,13 @@ import { LoyaltyProgramRow, LoyaltyProgramService } from './loyalty-program.serv
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoyaltyProgramListComponent implements OnInit {
+export class LoyaltyProgramListComponent implements OnInit, OnDestroy {
   private readonly loyaltyPrograms = inject(LoyaltyProgramService);
   private readonly router = inject(Router);
+  private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
 
   readonly toolbarConfig = LOYALTY_PROGRAM_TOOLBAR_CONFIG;
   readonly gridConfig = LOYALTY_PROGRAM_GRID_CONFIG;
@@ -49,7 +61,16 @@ export class LoyaltyProgramListComponent implements OnInit {
   readonly pageSize = signal(25);
 
   ngOnInit(): void {
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      create: () => this.router.navigate(['/loyalty/programs/new']),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.listShortcutBinding?.unregister();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

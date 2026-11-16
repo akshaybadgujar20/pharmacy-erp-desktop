@@ -98,4 +98,23 @@ describe('KeyboardShortcutService', () => {
     service.updateBinding('global.save', { key: 'b', ctrl: true });
     expect(service.bindingsChanged()).toBe(before + 1);
   });
+
+  it('prefers domain-specific handler when bindings collide on F2', () => {
+    const lookup = jest.fn();
+    const salesNew = jest.fn();
+    service.registerHandler('global.lookup', lookup);
+    service.registerHandler('sales.new', salesNew);
+
+    const event = new KeyboardEvent('keydown', { key: 'F2', bubbles: true });
+    document.dispatchEvent(event);
+
+    expect(salesNew).toHaveBeenCalled();
+    expect(lookup).not.toHaveBeenCalled();
+
+    service.unregisterHandler('sales.new');
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'F2', bubbles: true }),
+    );
+    expect(lookup).toHaveBeenCalled();
+  });
 });

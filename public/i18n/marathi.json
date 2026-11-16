@@ -68,6 +68,7 @@
     "helpTitle": "कीबोर्ड शॉर्टकट",
     "helpHint": "हा डायलॉग उघडण्यासाठी कधीही ? किंवा F1 दाबा",
     "openShortcuts": "कीबोर्ड शॉर्टकट",
+    "openShortcutsHint": "कीबोर्ड शॉर्टकट (? किंवा F1)",
     "change": "बदला",
     "reset": "रीसेट",
     "resetAll": "सर्व डीफॉल्टवर रीसेट करा",
@@ -93,7 +94,13 @@
       "sales": "विक्री",
       "purchase": "खरेदी",
       "inventory": "इन्व्हेंटरी",
-      "masters": "मास्टर्स"
+      "masters": "मास्टर्स",
+      "party": "पार्टी",
+      "finance": "वित्त",
+      "security": "सुरक्षा",
+      "configuration": "कॉन्फिगरेशन",
+      "prescription": "प्रिस्क्रिप्शन",
+      "pricing": "किंमत"
     }
   }
 }

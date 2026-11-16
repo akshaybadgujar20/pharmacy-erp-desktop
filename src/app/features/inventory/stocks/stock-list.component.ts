@@ -1,18 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import { Router, RouterLink } from '@angular/router';
 import { GridActionEvent } from '../../../components/generic/grid/types/grid-events.types';
 import { AppGridComponent } from '../../../components/generic/grid';
 import { AppToolbarComponent } from '../../../components/generic/toolbar';
 import { GridFilterChange, GridPageChange } from '../../../components/generic/grid/types/grid-events.types';
 import { ToolbarActionEvent } from '../../../components/generic/toolbar/types/toolbar-events.types';
-import { KeyboardShortcutService } from '../../../core/keyboard';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../../core/keyboard';
+import { ActiveScreenSearchService } from '../../../core/services/active-screen-search.service';
+
 import { toListParams } from '../../../shared/utils/list-query.util';
 import { STOCK_GRID_CONFIG } from './stock-grid.config';
 import { Stock } from './stock.models';
@@ -33,6 +33,9 @@ export class StockListComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly electron = inject(ElectronService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
   private unsubscribeBarcode?: () => void;
 
   readonly fefoPreview = signal<string[]>([]);
@@ -49,7 +52,11 @@ export class StockListComponent implements OnInit, OnDestroy {
   readonly search = signal('');
 
   ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
+
     this.unsubscribeBarcode = this.electron.onBarcodeScan((code) => {
       this.search.set(code);
       this.page.set(1);
@@ -59,7 +66,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
+    this.listShortcutBinding?.unregister();
     this.unsubscribeBarcode?.();
   }
 

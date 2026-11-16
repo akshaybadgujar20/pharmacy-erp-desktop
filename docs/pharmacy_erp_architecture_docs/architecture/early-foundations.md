@@ -95,6 +95,21 @@ LOG_LEVEL=info
 
 Never commit real `JWT_SECRET` values. Generate a cryptographically random string (32+ bytes).
 
+### SMTP (forgot-password OTP email)
+
+Configure in backend environment (not committed):
+
+| Variable | Description |
+|----------|-------------|
+| `SMTP_HOST` | SMTP server hostname |
+| `SMTP_PORT` | Port (default `587`) |
+| `SMTP_SECURE` | `true` for TLS on port 465 |
+| `SMTP_USER` | Auth username (optional) |
+| `SMTP_PASS` | Auth password (optional) |
+| `SMTP_FROM` | From address (required with host) |
+
+Forgot-password OTP is sent only when both `SMTP_HOST` and `SMTP_FROM` are set.
+
 ---
 
 ## Authentication configuration
@@ -115,6 +130,8 @@ Code: `backend/src/auth/constants/auth.constants.ts`
 |--------|------|------|-------------|
 | `POST` | `/auth/login` | Public | Username/password → access + refresh tokens |
 | `POST` | `/auth/refresh` | Public | Refresh token → new tokens |
+| `POST` | `/auth/forgot-password/request` | Public | Username → email OTP (generic response) |
+| `POST` | `/auth/forgot-password/confirm` | Public | Username + OTP + new password |
 | `POST` | `/auth/logout` | JWT | Deactivates session |
 | `GET` | `/auth/me` | JWT | Current user profile |
 
@@ -247,7 +264,10 @@ When editing frontend code, follow [01-coding-principles.mdc](../../../.cursor/r
 | `authInterceptor` | Attaches Bearer + `x-device-id` |
 | `errorInterceptor` | Toastr errors; 401 → clear session → `/login` |
 | `authGuard` | Protects routes (e.g. dashboard) |
-| `KeyboardShortcutService` | Global shortcuts + F1/? help overlay |
+| `KeyboardShortcutService` | Global shortcuts, remapping, F1/? help overlay |
+| `ActiveScreenSaveService` | Active detail/counter `Ctrl+S` handler |
+| `ActiveScreenSearchService` | Active list `Ctrl+F` → grid search focus |
+| `ActiveScreenPrintService` | Active screen `Ctrl+P` print hook |
 
 i18n: `@ngx-translate/core` v18, `public/i18n/en.json`, default locale `en-IN`.
 
@@ -294,18 +314,27 @@ Every enqueue should include entity `version` in the payload envelope. Worker/sy
 
 ---
 
-## Keyboard shortcuts (placeholders)
+## Keyboard shortcuts
 
-Registered in `KeyboardShortcutService` (handlers are no-ops until features exist):
+Registry: `src/app/core/keyboard/` (`KeyboardShortcutService`). Help UI: `src/app/shared/components/keyboard-shortcuts/`. Tooltips: `appShortcutTooltip` in `src/app/shared/keyboard/`.
 
-| Key | Intent |
-|-----|--------|
-| F2 | New sale |
-| F4 | Search medicine |
-| F8 | Payment |
-| Ctrl+S | Save |
+List screens use `bindListScreenShortcuts`; detail screens use `bindDetailScreenShortcuts` (see `src/app/core/keyboard/README.md`). Shell delegates `Ctrl+S`, `Ctrl+F`, and `Ctrl+P` through the active-screen services.
+
+| Key | Default action |
+|-----|----------------|
+| Ctrl+F | Focus grid search on the active list |
+| Ctrl+N | New record (list screens) |
+| Ctrl+S | Save (active detail/counter via `ActiveScreenSaveService`) |
+| Ctrl+D | Delete (active detail) |
+| Ctrl+P | Print (when the screen registers a handler) |
+| F5 | Refresh list |
+| F2 | Medicine lookup (shell); **sales.new** on sales list/counter when registered |
+| F4 | History / lookup (shell) |
+| F8 | Payments (counter) |
 | Esc | Cancel / close help |
 | F1 / ? | Toggle shortcut help overlay |
+
+Toolbar buttons may set `shortcutId`; `app-toolbar` shows inline `<kbd>` labels and hover tooltips. Overrides persist in `localStorage` (`app-keyboard-shortcuts:overrides`).
 
 ---
 

@@ -1,12 +1,12 @@
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { KeyboardShortcutService } from '../../core/keyboard';
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../core/keyboard';
+import { ActiveScreenSearchService } from '../../core/services/active-screen-search.service';
+
 import { AppGridComponent } from '../../components/generic/grid';
 import { AppToolbarComponent } from '../../components/generic/toolbar';
 import {
@@ -65,6 +65,9 @@ import { AUDIT_LOG_TOOLBAR_CONFIG } from '../audit/audit-log-toolbar.config';
 export class SyncConflictListComponent implements OnInit, OnDestroy {
   private readonly conflicts = inject(SyncConflictAdminService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
   private readonly messages = inject(MessageService);
 
   readonly toolbarConfig = AUDIT_LOG_TOOLBAR_CONFIG;
@@ -80,12 +83,16 @@ export class SyncConflictListComponent implements OnInit, OnDestroy {
   readonly detail = signal<SyncConflictDetail | null>(null);
 
   ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
+
     this.load();
   }
 
   ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
+    this.listShortcutBinding?.unregister();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

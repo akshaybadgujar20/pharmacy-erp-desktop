@@ -178,19 +178,51 @@ export class KeyboardShortcutService {
       return;
     }
 
-    for (const definition of this.definitions.values()) {
-      const binding = this.resolveBinding(definition);
-      if (this.matches(event, binding)) {
-        event.preventDefault();
-        const handler = this.handlers.get(definition.id);
-        if (handler) {
-          handler();
-        } else if (definition.id === 'global.cancel') {
-          this.closeDialog();
-        }
-        return;
-      }
+    const matched = this.resolveMatchedShortcut(event);
+    if (!matched) {
+      return;
     }
+
+    event.preventDefault();
+    const handler = this.handlers.get(matched);
+    if (handler) {
+      handler();
+    } else if (matched === 'global.cancel') {
+      this.closeDialog();
+    }
+  }
+
+  private resolveMatchedShortcut(event: KeyboardEvent): string | null {
+    const candidates: string[] = [];
+
+    for (const definition of DEFAULT_SHORTCUT_DEFINITIONS) {
+      const binding = this.resolveBinding(definition);
+      if (!this.matches(event, binding)) {
+        continue;
+      }
+      if (!this.handlers.has(definition.id) && definition.id !== 'global.cancel') {
+        continue;
+      }
+      candidates.push(definition.id);
+    }
+
+    if (candidates.length === 0) {
+      return null;
+    }
+
+    candidates.sort((a, b) => this.shortcutPriority(b) - this.shortcutPriority(a));
+    return candidates[0];
+  }
+
+  private shortcutPriority(id: string): number {
+    if (id.startsWith('global.')) {
+      return 0;
+    }
+    const category = id.split('.')[0] ?? '';
+    const categoryOrder = SHORTCUT_CATEGORY_ORDER.indexOf(
+      category as ShortcutDefinition['category'],
+    );
+    return 10 + (categoryOrder >= 0 ? categoryOrder : 0);
   }
 
   private matches(event: KeyboardEvent, binding: KeyBinding): boolean {

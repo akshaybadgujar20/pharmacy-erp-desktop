@@ -1,14 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { KeyboardShortcutService } from '../../core/keyboard';
+import {
+  bindListScreenShortcuts,
+  KeyboardShortcutService,
+  type ShortcutBinding,
+} from '../../core/keyboard';
+import { ActiveScreenSearchService } from '../../core/services/active-screen-search.service';
+
 import { AppGridComponent } from '../../components/generic/grid';
 import { AppToolbarComponent } from '../../components/generic/toolbar';
 import {
@@ -31,6 +31,9 @@ import { ChangeHistoryRow, ChangeHistoryService } from './change-history.service
 export class ChangeHistoryListComponent implements OnInit, OnDestroy {
   private readonly changeHistory = inject(ChangeHistoryService);
   private readonly shortcuts = inject(KeyboardShortcutService);
+  private readonly activeSearch = inject(ActiveScreenSearchService);
+  private readonly grid = viewChild(AppGridComponent);
+  private listShortcutBinding?: ShortcutBinding;
 
   readonly toolbarConfig = AUDIT_LOG_TOOLBAR_CONFIG;
   readonly gridConfig = CHANGE_HISTORY_GRID_CONFIG;
@@ -45,12 +48,16 @@ export class ChangeHistoryListComponent implements OnInit, OnDestroy {
   readonly entityId = signal('');
 
   ngOnInit(): void {
-    this.shortcuts.registerHandler('global.refresh', () => this.load());
+    this.listShortcutBinding = bindListScreenShortcuts(this.shortcuts, this.activeSearch, {
+      refresh: () => this.load(),
+      focusSearch: () => this.grid()?.focusSearch(),
+    });
+
     this.load();
   }
 
   ngOnDestroy(): void {
-    this.shortcuts.unregisterHandler('global.refresh');
+    this.listShortcutBinding?.unregister();
   }
 
   onToolbarAction(event: ToolbarActionEvent): void {

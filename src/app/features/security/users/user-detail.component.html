@@ -36,7 +36,7 @@
           <label for="userMustChangePassword">Must Change Password</label>
         </div>
         <div class="detail-form__actions">
-          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid">
+          <button pButton type="submit" severity="primary" [disabled]="saving() || form.invalid" appShortcutTooltip="Save" shortcutId="global.save" shortcutTooltipPosition="bottom">
             Save
           </button>
           @if (!isNew()) {
@@ -58,7 +58,7 @@
             >
               Unlock
             </button>
-            <button
+            <button appShortcutTooltip="Delete" shortcutId="global.delete" shortcutTooltipPosition="bottom"
               pButton
               type="button"
               severity="danger"
@@ -68,7 +68,7 @@
               Delete
             </button>
           }
-          <button pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
+          <button appShortcutTooltip="Back" shortcutId="global.cancel" shortcutTooltipPosition="bottom" pButton type="button" severity="secondary" variant="outlined" (click)="goBack()">
             Back
           </button>
         </div>
