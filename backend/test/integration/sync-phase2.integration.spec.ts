@@ -56,6 +56,10 @@ describe('Sync phase 2 (integration)', () => {
       return;
     }
 
+    await prisma.client.deviceSyncState.updateMany({
+      data: { lastPullCursor: null },
+    });
+
     const remoteName = `${tax.taxName} (cloud)`;
     addCloudSyncRemotePullRecord({
       entityType: 'Tax',
@@ -93,12 +97,12 @@ describe('Sync phase 2 (integration)', () => {
       pull: { recordsDownloaded: number; status: string };
     }>;
     expect(body.success).toBe(true);
-    expect(body.data?.pull.recordsDownloaded).toBeGreaterThanOrEqual(1);
 
     const updated = await prisma.client.tax.findFirst({
       where: { uuid: tax.uuid },
     });
     expect(updated?.taxName).toBe(remoteName);
+    expect(body.data?.pull.recordsDownloaded).toBeGreaterThanOrEqual(1);
 
     await mock.close();
   });
