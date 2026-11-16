@@ -89,7 +89,7 @@ Triggers: app start, interval (`SYNC_INTERVAL_MINUTES` default 15), manual sync,
 | Medicine master | Prefer server authority |
 | Masters generally | Version check; optimistic lock |
 
-**Worker status:** **Push stub shipped** — `POST /sync/runs` drains pending outbox to `SYNC_CLOUD_URL`; Electron schedules runs via `SYNC_INTERVAL_MINUTES`. Pull/apply and production cloud service remain Planned.
+**Worker status:** `POST /sync/runs` runs **batch push** then **pull/apply**. Phase 1 (masters + party) is always enabled. Phase 2 (pricing, prescriptions, purchase, sales, inventory, finance, loyalty) is **opt-in** via `SYNC_PHASE2_ENABLED=true` until staging sign-off. Nest forwards the caller JWT to external Spring + PostgreSQL per [`sync-cloud-api.md`](../architecture/sync-cloud-api.md). Per-device pull cursors live in `DeviceSyncState`. Electron still schedules via `SYNC_INTERVAL_MINUTES`.
 
 ---
 

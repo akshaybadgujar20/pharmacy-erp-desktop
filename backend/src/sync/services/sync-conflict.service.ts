@@ -13,7 +13,10 @@ import { PrismaService } from '../../prisma.service';
 import {
   SyncConflictAuditEntityType,
   SyncConflictResolutionStatus,
+  SyncConflictResolutionStrategy,
 } from '../constants/sync.constants';
+import { SyncApplyService } from './sync-apply.service';
+import { extractApplyData } from '../apply/sync-apply.util';
 import { ResolveSyncConflictDto } from '../dto/resolve-sync-conflict.dto';
 import { SyncConflictListQueryDto } from '../dto/sync-conflict-list-query.dto';
 import { toSyncConflictResponse } from '../mappers/sync-conflict.mapper';
@@ -29,6 +32,7 @@ export class SyncConflictService {
     private readonly prisma: PrismaService,
     private readonly unitOfWork: UnitOfWorkService,
     private readonly auditService: AuditService,
+    private readonly syncApply: SyncApplyService,
   ) {}
 
   async list(query: SyncConflictListQueryDto) {
@@ -98,6 +102,38 @@ export class SyncConflictService {
             resolutionStatus: existing.resolutionStatus,
           },
         );
+      }
+
+      if (
+        dto.resolutionStrategy === SyncConflictResolutionStrategy.SERVER_WINS
+      ) {
+        const serverData = extractApplyData(existing.serverPayload);
+        const entityVersion =
+          typeof serverData.version === 'string' ||
+          typeof serverData.version === 'number'
+            ? String(serverData.version)
+            : existing.version.toString();
+        const outcome = await this.syncApply.applyPullRecord(
+          tx,
+          {
+            entityType: existing.entityType,
+            entityUuid: existing.entityUuid,
+            operation: 'UPDATE',
+            entityVersion,
+            originDeviceId: 'cloud',
+            payload: existing.serverPayload,
+          },
+          'cloud',
+        );
+        if (outcome.kind !== 'applied') {
+          throwConflict(
+            ErrorCode.BAD_REQUEST,
+            outcome.kind === 'conflict'
+              ? outcome.message
+              : 'Server payload could not be applied',
+            { id: id.toString() },
+          );
+        }
       }
 
       const now = BigInt(Date.now());

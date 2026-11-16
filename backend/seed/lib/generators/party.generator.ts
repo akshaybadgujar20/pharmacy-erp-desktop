@@ -156,7 +156,24 @@ export async function seedParties(
         },
       });
 
-      if (faker.number.int({ min: 0, max: 1 }) === 1) {
+      if (spec.roleType === 'EMPLOYEE') {
+        const staffEmail =
+          i === 0
+            ? 'admin@apexpharmacy.in'
+            : `staff${i + 1}@apexpharmacy.in`;
+        await prisma.partyContact.create({
+          data: {
+            uuid: uuid(),
+            partyId: party.id,
+            contactType: 'EMAIL',
+            contactValue: staffEmail,
+            isPrimary: true,
+            isActive: true,
+            createdAt: BigInt(Date.now()),
+            updatedAt: BigInt(Date.now()),
+          },
+        });
+      } else if (faker.number.int({ min: 0, max: 1 }) === 1) {
         await prisma.partyContact.create({
           data: {
             uuid: uuid(),

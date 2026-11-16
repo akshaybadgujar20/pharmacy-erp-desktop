@@ -32,7 +32,10 @@
 | `AUTH_ACCOUNT_LOCKED` | Too many failed logins |
 | `AUTH_SESSION_EXPIRED` | Refresh token invalid or expired |
 | `AUTH_PERMISSION_DENIED` | User lacks required permission |
-| `AUTH_MUST_CHANGE_PASSWORD` | Login blocked until password changed |
+| `AUTH_MUST_CHANGE_PASSWORD` | Login blocked until password changed; also PIN login when `mustChangePin` |
+| `AUTH_RESET_OTP_INVALID` | Forgot-password OTP wrong or too many attempts |
+| `AUTH_RESET_OTP_EXPIRED` | Forgot-password OTP past TTL |
+| `AUTH_RESET_EMAIL_NOT_CONFIGURED` | SMTP not configured when mail send is required |
 | `INVALID_CURRENT_PASSWORD` | Change-password with wrong current password |
 | `USER_NOT_FOUND` | Unknown user id |
 | `USERNAME_ALREADY_EXISTS` | Duplicate username on create |

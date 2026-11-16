@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { PrismaService } from 'src/prisma.service';
@@ -60,6 +61,66 @@ describe('Auth (e2e)', () => {
       .post('/auth/logout')
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(201);
+  });
+
+  it('POST /auth/forgot-password/request returns generic success', async () => {
+    return request(app.getHttpServer())
+      .post('/auth/forgot-password/request')
+      .send({ username: 'admin' })
+      .expect(201)
+      .expect((res) => {
+        const body = res.body as ApiEnvelope<{ message: string }>;
+        expect(body.success).toBe(true);
+        expect(body.data?.message).toContain('If an account exists');
+      });
+  });
+
+  it('POST /auth/forgot-password/confirm resets password with valid otp', async () => {
+    const user = await prisma.client.user.findFirst({
+      where: { username: 'admin', deletedAt: null },
+    });
+    if (!user) {
+      throw new Error('admin user not found in seed data');
+    }
+
+    const otp = '654321';
+    const otpHash = bcrypt.hashSync(otp, 10);
+    const now = BigInt(Date.now());
+
+    await prisma.client.passwordResetOtp.deleteMany({
+      where: { userId: user.id },
+    });
+
+    await prisma.client.passwordResetOtp.create({
+      data: {
+        userId: user.id,
+        otpHash,
+        expiresAt: now + 600_000n,
+        createdAt: now,
+      },
+    });
+
+    await request(app.getHttpServer())
+      .post('/auth/forgot-password/confirm')
+      .send({
+        username: 'admin',
+        otp,
+        newPassword: 'ResetPass1',
+      })
+      .expect(201);
+
+    const accessToken = await loginAs(app, {
+      username: 'admin',
+      password: 'ResetPass1',
+    });
+    expect(accessToken).toBeTruthy();
+
+    const me = await request(app.getHttpServer())
+      .get('/auth/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    const meBody = me.body as ApiEnvelope<{ mustChangePin: boolean }>;
+    expect(meBody.data?.mustChangePin).toBe(true);
   });
 
   it('GET /settings returns 403 for cashier without settings permission', async () => {

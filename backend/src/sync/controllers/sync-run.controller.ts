@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Headers, Post } from '@nestjs/common';
 import { RequirePermissions } from '../../auth/decorators/require-permissions.decorator';
 import { SyncRunService } from '../services/sync-run.service';
 
@@ -8,8 +8,8 @@ export class SyncRunController {
 
   @Post()
   @RequirePermissions('SYNC:SYNC:EXECUTE')
-  run() {
-    return this.syncRunService.runPushAndPull();
+  run(@Headers('authorization') authorization?: string) {
+    return this.syncRunService.runPushAndPull(authorization);
   }
 
   @Get('latest')

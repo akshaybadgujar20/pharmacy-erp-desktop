@@ -58,23 +58,26 @@ Transactional reports use JWT **branch** scope and optional `fromDate` / `toDate
 
 ---
 
-## Phase 3 — Sync push worker (stub)
+## Phase 3 — Sync push / pull (Nest client, Phase 1 masters + party)
 
 ### Backend
 
-- [`SyncRunService`](../../../backend/src/sync/services/sync-run.service.ts) — drains `PENDING` outbox for current `deviceId`, POST to `SYNC_CLOUD_URL`, writes `SyncLog`.
-- `POST /sync/runs` — permission `SYNC:SYNC:EXECUTE` (seed code `SYNC_RUN`).
+- [`SyncRunService`](../../../backend/src/sync/services/sync-run.service.ts) — batch push + pull; [`SyncCloudClient`](../../../backend/src/sync/cloud/sync-cloud.client.ts); [`SyncApplyService`](../../../backend/src/sync/services/sync-apply.service.ts); [`DeviceSyncState`](../../../backend/prisma/synchronization/device-sync-state.prisma).
+- `POST /sync/runs` — forwards `Authorization` to cloud; permission `SYNC:SYNC:EXECUTE` (`SYNC_RUN`).
 - `GET /sync/runs/latest` — last session for device (`SYNC:SYNC_LOG:READ`).
+- HTTP contract for Spring team: [sync-cloud-api.md](./sync-cloud-api.md).
 
 **Environment**
 
 | Variable | Purpose |
 |----------|---------|
-| `SYNC_CLOUD_URL` | HTTP endpoint receiving JSON outbox payloads (required for run) |
-| `SYNC_BATCH_SIZE` | Max rows per run (default 50, cap 200) |
+| `SYNC_CLOUD_URL` | Base URL through `/api/sync` (e.g. `https://host/api/sync`) |
+| `SYNC_BATCH_SIZE` | Max outbox rows per push (default 50, cap 200) |
+| `SYNC_PULL_LIMIT` | Pull page size (default 50) |
+| `SYNC_MAX_PULL_PAGES` | Max pull pages per run (default 10) |
 | `SYNC_INTERVAL_MINUTES` | Electron scheduler interval (default 15) |
 
-**Not implemented:** pull delta, apply remote changes, conflict payload merge (resolve stays metadata-only per ADR-138).
+**Not implemented:** transactional outbox types; conflict resolve applying payloads (ADR-138); cloud service in this repo.
 
 ### Electron
 

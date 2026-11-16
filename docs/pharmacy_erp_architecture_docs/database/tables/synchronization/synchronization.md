@@ -43,6 +43,7 @@ flowchart TB
 - [outbox](#outbox) — transactional outbox for pending sync events.
 - [sync log](#synclog) — synchronization session audit log.
 - [sync conflict](#syncconflict) — data conflict resolution queue.
+- [device sync state](#devicesyncstate) — per-device pull cursor for incremental cloud pull.
 
 ---
 
@@ -175,6 +176,18 @@ Cloud API (Spring Boot + JPA + PostgreSQL)
 - The Synchronization Service polls pending records ordered by `sequenceNo`.
 - Failed records remain until successfully synchronized or manually resolved.
 - Supports offline-first architecture with SQLite clients and PostgreSQL cloud servers.
+
+---
+
+## DeviceSyncState
+
+> Prisma model: `backend/prisma/synchronization/device-sync-state.prisma` (`DeviceSyncState`)
+
+## Purpose
+
+Stores the **last successful pull cursor** per `deviceId` + `branchId` pair so incremental cloud pulls do not re-download the full changelog. Updated only when a pull page completes with zero apply failures (see `SyncRunService`).
+
+Key fields: `lastPullCursor`, `lastPullAt`, `lastPushAt`.
 
 ---
 

@@ -45,6 +45,10 @@
       </label>
     }
 
+    @if (successMessage) {
+      <p class="success">{{ successMessage }}</p>
+    }
+
     @if (errorMessage) {
       <p class="error">{{ errorMessage }}</p>
     }
@@ -58,6 +62,10 @@
       <button pButton iconOnly [variant]="passwordVariant" (click)="togglePasswordButton()"><span class="material-icons">dialpad</span></button>
       <button pButton iconOnly [variant]="dialpadVariant" (click)="toggleDialpadButton()"><span class="material-icons">password</span></button>
     </div>
+
+    <p class="forgot-link">
+      <a routerLink="/forgot-password">{{ 'auth.forgotPassword' | translate }}</a>
+    </p>
 
     <p class="hint">{{ 'auth.demoHint' | translate }}</p>
   </form>

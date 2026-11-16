@@ -84,6 +84,21 @@ Every HTTP request (except login/refresh):
 
 Refresh token (7-day session) exchanges for new access + refresh tokens without re-entering password.
 
+The Angular client retries once on `AUTH_SESSION_EXPIRED` via `refreshInterceptor`, then updates the access token in `TokenStorageService`.
+
+### Forgot password (email OTP)
+
+1. User submits username at `/forgot-password` → `POST /auth/forgot-password/request` (always returns a generic message).
+2. Backend resolves **User → Employee → Party primary EMAIL** contact and emails a 6-digit OTP when SMTP is configured.
+3. User confirms OTP + new password → `POST /auth/forgot-password/confirm`; sessions invalidated; `mustChangePin` set so PIN must be reset after password login.
+
+### Forced credential change (self-service)
+
+| Flag | Blocked login | Public UI |
+|------|---------------|-----------|
+| `mustChangePassword` | Password login | `/change-required-password` |
+| `mustChangePin` | PIN login only | `/change-required-pin`; after password login → `/security/change-pin` |
+
 ---
 
 ## Rules and variations

@@ -30,8 +30,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             clientError.code === 'UNAUTHORIZED' ||
             clientError.code === 'AUTH_SESSION_EXPIRED'
           ) {
-            authService.clearSession();
-            router.navigate(['/login']);
+            if (!req.headers.has('X-Auth-Refresh-Retry')) {
+              authService.clearSession();
+              router.navigate(['/login']);
+            }
           } else {
             notificationService.showApiError(clientError);
           }

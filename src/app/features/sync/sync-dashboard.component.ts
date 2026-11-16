@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { resolveApiErrorMessage } from '../../core/utils/api-error-message.util';
-import { SyncRunSummary, SyncService } from './sync.service';
+import { SyncLatestRunResponse, SyncRunResult, SyncService } from './sync.service';
 
 @Component({
   selector: 'app-sync-dashboard',
@@ -10,12 +10,19 @@ import { SyncRunSummary, SyncService } from './sync.service';
   template: `
     <section class="sync-dashboard">
       <h2>Synchronization</h2>
-      <p>Push pending outbox changes to the configured cloud endpoint.</p>
+      <p>Push local outbox changes to the cloud, then pull and apply remote updates.</p>
       <button pButton type="button" label="Sync now" (click)="runSync()" [loading]="running()"></button>
       @if (lastRun()) {
         <p>
-          Last run: {{ lastRun()?.status }} — uploaded {{ lastRun()?.recordsUploaded }},
-          failed {{ lastRun()?.failedRecords }}
+          Push: {{ lastRun()?.push?.status }} — uploaded
+          {{ lastRun()?.push?.recordsUploaded }}, failed {{ lastRun()?.push?.failedRecords }},
+          conflicts {{ lastRun()?.push?.conflictsDetected ?? 0 }}
+        </p>
+        <p>
+          Pull: {{ lastRun()?.pull?.status }} — downloaded
+          {{ lastRun()?.pull?.recordsDownloaded ?? 0 }}, failed
+          {{ lastRun()?.pull?.failedRecords ?? 0 }}, conflicts
+          {{ lastRun()?.pull?.conflictsDetected ?? 0 }}
         </p>
       }
       @if (errorMessage()) {
@@ -29,7 +36,7 @@ export class SyncDashboardComponent implements OnInit {
   private readonly syncService = inject(SyncService);
 
   readonly running = signal(false);
-  readonly lastRun = signal<SyncRunSummary | null>(null);
+  readonly lastRun = signal<SyncLatestRunResponse | null>(null);
   readonly errorMessage = signal('');
 
   ngOnInit(): void {
@@ -45,8 +52,25 @@ export class SyncDashboardComponent implements OnInit {
     this.running.set(true);
     this.errorMessage.set('');
     this.syncService.runNow().subscribe({
-      next: (summary) => {
-        this.lastRun.set(summary);
+      next: (summary: SyncRunResult) => {
+        this.lastRun.set({
+          push: {
+            syncLogId: summary.push.syncLogId,
+            recordsUploaded: summary.push.recordsUploaded,
+            recordsDownloaded: 0,
+            failedRecords: summary.push.failedRecords,
+            conflictsDetected: summary.push.conflictsDetected,
+            status: summary.push.status,
+          },
+          pull: {
+            syncLogId: summary.pull.syncLogId,
+            recordsUploaded: 0,
+            recordsDownloaded: summary.pull.recordsDownloaded,
+            failedRecords: summary.pull.failedRecords,
+            conflictsDetected: summary.pull.conflictsDetected,
+            status: summary.pull.status,
+          },
+        });
         this.running.set(false);
       },
       error: (error) => {

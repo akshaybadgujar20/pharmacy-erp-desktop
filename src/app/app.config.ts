@@ -12,6 +12,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { refreshInterceptor } from './core/interceptors/refresh.interceptor';
 import { routes } from './app.routes';
 
 registerLocaleData(localeEnIn);
@@ -21,7 +22,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
-    provideHttpClient(withXhr(), withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(
+      withXhr(),
+      withInterceptors([authInterceptor, errorInterceptor, refreshInterceptor]),
+    ),
     providePrimeNG({
       license: 'eyJpZCI6IjQ0OWVhMmFlLTE0YzYtNGJmMy05YWRkLTdkMGQwNWQzMTc3YyIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODg0MzUzNTksImV4cCI6MTgxOTk3MTM1OX0.o3kcNwc9vXJp8jrhJHbEjAD4bVyq_Mof_cR4Kp9ZowYt9H2PzQgR3fZsEcAN69EK6SsRcflToocZ0XT19-dOAQ',
       theme: {

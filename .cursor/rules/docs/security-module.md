@@ -13,7 +13,7 @@ Implementation-grounded reference for `backend/src/security/`. Auth endpoints re
 | **Controllers** | 7 (4 top-level + 3 nested junction) |
 | **Services** | 7 |
 | **Exports** | `UserService` |
-| **Auth split** | `auth/` — login, logout, refresh, me, change-password, change-required-password |
+| **Auth split** | `auth/` — login, logout, refresh, me, PIN/password change, forgot-password OTP email |
 
 ---
 
@@ -184,7 +184,18 @@ List supports optional `userId`, `branchId`, `isActive`, `loginFrom`, `loginTo` 
 - Unit/persistence/e2e tests
 - Angular / Electron API client types
 - MFA, password complexity policy settings
-- Self-service user profile beyond change-password
+- SMS / magic-link password reset (email OTP via `ForgotPasswordService` is implemented)
+
+### Auth API (in `backend/src/auth/`, not security module)
+
+| Method | Path | Notes |
+|--------|------|-------|
+| POST | `/auth/forgot-password/request` | Public; username → employee party email OTP |
+| POST | `/auth/forgot-password/confirm` | Public; sets `mustChangePin` on success |
+| POST | `/auth/change-required-password` | Public; when `mustChangePassword` |
+| POST | `/auth/change-required-pin` | Public; when `mustChangePin` blocks PIN login |
+
+Angular: `/forgot-password`, `/change-required-password`, `/change-required-pin`; authenticated `/security/change-pin`.
 
 ---
 

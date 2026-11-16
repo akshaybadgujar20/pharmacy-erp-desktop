@@ -74,6 +74,8 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UI screens
 
 - Login — `src/app/features/auth/login/`
+- Forgot password — `src/app/features/auth/forgot-password/`
+- Force PIN / password change — `src/app/features/auth/change-required-pin/`, `change-required-password/`
 - Dashboard — `src/app/components/dashboard/`
 - Main layout + sidebar nav — `src/app/components/shell/`
 - Permission-filtered menu — `nav.config.ts`, `nav.utils.ts`
@@ -86,7 +88,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### UX gaps
 
-- UI-PLATFORM-2: F4 global medicine search and Ctrl+S save-on-active-screen partially wired; sales F2/F8 on list/counter.
+- ~~UI-PLATFORM-2~~ — global shortcuts, tooltips, and active-screen save/search wired app-wide (see `core/keyboard/README.md`).
 - ~~UI-PLATFORM-1~~ / ~~UI-PLATFORM-3~~ — sync badge in header; Electron print/save/barcode wedge via `ElectronService` and `electron/preload.js`.
 
 ---
@@ -158,6 +160,7 @@ Cross-cutting Angular/Electron shell (not a business module).
 ### UX gaps
 
 - ~~UI-SEC-1~~ — change password at `/security/change-password`; MFA enroll link in shell; login TOTP step when `totpEnabled`.
+- ~~UI-SEC-2~~ — forgot password (`/forgot-password`, SMTP OTP); refresh-on-401; PIN login/change; change-required password/PIN screens; `/security/change-pin`.
 
 ---
 
@@ -496,14 +499,16 @@ Cross-cutting Angular/Electron shell (not a business module).
 
 ### Backend
 
-- Outbox pattern, sync log, conflict entities; **push** worker `POST /sync/runs` (`SYNC_CLOUD_URL`).
+- Outbox pattern, sync log, conflict entities; **push + pull/apply** via `POST /sync/runs` and batch cloud API (`SYNC_CLOUD_URL`).
+- Phase 1 masters/party apply complete; Phase 2 transactional apply + nested `lines[]` expand when `SYNC_PHASE2_ENABLED=true` (opt-in).
+- Push expands payloads from DB; `SERVER_WINS` conflict resolve applies server payload (ADR-138 addendum).
 - Electron interval + `sync:runNow` IPC triggers renderer to call Nest.
-- Pull delta / cloud Spring Boot service Planned for production.
 
 **Backend gaps**
 
-- No pull/apply pipeline; conflict resolve remains metadata-only.
-- `SYNC_CLOUD_URL` must be set for push runs (dev often unset).
+- Production Spring Boot + PostgreSQL cloud service external to repo.
+- Phase 2 on production devices remains behind `SYNC_PHASE2_ENABLED` until integration sign-off; Spring cloud service still external.
+- `SYNC_CLOUD_URL` must be set for sync runs (dev often unset).
 
 ### UI screens
 

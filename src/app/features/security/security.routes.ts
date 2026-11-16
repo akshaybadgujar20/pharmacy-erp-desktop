@@ -13,6 +13,11 @@ export const securityRoutes: Routes = [
       import('../settings/change-password.component').then((m) => m.ChangePasswordComponent),
   },
   {
+    path: 'change-pin',
+    loadComponent: () =>
+      import('../settings/change-pin.component').then((m) => m.ChangePinComponent),
+  },
+  {
     path: 'users',
     canActivate: [permissionGuard('SECURITY:USER:READ')],
     children: [

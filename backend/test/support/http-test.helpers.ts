@@ -58,6 +58,8 @@ export async function resetAllUserPasswords(
       passwordHash,
       failedLoginAttempts: 0,
       lockedUntil: null,
+      mustChangePin: false,
+      mustChangePassword: false,
     },
   });
 }

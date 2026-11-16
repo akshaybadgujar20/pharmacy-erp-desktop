@@ -1,0 +1,23 @@
+model DeviceSyncState {
+  id BigInt @id @default(autoincrement())
+
+  uuid String @unique @default(uuid())
+
+  deviceId String @map("device_id")
+  branchId BigInt @map("branch_id")
+
+  lastPullCursor String? @map("last_pull_cursor")
+  lastPullAt     BigInt? @map("last_pull_at")
+  lastPushAt     BigInt? @map("last_push_at")
+
+  createdAt BigInt @map("created_at")
+  updatedAt BigInt @map("updated_at")
+
+  version BigInt @default(1)
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@unique([deviceId, branchId])
+  @@index([deviceId])
+  @@index([branchId])
+}

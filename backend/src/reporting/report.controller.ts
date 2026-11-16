@@ -23,7 +23,10 @@ import {
   validateReportDateRange,
   buildContentDisposition,
 } from './utils/report.util';
-import { toJwtReportPermission, userCanRunReport } from './utils/report-permission.util';
+import {
+  toJwtReportPermission,
+  userCanRunReport,
+} from './utils/report-permission.util';
 
 @Controller('reports')
 export class ReportController {

@@ -45,6 +45,7 @@ export interface AuthTokenResponse {
     permissions: string[];
     companyId: string;
     branchId: string;
+    mustChangePin: boolean;
   };
 }
 
@@ -187,7 +188,7 @@ export class AuthService {
   }
 
   private async issueSessionForUser(
-    user: { id: bigint; username: string },
+    user: { id: bigint; username: string; mustChangePin: boolean },
     dto: LoginDto,
     req: Request,
   ): Promise<AuthTokenResponse> {
@@ -276,6 +277,7 @@ export class AuthService {
         permissions,
         companyId: companyId.toString(),
         branchId: branchId.toString(),
+        mustChangePin: user.mustChangePin,
       },
     };
   }
@@ -413,6 +415,7 @@ export class AuthService {
         permissions,
         companyId: companyId.toString(),
         branchId: branchId.toString(),
+        mustChangePin: user.mustChangePin,
       },
     };
   }
@@ -481,15 +484,6 @@ export class AuthService {
       throw new ApplicationException(
         ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
         'Password change is required',
-        HttpStatus.FORBIDDEN,
-        { userId: user.id.toString() },
-      );
-    }
-
-    if (user.mustChangePin) {
-      throw new ApplicationException(
-        ErrorCode.AUTH_MUST_CHANGE_PASSWORD,
-        'Pin change is required',
         HttpStatus.FORBIDDEN,
         { userId: user.id.toString() },
       );
@@ -566,6 +560,7 @@ export class AuthService {
         permissions,
         companyId: companyId.toString(),
         branchId: branchId.toString(),
+        mustChangePin: user.mustChangePin,
       },
     };
   }
@@ -603,7 +598,15 @@ export class AuthService {
     });
   }
 
-  getProfile(user: AuthenticatedUser) {
+  async getProfile(user: AuthenticatedUser) {
+    const row = await this.prisma.client.user.findFirst({
+      where: { id: user.userId, deletedAt: null },
+      select: {
+        mustChangePin: true,
+        mustChangePassword: true,
+      },
+    });
+
     return {
       id: user.userId.toString(),
       username: user.username,
@@ -611,6 +614,8 @@ export class AuthService {
       permissions: user.permissions,
       companyId: user.companyId.toString(),
       branchId: user.branchId.toString(),
+      mustChangePin: row?.mustChangePin ?? false,
+      mustChangePassword: row?.mustChangePassword ?? false,
     };
   }
 
@@ -721,7 +726,7 @@ export class AuthService {
     const pinHash = await this.passwordService.hash(dto.newPin);
 
     return this.unitOfWork.run(async (tx) => {
-      await this.applyPasswordChange(
+      await this.applyPinChange(
         tx,
         user,
         pinHash,
@@ -811,7 +816,7 @@ export class AuthService {
     const pinHash = await this.passwordService.hash(dto.newPin);
 
     return this.unitOfWork.run(async (tx) => {
-      await this.applyPasswordChange(
+      await this.applyPinChange(
         tx,
         user,
         pinHash,
@@ -866,10 +871,6 @@ export class AuthService {
     }
 
     if (user.mustChangePassword) {
-      return null;
-    }
-
-    if (user.mustChangePin) {
       return null;
     }
 
@@ -1077,7 +1078,7 @@ export class AuthService {
     });
   }
 
-  private async applyPasswordPin(
+  private async applyPinChange(
     tx: TxClient,
     user: { id: bigint; uuid: string; username: string },
     pinHash: string,
@@ -1090,7 +1091,7 @@ export class AuthService {
       data: {
         pinHash,
         pinChangedAt: now,
-        mustChangePassword: false,
+        mustChangePin: false,
         pinFailedLoginAttempts: 0,
         pinLockedUntil: null,
         updatedAt: now,

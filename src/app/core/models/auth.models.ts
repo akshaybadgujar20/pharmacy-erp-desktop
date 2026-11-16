@@ -5,6 +5,8 @@ export interface AuthUser {
   permissions: string[];
   companyId: string;
   branchId: string;
+  mustChangePin?: boolean;
+  mustChangePassword?: boolean;
 }
 
 export interface AuthTokenResponse {

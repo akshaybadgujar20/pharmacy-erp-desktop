@@ -1,36 +1,22 @@
-# ADR-138: Sync conflict resolve updates metadata only — does not apply payload
+# ADR-138 addendum — SERVER_WINS resolve applies payload
 
-**Status:** Active  
-**Confidence:** Explicit  
-**Modules:** Sync
+**Status:** Amended
 
----
+## Context
 
-## Problem / Context
+Original ADR-138: sync conflict resolve was metadata-only (no business table writes).
 
-Applying conflict payloads automatically is risky without worker.
+## Decision (amendment)
 
-## Question Discussed
+When an operator resolves a pending conflict with **`SERVER_WINS`**:
 
-What does POST sync-conflicts/:id/resolve do?
+1. Nest calls `SyncApplyService.applyPullRecord` with `serverPayload` inside the same transaction as the conflict update.
+2. On successful apply: conflict moves to `MANUAL_RESOLVED` with strategy `SERVER_WINS` (audited).
+3. On apply failure: conflict stays `PENDING`; API returns conflict (409).
 
-## Options Considered
+**CLIENT_WINS**, **MERGED**, and other strategies remain metadata-only until explicitly implemented.
 
-1. Metadata only
-2. Apply payload to business tables
+## Code
 
-## Decision Selected
-
-Metadata-only resolve; does not mutate business entities.
-
-## Rationale
-
-The historical discussion confirms the selection above, but does not explicitly record the reasoning.
-
-## Rejected Alternatives
-
-See options not selected above; reasons not explicitly recorded.
-
-## Historical Source
-
-- Doc 18 — sync plan + developer guide Known gaps
+- [`sync-conflict.service.ts`](../../../../backend/src/sync/services/sync-conflict.service.ts)
+- [`sync-apply.service.ts`](../../../../backend/src/sync/services/sync-apply.service.ts)

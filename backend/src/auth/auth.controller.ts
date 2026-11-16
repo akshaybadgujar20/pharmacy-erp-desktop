@@ -14,11 +14,17 @@ import { ChangePinDto } from './dto/change-pin.dto';
 import { ChangeRequiredPinDto } from './dto/change-required-pin.dto';
 import { LoginWithPinDto } from './dto/loginWithPin.dto';
 import { CompleteMfaLoginDto } from './dto/complete-mfa-login.dto';
+import { ForgotPasswordConfirmDto } from './dto/forgot-password-confirm.dto';
+import { ForgotPasswordRequestDto } from './dto/forgot-password-request.dto';
+import { ForgotPasswordService } from './forgot-password.service';
 
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly forgotPasswordService: ForgotPasswordService,
+  ) {}
 
   @Public()
   @Post('login')
@@ -42,6 +48,21 @@ export class AuthController {
   @Post('refresh')
   refresh(@Body() dto: RefreshTokenDto) {
     return this.authService.refresh(dto.refreshToken);
+  }
+
+  @Public()
+  @Post('forgot-password/request')
+  forgotPasswordRequest(
+    @Body() dto: ForgotPasswordRequestDto,
+    @Req() req: Request,
+  ) {
+    return this.forgotPasswordService.requestOtp(dto.username, req);
+  }
+
+  @Public()
+  @Post('forgot-password/confirm')
+  forgotPasswordConfirm(@Body() dto: ForgotPasswordConfirmDto) {
+    return this.forgotPasswordService.confirmReset(dto);
   }
 
   @Post('logout')

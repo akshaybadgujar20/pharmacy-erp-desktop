@@ -59,6 +59,7 @@ model Branch {
   expenses              Expense[]
   outboxEntries         Outbox[]
   userBranches          UserBranch[]
+  deviceSyncStates      DeviceSyncState[]
 
   @@unique([companyId, branchCode])
   @@index([companyId])

@@ -17,7 +17,14 @@ Total routes: 382
 | GET | `/audit-logs` | audit | AUDIT:AUDIT_LOG:READ | AuditLogController |
 | GET | `/audit-logs/:id` | audit | AUDIT:AUDIT_LOG:READ | AuditLogController |
 | POST | `/auth/change-password` | auth | — | AuthController |
+| POST | `/auth/change-pin` | auth | — | AuthController |
+| POST | `/auth/change-required-password` | auth | — | AuthController |
+| POST | `/auth/change-required-pin` | auth | — | AuthController |
+| POST | `/auth/forgot-password/confirm` | auth | — | AuthController |
+| POST | `/auth/forgot-password/request` | auth | — | AuthController |
 | POST | `/auth/login` | auth | — | AuthController |
+| POST | `/auth/login/mfa` | auth | — | AuthController |
+| POST | `/auth/login-with-pin` | auth | — | AuthController |
 | POST | `/auth/logout` | auth | — | AuthController |
 | GET | `/auth/me` | auth | — | AuthController |
 | POST | `/auth/refresh` | auth | — | AuthController |

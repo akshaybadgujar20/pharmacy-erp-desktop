@@ -170,6 +170,7 @@ export const ERP_NAV_GROUPS: NavGroupConfig[] = [
           { icon: 'lock', label: 'nav.security.permissions', route: '/security/permissions', permission: 'SECURITY:PERMISSION:READ' },
           { icon: 'desktop', label: 'nav.security.sessions', route: '/security/user-sessions', permission: 'SECURITY:USER_SESSION:READ' },
           { icon: 'key', label: 'nav.security.changePassword', route: '/security/change-password' },
+          { icon: 'dialpad', label: 'nav.security.changePin', route: '/security/change-pin' },
         ],
       },
       {

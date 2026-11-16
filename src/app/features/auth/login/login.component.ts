@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ApiClientError} from '../../../core/models/api-response.types';
 import {AuthService} from '../../../core/services/auth.service';
@@ -27,16 +27,18 @@ enum LoginMode {
     FormsModule,
     ButtonModule,
     InputTextModule,
-    LabelModule
+    LabelModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly translate = inject(TranslateService);
   private readonly loadingService = inject(LoadingService);
   passwordVariant: 'outlined' | 'text' | undefined = undefined;
@@ -52,9 +54,23 @@ export class LoginComponent {
 
   loading = false;
   errorMessage = '';
+  successMessage = '';
   mfaStep = false;
   mfaChallengeToken = '';
   totpCode = '';
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.queryParamMap;
+    if (params.get('reset') === 'success') {
+      this.successMessage = this.translate.instant('auth.resetSuccessMessage');
+    } else if (params.get('passwordChanged') === '1') {
+      this.successMessage = this.translate.instant('auth.passwordChangedSuccess');
+    }
+    const username = params.get('username');
+    if (username) {
+      this.form.patchValue({ username });
+    }
+  }
 
   async submit(): Promise<void> {
     if (this.form.invalid) {
@@ -63,13 +79,14 @@ export class LoginComponent {
 
     this.loading = true;
     this.errorMessage = '';
+    this.successMessage = '';
     const formValue = this.form.getRawValue();
     try {
       this.loadingService.show();
       if (this.loginMode === LoginMode.PIN) {
         const { password, ...formData } = formValue;
         await this.authService.loginWithPin(formData);
-        await this.router.navigate(['/dashboard']);
+        await this.navigateAfterLogin();
       } else if (this.mfaStep) {
         const { pin, ...formData } = formValue;
         await this.authService.completeMfaLogin({
@@ -77,7 +94,7 @@ export class LoginComponent {
           mfaChallengeToken: this.mfaChallengeToken,
           totpCode: this.totpCode,
         });
-        await this.router.navigate(['/dashboard']);
+        await this.navigateAfterLogin();
       } else {
         const { pin, ...formData } = formValue;
         const result = await this.authService.login(formData);
@@ -87,11 +104,24 @@ export class LoginComponent {
           this.errorMessage = '';
           return;
         }
-        await this.router.navigate(['/dashboard']);
+        await this.navigateAfterLogin();
       }
       this.loadingService.hide();
     } catch (error) {
       this.loadingService.hide();
+      if (error instanceof ApiClientError && error.code === 'AUTH_MUST_CHANGE_PASSWORD') {
+        const username = formValue.username;
+        if (this.loginMode === LoginMode.PIN) {
+          await this.router.navigate(['/change-required-pin'], {
+            queryParams: { username },
+          });
+        } else {
+          await this.router.navigate(['/change-required-password'], {
+            queryParams: { username },
+          });
+        }
+        return;
+      }
       this.errorMessage =
         error instanceof ApiClientError
           ? error.message
@@ -131,6 +161,15 @@ export class LoginComponent {
     }else {
       this.dialpadVariant = undefined;
     }
+  }
+
+  private async navigateAfterLogin(): Promise<void> {
+    const user = this.authService.currentUser();
+    if (user?.mustChangePin) {
+      await this.router.navigate(['/security/change-pin']);
+      return;
+    }
+    await this.router.navigate(['/dashboard']);
   }
 
   private setFormValidation() {

@@ -1,0 +1,33 @@
+<div class="login-page">
+  <div class="login-card">
+    <h1>{{ 'auth.changeRequiredPinTitle' | translate }}</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <input pInputText formControlName="username" [placeholder]="'auth.username' | translate" />
+      <label class="field">
+        <span>{{ 'auth.currentPin' | translate }}</span>
+        <p-inputotp
+          [length]="6"
+          [integerOnly]="true"
+          formControlName="currentPin"
+          [mask]="true"
+        />
+      </label>
+      <label class="field">
+        <span>{{ 'auth.newPin' | translate }}</span>
+        <p-inputotp
+          [length]="6"
+          [integerOnly]="true"
+          formControlName="newPin"
+          [mask]="true"
+        />
+      </label>
+      <button pButton type="submit" [disabled]="saving() || form.invalid">
+        {{ 'auth.updatePin' | translate }}
+      </button>
+      @if (message()) {
+        <p class="error">{{ message() }}</p>
+      }
+    </form>
+    <a routerLink="/login">{{ 'auth.backToLogin' | translate }}</a>
+  </div>
+</div>

@@ -14,12 +14,15 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { PasswordService } from './password.service';
 import { getJwtSecret } from './utils/auth-config.util';
+import { EmailModule } from '../communication/email/email.module';
+import { ForgotPasswordService } from './forgot-password.service';
 
 @Module({
   imports: [
     PrismaModule,
     PersistenceModule,
     AuditModule,
+    EmailModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     ThrottlerModule.forRoot([
       {
@@ -41,7 +44,13 @@ import { getJwtSecret } from './utils/auth-config.util';
     }),
   ],
   controllers: [AuthController, MfaController],
-  providers: [AuthService, PasswordService, JwtStrategy, MfaService],
+  providers: [
+    AuthService,
+    PasswordService,
+    JwtStrategy,
+    MfaService,
+    ForgotPasswordService,
+  ],
   exports: [AuthService, JwtModule, PasswordService],
 })
 export class AuthModule {}

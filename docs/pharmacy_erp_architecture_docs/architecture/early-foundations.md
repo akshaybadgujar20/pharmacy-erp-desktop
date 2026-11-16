@@ -132,8 +132,12 @@ Code: `backend/src/auth/constants/auth.constants.ts`
 | `POST` | `/auth/refresh` | Public | Refresh token → new tokens |
 | `POST` | `/auth/forgot-password/request` | Public | Username → email OTP (generic response) |
 | `POST` | `/auth/forgot-password/confirm` | Public | Username + OTP + new password |
+| `POST` | `/auth/change-required-password` | Public | For `mustChangePassword` accounts |
+| `POST` | `/auth/change-required-pin` | Public | For `mustChangePin` (PIN login blocked) |
+| `POST` | `/auth/change-pin` | JWT | Authenticated PIN change |
+| `POST` | `/auth/login-with-pin` | Public | Username + 6-digit PIN |
 | `POST` | `/auth/logout` | JWT | Deactivates session |
-| `GET` | `/auth/me` | JWT | Current user profile |
+| `GET` | `/auth/me` | JWT | Current user profile (includes `mustChangePin`) |
 
 Login body may include optional `branchId` (bigint). If omitted, head-office branch is used.
 
@@ -262,8 +266,9 @@ When editing frontend code, follow [01-coding-principles.mdc](../../../.cursor/r
 | `TokenStorageService` | Electron `secureStore` or in-memory (ng serve) |
 | `DeviceService` | Stable `deviceId` for headers |
 | `authInterceptor` | Attaches Bearer + `x-device-id` |
+| `refreshInterceptor` | On 401, attempts token refresh once then retries the request |
 | `errorInterceptor` | Toastr errors; 401 → clear session → `/login` |
-| `authGuard` | Protects routes (e.g. dashboard) |
+| `authGuard` | Protects routes; attempts refresh before login redirect |
 | `KeyboardShortcutService` | Global shortcuts, remapping, F1/? help overlay |
 | `ActiveScreenSaveService` | Active detail/counter `Ctrl+S` handler |
 | `ActiveScreenSearchService` | Active list `Ctrl+F` → grid search focus |
@@ -271,7 +276,7 @@ When editing frontend code, follow [01-coding-principles.mdc](../../../.cursor/r
 
 i18n: `@ngx-translate/core` v18, `public/i18n/en.json`, default locale `en-IN`.
 
-Routes: `/login` (public), `/dashboard` (guarded).
+Public routes: `/login`, `/forgot-password`, `/change-required-pin`, `/change-required-password`. Guarded app routes load under main layout (e.g. `/dashboard`).
 
 ---
 
